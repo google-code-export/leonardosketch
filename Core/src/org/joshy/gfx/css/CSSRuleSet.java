@@ -87,4 +87,9 @@ public class CSSRuleSet {
     public void setBaseURI(URI uri) {
         baseURI = uri;
     }
+
+    public int findIntegerValue(CSSMatcher matcher, String propName) {
+        CSSProperty prop = findMatchingRule(matcher,propName);
+        return ((IntegerPixelValue)prop.value).getValue();
+    }
 }

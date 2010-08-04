@@ -1,11 +1,15 @@
 * {
     color:#ff00aa;
     border:1px;
+    font-family: Arial, f oo, bar, serif;
+    font-weight: normal;
+    font-size: 12pt; 
 }
 button {
     border:3px;
     icon: url(images/checkbox_normal.png);
     icon-position: left;
+    font-weight: bold;
 }
 
 transptest {

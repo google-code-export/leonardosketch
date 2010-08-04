@@ -1,11 +1,15 @@
 package org.joshy.gfx.css;
 
+import org.joshy.gfx.css.values.BaseValue;
+import org.joshy.gfx.css.values.StringListValue;
+import org.joshy.gfx.util.u;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.parboiled.Node;
 import org.parboiled.Parboiled;
 import org.parboiled.ReportingParseRunner;
+import org.parboiled.support.ParseTreeUtils;
 import org.parboiled.support.ParsingResult;
 
 import java.io.ByteArrayOutputStream;
@@ -50,7 +54,16 @@ public class MainTest {
         assertTrue("transparent".equals(set.findStringValue("transptest","background-color")));
         assertTrue(!"transparent".equals(set.findStringValue("transptest","color")));
         //background-color: red turns into #ff0000
-        
+
+        //fonts
+        BaseValue fontList = set.findValue(matcher, "font-family");
+        assertTrue(fontList instanceof StringListValue);
+        u.p(((StringListValue)fontList).getList());
+        assertTrue(((StringListValue)fontList).getList().contains("serif"));
+        assertTrue("normal".equals(set.findStringValue("label","font-weight")));
+        assertTrue("bold".equals(set.findStringValue("button","font-weight")));
+        assertTrue(set.findIntegerValue(matcher,"font-size") == 12);
+
     }
 
 
@@ -70,8 +83,8 @@ public class MainTest {
         CSSParser parser = Parboiled.createParser(CSSParser.class);
         //System.out.println("string = " + cssString);
         ParsingResult<?> result = ReportingParseRunner.run(parser.RuleSet(), cssString);
-        //String parseTreePrintOut = ParseTreeUtils.printNodeTree(result);
-        //System.out.println(parseTreePrintOut);
+        String parseTreePrintOut = ParseTreeUtils.printNodeTree(result);
+        System.out.println(parseTreePrintOut);
         //u.p("other value = " + result.parseTreeRoot.getLabel());
         return result;
     }

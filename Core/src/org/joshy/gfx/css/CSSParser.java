@@ -8,7 +8,6 @@ import org.parboiled.annotations.DontLabel;
 import org.parboiled.annotations.SuppressNode;
 import org.parboiled.support.Var;
 
-import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.List;
 
@@ -161,7 +160,7 @@ public class CSSParser extends BaseParser<Object> {
                 //hex color values: #abc067
             HexValue(),
                 //pixel values: 90px
-            Sequence(Sequence(OneOrMore(Number()),'p','x'),
+            Sequence(Sequence(OneOrMore(Number()),FirstOf("px","pt")),
                     new Action() {
                         public boolean run(Context context) {
                             context.setNodeValue(new IntegerPixelValue(context.getPrevText()));
@@ -169,6 +168,22 @@ public class CSSParser extends BaseParser<Object> {
                         }
                     }
                     ),
+                //a comma separated set of string values (mainly for font-family)
+                Sequence(Sequence(OneOrMore(WordCharOrSpace()),ZeroOrMore(Sequence(',',OneOrMore(WordCharOrSpace())))),
+                        new Action() {
+                            public boolean run(Context context) {
+                                u.p("list =  " + context.getPrevText());
+                                String str = context.getPrevText();
+                                if(str.contains(",")) {
+                                    context.setNodeValue(new StringListValue(str.split(",")));
+                                } else {
+                                    context.setNodeValue(new StringValue(context.getPrevText()));
+                                }
+                                return true;
+                            }
+                        }
+                        ),
+
                 //plain string values
             Sequence(OneOrMore(Letter()),
                     new Action() {
@@ -179,7 +194,13 @@ public class CSSParser extends BaseParser<Object> {
                     }
                     )
 
+
         );
+    }
+
+    public Rule WordCharOrSpace() {
+        //word chars and spaces
+        return FirstOf(CharRange('a', 'z'), CharRange('A', 'Z'), CharRange('0', '9'), '_', '#',' ');
     }
 
     Rule GradientStop() {
