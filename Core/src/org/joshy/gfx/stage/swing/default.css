@@ -91,3 +91,9 @@ Scrollbar {
 Scrollbar:vertical {
     thumb-background: linear-gradient(left center, #ffffff 0%, #808080 100%);    
 }
+
+/* ============== text box ============= */
+Textbox {
+    padding: 5px;
+    background-color: #d0d0d0;
+}

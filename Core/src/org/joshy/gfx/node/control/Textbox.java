@@ -1,20 +1,26 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.MasterCSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.skin.InsetsSkin;
+import org.joshy.gfx.util.u;
 
 public class Textbox extends TextControl {
     private InsetsSkin insets;
     private double baseline;
     double xoff = 0;
+    private CSSSkin cssSkin;
+    private MasterCSSSkin.BoxState cssSize;
 
     public Textbox() {
         setWidth(100);
-        setHeight(20);
-        insets = new InsetsSkin(5,3,5,3);
+        setHeight(40);
+        insets = new InsetsSkin(8,4,8,4);
     }
 
     public Textbox(String text) {
@@ -27,6 +33,13 @@ public class Textbox extends TextControl {
         return x - xoff;
     }
 
+    @Override
+    public void doSkins() {
+        super.doSkins();
+        cssSkin = (CSSSkin) SkinManager.getShared().getSkin(this,PART_CSS,PROP_CSS);
+        setLayoutDirty();
+    }
+
     /* =========== Layout stuff ================= */
     @Override
     public void doLayout() {
@@ -34,6 +47,12 @@ public class Textbox extends TextControl {
         baseline = insets.getTop() + this.getFont().getAscender();
         double height = insets.getTop() + th + insets.getBottom();
         setHeight(height);
+        if(cssSkin != null) {
+            cssSize = cssSkin.getSize(this,text);
+            setWidth(cssSize.width);
+            setHeight(cssSize.height);
+            u.p("did layout. w/h set to: " + this.getWidth() + " " + this.getHeight());
+        }
     }
 
     @Override
@@ -44,23 +63,27 @@ public class Textbox extends TextControl {
     /* =============== Drawing stuff ================ */
     @Override
     public void draw(GFX g) {
-        
-        //draw background
-        if(focused) {
-            g.setPaint(new FlatColor("#e0e0e0"));
+
+        if(cssSkin != null) {
+            cssSkin.draw(g,this,cssSize);
         } else {
-            g.setPaint(new FlatColor("#f0f0f0"));
-        }
-        g.fillRect(0,0,width,height);
+            //draw background
+            if(focused) {
+                g.setPaint(new FlatColor("#e0e0e0"));
+            } else {
+                g.setPaint(new FlatColor("#f0f0f0"));
+            }
+            g.fillRect(0,0,width,height);
 
 
-        // draw border
-        if(focused) {
-            g.setPaint(FlatColor.BLUE);
-        } else {
-            g.setPaint(FlatColor.BLACK);
+            // draw border
+            if(focused) {
+                g.setPaint(FlatColor.BLUE);
+            } else {
+                g.setPaint(FlatColor.BLACK);
+            }
+            g.drawRect(0,0,width,height);
         }
-        g.drawRect(0,0,width,height);
 
         //set a new clip
         Bounds oldClip = g.getClipRect();
