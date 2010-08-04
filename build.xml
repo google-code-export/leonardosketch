@@ -65,7 +65,7 @@
 
         <mkdir dir="build/classes/Core"/>
 
-        <javac destdir="build/classes/Core">
+        <javac destdir="build/classes/Core" debug="true">
             <src path="Core/src"/>
             <classpath path="${lib.jogl.dir}gluegen-rt.jar"></classpath>
             <classpath path="${lib.jogl.dir}jogl.all.jar"></classpath>
@@ -212,7 +212,7 @@
         </copy>
     </target>
 
-    <target name="run">
+    <target name="run" depends="build-sketch">
         <java classname="org.joshy.sketch.Main" fork="true">
             <classpath path="build/jars/Core.jar"/>
             <classpath path="build/jars/Sketch.jar"/>

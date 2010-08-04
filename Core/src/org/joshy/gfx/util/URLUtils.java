@@ -31,4 +31,13 @@ public class URLUtils {
         }
         return resolved;
     }
+
+    public static URI safeURIResolve(URI baseURI, URI imageURI) throws URISyntaxException {
+        if(baseURI.toASCIIString().startsWith("jar:")) {
+            baseURI = new URI(baseURI.toASCIIString().substring(4));
+            URI uri = baseURI.resolve(imageURI);
+            return new URI("jar:"+uri.toASCIIString());
+        }
+        return baseURI.resolve(imageURI);
+    }
 }
