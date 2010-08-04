@@ -9,19 +9,7 @@
 
 package org.joshy.gfx.util;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.List;
 
 /**
@@ -165,5 +153,14 @@ public class u {
         }
         return false;
     }
-    
+
+    public static void printFullStackTrace(Throwable th) {
+        p("exception: " + th.getMessage());
+        for(StackTraceElement e :  th.getStackTrace()) {
+            p("   "+e);
+        }
+        if(th.getCause() != null) {
+            printFullStackTrace(th.getCause());
+        }
+    }
 }

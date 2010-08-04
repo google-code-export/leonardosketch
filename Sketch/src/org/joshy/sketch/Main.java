@@ -71,6 +71,7 @@ public class Main implements Runnable {
     private List<DocContext> contexts = new ArrayList<DocContext>();
 
     public static void main(String ... args) throws Exception {
+        System.setSecurityManager(null);
         URL url = Main.class.getResource("skin/style.xml");
         Core.setUseJOGL(false);
         Core.init();

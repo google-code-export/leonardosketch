@@ -1,5 +1,6 @@
 package org.joshy.gfx.css;
 
+import org.joshy.gfx.util.u;
 import org.parboiled.Parboiled;
 import org.parboiled.ReportingParseRunner;
 import org.parboiled.support.ParsingResult;
@@ -28,6 +29,7 @@ public class CSSProcessor {
 
     public static ParsingResult<?> parseCSS(InputStream css) throws IOException {
         String cssString = toString(css);
+        try {
         CSSParser parser = Parboiled.createParser(CSSParser.class);
         //System.out.println("string = " + cssString);
         ParsingResult<?> result = ReportingParseRunner.run(parser.RuleSet(), cssString);
@@ -35,6 +37,10 @@ public class CSSProcessor {
         //System.out.println(parseTreePrintOut);
         //u.p("other value = " + result.parseTreeRoot.getLabel());
         return result;
+        } catch(Throwable th) {
+            u.printFullStackTrace(th);
+            return null;
+        }
     }
 
     private static String toString(InputStream css) throws IOException {

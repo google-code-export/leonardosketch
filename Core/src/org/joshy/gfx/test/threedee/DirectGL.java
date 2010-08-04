@@ -34,7 +34,7 @@ public class DirectGL implements Runnable {
 
     public void run() {
         try {
-            SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
+            //SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
             Rectangle r = new Rectangle();
             r.setTranslateX(100);
             r.setFill(FlatColor.GREEN);

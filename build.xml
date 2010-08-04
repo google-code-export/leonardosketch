@@ -16,7 +16,7 @@
         <property  name="lib.jogl.dir" value="lib/jogl/"/>
 
         <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
-        <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/Bedrock/dist/jnlp/"/>
+        <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/LeonardoSketch/dist/jnlp/"/>
     </target>
 
     <target name="clean">
@@ -156,6 +156,7 @@
                     <jar href="httpcore-4.0.1.jar"/>
                     <jar href="httpcore-nio-4.0.1.jar"/>
                     <jar href="httpmime-4.0.1.jar"/>
+                    <jar href="XMLLib.jar"/>
                     <property name="apple.laf.useScreenMenuBar" value="true"/>
                 </resources>
                 <application-desc main-class="org.joshy.sketch.Main">
@@ -202,7 +203,7 @@
     </macrodef>
 
     
-    <target name="dist" depends="build-sketch, signjars, jnlp, publish">
+    <target name="dist" depends="build-sketch, signjars, jnlp">
     </target>
     
     <target name="publish">
@@ -221,5 +222,15 @@
             <sysproperty key="apple.laf.useScreenMenuBar" value="true"/>
             <jvmarg value="-Xdock:name=Leonardo"/>
         </java>
+    </target>
+    
+    
+    <target name="parboiled">
+        <mkdir dir="build/classes/parboiled"/>
+        <javac destdir="build/classes/parboiled" debug="true">
+            <src path="t/"/>
+
+        </javac>
+
     </target>
 </project>
