@@ -102,7 +102,7 @@
         <unsignjar jar="dist/jnlp/Sketch.jar"/>
         <unsignjar jar="dist/jnlp/Core.jar"/>
         <unsignjar jar="dist/jnlp/parboiled-0.9.7.3.jar"/>
-        <property name="keystore" value="testkeystore"/>
+        <property name="keystore" value="bin/testkeystore"/>
         <property name="alias" value="joshy2"/>
 
         <signjar alias="${alias}" storepass="password" keystore="${keystore}">
