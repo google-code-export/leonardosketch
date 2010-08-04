@@ -1,0 +1,253 @@
+<?xml version="1.0" ?>
+            
+<project default="help">
+
+    <target name="help">
+        <echo>ant build      build and package the entire project, including jnlps</echo>
+    </target>
+    
+    <target name="init">
+        <buildnumber/>
+        <tstamp>
+            <format property="TIMESTAMP" pattern="yyyy-MM-dd_kk-mm"/>
+        </tstamp>
+        <echo message="timestamp = ${TIMESTAMP}"/>
+
+        <property  name="lib.jogl.dir" value="../../jogl-2.0-macosx-universal/lib/"/>
+
+        <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
+        <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/Bedrock/dist/jnlp/"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="build"/>
+        <delete dir="dist"/>
+    </target>
+    
+    <target name="build-sketchy" depends="build-core">
+        <mkdir dir="build/classes/Sketch"/>
+        <javac destdir="build/classes/Sketch">
+            <src path="Sketch/src"/>
+            <classpath path="build/jars/Core.jar"/>
+            <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+        </javac>
+        <copy todir="build/classes/Sketch">
+             <fileset dir="Sketch/src">
+                 <include name="**"/>
+                 <exclude name="**/*.java"/>
+             </fileset>
+        </copy>
+
+        <jar destfile="build/jars/Sketch.jar">
+            <fileset dir = "build/classes/Sketch"></fileset>
+        </jar>
+        
+        <!-- build the mac bundle -->
+        <java classpath="lib/AppBundler.jar;lib/XMLLib.jar" classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="bundler.xml"/>
+            <arg value="dist/"/>
+            <arg value="build/jars/"/>
+        </java>
+
+        <zip destfile="dist/Sketchy.app.zip">
+            <zipfileset dir="dist/mac">
+                <include name="Sketchy.app"/>
+                <include name="Sketchy.app/**"/>
+                <exclude name="Sketchy.app/Contents/MacOS/JavaApplicationStub"/>
+            </zipfileset>
+            <zipfileset dir="dist/mac" includes="Sketchy.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>
+        </zip>
+    </target>
+    
+    <target name="build-pitunes" depends="build-core">
+        <mkdir dir="build/classes/Playa"/>
+        <javac destdir="build/classes/Playa">
+            <src path="Playa/src"/>
+            <classpath path="build/jars/Core.jar"/>
+            <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+        </javac>
+        <copy todir="build/classes/Playa">
+             <fileset dir="Playa/src">
+                 <include name="**"/>
+                 <exclude name="**/*.java"/>
+             </fileset>
+        </copy>
+        <jar destfile="build/jars/Playa.jar">
+            <fileset dir = "build/classes/Playa"></fileset>
+        </jar>    
+    
+        <!-- build the mac bundle -->
+        <java classpath="lib/AppBundler.jar;lib/XMLLib.jar" classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="Playa.xml"/>
+            <arg value="dist/"/>
+            <arg value="build/jars/"/>
+        </java>
+        
+        <zip destfile="dist/Playa.app.zip">
+            <zipfileset dir="dist/mac">
+                <include name="Playa.app"/>
+                <include name="Playa.app/**"/>
+                <exclude name="Playa.app/Contents/MacOS/JavaApplicationStub"/>
+            </zipfileset>
+            <zipfileset dir="dist/mac" includes="Playa.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>
+        </zip>    
+    </target>
+    
+    <target name="build-core" depends="init">
+        <mkdir dir="build"/>
+
+        <mkdir dir="build/classes/Core"/>
+
+        <javac destdir="build/classes/Core">
+            <src path="Core/src"/>
+            <classpath path="${lib.jogl.dir}gluegen-rt.jar"></classpath>
+            <classpath path="${lib.jogl.dir}jogl.all.jar"></classpath>
+            <classpath path="${lib.jogl.dir}nativewindow.all.jar"></classpath>
+            <classpath path="${lib.jogl.dir}newt.all.jar"></classpath>
+            <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+        </javac>
+        <copy todir="build/classes/Core">
+            <fileset dir="Core/src">
+                <include name="**"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+
+        <mkdir dir="build/jars"/>
+        <jar destfile="build/jars/Core.jar">
+            <fileset dir = "build/classes/Core"></fileset>
+        </jar>
+
+        <copy todir="build/jars/">
+            <fileset dir="lib"><include  name="*.jar"/></fileset>
+        </copy>
+
+
+    </target>
+
+    <target name="signjars">
+        <copy  todir="dist/jnlp">
+            <fileset dir="build/jars">
+                <include name="*.jar"/>
+            </fileset>
+        </copy>
+        
+        <unsignjar jar="dist/jnlp/Sketch.jar"/>
+        <unsignjar jar="dist/jnlp/Core.jar"/>
+        <unsignjar jar="dist/jnlp/parboiled-0.9.7.3.jar"/>
+        <property name="keystore" value="testkeystore"/>
+        <property name="alias" value="joshy2"/>
+
+        <signjar alias="${alias}" storepass="password" keystore="${keystore}">
+            <fileset dir="dist/jnlp/">
+                <include name="*.jar"/>
+            </fileset>
+        </signjar>
+    </target>
+
+    <target name="jnlp" depends="init">
+        <!--<copy todir="dist" file="splash.png"/>-->
+        <mkdir  dir="dist/jnlp"/>
+        <echoxml file="dist/jnlp/Sketchy.jnlp">
+            <jnlp spec="1.0+" codebase="${jnlp.codebase}" href="Sketchy.jnlp">
+                <information>
+                    <title>Sketchy</title>
+                    <vendor>Josh Marinacci</vendor>
+                    <homepage href="http://projects.joshy.org/"/>
+                    <description>general purpose drawing tool</description>
+                    <offline-allowed/>
+                    <!--
+                    <icon href="icon.png"/>
+                    <icon kind="splash" href="splash.png"/>
+                    <association mime-type="application-x/maitai" extensions="maitai">
+                        <description>Mai Tai graphics file</description>
+                        <icon href="doc-icon.png"/>
+                    </association>
+                    <shortcut online="false">
+                      <desktop/>
+                      <menu submenu="Mai Tai"/>
+                    </shortcut>
+                    -->
+                </information>
+                <security>
+                    <all-permissions/>
+                </security>
+                <update check="background" policy="prompt-update"/>
+                <resources>
+                    <j2se version='1.6+'
+                        initial-heap-size="64m"
+                        max-heap-size="512m"
+                        java-vm-args="-d32"
+                        />
+                    <jar href="Sketch.jar" main="true" download="eager"/>
+                    <jar href="Core.jar" main="false" download="eager"/>
+                    <jar href="parboiled-0.9.7.3.jar"/>
+                    <jar href="apache-mime4j-0.6.jar"/>
+                    <jar href="commons-codec-1.4.jar"/>
+                    <jar href="commons-logging-1.1.1.jar"/>
+                    <jar href="httpclient-4.0.1.jar"/>
+                    <jar href="httpcore-4.0.1.jar"/>
+                    <jar href="httpcore-nio-4.0.1.jar"/>
+                    <jar href="httpmime-4.0.1.jar"/>
+                    <property name="apple.laf.useScreenMenuBar" value="true"/>
+                </resources>
+                <application-desc main-class="org.joshy.sketch.Main">
+                </application-desc>
+            </jnlp>
+
+        </echoxml>    
+    </target>
+
+    <macrodef name="unsignjar">
+
+        <attribute name="jar"/>
+
+        <sequential>
+        <!-- Remove any existing signatures from a JAR file. -->
+        <tempfile prefix="usignjar-" destdir="${java.io.tmpdir}" property="temp.file"/>
+            <echo message="Removing signatures from JAR: @{jar}"/>
+            <mkdir dir="${temp.file}"/>
+
+            <unjar src="@{jar}" dest="${temp.file}">
+                <patternset>
+                    <include name="**"/>
+                    <exclude name="META-INF/*.SF"/>
+                    <exclude name="META-INF/*.DSA"/>
+                    <exclude name="META-INF/*.RSA"/>
+                </patternset>
+            </unjar>
+
+            <delete file="@{jar}" failonerror="true"/>
+
+            <!-- Touch it in case the file didn't have a manifest.
+                 Otherwise the JAR task below will fail if the manifest
+             file doesn't exist. -->
+            <mkdir dir="${temp.file}/META-INF"/>
+            <touch file="${temp.file}/META-INF/MANIFEST.MF"/>
+
+            <jar destfile="@{jar}"
+                basedir="${temp.file}"
+                includes="**"
+                manifest="${temp.file}/META-INF/MANIFEST.MF"/>
+
+            <delete dir="${temp.file}" failonerror="true"/>
+        </sequential>
+    </macrodef>
+
+    
+    <target name="dist" depends="build-sketchy, signjars, jnlp">
+    </target>
+    <!--
+    <target name="dist" depends="build-sketchy,signjars,jnlp">
+    </target>
+    -->
+
+    <target name="run">
+        <java classname="org.joshy.sketch.Main" fork="true">
+            <classpath path="build/jars/Core.jar"/>
+            <classpath path="build/jars/Sketch.jar"/>
+            <sysproperty key="apple.laf.useScreenMenuBar" value="true"/>
+            <jvmarg value="-Xdock:name=Sketchy"/>
+        </java>
+    </target>
+</project>
