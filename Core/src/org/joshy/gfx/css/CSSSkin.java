@@ -9,7 +9,6 @@ import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Scrollbar;
-import org.joshy.gfx.node.control.skin.FontSkin;
 
 /**
 * Created by IntelliJ IDEA.
@@ -32,7 +31,8 @@ public class CSSSkin extends MasterCSSSkin {
         size.contentHeight = control.getHeight()-margin*2-padding*2;
         //calc the sizes
         if("true".equals(set.findStringValue(name,"shrink-to-fit"))) {
-            Font font = FontSkin.DEFAULT.getFont();
+            //Font font = FontSkin.DEFAULT.getFont();
+            Font font = getFont(matcher);
             size.contentWidth = font.calculateWidth(content);
             size.contentHeight = font.calculateHeight(content);
             if(icon != null) {
@@ -63,8 +63,8 @@ public class CSSSkin extends MasterCSSSkin {
 
         //BaseValue grad = set.findValue(matcher.element, "foo");
         //u.p("got the grad value: " + background);
-        Font font = FontSkin.DEFAULT.getFont();
-        
+        Font font = getFont(matcher);
+
         //draw the background
         double backWidth = size.width-margin*2;
         double backHeight = size.height-margin*2;
@@ -136,6 +136,13 @@ public class CSSSkin extends MasterCSSSkin {
         //debugging
 //        g.setPaint(FlatColor.RED);
 //        g.drawRect(0,0,size.width,size.height);
+    }
+
+    private Font getFont(CSSMatcher matcher) {
+        int fontSize = set.findIntegerValue(matcher.element, "font-size");
+        Font font = Font.name("Arial").size(fontSize).resolve();
+        //Font font = FontSkin.DEFAULT.getFont();
+        return font;
     }
 
     public CSSRuleSet getCSSSet() {

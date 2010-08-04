@@ -172,7 +172,6 @@ public class CSSParser extends BaseParser<Object> {
                 Sequence(Sequence(OneOrMore(WordCharOrSpace()),ZeroOrMore(Sequence(',',OneOrMore(WordCharOrSpace())))),
                         new Action() {
                             public boolean run(Context context) {
-                                u.p("list =  " + context.getPrevText());
                                 String str = context.getPrevText();
                                 if(str.contains(",")) {
                                     context.setNodeValue(new StringListValue(str.split(",")));

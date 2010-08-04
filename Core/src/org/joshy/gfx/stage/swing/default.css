@@ -8,6 +8,9 @@
     text-align: left;
     border-radius: 0px;
     shrink-to-fit: false;
+    font-size: 12pt;
+    font-family: Arial, serif;
+    font-weight: normal;
 }
 
 /* =========== buttons =========== */
@@ -26,12 +29,14 @@ Button, Checkbox, Radiobutton, Togglebutton {
 Button, Togglebutton {
     background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
 }
+
 Checkbox {
     border-width: 0px;
     background-color: transparent;
     icon: url(images/checkbox_normal.png);
     icon-position: left;
 }
+
 Checkbox:selected {
     icon: url(images/checkbox_selected.png);
 }
@@ -42,6 +47,7 @@ Radiobutton {
     background-color: transparent;
     icon: url(images/radiobutton_normal.png);
 }
+
 Togglebutton {
     border-radius: 3px;
 }

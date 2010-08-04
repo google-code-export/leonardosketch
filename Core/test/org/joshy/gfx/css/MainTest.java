@@ -84,7 +84,7 @@ public class MainTest {
         //System.out.println("string = " + cssString);
         ParsingResult<?> result = ReportingParseRunner.run(parser.RuleSet(), cssString);
         String parseTreePrintOut = ParseTreeUtils.printNodeTree(result);
-        System.out.println(parseTreePrintOut);
+        //System.out.println(parseTreePrintOut);
         //u.p("other value = " + result.parseTreeRoot.getLabel());
         return result;
     }
