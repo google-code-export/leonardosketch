@@ -1,0 +1,14 @@
+* {
+    color:#ff00aa;
+    border:1px;
+}
+button {
+    border:3px;
+    icon: url(images/checkbox_normal.png);
+    icon-position: left;
+}
+
+transptest {
+    background-color: transparent;
+    color: #ff0000;
+}

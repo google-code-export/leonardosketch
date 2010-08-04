@@ -1,0 +1,87 @@
+* {
+    margin: 1px;
+    padding: 2px;
+    background-color: #ffffff;
+    color: #000000;
+    border-width: 1px;
+    border-color: #000000;
+    text-align: left;
+    border-radius: 0px;
+    shrink-to-fit: false;
+}
+
+/* =========== buttons =========== */
+Button, Checkbox, Radiobutton, Togglebutton {
+    margin: 3px;
+    padding: 8px;
+    background-color: #c0c0c0;
+    border-width: 1px;
+    color: #444444;
+    border-color: #f8f8f8;
+    border-radius: 11px;
+    text-align: center;
+    shrink-to-fit: true;
+}
+
+Button, Togglebutton {
+    background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
+}
+Checkbox {
+    border-width: 0px;
+    background-color: transparent;
+    icon: url(images/checkbox_normal.png);
+    icon-position: left;
+}
+Checkbox:selected {
+    icon: url(images/checkbox_selected.png);
+}
+
+Radiobutton {
+    border-width: 0px;
+    border-radius: 30px;
+    background-color: transparent;
+    icon: url(images/radiobutton_normal.png);
+}
+Togglebutton {
+    border-radius: 3px;
+}
+
+Button:hover, Togglebutton:hover {
+    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    color: #ffffff;
+    border-color: #808080;
+}
+
+Togglebutton:selected {
+    background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    color: #ffffff;
+    border-color: #808080;
+}
+
+/* =========== panels ======== */
+Panel, HBox, VBox {
+    background-color: #aaaaaa;
+    border-width: 0px;
+}
+
+/* =========== scroll bars ========== */
+Scrollbar {
+    border-width: 1px;
+    border-color: #000000;
+    background-color: #00ff00;
+    background: linear-gradient(left center, #04acec 0%, #0186ba 100%);
+
+    thumb-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
+    thumb-background-color: #888888;
+    thumb-border-color: #000000;
+    thumb-border-radius: 14px;
+    thumb-border-width: 1px;
+    thumb-margin: 2px;
+    
+    left-arrow-background-color: #ff0000;
+    right-arrow-background-color: #ff0000;
+}
+
+Scrollbar:vertical {
+    thumb-background: linear-gradient(left center, #ffffff 0%, #808080 100%);    
+}

@@ -13,7 +13,7 @@
         </tstamp>
         <echo message="timestamp = ${TIMESTAMP}"/>
 
-        <property  name="lib.jogl.dir" value="../../jogl-2.0-macosx-universal/lib/"/>
+        <property  name="lib.jogl.dir" value="lib/jogl/"/>
 
         <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
         <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/Bedrock/dist/jnlp/"/>
