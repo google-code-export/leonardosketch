@@ -24,7 +24,7 @@
         <delete dir="dist"/>
     </target>
     
-    <target name="build-sketchy" depends="build-core">
+    <target name="build-sketch" depends="build-core">
         <mkdir dir="build/classes/Sketch"/>
         <javac destdir="build/classes/Sketch">
             <src path="Sketch/src"/>
@@ -49,48 +49,15 @@
             <arg value="build/jars/"/>
         </java>
 
-        <zip destfile="dist/Sketchy.app.zip">
+        <property name="app.name" value="Leonardo"/>
+        <zip destfile="dist/${app.name}.app.zip">
             <zipfileset dir="dist/mac">
-                <include name="Sketchy.app"/>
-                <include name="Sketchy.app/**"/>
-                <exclude name="Sketchy.app/Contents/MacOS/JavaApplicationStub"/>
+                <include name="${app.name}.app"/>
+                <include name="${app.name}.app/**"/>
+                <exclude name="${app.name}.app/Contents/MacOS/JavaApplicationStub"/>
             </zipfileset>
-            <zipfileset dir="dist/mac" includes="Sketchy.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>
+            <zipfileset dir="dist/mac" includes="${app.name}.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>
         </zip>
-    </target>
-    
-    <target name="build-pitunes" depends="build-core">
-        <mkdir dir="build/classes/Playa"/>
-        <javac destdir="build/classes/Playa">
-            <src path="Playa/src"/>
-            <classpath path="build/jars/Core.jar"/>
-            <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
-        </javac>
-        <copy todir="build/classes/Playa">
-             <fileset dir="Playa/src">
-                 <include name="**"/>
-                 <exclude name="**/*.java"/>
-             </fileset>
-        </copy>
-        <jar destfile="build/jars/Playa.jar">
-            <fileset dir = "build/classes/Playa"></fileset>
-        </jar>    
-    
-        <!-- build the mac bundle -->
-        <java classpath="lib/AppBundler.jar;lib/XMLLib.jar" classname="com.joshondesign.appbundler.Bundler" fork="true">
-            <arg value="Playa.xml"/>
-            <arg value="dist/"/>
-            <arg value="build/jars/"/>
-        </java>
-        
-        <zip destfile="dist/Playa.app.zip">
-            <zipfileset dir="dist/mac">
-                <include name="Playa.app"/>
-                <include name="Playa.app/**"/>
-                <exclude name="Playa.app/Contents/MacOS/JavaApplicationStub"/>
-            </zipfileset>
-            <zipfileset dir="dist/mac" includes="Playa.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>
-        </zip>    
     </target>
     
     <target name="build-core" depends="init">
@@ -148,12 +115,12 @@
     <target name="jnlp" depends="init">
         <!--<copy todir="dist" file="splash.png"/>-->
         <mkdir  dir="dist/jnlp"/>
-        <echoxml file="dist/jnlp/Sketchy.jnlp">
-            <jnlp spec="1.0+" codebase="${jnlp.codebase}" href="Sketchy.jnlp">
+        <echoxml file="dist/jnlp/Leonardo.jnlp">
+            <jnlp spec="1.0+" codebase="${jnlp.codebase}" href="Leonardo.jnlp">
                 <information>
-                    <title>Sketchy</title>
+                    <title>Leonardo</title>
                     <vendor>Josh Marinacci</vendor>
-                    <homepage href="http://projects.joshy.org/"/>
+                    <homepage href="http://leonardosketch.org/"/>
                     <description>general purpose drawing tool</description>
                     <offline-allowed/>
                     <!--
@@ -235,19 +202,17 @@
     </macrodef>
 
     
-    <target name="dist" depends="build-sketchy, signjars, jnlp">
+    <target name="dist" depends="build-sketch, signjars, jnlp">
     </target>
-    <!--
-    <target name="dist" depends="build-sketchy,signjars,jnlp">
-    </target>
-    -->
 
     <target name="run">
         <java classname="org.joshy.sketch.Main" fork="true">
             <classpath path="build/jars/Core.jar"/>
             <classpath path="build/jars/Sketch.jar"/>
+            <classpath path="lib/parboiled-0.9.7.3.jar"/>
+            <classpath path="lib/XMLLib.jar"/>
             <sysproperty key="apple.laf.useScreenMenuBar" value="true"/>
-            <jvmarg value="-Xdock:name=Sketchy"/>
+            <jvmarg value="-Xdock:name=Leonardo"/>
         </java>
     </target>
 </project>
