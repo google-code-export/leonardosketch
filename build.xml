@@ -202,7 +202,14 @@
     </macrodef>
 
     
-    <target name="dist" depends="build-sketch, signjars, jnlp">
+    <target name="dist" depends="build-sketch, signjars, jnlp, publish">
+    </target>
+    
+    <target name="publish">
+        <copy todir="/home/joshy/public_html/Leonardo/daily/">
+            <fileset dir="dist/">
+            </fileset>
+        </copy>
     </target>
 
     <target name="run">
