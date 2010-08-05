@@ -2,18 +2,25 @@ importClass(org.joshy.gfx.draw.FlatColor);
 
 println("doing a rainbow duplicate. context = " + ctx);
 
-var doc = ctx.getDocument();
-var sel = ctx.getSelection();
-if(!sel.isEmpty()) {
-   var item = sel.firstItem();
+
+if(!ctx.selection.isEmpty()) {
+
+    //duplicate the first time five times
+   var item = ctx.selection.firstItem();
    for(i=0; i<5; i++) {
       var dupe = item.duplicate(null);
-      dupe.setTranslateX(dupe.getTranslateX()+i*(dupe.getBounds().getWidth()+10));
-      doc.getCurrentPage().model.add(dupe);
+
+      //offset each item
+      dupe.translateX = item.translateX + i*(dupe.bounds.width + 10);
       if(typeof dupe.setFillPaint == 'function') {
-          dupe.setFillPaint(FlatColor.hsb(30*i,1,1));
+          dupe.fillPaint = FlatColor.hsb(30*i,1,1);
       }
+
+      //add to the model
+      ctx.document.currentPage.model.add(dupe);
    }
-   doc.setDirty(true);
-   ctx.getCanvas().redraw();
+
+   //redraw the screen
+   ctx.document.dirty = true;
+   ctx.canvas.redraw();
 }

@@ -1,14 +1,8 @@
 package org.joshy.sketch.script;
 
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.SAction;
-import org.joshy.sketch.canvas.Selection;
-import org.joshy.sketch.model.SNode;
-import org.joshy.sketch.model.SShape;
-import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
-import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -45,6 +39,7 @@ public class ScriptTools {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
 
                                        /*
             VectorDocContext ctx = (VectorDocContext) context;
