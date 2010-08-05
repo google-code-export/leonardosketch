@@ -99,6 +99,7 @@ public class SymbolManager {
             SymbolSet set = new SymbolSet();
             set.file = new File(basedir,"default.xml");
             sets.put(set.file,set);
+            list.add(set);
             currentSet = set;
         }
     }

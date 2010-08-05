@@ -40,6 +40,7 @@ import org.joshy.sketch.modes.preso.ViewSlideshowAction;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
 import org.joshy.sketch.property.PropertyManager;
+import org.joshy.sketch.script.ScriptTools;
 
 import javax.swing.*;
 import java.io.File;
@@ -53,9 +54,10 @@ import java.util.Properties;
 
 public class Main implements Runnable {
     private static final File BASE_STORAGE_DIR = new File(OSUtil.getBaseStorageDir());
-    private static final File homedir = new File(BASE_STORAGE_DIR,"Bedrock/settings");
+    private static final File homedir = new File(BASE_STORAGE_DIR,"Leonardo");
     public static final File RECENT_FILES = new File(homedir,"recentfiles.xml");
     public static final File SETTINGS_FILE = new File(homedir,"settings.txt");
+    public static final File SCRIPTS_DIR = new File(homedir,"scripts");
     public static Font HANDDRAWN_FONT;
     public static Font SERIF_FONT;
     public static Font SANSSERIF_FONT;
@@ -272,6 +274,10 @@ public class Main implements Runnable {
         if(SETTINGS_FILE.exists()) {
             settings.load(new FileReader(SETTINGS_FILE));
         }
+        if(!SCRIPTS_DIR.exists()) {
+            SCRIPTS_DIR.mkdirs();
+            u.streamToFile(ScriptTools.class.getResourceAsStream("demo_script.js"),new File(SCRIPTS_DIR,"demo_script.js"));
+        }
 
         recentFiles = loadRecentDocs(RECENT_FILES);
     }
@@ -360,6 +366,14 @@ public class Main implements Runnable {
             shareMenu.addItem("Email as PNG", new SendMacMail(context));
         }
         menubar.add(shareMenu.createJMenu());
+
+        Menu scriptMenu = new Menu().setTitle("Scripts");
+        for(File file : SCRIPTS_DIR.listFiles()) {
+            if(file.exists() && file.getName().toLowerCase().endsWith(".js")) {
+                scriptMenu.addItem(file.getName(),new ScriptTools.RunScriptAction(file,context));
+            }
+        }
+        menubar.add(scriptMenu.createJMenu());
     }
 
     private List<File> loadRecentDocs(File file) {
