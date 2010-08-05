@@ -7,10 +7,7 @@ import org.joshy.gfx.css.CSSRuleSet;
 import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Node;
-import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.Scrollbar;
-import org.joshy.gfx.node.control.Textbox;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
@@ -45,10 +42,11 @@ public class SwingCore extends Core {
             cssskin.setRuleSet(set);
             CSSProcessor.condense(result.parseTreeRoot,set);
             u.p("default css parsed from: " + url);
-            SkinManager.getShared().installSkin(Button.class,   Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(Panel.class,    Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(Scrollbar.class,Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(Textbox.class,Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(Button.class,        Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(Panel.class,         Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(Scrollbar.class,     Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(Textbox.class,       Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(Passwordbox.class,   Control.PART_CSS, Control.PROP_CSS, cssskin);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

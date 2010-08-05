@@ -1,5 +1,6 @@
 package org.joshy.gfx.css;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.css.values.BaseValue;
 import org.joshy.gfx.css.values.LinearGradientValue;
 import org.joshy.gfx.draw.FlatColor;
@@ -50,6 +51,9 @@ public class MasterCSSSkin extends Skin {
             return;
         }
         CSSMatcher matcher = createMatcher(control,null);
+        if(Core.getShared().getFocusManager().getFocusedNode()==control) {
+            matcher.pseudo = "active";
+        }
         int margin = set.findIntegerValue(matcher.element,"margin");
 //        int padding = set.findIntegerValue(matcher.element,"padding");
 //        int borderWidth = set.findIntegerValue(matcher.element, "border-width");

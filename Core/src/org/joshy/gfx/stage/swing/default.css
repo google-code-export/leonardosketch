@@ -93,7 +93,10 @@ Scrollbar:vertical {
 }
 
 /* ============== text box ============= */
-Textbox {
-    padding: 5px;
+Textbox, Passwordbox {
+    padding: 4px;
     background-color: #d0d0d0;
+}
+Textbox:active, Passwordbox:active {
+    background-color: #ffffff;
 }

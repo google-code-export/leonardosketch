@@ -8,7 +8,6 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.skin.InsetsSkin;
-import org.joshy.gfx.util.u;
 
 public class Textbox extends TextControl {
     private InsetsSkin insets;
@@ -30,7 +29,7 @@ public class Textbox extends TextControl {
 
     @Override
     protected double filterMouseX(double x) {
-        return x - xoff;
+        return x - xoff - insets.getLeft();
     }
 
     @Override
@@ -43,16 +42,17 @@ public class Textbox extends TextControl {
     /* =========== Layout stuff ================= */
     @Override
     public void doLayout() {
+        if(cssSkin != null) {
+            cssSize = cssSkin.getSize(this,text);
+            int padding = cssSkin.getCSSSet().findIntegerValue("Textbox","padding");
+            setWidth(cssSize.width);
+            setHeight(cssSize.height);
+            insets = new InsetsSkin(padding,padding,padding,padding);
+        }
         double th = this.getFont().getAscender();
         baseline = insets.getTop() + this.getFont().getAscender();
         double height = insets.getTop() + th + insets.getBottom();
         setHeight(height);
-        if(cssSkin != null) {
-            cssSize = cssSkin.getSize(this,text);
-            setWidth(cssSize.width);
-            setHeight(cssSize.height);
-            u.p("did layout. w/h set to: " + this.getWidth() + " " + this.getHeight());
-        }
     }
 
     @Override
@@ -112,20 +112,23 @@ public class Textbox extends TextControl {
             double start = font.getWidth(text.substring(0,selection.getLeadingColumn()));
             double end = font.getWidth(text.substring(0,selection.getTrailingColumn()));
             g.setPaint(FlatColor.GRAY);
-            g.fillRect(start+xoff,cp.cursorY+2, end-start,cp.cursorH);
+            g.fillRect(insets.getLeft()+start+xoff,cp.cursorY+2+insets.getTop(), end-start,cp.cursorH);
             g.setPaint(FlatColor.BLACK);
         }
 
         //draw the text
         g.setPaint(FlatColor.BLACK);
-        g.drawText(text,font,2+xoff,baseline);
+        g.drawText(text,font,insets.getLeft()+xoff,baseline);
 
         //draw the cursor
         g.setPaint(FlatColor.BLUE);
         if(focused) {
             CursorPoint cp = getCurrentCursorPoint();
             // draw cursor
-            g.fillRect(cp.cursorX + 1 + xoff, cp.cursorY+2, cp.cursorW, cp.cursorH);
+            g.fillRect(
+                    insets.getLeft()+cp.cursorX + 1 + xoff,
+                    insets.getTop()+cp.cursorY+2,
+                    cp.cursorW, cp.cursorH);
         }
 
         //restore the old clip

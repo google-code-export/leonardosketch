@@ -3,7 +3,6 @@ package org.joshy.gfx.event;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Focusable;
-import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.util.u;
 
 /**
@@ -36,6 +35,13 @@ public class FocusManager {
         focusedNode = focusableNode;
         EventBus.getSystem().publish(new FocusEvent(FocusEvent.Gained, focusedNode));
     }
+
+
+    public Focusable getFocusedNode() {
+        return focusedNode;
+    }
+
+
     public void gotoPrevFocusableNode() {
         if(focusedNode != null) {
             Focusable prev = null;
