@@ -72,20 +72,26 @@ Panel, HBox, VBox {
 
 /* =========== scroll bars ========== */
 Scrollbar {
+    margin: 0px;
     border-width: 1px;
     border-color: #000000;
     background-color: #a0a0a0;
-    /*background: linear-gradient(left center, #04acec 0%, #0186ba 100%);*/
 
     thumb-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
     thumb-background-color: #888888;
     thumb-border-color: #000000;
-    thumb-border-radius: 14px;
+    thumb-border-radius: 3px;
     thumb-border-width: 1px;
-    thumb-margin: 2px;
+    thumb-margin: 0px;
     
-    left-arrow-background-color: #ff0000;
-    right-arrow-background-color: #ff0000;
+    left-arrow-background-color: #888888;
+    left-arrow-border-color: #000000;
+    left-arrow-border-width: 1px;
+    left-arrow-margin: 0px;
+    right-arrow-background-color: #888888;
+    right-arrow-border-color: #000000;
+    right-arrow-border-width: 1px;
+    right-arrow-margin: 0px;
 }
 
 Scrollbar:vertical {

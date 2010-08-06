@@ -176,8 +176,12 @@ public class Scrollbar extends Control {
         //draw the background
 
         Bounds thumbBounds = calculateThumbBounds();
-        Bounds leftArrowBounds = new Bounds(2,3,14,14);
-        Bounds rightArrowBounds = new Bounds(getWidth()-3-14,3,14,14);
+        Bounds leftArrowBounds = new Bounds(0,0,arrowLength,getHeight());
+        Bounds rightArrowBounds = new Bounds(getWidth()-arrowLength,0,arrowLength,getHeight());
+        if(isVertical()) {
+            leftArrowBounds = new Bounds(0,0,getWidth(),arrowLength);
+            rightArrowBounds = new Bounds(0, getHeight()-arrowLength,getWidth(),arrowLength);           
+        }
 
         if(cssSkin != null) {
             cssSkin.draw(g,this,size,thumbBounds, leftArrowBounds, rightArrowBounds);

@@ -8,8 +8,8 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.node.control.Scrollbar;
+import org.joshy.gfx.util.GraphicsUtil;
 
 /**
 * Created by IntelliJ IDEA.
@@ -178,9 +178,18 @@ public class CSSSkin extends MasterCSSSkin {
         drawBorder(    g,matcher,"",backBounds);
         //draw the track
         //draw the arrows
-
         drawBackground(g,matcher,"left-arrow-",leftArrowBounds);
         drawBackground(g,matcher,"right-arrow-",rightArrowBounds);
+        drawBorder(g,matcher,"left-arrow-",leftArrowBounds);
+        drawBorder(g,matcher,"right-arrow-",rightArrowBounds);
+        g.setPaint(FlatColor.BLACK);
+        if(scrollbar.isVertical()) {
+            GraphicsUtil.fillUpArrow(g,3,3,14);
+            GraphicsUtil.fillDownArrow(g,3,scrollbar.getHeight()-3-14,14);
+        } else {
+            GraphicsUtil.fillLeftArrow(g,2,3,14);
+            GraphicsUtil.fillRightArrow(g,scrollbar.getWidth()-2-14,3,14);
+        }
 
         //draw the thumb
         drawBackground(g,matcher,"thumb-",thumbBounds);
