@@ -3,7 +3,6 @@ package org.joshy.gfx.stage.swing;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 import javax.media.opengl.GLAutoDrawable;
 import java.awt.*;
@@ -11,7 +10,6 @@ import java.awt.Font;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
 
 public class SwingGFX extends GFX {
     private org.joshy.gfx.draw.Paint fill;
@@ -267,6 +265,16 @@ public class SwingGFX extends GFX {
         } else {
             g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);            
         }
+    }
+
+    @Override
+    public ImageBuffer createBuffer(int width, int height) {
+        return new ImageBuffer(width,height);
+    }
+
+    @Override
+    public void draw(ImageBuffer buf, double x, double y) {
+        g.drawImage(buf.buf, (int)x, (int)y, null);
     }
 
     @Override

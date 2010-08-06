@@ -64,4 +64,8 @@ public abstract class GFX {
     public abstract void fillPath(Path2D.Double path);
 
     public abstract void setSmoothImage(boolean smooth);
+
+    public abstract ImageBuffer createBuffer(int i, int i1);
+
+    public abstract void draw(ImageBuffer buf, double x, double y);
 }

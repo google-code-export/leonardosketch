@@ -3,16 +3,13 @@ package org.joshy.gfx.test.drawing;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.Image;
+import org.joshy.gfx.draw.ImageBuffer;
+import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
+import org.joshy.gfx.node.control.skin.FontSkin;
 import org.joshy.gfx.stage.Stage;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Kernel;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -37,24 +34,18 @@ public class Effects implements Runnable {
                 g.setPaint(FlatColor.RED);
                 g.drawLine(0,0,100,100);
 
-                float[] matrix = {
-                    0.111f, 0.111f, 0.111f,
-                    0.111f, 0.111f, 0.111f,
-                    0.111f, 0.111f, 0.111f,
-                };
+
+                ImageBuffer buf = g.createBuffer(100,25);
+                GFX g2 = buf.getGFX();
+                g2.setPaint(new FlatColor(0.1,0.1,0.1,0.3));
+                g2.drawText("ABCabc", FontSkin.DEFAULT.getFont(),20,20);
+                buf.apply(new BlurEffect(3,3));
+                g.draw(buf,0,0);
+
+                g.setPaint(new FlatColor(0,0,0,1.0));
+                g.drawText("ABCabc", FontSkin.DEFAULT.getFont(),20,20-1);
 
 
-                BufferedImage sourceImage = new BufferedImage(50,50,BufferedImage.TYPE_INT_ARGB);
-                Graphics2D gfx = sourceImage.createGraphics();
-                gfx.setPaint(java.awt.Color.BLACK);
-                gfx.drawString("ABCabc",20,20);
-                gfx.drawLine(0,0,50,50);
-                gfx.dispose();
-
-                BufferedImageOp op = new ConvolveOp( new Kernel(3, 3, matrix) );
-                BufferedImage blurredImage = op.filter(sourceImage,null);
-                Image finalImage = Image.create(blurredImage);
-                g.drawImage(finalImage,0,50);        
             }
 
             @Override
@@ -71,4 +62,5 @@ public class Effects implements Runnable {
         Stage stage = Stage.createStage();
         stage.setContent(node);
     }
+
 }

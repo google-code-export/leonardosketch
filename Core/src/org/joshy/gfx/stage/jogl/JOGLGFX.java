@@ -1,12 +1,7 @@
 package org.joshy.gfx.stage.jogl;
 
 import com.sun.opengl.util.texture.TextureCoords;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.GridNine;
-import org.joshy.gfx.draw.Image;
-import org.joshy.gfx.draw.Paint;
-import org.joshy.gfx.draw.Transform;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.node.Bounds;
 
 import javax.media.opengl.GL;
@@ -193,6 +188,16 @@ public class JOGLGFX extends GFX {
 
     @Override
     public void setSmoothImage(boolean smooth) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public ImageBuffer createBuffer(int i, int i1) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void draw(ImageBuffer buf, double x, double y) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
