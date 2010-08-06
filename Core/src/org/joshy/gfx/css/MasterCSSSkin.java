@@ -11,6 +11,7 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Skin;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.util.URLUtils;
+import org.joshy.gfx.util.u;
 
 import java.net.URI;
 
@@ -102,15 +103,15 @@ public class MasterCSSSkin extends Skin {
         Image icon = null;
         URI uri = set.findURIValue(matcher, "icon");
         if(uri != null) {
-//            u.p("doing the icon: " + uri);
-//            u.p("base URI = " + set.getBaseURI());
+            u.p("doing the icon: " + uri);
+            u.p("base URI = " + set.getBaseURI());
             if(set.getBaseURI() != null) {
                 try {
                     URI imageURI = URLUtils.safeURIResolve(set.getBaseURI(),uri);
                     //URI imageURI = set.getBaseURI().resolve(uri);
-//                    u.p("image uri = " + imageURI);
+                    u.p("image uri = " + imageURI);
                     icon = Image.getImageFromCache(imageURI.toURL());
-//                    u.p("Image = " + icon);
+                    u.p("Image = " + icon);
                 } catch (Exception e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
