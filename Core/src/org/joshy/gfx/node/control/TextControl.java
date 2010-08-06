@@ -123,9 +123,9 @@ public abstract class TextControl extends Control implements Focusable {
 
     private void processKeyEvent(KeyEvent event) {
         int cursorCharX = cursorPointToCursorChar(currentCursorPoint);
-        
+
         if(event.isTextKey()) {
-            if(selection.isActive()) {
+            if(selection.isActive() && text.length() >= 1) {
                 replaceAndClearSelectionWith(event.getGeneratedText());
                 return;
             }
