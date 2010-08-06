@@ -156,7 +156,6 @@ public class Main implements Runnable {
             @Override
             public void doLayout() {
                 for(Control c : controlChildren()) {
-                    c.doLayout();
                     if(c == context.stackPanel) {
                         c.setTranslateY(0);
                         c.setTranslateX(0);
@@ -168,21 +167,22 @@ public class Main implements Runnable {
                         c.setTranslateY(0);
                         c.setHeight(getHeight());
                     }
+                    double w= 4*50+20;
                     if(c == context.getSidebar()) {
-                        double w= 4*50+20;
                         c.setWidth(w);
-                        c.setHeight(getHeight()-0);
+                        c.setHeight(getHeight());
                         c.setTranslateX(getWidth()-w);
-                        c.setTranslateY(5);
-                        c.doLayout();
+                        c.setTranslateY(0);
                     }
                     if(c == context.pageList) {
-                        c.setTranslateX(30);
+                        c.setTranslateX(20);
                         c.setTranslateY(getHeight()-100);
                         c.setHeight(100);
-                        c.setWidth(getWidth()-30-200);
+                        c.setWidth(getWidth()-20-w);
                     }
+                    c.doLayout();
                 }
+                setDrawingDirty();
             }
             @Override
             protected void drawSelf(GFX g) {
