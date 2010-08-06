@@ -42,12 +42,13 @@ public class SwingCore extends Core {
             cssskin.setRuleSet(set);
             CSSProcessor.condense(result.parseTreeRoot,set);
             u.p("default css parsed from: " + url);
-            SkinManager.getShared().installSkin(Button.class,        Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(Panel.class,         Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(Scrollbar.class,     Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(Textbox.class,       Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(Passwordbox.class,   Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(ListView.class,      Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(Button.class,          Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(Panel.class,           Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(Scrollbar.class,       Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(Textbox.class,         Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(Passwordbox.class,     Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(ListView.class,        Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(PopupMenuButton.class, Control.PART_CSS, Control.PROP_CSS, cssskin);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

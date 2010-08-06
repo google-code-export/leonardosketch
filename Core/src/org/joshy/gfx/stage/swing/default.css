@@ -100,7 +100,13 @@ Textbox, Passwordbox {
 Textbox:active, Passwordbox:active {
     background-color: #ffffff;
 }
-Combobox {
+PopupMenuButton {
+    background-color: #a0a0a0;
+    background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
+    border-width: 1px;
+    color: #444444;
+    border-color: #808080;
+    border-radius: 11px;
 
 }
 ListView {

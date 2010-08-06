@@ -43,7 +43,7 @@ public class Button extends Control {
     private Image pressedIcon;
     private static final String PART_ICON = "icon";
     private Callback<ActionEvent> callback;
-    private CSSSkin cssSkin;
+    protected CSSSkin cssSkin;
     private CSSSkin.BoxState size;
 
     public boolean isSelected() {

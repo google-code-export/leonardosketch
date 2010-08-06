@@ -1,9 +1,11 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.stage.Stage;
 
@@ -70,18 +72,37 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
-        g.setPaint(FlatColor.WHITE);
-        g.fillRoundRect(0,0,getWidth(),getHeight(), 10,10);
-        g.setPaint(FlatColor.BLACK);
-        Object o = getSelectedItem();
-        Font.drawCenteredVertically(g, o.toString(), font.getFont(),4, 0, getWidth(), getHeight(), true);
 
+        if(cssSkin != null) {
+            CSSMatcher matcher = new CSSMatcher("PopupMenuButton");
+            Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
+            cssSkin.drawBackground(g,matcher,"", bounds);
+            int col = cssSkin.getCSSSet().findColorValue(matcher, "color");
+            g.setPaint(new FlatColor(col));
+            drawText(g);
+            drawTriangle(g);
+            cssSkin.drawBorder(g,matcher,"",bounds);
+        } else {
+            g.setPaint(FlatColor.WHITE);
+            g.fillRoundRect(0,0,getWidth(),getHeight(), 10,10);
+            g.setPaint(FlatColor.BLACK);
+            drawText(g);
+            drawTriangle(g);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRoundRect(0,0,getWidth(),getHeight(), 10,10);
+        }
+    }
+
+    private void drawTriangle(GFX g) {
         double[] points = new double[]{0,0, 14,0, 7, 9};
         g.translate(getWidth()-22,6);
         g.fillPolygon(points);
         g.translate(-getWidth()+22,-6);
-        g.setPaint(FlatColor.BLACK);
-        g.drawRoundRect(0,0,getWidth(),getHeight(), 10,10);
+    }
+
+    private void drawText(GFX g) {
+        Object o = getSelectedItem();
+        Font.drawCenteredVertically(g, o.toString(), font.getFont(),6, 0, getWidth(), getHeight(), true);
     }
 
     public E getSelectedItem() {
