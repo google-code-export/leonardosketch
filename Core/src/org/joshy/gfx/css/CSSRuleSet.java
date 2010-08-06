@@ -65,6 +65,10 @@ public class CSSRuleSet {
 
     public int findColorValue(CSSMatcher matcher, String propName) {
         CSSProperty prop = findMatchingRule(matcher,propName);
+        if(prop == null) {
+            System.out.println("Couldn't find property " + propName + " for " + matcher);
+            return 0;
+        }
         return ((ColorValue)prop.value).getValue();
     }
 

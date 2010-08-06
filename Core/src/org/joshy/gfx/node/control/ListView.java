@@ -2,6 +2,8 @@ package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.CSSMatcher;
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
@@ -28,21 +30,18 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     private Orientation orientation = Orientation.Vertical;
     private boolean dropIndicatorVisible;
     private int dropIndicatorIndex;
+    private CSSSkin cssSkin;
+    private TextRenderer<E> textRenderer;
 
 
     public ListView() {
         setWidth(200);
         setHeight(300);
-        setRenderer(new ItemRenderer<E>() {
-            public void draw(GFX gfx, ListView listView, Object item, int index, double x, double y, double width, double height) {
-                if(listView.getSelectedIndex() == index) {
-                    gfx.setPaint(new FlatColor(0xe0e0ff));
-                    gfx.fillRect(x,y,width,height);
-                }
-                gfx.setPaint(FlatColor.BLACK);
-                if(item != null) {
-                    gfx.drawText(item.toString(), font.getFont(), x+2, y+15);
-                }
+        setRenderer(defaultItemRenderer);
+        setTextRenderer(new TextRenderer<E>(){
+            public String toString(ListView view, E item, int index) {
+                if(item == null) return "";
+                return item.toString();
             }
         });
 
@@ -167,6 +166,8 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     @Override
     public void doSkins() {
         font = SkinManager.getShared().getSkin(this, null, "main", "jogltext.font", null, FontSkin.DEFAULT);
+        cssSkin = (CSSSkin) SkinManager.getShared().getSkin(this,PART_CSS,PROP_CSS);
+        setLayoutDirty();
     }
 
 
@@ -177,10 +178,16 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     @Override
     public void draw(GFX g) {
         if(getWidth() < 1) return;
-        g.setPaint(FlatColor.WHITE);
-        g.fillRect(0,0,width,height);
-        g.setPaint(FlatColor.BLACK);
-        g.drawRect(0,0,width,height);
+        CSSMatcher matcher = new CSSMatcher("ListView");
+        
+        if(cssSkin != null) {
+            cssSkin.drawBackground(g,matcher,"",new Bounds(0,0,width,height));
+        } else {
+            g.setPaint(FlatColor.WHITE);
+            g.fillRect(0,0,width,height);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRect(0,0,width,height);
+        }
 
         Bounds oldClip = g.getClipRect();
         g.setClipRect(new Bounds(0,0,width,height));
@@ -201,6 +208,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
                 renderer.draw(g, this, item, i+startRow, 0+1, i*rowHeight+1+dy, getWidth()-1, rowHeight);
             }
         }
+
         if(orientation == Orientation.Horizontal) {
             double dx = scrollX - ((int)(scrollX/colWidth))*colWidth;
             int startCol = (int)(-scrollX/colWidth);
@@ -219,6 +227,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
             }
 
         }
+
         if(orientation == Orientation.HorizontalWrap || orientation == Orientation.VerticalWrap) {
             double dy = scrollY - ((int)(scrollY/rowHeight))*rowHeight;
             double dx = scrollX - ((int)(scrollX/colWidth))*colWidth;
@@ -253,6 +262,10 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
 
         
         g.setClipRect(oldClip);
+        if(cssSkin != null) {
+            cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,width,height));
+        }
+
     }
 
 
@@ -393,6 +406,10 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         this.dropIndicatorIndex = dropIndicatorIndex;
     }
 
+    public void setTextRenderer(TextRenderer<E> textRenderer) {
+        this.textRenderer = textRenderer;
+    }
+
 
     public static class ListEvent extends Event {
         public static final EventType Updated = new EventType("ListEventUpdated");
@@ -426,4 +443,40 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     public enum Orientation {
         Horizontal, HorizontalWrap, VerticalWrap, Vertical
     }
+
+    public static interface TextRenderer<E> {
+        public String toString(ListView view, E item, int index);
+    }
+
+    ItemRenderer defaultItemRenderer =  new ItemRenderer<E>() {
+        public void draw(GFX gfx, ListView listView, E item, int index, double x, double y, double width, double height) {
+            if(cssSkin != null) {
+                CSSMatcher matcher = new CSSMatcher("ListView");
+                Bounds bounds = new Bounds(x,y,width,height);
+                String prefix = "item-";
+                if(listView.getSelectedIndex() == index) {
+                    prefix = "selected-item-";
+                }
+                cssSkin.drawBackground(gfx,matcher,prefix,bounds);
+                cssSkin.drawBorder(gfx,matcher,prefix,bounds);
+                int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
+                gfx.setPaint(new FlatColor(col));
+                if(item != null) {
+                    String s = textRenderer.toString(listView, item, index);
+                    gfx.drawText(s, font.getFont(), x+2, y+15);
+                }
+            } else {
+                if(listView.getSelectedIndex() == index) {
+                    gfx.setPaint(new FlatColor(0xff00ff));
+                    gfx.fillRect(x,y,width,height);
+                }
+                gfx.setPaint(FlatColor.BLACK);
+                if(item != null) {
+                    String s = textRenderer.toString(listView, item, index);
+                    gfx.drawText(s, font.getFont(), x+2, y+15);
+                }
+            }
+        }
+    };
+
 }

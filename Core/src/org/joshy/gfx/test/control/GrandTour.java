@@ -1,22 +1,16 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SelectionEvent;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.control.skin.FontSkin;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.SplitPane;
 import org.joshy.gfx.node.layout.VBox;
 import org.joshy.gfx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -188,18 +182,16 @@ public class GrandTour implements Runnable {
         ListView exampleList = new ListView();
         final ListModel<Example> exampleModel = (ListModel<Example>)ListView.createModel(examples);
         exampleList.setModel(exampleModel);
-        exampleList.setRenderer(new ListView.ItemRenderer<Example>(){
-            public void draw(GFX gfx, ListView listView, Example item, int index, double x, double y, double width, double height) {
-                if(listView.getSelectedIndex() == index) {
-                    gfx.setPaint(new FlatColor(0xc0c0ff));
-                    gfx.fillRect(x,y,width,height);
-                }
-                gfx.setPaint(FlatColor.BLACK);
+        exampleList.setTextRenderer(new ListView.TextRenderer<Example>(){
+            public String toString(ListView view, Example item, int index) {
                 if(item != null) {
-                    Font.drawCenteredVertically(gfx, item.name, FontSkin.DEFAULT.getFont(),  x, y, width, height, true);
+                    return item.name;
+                } else {
+                    return null;
                 }
             }
         });
+        
         ScrollPane exampleListScroll = new ScrollPane();
         exampleListScroll.setContent(exampleList);
 

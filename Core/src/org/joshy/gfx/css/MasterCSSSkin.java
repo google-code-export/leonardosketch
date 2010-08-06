@@ -69,7 +69,7 @@ public class MasterCSSSkin extends Skin {
 
     }
 
-    protected void drawBorder(GFX g, CSSMatcher matcher, String prefix, Bounds bounds) {
+    public void drawBorder(GFX g, CSSMatcher matcher, String prefix, Bounds bounds) {
         int margin = set.findIntegerValue(matcher.element,prefix+"margin");
         int borderWidth = set.findIntegerValue(matcher.element, prefix+"border-width");
         int borderRadius = set.findIntegerValue(matcher.element,prefix+"border-radius");
@@ -151,7 +151,8 @@ public class MasterCSSSkin extends Skin {
         return gf;
     }
 
-    protected void drawBackground(GFX g, CSSMatcher matcher, String prefix, Bounds b) {
+    public void drawBackground(GFX g, CSSMatcher matcher, String prefix, Bounds b) {
+        g.translate(b.getX(),b.getY());
         int margin = set.findIntegerValue(matcher.element,prefix+"margin");
         BaseValue background = set.findValue(matcher,prefix+"background");
         int radius = set.findIntegerValue(matcher.element,prefix+"border-radius");
@@ -162,12 +163,12 @@ public class MasterCSSSkin extends Skin {
                 g.setPaint(toGradientFill((LinearGradientValue)background,b.getWidth(),b.getHeight()));
             }
             if(radius == 0) {
-                g.fillRect(b.getX()+margin,b.getY()+margin,b.getWidth()-margin*2, b.getHeight()-margin*2);
+                g.fillRect(0+margin,0+margin,b.getWidth()-margin*2, b.getHeight()-margin*2);
             } else {
-                g.fillRoundRect(b.getX()+margin,b.getY()+margin,b.getWidth()-margin*2, b.getHeight()-margin*2,radius,radius);
+                g.fillRoundRect(0+margin,0+margin,b.getWidth()-margin*2, b.getHeight()-margin*2,radius,radius);
             }
-
         }
+        g.translate(-b.getX(),-b.getY());
     }
 
     public static class BoxState {
