@@ -74,8 +74,8 @@ Panel, HBox, VBox {
 Scrollbar {
     border-width: 1px;
     border-color: #000000;
-    background-color: #00ff00;
-    background: linear-gradient(left center, #04acec 0%, #0186ba 100%);
+    background-color: #a0a0a0;
+    /*background: linear-gradient(left center, #04acec 0%, #0186ba 100%);*/
 
     thumb-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
     thumb-background-color: #888888;
@@ -107,8 +107,23 @@ PopupMenuButton {
     color: #444444;
     border-color: #808080;
     border-radius: 11px;
-
 }
+
+PopupMenu {
+    background-color: #f0f0f0;
+    border-radius: 11px;
+    border-width: 1px;
+    border-color: #808080;
+    color: #444444;
+
+    item-background-color: #f0f0f0;
+    item-color: #444444;
+    selected-item-margin: 1px;
+    selected-item-background-color: #0000ff;
+    selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    selected-item-color: #ffffff;
+}
+
 ListView {
     margin: 0px;
     border-width: 0px;

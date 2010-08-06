@@ -1,5 +1,8 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.CSSMatcher;
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -8,6 +11,7 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.skin.FontSkin;
 
 import java.util.Date;
@@ -24,6 +28,7 @@ public class PopupMenu extends Control {
     private int hoverRow = -1;
     private Callback<ChangedEvent> callback;
     private long openTime;
+    private CSSSkin cssSkin;
 
     public PopupMenu(ListModel model, Callback<ChangedEvent> callback) {
         setVisible(true);
@@ -78,12 +83,32 @@ public class PopupMenu extends Control {
     double arc = 10;
 
     @Override
+    public void doSkins() {
+        cssSkin = (CSSSkin) SkinManager.getShared().getSkin(this,PART_CSS,PROP_CSS);
+        setLayoutDirty();
+    }
+
+    @Override
+    public void doLayout() {
+        setHeight( rowHeight * model.size() + spacer*2);
+    }
+
+    @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
-        g.setPaint(FlatColor.WHITE);
-        g.fillRoundRect(0,0,getWidth(),getHeight(),arc,arc);
-        g.setPaint(FlatColor.BLACK);
-        g.drawRoundRect(0,0,getWidth(),getHeight(),arc,arc);
+
+        Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
+        CSSMatcher matcher = new CSSMatcher("PopupMenu");
+
+        if(cssSkin != null) {
+            cssSkin.drawBackground(g,matcher,"",bounds);
+            cssSkin.drawBorder(g,matcher,"",bounds);
+        } else {
+            g.setPaint(FlatColor.WHITE);
+            g.fillRoundRect(0,0,getWidth(),getHeight(),arc,arc);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRoundRect(0,0,getWidth(),getHeight(),arc,arc);
+        }
 
         for(int i=0; i<model.size(); i++) {
             Object o = model.get(i);
@@ -97,22 +122,31 @@ public class PopupMenu extends Control {
                 bg = FlatColor.WHITE;
                 fg = FlatColor.BLACK;
             }
-            g.setPaint(bg);
-            g.fillRect(1,rowy+spacer,getWidth()-1,rowHeight);
-            g.setPaint(fg);
-            Font.drawCenteredVertically(g,o.toString(), FontSkin.DEFAULT.getFont(),
-                    3,rowy+spacer,getWidth(),rowHeight,true);
+            Bounds itemBounds = new Bounds(0, rowy + spacer, getWidth() - 1, rowHeight);
+            if(cssSkin != null) {
+                String prefix = "item-";
+                if(i == hoverRow) {
+                    prefix = "selected-item-";
+                }
+                cssSkin.drawBackground(g,matcher,prefix,itemBounds);
+                cssSkin.drawBorder(g,matcher,prefix,itemBounds);
+                int col = cssSkin.getCSSSet().findColorValue(matcher, prefix+"color");
+                g.setPaint(new FlatColor(col));
+                drawText(g, o, rowy);
+            } else {
+                g.setPaint(bg);
+                g.fillRect(1,rowy+spacer,getWidth()-1,rowHeight);
+                g.setPaint(fg);
+                drawText(g, o, rowy);
+            }
         }
     }
 
-    @Override
-    public void doLayout() {
-        setHeight( rowHeight * model.size() + spacer*2);
+    private void drawText(GFX g, Object o, double rowy) {
+        Font.drawCenteredVertically(g,o.toString(), FontSkin.DEFAULT.getFont(),
+                3,rowy+spacer,getWidth(),rowHeight,true);
     }
 
-    @Override
-    public void doSkins() {
-    }
 
     public ListModel getModel() {
         return model;

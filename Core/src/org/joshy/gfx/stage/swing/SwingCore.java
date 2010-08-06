@@ -49,6 +49,7 @@ public class SwingCore extends Core {
             SkinManager.getShared().installSkin(Passwordbox.class,     Control.PART_CSS, Control.PROP_CSS, cssskin);
             SkinManager.getShared().installSkin(ListView.class,        Control.PART_CSS, Control.PROP_CSS, cssskin);
             SkinManager.getShared().installSkin(PopupMenuButton.class, Control.PART_CSS, Control.PROP_CSS, cssskin);
+            SkinManager.getShared().installSkin(PopupMenu.class, Control.PART_CSS, Control.PROP_CSS, cssskin);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
