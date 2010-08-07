@@ -11,4 +11,5 @@
     <jar name="httpcore-nio-4.0.1.jar"/>
     <jar name="httpmime-4.0.1.jar"/>
     <jar name="parboiled-0.9.7.3.jar"/>
+    <jar name="twitter4j-core-2.1.4-SNAPSHOT.jar"/>
 </app>

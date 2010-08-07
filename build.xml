@@ -157,6 +157,7 @@
                     <jar href="httpcore-nio-4.0.1.jar"/>
                     <jar href="httpmime-4.0.1.jar"/>
                     <jar href="XMLLib.jar"/>
+                    <jar href="twitter4j-core-2.1.4-SNAPSHOT.jar"/>
                     <property name="apple.laf.useScreenMenuBar" value="true"/>
                 </resources>
                 <application-desc main-class="org.joshy.sketch.Main">
@@ -219,6 +220,7 @@
             <classpath path="build/jars/Sketch.jar"/>
             <classpath path="lib/parboiled-0.9.7.3.jar"/>
             <classpath path="lib/XMLLib.jar"/>
+            <classpath path="lib/twitter4j-core-2.1.4-SNAPSHOT.jar"/>
             <sysproperty key="apple.laf.useScreenMenuBar" value="true"/>
             <jvmarg value="-Xdock:name=Leonardo"/>
         </java>
