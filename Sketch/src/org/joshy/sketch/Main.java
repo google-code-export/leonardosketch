@@ -287,6 +287,7 @@ public class Main implements Runnable {
     }
 
     private void buildCommonMenubar(DocContext context) {
+        u.p("foo 0");
         DocumentCanvas canvas = context.getCanvas();
         //recent files menu
         Menu recentFilesMenu = new Menu().setTitle("Recent Files");
