@@ -80,6 +80,13 @@ public class SymbolManager {
         if(!basedir.exists()) {
             boolean success = basedir.mkdirs();
             if(!success) {
+                if(sets.isEmpty()) {
+                    SymbolSet set = new SymbolSet();
+                    set.file = new File(basedir,"default.xml");
+                    sets.put(set.file,set);
+                    list.add(set);
+                    currentSet = set;
+                }
                 throw new Exception("Error making the directory: " + basedir);
             }
         }
