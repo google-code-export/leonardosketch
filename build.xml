@@ -139,7 +139,7 @@
                 <security>
                     <all-permissions/>
                 </security>
-                <update check="background" policy="prompt-update"/>
+                <update check="always" policy="prompt-update"/>
                 <resources>
                     <j2se version='1.6+'
                         initial-heap-size="64m"
