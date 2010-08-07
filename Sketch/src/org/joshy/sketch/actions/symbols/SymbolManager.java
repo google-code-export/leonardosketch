@@ -46,6 +46,8 @@ public class SymbolManager {
                 }
             }
             public int size() {
+                if(currentSet == null) return 0;
+                if(currentSet.symbols == null) return 0;
                 return currentSet.symbols.size();
             }
         };
