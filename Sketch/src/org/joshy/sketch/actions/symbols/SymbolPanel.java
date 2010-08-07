@@ -143,6 +143,8 @@ public class SymbolPanel extends Panel {
         this.add(setSwitcher);
         this.add(symbolPane);
         this.add(symbolAddButton);
+
+        this.setFill(new FlatColor(0x808080));
     }
 
     private void showContextMenu(MouseEvent event) {
@@ -184,22 +186,45 @@ public class SymbolPanel extends Panel {
 
     @Override
     public void doLayout() {
+        /*
         for(Control c : controlChildren()) {
-            c.doLayout();
             if(c == setSwitcher) {
-                c.setWidth(getWidth());
                 c.setTranslateY(0);
+                c.setTranslateX(0);
+                c.setWidth(getWidth());
             }
             if(c == symbolPane) {
+                c.setTranslateX(0);
+                c.setTranslateY(30);
                 c.setWidth(getWidth());
                 c.setHeight(getHeight()-50);
-                c.setTranslateY(30);
             }
             if(c == symbolAddButton) {
                 c.setWidth(getWidth());
                 c.setHeight(50);
                 c.setTranslateY(getHeight()-50);
+                c.setTranslateX(0);
             }
-        }
+            c.doLayout();
+        }*/
+
+        setSwitcher.doLayout();
+        setSwitcher.setTranslateX(0);
+        setSwitcher.setTranslateY(0);
+        symbolPane.setTranslateX(0);
+        double sy = setSwitcher.getVisualBounds().getY2();
+
+        symbolAddButton.doLayout();
+        symbolAddButton.setTranslateX(0);
+        symbolAddButton.setTranslateY(getHeight()-symbolAddButton.getHeight());
+        double bh = symbolAddButton.getHeight();
+        
+
+        symbolPane.setTranslateX(0);
+        symbolPane.setTranslateY(sy);
+        symbolPane.setHeight(getHeight()-sy-bh);
+        symbolPane.setWidth(getWidth());
+        symbolPane.doLayout();
+
     }
 }

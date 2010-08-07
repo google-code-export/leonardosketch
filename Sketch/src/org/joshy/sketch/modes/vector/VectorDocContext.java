@@ -9,7 +9,6 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.node.layout.VBox;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrPanel;
@@ -160,7 +159,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         this.symbolPanel = new SymbolPanel(getMain().symbolManager, this);
         this.sideBar.add("Symbols",this.symbolPanel);
         this.flickrPanel = new FlickrPanel(this);
-        this.flickrPanel.setFill(FlatColor.GREEN);
+        this.flickrPanel.setFill(new FlatColor(0x808080));
         this.sideBar.add("Flickr Search", this.flickrPanel);
         this.flickrPanel.setVisible(false);
     }

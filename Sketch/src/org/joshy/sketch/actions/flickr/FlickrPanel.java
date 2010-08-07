@@ -141,9 +141,8 @@ public class FlickrPanel extends Panel {
         scrollPane.setContent(photoList);
         searchBox = new Textbox();
         HBox box = new HBox();
-        //box.setFill(FlatColor.GRAY);
-        box.setHAlign(HAlign.TOP);
-        box.setHeight(35);
+        box.setHAlign(HAlign.BOTTOM);
+        box.setHeight(40);
         box.add(searchBox,new Button("Search").onClicked(doSearch));
         this.add(box);
 
@@ -153,12 +152,12 @@ public class FlickrPanel extends Panel {
     @Override
     public void doLayout() {
         for(Control c : controlChildren()) {
-            c.doLayout();
             if(c == scrollPane){
                 c.setWidth(getWidth());
-                c.setHeight(getHeight()-30);
-                c.setTranslateY(30);
+                c.setHeight(getHeight()-40);
+                c.setTranslateY(40);
             }
+            c.doLayout();
         }
     }
 

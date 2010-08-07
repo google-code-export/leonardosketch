@@ -40,7 +40,6 @@ public class TabPanel extends Panel {
     @Override
     public void doLayout() {
         for(Control c : controlChildren()) {
-            c.doLayout();
             if(c == tabtop) {
                 tabtop.setWidth(getWidth());
                 tabtop.setHeight(30);
@@ -52,7 +51,9 @@ public class TabPanel extends Panel {
                 c.setTranslateX(0);
                 c.setTranslateY(30);
             }
+            c.doLayout();
         }
+        setDrawingDirty();
     }
 
     public void setSelected(Node node) {
@@ -68,7 +69,6 @@ public class TabPanel extends Panel {
             EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
                 public void call(MouseEvent event) {
                     int x = (int) (event.getX()/getWidth()*tabs.size());
-                    u.p("x = " + x);
                     setSelected(tabs.get(x));
                 }
             });
