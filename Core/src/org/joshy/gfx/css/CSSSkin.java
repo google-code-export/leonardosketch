@@ -2,13 +2,13 @@ package org.joshy.gfx.css;
 
 import org.joshy.gfx.css.values.BaseValue;
 import org.joshy.gfx.css.values.LinearGradientValue;
+import org.joshy.gfx.css.values.ShadowValue;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.util.GraphicsUtil;
-import org.joshy.gfx.util.u;
 
 /**
 * Created by IntelliJ IDEA.
@@ -124,15 +124,18 @@ public class CSSSkin extends MasterCSSSkin {
             textWidth -= icon.getWidth();
         }
         //do drop shadow on text content
-        if(false && content != null && content.length() > 0) {
-            u.p("drawoing buffere for control " + control + " " + textWidth + " " + size.contentHeight);
-            ImageBuffer buf = g.createBuffer((int)textWidth,(int)size.contentHeight);
-            GFX g2 = buf.getGFX();
-            g2.setPaint(new FlatColor(0.1,0.1,0.1,0.3));
-            g2.translate(-textX,-contentY);
-            Font.drawCentered(g2,content,font,textX,contentY,textWidth,size.contentHeight,true);
-            buf.apply(new BlurEffect(3,3));
-            g.draw(buf,textX+1,contentY+1);
+        if(content != null && content.length() > 0) {
+            BaseValue value = set.findValue(matcher, "text-shadow");
+            if(value instanceof ShadowValue) {
+                ShadowValue shadow = (ShadowValue) value;
+                ImageBuffer buf = g.createBuffer((int)textWidth,(int)size.contentHeight);
+                GFX g2 = buf.getGFX();
+                g2.setPaint(new FlatColor(shadow.getColor(),0.3));
+                g2.translate(-textX,-contentY);
+                Font.drawCentered(g2,content,font,textX,contentY,textWidth,size.contentHeight,true);
+                buf.apply(new BlurEffect(3,3));
+                g.draw(buf,textX+shadow.getXoffset(),contentY+shadow.getYoffset());
+            }
         }
         
         if("center".equals(textAlign)) {

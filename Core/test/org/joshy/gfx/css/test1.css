@@ -16,3 +16,8 @@ transptest {
     background-color: transparent;
     color: #ff0000;
 }
+
+shadowtest {
+    /* a black shadow offset by 3,2 with a blur radius of 4 */
+    text-shadow: #000000 3px 2px 4px;
+}

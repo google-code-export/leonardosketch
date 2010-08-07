@@ -1,6 +1,7 @@
 package org.joshy.gfx.css;
 
 import org.joshy.gfx.css.values.BaseValue;
+import org.joshy.gfx.css.values.ShadowValue;
 import org.joshy.gfx.css.values.StringListValue;
 import org.joshy.gfx.util.u;
 import org.junit.After;
@@ -64,6 +65,13 @@ public class MainTest {
         assertTrue("bold".equals(set.findStringValue("button","font-weight")));
         assertTrue(set.findIntegerValue(matcher,"font-size") == 12);
 
+        //shadow
+        BaseValue shadow = set.findValue(new CSSMatcher("shadowtest"), "text-shadow");
+        assertTrue(shadow instanceof ShadowValue);
+        ShadowValue sv = (ShadowValue)shadow;
+        assertTrue(sv.getXoffset()==3);
+        assertTrue(sv.getYoffset()==2);
+        assertTrue(sv.getBlurRadius()==4);
     }
 
 

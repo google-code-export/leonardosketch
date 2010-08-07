@@ -103,6 +103,10 @@ public class CSSParser extends BaseParser<Object> {
         final Var<String> pos1 = new Var<String>();
         final Var<String> pos2 = new Var<String>();
         final Var stops = new Var();
+        final Var<String> textShadowColor = new Var<String>();
+        final Var<String> shadowXoff = new Var<String>();
+        final Var<String> shadowYoff = new Var<String>();
+        final Var<String> blurRadius = new Var<String>();
         return FirstOf(
             //gradients
             Sequence(Sequence(String("linear-gradient("),
@@ -113,6 +117,14 @@ public class CSSParser extends BaseParser<Object> {
                     ZeroOrMore(Sequence(",",GradientStop())),stops.set(values("ZeroOrMore/Sequence/GradientStop")),
                     ")"),
                     new LinearGradientAction(pos1,pos2,stops)
+                    ),
+            //text shadows
+            Sequence(Sequence(
+                    HexValue(),textShadowColor.set(lastText()),Spacing(),
+                    PixelValue(),shadowXoff.set(lastText()),Spacing(),
+                    PixelValue(),shadowYoff.set(lastText()),Spacing(),
+                    PixelValue(),blurRadius.set(lastText()),Spacing()),
+                    new TextShadowAction(textShadowColor,shadowXoff,shadowYoff,blurRadius)
                     ),
             //image URL
             Sequence(Sequence("url(",OneOrMore(URLChar()),")"), new ImageURLAction()),
@@ -136,25 +148,15 @@ public class CSSParser extends BaseParser<Object> {
         );
     }
 
+    public Rule PixelValue() {
+        return Sequence(Optional("-"),OneOrMore(Number()),"px");
+    }
+
     public Rule WordCharOrSpace() {
         //word chars and spaces
         return FirstOf(CharRange('a', 'z'), CharRange('A', 'Z'), CharRange('0', '9'), '_', '#',' ');
     }
 
-    public static class GradientStopAction implements Action {
-        private Var<String> hex;
-        private Var<String> percentage;
-
-        public GradientStopAction(Var<String> hex, Var<String> percentage) {
-            this.hex = hex;
-            this.percentage = percentage;
-        }
-
-        public boolean run(Context context) {
-            context.setNodeValue(new GradientStopValue(hex.get(),percentage.get()));
-            return true;
-        }
-    }
 
     public Rule GradientStop() {
         final Var<String> hex = new Var<String>();
@@ -238,6 +240,21 @@ public class CSSParser extends BaseParser<Object> {
 
     private static void p(String s) {
         System.out.println(s);
+    }
+    
+    public static class GradientStopAction implements Action {
+        private Var<String> hex;
+        private Var<String> percentage;
+
+        public GradientStopAction(Var<String> hex, Var<String> percentage) {
+            this.hex = hex;
+            this.percentage = percentage;
+        }
+
+        public boolean run(Context context) {
+            context.setNodeValue(new GradientStopValue(hex.get(),percentage.get()));
+            return true;
+        }
     }
 
     public static class ImageURLAction implements Action {
@@ -337,6 +354,26 @@ public class CSSParser extends BaseParser<Object> {
     public static class ToStringAction implements Action<String> {
         public boolean run(Context<String> context) {
             context.setNodeValue(context.getPrevText());
+            return true;
+        }
+    }
+
+    public static class TextShadowAction implements Action {
+        private Var<String> color;
+        private Var<String> xoff;
+        private Var<String> yoff;
+        private Var<String> radius;
+
+        public TextShadowAction(Var<String> textShadowColor, Var<String> shadowXoff, Var<String> shadowYoff, Var<String> blurRadius) {
+            this.color = textShadowColor;
+            this.xoff = shadowXoff;
+            this.yoff = shadowYoff;
+            this.radius = blurRadius;
+        }
+
+        public boolean run(Context context) {
+            System.out.println("got a text shadow call: " + color.get() + " " + xoff.get() + " " + yoff.get() + " " + radius.get());
+            context.setNodeValue(new ShadowValue(color.get(), xoff.get(),yoff.get(), radius.get()));
             return true;
         }
     }
