@@ -97,22 +97,26 @@ public class OSUtil {
         StringBuffer filepath = new StringBuffer(System.getProperty("user.home"));
         System.out.println("os = " + os);
         if(os.indexOf("windows xp") != -1) {
+            u.p("doing xp");
             filepath.append(File.separator);
             filepath.append("Local Settings");
             filepath.append(File.separator);
             filepath.append("Application Data");
         } else if (os.indexOf("vista") != -1) {
-          filepath.append(File.separator);
-          filepath.append("appdata");
-          filepath.append(File.separator);
-          filepath.append("locallow");
-      } else if (os.startsWith("mac")) {
-          filepath.append(File.separator);
-          filepath.append("Library");
-          filepath.append(File.separator);
-          filepath.append("Preferences");
-      }
-      filepath.append(File.separator);
+            u.p("doing vista");
+            filepath.append(File.separator);
+            filepath.append("appdata");
+            filepath.append(File.separator);
+            filepath.append("locallow");
+        } else if (os.startsWith("mac")) {
+            u.p("doing mac");
+            filepath.append(File.separator);
+            filepath.append("Library");
+            filepath.append(File.separator);
+            filepath.append("Preferences");
+        }
+        filepath.append(File.separator);
+        System.out.println("final filepath = " + filepath.toString());
       return filepath.toString();
     }
 }
