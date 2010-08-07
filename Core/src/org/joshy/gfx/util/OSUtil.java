@@ -93,10 +93,15 @@ public class OSUtil {
     }*/
 
     public static String getBaseStorageDir() {
-      String os = System.getProperty("os.name").toLowerCase();
-      StringBuffer filepath = new StringBuffer(System.getProperty("user.home"));
+        String os = System.getProperty("os.name").toLowerCase();
+        StringBuffer filepath = new StringBuffer(System.getProperty("user.home"));
         System.out.println("os = " + os);
-      if (os.indexOf("vista") != -1) {
+        if(os.indexOf("windows xp") != -1) {
+            filepath.append(File.separator);
+            filepath.append("Local Settings");
+            filepath.append(File.separator);
+            filepath.append("Application Data");
+        } else if (os.indexOf("vista") != -1) {
           filepath.append(File.separator);
           filepath.append("appdata");
           filepath.append(File.separator);
