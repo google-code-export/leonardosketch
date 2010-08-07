@@ -1,25 +1,34 @@
 package org.joshy.sketch.actions;
 
-import com.joshondesign.xml.Doc;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.util.OSUtil;
+import org.joshy.gfx.Core;
 import org.joshy.gfx.util.u;
-import org.joshy.gfx.util.xml.XMLRequest;
 import org.joshy.sketch.controls.StandardDialog;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.Configuration;
+import twitter4j.conf.PropertyConfiguration;
+import twitter4j.http.AccessToken;
+import twitter4j.http.OAuthAuthorization;
+import twitter4j.http.RequestToken;
+import twitter4j.util.ImageUpload;
 
-import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
-import java.io.IOException;
-import java.net.URL;
+import java.util.Properties;
 
 /**
  * Uploads a snapshot of the current document to twitter
  */
 public class TwitPicAction extends SAction {
-    private static final String USERNAME = "org.joshy.sketch.actions.TwitPicAction.username";
-    private static final String PASSWORD = "org.joshy.sketch.actions.TwitPicAction.password";
+    private static final String consumerKey = "Di1ZjpaZBqBTuCNBMmQ0g";
+    private static final String consumerSecret = "Qsa832hZ0z6Di2AY1umfhAgPowf2YtjCxQvooRzXTM";
+    private static final String TWITPIC_API = "143ccfc261d48a81a1094f18019b7a82";
+
+    private static final String TWITTER_TOKEN = "org.joshy.sketch.actions.TwitPicAction.token";
+    private static final String TWITTER_TOKEN_SECRET = "org.joshy.sketch.actions.TwitPicAction.tokenSecret";
+
     private DocContext context;
 
     public TwitPicAction(DocContext context) {
@@ -33,64 +42,51 @@ public class TwitPicAction extends SAction {
 
             ChangeSettingsAction csa = new ChangeSettingsAction(context, false);
             csa.execute();
-            if(csa.username == null || csa.password == null) return;
-            
-            File file = File.createTempFile("foo", ".png");
+            if(!context.getSettings().containsKey(TWITTER_TOKEN)) return;
+
+            u.p("we already have auth info");
+            final Twitter twitter = new TwitterFactory().getInstance();
+            twitter.setOAuthConsumer(consumerKey,consumerSecret);
+            final AccessToken token = new AccessToken(context.getSettings().getProperty(TWITTER_TOKEN), context.getSettings().getProperty(TWITTER_TOKEN_SECRET));
+            twitter.setOAuthAccessToken(token);
+            //u.p("my id = " + twitter.getId());
+
+
+
+            final File file = File.createTempFile("foo", ".png");
             file.deleteOnExit();
             SavePNGAction.export(file, (SketchDocument) context.getDocument());
-            u.p("wrote image to "+file.getAbsolutePath());
-            URL url = new URL("http://twitpic.com/api/uploadAndPost");
-            String message = StandardDialog.showEditText("Status message with image","");
-            if(message == null) return;
+            //u.p("wrote image to "+file.getAbsolutePath());
 
-            new XMLRequest()
-                    .setMethod(XMLRequest.METHOD.POST)
-                    .setURL("http://twitpic.com/api/uploadAndPost")
-                    .setMultiPart(true)
-                    .setParameter("username", csa.username)
-                    .setParameter("password", csa.password)
-                    .setParameter("message", message)
-                    .setFile(file)
-                    .onComplete(new Callback<Doc>() {
-                        public void call(Doc doc) {
-                            doc.dump();
-                            context.getUndoOverlay().showIndicator("Uploaded");
-                            try {
-                                OSUtil.openBrowser(doc.xpathString("rsp/mediaurl/text()").trim());
-                            } catch (XPathExpressionException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    })
-                    .start();
 
-            u.p("started request");
+            final String message = StandardDialog.showEditText("Message with image","");
             context.getUndoOverlay().showIndicator("Uploading to TwitPic");
-        } catch (IOException e) {
-            e.printStackTrace();
+
+            new Thread(new Runnable(){
+                public void run() {
+                    try {
+                        Configuration conf = new PropertyConfiguration(new Properties());
+                        OAuthAuthorization oauth = new OAuthAuthorization(conf,consumerKey,consumerSecret,token);
+                        ImageUpload upload = ImageUpload.getTwitpicUploader(TWITPIC_API,oauth);
+                        final String resultUrl = upload.upload(file,"foo bar baz");
+                        //u.p("finished uploading to twitpic: " + resultUrl);
+                        twitter.updateStatus(message + " " + resultUrl);
+                        Core.getShared().defer(new Runnable(){
+                            public void run() {
+                                context.getUndoOverlay().showIndicator("Done uploading to twitter");
+                            }
+                        });
+                    } catch (TwitterException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-//                var rsp = doc.elements("rsp")[0];
-//                println("rsp = {rsp}");
-//                println("status = {rsp.attr('status')}");
-//                println("stat = {rsp.attr('stat')}");
-//                if(rsp.attr('status') == 'ok') {
-//                    var url = rsp.elements("mediaurl")[0].text();
-//                    println("url = {url}");
-//                    if(url != null) {
-//                        OSUtil.openBrowser(url);
-//                    }
-//                }
-//                if(rsp.attr('stat') == 'fail') {
-//                    var err = rsp.elements("err")[0];
-//                    showError(err.attr("msg"));
-//                }
 
     public static class ChangeSettingsAction extends SAction {
-        private String username;
-        private String password;
         private boolean force;
         private DocContext context;
 
@@ -102,23 +98,22 @@ public class TwitPicAction extends SAction {
 
         @Override
         public void execute() {
-            username = null;
-            if(!context.getSettings().containsKey(USERNAME) || force) {
-                username = StandardDialog.showEditText("Twitter username","");
-                context.getSettings().setProperty(USERNAME,username);
-            } else {
-                username = context.getSettings().getProperty(USERNAME);
-            }
-            if(username == null)return;
+            try {
+                Twitter twitter = new TwitterFactory().getInstance();
+                twitter.setOAuthConsumer(consumerKey,consumerSecret);
 
-            password = null;
-            if(!context.getSettings().containsKey(PASSWORD) || force) {
-                password = StandardDialog.showEditText("Twitter password","");
-                context.getSettings().setProperty(PASSWORD, password);
-            } else {
-                password = context.getSettings().getProperty(PASSWORD);
+                if(!context.getSettings().containsKey(TWITTER_TOKEN) || force) {
+                    u.p("no auth info already");
+                    RequestToken requestToken = twitter.getOAuthRequestToken();
+                    String url = requestToken.getAuthorizationURL();
+                    String pin = StandardDialog.showEditText("Please visit this url then paste in the PIN",url);
+                    AccessToken accessToken = twitter.getOAuthAccessToken(requestToken,pin);
+                    context.getSettings().setProperty(TWITTER_TOKEN,accessToken.getToken());
+                    context.getSettings().setProperty(TWITTER_TOKEN_SECRET,accessToken.getTokenSecret());
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
-            if(password == null)return;
         }
     }
 }
