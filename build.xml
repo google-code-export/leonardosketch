@@ -149,6 +149,7 @@
 
                     <jar href="Sketch.jar" main="true" download="eager"/>
                     <jar href="Core.jar" main="false" download="eager"/>
+                    <jar href="MacStubs.jar"/>
                     <jar href="parboiled-0.9.7.3.jar"/>
                     <jar href="apache-mime4j-0.6.jar"/>
                     <jar href="commons-codec-1.4.jar"/>
