@@ -144,8 +144,9 @@
                     <j2se version='1.6+'
                         initial-heap-size="64m"
                         max-heap-size="512m"
-                        java-vm-args="-d32"
                         />
+<!--                                                java-vm-args="-d32"-->
+
                     <jar href="Sketch.jar" main="true" download="eager"/>
                     <jar href="Core.jar" main="false" download="eager"/>
                     <jar href="parboiled-0.9.7.3.jar"/>
