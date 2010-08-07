@@ -96,6 +96,7 @@ public class OSUtil {
         String os = System.getProperty("os.name").toLowerCase();
         StringBuffer filepath = new StringBuffer(System.getProperty("user.home"));
         System.out.println("os = " + os);
+        System.out.println("user.home = " + filepath);
         if(os.indexOf("windows xp") != -1) {
             u.p("doing xp");
             filepath.append(File.separator);

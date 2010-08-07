@@ -276,7 +276,11 @@ public class Main implements Runnable {
         }
         if(!SCRIPTS_DIR.exists()) {
             SCRIPTS_DIR.mkdirs();
-            u.streamToFile(ScriptTools.class.getResourceAsStream("demo_script.js"),new File(SCRIPTS_DIR,"demo_script.js"));
+            try {
+                u.streamToFile(ScriptTools.class.getResourceAsStream("demo_script.js"),new File(SCRIPTS_DIR,"demo_script.js"));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
 
         recentFiles = loadRecentDocs(RECENT_FILES);
