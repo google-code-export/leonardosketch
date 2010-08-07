@@ -95,7 +95,7 @@ public class OSUtil {
     public static String getBaseStorageDir() {
       String os = System.getProperty("os.name").toLowerCase();
       StringBuffer filepath = new StringBuffer(System.getProperty("user.home"));
-        System.out.pjrintln("os = " + os);
+        System.out.println("os = " + os);
       if (os.indexOf("vista") != -1) {
           filepath.append(File.separator);
           filepath.append("appdata");
