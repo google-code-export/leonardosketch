@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class u {
     private static PrintStream wrt;
-    private static boolean useWrt = true;
+    private static boolean useWrt = false;
     
     public static void p(String str) {
         if(useWrt && wrt == null) {
