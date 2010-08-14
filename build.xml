@@ -123,8 +123,8 @@
                     <homepage href="http://leonardosketch.org/"/>
                     <description>general purpose drawing tool</description>
                     <offline-allowed/>
+                    <icon href="Turtle.png"/>
                     <!--
-                    <icon href="icon.png"/>
                     <icon kind="splash" href="splash.png"/>
                     <association mime-type="application-x/maitai" extensions="maitai">
                         <description>Mai Tai graphics file</description>
@@ -166,7 +166,9 @@
                 </application-desc>
             </jnlp>
 
-        </echoxml>    
+        </echoxml>   
+        
+        <copy todir="dist/jnlp/" file="resources/Turtle.png"/>
     </target>
 
     <macrodef name="unsignjar">
