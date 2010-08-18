@@ -287,7 +287,6 @@ public class Main implements Runnable {
     }
 
     private void buildCommonMenubar(DocContext context) {
-        u.p("foo 0");
         DocumentCanvas canvas = context.getCanvas();
         //recent files menu
         Menu recentFilesMenu = new Menu().setTitle("Recent Files");
@@ -296,7 +295,6 @@ public class Main implements Runnable {
         for(File f : f2) {
             recentFilesMenu.addItem(f.getName(), new OpenAction(context,f));
         }
-        u.p("foo 1");
         //file menu
         Menu fileMenu = new Menu().setTitle("File");
         Menu newMenu = new Menu().setTitle("New");
@@ -315,7 +313,6 @@ public class Main implements Runnable {
                     .addItem("to SVG", new SaveSVGAction(context))
                     .addItem("to HTML", new SaveHTMLAction(context))
                 );
-        u.p("foo 2");
         quitAction = new QuitAction(this);
         if(!OSUtil.isMac()) {
             fileMenu.addItem("Exit",    "Q",       quitAction);
@@ -334,7 +331,6 @@ public class Main implements Runnable {
         if(context instanceof VectorDocContext) {
                 editMenu.addItem("Clear Selection", "D", new NodeActions.ClearSelection((VectorDocContext) context));
         }
-        u.p("foo 3");
         editMenu.addItem("Set Background Color", new DocumentActions.SetBackground(context));
         menubar.add(editMenu.createJMenu());
         context.createAfterEditMenu(menubar);
@@ -362,7 +358,6 @@ public class Main implements Runnable {
                     .separator()
                     .addItem("View Presentation", new ViewSlideshowAction(vdc));
         }
-        u.p("foo 4");
 
         //view menu
         menubar.add(viewMenu.createJMenu());
@@ -384,7 +379,6 @@ public class Main implements Runnable {
             }
         }
         menubar.add(scriptMenu.createJMenu());
-        u.p("foo 4");
     }
 
     private List<File> loadRecentDocs(File file) {
