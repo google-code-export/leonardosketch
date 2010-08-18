@@ -1,6 +1,7 @@
 package org.joshy.gfx.css;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.PeriodicTask;
 import org.joshy.gfx.node.control.Button;
@@ -15,7 +16,6 @@ import org.parboiled.support.ParsingResult;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,7 +29,7 @@ public class InteractiveTest implements Runnable {
     private long lastModified;
     private Panel hbox;
 
-    public static void main(String ... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String ... args) throws Exception, InterruptedException {
         Core.init();
         Core.getShared().defer(new InteractiveTest());
     }
@@ -71,7 +71,7 @@ public class InteractiveTest implements Runnable {
                 CSSRuleSet set = new CSSRuleSet();
                 set.setBaseURI(file.toURI());
                 SwingCore sc = (SwingCore) Core.getShared();
-                sc.getCSSSkin().setRuleSet(set);
+                SkinManager.getShared().getCSSSkin().setRuleSet(set);
                 CSSProcessor.condense(result.parseTreeRoot,set);
                 u.p("parsed. reloading skins");
                 Core.getShared().reloadSkins();

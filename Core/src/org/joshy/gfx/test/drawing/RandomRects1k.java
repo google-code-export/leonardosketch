@@ -35,7 +35,6 @@ public class RandomRects1k implements Runnable {
 
     public void run() {
         try {
-            SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
 
         Stage stage = Stage.createStage();
 

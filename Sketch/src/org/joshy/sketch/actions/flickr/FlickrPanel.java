@@ -27,7 +27,6 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import javax.xml.xpath.XPathExpressionException;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class FlickrPanel extends Panel {
     private ScrollPane scrollPane;
     private VectorDocContext context;
 
-    public static void main(String ... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String ... args) throws Exception {
         Core.init();
         Core.getShared().defer(new Runnable(){
             public void run() {

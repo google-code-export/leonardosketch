@@ -1,8 +1,7 @@
 package org.joshy.sketch.actions;
 
-import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Paint;
-import org.joshy.gfx.node.control.skin.FontSkin;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
@@ -71,7 +70,7 @@ public class SaveSVGAction extends SAction {
     }
 
     private void draw(PrintWriter out, SText text) {
-        org.joshy.gfx.draw.Font font = FontSkin.DEFAULT.getFont();
+        org.joshy.gfx.draw.Font font = org.joshy.gfx.draw.Font.DEFAULT;
         font = org.joshy.gfx.draw.Font.name(font.getName())
                 .size((float)text.getFontSize())
                 .weight(text.getWeight())

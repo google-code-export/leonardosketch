@@ -14,7 +14,6 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.Parent;
-import org.joshy.gfx.node.control.skin.FontSkin;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 
@@ -153,7 +152,7 @@ public class CompoundListView extends Control implements Parent, Focusable, Scro
                         } else {
                             g.setPaint(FlatColor.BLACK);
                         }
-                        Font.drawCenteredVertically(g, finalText, FontSkin.DEFAULT.getFont(), 5, 0, getWidth(), itemViewHeight, true);
+                        Font.drawCenteredVertically(g, finalText, Font.DEFAULT, 5, 0, getWidth(), itemViewHeight, true);
                     }
                 };
             }

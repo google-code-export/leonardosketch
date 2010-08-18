@@ -2,6 +2,7 @@ package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
@@ -9,16 +10,14 @@ import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.control.CompoundListView;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.ListModel;
-import org.joshy.gfx.node.control.skin.FontSkin;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.GraphicsUtil;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CollapsingListTest implements Runnable {
-    public static void main(String... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String... args) throws Exception {
         Core.setUseJOGL(false);
         Core.init();
         Core.getShared().defer(new CollapsingListTest());
@@ -190,7 +189,7 @@ public class CollapsingListTest implements Runnable {
                         GraphicsUtil.fillDownArrow(gfx,inset,getHeight()-3-14,14);
                     }
                 }
-                gfx.drawText(item.name + " count = " + item.count, FontSkin.DEFAULT.getFont(), inset+20, 0 + 20);
+                gfx.drawText(item.name + " count = " + item.count, Font.DEFAULT, inset+20, 0 + 20);
             }
         }
     }

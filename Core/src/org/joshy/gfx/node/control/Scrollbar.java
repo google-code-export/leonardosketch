@@ -157,7 +157,7 @@ public class Scrollbar extends Control {
 
     @Override
     public void doSkins() {
-        cssSkin = (CSSSkin) SkinManager.getShared().getSkin(this,PART_CSS,PROP_CSS);
+        cssSkin = SkinManager.getShared().getCSSSkin();
         setLayoutDirty();
     }
 

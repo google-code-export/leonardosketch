@@ -2,9 +2,9 @@ package org.joshy.sketch.tools;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
-import org.joshy.gfx.node.control.skin.FontSkin;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.Main;
@@ -425,7 +425,7 @@ public class DrawPathTool extends CanvasTool {
     public void drawOverlay(GFX g) {
         //draw the current tool indicator
         g.setPaint(FlatColor.BLACK);
-        g.drawText(defaultTool.toString(), FontSkin.DEFAULT.getFont(), 100,100);
+        g.drawText(defaultTool.toString(), Font.DEFAULT, 100,100);
 
         //draw overlays
         if(node != null) {
@@ -462,7 +462,7 @@ public class DrawPathTool extends CanvasTool {
                 g.drawRect(pt.x-2,pt.y-2,5,5);
 
                 g.setPaint(FlatColor.BLACK);
-                g.drawText("close", FontSkin.DEFAULT.getFont(),pt.x-3,pt.y+30);
+                g.drawText("close", Font.DEFAULT,pt.x-3,pt.y+30);
             }
             
             if(hoverPoint != null) {
@@ -472,14 +472,14 @@ public class DrawPathTool extends CanvasTool {
                     g.drawRect(hp.x-2,hp.y-2,5,5);
 
                     g.setPaint(FlatColor.BLACK);
-                    g.drawText("move", FontSkin.DEFAULT.getFont(),hp.x-3,hp.y+30);
+                    g.drawText("move", Font.DEFAULT,hp.x-3,hp.y+30);
                 }
                 if(couldDelete) {
                     g.setPaint(FlatColor.RED);
                     g.drawRect(hp.x-2,hp.y-2,5,5);
 
                     g.setPaint(FlatColor.BLACK);
-                    g.drawText("delete", FontSkin.DEFAULT.getFont(),hp.x-3,hp.y+30);
+                    g.drawText("delete", Font.DEFAULT,hp.x-3,hp.y+30);
                 }
                 if(couldReshape && hoverPoint != null) {
                     g.setPaint(FlatColor.RED);
@@ -487,9 +487,9 @@ public class DrawPathTool extends CanvasTool {
 
                     g.setPaint(FlatColor.BLACK);
                     if(spacePressed) {
-                        g.drawText("move", FontSkin.DEFAULT.getFont(),hp.x-3,hp.y+30);
+                        g.drawText("move", Font.DEFAULT,hp.x-3,hp.y+30);
                     } else {
-                        g.drawText("reshape", FontSkin.DEFAULT.getFont(),hp.x-3,hp.y+30);
+                        g.drawText("reshape", Font.DEFAULT,hp.x-3,hp.y+30);
                     }
                 }
             }

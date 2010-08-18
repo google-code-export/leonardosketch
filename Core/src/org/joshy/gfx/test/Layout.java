@@ -1,7 +1,6 @@
 package org.joshy.gfx.test;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Checkbox;
 import org.joshy.gfx.node.control.Label;
@@ -10,8 +9,6 @@ import org.joshy.gfx.node.layout.HAlign;
 import org.joshy.gfx.node.layout.HBox;
 import org.joshy.gfx.node.shape.Rectangle;
 import org.joshy.gfx.stage.Stage;
-
-import java.io.File;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,7 +21,6 @@ public class Layout implements Runnable {
     public static void main(String ... args) throws Exception {
         Core.setUseJOGL(false);
         Core.init();
-        SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
         Core.getShared().defer(new Layout());
     }
 

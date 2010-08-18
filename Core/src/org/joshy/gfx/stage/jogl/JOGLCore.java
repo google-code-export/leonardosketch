@@ -17,6 +17,11 @@ public class JOGLCore extends Core {
     }
 
     @Override
+    protected void initSkinning() throws Exception {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     protected void createDefaultEventBus() {
         EventBus.setSystem(new JOGLEventBus());
         try {

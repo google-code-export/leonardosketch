@@ -1,7 +1,6 @@
 package org.joshy.gfx.test.text;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -14,9 +13,6 @@ import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 
-import java.io.File;
-import java.io.IOException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: josh
@@ -25,10 +21,9 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 public class Text implements Runnable {
-    public static void main(String ... args) throws Exception, InterruptedException {
+    public static void main(String ... args) throws Exception {
         Core.setUseJOGL(true);
         Core.init();
-        SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
         Core.getShared().defer(new Text());
     }
 

@@ -36,7 +36,6 @@ public class Particles implements Runnable {
 
     public void run() {
         try {
-            SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
 
         BufferedImage bi = new BufferedImage(32,32,BufferedImage.TYPE_INT_ARGB);
         Graphics2D gfx = bi.createGraphics();

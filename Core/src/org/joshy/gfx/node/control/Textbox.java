@@ -7,10 +7,10 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.control.skin.InsetsSkin;
+import org.joshy.gfx.node.Insets;
 
 public class Textbox extends TextControl {
-    private InsetsSkin insets;
+    private Insets insets;
     private double baseline;
     double xoff = 0;
     private CSSSkin cssSkin;
@@ -19,7 +19,7 @@ public class Textbox extends TextControl {
     public Textbox() {
         setWidth(100);
         setHeight(40);
-        insets = new InsetsSkin(8,4,8,4);
+        insets = new Insets(8,4,8,4);
     }
 
     public Textbox(String text) {
@@ -35,7 +35,7 @@ public class Textbox extends TextControl {
     @Override
     public void doSkins() {
         super.doSkins();
-        cssSkin = (CSSSkin) SkinManager.getShared().getSkin(this,PART_CSS,PROP_CSS);
+        cssSkin = SkinManager.getShared().getCSSSkin();
         setLayoutDirty();
     }
 
@@ -47,7 +47,7 @@ public class Textbox extends TextControl {
             int padding = cssSkin.getCSSSet().findIntegerValue("Textbox","padding");
             setWidth(cssSize.width);
             setHeight(cssSize.height);
-            insets = new InsetsSkin(padding,padding,padding,padding);
+            insets = new Insets(padding,padding,padding,padding);
         }
         double th = this.getFont().getAscender();
         baseline = insets.getTop() + this.getFont().getAscender();

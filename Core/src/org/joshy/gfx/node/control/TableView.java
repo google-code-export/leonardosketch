@@ -6,7 +6,6 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.control.skin.FontSkin;
 import org.joshy.gfx.util.u;
 
 /**
@@ -67,7 +66,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                 g.fillRect(x,y,width,height);
                 g.setPaint(FlatColor.BLACK);
                 if(cell != null) {
-                    Font.drawCenteredVertically(g, cell.toString(), FontSkin.DEFAULT.getFont(), x+2, y, width, height, true);
+                    Font.drawCenteredVertically(g, cell.toString(), Font.DEFAULT, x+2, y, width, height, true);
                 }
                 g.setPaint(new FlatColor("#d0d0d0"));
                 g.drawLine(x+width-1,y, x+width-1,y+height);
@@ -83,7 +82,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                 g.fillRect(x,y,width,height);
                 g.setPaint(FlatColor.BLACK);
                 if(header != null) {
-                    Font.drawCenteredVertically(g, header.toString(), FontSkin.DEFAULT.getFont(), x+2, y, width, height, true);
+                    Font.drawCenteredVertically(g, header.toString(), Font.DEFAULT, x+2, y, width, height, true);
                 }
             }
         });

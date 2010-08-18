@@ -1,7 +1,6 @@
 package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.*;
-import org.joshy.gfx.node.control.skin.FontSkin;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -30,6 +29,6 @@ public class Button9 extends AbstractResizeableNode {
     public void draw(GFX g) {
         g.setPaint(FlatColor.BLACK);
         g.drawGridNine(g9, getX(), getY(), getWidth(), getHeight());
-        Font.drawCentered(g,"Button",FontSkin.DEFAULT.getFont(), getX(), getY(), getWidth(), getHeight(),true);
+        Font.drawCentered(g,"Button",Font.DEFAULT, getX(), getY(), getWidth(), getHeight(),true);
     }
 }

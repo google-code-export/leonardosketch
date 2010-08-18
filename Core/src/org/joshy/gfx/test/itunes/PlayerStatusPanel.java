@@ -3,7 +3,6 @@ package org.joshy.gfx.test.itunes;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.node.control.skin.FontSkin;
 import org.joshy.gfx.node.layout.Panel;
 
 /**
@@ -39,8 +38,8 @@ public class PlayerStatusPanel extends Panel {
 
         //text
         g.setPaint(new FlatColor("#3D3F35"));
-        Font.drawCentered(g, "Everybody Knows", FontSkin.DEFAULT.getFont(), 0,0, getWidth(),getHeight()/2, false);
-        Font.drawCentered(g, "Evolver", FontSkin.DEFAULT.getFont(), 0,18, getWidth(),getHeight()/2, false);
+        Font.drawCentered(g, "Everybody Knows", Font.DEFAULT, 0,0, getWidth(),getHeight()/2, false);
+        Font.drawCentered(g, "Evolver", Font.DEFAULT, 0,18, getWidth(),getHeight()/2, false);
 
         g.setPaint(new FlatColor("#B9BCA9"));
         g.fillRoundRect(60,getHeight()-13, getWidth()-120, 9, 8,8);
@@ -52,8 +51,8 @@ public class PlayerStatusPanel extends Panel {
 
 
         g.setPaint(new FlatColor("#3D3F35"));
-        g.drawText("3:13", FontSkin.DEFAULT.getFont(), 30, getHeight()-7);
-        g.drawText("-3:13", FontSkin.DEFAULT.getFont(), getWidth()-30-FontSkin.DEFAULT.getFont().getWidth("-3:13"), getHeight()-7);
+        g.drawText("3:13", Font.DEFAULT, 30, getHeight()-7);
+        g.drawText("-3:13", Font.DEFAULT, getWidth()-30-Font.DEFAULT.getWidth("-3:13"), getHeight()-7);
 
     }
 }

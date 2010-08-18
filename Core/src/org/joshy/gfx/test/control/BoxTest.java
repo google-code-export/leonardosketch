@@ -1,7 +1,6 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.node.control.Button;
@@ -12,9 +11,6 @@ import org.joshy.gfx.node.layout.VBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: joshmarinacci
@@ -23,9 +19,8 @@ import java.lang.reflect.InvocationTargetException;
  * To change this template use File | Settings | File Templates.
  */
 public class BoxTest implements Runnable {
-    public static void main(String ... args) throws Exception, InterruptedException {
+    public static void main(String ... args) throws Exception {
         Core.init();
-        SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
         Core.getShared().defer(new BoxTest());
     }
 

@@ -7,7 +7,6 @@ import org.joshy.gfx.stage.swing.SwingCore;
 import org.joshy.gfx.util.u;
 
 import javax.swing.*;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,6 +21,7 @@ public abstract class Core {
     protected Thread _gui_thread;
     private FocusManager _focusManager;
     private static boolean testing;
+    private static boolean isInitting;
 
     public static synchronized Core getShared() {
         if(_runtime == null) {
@@ -44,14 +44,19 @@ public abstract class Core {
         return jogl;
     }
 
-    public static void init() throws InvocationTargetException, InterruptedException {
+    public static void init() throws Exception {
+        isInitting = true;
         if(isUseJOGL()) {
             _runtime = new JOGLCore();
         } else {
             _runtime = new SwingCore();
         }
+        _runtime.initSkinning();
         _runtime.createDefaultEventBus();
+        isInitting = false;
     }
+
+    protected abstract void initSkinning() throws Exception;
 
     protected abstract void createDefaultEventBus();
 

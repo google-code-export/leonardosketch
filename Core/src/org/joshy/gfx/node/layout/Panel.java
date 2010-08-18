@@ -7,13 +7,10 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
-import org.joshy.gfx.node.control.skin.FillSkin;
 
 public class Panel extends Container {
     protected FlatColor fill = null;
-    protected FillSkin skin;
     private FlatColor borderColor = FlatColor.BLACK;
-    private CSSSkin cssSkin;
     private Callback<Panel> callback;
 
     public Panel() {
@@ -36,8 +33,7 @@ public class Panel extends Container {
 
     @Override
     public void doSkins() {
-        skin = SkinManager.getShared().getFillSkin(this, "main", "background", null, FillSkin.SKELETON);
-        cssSkin = (CSSSkin) SkinManager.getShared().getSkin(this,PART_CSS,PROP_CSS);
+        cssSkin = SkinManager.getShared().getCSSSkin();
         super.doSkins();
     }
 
@@ -69,12 +65,6 @@ public class Panel extends Container {
             cssSkin.draw(g, this, null, new CSSSkin.BoxState(getWidth(),getHeight()),CSSSkin.State.None);
             return;
         }
-
-        if(skin != null) {
-            skin.paint(g,0,0,getWidth(),getHeight());
-            return;
-        }
-
     }
 
     public Panel setFill(FlatColor fill) {

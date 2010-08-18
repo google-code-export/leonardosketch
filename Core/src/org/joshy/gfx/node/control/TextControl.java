@@ -3,13 +3,7 @@ package org.joshy.gfx.node.control;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.ChangedEvent;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.FocusEvent;
-import org.joshy.gfx.event.KeyEvent;
-import org.joshy.gfx.event.MouseEvent;
-import org.joshy.gfx.node.control.skin.FontSkin;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.util.u;
 
 /*
@@ -44,7 +38,7 @@ import org.joshy.gfx.util.u;
 public abstract class TextControl extends Control implements Focusable {
     protected boolean focused;
     protected String text = "";
-    FontSkin font;
+    Font font;
 
     protected boolean allowMultiLine = false;
     private CursorPoint currentCursorPoint = null;
@@ -52,7 +46,6 @@ public abstract class TextControl extends Control implements Focusable {
     protected TextSelection selection = new TextSelection(this);
 
     protected TextControl() {
-        this.font = FontSkin.DEFAULT;
         currentCursorPoint = new CursorPoint(0,0,0,0,0,0,0);
 
         EventBus.getSystem().addListener(this, MouseEvent.MousePressed, new Callback<MouseEvent>(){
@@ -324,7 +317,7 @@ public abstract class TextControl extends Control implements Focusable {
         if(realFont != null) {
             return realFont;
         }
-        return this.font.getFont();
+        return this.font;
     }
 
     public boolean isFocused() {
@@ -333,7 +326,8 @@ public abstract class TextControl extends Control implements Focusable {
 
     @Override
     public void doSkins() {
-        font = (FontSkin) SkinManager.getShared().getSkin(this, null, "main", "jogltext.font", null, FontSkin.DEFAULT);
+        cssSkin = SkinManager.getShared().getCSSSkin();
+        font = cssSkin.getDefaultFont();
     }
 
     @Override

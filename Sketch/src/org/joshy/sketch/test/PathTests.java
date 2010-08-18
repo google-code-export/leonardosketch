@@ -28,7 +28,7 @@ public class PathTests implements Runnable {
     private P realClosest;
     private MyNode node;
 
-    public static void main(String ... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String ... args) throws Exception, InterruptedException {
         Core.setUseJOGL(false);
         Core.init();
         Core.getShared().defer(new PathTests());

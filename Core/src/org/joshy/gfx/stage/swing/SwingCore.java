@@ -7,8 +7,7 @@ import org.joshy.gfx.css.CSSRuleSet;
 import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Node;
-import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.Panel;
+import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 import org.parboiled.support.ParsingResult;
@@ -28,28 +27,10 @@ import java.util.List;
  */
 public class SwingCore extends Core {
     private List<Stage> stages = new ArrayList<Stage>();
-    private CSSSkin cssskin;
 
     public SwingCore() {
         super();
         try {
-            URL url = SwingCore.class.getResource("default.css");
-            u.p("css resource = " + url);
-            ParsingResult<?> result = CSSProcessor.parseCSS(url.openStream());
-            CSSRuleSet set = new CSSRuleSet();
-            set.setBaseURI(url.toURI());
-            cssskin = new CSSSkin();
-            cssskin.setRuleSet(set);
-            CSSProcessor.condense(result.parseTreeRoot,set);
-            u.p("default css parsed from: " + url);
-            SkinManager.getShared().installSkin(Button.class,          Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(Panel.class,           Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(Scrollbar.class,       Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(Textbox.class,         Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(Passwordbox.class,     Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(ListView.class,        Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(PopupMenuButton.class, Control.PART_CSS, Control.PROP_CSS, cssskin);
-            SkinManager.getShared().installSkin(PopupMenu.class, Control.PART_CSS, Control.PROP_CSS, cssskin);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -59,6 +40,20 @@ public class SwingCore extends Core {
     @Override
     public Iterable<Stage> getStages() {
         return stages;
+    }
+
+    @Override
+    protected void initSkinning() throws Exception {
+        URL url = SwingCore.class.getResource("default.css");
+        u.p("css resource = " + url);
+        ParsingResult<?> result = CSSProcessor.parseCSS(url.openStream());
+        CSSRuleSet set = new CSSRuleSet();
+        set.setBaseURI(url.toURI());
+        CSSSkin cssskin = new CSSSkin();
+        cssskin.setRuleSet(set);
+        CSSProcessor.condense(result.parseTreeRoot,set);
+        u.p("default css parsed from: " + url);
+        SkinManager.getShared().setCSSSkin(cssskin);
     }
 
     @Override
@@ -93,7 +88,4 @@ public class SwingCore extends Core {
         this.stages.add(swingStage);
     }
 
-    public CSSSkin getCSSSkin() {
-        return cssskin;
-    }
 }

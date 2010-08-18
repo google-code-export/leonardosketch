@@ -12,6 +12,7 @@ import java.net.URL;
 public class Font {
     private Weight weight = Weight.Regular;
     private Style style;
+    public static final Font DEFAULT = Font.name("Arial").size(12).resolve();
 
     public static FontBuilder fromURL(URL url) {
         return new FontBuilder(url);

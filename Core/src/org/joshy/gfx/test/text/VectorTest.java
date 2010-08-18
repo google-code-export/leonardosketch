@@ -16,13 +16,12 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.InvocationTargetException;
 
 public class VectorTest implements Runnable {
     private BufferedImage buff;
     private Graphics2D g;
 
-    public static void main(String ... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String ... args) throws Exception {
         Core.setUseJOGL(true);
         Core.init();
         Core.getShared().defer(new VectorTest());

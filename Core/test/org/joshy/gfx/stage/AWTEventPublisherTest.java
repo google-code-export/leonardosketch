@@ -23,7 +23,7 @@ public class AWTEventPublisherTest {
     private TestingStage stage;
     private EventPublisher eventPublisher;
 
-    @Before public void doSetup() throws InvocationTargetException, InterruptedException {
+    @Before public void doSetup() throws Exception, InterruptedException {
         Core.setTesting(true);
         Core.init();
         Core.getShared();

@@ -1,14 +1,10 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.node.control.Slider;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.stage.Stage;
-
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class DragControls implements Runnable {
 
-    public static void main(String ... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String ... args) throws Exception {
         Core.setUseJOGL(false);
         Core.init();
         Core.getShared().defer(new DragControls());
@@ -27,7 +23,6 @@ public class DragControls implements Runnable {
 
     public void run() {
         try {
-            SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
             
             Panel p = new Panel();
             Stage s = Stage.createStage();

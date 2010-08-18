@@ -12,7 +12,6 @@ import org.joshy.gfx.stage.Stage;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,7 +25,7 @@ public class Presentation implements Runnable {
     private Image image;
     private Font font2;
 
-    public static void main(String ... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String ... args) throws Exception {
         Core.setUseJOGL(false);
         Core.init();
         Core.getShared().defer(new Presentation());

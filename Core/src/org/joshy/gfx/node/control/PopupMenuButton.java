@@ -102,7 +102,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
 
     private void drawText(GFX g) {
         Object o = getSelectedItem();
-        Font.drawCenteredVertically(g, o.toString(), font.getFont(),6, 0, getWidth(), getHeight(), true);
+        Font.drawCenteredVertically(g, o.toString(), font,6, 0, getWidth(), getHeight(), true);
     }
 
     public E getSelectedItem() {

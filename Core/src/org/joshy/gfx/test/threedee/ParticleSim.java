@@ -33,7 +33,6 @@ public class ParticleSim implements Runnable {
     public static void main(String... args) throws Exception {
         Core.setUseJOGL(true);
         Core.init();
-        SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
         Core.getShared().defer(new ParticleSim());
     }
 

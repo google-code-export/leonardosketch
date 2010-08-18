@@ -34,7 +34,6 @@ public class Controls implements Runnable {
 
     public void run() {
         try {
-            SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
             Panel panel = new Panel();
 
 

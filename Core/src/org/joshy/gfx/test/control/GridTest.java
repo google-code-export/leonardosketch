@@ -1,15 +1,12 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.VBox;
 import org.joshy.gfx.stage.Stage;
-
-import java.io.File;
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,9 +20,8 @@ import java.io.File;
 
 public class GridTest implements Runnable {
 
-    public static void main(String ... args) throws Exception, InterruptedException {
+    public static void main(String ... args) throws Exception {
         Core.init();
-        SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
         Core.getShared().defer(new GridTest());
     }
     

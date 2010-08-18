@@ -1,17 +1,11 @@
 package org.joshy.gfx.test.itunes;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.control.skin.InsetsSkin;
 import org.joshy.gfx.node.layout.Growbar;
-import org.joshy.gfx.node.layout.HAlign;
-import org.joshy.gfx.node.layout.HBox;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.u;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,10 +19,9 @@ import java.io.IOException;
  */
 public class ITunes implements Runnable {
     
-    public static void main(String... args) throws Exception, InterruptedException {
+    public static void main(String... args) throws Exception {
         Core.setUseJOGL(false);
         Core.init();
-        SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
         Core.getShared().defer(new ITunes());
     }
 
@@ -38,7 +31,6 @@ public class ITunes implements Runnable {
             stage.setMinimumWidth(700);
             stage.setMinimumHeight(400);
 
-            SkinManager.getShared().installSkin(Button.class.getName(), "imageOnly", "main", "padding", "normal", new InsetsSkin(0,0,0,0));
 
             Button prevButton = new Button("");
             prevButton.setVariant("imageOnly");

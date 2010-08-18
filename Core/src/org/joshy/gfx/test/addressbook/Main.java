@@ -1,17 +1,14 @@
 package org.joshy.gfx.test.addressbook;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.control.skin.FontSkin;
 import org.joshy.gfx.node.layout.GridLineLayout;
 import org.joshy.gfx.stage.Stage;
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +23,7 @@ public class Main implements Runnable {
     private List<Person> people;
     private FilteredListModel<Person> model;
 
-    public static void main(String ... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String ... args) throws Exception, InterruptedException {
         Core.setUseJOGL(false);
         Core.init();
         Core.getShared().defer(new Main());
@@ -35,7 +32,6 @@ public class Main implements Runnable {
     public void run() {
         try {
             initData();
-            SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
 
             //create components and their models
             ListView results = new ListView();
@@ -79,7 +75,7 @@ public class Main implements Runnable {
                     }
                     gfx.fillRect(x,y,width,height);
                     gfx.setPaint(FlatColor.BLACK);
-                    gfx.drawText(item.first + " " + item.last, FontSkin.DEFAULT.getFont(), x+2, y+15);
+                    gfx.drawText(item.first + " " + item.last, Font.DEFAULT, x+2, y+15);
                 }
             });
             

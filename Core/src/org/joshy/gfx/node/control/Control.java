@@ -1,6 +1,7 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 
@@ -17,9 +18,7 @@ public abstract class Control extends Node {
     protected double height;
     protected boolean skinsDirty;
     protected boolean layoutDirty;
-    protected static final String PART_MAIN = "main";
-    public static final String PART_CSS = "css";
-    public static final String PROP_CSS = "css";
+    protected CSSSkin cssSkin;
 
     protected Control() {
         setSkinDirty();

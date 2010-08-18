@@ -11,11 +11,7 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.Skin;
-import org.joshy.gfx.node.control.skin.FillSkin;
-import org.joshy.gfx.node.control.skin.FontSkin;
-import org.joshy.gfx.node.control.skin.ImageSkin;
-import org.joshy.gfx.node.control.skin.InsetsSkin;
+import org.joshy.gfx.node.Insets;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -23,28 +19,17 @@ import java.net.URL;
 
 public class Button extends Control {
     protected String text;
-    protected FontSkin font;
     protected boolean pressed = false;
     protected boolean hovered = false;
-
-    protected static final String BACKGROUND = "background";
-    protected static final String TEXT = "text";
-    private Skin bg_normal;
-    private Skin bg_pressed;
     protected boolean selected;
     protected boolean selectable = false;
     protected String style;
-    protected InsetsSkin insets;
-    protected Skin textSkin;
-    private static final String ICON = "icon";
-    private ImageSkin iconSkin;
+    protected Insets insets;
     protected double baseline = 0;
     private Image normalIcon;
     private Image pressedIcon;
-    private static final String PART_ICON = "icon";
     private Callback<ActionEvent> callback;
-    protected CSSSkin cssSkin;
-    private CSSSkin.BoxState size;
+    protected Font font;
 
     public boolean isSelected() {
         return selected;
@@ -124,18 +109,14 @@ public class Button extends Control {
         this.text = text;        
     }
 
+    protected CSSSkin.BoxState size;
+
     @Override
     public void doSkins() {
-        cssSkin = (CSSSkin) SkinManager.getShared().getSkin(this,PART_CSS,PROP_CSS);
-        //u.p("button got a css skin: " + cssSkin);
+        cssSkin = SkinManager.getShared().getCSSSkin();
+        insets = cssSkin.getInsets(this);
+        font = cssSkin.getDefaultFont();
         setLayoutDirty();
-        
-        font = (FontSkin)SkinManager.getShared().getSkin(this, style, PART_MAIN, "jogltext.font", null, FontSkin.DEFAULT);
-        insets = (InsetsSkin) SkinManager.getShared().getSkin(this, style, PART_MAIN, "padding",State.Normal.toString(), InsetsSkin.DEFAULT);
-        bg_normal = SkinManager.getShared().getSkin(this,style,PART_MAIN, BACKGROUND, State.Normal.toString());
-        bg_pressed = SkinManager.getShared().getSkin(this,style,PART_MAIN, BACKGROUND, State.Pressed.toString());
-        textSkin = SkinManager.getShared().getSkin(this,style,PART_MAIN, TEXT, State.Normal.toString());
-        iconSkin = (ImageSkin)SkinManager.getShared().getSkin(this,style,PART_ICON, ICON, State.Normal.toString());
     }
 
     @Override
@@ -146,15 +127,15 @@ public class Button extends Control {
         double iconHeight = 0;
 
         if(text != null && !text.trim().equals("")) {
-            textWidth = font.getFont().getWidth(text);
-            textHeight = font.getFont().getAscender() + font.getFont().getDescender();
-            baseline = Math.max(font.getFont().getAscender(),0);
+            textWidth = font.getWidth(text);
+            textHeight = font.getAscender() + font.getDescender();
+            baseline = Math.max(font.getAscender(),0);
         }
-        if(iconSkin != null) {
+/*        if(iconSkin != null) {
             iconWidth = iconSkin.getWidth();
             iconHeight = iconSkin.getHeight();
             baseline = Math.max(iconHeight, baseline);
-        }
+        }*/
         if(normalIcon != null) {
             iconWidth = normalIcon.getWidth();
             iconHeight = normalIcon.getHeight();
@@ -179,7 +160,6 @@ public class Button extends Control {
             size = cssSkin.getSize(this,text);
             setWidth(size.width);
             setHeight(size.height);
-            //u.p("did layout. w/h set to: " + this.getWidth() + " " + this.getHeight());
         }
     }
     
@@ -211,15 +191,11 @@ public class Button extends Control {
 
 
 
-        FillSkin skin = (FillSkin) SkinManager.getShared().getSkin(this,style,PART_MAIN, BACKGROUND, state.toString());
-        if(skin != null) {
-            skin.paint(g,0,0,width,height);
-        } else {
-            g.setPaint(new FlatColor(0,0,0,1.0));
-            g.drawRect(0,0,width,height);
-            g.drawLine(0,0,width,height);
-            g.drawLine(width,0,0,height);
-        }
+
+        g.setPaint(new FlatColor(0,0,0,1.0));
+        g.drawRect(0,0,width,height);
+        g.drawLine(0,0,width,height);
+        g.drawLine(width,0,0,height);
 
         double x = insets.getLeft();
         double y = insets.getTop();
@@ -228,37 +204,15 @@ public class Button extends Control {
                 g.drawImage(pressedIcon,x,y);
                 x+= pressedIcon.getWidth();
             }
-            ImageSkin iskin = (ImageSkin) SkinManager.getShared().getSkin(this, style, PART_ICON, ICON, state.toString());
-            if(iskin != null) {
-                g.drawImage(iskin.getImage(),x,y);
-                x+= iskin.getWidth();
-            }
         } else {
             if(normalIcon != null) {
                 g.drawImage(normalIcon,x,y);
                 x+= normalIcon.getWidth();
-            } else {
-                ImageSkin iskin = (ImageSkin) SkinManager.getShared().getSkin(this, style, PART_ICON, ICON, state.toString());
-                if(iskin != null) {
-                    g.drawImage(iskin.getImage(),x,y);
-                    x+= iskin.getWidth();
-                }
             }
         }
         g.setPaint(FlatColor.BLACK);
-        Font.drawCenteredVertically(g, text, font.getFont(),x,0,getWidth(),getHeight(),false);
+        Font.drawCenteredVertically(g, text, font,x,0,getWidth(),getHeight(),false);
 
-    }
-
-    protected Skin getSkin(String property, String state) {
-        if(property == BACKGROUND && state == "normal") {
-            return bg_normal;
-        }
-        if(property == BACKGROUND && state == "pressed") {
-            return bg_pressed;
-        }
-        
-        return null;
     }
 
     @Override

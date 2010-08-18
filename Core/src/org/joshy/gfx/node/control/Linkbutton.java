@@ -23,7 +23,6 @@ public class Linkbutton extends Button {
 
         if(text == null) return;
         if(text.length() == 0) return;
-        Font font = this.font.getFont();
         double tw = font.getWidth(text);
         double th = font.getAscender();
 //        if(includeDescender) {

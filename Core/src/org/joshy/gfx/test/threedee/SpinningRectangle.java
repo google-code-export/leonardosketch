@@ -17,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
  * To change this template use File | Settings | File Templates.
  */
 public class SpinningRectangle implements Runnable {
-    public static void main(String ... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String ... args) throws Exception, InterruptedException {
         Core.setUseJOGL(true);
         Core.init();
         Core.getShared().defer(new SpinningRectangle());

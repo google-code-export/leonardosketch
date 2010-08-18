@@ -5,10 +5,10 @@ import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.control.skin.FontSkin;
 
 import java.util.List;
 
@@ -17,7 +17,6 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     public static int NO_SELECTION = -1;
 
     private ListModel<E> model;
-    private FontSkin font;
     private ItemRenderer<E> renderer;
     private int selectedIndex = NO_SELECTION;
     private boolean focused;
@@ -32,6 +31,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     private int dropIndicatorIndex;
     private CSSSkin cssSkin;
     private TextRenderer<E> textRenderer;
+    private Font font;
 
 
     public ListView() {
@@ -165,8 +165,8 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
 
     @Override
     public void doSkins() {
-        font = SkinManager.getShared().getSkin(this, null, "main", "jogltext.font", null, FontSkin.DEFAULT);
-        cssSkin = (CSSSkin) SkinManager.getShared().getSkin(this,PART_CSS,PROP_CSS);
+        cssSkin = SkinManager.getShared().getCSSSkin();
+        font = cssSkin.getDefaultFont();
         setLayoutDirty();
     }
 
@@ -463,7 +463,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
                 gfx.setPaint(new FlatColor(col));
                 if(item != null) {
                     String s = textRenderer.toString(listView, item, index);
-                    gfx.drawText(s, font.getFont(), x+2, y+15);
+                    gfx.drawText(s, font, x+2, y+15);
                 }
             } else {
                 if(listView.getSelectedIndex() == index) {
@@ -473,7 +473,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
                 gfx.setPaint(FlatColor.BLACK);
                 if(item != null) {
                     String s = textRenderer.toString(listView, item, index);
-                    gfx.drawText(s, font.getFont(), x+2, y+15);
+                    gfx.drawText(s, font, x+2, y+15);
                 }
             }
         }

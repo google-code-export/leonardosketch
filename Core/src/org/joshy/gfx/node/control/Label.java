@@ -2,9 +2,9 @@ package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.control.skin.FontSkin;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,7 +15,7 @@ import org.joshy.gfx.node.control.skin.FontSkin;
  */
 public class Label extends Control {
     private String text = "Label";
-    private FontSkin font;
+    private Font font;
     private double baseline;
     private FlatColor fill;
 
@@ -26,14 +26,15 @@ public class Label extends Control {
 
     @Override
     public void doSkins() {
-        font = (FontSkin) SkinManager.getShared().getSkin(this, null, "main", "jogltext.font", null, FontSkin.DEFAULT);
+        cssSkin = SkinManager.getShared().getCSSSkin();
+        font = cssSkin.getDefaultFont();
     }
 
     @Override
     public void doLayout() {
-        double tw = font.getFont().calculateWidth(text);
-        double th = font.getFont().calculateHeight(text);
-        baseline = font.getFont().getAscender();
+        double tw = font.calculateWidth(text);
+        double th = font.calculateHeight(text);
+        baseline = font.getAscender();
         setWidth(tw);
         setHeight(th);
     }
@@ -43,7 +44,7 @@ public class Label extends Control {
         if(!isVisible()) return;
         if(fill != null && text != null) {
             g.setPaint(fill);
-            g.drawText(text, font.getFont(), 0, baseline);
+            g.drawText(text, font, 0, baseline);
         }
     }
 

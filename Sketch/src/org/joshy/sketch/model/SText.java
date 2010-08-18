@@ -2,7 +2,6 @@ package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.node.control.skin.FontSkin;
 
 public class SText extends AbstractResizeableNode implements SelfDrawable {
     public String text;
@@ -10,7 +9,7 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
     private Font.Weight weight = Font.Weight.Regular;
     private Font.Style style;
     private int alignment = 0;
-    private String fontName = FontSkin.DEFAULT.getFont().getName();
+    private String fontName = Font.DEFAULT.getName();
 
 
     public SText(double x, double y, double w, double h) {

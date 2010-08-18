@@ -6,6 +6,7 @@ import org.joshy.gfx.css.values.ShadowValue;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.util.GraphicsUtil;
@@ -18,6 +19,7 @@ import org.joshy.gfx.util.GraphicsUtil;
 * To change this template use File | Settings | File Templates.
 */
 public class CSSSkin extends MasterCSSSkin {
+    private Font defaultFont = Font.name("Arial").size(13).resolve();
 
     public BoxState getSize(Control control, String content) {
         BoxState size = super.getSize(control);
@@ -31,7 +33,6 @@ public class CSSSkin extends MasterCSSSkin {
         size.contentHeight = control.getHeight()-margin*2-padding*2;
         //calc the sizes
         if("true".equals(set.findStringValue(name,"shrink-to-fit"))) {
-            //Font font = FontSkin.DEFAULT.getFont();
             Font font = getFont(matcher);
             size.contentWidth = font.calculateWidth(content);
             size.contentHeight = font.calculateHeight(content);
@@ -156,7 +157,6 @@ public class CSSSkin extends MasterCSSSkin {
     private Font getFont(CSSMatcher matcher) {
         int fontSize = set.findIntegerValue(matcher.element, "font-size");
         Font font = Font.name("Arial").size(fontSize).resolve();
-        //Font font = FontSkin.DEFAULT.getFont();
         return font;
     }
 
@@ -164,11 +164,20 @@ public class CSSSkin extends MasterCSSSkin {
         return this.set;
     }
 
+    public Font getDefaultFont() {
+        return defaultFont;
+    }
+
 
     public enum State {
         Pressed, Hover, Selected, None
     }
 
+    public Insets getInsets(Control control) {
+        CSSMatcher matcher = createMatcher(control,null);
+        int margin = set.findIntegerValue(matcher.element,"margin");
+        return new Insets(margin);
+    }
     public void draw(GFX g, Scrollbar scrollbar, BoxState size, Bounds thumbBounds, Bounds leftArrowBounds, Bounds rightArrowBounds) {
         if(set == null) {
             g.setPaint(FlatColor.BLUE);

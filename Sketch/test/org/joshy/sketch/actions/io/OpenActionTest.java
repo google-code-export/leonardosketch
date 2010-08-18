@@ -11,13 +11,11 @@ import org.joshy.sketch.modes.vector.VectorModeHelper;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.InvocationTargetException;
-
 /** A test for the OpenAction
  */
 public class OpenActionTest {
 
-    @Before public void doSetup() throws InvocationTargetException, InterruptedException {
+    @Before public void doSetup() throws Exception {
         Core.setTesting(true);
         Core.init();
         Core.getShared();

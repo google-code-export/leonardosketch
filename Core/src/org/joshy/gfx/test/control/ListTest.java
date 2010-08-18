@@ -1,18 +1,16 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
-import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.ListModel;
+import org.joshy.gfx.node.control.ListView;
+import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.stage.Stage;
-
-import java.io.File;
 
 public class ListTest implements Runnable {
     
     public static void main(String ... args) throws Exception {
         Core.setUseJOGL(false);
         Core.init();
-        SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
         Core.getShared().defer(new ListTest());
     }
 

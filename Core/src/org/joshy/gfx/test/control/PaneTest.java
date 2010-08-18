@@ -1,20 +1,16 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.SplitPane;
 import org.joshy.gfx.stage.Stage;
 
-import java.io.File;
-
 public class PaneTest implements Runnable {
     public static void main(String ... args) throws Exception {
         Core.setUseJOGL(false);
         Core.init();
-        SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
         Core.getShared().defer(new PaneTest());
     }
 

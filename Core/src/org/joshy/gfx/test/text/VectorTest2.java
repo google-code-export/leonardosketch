@@ -8,8 +8,6 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.stage.Stage;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: joshmarinacci
@@ -18,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
  * To change this template use File | Settings | File Templates.
  */
 public class VectorTest2 implements Runnable {
-    public static void main(String ... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String ... args) throws Exception {
         Core.setUseJOGL(true);
         Core.init();
         Core.getShared().defer(new VectorTest2());

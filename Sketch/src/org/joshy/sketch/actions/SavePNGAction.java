@@ -1,8 +1,7 @@
 package org.joshy.sketch.actions;
 
-import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.control.skin.FontSkin;
 import org.joshy.gfx.stage.swing.SwingGFX;
 import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.gfx.util.u;
@@ -161,7 +160,7 @@ public class SavePNGAction extends SAction {
 
         private void draw(Graphics2D g, SText sText) {
             g.setPaint(GraphicsUtil.toAWT((FlatColor) sText.getFillPaint()));
-            org.joshy.gfx.draw.Font font = FontSkin.DEFAULT.getFont();
+            org.joshy.gfx.draw.Font font = org.joshy.gfx.draw.Font.DEFAULT;
             font = org.joshy.gfx.draw.Font.name(font.getName())
                     .size((float)sText.getFontSize())
                     .weight(sText.getWeight())

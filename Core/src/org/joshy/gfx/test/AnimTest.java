@@ -28,7 +28,6 @@ public class AnimTest implements Runnable {
     public void run() {
         try {
             Stage stage = Stage.createStage();
-            SkinManager.getShared().parseStylesheet(new File("assets/style.xml").toURI().toURL());
 
             final Button b = new Button();
             stage.setContent(b);

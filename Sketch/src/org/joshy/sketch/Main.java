@@ -74,10 +74,8 @@ public class Main implements Runnable {
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
-        URL url = Main.class.getResource("skin/style.xml");
         Core.setUseJOGL(false);
         Core.init();
-        SkinManager.getShared().parseStylesheet(url);
         Core.getShared().defer(new Main());
     }
 

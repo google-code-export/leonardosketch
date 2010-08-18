@@ -27,7 +27,7 @@ import java.nio.ByteBuffer;
  * To change this template use File | Settings | File Templates.
  */
 public class RenderBufferTest implements Runnable {
-    public static void main(String ... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String ... args) throws Exception, InterruptedException {
         Core.setUseJOGL(true);
         Core.init();
         Core.getShared().defer(new RenderBufferTest());

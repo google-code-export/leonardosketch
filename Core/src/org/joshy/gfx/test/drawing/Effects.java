@@ -2,15 +2,13 @@ package org.joshy.gfx.test.drawing;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.ImageBuffer;
 import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
-import org.joshy.gfx.node.control.skin.FontSkin;
 import org.joshy.gfx.stage.Stage;
-
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,7 +18,7 @@ import java.lang.reflect.InvocationTargetException;
  * To change this template use File | Settings | File Templates.
  */
 public class Effects implements Runnable {
-    public static void main(String ... args) throws InvocationTargetException, InterruptedException {
+    public static void main(String ... args) throws Exception, InterruptedException {
         Core.init();
         Core.getShared().defer(new Effects());
     }
@@ -38,12 +36,12 @@ public class Effects implements Runnable {
                 ImageBuffer buf = g.createBuffer(100,25);
                 GFX g2 = buf.getGFX();
                 g2.setPaint(new FlatColor(0.1,0.1,0.1,0.3));
-                g2.drawText("ABCabc", FontSkin.DEFAULT.getFont(),20,20);
+                g2.drawText("ABCabc", Font.DEFAULT,20,20);
                 buf.apply(new BlurEffect(3,3));
                 g.draw(buf,0,0);
 
                 g.setPaint(new FlatColor(0,0,0,1.0));
-                g.drawText("ABCabc", FontSkin.DEFAULT.getFont(),20,20-1);
+                g.drawText("ABCabc", Font.DEFAULT,20,20-1);
 
 
             }

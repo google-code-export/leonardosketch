@@ -2,7 +2,6 @@ package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -12,7 +11,6 @@ import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.control.skin.FontSkin;
 
 import java.util.Date;
 
@@ -28,7 +26,6 @@ public class PopupMenu extends Control {
     private int hoverRow = -1;
     private Callback<ChangedEvent> callback;
     private long openTime;
-    private CSSSkin cssSkin;
 
     public PopupMenu(ListModel model, Callback<ChangedEvent> callback) {
         setVisible(true);
@@ -84,7 +81,7 @@ public class PopupMenu extends Control {
 
     @Override
     public void doSkins() {
-        cssSkin = (CSSSkin) SkinManager.getShared().getSkin(this,PART_CSS,PROP_CSS);
+        cssSkin = SkinManager.getShared().getCSSSkin();
         setLayoutDirty();
     }
 
@@ -143,7 +140,7 @@ public class PopupMenu extends Control {
     }
 
     private void drawText(GFX g, Object o, double rowy) {
-        Font.drawCenteredVertically(g,o.toString(), FontSkin.DEFAULT.getFont(),
+        Font.drawCenteredVertically(g,o.toString(), cssSkin.getDefaultFont(),
                 3,rowy+spacer,getWidth(),rowHeight,true);
     }
 
