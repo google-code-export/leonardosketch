@@ -7,7 +7,6 @@ import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -22,6 +21,7 @@ import org.joshy.gfx.node.layout.StackPanel;
 import org.joshy.gfx.node.layout.VBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
+import org.joshy.gfx.util.localization.Localization;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.ViewSidebar;
@@ -52,6 +52,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 public class Main implements Runnable {
     private static final File BASE_STORAGE_DIR = new File(OSUtil.getBaseStorageDir());
     private static final File homedir = new File(BASE_STORAGE_DIR,"Leonardo");
@@ -74,6 +76,8 @@ public class Main implements Runnable {
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
+        //Localization.init(Main.class.getResource("translation.xml"),"en_US");
+        Localization.init(Main.class.getResource("translation.xml"),"de-DE");
         Core.setUseJOGL(false);
         Core.init();
         Core.getShared().defer(new Main());
@@ -140,7 +144,7 @@ public class Main implements Runnable {
             if(context.windowJMenu != null) {
                 context.menubar.remove(context.windowJMenu);
             }
-            Menu windowMenu = new Menu().setTitle("Window");
+            Menu windowMenu = new Menu().setTitle(getString("menus.window"));
             for(ShowWindow a : windowOpeners) {
                 windowMenu.addItem("Window: " + a.context.getDocument().getTitle(), a);
             }
@@ -287,33 +291,33 @@ public class Main implements Runnable {
     private void buildCommonMenubar(DocContext context) {
         DocumentCanvas canvas = context.getCanvas();
         //recent files menu
-        Menu recentFilesMenu = new Menu().setTitle("Recent Files");
+        Menu recentFilesMenu = new Menu().setTitle(getString("menus.recentfiles"));
         List<File> f2 = new ArrayList<File>(recentFiles);
         Collections.reverse(f2);
         for(File f : f2) {
             recentFilesMenu.addItem(f.getName(), new OpenAction(context,f));
         }
         //file menu
-        Menu fileMenu = new Menu().setTitle("File");
-        Menu newMenu = new Menu().setTitle("New");
+        Menu fileMenu = new Menu().setTitle(getString("menus.file"));
+        Menu newMenu = new Menu().setTitle(getString("menus.new"));
         for(DocModeHelper helper : modeHelpers) {
             newMenu.addItem(helper.getModeName() + " document", helper.getNewDocAction(this));
         }
         fileMenu.addMenu(newMenu);
         fileMenu
-                .addItem("Open", "O", new OpenAction(context))
+                .addItem(getString("menus.open"), "O", new OpenAction(context))
                 .addMenu(recentFilesMenu)
-                .addItem("Save", "S", new SaveAction(context, false))
-                .addItem("Save As", "shift S", new SaveAction(context, true))
-                .addItem("Close", "W", new CloseAction(canvas))
+                .addItem(getString("menus.save"), "S", new SaveAction(context, false))
+                .addItem(getString("menus.saveas"), "shift S", new SaveAction(context, true))
+                .addItem(getString("menus.close"), "W", new CloseAction(canvas))
                 .addMenu(new Menu().setTitle("Export")
-                    .addItem("to PNG", new SavePNGAction(context))
-                    .addItem("to SVG", new SaveSVGAction(context))
-                    .addItem("to HTML", new SaveHTMLAction(context))
+                    .addItem(getString("menus.topng"), new SavePNGAction(context))
+                    .addItem(getString("menus.tosvg"), new SaveSVGAction(context))
+                    .addItem(getString("menus.tohtml"), new SaveHTMLAction(context))
                 );
         quitAction = new QuitAction(this);
         if(!OSUtil.isMac()) {
-            fileMenu.addItem("Exit",    "Q",       quitAction);
+            fileMenu.addItem(getString("menus.exit"),    "Q",       quitAction);
         }
         JMenuBar menubar = context.menubar;
         menubar.add(fileMenu.createJMenu());

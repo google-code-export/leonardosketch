@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+
+<sets>
+
+
+<set name="menus">
+
+    <!-- this is an example of a string with a default and a translation -->
+    <key name="file">
+        <value>File</value>
+        <value language="de-DE">German File</value>
+    </key>
+
+
+    <!-- we need to translate the rest of these -->
+    <key name="recentfiles"><value>Recent Files</value></key>
+    <key name="new"><value>New</value></key>
+    <key name="open"><value>Open</value></key>
+    <key name="save"><value>Save</value></key>
+    <key name="saveas"><value>Save As</value></key>
+    <key name="close"><value>Close</value></key>
+    <key name="topng"><value>to PNG</value></key>
+    <key name="tosvg"><value>to SVG</value></key>
+    <key name="tohtml"><value>to HTML</value></key>
+    <key name="exit"><value>Exit</value></key>
+
+    <key name="window">
+         <value>Window</value>
+         <value language="en_US">Window</value>
+         <value language="zz_ZZ">Zindow</value>
+    </key>
+
+</set>
+
+
+</sets>
