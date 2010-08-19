@@ -84,6 +84,14 @@ public class MainTest {
         CSSMatcher classMatcher = new CSSMatcher();
         classMatcher.cssClass = "classmatch1";
         assertTrue(set.findIntegerValue(classMatcher,"margin") == 88);
+
+        //match by element against a rule with multiple elements
+        CSSMatcher multiElementMatcher = new CSSMatcher();
+        multiElementMatcher.element = "e1";
+        assertTrue(set.findIntegerValue(multiElementMatcher,"border")==3);
+        multiElementMatcher.element = "e2";
+        assertTrue(set.findIntegerValue(multiElementMatcher,"border")==3);
+
         //match by element and class
 //        classMatcher.element = "Button";
 //        classMatcher.cssClass = "classmatch2";
@@ -94,6 +102,7 @@ public class MainTest {
 
     
     private static void condense(Node<?> node, CSSRuleSet set) {
+        if(node == null) return;
         if("CSSRule".equals(node.getLabel())) {
             CSSRule rule = (CSSRule) node.getValue();
             set.rules.add(rule);

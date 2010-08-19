@@ -5,6 +5,10 @@
     font-weight: normal;
     font-size: 12pt; 
 }
+/* test multiple elements in the match */
+e1, e2 {
+    border: 3px;
+}
 button {
     border:3px;
     icon: url(images/checkbox_normal.png);
@@ -31,6 +35,7 @@ shadowtest {
 .classmatch1 {
     margin: 88px;
 }
+
 /*
 Button.classmatch2 {
     margin: 1px;

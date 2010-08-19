@@ -15,6 +15,12 @@ import java.util.List;
 public class CSSRuleSet {
     public List<CSSRule> rules = new ArrayList<CSSRule>();
     private URI baseURI;
+    private static final boolean DEBUG = false;
+    private static void p(String s) {
+        if(DEBUG) {
+            System.out.println(s);
+        }
+    }
 
     public CSSRuleSet() {
         
@@ -30,20 +36,21 @@ public class CSSRuleSet {
     }
 
     public CSSProperty findMatchingRule(CSSMatcher elem, String propName) {
+        p("looking for property: " + propName);
         List<CSSRule> rulescopy = new ArrayList<CSSRule>();
         rulescopy.addAll(rules);
         Collections.reverse(rulescopy);
         for(CSSRule rule : rulescopy) {
             for(CSSMatcher matcher : rule.matchers) {
-                //u.p("checking matcher: " + matcher);
+                p("checking matcher: " + matcher);
                 if(matches(matcher,elem)) {
                     for(CSSProperty prop : rule.getProperties()) {
                         if(prop.name.equals(propName)) {
-                            //u.p("found property: " + propName);
+                            p("found property: " + propName);
                             return prop;
                         }
                     }
-                    //u.p("didn't find property: " + propName + ". trying again");
+                    p("didn't find property: " + propName + ". trying again");
                 }
             }
         }
@@ -55,36 +62,36 @@ public class CSSRuleSet {
         //match pseudo class
         if(matcher.pseudo != null) {
             if(matcher.pseudo.equals(elem.pseudo) && matcher.element.equals(elem.element)) {
-//                u.p("matched pseudo on: " + elem);
+                p("matched pseudo on: " + elem);
                 return true;
             }
         }
 
         if(matcher.id != null) {
-//            u.p("checking id: " + matcher.id + " vs " + elem.id);
+           p("checking id: " + matcher.id + " vs " + elem.id);
             if(matcher.id.equals(elem.id)) {
-//                u.p("matched id on: " + elem);
+                p("matched id on: " + elem);
                 return true;
             }
         }
 
         if(matcher.element != null) {
             if(matcher.element.equals(elem.element) && matcher.pseudo == null) {
-//                u.p("matched element on: " + elem);
+                p("matched element on: " + elem);
                 return true;
             }
         }
 
         if(matcher.cssClass != null) {
-//            u.p("checking class: " + matcher.cssClass + " vs " + elem.cssClass);
+            p("checking class: " + matcher.cssClass + " vs " + elem.cssClass);
             if(matcher.cssClass.equals(elem.cssClass)) {
-//                u.p("matched css class on: " + elem);
+               p("matched css class on: " + elem);
                 return true;
             }
         }
 
         if("*".equals(matcher.element)) {
-//            u.p("Matched * on: " + elem);
+            p("Matched * on: " + elem);
             return true;
         }
         return false;
@@ -128,6 +135,7 @@ public class CSSRuleSet {
     }
 
     public int findIntegerValue(CSSMatcher matcher, String propName) {
+        p("--------");
         CSSProperty prop = findMatchingRule(matcher,propName);
         if(prop == null) return -1;
         return ((IntegerPixelValue)prop.value).getValue();

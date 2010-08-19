@@ -7,6 +7,7 @@ import org.parboiled.annotations.DontLabel;
 import org.parboiled.annotations.SuppressNode;
 import org.parboiled.support.Var;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class CSSParser extends BaseParser<Object> {
+    
     public Rule RuleSet() {
         return Sequence(
                 CSSRule(),
@@ -27,18 +29,20 @@ public class CSSParser extends BaseParser<Object> {
     }
 
     public Rule CSSRule() {
-        final Var matcher = new Var();
+        final Var<List<CSSMatcher>> matcher = new Var<List<CSSMatcher>>();
         final Var properties = new Var();
         return Sequence(
                 //a set of match expressions
                 MatchExpression(),
+                matcher.set(new ArrayList()),
+                matcher.get().add((CSSMatcher) this.value("MatchExpression")),
                 ZeroOrMore(Sequence(
                         Optional(Spacing()),
-                        Optional(','),
+                        ',',
+                        Optional(Spacing()),
                         MatchExpression(),
+                        matcher.get().add((CSSMatcher) this.value("MatchExpression")),
                         Optional(Spacing()))),
-                matcher.set(this.values("MatchExpression")),
-                
                 Spacing(),
                 LWING,
                 ZeroOrMore(PropertyRule()),
@@ -324,22 +328,20 @@ public class CSSParser extends BaseParser<Object> {
     }
 
     public class CSSRuleAction implements Action {
-        private final Var matcher;
+        private final Var<List<CSSMatcher>> matcher;
         private Var properties;
 
-        public CSSRuleAction(Var matcher, Var properties) {
+        public CSSRuleAction(Var<List<CSSMatcher>> matcher, Var properties) {
             this.matcher = matcher;
             this.properties = properties;
         }
 
         public boolean run(Context context) {
-//            p("matcher.get = " + matcher.get());
-//            p("Properties = " + properties.get());
             CSSRule rule = new CSSRule();
             rule.matchers.addAll((Collection<? extends CSSMatcher>) matcher.get());
             for(Object n : context.getLastNode().getChildren()) {
-//                p("cild = " + n);
-                rule.addProperty((CSSProperty) ((Node)n).getValue());
+                CSSProperty property = (CSSProperty) ((Node) n).getValue();
+                rule.addProperty(property);
             }
             set(rule);
             return true;
