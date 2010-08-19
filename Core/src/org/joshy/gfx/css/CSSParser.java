@@ -28,43 +28,67 @@ public class CSSParser extends BaseParser<Object> {
 
     public Rule CSSRule() {
         final Var matcher = new Var();
+        final Var properties = new Var();
         return Sequence(
                 //a set of match expressions
-                OneOrMore(Sequence(
-                        MatchExpression(),
+                MatchExpression(),
+                ZeroOrMore(Sequence(
                         Optional(Spacing()),
                         Optional(','),
+                        MatchExpression(),
                         Optional(Spacing()))),
-                matcher.set(this.values("OneOrMore/Sequence/MatchExpression")),
+                matcher.set(this.values("MatchExpression")),
                 
                 Spacing(),
                 LWING,
                 ZeroOrMore(PropertyRule()),
+                properties.set(this.nodes("ZeroOrMore")),
                 RWING,
-                new CSSRuleAction(matcher)
+                new CSSRuleAction(matcher,properties)
         );
     }
 
     public Rule MatchExpression() {
         final Var<String> elem = new Var<String>();
         final Var<String> pseudo = new Var<String>();
+        final Var<String> id = new Var<String>();
+        final Var<String> cssClass = new Var<String>();
         return Sequence(
-                //element name
-                Sequence(Sequence(LetterOrStar(), ZeroOrMore(LetterOrDigit())),toString,elem.set((String) value()),
+                FirstOf(
+                    //#foo : match id
+                    Sequence(Hash(),Sequence(Letter(),ZeroOrMore(LetterOrDigit())),
+                            toString, id.set((String)value())),
+                    //foo : match element name
+                    Sequence(Sequence(Letter(), ZeroOrMore(LetterOrDigit())),
+                            toString,  elem.set((String) value())),
+                    //* : match all
+                    Sequence(LetterOrStar(),
+                            toString,elem.set((String)value())),
+                    //.foo : match css class
+                    Sequence(Period(),Sequence(Letter(),ZeroOrMore(LetterOrDigit())),
+                            toString, cssClass.set((String)value()))
+                )
+
                 //pseudo class
-                Optional(Sequence(':',Sequence(OneOrMore(Letter()),toString,pseudo.set((String) value()))))
-                ),
-                new MatchExpressionAction(elem, pseudo)
+                ,Optional(Sequence(':',Sequence(OneOrMore(Letter()),toString,pseudo.set((String) value()))))
+                //turn into a match expression
+                ,new MatchExpressionAction(elem, pseudo,id, cssClass)
                 );
     }
 
     public Rule PropertyRule() {
+        final Var<String> propName = new Var<String>();
+        final Var propValue = new Var();
         return Sequence(
-                PropertyName(),
+                Spacing(),
+                PropertyName(),propName.set((String)value()),
+                Spacing(),
                 COLON,
-                PropertyValue(),
-                SEMICOLON,
-                new PropertyRuleAction()
+                Spacing(),
+                PropertyValue(),propValue.set(value()),
+                Spacing(),
+                SEMICOLON
+                ,new PropertyRuleAction(propName,propValue)
         );
     }
 
@@ -86,10 +110,6 @@ public class CSSParser extends BaseParser<Object> {
         }
 
         public boolean run(Context context) {
-//                            u.p("pos 1 = " + pos1.get());
-//                            u.p("stops = " + stops.get());
-//                            u.p(""+context.getNodeByPath("GradientStop"));
-
             LinearGradientValue grad = new LinearGradientValue(
                     pos1.get(),
                     pos2.get());
@@ -218,6 +238,15 @@ public class CSSParser extends BaseParser<Object> {
         return FirstOf(CharRange('a', 'z'), CharRange('A', 'Z'), '_');
     }
     @SuppressNode
+    public Rule Hash() {
+        return CharSet('#');
+    }
+    
+    public Rule Period() {
+        return CharSet('.');
+    }
+
+    @SuppressNode
     public Rule LetterOrDash() {
         return FirstOf(CharRange('a', 'z'), CharRange('A', 'Z'), '-');
     }
@@ -259,7 +288,6 @@ public class CSSParser extends BaseParser<Object> {
 
     public static class ImageURLAction implements Action {
         public boolean run(Context context) {
-            //u.p("matched a url: " + context.getPrevText());
             try {
                 context.setNodeValue(new URLValue(context.getPrevText()));
             } catch (Exception e) {
@@ -297,19 +325,21 @@ public class CSSParser extends BaseParser<Object> {
 
     public class CSSRuleAction implements Action {
         private final Var matcher;
+        private Var properties;
 
-        public CSSRuleAction(Var matcher) {
+        public CSSRuleAction(Var matcher, Var properties) {
             this.matcher = matcher;
+            this.properties = properties;
         }
 
         public boolean run(Context context) {
-//                        p("value = " + matcher.get());
+//            p("matcher.get = " + matcher.get());
+//            p("Properties = " + properties.get());
             CSSRule rule = new CSSRule();
             rule.matchers.addAll((Collection<? extends CSSMatcher>) matcher.get());
-            //rule.matcher = (CSSMatcher) ((List)matcher.get()).get(0);
-            Node rules = context.getNodeByPath("ZeroOrMore");
-            for(Object n : rules.getChildren()) {
-                rule.properties.add((CSSProperty) ((Node)n).getValue());
+            for(Object n : context.getLastNode().getChildren()) {
+//                p("cild = " + n);
+                rule.addProperty((CSSProperty) ((Node)n).getValue());
             }
             set(rule);
             return true;
@@ -319,34 +349,49 @@ public class CSSParser extends BaseParser<Object> {
     public class MatchExpressionAction implements Action {
         private final Var<String> elem;
         private final Var<String> pseudo;
+        private final Var<String> id;
+        private final Var<String> cssClass;
 
-        public MatchExpressionAction(Var<String> elem, Var<String> pseudo) {
+        public MatchExpressionAction(Var<String> elem, Var<String> pseudo, Var<String> id, Var<String> cssClass) {
             this.elem = elem;
             this.pseudo = pseudo;
+            this.id = id;
+            this.cssClass = cssClass;
         }
 
         public boolean run(Context context) {
             CSSMatcher match = new CSSMatcher();
             match.element = elem.get();
             match.pseudo = pseudo.get();
-//                        p("elem = " + elem.get());
-//                        p("pseudo = " + pseudo.get());
+            match.id = id.get();
+            match.cssClass = cssClass.get();
+            /*p("--------");
+            p("elem = " + elem.get());
+            p("pseudo = " + pseudo.get());
+            p("id = " + id.get());
+            p("class = " + cssClass.get());*/
             set(match);
             return true;
         }
     }
 
     public class PropertyRuleAction implements Action<String> {
-        public boolean run(Context<String> context) {
-//                        System.out.println("go//t a rule!: " + prevText() + " value = " + context.getNodeValue() + " " + context.getPrevValue());
-//                        p("pn = " + context.getNodeByPath("PropertyName").getValue());
-//                        p("pv = " + context.getNodeByPath("PropertyValue").getValue());
+        private Var<String> propName;
+        private Var propValue;
+
+        public PropertyRuleAction(Var<String> propName, Var propValue) {
+            this.propName = propName;
+            this.propValue = propValue;
+        }
+
+        public boolean run(Context context) {
+//            p("prop name = " + propName.get());
+//            p("prop value = " + propValue.get());
             CSSProperty cpa = new CSSProperty();
-            cpa.name = context.getNodeByPath("PropertyName").getValue();
-            Object v = context.getNodeByPath("PropertyValue").getValue();
-            cpa.value = (BaseValue) v;
+            cpa.name = propName.get();
+            cpa.value = (BaseValue) propValue.get();
+            context.setNodeValue(cpa);
             set(cpa);
-            //context.setNodeValue(cpa);
             return true;
         }
     }

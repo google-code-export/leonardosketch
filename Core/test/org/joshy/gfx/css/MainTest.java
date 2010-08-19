@@ -72,6 +72,23 @@ public class MainTest {
         assertTrue(sv.getXoffset()==3);
         assertTrue(sv.getYoffset()==2);
         assertTrue(sv.getBlurRadius()==4);
+
+
+        //tests for id and class matching
+        CSSMatcher idMatcher = new CSSMatcher();
+        idMatcher.id = "idmatch1";
+        //test an ID search
+        assertTrue(set.findIntegerValue(idMatcher,"margin") == 87);
+
+        //match by class
+        CSSMatcher classMatcher = new CSSMatcher();
+        classMatcher.cssClass = "classmatch1";
+        assertTrue(set.findIntegerValue(classMatcher,"margin") == 88);
+        //match by element and class
+//        classMatcher.element = "Button";
+//        classMatcher.cssClass = "classmatch2";
+//        assertTrue(set.findIntegerValue(classMatcher,"margin") == 1);
+//        assertTrue(set.findIntegerValue(classMatcher,"padding") == 8);
     }
 
 

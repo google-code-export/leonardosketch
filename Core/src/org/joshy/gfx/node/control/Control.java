@@ -5,6 +5,8 @@ import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * User: josh
@@ -19,6 +21,8 @@ public abstract class Control extends Node {
     protected boolean skinsDirty;
     protected boolean layoutDirty;
     protected CSSSkin cssSkin;
+    protected String id;
+    protected List<String> cssClasses;
 
     protected Control() {
         setSkinDirty();

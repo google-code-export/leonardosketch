@@ -10,11 +10,23 @@ package org.joshy.gfx.css;
 public class CSSMatcher {
     public String element;
     public String pseudo;
+    public String id;
+    public String cssClass;
 
     public CSSMatcher() {
     }
 
     public CSSMatcher(String element) {
         this.element = element;
+    }
+
+    @Override
+    public String toString() {
+        return "CSSMatcher{" +
+                "element='" + element + '\'' +
+                ", pseudo='" + pseudo + '\'' +
+                ", id='" + id + '\'' +
+                ", cssClass='" + cssClass + '\'' +
+                '}';
     }
 }

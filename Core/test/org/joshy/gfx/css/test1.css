@@ -21,3 +21,20 @@ shadowtest {
     /* a black shadow offset by 3,2 with a blur radius of 4 */
     text-shadow: #000000 3px 2px 4px;
 }
+#shad{
+
+}
+#idmatch1 {
+    margin: 87px;
+}
+
+.classmatch1 {
+    margin: 88px;
+}
+/*
+Button.classmatch2 {
+    margin: 1px;
+}
+Button.classmatch3 {
+    margin: 2px;
+} */

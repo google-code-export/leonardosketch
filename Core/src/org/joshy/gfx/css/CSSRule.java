@@ -15,5 +15,13 @@ import java.util.List;
  */
 public class CSSRule {
     public List<CSSMatcher> matchers = new ArrayList<CSSMatcher>();
-    public List<CSSProperty> properties = new ArrayList<CSSProperty>();
+    private List<CSSProperty> properties = new ArrayList<CSSProperty>();
+
+    public Iterable<? extends CSSProperty> getProperties() {
+        return properties;
+    }
+
+    public void addProperty(CSSProperty cssProperty) {
+        this.properties.add(cssProperty);
+    }
 }

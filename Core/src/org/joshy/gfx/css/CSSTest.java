@@ -46,7 +46,7 @@ public class CSSTest {
             CSSRule rule = (CSSRule) node.getValue();
             set.rules.add(rule);
             p("rule = " + rule.matchers);
-            for(CSSProperty prop : rule.properties) {
+            for(CSSProperty prop : rule.getProperties()) {
                 p("print " + prop.name + " = " + prop.value);
             }
         }

@@ -1,7 +1,5 @@
 package org.joshy.gfx.css.values;
 
-import org.joshy.gfx.util.u;
-
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,11 +15,8 @@ public class URLValue extends BaseValue {
     private URI value;
 
     public URLValue(String value) throws MalformedURLException, URISyntaxException {
-        u.p("creating a url with: " + value);
         String url = value.substring(4,value.length()-1);
-        u.p("final = " + url);
         this.value = new URI(url);
-        u.p("uri = " + this.value);
     }
 
     @Override
