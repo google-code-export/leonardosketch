@@ -28,6 +28,7 @@ public class LayoutTests implements Runnable {
     private static final String VBOX_SIMPLE = "VBox simple";
     private static final String VBOX_RIGHT_SIMPLE = "VBox simple, right aligned";
     private static final String VBOX_STRETCH_SIMPLE = "VBox simple, stretch";
+    private static final String COMPLEX_CENTER_ALIGNED_DIALOG = "Complex center aligned dialog";
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -52,6 +53,7 @@ public class LayoutTests implements Runnable {
         tests.add(VBOX_RIGHT_SIMPLE);
         tests.add(VBOX_STRETCH_SIMPLE);
         tests.add(VBOX_WITH_TOOLBAR_AND_STATUSBAR);
+        tests.add(COMPLEX_CENTER_ALIGNED_DIALOG);
 
         final ListView<String> testView =new ListView<String>().setModel(ListView.createModel(tests)); 
         split.setFirst(testView);
@@ -122,6 +124,57 @@ public class LayoutTests implements Runnable {
                     .add(toolbar)
                     .add(new Panel().setFill(FlatColor.RED),1)
                     .add(statusbar);
+        }
+        if(COMPLEX_CENTER_ALIGNED_DIALOG.equals(testName)) {
+            return new GridBox()
+                .setPadding(5)
+                .column(120, GridBox.Align.Right)
+                .column(200, GridBox.Align.Left)
+                    .addControl(new Label("Appearance:"))
+                    .addControl(createPopup("Blue"))
+                .nextRow()
+                    .skip()
+                    .addControl(new Label("For the overall look of buttons, menus, and windows"))
+                .nextRow()
+                    .addControl(new Label("Highlight Color"))
+                    .addControl(createPopup("Blue"))
+                .nextRow()
+                    .skip().addControl(new Label("For selected text"))
+                .nextRow()
+                    .addControl(new Label("Place scroll arrows:"))
+                    .addControl(new Radiobutton("Together"))
+                .nextRow()
+                    .skip()
+                    .addControl(new Radiobutton("At top and bottom"))
+                .nextRow()
+                    .addControl(new Label("Click in the scroll bar to:"))
+                    .addControl(new Radiobutton("Jump to the next page"))
+                .nextRow()
+                    .skip()
+                    .addControl(new Radiobutton("Jump to the spot that's clicked"))
+                .nextRow()
+                    .skip()
+                    .addControl(new Checkbox("Use smooth scrolling"))
+                .nextRow()
+                    .skip()
+                    .addControl(new Checkbox("Double-click a window's title bar to minimize"))
+                .nextRow()
+                    .addControl(new Label("Number of recent items:"))
+                    .addControl(new HFlexBox().add(createPopup("10"),new Label("Applications")).setHeight(20))
+                .nextRow()
+                    .skip()
+                    .addControl(new HFlexBox().add(createPopup("10"),new Label("Documents")).setHeight(20))
+                .nextRow()
+                    .skip()
+                    .addControl(new HFlexBox().add(createPopup("10"),new Label("Servers")).setHeight(20))
+                .nextRow()
+                    .skip()
+                    .addControl(new Checkbox("Use LCD font smoothing when available"))
+                .nextRow()
+                    .addControl(new HFlexBox().add(
+                        new Label("Turn off font smoothing for font sizes")
+                        ,createPopup("4")
+                        ,new Label("and smaller")).setHeight(20));
         }
 
         return new Panel();
