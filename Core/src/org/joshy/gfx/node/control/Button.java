@@ -121,44 +121,32 @@ public class Button extends Control {
 
     @Override
     public void doLayout() {
-        double textWidth = 0;
-        double textHeight = 0;
-        double iconWidth = 0;
-        double iconHeight = 0;
-
-        if(text != null && !text.trim().equals("")) {
-            textWidth = font.getWidth(text);
-            textHeight = font.getAscender() + font.getDescender();
-            baseline = Math.max(font.getAscender(),0);
-        }
-
-        if(normalIcon != null) {
-            iconWidth = normalIcon.getWidth();
-            iconHeight = normalIcon.getHeight();
-            baseline = Math.max(iconHeight,baseline);
-        }
-
-        double width = 0;
-
-        //eventually switch to support all orientations and alignments
-        if(true) {
-            width = insets.getLeft() + iconWidth + textWidth + insets.getRight();
-            height = insets.getTop() + Math.max(iconHeight, textHeight) + insets.getBottom();
-            baseline += insets.getTop();
-        }
-
-
-        setWidth(width);
-        setHeight(height);
-
         //new css skin stuff
         if(cssSkin != null) {
             size = cssSkin.getSize(this,text);
             setWidth(size.width);
             setHeight(size.height);
+            
+            if(prefWidth != CALCULATED) {
+                setWidth(prefWidth);
+                size.width = prefWidth;
+            }
         }
     }
     
+    @Override
+    public void doPrefLayout() {
+        if(cssSkin != null) {
+            size = cssSkin.getSize(this,text);
+            if(prefWidth != CALCULATED) {
+                setWidth(prefWidth);
+            } else {
+                setWidth(size.width);
+            }
+            setHeight(size.height);
+        }
+    }
+
     private CSSSkin.State buttonStateToCssState(State state) {
         switch(state) {
             case Selected: return CSSSkin.State.Selected;
@@ -169,6 +157,7 @@ public class Button extends Control {
         }
         return CSSSkin.State.None;
     }
+
     @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
@@ -240,6 +229,7 @@ public class Button extends Control {
         this.style = style;
         setDrawingDirty();
     }
+    
     public String getStyle() {
         return style;
     }

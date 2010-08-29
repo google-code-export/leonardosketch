@@ -8,16 +8,17 @@ import org.joshy.gfx.node.Node;
 import java.util.List;
 
 /**
- * Created by IntelliJ IDEA.
- * User: josh
- * Date: Jan 23, 2010
- * Time: 7:59:09 AM
- * To change this template use File | Settings | File Templates.
+ * The base of all UI controls. It defines the layout contract, and
+ * size values
  */
 public abstract class Control extends Node {
+    public static final double CALCULATED = -1;
+
+    protected double width = 0;
+    protected double height = 0;
+    protected double prefWidth = CALCULATED;
+    protected double prefHeight = CALCULATED;
     
-    protected double width;
-    protected double height;
     protected boolean skinsDirty;
     protected boolean layoutDirty;
     protected CSSSkin cssSkin;
@@ -33,6 +34,45 @@ public abstract class Control extends Node {
         setLayoutDirty();
         setDrawingDirty();
         return this;
+    }
+
+    public Control setHeight(double height) {
+        this.height = height;
+        setLayoutDirty();
+        setDrawingDirty();
+        return this;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public Control setPrefWidth(double width) {
+        this.prefWidth = width;
+        return this;
+    }
+
+    public Control setPrefHeight(double height) {
+        this.prefHeight = height;
+        return this;
+    }
+
+    @Override
+    public Bounds getInputBounds() {
+        return getVisualBounds();
+    }
+
+    @Override
+    public Bounds getVisualBounds() {
+        return new Bounds(getTranslateX(),getTranslateY(),getWidth(),getHeight());
+    }
+
+    public Bounds getLayoutBounds() {
+        return getVisualBounds();
     }
 
     protected void setLayoutDirty() {
@@ -51,44 +91,21 @@ public abstract class Control extends Node {
         }
     }
 
-    public Control setHeight(double height) {
-        this.height = height;
-        setLayoutDirty();
-        setDrawingDirty();
-        return this;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
     /** the control should calculate it's layout bounds,
      * caching as much info as possible so that drawing can be fast.
      */
     public abstract void doLayout();
+
+    /** do pref layout
+     *
+     */
+    public void doPrefLayout() { }
 
     /** the control should load up it's skins, caching as much
      * info as possible so that drawing and layout can be fast.
      */
     public abstract void doSkins();
 
-    @Override
-    public Bounds getInputBounds() {
-        return getVisualBounds();
-    }
-
-    @Override
-    public Bounds getVisualBounds() {
-        return new Bounds(getTranslateX(),getTranslateY(),getWidth(),getHeight());
-    }
-
-    public Bounds getLayoutBounds() {
-        return getVisualBounds();
-    }
 }
 
 

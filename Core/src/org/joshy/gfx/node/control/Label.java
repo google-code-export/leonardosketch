@@ -40,6 +40,15 @@ public class Label extends Control {
     }
 
     @Override
+    public void doPrefLayout() {
+        double tw = font.calculateWidth(text);
+        double th = font.calculateHeight(text);
+        baseline = font.getAscender();
+        setWidth(tw);
+        setHeight(th);
+    }
+
+    @Override
     public void draw(GFX g) {
         if(!isVisible()) return;
         if(fill != null && text != null) {

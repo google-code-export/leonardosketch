@@ -21,6 +21,7 @@ import java.util.List;
  */
 public class LayoutTests implements Runnable {
     private SplitPane split;
+    private static final String SIMPLE_HBOX_BUTTONS = "Simple HBox with buttons";
     private static final String SIMPLE_HBOX = "Simple HBox";
     private static final String SIMPLE_HBOX_BASELINE = "Simple HBox with baseline";
     private static final String HBOX_WITH_SPACERS = "Hbox with spacers";
@@ -30,6 +31,7 @@ public class LayoutTests implements Runnable {
     private static final String VBOX_STRETCH_SIMPLE = "VBox simple, stretch";
     private static final String COMPLEX_CENTER_ALIGNED_DIALOG = "Complex center aligned dialog";
     private static final String SIMPLE_HBOX_BOTTOM = "Simple HBox Bottom";
+    private static final String BUTTON_SIZING = "Button Sizing";
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -47,6 +49,8 @@ public class LayoutTests implements Runnable {
         split.setPosition(200);
 
         List<String> tests = new ArrayList<String>();
+        tests.add(SIMPLE_HBOX_BUTTONS);
+        tests.add(BUTTON_SIZING);
         tests.add(SIMPLE_HBOX);
         tests.add(SIMPLE_HBOX_BASELINE);
         tests.add(SIMPLE_HBOX_BOTTOM);
@@ -72,6 +76,12 @@ public class LayoutTests implements Runnable {
     private Control getTest(String testName) {
         //u.p("doing test " + testName);
 
+        if(SIMPLE_HBOX_BUTTONS.equals(testName)) {
+            return new HFlexBox().add(new Button("Label"),new Button("Button"), new Button("Popup List"));
+        }
+        if(BUTTON_SIZING.equals(testName)) {
+            return new HFlexBox().add(new Button("long b").setPrefWidth(100));
+        }
         if(SIMPLE_HBOX.equals(testName)) {
             return new HFlexBox().add(new Label("Label"),new Button("Button"), createPopup("Popup List"));
         }
