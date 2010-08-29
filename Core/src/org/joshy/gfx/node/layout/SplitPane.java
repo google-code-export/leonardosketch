@@ -6,10 +6,7 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Node;
-import org.joshy.gfx.node.Parent;
 import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +35,7 @@ public class SplitPane extends AbstractPane {
         });
     }
 
-    public void setFirst(Control panel) {
+    public SplitPane setFirst(Control panel) {
         if(first != null) {
             first.setParent(null);
         }
@@ -47,9 +44,10 @@ public class SplitPane extends AbstractPane {
         setSkinDirty();
         setLayoutDirty();
         setDrawingDirty();
+        return this;
     }
 
-    public void setSecond(Control panel) {
+    public SplitPane setSecond(Control panel) {
         if(second != null) {
             second.setParent(null);
         }
@@ -58,6 +56,7 @@ public class SplitPane extends AbstractPane {
         setSkinDirty();
         setLayoutDirty();
         setDrawingDirty();
+        return this;
     }
 
     @Override
@@ -129,9 +128,10 @@ public class SplitPane extends AbstractPane {
         }
     }
 
-    public void setPosition(double position) {
+    public SplitPane setPosition(double position) {
         this.position = position;
         setLayoutDirty();
+        return this;
     }
 
     public Iterable<? extends Node> children() {
@@ -155,5 +155,6 @@ public class SplitPane extends AbstractPane {
         }
         return list;
     }
+
 
 }

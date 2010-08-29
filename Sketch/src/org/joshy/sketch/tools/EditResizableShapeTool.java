@@ -11,11 +11,10 @@ import org.joshy.gfx.node.control.Togglebutton;
 import org.joshy.gfx.node.layout.VBox;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.canvas.PositionHandle;
-import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.model.ResizableGrid9Shape;
+import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.geom.Point2D;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class EditResizableShapeTool extends CanvasTool {
@@ -49,29 +48,26 @@ public class EditResizableShapeTool extends CanvasTool {
         handles.add(new VHandle(shape,0,shape.getTop()+bounds.getY(), PositionHandle.Position.Top));
         handles.add(new VHandle(shape,0,shape.getBottom()+bounds.getY(), PositionHandle.Position.Bottom));
 
-        try {
-            hlocked = new Togglebutton("h locked");
-            hlocked.setSelected(shape.isHLocked());
-            hlocked.onClicked(new Callback<ActionEvent>(){
-                public void call(ActionEvent event) {
-                    shape.setHLocked(hlocked.isSelected());
-                }
-            });
-            vlocked = new Togglebutton("v locked");
-            vlocked.setSelected(shape.isVLocked());
-            vlocked.onClicked(new Callback<ActionEvent>() {
-                public void call(ActionEvent event) {
-                    shape.setVLocked(vlocked.isSelected());
-                }
-            });
-            panel = new VBox();
-            panel.add(hlocked,vlocked);
-            panel.setTranslateX(100);
-            panel.setTranslateY(20);
-            context.getCanvas().getParent().getStage().getPopupLayer().add(panel);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        hlocked = new Togglebutton("h locked");
+        hlocked.setSelected(shape.isHLocked());
+        hlocked.onClicked(new Callback<ActionEvent>(){
+            public void call(ActionEvent event) {
+                shape.setHLocked(hlocked.isSelected());
+            }
+        });
+        vlocked = new Togglebutton("v locked");
+        vlocked.setSelected(shape.isVLocked());
+        vlocked.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent event) {
+                shape.setVLocked(vlocked.isSelected());
+            }
+        });
+        panel = new VBox();
+        panel.add(hlocked,vlocked);
+        panel.setTranslateX(100);
+        panel.setTranslateY(20);
+        context.getCanvas().getParent().getStage().getPopupLayer().add(panel);
+
     }
 
     @Override

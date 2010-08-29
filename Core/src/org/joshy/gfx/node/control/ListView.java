@@ -273,7 +273,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         return model;
     }
     
-    public void setModel(ListModel<E> listModel) {
+    public ListView setModel(ListModel<E> listModel) {
         this.model = listModel;
         EventBus.getSystem().addListener(model, ListEvent.Updated, new Callback<ListEvent>() {
             public void call(ListEvent event) {
@@ -281,7 +281,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
                 setDrawingDirty();
             }
         });
-
+        return this;
     }
 
     public int getSelectedIndex() {

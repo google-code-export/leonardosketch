@@ -1,9 +1,8 @@
-package org.joshy.gfx.test.control;
+package org.joshy.gfx.node.layout;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import java.util.List;
  * Time: 9:28:00 PM
  * To change this template use File | Settings | File Templates.
  */
-public class Grid extends Panel {
+public class GridBox extends Panel {
     private Row currentRow;
     private double padding = 5;
     private boolean debug;
@@ -26,10 +25,11 @@ public class Grid extends Panel {
         this.debug = debug;
     }
 
-    public Grid setPadding(double padding) {
+    public GridBox setPadding(double padding) {
         this.padding = padding;
         return this;
     }
+
 
     public enum Align {
         Left, Center, Fill, Right
@@ -43,30 +43,34 @@ public class Grid extends Panel {
     private List<Row> rows;
 
 
-    public Grid() {
+    public GridBox() {
         columns = new ArrayList<Column>();
         rows = new ArrayList<Row>();
         currentRow = new Row();
         rows.add(currentRow);
     }
 
-    public Grid column(int width, Align align) {
+    public GridBox column(int width, Align align) {
         columns.add(new Column(width,align,VAlign.Baseline));
         return this;
     }
 
-    public Grid column(int width, Align align, VAlign vAlign) {
+    public GridBox column(int width, Align align, VAlign vAlign) {
         columns.add(new Column(width,align,vAlign));
         return this;
     }
 
-    public Grid addControl(Control ... controls) {
+    public GridBox addControl(Control ... controls) {
         super.add(controls);
         currentRow.controls.addAll(Arrays.asList(controls));
         return this;
     }
 
-    public Grid nextRow() {
+    public GridBox skip() {
+        return addControl(new Spacer());
+    }
+
+    public GridBox nextRow() {
         currentRow = new Row();
         rows.add(currentRow);
         return this;

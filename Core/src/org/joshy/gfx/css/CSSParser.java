@@ -397,7 +397,7 @@ public class CSSParser extends BaseParser<Object> {
             return true;
         }
     }
-
+                                                    
     public static class ToStringAction implements Action<String> {
         public boolean run(Context<String> context) {
             context.setNodeValue(context.getPrevText());

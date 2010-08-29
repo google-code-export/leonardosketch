@@ -4,6 +4,7 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.VBox;
 import org.joshy.gfx.stage.Stage;
@@ -29,11 +30,11 @@ public class GridTest implements Runnable {
 
         Stage stage = Stage.createStage();
 
-        Grid widthHeight = new Grid()
+        GridBox widthHeight = new GridBox()
                 .setPadding(5)
-                .column(70,Grid.Align.Right)
-                .column(100,Grid.Align.Left)
-                .column(100,Grid.Align.Left)
+                .column(70, GridBox.Align.Right)
+                .column(100, GridBox.Align.Left)
+                .column(100, GridBox.Align.Left)
                 .addControl(new Label("Width:"))
                 .addControl(new Textbox("1024"))
                 .addControl(new Button("pixels"))
@@ -44,10 +45,10 @@ public class GridTest implements Runnable {
                 ;
         widthHeight.setFill(FlatColor.WHITE);
         TitleBorderPanel title1 = new TitleBorderPanel(widthHeight);
-        Grid docSize = new Grid()
-                .column(70,Grid.Align.Right)
-                .column(100,Grid.Align.Left)
-                .column(100,Grid.Align.Left)
+        GridBox docSize = new GridBox()
+                .column(70, GridBox.Align.Right)
+                .column(100, GridBox.Align.Left)
+                .column(100, GridBox.Align.Left)
                 .addControl(new Label("Width:"))
                 .addControl(new Textbox("48"))
                 .addControl(new Button("inches"))
@@ -68,9 +69,9 @@ public class GridTest implements Runnable {
 
         VBox box = new VBox();
         box.add(new Button("OK"),new Button("Cancel"),new Button("Auto"));
-        Grid master = new Grid()
-                .column(300, Grid.Align.Fill)
-                .column(100, Grid.Align.Left, Grid.VAlign.Top)
+        GridBox master = new GridBox()
+                .column(300, GridBox.Align.Fill)
+                .column(100, GridBox.Align.Left, GridBox.VAlign.Top)
                 .addControl(title1)
                 .addControl(box)
                 .nextRow()
@@ -91,7 +92,7 @@ public class GridTest implements Runnable {
 
     private class TitleBorderPanel extends Panel {
         double inset = 20;
-        public TitleBorderPanel(Grid grid) {
+        public TitleBorderPanel(GridBox grid) {
             super();
             add(grid);
         }

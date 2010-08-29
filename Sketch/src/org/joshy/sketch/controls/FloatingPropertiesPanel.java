@@ -198,7 +198,6 @@ public class FloatingPropertiesPanel extends HBox {
         add(strokeWidthLabel);
         add(strokeWidthSlider);
 
-        try {
             fontBoldButton = new Togglebutton("B");
             add(fontBoldButton);
             fontBoldButton.onClicked(new Callback<ActionEvent>() {
@@ -218,11 +217,7 @@ public class FloatingPropertiesPanel extends HBox {
 
                 }
             });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-        try {
             fontItalicButton = new Togglebutton("I");
             add(fontItalicButton);
             fontItalicButton.onClicked(new Callback<ActionEvent>() {
@@ -250,10 +245,6 @@ public class FloatingPropertiesPanel extends HBox {
                     context.propsPalette.setVisible(!context.propsPalette.isVisible());
                 }
             });
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
 
         setHAlign(HAlign.TOP);

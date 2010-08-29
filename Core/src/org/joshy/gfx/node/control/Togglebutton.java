@@ -1,9 +1,5 @@
 package org.joshy.gfx.node.control;
 
-import org.joshy.gfx.node.Node;
-
-import java.io.IOException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: josh
@@ -12,7 +8,7 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 public class Togglebutton extends Button {
-    public Togglebutton(String text) throws IOException {
+    public Togglebutton(String text) {
         super(text);
         selectable = true;
     }
