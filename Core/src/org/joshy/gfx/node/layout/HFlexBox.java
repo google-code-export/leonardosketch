@@ -31,9 +31,8 @@ public class HFlexBox extends FlexBox {
 
         double x = 0;
         for(Control c : controlChildren()) {
-            //position child first
+            //position x
             c.setTranslateX(x);
-            c.setTranslateY(0);
             //set the width
             double flex = spaceMap.get(c);
             if(totalFlex > 0) {
@@ -41,6 +40,15 @@ public class HFlexBox extends FlexBox {
             }
             //update running total
             x = x + c.getWidth();
+
+            //position y
+            if(align == Align.Baseline) {
+
+            } else {
+                c.setTranslateY(0);
+            }
+            
+
             //layout child
             c.doLayout();
         }

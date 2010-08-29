@@ -29,6 +29,7 @@ public class LayoutTests implements Runnable {
     private static final String VBOX_RIGHT_SIMPLE = "VBox simple, right aligned";
     private static final String VBOX_STRETCH_SIMPLE = "VBox simple, stretch";
     private static final String COMPLEX_CENTER_ALIGNED_DIALOG = "Complex center aligned dialog";
+    private static final String SIMPLE_HBOX_BOTTOM = "Simple HBox Bottom";
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -48,6 +49,7 @@ public class LayoutTests implements Runnable {
         List<String> tests = new ArrayList<String>();
         tests.add(SIMPLE_HBOX);
         tests.add(SIMPLE_HBOX_BASELINE);
+        tests.add(SIMPLE_HBOX_BOTTOM);
         tests.add(HBOX_WITH_SPACERS);
         tests.add(VBOX_SIMPLE);
         tests.add(VBOX_RIGHT_SIMPLE);
@@ -75,7 +77,14 @@ public class LayoutTests implements Runnable {
         }
 
         if(SIMPLE_HBOX_BASELINE.equals(testName)) {
-            return new HFlexBox().setBoxAlign(FlexBox.Align.Baseline).add(new Label("Label"),new Button("Button"), createPopup("Popup List"));
+            return new HFlexBox()
+                    .setBoxAlign(FlexBox.Align.Baseline)
+                    .add(new Label("Label"),new Button("Button"), createPopup("Popup List"));
+        }
+        if(SIMPLE_HBOX_BOTTOM.equals(testName)) {
+            return new HFlexBox()
+                    .setBoxAlign(FlexBox.Align.Bottom)
+                    .add(new Label("Label"),new Button("Button"), createPopup("Popup List"));
         }
 
         if(HBOX_WITH_SPACERS.equals(testName)) {
