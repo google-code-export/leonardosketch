@@ -131,11 +131,7 @@ public class Button extends Control {
             textHeight = font.getAscender() + font.getDescender();
             baseline = Math.max(font.getAscender(),0);
         }
-/*        if(iconSkin != null) {
-            iconWidth = iconSkin.getWidth();
-            iconHeight = iconSkin.getHeight();
-            baseline = Math.max(iconHeight, baseline);
-        }*/
+
         if(normalIcon != null) {
             iconWidth = normalIcon.getWidth();
             iconHeight = normalIcon.getHeight();
