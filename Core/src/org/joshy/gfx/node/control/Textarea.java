@@ -52,7 +52,7 @@ public class Textarea extends TextControl {
             if(selection.isActive()) {
                 double start = 0;
                 double end = 0;
-                //u.p("leading column = " + selection.getLeadingColumn() + " trailing column = " + selection.getTrailingColumn());
+                //u.p("leading createColumn = " + selection.getLeadingColumn() + " trailing createColumn = " + selection.getTrailingColumn());
                 //we are doing the leading row
                 if(row == selection.getLeadingRow()) {
                     if(selection.getTrailingRow() != selection.getLeadingRow()) {

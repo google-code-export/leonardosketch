@@ -70,8 +70,8 @@ public class HboxTestNew implements Runnable {
         stage.setContent(
             new GridBox()
                 .setPadding(5)
-                .column(120, GridBox.Align.Right)
-                .column(200, GridBox.Align.Left)
+                .createColumn(120, GridBox.Align.Right)
+                .createColumn(200, GridBox.Align.Left)
                     .addControl(new Label("Appearance:"))
                     .addControl(createPopup("Blue"))
                 .nextRow()

@@ -32,9 +32,9 @@ public class GridTest implements Runnable {
 
         GridBox widthHeight = new GridBox()
                 .setPadding(5)
-                .column(70, GridBox.Align.Right)
-                .column(100, GridBox.Align.Left)
-                .column(100, GridBox.Align.Left)
+                .createColumn(70, GridBox.Align.Right)
+                .createColumn(100, GridBox.Align.Left)
+                .createColumn(100, GridBox.Align.Left)
                 .addControl(new Label("Width:"))
                 .addControl(new Textbox("1024"))
                 .addControl(new Button("pixels"))
@@ -46,9 +46,9 @@ public class GridTest implements Runnable {
         widthHeight.setFill(FlatColor.WHITE);
         TitleBorderPanel title1 = new TitleBorderPanel(widthHeight);
         GridBox docSize = new GridBox()
-                .column(70, GridBox.Align.Right)
-                .column(100, GridBox.Align.Left)
-                .column(100, GridBox.Align.Left)
+                .createColumn(70, GridBox.Align.Right)
+                .createColumn(100, GridBox.Align.Left)
+                .createColumn(100, GridBox.Align.Left)
                 .addControl(new Label("Width:"))
                 .addControl(new Textbox("48"))
                 .addControl(new Button("inches"))
@@ -70,8 +70,8 @@ public class GridTest implements Runnable {
         VBox box = new VBox();
         box.add(new Button("OK"),new Button("Cancel"),new Button("Auto"));
         GridBox master = new GridBox()
-                .column(300, GridBox.Align.Fill)
-                .column(100, GridBox.Align.Left, GridBox.VAlign.Top)
+                .createColumn(300, GridBox.Align.Fill)
+                .createColumn(100, GridBox.Align.Left, GridBox.VAlign.Top)
                 .addControl(title1)
                 .addControl(box)
                 .nextRow()

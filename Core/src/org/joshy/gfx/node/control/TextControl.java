@@ -14,7 +14,7 @@ import org.joshy.gfx.util.u;
  convert an x y pixel coordinate to a character point
  convertXYToCharPoint()
 
- convert a character point to the line or column
+ convert a character point to the line or createColumn
  getLine(cp)
  getColumn(cp)
 
@@ -31,7 +31,7 @@ import org.joshy.gfx.util.u;
  cursor.getY()
 
  the text model simply stores lines of text and allows their editing
- the char point converts between screen coords to row & column
+ the char point converts between screen coords to row & createColumn
  the textcontrol implements the actual drawing and input handleing 
 
  */
@@ -363,7 +363,7 @@ public abstract class TextControl extends Control implements Focusable {
             cursorY = row * lineHeight;
         }
 
-        //calculate the column next
+        //calculate the createColumn next
         String line = lines[row];
         double prevLen = 0;
         if(font.getWidth(line) < x) {

@@ -144,7 +144,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     }
 
     private void setSelectedColumn(int selectedColumn) {
-        u.p("selected column set to " + selectedColumn);
+        u.p("selected createColumn set to " + selectedColumn);
         this.selectedColumn = selectedColumn;
         setDrawingDirty();
     }
@@ -262,10 +262,10 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         public H getColumnHeader(int column);
 
         /**
-         * Return the data item at the specified row and column. May return null. 
+         * Return the data item at the specified row and createColumn. May return null.
          * @param row
          * @param column
-         * @return the data at the specified row and column. May be null.
+         * @return the data at the specified row and createColumn. May be null.
          */
         public D get(int row, int column);
     }

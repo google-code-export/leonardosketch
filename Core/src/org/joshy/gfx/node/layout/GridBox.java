@@ -50,12 +50,12 @@ public class GridBox extends Panel {
         rows.add(currentRow);
     }
 
-    public GridBox column(int width, Align align) {
+    public GridBox createColumn(int width, Align align) {
         columns.add(new Column(width,align,VAlign.Baseline));
         return this;
     }
 
-    public GridBox column(int width, Align align, VAlign vAlign) {
+    public GridBox createColumn(int width, Align align, VAlign vAlign) {
         columns.add(new Column(width,align,vAlign));
         return this;
     }
