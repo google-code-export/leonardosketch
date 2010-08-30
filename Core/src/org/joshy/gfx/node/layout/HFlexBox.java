@@ -73,7 +73,6 @@ public class HFlexBox extends FlexBox {
 
     @Override
     public void doPrefLayout() {
-        u.p("hbox pref layout");
     }
 
 }

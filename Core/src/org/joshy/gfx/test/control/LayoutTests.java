@@ -140,13 +140,16 @@ public class LayoutTests implements Runnable {
             toolbar.add(new Button("B1"),new Button("B2"), new Button("B3"));
             toolbar.add(new Spacer(),1);
             toolbar.add(new Button("B4"),new Button("B5"),new Button("B6"));
+            toolbar.setHeight(50);
 
-            FlexBox statusbar = new HFlexBox()
+            Control statusbar = new HFlexBox()
                     .add(new Label("left edge"))
                     .add(new Spacer(),1)
-                    .add(new Label("right edge"));
+                    .add(new Label("right edge"))
+                    .setHeight(50);
 
             return new VFlexBox()
+                    .setBoxAlign(FlexBox.Align.Stretch)
                     .add(toolbar)
                     .add(new Panel().setFill(FlatColor.RED),1)
                     .add(statusbar);

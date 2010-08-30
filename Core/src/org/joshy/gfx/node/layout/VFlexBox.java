@@ -15,7 +15,6 @@ public class
         VFlexBox extends FlexBox {
     @Override
     public void doLayout() {
-        u.p("======= doing v box " + getWidth() + " x " + getHeight());
         //set children to their preferred width first
         //and calc total width & flex
         double totalHeight = 0;
