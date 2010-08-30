@@ -1,11 +1,8 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.node.Node;
-
-import java.io.IOException;
+import org.joshy.gfx.util.u;
 
 public class Linkbutton extends Button {
     public Linkbutton(String text) {

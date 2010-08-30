@@ -66,6 +66,10 @@ Togglebutton:selected {
     border-color: #808080;
 }
 
+Linkbutton {
+    shrink-to-fit: true;
+}
+
 /* =========== panels ======== */
 Panel, HBox, VBox {
     background-color: #aaaaaa;

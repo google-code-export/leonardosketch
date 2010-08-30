@@ -82,6 +82,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
             drawText(g);
             drawTriangle(g);
             cssSkin.drawBorder(g,matcher,"",bounds);
+            return;
         } else {
             g.setPaint(FlatColor.WHITE);
             g.fillRoundRect(0,0,getWidth(),getHeight(), 10,10);
@@ -111,6 +112,7 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
 
     public void setSelectedIndex(int selectedIndex) {
         this.selectedIndex = selectedIndex;
+        this.text = getSelectedItem().toString();
         EventBus.getSystem().publish(new SelectionEvent(SelectionEvent.Changed,this));
         setDrawingDirty();
     }

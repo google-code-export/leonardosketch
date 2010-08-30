@@ -47,6 +47,8 @@ public class CSSSkin extends MasterCSSSkin {
             size.padding = padding;
             double fh = font.calculateHeight(content);
             size.contentBaseline = (size.contentHeight-fh)/2 + fh;
+        } else {
+            size.contentBaseline = size.contentHeight;
         }
         return size;
     }
