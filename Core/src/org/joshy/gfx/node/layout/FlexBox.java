@@ -14,7 +14,7 @@ import java.util.Map;
 * To change this template use File | Settings | File Templates.
 */
 public abstract class FlexBox extends Panel {
-    public enum Align { Stretch, Right, Bottom, Top, Baseline };
+    public enum Align { Stretch, Right, Bottom, Top, Left, Baseline };
     protected Align align = Align.Top;
     protected static final double NONE = 0;
     protected Map<Control,Double> spaceMap = new HashMap<Control,Double>();

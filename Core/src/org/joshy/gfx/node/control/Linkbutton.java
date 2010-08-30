@@ -8,7 +8,7 @@ import org.joshy.gfx.node.Node;
 import java.io.IOException;
 
 public class Linkbutton extends Button {
-    public Linkbutton(String text) throws IOException {
+    public Linkbutton(String text) {
         super(text);
         selectable = false;
     }

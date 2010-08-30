@@ -3,8 +3,9 @@ package org.joshy.gfx.test.itunes;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.Growbar;
+import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.Panel;
+import org.joshy.gfx.node.layout.Spacer;
 import org.joshy.gfx.stage.Stage;
 
 import java.io.File;
@@ -62,45 +63,47 @@ public class ITunes implements Runnable {
             Button coverflowToggle = new Button("C").setVariant("footerControl");
 
             final Textbox search = new Textbox();
-            
-            final Growbar header = new Growbar();
-            header.add(
-                    new Growbar.Strut(20,0),
-                    prevButton,
-                    playButton,
-                    nextButton,
-                    new Growbar.Strut(20,0),
-                    volume,
-                    new Growbar.Strut(20,0),
-                    statusPanel,
-                    new Growbar.Strut(20,0),
-                    listToggle,
-                    gridToggle,
-                    coverflowToggle,
-                    new Growbar.Strut(20,0),
-                    search,
-                    new Growbar.Strut(20,0)
-            );
-            header.makeGrowable(statusPanel);
+
+            final Panel header = new HFlexBox()
+                    .add(
+                            ////new Growbar.Strut(20, 0),
+                            new Spacer(),
+                            prevButton,
+                            playButton,
+                            nextButton,
+                            new Spacer(),
+                            //new Growbar.Strut(20, 0),
+                            volume,
+                            //new Growbar.Strut(20, 0),
+                            new Spacer(),
+                            statusPanel,
+                            //new Growbar.Strut(20, 0),
+                            new Spacer(),
+                            listToggle,
+                            gridToggle,
+                            coverflowToggle,
+                            //new Growbar.Strut(20, 0),
+                            new Spacer(),
+                            search,
+                            //new Growbar.Strut(20, 0));
+                            new Spacer()
+                    );
             header.setWidth(600);
             header.setHeight(80);
             
             final Label status = new Label("10 items, 40:07 total time, 46.1 MB");
-            final Panel footer = new Growbar();
-            footer.add(
-                    new Growbar.Strut(20,0),
-                    new Button("+").setVariant("footerControl"),
-                    new Button("s").setVariant("footerControl"),
-                    new Button("r").setVariant("footerControl"),
-                    new Button("^").setVariant("footerControl"),
-                    new Growbar.Spacer(),
-                    status,
-                    new Growbar.Spacer(),
-                    new Button("L").setVariant("footerControl"),
-                    new Button("*").setVariant("footerControl"),
-                    new Button("<").setVariant("footerControl"),
-                    new Growbar.Strut(20,0)
-            );
+            final Panel footer = new HFlexBox()
+                    .add(new Spacer(),1)
+                    .add(new Button("+").setVariant("footerControl"),0)
+                    .add(new Button("s").setVariant("footerControl"),0)
+                    .add(new Button("r").setVariant("footerControl"),0)
+                    .add(new Button("^").setVariant("footerControl"),0)
+                    .add(new Spacer(),1)
+                    .add(status)
+                    .add(new Spacer(),1)
+                    .add(new Button("L").setVariant("footerControl"),0)
+                    .add(new Button("*").setVariant("footerControl"),0)
+                    .add(new Button("<").setVariant("footerControl"),0);
 
             footer.setTranslateY(400);
             footer.setHeight(40);

@@ -6,9 +6,7 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SelectionEvent;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.Panel;
-import org.joshy.gfx.node.layout.SplitPane;
-import org.joshy.gfx.node.layout.VBox;
+import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.stage.Stage;
 
 import java.io.IOException;
@@ -27,70 +25,60 @@ public class GrandTour implements Runnable {
         List<Example> examples = new ArrayList<Example>();
         examples.add(new Example("Buttons") {
             public Control build() {
-                VBox box = new VBox();
-                try {
-                    box.add(new Button("Regular Button"));
-                    box.add(new Togglebutton("Toggle Button"));
-                    box.add(new Checkbox("Check box"));
-                    box.add(new Radiobutton("Radio button"));
-                    box.add(new Linkbutton("a hyperlink"));
-                } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
+                FlexBox box = new VFlexBox()
+                        .setBoxAlign(FlexBox.Align.Left)
+                        .add(new Button("Regular Button"))
+                        .add(new Togglebutton("Toggle Button"))
+                        .add(new Checkbox("Check box"))
+                        .add(new Radiobutton("Radio button"))
+                        .add(new Linkbutton("a hyperlink"));
                 return box;
             }
         });
         examples.add(new Example("Text controls") {
             public Control build() {
-                VBox box = new VBox();
-
-                box.add(new Label("A Label"));
                 Textbox tb = new Textbox();
                 tb.setText("a textbox");
-                box.add(tb);
-
                 Passwordbox passbox = new Passwordbox();
                 passbox.setText("password");
-                box.add(passbox);
-
                 Textarea ta = new Textarea();
                 ta.setText("A\nText\nArea");
-                box.add(ta);
+                FlexBox box = new VFlexBox().setBoxAlign(FlexBox.Align.Left)
+                        .add(new Label("A Label"))
+                        .add(tb)
+                        .add(passbox)
+                        .add(ta);
                 return box;
             }
         });
         examples.add(new Example("Sliders and Scrollbars") {
             public Control build() {
-                VBox vbox = new VBox();
                 Scrollbar sb = new Scrollbar();
                 sb.setWidth(200);
                 sb.setMin(0); sb.setMax(200); sb.setValue(100);
-                vbox.add(sb);
-
                 Scrollbar psb = new Scrollbar();
                 psb.setProportional(true);
                 psb.setWidth(200);
                 psb.setMin(0); psb.setMax(200); psb.setValue(100); psb.setSpan(0.5);
-                vbox.add(psb);
-
                 Slider slider = new Slider(false);
                 slider.setWidth(200);
                 slider.setMin(0);
                 slider.setMax(100);
                 slider.setValue(50);
-                vbox.add(slider);
-                return vbox;
+                FlexBox box = new VFlexBox().setBoxAlign(FlexBox.Align.Left)
+                        .add(sb)
+                        .add(psb)
+                        .add(slider);
+                return box;
             }
         });
         examples.add(new Example("Progress Bars and Spinners") {
             public Control build() throws InterruptedException {
-                VBox vbox = new VBox();
                 ProgressBar pb = new ProgressBar();
-                pb.setTranslateX(200);
-                vbox.add(pb);
-
                 ProgressSpinner ps = new ProgressSpinner();
-                vbox.add(ps);
+                FlexBox box = new VFlexBox().setBoxAlign(FlexBox.Align.Left)
+                        .add(pb)
+                        .add(ps);
                 BackgroundTask task = new BackgroundTask<String, String>() {
                     @Override
                     protected String onWork(String data) {
@@ -128,23 +116,15 @@ public class GrandTour implements Runnable {
                 ps.setTask(task2);
                 task.start();
                 task2.start();
-                return vbox;
+                return box;
             }
         });
         examples.add(new Example("Complex (list, table, dropdowns)") {
             public Control build() throws IOException {
-                VBox vbox = new VBox();
                 PopupMenuButton popup = new PopupMenuButton();
-                popup.setTranslateX(20);
-                popup.setTranslateY(250);
-                popup.setModel(ListView.createModel(new String[]{"Ethernet","WiFi","Bluetooth","FireWire","USB hack"}));
-                vbox.add(popup);
-
                 SwatchColorPicker color1 = new SwatchColorPicker();
-                vbox.add(color1);
+                popup.setModel(ListView.createModel(new String[]{"Ethernet","WiFi","Bluetooth","FireWire","USB hack"}));
 
-
-                vbox.add(new Label("List View"));
                 ListView listView = new ListView();
                 listView.setModel(new ListModel(){
                     public Object get(int i) {
@@ -158,24 +138,29 @@ public class GrandTour implements Runnable {
                 sp.setContent(listView);
                 sp.setWidth(300);
                 sp.setHeight(200);
-                vbox.add(sp);
 
-                vbox.add(new Label("Compounds List View"));
                 CompoundListView clistView = new CompoundListView();
                 ScrollPane sp3 = new ScrollPane();
                 sp3.setContent(clistView);
                 sp3.setWidth(300);
                 sp3.setHeight(200);
-                vbox.add(sp3);
 
                 TableView table = new TableView();
                 ScrollPane sp2 = new ScrollPane();
                 sp2.setContent(table);
                 sp2.setWidth(300);
                 sp2.setHeight(200);
-                vbox.add(sp2);
-                
-                return vbox;
+
+                FlexBox box = new VFlexBox()
+                        .add(popup)
+                        .add(color1)
+                        .add(new Label("List View"))
+                        .add(sp)
+                        .add(new Label("Compounds List View"))
+                        .add(sp3)
+                        .add(sp2);
+                return box;
+
             }
         });
 
