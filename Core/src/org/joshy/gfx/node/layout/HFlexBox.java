@@ -1,7 +1,5 @@
 package org.joshy.gfx.node.layout;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 
@@ -74,11 +72,6 @@ public class HFlexBox extends FlexBox {
         }
     }
 
-    @Override
-    public void drawSelf(GFX g) {
-        g.setPaint(FlatColor.GREEN);
-        g.drawRect(0,0,getWidth(),getHeight());
-    }
 
     @Override
     public void doPrefLayout() {

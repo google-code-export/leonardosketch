@@ -216,7 +216,6 @@ public class Button extends Control {
     @Override
     public double getBaseline() {
         return size.margin + size.borderWidth + size.padding + size.contentBaseline;
-        //return size.height - size.contentHeight;
     }
 
     public String getText() {

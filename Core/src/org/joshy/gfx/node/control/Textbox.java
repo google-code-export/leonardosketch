@@ -56,6 +56,11 @@ public class Textbox extends TextControl {
     }
 
     @Override
+    public double getBaseline() {
+        return cssSize.margin + cssSize.borderWidth + cssSize.padding + cssSize.contentBaseline;
+    }
+
+    @Override
     public Bounds getLayoutBounds() {
         return new Bounds(getTranslateX(), getTranslateY(), getWidth(), baseline);
     }

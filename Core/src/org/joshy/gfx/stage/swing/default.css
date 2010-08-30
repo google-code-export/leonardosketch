@@ -106,8 +106,9 @@ Scrollbar:vertical {
 
 /* ============== text box ============= */
 Textbox, Passwordbox {
-    padding: 4px;
+    padding: 6px;
     background-color: #d0d0d0;
+    shrink-to-fit: true;
 }
 Textbox:active, Passwordbox:active {
     background-color: #ffffff;
