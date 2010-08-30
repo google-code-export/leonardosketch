@@ -12,7 +12,6 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
-import org.joshy.gfx.util.u;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -211,6 +210,12 @@ public class Button extends Control {
     @Override
     public Bounds getLayoutBounds() {
         return new Bounds(getTranslateX(), getTranslateY(), getWidth(), getHeight());
+    }
+
+    @Override
+    public double getBaseline() {
+        return size.margin + size.borderWidth + size.padding + size.contentBaseline;
+        //return size.height - size.contentHeight;
     }
 
     public String getText() {

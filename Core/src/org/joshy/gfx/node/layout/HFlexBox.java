@@ -1,8 +1,9 @@
 package org.joshy.gfx.node.layout;
 
+import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.util.u;
 
 /**
 * Created by IntelliJ IDEA.
@@ -35,6 +36,7 @@ public class HFlexBox extends FlexBox {
             Bounds bounds = c.getLayoutBounds();
             totalWidth += bounds.getWidth();
             totalFlex += spaceMap.get(c);
+            double baseline = c.getBaseline();
         }
 
         double totalExcess = getWidth()-totalWidth;
@@ -57,7 +59,8 @@ public class HFlexBox extends FlexBox {
             if(align == Align.Top) {
                 c.setTranslateY(0);
             } else if(align == Align.Baseline) {
-                c.setTranslateY(getHeight()-bounds.getHeight());
+                double baseline = c.getBaseline();
+                c.setTranslateY(getHeight()-baseline);
             } else if(align == Align.Bottom) {
                 c.setTranslateY(getHeight()-bounds.getHeight());
             } else {
@@ -69,6 +72,12 @@ public class HFlexBox extends FlexBox {
             //layout child
             c.doLayout();
         }
+    }
+
+    @Override
+    public void drawSelf(GFX g) {
+        g.setPaint(FlatColor.GREEN);
+        g.drawRect(0,0,getWidth(),getHeight());
     }
 
     @Override

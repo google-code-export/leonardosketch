@@ -32,11 +32,12 @@ public class Label extends Control {
 
     @Override
     public void doLayout() {
+        /*
         double tw = font.calculateWidth(text);
         double th = font.calculateHeight(text);
         baseline = font.getAscender();
         setWidth(tw);
-        setHeight(th);
+        setHeight(th);*/
     }
 
     @Override
@@ -64,7 +65,12 @@ public class Label extends Control {
 
     @Override
     public Bounds getLayoutBounds() {
-        return new Bounds(getTranslateX(), getTranslateY(), getWidth(), baseline);
+        return new Bounds(getTranslateX(), getTranslateY(), getWidth(), getHeight());
+    }
+
+    @Override
+    public double getBaseline() {
+        return baseline;
     }
 
     public Label setFill(FlatColor fill) {

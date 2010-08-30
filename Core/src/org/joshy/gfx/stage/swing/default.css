@@ -37,7 +37,6 @@ Checkbox {
     background-color: transparent;
     icon: url(images/checkbox_normal.png);
     icon-position: left;
-    padding: 0px;
 }
 
 Checkbox:selected {
@@ -46,10 +45,9 @@ Checkbox:selected {
 
 Radiobutton {
     border-width: 0px;
-    border-radius: 30px;
+    border-radius: 0px;
     background-color: transparent;
     icon: url(images/radiobutton_normal.png);
-    padding: 0px;
 }
 
 Togglebutton {

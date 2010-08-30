@@ -176,6 +176,10 @@ public class MasterCSSSkin extends Skin {
         public double height;
         public double contentWidth;
         public double contentHeight;
+        public int margin;
+        public int borderWidth;
+        public int padding;
+        public double contentBaseline;
 
         public BoxState() {
         }

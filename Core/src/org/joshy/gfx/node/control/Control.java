@@ -71,8 +71,23 @@ public abstract class Control extends Node {
         return new Bounds(getTranslateX(),getTranslateY(),getWidth(),getHeight());
     }
 
+    /** returns the bounds to be used for layout. All layouts and panels should use
+     * these bounds, not the visual bounds. Visual bounds are only used for repainting.
+     *
+      * @return
+     */
     public Bounds getLayoutBounds() {
         return getVisualBounds();
+    }
+
+    /** returns the baseline of this control, in the coordinate system returned by
+     * getLayoutBounds().  A control with no particular baseline should just return
+     * the height.
+     *
+     * @return
+     */
+    public double getBaseline() {
+        return getLayoutBounds().getHeight();
     }
 
     protected void setLayoutDirty() {
