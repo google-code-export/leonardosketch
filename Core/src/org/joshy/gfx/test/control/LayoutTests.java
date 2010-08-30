@@ -34,6 +34,7 @@ public class LayoutTests implements Runnable {
     private static final String SIMPLE_HBOX_BOTTOM = "Simple HBox Bottom";
     private static final String BUTTON_SIZING = "Button Sizing";
     private static final String NEW_DOC_DIALOG_GRID_TEST = "Grid Test: New doc dialog";
+    private static final String CONTROLS_BASELINE_TEST = "Controls baseline test";
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -63,6 +64,7 @@ public class LayoutTests implements Runnable {
         tests.add(VBOX_WITH_TOOLBAR_AND_STATUSBAR);
         tests.add(COMPLEX_CENTER_ALIGNED_DIALOG);
         tests.add(NEW_DOC_DIALOG_GRID_TEST);
+        tests.add(CONTROLS_BASELINE_TEST);
 
         final ListView<String> testView =new ListView<String>().setModel(ListView.createModel(tests)); 
         split.setFirst(testView);
@@ -230,6 +232,22 @@ public class LayoutTests implements Runnable {
                     .nextRow()
                     .addControl(new Button("Cancel"))
                     .addControl(new Button("Okay"));
+        }
+
+        if(CONTROLS_BASELINE_TEST.equals(testName)) {
+            return new VFlexBox()
+                    .setBoxAlign(FlexBox.Align.Stretch)
+                    .add(new HFlexBox()
+                        .setBoxAlign(FlexBox.Align.Baseline)
+                        .add(new Button("A Button"))
+                        .add(new Label("A Label"))
+                        .add(new Checkbox("A Checkbox"))
+                        .add(new Radiobutton("A Radiobutton"))
+                        .add(new Textbox("A Textbox"))
+                        .add(createPopup("A Popup menu"))
+                        .add(new Linkbutton("A HyperLink"))
+                        .setHeight(100)
+                    );
         }
 
         return new Panel();
