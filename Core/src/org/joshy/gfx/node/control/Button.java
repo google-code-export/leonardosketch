@@ -12,7 +12,6 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
-import org.joshy.gfx.util.u;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;
@@ -169,6 +168,15 @@ public class Button extends Control {
                 doPrefLayout();
             }
             cssSkin.draw(g, this, text, size, buttonStateToCssState(state));
+
+            if(false) {
+                g.setPaint(FlatColor.WHITE);
+                g.fillRect(0,0,50,50);
+                g.setPaint(FlatColor.BLUE);
+                g.fillRoundRect(10,10,30,30,10,10);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRoundRect(10,10,30,30,10,10);
+            }
             return;
         }
 

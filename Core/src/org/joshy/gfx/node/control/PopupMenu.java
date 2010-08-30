@@ -119,7 +119,7 @@ public class PopupMenu extends Control {
                 bg = FlatColor.WHITE;
                 fg = FlatColor.BLACK;
             }
-            Bounds itemBounds = new Bounds(0, rowy + spacer, getWidth() - 1, rowHeight);
+            Bounds itemBounds = new Bounds(1, rowy + spacer, getWidth() - 2, rowHeight);
             if(cssSkin != null) {
                 String prefix = "item-";
                 if(i == hoverRow) {
