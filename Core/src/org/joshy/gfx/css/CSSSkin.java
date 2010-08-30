@@ -157,8 +157,18 @@ public class CSSSkin extends MasterCSSSkin {
         }
 
         //debugging
-//        g.setPaint(FlatColor.RED);
-//        g.drawRect(0,0,size.width,size.height);
+        if("true".equals(set.findStringValue(matcher,"debug-margin"))) {
+            g.setPaint(FlatColor.RED);
+            g.drawRect(0,0,size.width,size.height);
+        }
+        if("true".equals(set.findStringValue(matcher,"debug-border"))) {
+            g.setPaint(FlatColor.GREEN);
+            g.drawRect(margin,margin,size.width-margin*2,size.height-margin*2);
+        }
+        if("true".equals(set.findStringValue(matcher,"debug-padding"))) {
+            g.setPaint(FlatColor.BLUE);
+            g.drawRect(margin+borderWidth,margin+borderWidth,size.width-margin*2-borderWidth*2,size.height-margin*2-borderWidth*2);
+        }
     }
 
     private Font getFont(CSSMatcher matcher) {

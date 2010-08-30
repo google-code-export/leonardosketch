@@ -11,6 +11,11 @@
     font-size: 12pt;
     font-family: Arial, serif;
     font-weight: normal;
+
+    /* turn these on to draw lines showing the box dimensions */
+    debug-margin:   false;
+    debug-border:   false;
+    debug-padding:  flase;
 }
 
 /* =========== buttons =========== */

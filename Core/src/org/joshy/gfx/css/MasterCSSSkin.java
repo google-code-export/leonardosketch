@@ -75,7 +75,7 @@ public class MasterCSSSkin extends Skin {
         int borderRadius = set.findIntegerValue(matcher.element,prefix+"border-radius");
         if(borderWidth > 0) {
             g.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
-            g.setStrokeWidth(borderWidth);
+            g.setStrokeWidth(borderWidth);            
             if(borderRadius == 0) {
                 g.drawRect(
                         bounds.getX()+margin+borderWidth/2,
