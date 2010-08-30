@@ -2,6 +2,7 @@ package org.joshy.gfx.node.layout;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.util.u;
 
@@ -110,15 +111,16 @@ public class GridBox extends Panel {
             double maxHeight = 0;
             double maxBaseline = 0;
             for(Control c : row.controls) {
-                maxHeight = Math.max(maxHeight,c.getHeight()+padding);
-                double baseline = (c.getLayoutBounds().getY()+c.getLayoutBounds().getHeight()) - c.getVisualBounds().getY();
+                c.doPrefLayout();
+                Bounds bounds = c.getLayoutBounds();
+                maxHeight = Math.max(maxHeight,bounds.getHeight()+padding);
+                double baseline = (bounds.getY()+bounds.getHeight()) - bounds.getY();
                 maxBaseline = Math.max(maxBaseline,baseline);
 //                u.p("control " + c + " height = " + c.getHeight() + " vs " + c.getLayoutBounds() + " baseline = " + baseline);
             }
             //now really lay out the controls
             for(int i=0; i<row.controls.size(); i++) {
                 Control c = row.controls.get(i);
-                c.doLayout();
                 if(i < columns.size()) {
                     Column col = columns.get(i);
                     switch(col.align) {
@@ -142,6 +144,7 @@ public class GridBox extends Panel {
                 } else {
                     u.p("Warning: more controls in this row than there are columns");
                 }
+                c.doLayout();
             }
             y+=maxHeight;
         }

@@ -17,8 +17,7 @@ public class HFlexBox extends FlexBox {
     
     @Override
     public void doLayout() {
-        u.p("-- doing hbox: " + getWidth() + " x " + getHeight());
-        
+
         /*
           hbox.doLayout would do:
              call doPrefLayout on all children
@@ -49,15 +48,18 @@ public class HFlexBox extends FlexBox {
             //set the width
             double flex = spaceMap.get(c);
             if(totalFlex > 0) {
-                u.p("for control: " + c + " using width = " + c.getWidth());
                 c.setWidth(c.getWidth()+flex/totalFlex*totalExcess);
             }
             //update running total
             x = x + c.getWidth();
 
             //position y
-            if(align == Align.Baseline) {
-
+            if(align == Align.Top) {
+                c.setTranslateY(0);
+            } else if(align == Align.Baseline) {
+                c.setTranslateY(getHeight()-bounds.getHeight());
+            } else if(align == Align.Bottom) {
+                c.setTranslateY(getHeight()-bounds.getHeight());
             } else {
                 c.setTranslateY(0);
             }

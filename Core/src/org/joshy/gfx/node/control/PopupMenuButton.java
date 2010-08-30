@@ -109,10 +109,6 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
         return getModel().get(getSelectedIndex());
     }
 
-    @Override
-    public void doLayout() {
-    }
-
     public void setSelectedIndex(int selectedIndex) {
         this.selectedIndex = selectedIndex;
         EventBus.getSystem().publish(new SelectionEvent(SelectionEvent.Changed,this));

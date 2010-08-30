@@ -82,19 +82,21 @@ public class LayoutTests implements Runnable {
         if(BUTTON_SIZING.equals(testName)) {
             return new HFlexBox().add(new Button("long b").setPrefWidth(100));
         }
+        
         if(SIMPLE_HBOX.equals(testName)) {
-            return new HFlexBox().add(new Label("Label"),new Button("Button"), createPopup("Popup List"));
+            return new HFlexBox()
+                    .add(new Label("Label"), new Button("Button"), createPopup("Popup List"));
         }
 
         if(SIMPLE_HBOX_BASELINE.equals(testName)) {
             return new HFlexBox()
                     .setBoxAlign(FlexBox.Align.Baseline)
-                    .add(new Label("Label"),new Button("Button"), createPopup("Popup List"));
+                    .add(new Label("Label"), new Button("Button"), createPopup("Popup List"));
         }
         if(SIMPLE_HBOX_BOTTOM.equals(testName)) {
             return new HFlexBox()
                     .setBoxAlign(FlexBox.Align.Bottom)
-                    .add(new Label("Label"),new Button("Button"), createPopup("Popup List"));
+                    .add(new Label("Label"), new Button("Button"), createPopup("Popup List"));
         }
 
         if(HBOX_WITH_SPACERS.equals(testName)) {

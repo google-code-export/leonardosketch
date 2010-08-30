@@ -120,26 +120,12 @@ public class Button extends Control {
     }
 
     @Override
-    public void doLayout() {
-        //new css skin stuff
-        if(cssSkin != null) {
-            size = cssSkin.getSize(this,text);
-            setWidth(size.width);
-            setHeight(size.height);
-            
-            if(prefWidth != CALCULATED) {
-                setWidth(prefWidth);
-                size.width = prefWidth;
-            }
-        }
-    }
-    
-    @Override
     public void doPrefLayout() {
         if(cssSkin != null) {
             size = cssSkin.getSize(this,text);
             if(prefWidth != CALCULATED) {
                 setWidth(prefWidth);
+                size.width = prefWidth;
             } else {
                 setWidth(size.width);
             }
@@ -147,6 +133,14 @@ public class Button extends Control {
         }
     }
 
+    @Override
+    public void doLayout() {
+        if(size != null) {
+            size.width = getWidth();
+            size.height = getHeight();
+        }
+    }
+    
     private CSSSkin.State buttonStateToCssState(State state) {
         switch(state) {
             case Selected: return CSSSkin.State.Selected;
@@ -170,7 +164,7 @@ public class Button extends Control {
         if(selected && pressed) state = State.SelectedPressed;
 
         if(cssSkin != null) {
-            cssSkin.draw(g,this,text,size,buttonStateToCssState(state));
+            cssSkin.draw(g, this, text, size, buttonStateToCssState(state));
             return;
         }
 
@@ -212,7 +206,7 @@ public class Button extends Control {
 
     @Override
     public Bounds getLayoutBounds() {
-        return new Bounds(getTranslateX(), getTranslateY(), getWidth(), baseline);
+        return new Bounds(getTranslateX(), getTranslateY(), getWidth(), getHeight());
     }
 
     public String getText() {
