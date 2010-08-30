@@ -55,6 +55,10 @@ Radiobutton {
     icon: url(images/radiobutton_normal.png);
 }
 
+Radiobutton:selected {
+    icon: url(images/radiobutton_selected.png);
+}
+
 Togglebutton {
     border-radius: 3px;
 }
