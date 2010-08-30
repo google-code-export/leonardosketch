@@ -6,9 +6,9 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.HBox;
+import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.Panel;
-import org.joshy.gfx.node.layout.VBox;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.sketch.model.SketchDocument;
@@ -109,11 +109,15 @@ public class DocumentActions {
                     }
                 };
                 popup.onClicked(clicked);
-                dialog.setContent(new VBox().add(
-                    new HBox().add(new Label("Preset:"),popup),
-                    new HBox().add(new Label("Width (px):"), width),
-                    new HBox().add(new Label("Height (px):"), height),
-                    new HBox().add(new Button("Cancel").onClicked(canceled), new Button("Okay").onClicked(okay))
+                dialog.setContent(new VFlexBox().add(
+                        new HFlexBox().add(new Label("Preset:"),popup),
+                        new HFlexBox().add(new Label("Width (px):"), width),
+                        new HFlexBox().add(new Label("Height (px):"), height),
+                        new HFlexBox().add(
+                                new Button("Cancel")
+                                    .onClicked(canceled), 
+                                new Button("Okay")
+                                        .onClicked(okay))
                 ));
             dialog.setWidth(400);
             dialog.setHeight(400);

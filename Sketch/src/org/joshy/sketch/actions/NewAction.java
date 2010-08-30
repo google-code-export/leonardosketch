@@ -3,8 +3,7 @@ package org.joshy.sketch.actions;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.HBox;
-import org.joshy.gfx.node.layout.VBox;
+import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.model.CanvasDocument;
@@ -89,12 +88,23 @@ public class NewAction extends SAction {
                 }
             };
             popup.onClicked(clicked);
-            dialog.setContent(new VBox().add(
-                new HBox().add(new Label("Preset:"),popup),
-                new HBox().add(new Label("Width (px):"), width),
-                new HBox().add(new Label("Height (px):"), height),
-                new HBox().add(new Button("Cancel").onClicked(canceled), new Button("Okay").onClicked(okay))
-            ));
+            dialog.setContent(
+                    new GridBox()
+                            .setPadding(5)
+                            .createColumn(70, GridBox.Align.Right)
+                            .createColumn(100, GridBox.Align.Left)
+                            .addControl(new Label("Preset:"))
+                            .addControl(popup)
+                            .nextRow()
+                            .addControl(new Label("Width (px):"))
+                            .addControl(width)
+                            .nextRow()
+                            .addControl(new Label("Height (px):"))
+                            .addControl(height)
+                            .nextRow()
+                            .addControl(new Button("Cancel").onClicked(canceled))
+                            .addControl(new Button("Okay").onClicked(okay))
+                    );
         dialog.setWidth(400);
         dialog.setHeight(400);
     }

@@ -1,23 +1,21 @@
 package org.joshy.gfx.test.threedee;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.node.Insets;
-import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.Label;
+import org.joshy.gfx.node.control.PopupMenuButton;
+import org.joshy.gfx.node.control.Slider;
 import org.joshy.gfx.node.layout.Panel;
-import org.joshy.gfx.node.layout.VBox;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.u;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -53,7 +51,7 @@ public class ParticleSim implements Runnable {
             panel.add(sim);
 
 
-            VBox vbox = new VBox() {
+            VFlexBox vbox = new VFlexBox() {
                 @Override
                 protected void drawSelf(GFX g) {
                     g.setPaint(new FlatColor("#242424",0.5));
@@ -62,7 +60,7 @@ public class ParticleSim implements Runnable {
                     g.drawRoundRect(0,0,getWidth(),getHeight(),10,10);
                 }
             };
-            vbox.setPadding(new Insets(5,5,5,5));
+            //vbox.setPadding(new Insets(5,5,5,5));
             vbox.setWidth(150);
             vbox.setHeight(300);
             final Slider emissionRate = new Slider(false);

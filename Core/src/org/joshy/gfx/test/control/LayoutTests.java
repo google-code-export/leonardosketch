@@ -2,6 +2,7 @@ package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SelectionEvent;
@@ -32,6 +33,7 @@ public class LayoutTests implements Runnable {
     private static final String COMPLEX_CENTER_ALIGNED_DIALOG = "Complex center aligned dialog";
     private static final String SIMPLE_HBOX_BOTTOM = "Simple HBox Bottom";
     private static final String BUTTON_SIZING = "Button Sizing";
+    private static final String NEW_DOC_DIALOG_GRID_TEST = "Grid Test: New doc dialog";
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -60,6 +62,7 @@ public class LayoutTests implements Runnable {
         tests.add(VBOX_STRETCH_SIMPLE);
         tests.add(VBOX_WITH_TOOLBAR_AND_STATUSBAR);
         tests.add(COMPLEX_CENTER_ALIGNED_DIALOG);
+        tests.add(NEW_DOC_DIALOG_GRID_TEST);
 
         final ListView<String> testView =new ListView<String>().setModel(ListView.createModel(tests)); 
         split.setFirst(testView);
@@ -196,6 +199,37 @@ public class LayoutTests implements Runnable {
                         new Label("Turn off font smoothing for font sizes")
                         ,createPopup("4")
                         ,new Label("and smaller")).setHeight(20));
+        }
+        if(NEW_DOC_DIALOG_GRID_TEST.equals(testName)) {
+            final Textbox width = new Textbox("800");
+            final Textbox height = new Textbox("500");
+            
+            final PopupMenuButton popup = new PopupMenuButton();
+            popup.setModel(ListView.createModel(new String[]{"16x16","1024x1024"}));
+            Callback<ActionEvent> clicked = new Callback<ActionEvent>() {
+                public void call(ActionEvent event) {
+                    switch(popup.getSelectedIndex()) {
+                        case 0: width.setText("16"); height.setText("16"); break;
+                        case 1: width.setText("1024"); height.setText("768"); break;
+                    }
+                }
+            };
+
+            return new GridBox()
+                    .setPadding(5)
+                    .createColumn(100, GridBox.Align.Right)
+                    .createColumn(100, GridBox.Align.Left)
+                    .addControl(new Label("Preset:"))
+                    .addControl(popup)
+                    .nextRow()
+                    .addControl(new Label("Width (px):"))
+                    .addControl(width)
+                    .nextRow()
+                    .addControl(new Label("Height (px):"))
+                    .addControl(height)
+                    .nextRow()
+                    .addControl(new Button("Cancel"))
+                    .addControl(new Button("Okay"));
         }
 
         return new Panel();

@@ -5,27 +5,26 @@ import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.control.Slider;
-import org.joshy.gfx.node.layout.HBox;
+import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.util.GeomUtil;
-import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
 import org.joshy.sketch.model.NGon;
 import org.joshy.sketch.model.SketchDocument;
+import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.geom.Point2D;
 
 public class DrawNgonTool extends CanvasTool {
     private Point2D start;
     private NGon node;
-    private HBox panel;
+    private HFlexBox panel;
     private Control slider;
     private Label sliderLabel;
     private int nValue;
 
     public DrawNgonTool(VectorDocContext context) {
         super(context);
-        panel = new HBox();
-        panel.setSpacing(5);
+        panel = new HFlexBox();
         panel.add(new Label("sides"));
         slider = new Slider(false).setMin(3).setMax(20).setValue(5).setWidth(200);
         panel.add(slider);

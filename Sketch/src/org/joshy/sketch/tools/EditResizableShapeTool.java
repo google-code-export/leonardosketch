@@ -8,7 +8,7 @@ import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Togglebutton;
-import org.joshy.gfx.node.layout.VBox;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.canvas.PositionHandle;
 import org.joshy.sketch.model.ResizableGrid9Shape;
@@ -25,7 +25,7 @@ public class EditResizableShapeTool extends CanvasTool {
     private double sizedHeight;
     private Togglebutton hlocked;
     private Togglebutton vlocked;
-    private VBox panel;
+    private VFlexBox panel;
 
     public EditResizableShapeTool(VectorDocContext context) {
         super(context);
@@ -62,7 +62,7 @@ public class EditResizableShapeTool extends CanvasTool {
                 shape.setVLocked(vlocked.isSelected());
             }
         });
-        panel = new VBox();
+        panel = new VFlexBox();
         panel.add(hlocked,vlocked);
         panel.setTranslateX(100);
         panel.setTranslateY(20);

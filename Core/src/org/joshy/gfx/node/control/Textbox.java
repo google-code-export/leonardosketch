@@ -41,7 +41,7 @@ public class Textbox extends TextControl {
 
     /* =========== Layout stuff ================= */
     @Override
-    public void doLayout() {
+    public void doPrefLayout() {
         if(cssSkin != null) {
             cssSize = cssSkin.getSize(this,text);
             int padding = cssSkin.getCSSSet().findIntegerValue("Textbox","padding");
@@ -65,6 +65,9 @@ public class Textbox extends TextControl {
     public void draw(GFX g) {
 
         if(cssSkin != null) {
+            if(cssSize == null) {
+                this.doPrefLayout();
+            }
             cssSkin.draw(g,this,cssSize);
         } else {
             //draw background

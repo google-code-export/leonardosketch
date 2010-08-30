@@ -8,7 +8,7 @@ import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.TabPanel;
-import org.joshy.gfx.node.layout.VBox;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrPanel;
@@ -35,7 +35,7 @@ import java.io.IOException;
 public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     private DrawTextTool drawTextTool;
     private DrawPathTool drawPathTool;
-    private VBox toolbar;
+    private VFlexBox toolbar;
     private TabPanel sideBar;
     private Panel flickrPanel;
     private SketchCanvas canvas;
@@ -123,7 +123,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     }
 
     public void setupTools() throws Exception {
-        toolbar = new VBox();
+        toolbar = new VFlexBox();
         moveRectTool = new SelectMoveTool(this);
         drawTextTool = new DrawTextTool(this);
         drawPathTool = new DrawPathTool(this);

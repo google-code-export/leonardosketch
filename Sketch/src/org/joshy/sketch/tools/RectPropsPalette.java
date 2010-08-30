@@ -8,7 +8,7 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.Panel;
-import org.joshy.gfx.node.layout.VBox;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.sketch.canvas.SketchCanvas;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SRect;
@@ -17,7 +17,7 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 
 public class RectPropsPalette extends Panel {
-    private VBox box;
+    private VFlexBox box;
     private Checkbox useGradient;
     private SwatchColorPicker gradientStartButton;
     private SwatchColorPicker gradientEndButton;
@@ -38,7 +38,7 @@ public class RectPropsPalette extends Panel {
         dragHandle.setHeight(20);
         add(dragHandle);
 
-        box = new VBox();
+        box = new VFlexBox();
         useGradient = new Checkbox("Gradient Fill");
         box.add(useGradient);
         gradientStartButton = new SwatchColorPicker();

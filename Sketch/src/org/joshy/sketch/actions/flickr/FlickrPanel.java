@@ -12,9 +12,7 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.HAlign;
-import org.joshy.gfx.node.layout.HBox;
-import org.joshy.gfx.node.layout.Panel;
+import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.util.image.MasterImageCache;
 import org.joshy.gfx.util.image.SizingMethod;
 import org.joshy.gfx.util.u;
@@ -139,12 +137,13 @@ public class FlickrPanel extends Panel {
         scrollPane = new ScrollPane();
         scrollPane.setContent(photoList);
         searchBox = new Textbox();
-        HBox box = new HBox();
-        box.setHAlign(HAlign.BOTTOM);
-        box.setHeight(40);
-        box.add(searchBox,new Button("Search").onClicked(doSearch));
+        Control box = new HFlexBox()
+                .setBoxAlign(HFlexBox.Align.Bottom)
+                .add(searchBox, new Button("Search")
+                        .onClicked(doSearch)
+                )
+                .setHeight(40);
         this.add(box);
-
         this.add(scrollPane);
     }
 

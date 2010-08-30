@@ -6,7 +6,7 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.node.layout.Panel;
-import org.joshy.gfx.node.layout.VBox;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 
 /**
@@ -67,7 +67,7 @@ public class GridTest implements Runnable {
         title2.setHeight(165);
 
 
-        VBox box = new VBox();
+        VFlexBox box = new VFlexBox();
         box.add(new Button("OK"),new Button("Cancel"),new Button("Auto"));
         GridBox master = new GridBox()
                 .createColumn(300, GridBox.Align.Fill)

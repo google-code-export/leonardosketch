@@ -3,8 +3,7 @@ package org.joshy.sketch.modes.pixel;
 import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.control.Slider;
 import org.joshy.gfx.node.control.SwatchColorPicker;
-import org.joshy.gfx.node.layout.HAlign;
-import org.joshy.gfx.node.layout.HBox;
+import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.sketch.controls.HistogramColorPicker;
 
 import java.io.IOException;
@@ -16,7 +15,7 @@ import java.io.IOException;
  * Time: 8:42:28 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PixelToolbar extends HBox {
+public class PixelToolbar extends HFlexBox {
     public SwatchColorPicker pixelColorPicker;
     public HistogramColorPicker histogramColorPicker;
     public Slider brushWidthSlider;
@@ -24,7 +23,7 @@ public class PixelToolbar extends HBox {
     public Slider brushOpacitySlider;
 
     public PixelToolbar(PixelDocContext context) throws IOException {
-        this.setHAlign(HAlign.TOP);
+        this.setBoxAlign(Align.Top);
         pixelColorPicker = new SwatchColorPicker();
         this.add(pixelColorPicker);
         histogramColorPicker = new HistogramColorPicker(context);

@@ -6,10 +6,8 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.HAlign;
-import org.joshy.gfx.node.layout.HBox;
+import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.*;
@@ -19,7 +17,7 @@ import org.joshy.sketch.property.PropertyManager;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
-public class FloatingPropertiesPanel extends HBox {
+public class FloatingPropertiesPanel extends HFlexBox {
     private boolean selected = false;
     private Selection selection;
     private SwatchColorPicker colorButton;
@@ -247,9 +245,9 @@ public class FloatingPropertiesPanel extends HBox {
             });
 
 
-        setHAlign(HAlign.TOP);
+        this.setBoxAlign(Align.Top);
         setVisible(false);
-        setPadding(new Insets(5,5,5,5));
+        //setPadding(new Insets(5,5,5,5));
     }
 
     private void updatePanelContents() {

@@ -18,7 +18,7 @@ import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.StackPanel;
-import org.joshy.gfx.node.layout.VBox;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.localization.Localization;
@@ -250,7 +250,7 @@ public class Main implements Runnable {
 
     private void showDocChooser() {
         final Stage stage = Stage.createStage();
-        Panel panel = new VBox();
+        Panel panel = new VFlexBox();
         for(final DocModeHelper mode : modeHelpers) {
             panel.add(new Button("New " + mode.getModeName()).onClicked(new Callback<ActionEvent>(){
                 public void call(ActionEvent event) {
