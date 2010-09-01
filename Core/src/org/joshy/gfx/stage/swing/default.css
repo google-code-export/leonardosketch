@@ -15,7 +15,7 @@
     /* turn these on to draw lines showing the box dimensions */
     debug-margin:   false;
     debug-border:   false;
-    debug-padding:  flase;
+    debug-padding:  false;
 }
 
 /* =========== buttons =========== */
@@ -77,6 +77,25 @@ Togglebutton:selected {
 
 Linkbutton {
     shrink-to-fit: true;
+}
+
+ProgressBar {
+    shrink-to-fit: true;
+    padding: 3px;
+    
+    background-color: #a0a0a0;
+    background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
+    border-width: 1px;
+    color: #444444;
+    border-color: #808080;
+    border-radius: 11px;
+    
+    bar-background-color: #0000ff;
+    bar-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    bar-margin: 2px;
+    bar-border-color: #f0f0f0;
+    bar-border-width: 1px;
+    bar-border-radius: 10px;
 }
 
 /* =========== panels ======== */
