@@ -196,53 +196,53 @@ public class FloatingPropertiesPanel extends HFlexBox {
         add(strokeWidthLabel);
         add(strokeWidthSlider);
 
-            fontBoldButton = new Togglebutton("B");
-            add(fontBoldButton);
-            fontBoldButton.onClicked(new Callback<ActionEvent>() {
-                public void call(ActionEvent event) {
-                    if(selection != null) {
-                    for(SNode node: selection.items()) {
-                        if(node instanceof SText) {
-                            SText text = (SText) node;
-                            if(fontBoldButton.isSelected()) {
-                                text.setWeight(Font.Weight.Bold);
-                            } else {
-                                text.setWeight(Font.Weight.Regular);
-                            }
+        fontBoldButton = new Togglebutton("B");
+        add(fontBoldButton);
+        fontBoldButton.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent event) {
+                if(selection != null) {
+                for(SNode node: selection.items()) {
+                    if(node instanceof SText) {
+                        SText text = (SText) node;
+                        if(fontBoldButton.isSelected()) {
+                            text.setWeight(Font.Weight.Bold);
+                        } else {
+                            text.setWeight(Font.Weight.Regular);
                         }
                     }
-                    }
-
                 }
-            });
+                }
 
-            fontItalicButton = new Togglebutton("I");
-            add(fontItalicButton);
-            fontItalicButton.onClicked(new Callback<ActionEvent>() {
-                public void call(ActionEvent event) {
-                    if(selection != null) {
-                    for(SNode node: selection.items()) {
-                        if(node instanceof SText) {
-                            SText text = (SText) node;
-                            if(fontItalicButton.isSelected()) {
-                                text.setStyle(Font.Style.Italic);
-                            } else {
-                                text.setStyle(Font.Style.Regular);
-                            }
+            }
+        });
+
+        fontItalicButton = new Togglebutton("I");
+        add(fontItalicButton);
+        fontItalicButton.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent event) {
+                if(selection != null) {
+                for(SNode node: selection.items()) {
+                    if(node instanceof SText) {
+                        SText text = (SText) node;
+                        if(fontItalicButton.isSelected()) {
+                            text.setStyle(Font.Style.Italic);
+                        } else {
+                            text.setStyle(Font.Style.Regular);
                         }
                     }
-                    }
-
                 }
-            });
-
-            rectPropsButton = new Togglebutton("^");
-            add(rectPropsButton);
-            rectPropsButton.onClicked(new Callback<ActionEvent>() {
-                public void call(ActionEvent event) {
-                    context.propsPalette.setVisible(!context.propsPalette.isVisible());
                 }
-            });
+
+            }
+        });
+
+        rectPropsButton = new Togglebutton("^");
+        add(rectPropsButton);
+        rectPropsButton.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent event) {
+                context.propsPalette.setVisible(!context.propsPalette.isVisible());
+            }
+        });
 
 
         this.setBoxAlign(Align.Top);
@@ -327,6 +327,8 @@ public class FloatingPropertiesPanel extends HFlexBox {
     }
     @Override
     public void doLayout() {
+        setWidth(500);
+        setHeight(40);
         if(selected) {
             Bounds bounds = selection.calculateBounds();
             bounds = context.getSketchCanvas().transformToDrawing(bounds);

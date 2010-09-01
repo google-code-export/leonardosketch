@@ -30,18 +30,19 @@ public class HFlexBox extends FlexBox {
         double totalWidth = 0;
         double totalFlex = 0;
         for(Control c : controlChildren()) {
+            if(!c.isVisible()) continue;
             c.doPrefLayout();
             Bounds bounds = c.getLayoutBounds();
             totalWidth += bounds.getWidth();
             totalFlex += spaceMap.get(c);
-            double baseline = c.getBaseline();
+            //double baseline = c.getBaseline();
         }
 
         double totalExcess = getWidth()-totalWidth;
-        //u.p("total flex = " + totalFlex);
 
         double x = 0;
         for(Control c : controlChildren()) {
+            if(!c.isVisible()) continue;            
             Bounds bounds = c.getLayoutBounds();
             //position x
             c.setTranslateX(x);
