@@ -3,10 +3,7 @@ package org.joshy.gfx.css;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.css.values.BaseValue;
 import org.joshy.gfx.css.values.LinearGradientValue;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.GradientFill;
-import org.joshy.gfx.draw.Image;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Skin;
 import org.joshy.gfx.node.control.Control;
@@ -23,6 +20,7 @@ import java.net.URI;
  */
 public class MasterCSSSkin extends Skin {
     protected CSSRuleSet set;
+    private Font defaultFont = Font.name("Arial").size(13).resolve();
 
     public BoxState getSize(Control control) {
         BoxState size = new BoxState();
@@ -170,6 +168,26 @@ public class MasterCSSSkin extends Skin {
         }
         g.translate(-b.getX(),-b.getY());
     }
+
+    public void drawText(GFX g, CSSMatcher matcher, String prefix, Bounds b, String text) {
+        g.translate(b.getX(),b.getY());
+        int margin = set.findIntegerValue(matcher.element,prefix+"margin");
+        int borderWidth = set.findIntegerValue(matcher.element,prefix+"border-width");
+        int padding = set.findIntegerValue(matcher.element,prefix+"padding");
+        g.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"color")));
+        double x = margin + borderWidth + padding;
+        Font font = getDefaultFont();
+        double tw = font.getWidth(text);
+        double th = font.getAscender();
+        double ty = 0 + (b.getHeight() -th)/2 + font.getAscender();
+        g.drawText(text,font,x, ty);
+        g.translate(-b.getX(),-b.getY());
+    }
+
+    public Font getDefaultFont() {
+        return defaultFont;
+    }
+
 
     public static class BoxState {
         public double width;

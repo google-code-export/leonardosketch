@@ -77,6 +77,13 @@ Togglebutton:selected {
 
 Linkbutton {
     shrink-to-fit: true;
+    color: #000000;
+    border-width: 0px;
+    margin: 2px;
+    padding: 3px;
+}
+Linkbutton:hover {
+    color: #5050ff;
 }
 
 ProgressBar {

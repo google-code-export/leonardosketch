@@ -1,8 +1,9 @@
 package org.joshy.gfx.node.control;
 
-import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.css.CSSMatcher;
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.util.u;
+import org.joshy.gfx.node.Bounds;
 
 public class Linkbutton extends Button {
     public Linkbutton(String text) {
@@ -12,24 +13,23 @@ public class Linkbutton extends Button {
 
     @Override
     public void draw(GFX g) {
-        g.setPaint(FlatColor.BLACK);
-        if(pressed) {
-            g.setPaint(FlatColor.BLUE);
-        }
-        double x = insets.getLeft();
-
-        if(text == null) return;
-        if(text.length() == 0) return;
-        double tw = font.getWidth(text);
-        double th = font.getAscender();
-//        if(includeDescender) {
-//            th += font.getDescender();
-//        }
-        double ty = 0 + (height -th)/2 + font.getAscender(); 
-        g.drawText(text,font,x, ty);
-
-        if(hovered) {
-            g.drawLine(x,ty+1,tw,ty+1);
+        if(!isVisible()) return;
+        if(cssSkin != null) {
+            if(size == null) {
+                doPrefLayout();
+            }
+            CSSMatcher matcher = cssSkin.createMatcher(this, CSSSkin.State.None);
+            if(hovered) {
+                matcher = cssSkin.createMatcher(this, CSSSkin.State.Hover);
+            }
+            if(pressed) {
+                matcher = cssSkin.createMatcher(this, CSSSkin.State.Pressed);
+            }
+            Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
+            cssSkin.drawBackground(g, matcher, "", bounds);
+            cssSkin.drawBorder(g, matcher, "", bounds);
+            cssSkin.drawText(g,matcher,"",bounds,text);
+            return;
         }
     }
 }

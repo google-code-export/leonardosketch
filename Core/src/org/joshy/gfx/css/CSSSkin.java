@@ -19,7 +19,6 @@ import org.joshy.gfx.util.GraphicsUtil;
 * To change this template use File | Settings | File Templates.
 */
 public class CSSSkin extends MasterCSSSkin {
-    private Font defaultFont = Font.name("Arial").size(13).resolve();
 
     public BoxState getSize(Control control, String content) {
         BoxState size = super.getSize(control);
@@ -179,10 +178,6 @@ public class CSSSkin extends MasterCSSSkin {
 
     public CSSRuleSet getCSSSet() {
         return this.set;
-    }
-
-    public Font getDefaultFont() {
-        return defaultFont;
     }
 
 
