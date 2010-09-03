@@ -92,6 +92,11 @@ public class MainTest {
         multiElementMatcher.element = "e2";
         assertTrue(set.findIntegerValue(multiElementMatcher,"border")==3);
 
+
+        idMatcher = new CSSMatcher();
+        idMatcher.id = "hex_test";
+        assertTrue(set.findColorValue(idMatcher,"background-color") == 0x00ff00ff);
+
         //match by element and class
 //        classMatcher.element = "Button";
 //        classMatcher.cssClass = "classmatch2";

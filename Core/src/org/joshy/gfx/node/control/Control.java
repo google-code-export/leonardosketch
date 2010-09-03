@@ -22,7 +22,7 @@ public abstract class Control extends Node {
     protected boolean skinsDirty;
     protected boolean layoutDirty;
     protected CSSSkin cssSkin;
-    protected String id;
+    private String id;
     protected List<String> cssClasses;
 
     protected Control() {
@@ -121,6 +121,14 @@ public abstract class Control extends Node {
      */
     public abstract void doSkins();
 
+    public String getId() {
+        return id;
+    }
+
+    public Control setId(String id) {
+        this.id = id;
+        return this;
+    }
 }
 
 

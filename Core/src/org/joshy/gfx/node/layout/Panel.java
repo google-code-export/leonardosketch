@@ -1,6 +1,7 @@
 package org.joshy.gfx.node.layout;
 
 import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
@@ -49,6 +50,8 @@ public class Panel extends Container {
         }
         this.drawingDirty = false;
         g.setOpacity(1.0);
+
+        
     }
 
     protected void drawSelf(GFX g) {
@@ -62,7 +65,11 @@ public class Panel extends Container {
         }
         
         if(cssSkin != null) {
-            cssSkin.draw(g, this, null, new CSSSkin.BoxState(getWidth(),getHeight()),CSSSkin.State.None);
+            Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
+            CSSMatcher matcher = new CSSMatcher(this);
+            cssSkin.drawBackground(g,matcher,"",bounds);
+            cssSkin.drawBorder(g,matcher,"",bounds);
+            //cssSkin.draw(g, this, null, new CSSSkin.BoxState(getWidth(),getHeight()),CSSSkin.State.None);
             return;
         }
     }

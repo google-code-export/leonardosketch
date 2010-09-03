@@ -36,6 +36,9 @@ shadowtest {
     margin: 88px;
 }
 
+#hex_test {
+    background-color: #FF00ff;
+}
 /*
 Button.classmatch2 {
     margin: 1px;

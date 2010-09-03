@@ -96,6 +96,10 @@ public class MasterCSSSkin extends Skin {
         this.set = set;
     }
 
+    public CSSRuleSet getRuleSet() {
+        return this.set;
+    }
+
     protected Image getIcon(CSSMatcher matcher) {
         Image icon = null;
         URI uri = set.findURIValue(matcher, "icon");
@@ -120,6 +124,7 @@ public class MasterCSSSkin extends Skin {
     public CSSMatcher createMatcher(Control control, CSSSkin.State state) {
         CSSMatcher matcher = new CSSMatcher();
         matcher.element = control.getClass().getSimpleName();
+        matcher.id = control.getId();
         if(state == CSSSkin.State.Hover) {
             matcher.pseudo = "hover";
         }

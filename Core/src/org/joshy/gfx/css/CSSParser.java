@@ -192,7 +192,7 @@ public class CSSParser extends BaseParser<Object> {
     }
 
     public Rule HexValue() {
-        return Sequence(Sequence(Ch('#'),ZeroOrMore(FirstOf(CharRange('0','9'),CharRange('a','f')))),
+        return Sequence(Sequence(Ch('#'),ZeroOrMore(FirstOf(CharRange('0','9'),CharRange('a','f'),CharRange('A','Z')))),
                 new Action() {
                     public boolean run(Context context) {
                         context.setNodeValue(new ColorValue(context.getPrevText()));

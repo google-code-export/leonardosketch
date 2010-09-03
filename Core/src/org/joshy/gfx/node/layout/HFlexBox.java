@@ -54,6 +54,8 @@ public class HFlexBox extends FlexBox {
             //update running total
             x = x + c.getWidth();
 
+            c.setHeight(bounds.getHeight());
+
             //position y
             if(align == Align.Top) {
                 c.setTranslateY(0);
@@ -62,11 +64,13 @@ public class HFlexBox extends FlexBox {
                 c.setTranslateY(getHeight()-baseline);
             } else if(align == Align.Bottom) {
                 c.setTranslateY(getHeight()-bounds.getHeight());
+            } else if (align == Align.Stretch) {
+                c.setTranslateY(0);
+                c.setHeight(getHeight());
             } else {
                 c.setTranslateY(0);
             }
 
-            c.setHeight(bounds.getHeight());
 
             //layout child
             c.doLayout();

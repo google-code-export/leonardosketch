@@ -26,6 +26,10 @@ public class CSSRuleSet {
         
     }
 
+    public void append(CSSRuleSet set) {
+        rules.addAll(set.rules);
+    }
+
     public String findStringValue(String elem, String propName) {
         return findMatchingRule(new CSSMatcher(elem),propName).value.asString();
     }

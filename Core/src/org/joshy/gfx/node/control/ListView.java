@@ -40,7 +40,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         setRenderer(defaultItemRenderer);
         setTextRenderer(new TextRenderer<E>(){
             public String toString(ListView view, E item, int index) {
-                if(item == null) return "";
+                if(item == null) return "null";
                 return item.toString();
             }
         });
