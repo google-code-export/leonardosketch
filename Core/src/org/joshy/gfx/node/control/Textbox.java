@@ -44,10 +44,9 @@ public class Textbox extends TextControl {
     public void doPrefLayout() {
         if(cssSkin != null) {
             cssSize = cssSkin.getSize(this,text);
-            int padding = cssSkin.getCSSSet().findIntegerValue("Textbox","padding");
             setWidth(cssSize.width);
             setHeight(cssSize.height);
-            insets = new Insets(padding,padding,padding,padding);
+            insets = cssSize.padding;
         }
         double th = this.getFont().getAscender();
         baseline = insets.getTop() + this.getFont().getAscender();
@@ -57,7 +56,7 @@ public class Textbox extends TextControl {
 
     @Override
     public double getBaseline() {
-        return cssSize.margin + cssSize.borderWidth + cssSize.padding + cssSize.contentBaseline;
+        return cssSize.margin.getTop() + cssSize.borderWidth.getTop() + cssSize.padding.getTop() + cssSize.contentBaseline;
     }
 
     @Override

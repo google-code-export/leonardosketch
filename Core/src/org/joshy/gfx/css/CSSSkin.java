@@ -25,11 +25,12 @@ public class CSSSkin extends MasterCSSSkin {
         CSSMatcher matcher = createMatcher(control,null);
         Image icon = getIcon(matcher);
         String name = control.getClass().getSimpleName();
-        int margin = set.findIntegerValue(name,"margin");
-        int padding = set.findIntegerValue(name,"padding");
-        int borderWidth = set.findIntegerValue(name, "border-width");
-        size.contentWidth = control.getWidth()-margin*2-padding*2;
-        size.contentHeight = control.getHeight()-margin*2-padding*2;
+        size.margin = getMargin(name);
+        size.padding = getPadding(name);
+        size.borderWidth = getBorderWidth(name);
+        size.contentWidth =  control.getWidth()-size.margin.getLeft()-size.margin.getRight()-size.padding.getLeft()-size.padding.getRight();
+        size.contentHeight = control.getHeight()-size.margin.getTop()-size.margin.getBottom()-size.padding.getTop()-size.padding.getBottom();
+
         //calc the sizes
         if("true".equals(set.findStringValue(name,"shrink-to-fit"))) {
             Font font = getFont(matcher);
@@ -39,11 +40,8 @@ public class CSSSkin extends MasterCSSSkin {
                 size.contentWidth += icon.getWidth();
                 size.contentHeight = Math.max(size.contentHeight,icon.getHeight());
             }
-            size.width = margin*2+borderWidth*2+padding*2+size.contentWidth;
-            size.height = margin*2+borderWidth*2+padding*2+size.contentHeight;
-            size.margin = margin;
-            size.borderWidth = borderWidth;
-            size.padding = padding;
+            size.width = size.margin.getLeft()+size.margin.getRight()+size.borderWidth.getLeft()+size.borderWidth.getRight()+size.padding.getLeft()+size.padding.getRight()+size.contentWidth;
+            size.height = size.margin.getTop()+size.margin.getBottom()+size.borderWidth.getTop()+size.borderWidth.getBottom()+size.padding.getTop()+size.padding.getBottom()+size.contentHeight;
             double fh = font.calculateHeight(content);
             size.contentBaseline = (size.contentHeight-fh)/2 + fh;
         } else {
@@ -60,11 +58,10 @@ public class CSSSkin extends MasterCSSSkin {
         }
         CSSMatcher matcher = createMatcher(control,state);
         Image icon = getIcon(matcher);
-//        u.p("In drawing, icon = " + icon);
 
-        int margin = set.findIntegerValue(matcher.element,"margin");
-        int padding = set.findIntegerValue(matcher.element,"padding");
-        int borderWidth = set.findIntegerValue(matcher.element, "border-width");
+        Insets margin = getMargin(matcher.element);
+        Insets padding = getPadding(matcher.element);
+        Insets borderWidth = getBorderWidth(matcher.element);
         int borderRadius = set.findIntegerValue(matcher.element,"border-radius");
         BaseValue background = set.findValue(matcher,"background");
 
@@ -73,8 +70,8 @@ public class CSSSkin extends MasterCSSSkin {
         Font font = getFont(matcher);
 
         //draw the background
-        double backWidth = size.width-margin*2;
-        double backHeight = size.height-margin*2;
+        double backWidth = size.width-margin.getLeft()-margin.getRight();
+        double backHeight = size.height-margin.getTop()-margin.getBottom();
 
         //background-color
 //        u.p("bg color as string = " + set.findStringValue(matcher,"background-color"));
@@ -85,9 +82,9 @@ public class CSSSkin extends MasterCSSSkin {
                 g.setPaint(toGradientFill((LinearGradientValue)background,backWidth,backHeight));
             }
             if(borderRadius == 0) {
-                g.fillRect(margin,margin,backWidth,backHeight);
+                g.fillRect(margin.getLeft(),margin.getTop(),backWidth,backHeight);
             } else {
-                g.fillRoundRect(margin,margin,backWidth,backHeight,borderRadius,borderRadius);
+                g.fillRoundRect(margin.getLeft(),margin.getTop(),backWidth,backHeight,borderRadius,borderRadius);
             }
             
         }
@@ -95,15 +92,21 @@ public class CSSSkin extends MasterCSSSkin {
 
 
         //draw the border
-        if(borderWidth > 0) {
+        if(!borderWidth.allEquals(0)) {
             g.setPaint(new FlatColor(set.findColorValue(matcher,"border-color")));
-            g.setStrokeWidth(borderWidth);
+            g.setStrokeWidth(borderWidth.getLeft());
             if(borderRadius == 0) {
-                g.drawRect(margin+borderWidth/2,margin+borderWidth/2,
-                        size.width-margin*2-borderWidth,size.height-margin*2-borderWidth);
+                g.drawRect(
+                        margin.getLeft()+borderWidth.getLeft()/2,
+                        margin.getTop()+borderWidth.getTop()/2,
+                        size.width-margin.getLeft()-margin.getRight()-borderWidth.getLeft(),
+                        size.height-margin.getTop()-margin.getBottom()-borderWidth.getTop());
             } else {
-                g.drawRoundRect(margin+borderWidth/2,margin+borderWidth/2,
-                        size.width-margin*2-borderWidth,size.height-margin*2-borderWidth,
+                g.drawRoundRect(
+                        margin.getLeft()+borderWidth.getLeft()/2,
+                        margin.getRight()+borderWidth.getTop()/2,
+                        size.width-margin.getLeft()-margin.getRight()-borderWidth.getLeft(),
+                        size.height-margin.getTop()-margin.getBottom()-borderWidth.getTop(),
                         borderRadius,borderRadius);
             }
             g.setStrokeWidth(1);
@@ -113,8 +116,8 @@ public class CSSSkin extends MasterCSSSkin {
 
 
         //draw the internal content
-        double contentX = margin+borderWidth+padding;
-        double contentY = margin+borderWidth+padding;
+        double contentX = margin.getLeft()+borderWidth.getLeft()+padding.getLeft();
+        double contentY = margin.getTop()+borderWidth.getTop()+padding.getTop();
         
         //debugging
 //        g.setPaint(FlatColor.GREEN);
@@ -162,11 +165,15 @@ public class CSSSkin extends MasterCSSSkin {
         }
         if("true".equals(set.findStringValue(matcher,"debug-border"))) {
             g.setPaint(FlatColor.GREEN);
-            g.drawRect(margin,margin,size.width-margin*2,size.height-margin*2);
+            g.drawRect(margin.getLeft(),margin.getTop(),size.width-margin.getLeft()-margin.getRight(),size.height-margin.getTop()-margin.getBottom());
         }
         if("true".equals(set.findStringValue(matcher,"debug-padding"))) {
             g.setPaint(FlatColor.BLUE);
-            g.drawRect(margin+borderWidth,margin+borderWidth,size.width-margin*2-borderWidth*2,size.height-margin*2-borderWidth*2);
+            g.drawRect(
+                    margin.getLeft()+borderWidth.getLeft(),
+                    margin.getTop()+borderWidth.getTop(),
+                    size.width-margin.getLeft()-margin.getRight()-borderWidth.getLeft()-borderWidth.getRight(),
+                    size.height-margin.getTop()-margin.getBottom()-borderWidth.getTop()-borderWidth.getBottom());
         }
     }
 
@@ -187,8 +194,9 @@ public class CSSSkin extends MasterCSSSkin {
 
     public Insets getInsets(Control control) {
         CSSMatcher matcher = createMatcher(control,null);
-        int margin = set.findIntegerValue(matcher.element,"margin");
-        return new Insets(margin);
+        return getMargin(matcher.element);
+        //int margin = set.findIntegerValue(matcher.element,"margin");
+        //return new Insets(margin);
     }
     public void draw(GFX g, Scrollbar scrollbar, BoxState size, Bounds thumbBounds, Bounds leftArrowBounds, Bounds rightArrowBounds) {
         if(set == null) {
@@ -200,14 +208,11 @@ public class CSSSkin extends MasterCSSSkin {
         if(scrollbar.isVertical()) {
             matcher.pseudo = "vertical";
         }
-        int margin = set.findIntegerValue(matcher.element,"margin");
-//        int padding = set.findIntegerValue(matcher.element,"padding");
-//        int borderWidth = set.findIntegerValue(matcher.element, "border-width");
-//        int borderRadius = set.findIntegerValue(matcher.element,"border-radius");
+        Insets margin = getMargin(matcher.element);
 
-        double backWidth = size.width-margin*2;
-        double backHeight = size.height-margin*2;
-        Bounds backBounds = new Bounds(margin,margin,backWidth,backHeight);
+        double backWidth = size.width-margin.getLeft()-margin.getRight();
+        double backHeight = size.height-margin.getTop()-margin.getBottom();
+        Bounds backBounds = new Bounds(margin.getLeft(),margin.getTop(),backWidth,backHeight);
         //draw the background
         drawBackground(g,matcher,"",backBounds);
         drawBorder(    g,matcher,"",backBounds);

@@ -39,4 +39,8 @@ public class Insets {
     public double getRight() {
         return right;
     }
+
+    public boolean allEquals(double i) {
+        return (left == i && right == i && top == i && bottom == i);
+    }
 }

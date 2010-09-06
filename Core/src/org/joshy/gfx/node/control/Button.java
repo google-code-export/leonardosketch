@@ -223,7 +223,10 @@ public class Button extends Control {
 
     @Override
     public double getBaseline() {
-        return size.margin + size.borderWidth + size.padding + size.contentBaseline;
+        if(size == null) {
+            doPrefLayout();
+        }
+        return size.margin.getTop() + size.borderWidth.getTop() + size.padding.getTop() + size.contentBaseline;
     }
 
     public String getText() {
