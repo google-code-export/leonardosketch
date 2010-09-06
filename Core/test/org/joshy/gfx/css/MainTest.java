@@ -78,12 +78,12 @@ public class MainTest {
         CSSMatcher idMatcher = new CSSMatcher();
         idMatcher.id = "idmatch1";
         //test an ID search
-        assertTrue(set.findIntegerValue(idMatcher,"padding") == 87);
+        assertTrue(set.findIntegerValue(idMatcher,"dummy-prop-name") == 87);
 
         //match by class
         CSSMatcher classMatcher = new CSSMatcher();
         classMatcher.cssClass = "classmatch1";
-        assertTrue(set.findIntegerValue(classMatcher,"padding") == 88);
+        assertTrue(set.findIntegerValue(classMatcher,"dummy-prop-name") == 88);
 
         //match by element against a rule with multiple elements
         CSSMatcher multiElementMatcher = new CSSMatcher();
@@ -104,6 +104,8 @@ public class MainTest {
 //        assertTrue(set.findIntegerValue(classMatcher,"padding") == 8);
 
         marginTests(set);
+        paddingTests(set);
+        borderTests(set);
     }
 
     private void marginTests(CSSRuleSet set) {
@@ -140,7 +142,71 @@ public class MainTest {
     }
 
 
+    private void paddingTests(CSSRuleSet set) {
+        CSSMatcher m = new CSSMatcher();
+        m.id = "padding_test_1";
+        assertTrue(set.findIntegerValue(m,"padding-top")==1);
+        assertTrue(set.findIntegerValue(m,"padding-right")==3);
+        assertTrue(set.findIntegerValue(m,"padding-bottom")==5);
+        assertTrue(set.findIntegerValue(m,"padding-left")==7);
+
+        m.id = "padding_test_2";
+        assertTrue(set.findIntegerValue(m,"padding-top")==1);
+        assertTrue(set.findIntegerValue(m,"padding-right")==3);
+        assertTrue(set.findIntegerValue(m,"padding-bottom")==5);
+        assertTrue(set.findIntegerValue(m,"padding-left")==7);
+
+        m.id = "padding_test_3";
+        assertTrue(set.findIntegerValue(m,"padding-top")==9);
+        assertTrue(set.findIntegerValue(m,"padding-right")==9);
+        assertTrue(set.findIntegerValue(m,"padding-bottom")==9);
+        assertTrue(set.findIntegerValue(m,"padding-left")==9);
+
+        m.id = "padding_test_4";
+        assertTrue(set.findIntegerValue(m,"padding-top")==10);
+        assertTrue(set.findIntegerValue(m,"padding-right")==11);
+        assertTrue(set.findIntegerValue(m,"padding-bottom")==10);
+        assertTrue(set.findIntegerValue(m,"padding-left")==11);
+
+        m.id = "padding_test_5";
+        assertTrue(set.findIntegerValue(m,"padding-top")==10);
+        assertTrue(set.findIntegerValue(m,"padding-right")==11);
+        assertTrue(set.findIntegerValue(m,"padding-bottom")==12);
+        assertTrue(set.findIntegerValue(m,"padding-left")==11);
+    }
     
+    private void borderTests(CSSRuleSet set) {
+        CSSMatcher m = new CSSMatcher();
+        m.id = "border_test_1";
+        assertTrue(set.findIntegerValue(m,"border-top-width")==1);
+        assertTrue(set.findIntegerValue(m,"border-right-width")==3);
+        assertTrue(set.findIntegerValue(m,"border-bottom-width")==5);
+        assertTrue(set.findIntegerValue(m,"border-left-width")==7);
+
+        m.id = "border_test_2";
+        assertTrue(set.findIntegerValue(m,"border-top-width")==1);
+        assertTrue(set.findIntegerValue(m,"border-right-width")==3);
+        assertTrue(set.findIntegerValue(m,"border-bottom-width")==5);
+        assertTrue(set.findIntegerValue(m,"border-left-width")==7);
+
+        m.id = "border_test_3";
+        assertTrue(set.findIntegerValue(m,"border-top-width")==9);
+        assertTrue(set.findIntegerValue(m,"border-right-width")==9);
+        assertTrue(set.findIntegerValue(m,"border-bottom-width")==9);
+        assertTrue(set.findIntegerValue(m,"border-left-width")==9);
+
+        m.id = "border_test_4";
+        assertTrue(set.findIntegerValue(m,"border-top-width")==10);
+        assertTrue(set.findIntegerValue(m,"border-right-width")==11);
+        assertTrue(set.findIntegerValue(m,"border-bottom-width")==10);
+        assertTrue(set.findIntegerValue(m,"border-left-width")==11);
+
+        m.id = "border_test_5";
+        assertTrue(set.findIntegerValue(m,"border-top-width")==10);
+        assertTrue(set.findIntegerValue(m,"border-right-width")==11);
+        assertTrue(set.findIntegerValue(m,"border-bottom-width")==12);
+        assertTrue(set.findIntegerValue(m,"border-left-width")==11);
+    }
     private static void condense(Node<?> node, CSSRuleSet set) {
         if(node == null) return;
         if("CSSRule".equals(node.getLabel())) {

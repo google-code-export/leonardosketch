@@ -29,11 +29,11 @@ shadowtest {
 
 }
 #idmatch1 {
-    padding: 87px;
+    dummy-prop-name: 87px;
 }
 
 .classmatch1 {
-    padding: 88px;
+    dummy-prop-name: 88px;
 }
 
 #hex_test {
@@ -65,3 +65,42 @@ Button.classmatch3 {
 #margin_test_5 {
     margin: 10px 11px 12px; /* top, left&right, bottom */
 }
+
+#padding_test_1 {
+    padding-top: 1px;
+    padding-right: 3px;
+    padding-bottom: 5px;
+    padding-left: 7px;
+}
+#padding_test_2 {
+    padding: 1px 3px 5px 7px;
+}
+#padding_test_3 {
+    padding: 9px; /*all sides*/
+}
+#padding_test_4 {
+    padding: 10px 11px; /* top&bottom, left&right */
+}
+#padding_test_5 {
+    padding: 10px 11px 12px; /* top, left&right, bottom */
+}
+
+#border_test_1 {
+    border-top-width: 1px;
+    border-right-width: 3px;
+    border-bottom-width: 5px;
+    border-left-width: 7px;
+}
+#border_test_2 {
+    border-width: 1px 3px 5px 7px;
+}
+#border_test_3 {
+    border-width: 9px; /*all sides*/
+}
+#border_test_4 {
+    border-width: 10px 11px; /* top&bottom, left&right */
+}
+#border_test_5 {
+    border-width: 10px 11px 12px; /* top, left&right, bottom */
+}
+

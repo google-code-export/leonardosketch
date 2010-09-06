@@ -2,7 +2,6 @@ package org.joshy.gfx.css;
 
 import org.joshy.gfx.css.values.*;
 import org.joshy.gfx.css.values.StringValue;
-import org.joshy.gfx.util.u;
 import org.parboiled.*;
 import org.parboiled.annotations.DontLabel;
 import org.parboiled.annotations.SuppressNode;
@@ -85,30 +84,60 @@ public class CSSParser extends BaseParser<Object> {
         final Var<String> propName = new Var<String>();
         final Var propValue = new Var();
         return FirstOf(
-            Sequence(
-                Spacing(),
-                "margin",
-                Spacing(),
-                COLON,
-                Spacing(),
-                OneOrMore(
-                    Sequence(OneOrMore(Number()),FirstOf("px","pt"),Spacing())
-                ),toString,propValue.set(value()),
-                Spacing(),
-                SEMICOLON,
-                new InsetsRuleAction("margin",propValue)
-            ),
-            Sequence(
-                Spacing(),
-                PropertyName(),propName.set((String)value()),
-                Spacing(),
-                COLON,
-                Spacing(),
-                PropertyValue(),propValue.set(value()),
-                Spacing(),
-                SEMICOLON
-                ,new PropertyRuleAction(propName,propValue)
-            )
+                //margin shortcut
+                Sequence(
+                    Spacing(),
+                    "margin",
+                    Spacing(),
+                    COLON,
+                    Spacing(),
+                    OneOrMore(
+                        Sequence(OneOrMore(Number()),FirstOf("px","pt"),Spacing())
+                    ),toString,propValue.set(value()),
+                    Spacing(),
+                    SEMICOLON,
+                    new InsetsRuleAction("margin","",propValue)
+                ),
+                //padding shortcut
+                Sequence(
+                    Spacing(),
+                    "padding",
+                    Spacing(),
+                    COLON,
+                    Spacing(),
+                    OneOrMore(
+                        Sequence(OneOrMore(Number()),FirstOf("px","pt"),Spacing())
+                    ),toString,propValue.set(value()),
+                    Spacing(),
+                    SEMICOLON,
+                    new InsetsRuleAction("padding","",propValue)
+                ),
+                //padding shortcut
+                Sequence(
+                    Spacing(),
+                    "border-width",
+                    Spacing(),
+                    COLON,
+                    Spacing(),
+                    OneOrMore(
+                        Sequence(OneOrMore(Number()),FirstOf("px","pt"),Spacing())
+                    ),toString,propValue.set(value()),
+                    Spacing(),
+                    SEMICOLON,
+                    new InsetsRuleAction("border","-width",propValue)
+                ),
+                //other property name
+                Sequence(
+                    Spacing(),
+                    PropertyName(),propName.set((String)value()),
+                    Spacing(),
+                    COLON,
+                    Spacing(),
+                    PropertyValue(),propValue.set(value()),
+                    Spacing(),
+                    SEMICOLON
+                    ,new PropertyRuleAction(propName,propValue)
+                )
         );
     }
 
@@ -286,10 +315,6 @@ public class CSSParser extends BaseParser<Object> {
     public Rule URLChar() {
         return FirstOf(Letter(),'/','.');
     }
-
-    private static void p(String s) {
-        System.out.println(s);
-    }
     
     public static class GradientStopAction implements Action {
         private Var<String> hex;
@@ -443,7 +468,6 @@ public class CSSParser extends BaseParser<Object> {
         }
 
         public boolean run(Context context) {
-            u.p("got a text shadow call: " + color.get() + " " + xoff.get() + " " + yoff.get() + " " + radius.get());
             context.setNodeValue(new ShadowValue(color.get(), xoff.get(),yoff.get(), radius.get()));
             return true;
         }
@@ -452,26 +476,25 @@ public class CSSParser extends BaseParser<Object> {
     public class InsetsRuleAction implements Action {
         private Var propValue;
         private String prefix;
+        private String suffix;
 
-        public InsetsRuleAction(String prefix, Var propValue) {
+        public InsetsRuleAction(String prefix, String suffix, Var propValue) {
             this.prefix = prefix;
+            this.suffix = suffix;
             this.propValue = propValue;
         }
 
         public boolean run(Context context) {
-            //u.p("prop value = " + propValue.get());
             String[] parts = (""+propValue.get()).split(" ");
-            //u.p("Parts");
-            //u.p(parts);
 
             CSSProperty right = new CSSProperty();
             CSSProperty left = new CSSProperty();
             CSSProperty top = new CSSProperty();
             CSSProperty bottom = new CSSProperty();
-            right.name = prefix+"-right";
-            left.name = prefix+"-left";
-            top.name = prefix+"-top";
-            bottom.name = prefix+"-bottom";
+            right.name = prefix+"-right"+suffix;
+            left.name = prefix+"-left"+suffix;
+            top.name = prefix+"-top"+suffix;
+            bottom.name = prefix+"-bottom"+suffix;
             if(parts.length == 1) {
                 top.value = new IntegerPixelValue(parts[0]);
                 right.value = new IntegerPixelValue(parts[0]);
