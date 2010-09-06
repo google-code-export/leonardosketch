@@ -2,6 +2,7 @@ package org.joshy.gfx.css;
 
 import org.joshy.gfx.css.values.*;
 import org.joshy.gfx.css.values.StringValue;
+import org.joshy.gfx.util.u;
 import org.parboiled.*;
 import org.parboiled.annotations.DontLabel;
 import org.parboiled.annotations.SuppressNode;
@@ -83,7 +84,21 @@ public class CSSParser extends BaseParser<Object> {
     public Rule PropertyRule() {
         final Var<String> propName = new Var<String>();
         final Var propValue = new Var();
-        return Sequence(
+        return FirstOf(
+            Sequence(
+                Spacing(),
+                "margin",
+                Spacing(),
+                COLON,
+                Spacing(),
+                OneOrMore(
+                    Sequence(OneOrMore(Number()),FirstOf("px","pt"),Spacing())
+                ),toString,propValue.set(value()),
+                Spacing(),
+                SEMICOLON,
+                new InsetsRuleAction("margin",propValue)
+            ),
+            Sequence(
                 Spacing(),
                 PropertyName(),propName.set((String)value()),
                 Spacing(),
@@ -93,6 +108,7 @@ public class CSSParser extends BaseParser<Object> {
                 Spacing(),
                 SEMICOLON
                 ,new PropertyRuleAction(propName,propValue)
+            )
         );
     }
 
@@ -340,8 +356,16 @@ public class CSSParser extends BaseParser<Object> {
             CSSRule rule = new CSSRule();
             rule.matchers.addAll((Collection<? extends CSSMatcher>) matcher.get());
             for(Object n : context.getLastNode().getChildren()) {
-                CSSProperty property = (CSSProperty) ((Node) n).getValue();
-                rule.addProperty(property);
+                Object value = ((Node)n).getValue();
+                if(value instanceof CSSProperty) {
+                    rule.addProperty((CSSProperty) value);
+                }
+                if(value instanceof CSSPropertySet) {
+                    CSSPropertySet set = (CSSPropertySet) value;
+                    for(CSSProperty prop : set.getProps()) {
+                        rule.addProperty(prop);
+                    }
+                }
             }
             set(rule);
             return true;
@@ -419,8 +443,65 @@ public class CSSParser extends BaseParser<Object> {
         }
 
         public boolean run(Context context) {
-            System.out.println("got a text shadow call: " + color.get() + " " + xoff.get() + " " + yoff.get() + " " + radius.get());
+            u.p("got a text shadow call: " + color.get() + " " + xoff.get() + " " + yoff.get() + " " + radius.get());
             context.setNodeValue(new ShadowValue(color.get(), xoff.get(),yoff.get(), radius.get()));
+            return true;
+        }
+    }
+
+    public class InsetsRuleAction implements Action {
+        private Var propValue;
+        private String prefix;
+
+        public InsetsRuleAction(String prefix, Var propValue) {
+            this.prefix = prefix;
+            this.propValue = propValue;
+        }
+
+        public boolean run(Context context) {
+            //u.p("prop value = " + propValue.get());
+            String[] parts = (""+propValue.get()).split(" ");
+            //u.p("Parts");
+            //u.p(parts);
+
+            CSSProperty right = new CSSProperty();
+            CSSProperty left = new CSSProperty();
+            CSSProperty top = new CSSProperty();
+            CSSProperty bottom = new CSSProperty();
+            right.name = prefix+"-right";
+            left.name = prefix+"-left";
+            top.name = prefix+"-top";
+            bottom.name = prefix+"-bottom";
+            if(parts.length == 1) {
+                top.value = new IntegerPixelValue(parts[0]);
+                right.value = new IntegerPixelValue(parts[0]);
+                bottom.value = new IntegerPixelValue(parts[0]);
+                left.value = new IntegerPixelValue(parts[0]);
+            }
+            if(parts.length == 2) {
+                top.value = new IntegerPixelValue(parts[0]);
+                bottom.value = new IntegerPixelValue(parts[0]);
+                right.value = new IntegerPixelValue(parts[1]);
+                left.value = new IntegerPixelValue(parts[1]);
+            }
+            if(parts.length == 3) {
+                top.value = new IntegerPixelValue(parts[0]);
+                right.value = new IntegerPixelValue(parts[1]);
+                left.value = new IntegerPixelValue(parts[1]);
+                bottom.value = new IntegerPixelValue(parts[2]);
+            }
+            if(parts.length == 4) {
+                top.value = new IntegerPixelValue(parts[0]);
+                right.value = new IntegerPixelValue(parts[1]);
+                bottom.value = new IntegerPixelValue(parts[2]);
+                left.value = new IntegerPixelValue(parts[3]);
+            }
+
+
+            CSSPropertySet set = new CSSPropertySet();
+            set.add(right,left,top,bottom);
+            context.setNodeValue(set);
+            set(set);
             return true;
         }
     }

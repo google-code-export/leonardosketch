@@ -78,12 +78,12 @@ public class MainTest {
         CSSMatcher idMatcher = new CSSMatcher();
         idMatcher.id = "idmatch1";
         //test an ID search
-        assertTrue(set.findIntegerValue(idMatcher,"margin") == 87);
+        assertTrue(set.findIntegerValue(idMatcher,"padding") == 87);
 
         //match by class
         CSSMatcher classMatcher = new CSSMatcher();
         classMatcher.cssClass = "classmatch1";
-        assertTrue(set.findIntegerValue(classMatcher,"margin") == 88);
+        assertTrue(set.findIntegerValue(classMatcher,"padding") == 88);
 
         //match by element against a rule with multiple elements
         CSSMatcher multiElementMatcher = new CSSMatcher();
@@ -102,6 +102,41 @@ public class MainTest {
 //        classMatcher.cssClass = "classmatch2";
 //        assertTrue(set.findIntegerValue(classMatcher,"margin") == 1);
 //        assertTrue(set.findIntegerValue(classMatcher,"padding") == 8);
+
+        marginTests(set);
+    }
+
+    private void marginTests(CSSRuleSet set) {
+        CSSMatcher m = new CSSMatcher();
+        m.id = "margin_test_1";
+        assertTrue(set.findIntegerValue(m,"margin-top")==1);
+        assertTrue(set.findIntegerValue(m,"margin-right")==3);
+        assertTrue(set.findIntegerValue(m,"margin-bottom")==5);
+        assertTrue(set.findIntegerValue(m,"margin-left")==7);
+
+        m.id = "margin_test_2";
+        assertTrue(set.findIntegerValue(m,"margin-top")==1);
+        assertTrue(set.findIntegerValue(m,"margin-right")==3);
+        assertTrue(set.findIntegerValue(m,"margin-bottom")==5);
+        assertTrue(set.findIntegerValue(m,"margin-left")==7);
+
+        m.id = "margin_test_3";
+        assertTrue(set.findIntegerValue(m,"margin-top")==9);
+        assertTrue(set.findIntegerValue(m,"margin-right")==9);
+        assertTrue(set.findIntegerValue(m,"margin-bottom")==9);
+        assertTrue(set.findIntegerValue(m,"margin-left")==9);
+
+        m.id = "margin_test_4";
+        assertTrue(set.findIntegerValue(m,"margin-top")==10);
+        assertTrue(set.findIntegerValue(m,"margin-right")==11);
+        assertTrue(set.findIntegerValue(m,"margin-bottom")==10);
+        assertTrue(set.findIntegerValue(m,"margin-left")==11);
+
+        m.id = "margin_test_5";
+        assertTrue(set.findIntegerValue(m,"margin-top")==10);
+        assertTrue(set.findIntegerValue(m,"margin-right")==11);
+        assertTrue(set.findIntegerValue(m,"margin-bottom")==12);
+        assertTrue(set.findIntegerValue(m,"margin-left")==11);
     }
 
 
