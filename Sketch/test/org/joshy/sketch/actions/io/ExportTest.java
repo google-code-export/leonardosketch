@@ -94,6 +94,8 @@ public class ExportTest {
 
         File outdir = new File("testout");
         outdir.mkdirs();
+
+        SavePDFAction.export(new File(outdir,"export.pdf"),doc);
         SavePNGAction.export(new File(outdir,"export.png"),doc);
         SaveSVGAction.export(new File(outdir,"export.svg"),doc);
         SaveHTMLAction.export(new File(outdir,"export_html"),doc);

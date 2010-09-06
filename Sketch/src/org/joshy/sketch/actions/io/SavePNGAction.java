@@ -113,6 +113,10 @@ public class SavePNGAction extends SAction {
         return new Bounds(x,y,w-x,h-y);
     }
 
+    public static void export(Graphics2D g, SketchDocument doc) {
+        ExportProcessor.process(new PNGExporter(), g, doc);
+    }
+
 
     private static class PNGExporter implements ShapeExporter<Graphics2D> {
         public void docStart(Graphics2D g2, SketchDocument doc) {
