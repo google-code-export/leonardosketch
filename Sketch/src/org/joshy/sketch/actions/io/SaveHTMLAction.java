@@ -5,7 +5,6 @@ import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.SAction;
-import org.joshy.sketch.actions.SavePNGAction;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
@@ -38,7 +37,11 @@ public class SaveHTMLAction extends SAction {
         OSUtil.openBrowser(new File(dir,"page0.html").toURI().toASCIIString());
     }
 
-    private class HTMLExport implements ShapeExporter<MultiFileOutput> {
+    public static void export(File file, SketchDocument doc) {
+        ExportProcessor.process(new HTMLExport(), new MultiFileOutput(file), doc);
+    }
+
+    private static class HTMLExport implements ShapeExporter<MultiFileOutput> {
         public void docStart(MultiFileOutput out, SketchDocument doc) {
             out.dir.mkdir();
         }
@@ -139,7 +142,7 @@ public class SaveHTMLAction extends SAction {
         }
     }
 
-    private class MultiFileOutput {
+    private static class MultiFileOutput {
         private File dir;
         private int pageIndex;
         private File currentFile;

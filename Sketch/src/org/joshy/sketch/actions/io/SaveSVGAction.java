@@ -1,8 +1,11 @@
-package org.joshy.sketch.actions;
+package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.util.u;
+import org.joshy.sketch.actions.ExportProcessor;
+import org.joshy.sketch.actions.SAction;
+import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 
@@ -34,14 +37,14 @@ public class SaveSVGAction extends SAction {
                 fileName = fileName + ".svg";
             }
             File file = new File(fd.getDirectory(),fileName);
-            export(file);
+            export(file,(SketchDocument)context.getDocument());
         }
     }
 
-    private void export(File file) {
+    public static void export(File file, SketchDocument doc) {
         try {
             PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
-            ExportProcessor.process(new SVGExport(), out, (SketchDocument)context.getDocument());
+            ExportProcessor.process(new SVGExport(), out, doc);
             out.close();
         } catch (Exception ex) {
             u.p(ex);
@@ -49,7 +52,7 @@ public class SaveSVGAction extends SAction {
     }
 
 
-    private void draw(PrintWriter out, SRect rect) {
+    private static void draw(PrintWriter out, SRect rect) {
         out.println("<rect x='"+ rect.getX() +"' y='"+ rect.getY() +"' width='"+ rect.getWidth() +"' height='"+ rect.getHeight() +"'"+
                 " fill='"+toRGBString(rect.getFillPaint())+"'"+
                 " stroke='"+toRGBString(rect.getStrokePaint())+"'" +
@@ -57,7 +60,7 @@ public class SaveSVGAction extends SAction {
                 "/>");
     }
 
-    private void draw(PrintWriter out, SOval oval) {
+    private static void draw(PrintWriter out, SOval oval) {
         out.println("<ellipse");
         out.println("    cx='"+(oval.getX() + oval.getWidth() /2)+"'");
         out.println("    cy='"+(oval.getY() + oval.getHeight() /2)+"'");
@@ -69,7 +72,7 @@ public class SaveSVGAction extends SAction {
         out.println("/>");
     }
 
-    private void draw(PrintWriter out, SText text) {
+    private static void draw(PrintWriter out, SText text) {
         org.joshy.gfx.draw.Font font = org.joshy.gfx.draw.Font.DEFAULT;
         font = org.joshy.gfx.draw.Font.name(font.getName())
                 .size((float)text.getFontSize())
@@ -88,7 +91,7 @@ public class SaveSVGAction extends SAction {
         out.print("</text>");
     }
 
-    private void draw(PrintWriter out, SPoly poly) {
+    private static void draw(PrintWriter out, SPoly poly) {
         if(poly.isClosed()) {
             out.println("<polygon ");
         } else {
@@ -112,7 +115,7 @@ public class SaveSVGAction extends SAction {
         out.println("/>");
     }
 
-    private String toRGBString(Paint paint) {
+    private static String toRGBString(Paint paint) {
         if(paint instanceof FlatColor){
             FlatColor color = (FlatColor) paint;
             return "rgb("+color.getRed()*100+"%,"+color.getGreen()*100+"%,"+color.getBlue()*100+"%)";
@@ -121,7 +124,7 @@ public class SaveSVGAction extends SAction {
         }
     }
 
-    private class SVGExport implements ShapeExporter<PrintWriter> {
+    private  static class SVGExport implements ShapeExporter<PrintWriter> {
         public void docStart(PrintWriter out, SketchDocument doc) {
             out.println("<?xml version=\"1.0\"?>");
             out.println("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" baseProfile=\"tiny\" ");

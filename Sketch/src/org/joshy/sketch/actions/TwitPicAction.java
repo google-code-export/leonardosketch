@@ -2,6 +2,7 @@ package org.joshy.sketch.actions;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.util.u;
+import org.joshy.sketch.actions.io.SavePNGAction;
 import org.joshy.sketch.controls.StandardDialog;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;

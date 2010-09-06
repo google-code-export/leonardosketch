@@ -2,7 +2,7 @@ package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.SAction;
-import org.joshy.sketch.actions.SavePNGAction;
+import org.joshy.sketch.actions.io.SavePNGAction;
 import org.joshy.sketch.modes.DocContext;
 
 import java.io.File;
