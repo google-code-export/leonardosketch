@@ -1,5 +1,6 @@
 package org.joshy.sketch.actions;
 
+import com.boxysystems.jgoogleanalytics.FocusPoint;
 import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
@@ -35,6 +36,8 @@ public class QuitAction extends SAction {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Main.tracker.trackAsynchronously(new FocusPoint("exit", Main.mainApp));
 
         System.exit(0);
     }

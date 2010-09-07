@@ -3,6 +3,9 @@ package org.joshy.sketch;
 import com.apple.eawt.Application;
 import com.apple.eawt.ApplicationEvent;
 import com.apple.eawt.ApplicationListener;
+import com.boxysystems.jgoogleanalytics.FocusPoint;
+import com.boxysystems.jgoogleanalytics.JGoogleAnalyticsTracker;
+import com.boxysystems.jgoogleanalytics.LoggingAdapter;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -72,6 +75,9 @@ public class Main implements Runnable {
     private List<DocModeHelper> modeHelpers = new ArrayList<DocModeHelper>();
     public DocModeHelper defaultModeHelper;
     private List<DocContext> contexts = new ArrayList<DocContext>();
+    public static FocusPoint mainApp;
+    public static JGoogleAnalyticsTracker tracker;
+    private static boolean trackingEnabled = true;
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -80,9 +86,30 @@ public class Main implements Runnable {
 
         //Localization.init(Main.class.getResource("translation.xml"),"en_US");
         Localization.init(Main.class.getResource("translation.xml"),locale);
+
+        tracker = new JGoogleAnalyticsTracker("Leonardo","UA-17798312-2");
+
+        mainApp = new FocusPoint("MainApp");
+        tracker.setLoggingAdapter(new LoggingAdapter(){
+            public void logError(String s) {
+                u.p("logging error: " + s);
+            }
+
+            public void logMessage(String s) {
+                u.p("logging message: " + s);
+            }
+        });
+
+        trackEvent("launch");
         Core.setUseJOGL(false);
         Core.init();
         Core.getShared().defer(new Main());
+    }
+
+    public static void trackEvent(String event) {
+        if(trackingEnabled) {
+            tracker.trackAsynchronously(new FocusPoint(event,mainApp));
+        }
     }
 
     public void run() {
@@ -337,6 +364,17 @@ public class Main implements Runnable {
                 editMenu.addItem(getString("menus.clearSelection"), "D", new NodeActions.ClearSelection((VectorDocContext) context));
         }
         editMenu.addItem(getString("menus.setBackgroundColor"), new DocumentActions.SetBackground(context));
+        editMenu.addItem("Enable Analytics Tracking", new ToggleAction(){
+            @Override
+            public boolean getToggleState() {
+                return trackingEnabled;
+            }
+
+            @Override
+            public void setToggleState(boolean toggleState) {
+                trackingEnabled = toggleState;
+            }
+        });
         menubar.add(editMenu.createJMenu());
         context.createAfterEditMenu(menubar);
 
