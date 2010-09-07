@@ -44,8 +44,19 @@ public class Textbox extends TextControl {
     public void doPrefLayout() {
         if(cssSkin != null) {
             cssSize = cssSkin.getSize(this,text);
-            setWidth(cssSize.width);
-            setHeight(cssSize.height);
+            if(prefWidth != CALCULATED) {
+                setWidth(prefWidth);
+                cssSize.width = prefWidth;
+            } else {
+                setWidth(cssSize.width);
+            }
+            if(prefHeight != CALCULATED) {
+                setHeight(prefHeight);
+                cssSize.height = prefHeight;
+            } else {
+                setHeight(cssSize.height);
+            }
+
             insets = cssSize.padding;
         }
         double th = this.getFont().getAscender();

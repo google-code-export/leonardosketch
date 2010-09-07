@@ -66,8 +66,8 @@ public class DrawTextTool extends CanvasTool {
             .style(textNode.getStyle())
             .weight(textNode.getWeight())
             .resolve());
-        overlayTextBox.setWidth(300);
-        overlayTextBox.setHeight(overlayTextBox.getFont().calculateHeight("WXYwxy"));
+        overlayTextBox.setPrefWidth(300);
+        overlayTextBox.setPrefHeight(overlayTextBox.getFont().calculateHeight("WXYwxy"));
         context.getCanvas().getParent().getStage().getPopupLayer().add(overlayTextBox);
         overlayTextBox.selectAll();
         overlayTextBox.setVisible(true);
@@ -124,12 +124,14 @@ public class DrawTextTool extends CanvasTool {
                 );
         overlayTextBox.setTranslateX(point.getX());
         overlayTextBox.setTranslateY(point.getY());
-        overlayTextBox.setWidth(overlayTextBox.getFont().calculateWidth(textNode.text)+100);
-        overlayTextBox.setHeight(overlayTextBox.getFont().calculateHeight(textNode.text));
+        overlayTextBox.setPrefWidth(overlayTextBox.getFont().calculateWidth(textNode.text)+100);
+        overlayTextBox.setPrefHeight(overlayTextBox.getFont().calculateHeight(textNode.text));
         context.getCanvas().getParent().getStage().getPopupLayer().add(overlayTextBox);
         overlayTextBox.selectAll();
         overlayTextBox.setVisible(true);
         Core.getShared().getFocusManager().setFocusedNode(overlayTextBox);
+        overlayTextBox.doSkins();
+        overlayTextBox.doPrefLayout();
         overlayTextBox.doLayout();
     }
 
