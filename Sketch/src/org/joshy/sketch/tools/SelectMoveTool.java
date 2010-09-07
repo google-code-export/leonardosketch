@@ -279,11 +279,11 @@ public class SelectMoveTool extends CanvasTool {
     private void showContextMenu(MouseEvent event) {
         contextMenu = new ContextMenu();
         contextMenu.addActions(
-            new DeleteSelectedNodeAction(context),
             new NodeActions.RaiseTopSelectedNodeAction(context),
             new NodeActions.RaiseSelectedNodeAction(context),
             new NodeActions.LowerSelectedNodeAction(context),
-            new NodeActions.LowerBottomSelectedNodeAction(context)
+            new NodeActions.LowerBottomSelectedNodeAction(context),
+            new DeleteSelectedNodeAction(context)
         );
 
         if(context.getSelection().size() > 1) {
