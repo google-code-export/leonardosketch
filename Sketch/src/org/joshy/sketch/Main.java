@@ -316,6 +316,7 @@ public class Main implements Runnable {
                     .addItem(getString("menus.topng"), new SavePNGAction(context))
                     .addItem(getString("menus.tosvg"), new SaveSVGAction(context))
                     .addItem(getString("menus.tohtml"), new SaveHTMLAction(context))
+                    .addItem(getString("menus.topdf"), new SavePDFAction(context))
                 );
         quitAction = new QuitAction(this);
         if(!OSUtil.isMac()) {

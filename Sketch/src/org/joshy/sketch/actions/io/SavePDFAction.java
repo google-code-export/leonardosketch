@@ -8,6 +8,7 @@ import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfTemplate;
 import com.lowagie.text.pdf.PdfWriter;
 import org.joshy.sketch.actions.SAction;
+import org.joshy.sketch.model.PixelDocument;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
 
@@ -28,6 +29,30 @@ public class SavePDFAction extends SAction {
 
     public SavePDFAction(DocContext context) {
         this.context = context;
+    }
+
+    public void execute() {
+        FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
+        fd.setMode(FileDialog.SAVE);
+        fd.setTitle("Export PDF Image");
+        File currentFile = context.getDocument().getFile();
+        if(currentFile != null) {
+            fd.setFile(currentFile.getName().substring(0,currentFile.getName().lastIndexOf('.'))+".pdf");
+        }
+        fd.setVisible(true);
+        if(fd.getFile() != null) {
+            String fileName = fd.getFile();
+            if(!fileName.toLowerCase().endsWith(".pdf")) {
+                fileName = fileName + ".pdf";
+            }
+            File file = new File(fd.getDirectory(),fileName);
+            if(context.getDocument() instanceof SketchDocument) {
+                export(file, (SketchDocument) context.getDocument());
+            }
+            if(context.getDocument() instanceof PixelDocument) {
+                //export(file, (PixelDocument) context.getDocument());
+            }
+        }
     }
 
     public static void export(File file, SketchDocument doc) {
@@ -54,10 +79,6 @@ public class SavePDFAction extends SAction {
         }
     }
 
-    @Override
-    public void execute() {
-
-    }
     private static class PDFContext {
         public PDFContext(File file) {
 
