@@ -35,6 +35,7 @@ public class LayoutTests implements Runnable {
     private static final String BUTTON_SIZING = "Button Sizing";
     private static final String NEW_DOC_DIALOG_GRID_TEST = "Grid Test: New doc dialog";
     private static final String CONTROLS_BASELINE_TEST = "Controls baseline test";
+    private static final String TEXTBOX_GRID_WIDTH = "Textbox Grid Width";
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -65,6 +66,7 @@ public class LayoutTests implements Runnable {
         tests.add(COMPLEX_CENTER_ALIGNED_DIALOG);
         tests.add(NEW_DOC_DIALOG_GRID_TEST);
         tests.add(CONTROLS_BASELINE_TEST);
+        tests.add(TEXTBOX_GRID_WIDTH);
 
         final ListView<String> testView =new ListView<String>().setModel(ListView.createModel(tests)); 
         split.setFirst(testView);
@@ -251,6 +253,15 @@ public class LayoutTests implements Runnable {
                         .add(new Linkbutton("A HyperLink"))
                         .setHeight(100)
                     );
+        }
+
+        if(TEXTBOX_GRID_WIDTH.equals(testName)) {
+            return new GridBox()
+                    .setPadding(5)
+                    .createColumn(100, GridBox.Align.Right)
+                    .createColumn(100, GridBox.Align.Fill)
+                    .addControl(new Label("Textbox: "))
+                    .addControl(new Textbox("tb"));
         }
 
         return new Panel();

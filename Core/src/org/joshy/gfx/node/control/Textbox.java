@@ -55,6 +55,12 @@ public class Textbox extends TextControl {
     }
 
     @Override
+    public void doLayout() {
+        if(cssSize == null) doPrefLayout();
+        cssSize.width = getWidth();
+    }
+
+    @Override
     public double getBaseline() {
         return cssSize.margin.getTop() + cssSize.borderWidth.getTop() + cssSize.padding.getTop() + cssSize.contentBaseline;
     }

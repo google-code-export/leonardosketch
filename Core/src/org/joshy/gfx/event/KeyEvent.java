@@ -1,6 +1,7 @@
 package org.joshy.gfx.event;
 
 import org.joshy.gfx.node.Node;
+import org.joshy.gfx.util.OSUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +19,13 @@ public class KeyEvent extends Event {
 
     public void accept() {
         this.accepted = true;
+    }
+
+    public boolean isSystemPressed() {
+        if(OSUtil.isMac()) {
+            return isCommandPressed();
+        }
+        return isControlPressed();
     }
 
 

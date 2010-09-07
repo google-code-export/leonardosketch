@@ -4,6 +4,7 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.event.*;
+import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 
 /*
@@ -116,29 +117,15 @@ public abstract class TextControl extends Control implements Focusable {
 
     private void processKeyEvent(KeyEvent event) {
         int cursorCharX = cursorPointToCursorChar(currentCursorPoint);
-
-        if(event.isTextKey()) {
-            if(selection.isActive() && text.length() >= 1) {
-                replaceAndClearSelectionWith(event.getGeneratedText());
-                return;
-            }
-
-            if(text.length() >= 1) {
-                text = text.substring(0, cursorCharX) +
-                    event.getGeneratedText()+
-                    text.substring(cursorCharX,text.length());
-            } else {
-                text = event.getGeneratedText();
-            }
-            if(selection.isActive()) {
-                selection.clear();
-            }
-            cursorCharX++;
-            currentCursorPoint = cursorCharToCursorPoint(cursorCharX,text);
-            EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
-            setDrawingDirty();
+        
+        if(event.getKeyCode().equals(KeyEvent.KeyCode.KEY_V) && event.isSystemPressed()) {
+            insertText(OSUtil.getClipboardAsString());
             return;
-
+        }
+        
+        if(event.isTextKey()) {
+            insertText(event.getGeneratedText());
+            return;
         }
 
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_ENTER && allowMultiLine) {
@@ -265,6 +252,29 @@ public abstract class TextControl extends Control implements Focusable {
                 Core.getShared().getFocusManager().gotoNextFocusableNode();
             }
         }
+    }
+
+    private void insertText(String generatedText) {
+        int cursorCharX = cursorPointToCursorChar(currentCursorPoint);
+        if(selection.isActive() && text.length() >= 1) {
+            replaceAndClearSelectionWith(generatedText);
+            return;
+        }
+
+        if(text.length() >= 1) {
+            text = text.substring(0, cursorCharX) +
+                generatedText+
+                text.substring(cursorCharX,text.length());
+        } else {
+            text = generatedText;
+        }
+        if(selection.isActive()) {
+            selection.clear();
+        }
+        cursorCharX++;
+        currentCursorPoint = cursorCharToCursorPoint(cursorCharX,text);
+        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.StringChanged,text,TextControl.this));
+        setDrawingDirty();
     }
 
     private void insertAtCursor(String string) {

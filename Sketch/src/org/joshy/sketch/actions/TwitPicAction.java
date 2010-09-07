@@ -1,6 +1,15 @@
 package org.joshy.sketch.actions;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.event.ActionEvent;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.node.control.Button;
+import org.joshy.gfx.node.control.Label;
+import org.joshy.gfx.node.control.Textbox;
+import org.joshy.gfx.node.layout.GridBox;
+import org.joshy.gfx.node.layout.Spacer;
+import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.io.SavePNGAction;
 import org.joshy.sketch.controls.StandardDialog;
@@ -100,17 +109,57 @@ public class TwitPicAction extends SAction {
         @Override
         public void execute() {
             try {
-                Twitter twitter = new TwitterFactory().getInstance();
+                final Twitter twitter = new TwitterFactory().getInstance();
                 twitter.setOAuthConsumer(consumerKey,consumerSecret);
 
                 if(!context.getSettings().containsKey(TWITTER_TOKEN) || force) {
                     u.p("no auth info already");
-                    RequestToken requestToken = twitter.getOAuthRequestToken();
-                    String url = requestToken.getAuthorizationURL();
-                    String pin = StandardDialog.showEditText("Please visit this url then paste in the PIN",url);
-                    AccessToken accessToken = twitter.getOAuthAccessToken(requestToken,pin);
-                    context.getSettings().setProperty(TWITTER_TOKEN,accessToken.getToken());
-                    context.getSettings().setProperty(TWITTER_TOKEN_SECRET,accessToken.getTokenSecret());
+                    final RequestToken requestToken = twitter.getOAuthRequestToken();
+                    final String url = requestToken.getAuthorizationURL();
+
+                    final Textbox pin = new Textbox("");
+                    pin.setPrefWidth(50);
+                    pin.setWidth(50);
+                    final Stage stage = Stage.createStage();
+                    stage.setContent(
+                            new GridBox()
+                                    .createColumn(50,GridBox.Align.Right)
+                                    .createColumn(50,GridBox.Align.Fill)
+                                    .addControl(new Label("Please login to Twitter"))
+                                    .addControl(new Label("and enter the PIN here"))
+                                    .nextRow()
+                                    .addControl(new Spacer())
+                                    .addControl(new Button("Goto Twitter.com").onClicked(new Callback<ActionEvent>() {
+                                        public void call(ActionEvent event) {
+                                            OSUtil.openBrowser(url);
+                                        }
+                                    }))
+                                    .nextRow()
+                                    .addControl(new Label("PIN"))
+                                    .addControl(pin)
+                                    .nextRow()
+                                    .addControl(new Button("Cancel").onClicked(new Callback<ActionEvent>(){
+                                        public void call(ActionEvent event) {
+                                            stage.hide();
+                                        }
+                                    }))
+                                    .addControl(new Button("Authenticate").onClicked(new Callback<ActionEvent>(){
+                                        public void call(ActionEvent event) {
+                                            stage.hide();
+                                            try {
+                                                String pinText = pin.getText();
+                                                u.p("using pin text " + pinText);
+                                                AccessToken accessToken = twitter.getOAuthAccessToken(requestToken,pinText);
+                                                context.getSettings().setProperty(TWITTER_TOKEN,accessToken.getToken());
+                                                context.getSettings().setProperty(TWITTER_TOKEN_SECRET,accessToken.getTokenSecret());
+                                            } catch (TwitterException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }))
+                    );
+                    stage.setWidth(400);
+                    stage.setHeight(200);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();

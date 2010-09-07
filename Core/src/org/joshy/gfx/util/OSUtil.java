@@ -1,6 +1,12 @@
 package org.joshy.gfx.util;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 
 /**
@@ -25,6 +31,32 @@ public class OSUtil {
     public static boolean isJava6() {
 //            return true;
         return (System.getProperty("java.version").startsWith("1.6"));
+    }
+
+    public static String getClipboardAsString() {
+      String result = "";
+      Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+      //odd: the Object param of getContents is not currently used
+      Transferable contents = clipboard.getContents(null);
+      boolean hasTransferableText =
+        (contents != null) &&
+        contents.isDataFlavorSupported(DataFlavor.stringFlavor)
+      ;
+      if ( hasTransferableText ) {
+        try {
+          result = (String)contents.getTransferData(DataFlavor.stringFlavor);
+        }
+        catch (UnsupportedFlavorException ex){
+          //highly unlikely since we are using a standard DataFlavor
+          System.out.println(ex);
+          ex.printStackTrace();
+        }
+        catch (IOException ex) {
+          System.out.println(ex);
+          ex.printStackTrace();
+        }
+      }
+      return result;
     }
 
     public static File getJavaWSExecutable() {
