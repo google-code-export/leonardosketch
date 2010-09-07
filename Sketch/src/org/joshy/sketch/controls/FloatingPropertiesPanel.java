@@ -141,17 +141,17 @@ public class FloatingPropertiesPanel extends HFlexBox {
         EventBus.getSystem().addListener(fontSizeSlider, ChangedEvent.DoubleChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) {
                 if(selection != null) {
-                for(SNode node: selection.items()) {
-                    if(node instanceof SText) {
-                        SText text = (SText) node;
-                        text.setFontSize(((Double)event.getValue()));
-                        if(fontBoldButton.isSelected()) {
-                            text.setWeight(Font.Weight.Bold);
-                        } else {
-                            text.setWeight(Font.Weight.Regular);
+                    for(SNode node: selection.items()) {
+                        if(node instanceof SText) {
+                            SText text = (SText) node;
+                            text.setFontSize(((Double)event.getValue()));
+                            if(fontBoldButton.isSelected()) {
+                                text.setWeight(Font.Weight.Bold);
+                            } else {
+                                text.setWeight(Font.Weight.Regular);
+                            }
                         }
                     }
-                }
                 }
                 
             }
@@ -259,7 +259,9 @@ public class FloatingPropertiesPanel extends HFlexBox {
         if(manager.propMan.isClassAvailable(SText.class)) {
             fontSizeSlider.setVisible(true);
             double dval = manager.propMan.getProperty("fontSize").getDoubleValue();
-            fontSizeSlider.setValue(dval);
+            if(selection.size() == 1) {
+                fontSizeSlider.setValue(dval);
+            }
             fontBoldButton.setVisible(true);
             //fontBoldButton.setSelected(firstText.getWeight() == Font.Weight.Bold);
             fontItalicButton.setVisible(true);
