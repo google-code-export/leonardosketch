@@ -324,58 +324,59 @@ public class Main implements Runnable {
         }
         JMenuBar menubar = context.menubar;
         menubar.add(fileMenu.createJMenu());
-        Menu editMenu = new Menu().setTitle("Edit")
-                .addItem("Cut", "X", new Clipboard.CutAction(context))
-                .addItem("Copy", "C", new Clipboard.CopyAction(context))
-                .addItem("Paste", "V", new Clipboard.PasteAction(context));
+        Menu editMenu = new Menu().setTitle(getString("menus.edit"))
+                .addItem(getString("menus.cut"), "X", new Clipboard.CutAction(context))
+                .addItem(getString("menus.copy"), "C", new Clipboard.CopyAction(context))
+                .addItem(getString("menus.paste"), "V", new Clipboard.PasteAction(context));
         if(context instanceof VectorDocContext) {
-            editMenu.addItem("Delete Selected Node", ((VectorDocContext)context).deleteSelectedNodeAction);
+            editMenu.addItem(getString("menus.delete"), ((VectorDocContext)context).deleteSelectedNodeAction);
         }
-        editMenu.addItem("Undo", "Z", new UndoManager.UndoAction(context))
-                .addItem("Redo", "shift Z", new UndoManager.RedoAction(context));
+        editMenu.addItem(getString("menus.undo"), "Z", new UndoManager.UndoAction(context))
+                .addItem(getString("menus.redo"), "shift Z", new UndoManager.RedoAction(context));
         if(context instanceof VectorDocContext) {
-                editMenu.addItem("Clear Selection", "D", new NodeActions.ClearSelection((VectorDocContext) context));
+                editMenu.addItem(getString("menus.clearSelection"), "D", new NodeActions.ClearSelection((VectorDocContext) context));
         }
-        editMenu.addItem("Set Background Color", new DocumentActions.SetBackground(context));
+        editMenu.addItem(getString("menus.setBackgroundColor"), new DocumentActions.SetBackground(context));
         menubar.add(editMenu.createJMenu());
         context.createAfterEditMenu(menubar);
 
-        Menu viewMenu = new Menu().setTitle("View")
-                .addItem("Zoom In",     "EQUALS", new ViewActions.ZoomInAction(context))
-                .addItem("Zoom Out",    "MINUS",  new ViewActions.ZoomOutAction(context))
-                .addItem("Actual Size", "0",      new ViewActions.ZoomResetAction(context))
+        Menu viewMenu = new Menu().setTitle(getString("menus.view"))
+                .addItem(getString("menus.zoomIn"),     "EQUALS", new ViewActions.ZoomInAction(context))
+                .addItem(getString("menus.zoomOut"),    "MINUS",  new ViewActions.ZoomOutAction(context))
+                .addItem(getString("menus.zoomActual"), "0",      new ViewActions.ZoomResetAction(context))
                 .separator()
-                .addItem("Full Screen", "F",      new ViewActions.ToggleFullScreen(context))
-                .addItem("Full Screen with Menubar", new ViewActions.ToggleFullScreenMenubar(context))
+                .addItem(getString("menus.fullScreen"), "F",      new ViewActions.ToggleFullScreen(context))
+                .addItem(getString("menus.fullScreenWithMenubar"), new ViewActions.ToggleFullScreenMenubar(context))
                 .separator()
-                .addItem("New View", new ViewActions.NewView(context));
+                .addItem(getString("menus.newView"), new ViewActions.NewView(context));
+        
         if(context instanceof VectorDocContext) {
             VectorDocContext vdc = (VectorDocContext) context;
             viewMenu
-                    .addItem("Show Document Bounds",  new ViewActions.ShowDocumentBounds(vdc))
-                    .addItem("Show Grid",             new ViewActions.ShowGridAction(vdc))
-                    .addItem("Snap to Grid",          new ViewActions.SnapGridAction(vdc))
-                    .addItem("Snap to Doc Edges",          new ViewActions.SnapDocBoundsAction(vdc))
-                    .addItem("Snap to Node Edges",          new ViewActions.SnapNodeBoundsAction(vdc))
+                    .addItem(getString("menus.showDocumentBounds"),  new ViewActions.ShowDocumentBounds(vdc))
+                    .addItem(getString("menus.showGrid"),             new ViewActions.ShowGridAction(vdc))
+                    .addItem(getString("menus.snapGrid"),          new ViewActions.SnapGridAction(vdc))
+                    .addItem(getString("menus.snapDocEdges"),          new ViewActions.SnapDocBoundsAction(vdc))
+                    .addItem(getString("menus.snapNodeEdges"),          new ViewActions.SnapNodeBoundsAction(vdc))
                     .separator()
-                    .addItem("Flickr Search", new ViewSidebar(vdc))
-                    .addItem("Symbol Panel", new SymbolManager.ShowSymbolPanel(vdc))
+                    .addItem(getString("menus.viewFlickrSidebar"), new ViewSidebar(vdc))
+                    .addItem(getString("menus.viewSymbolSidebar"), new SymbolManager.ShowSymbolPanel(vdc))
                     .separator()
-                    .addItem("View Presentation", new ViewSlideshowAction(vdc));
+                    .addItem(getString("menus.viewPresentation"),"", new ViewSlideshowAction(vdc));
         }
 
         //view menu
         menubar.add(viewMenu.createJMenu());
 
-        Menu shareMenu = new Menu().setTitle("Share")
-                .addItem("Send to Twitter", new TwitPicAction(context))
-                .addItem("Change Twitter Settings", new TwitPicAction.ChangeSettingsAction(context, true));
+        Menu shareMenu = new Menu().setTitle(getString("menus.share"))
+                .addItem(getString("menus.sendTwitter"), new TwitPicAction(context))
+                .addItem(getString("menus.configTwitter"), new TwitPicAction.ChangeSettingsAction(context, true));
         if(OSUtil.isMac()) {
-            shareMenu.addItem("Email as PNG", new SendMacMail(context));
+            shareMenu.addItem(getString("menus.sendEmailPNG"), new SendMacMail(context));
         }
         menubar.add(shareMenu.createJMenu());
 
-        Menu scriptMenu = new Menu().setTitle("Scripts");
+        Menu scriptMenu = new Menu().setTitle(getString("menus.scripts"));
         if(SCRIPTS_DIR.exists()) {
             for(File file : SCRIPTS_DIR.listFiles()) {
                 if(file.exists() && file.getName().toLowerCase().endsWith(".js")) {

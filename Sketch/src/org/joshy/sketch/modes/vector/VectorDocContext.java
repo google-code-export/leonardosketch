@@ -28,6 +28,7 @@ import org.joshy.sketch.util.BiList;
 
 import javax.swing.*;
 import java.io.IOException;
+import static org.joshy.gfx.util.localization.Localization.getString;
 
 /**
  * A doc context for all vector based doc types, including drawing and presentation
@@ -157,10 +158,10 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     public void setupSidebar() {
         this.sideBar = new TabPanel();
         this.symbolPanel = new SymbolPanel(getMain().symbolManager, this);
-        this.sideBar.add("Symbols",this.symbolPanel);
+        this.sideBar.add(getString("sidebar.symbols"),this.symbolPanel);
         this.flickrPanel = new FlickrPanel(this);
         this.flickrPanel.setFill(new FlatColor(0x808080));
-        this.sideBar.add("Flickr Search", this.flickrPanel);
+        this.sideBar.add(getString("sidebar.flickr"), this.flickrPanel);
         this.flickrPanel.setVisible(false);
     }
 
@@ -189,42 +190,42 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     public void createAfterEditMenu(JMenuBar menubar) {
         //node menu
         VectorDocContext context = this;
-        menubar.add(new org.joshy.sketch.controls.Menu().setTitle("Node")
-                .addItem("Raise to Top",      "shift CLOSE_BRACKET", new NodeActions.RaiseTopSelectedNodeAction(this))
-                .addItem("Raise Node",        "CLOSE_BRACKET", new NodeActions.RaiseSelectedNodeAction(this))
-                .addItem("Lower Node",        "OPEN_BRACKET",        new NodeActions.LowerSelectedNodeAction(this))
-                .addItem("Lower to Bottom",   "shift OPEN_BRACKET",  new NodeActions.LowerBottomSelectedNodeAction(this))
+        menubar.add(new org.joshy.sketch.controls.Menu().setTitle(getString("menus.node"))
+                .addItem(getString("menus.raiseNodeTop"),      "shift CLOSE_BRACKET", new NodeActions.RaiseTopSelectedNodeAction(this))
+                .addItem(getString("menus.raiseNode"),        "CLOSE_BRACKET", new NodeActions.RaiseSelectedNodeAction(this))
+                .addItem(getString("menus.lowerNode"),        "OPEN_BRACKET",        new NodeActions.LowerSelectedNodeAction(this))
+                .addItem(getString("menus.lowerNodeBottom"),   "shift OPEN_BRACKET",  new NodeActions.LowerBottomSelectedNodeAction(this))
                 .separator()
-                .addItem("Align Top",               new NodeActions.AlignTop(context))
-                .addItem("Align Bottom",            new NodeActions.AlignBottom(context))
-                .addItem("Align Left",              new NodeActions.AlignLeft(context))
-                .addItem("Align Right",             new NodeActions.AlignRight(context))
-                .addItem("Align Center Horizontal", new NodeActions.AlignCenterH(context))
-                .addItem("Align Center Vertical",   new NodeActions.AlignCenterV(context))
+                .addItem(getString("menus.alignNodeTop"),               new NodeActions.AlignTop(context))
+                .addItem(getString("menus.alignNodeBottom"),            new NodeActions.AlignBottom(context))
+                .addItem(getString("menus.alignNodeLeft"),              new NodeActions.AlignLeft(context))
+                .addItem(getString("menus.alignNodeRight"),             new NodeActions.AlignRight(context))
+                .addItem(getString("menus.alignNodeCenterHorizontal"), new NodeActions.AlignCenterH(context))
+                .addItem(getString("menus.alignNodeCenterVertical"),   new NodeActions.AlignCenterV(context))
                 .separator()
-                .addItem("Same Width",              new NodeActions.SameWidth(context,true))
-                .addItem("Same Height",             new NodeActions.SameWidth(context,false))
+                .addItem(getString("menus.matchNodeWidth"),              new NodeActions.SameWidth(context,true))
+                .addItem(getString("menus.matchNodeHeight"),             new NodeActions.SameWidth(context,false))
                 .separator()
-                .addItem("Group Selection",   "G",       new NodeActions.GroupSelection(context))
-                .addItem("Ungroup Selection", "shift G", new NodeActions.UngroupSelection(context))
+                .addItem(getString("menus.groupSelection"),   "G",       new NodeActions.GroupSelection(context))
+                .addItem(getString("menus.ungroupSelection"), "shift G", new NodeActions.UngroupSelection(context))
                 .separator()
-                .addItem("Create Symbol from Selection", new CreateSymbol(context))
-                .addItem("Create Resizable Shape from Selection", new CreateResizableShape(context))
-                .addItem("Edit Resizable Shape", new CreateResizableShape.Edit(context))
-                .addItem("Duplicate", new NodeActions.DuplicateNodesAction(context,true))
+                .addItem(getString("menus.createSymbol"), new CreateSymbol(context))
+                .addItem(getString("menus.createResizableShape"), new CreateResizableShape(context))
+                .addItem(getString("menus.editResizableShape"), new CreateResizableShape.Edit(context))
+                .addItem(getString("menus.duplicateNode"), new NodeActions.DuplicateNodesAction(context,true))
                 .separator()
-                .addItem("Reset Transforms", new NodeActions.ResetTransforms(context))
+                .addItem(getString("menus.resetTransforms"), new NodeActions.ResetTransforms(context))
                 .createJMenu());
-        menubar.add(new Menu().setTitle("Path")
-                .addItem("Flip Horizontal", new PathActions.Flip(context,true))
-                .addItem("Flip Vertical",   new PathActions.Flip(context,false))
-                .addItem("Rotate 90¿ Clockwise", new PathActions.RotateClockwise(context,Math.PI/2))
-                .addItem("Rotate 90¿ Counter Clockwise", new PathActions.RotateClockwise(context,-Math.PI/2))
-                .addItem("Free Rotate", new PathActions.Rotate(context))
-                .addItem("Scale Trasnsform", new PathActions.Scale(context))
+        menubar.add(new Menu().setTitle(getString("menus.path"))
+                .addItem(getString("menus.flipNodeHorizontal"), new PathActions.Flip(context,true))
+                .addItem(getString("menus.flipNodeVertical"),   new PathActions.Flip(context,false))
+                .addItem(getString("menus.rotateNode90Right"), new PathActions.RotateClockwise(context,Math.PI/2))
+                .addItem(getString("menus.rotateNode90Left"), new PathActions.RotateClockwise(context,-Math.PI/2))
+                .addItem(getString("menus.rotateNodeFree"), new PathActions.Rotate(context))
+                .addItem(getString("menus.scaleNode"), new PathActions.Scale(context))
                 .createJMenu());
-        menubar.add(new Menu().setTitle("Document")
-                .addItem("Set Document Size", new DocumentActions.SetDocumentSize(this))
+        menubar.add(new Menu().setTitle(getString("menus.document"))
+                .addItem(getString("menus.setDocumentSize"), new DocumentActions.SetDocumentSize(this))
                 .createJMenu());
 
         rebuildSymbolMenu(menubar);

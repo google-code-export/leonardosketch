@@ -138,11 +138,11 @@ public class FlickrPanel extends Panel {
         scrollPane.setContent(photoList);
         searchBox = new Textbox();
         Control box = new HFlexBox()
-                .setBoxAlign(HFlexBox.Align.Bottom)
-                .add(searchBox, new Button("Search")
-                        .onClicked(doSearch)
-                )
-                .setHeight(40);
+                .setBoxAlign(HFlexBox.Align.Top)
+                .add(searchBox,1)
+                .add(new Button("Search").onClicked(doSearch),0)
+                .setHeight(40).setWidth(200);
+
         this.add(box);
         this.add(scrollPane);
     }

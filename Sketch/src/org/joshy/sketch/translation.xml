@@ -31,7 +31,87 @@
          <value language="zz_ZZ">Zindow</value>
     </key>
 
+
+    <!-- the Edit menu -->
+    <key name="edit"><value>Edit</value></key>
+    <key name="cut"><value>Cut</value></key>
+    <key name="copy"><value>Copy</value></key>
+    <key name="paste"><value>Paste</value></key>
+    <key name="delete"><value>Delete</value></key>
+    <key name="undo"><value>Undo</value></key>
+    <key name="redo"><value>Redo</value></key>
+    <key name="clearSelection"><value>Clear Selection</value></key>
+    <key name="setBackgroundColor"><value>Set Background Color</value></key>
+
+
+    <!-- the Node menu -->
+    <key name="node"><value>Node</value></key>
+    <key name="raiseNodeTop"><value>Raise to Top</value></key>
+    <key name="raiseNode"><value>Raise Node</value></key>
+    <key name="lowerNode"><value>Lower Node</value></key>
+    <key name="lowerNodeBottom"><value>Lower to Bottom</value></key>
+    <key name="alignNodeTop"><value>Align Top</value></key>
+    <key name="alignNodeBottom"><value>Align Bottom</value></key>
+    <key name="alignNodeLeft"><value>Align Left</value></key>
+    <key name="alignNodeRight"><value>Align Right</value></key>
+    <key name="alignNodeCenterHorizontal"><value>Align Center Horizontal</value></key>
+    <key name="alignNodeCenterVertical"><value>Align Center Vertical</value></key>
+    <key name="matchNodeWidth"><value>Same Width</value></key>
+    <key name="matchNodeHeight"><value>Same Height</value></key>
+    <key name="groupSelection"><value>Group Selection</value></key>
+    <key name="ungroupSelection"><value>Ungroup Selection</value></key>
+    <key name="createSymbol"><value>Create Symbol from Selection</value></key>
+    <key name="createResizableShape"><value>Create Resizable Shape from Selection</value></key>
+    <key name="editResizableShape"><value>Edit Resizable Shape</value></key>
+    <key name="duplicateNode"><value>Duplicate</value></key>
+    <key name="resetTransforms"><value>Reset Transforms</value></key>
+
+    <!-- the Path menu -->
+    <key name="path"><value>Path</value></key>
+    <key name="flipNodeHorizontal"><value>Flip Horizontal</value></key>
+    <key name="flipNodeVertical"><value>Flip Vertical</value></key>
+    <key name="rotateNode90Right"><value>Rotate 90ø Clockwise</value></key>
+    <key name="rotateNode90Left"><value>Rotate 90ø Counter Clockwise</value></key>
+    <key name="rotateNodeFree"><value>Free Rotate</value></key>
+    <key name="scaleNode"><value>Scale Transform</value></key>
+
+    <!-- the Document menu -->
+    <key name="document"><value>Document</value></key>
+    <key name="setDocumentSize"><value>Set Document Size</value></key>
+
+    <!-- the View menu -->
+    <key name="view"><value>View</value></key>
+    <key name="zoomIn"><value>Zoom In</value></key>
+    <key name="zoomOut"><value>Zoom Out</value></key>
+    <key name="zoomActual"><value>Actual Size</value></key>
+    <key name="fullScreen"><value>Full Screen</value></key>
+    <key name="fullScreenWithMenubar"><value>Full Screen with Menubar</value></key>
+    <key name="newView"><value>New View</value></key>
+
+    <key name="showDocumentBounds"><value>Show Document Edges</value></key>
+    <key name="showGrid"><value>Show Grid</value></key>
+    <key name="snapGrid"><value>Snap to Grid</value></key>
+    <key name="snapDocEdges"><value>Snap to Doc Edges</value></key>
+    <key name="snapNodeEdges"><value>Snap to Node Edges</value></key>
+    <key name="viewFlickrSidebar"><value>Flickr Search</value></key>
+    <key name="viewSymbolSidebar"><value>Symbol Panel</value></key>
+    <key name="viewPresentation"><value>View Presentation</value></key>
+
+    <!-- the View menu -->
+    <key name="share"><value>Share</value></key>
+    <key name="sendTwitter"><value>Send to Twitter</value></key>
+    <key name="configTwitter"><value>Change Twitter Settings</value></key>
+    <key name="sendEmailPNG"><value>Email as PNG</value></key>
+
+    <!-- the Scripts menu -->
+    <key name="scripts"><value>Scripts</value></key>
 </set>
+
+
+    <set name="sidebar">
+        <key name="symbols"><value>Symbols</value></key>
+        <key name="flickr"><value>Flickr Search</value></key>
+    </set>
 
 
 </sets>
