@@ -15,6 +15,7 @@ import org.joshy.sketch.actions.io.SavePNGAction;
 import org.joshy.sketch.controls.StandardDialog;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
+import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -79,11 +80,12 @@ public class TwitPicAction extends SAction {
                         OAuthAuthorization oauth = new OAuthAuthorization(conf,consumerKey,consumerSecret,token);
                         ImageUpload upload = ImageUpload.getTwitpicUploader(TWITPIC_API,oauth);
                         final String resultUrl = upload.upload(file,"foo bar baz");
-                        //u.p("finished uploading to twitpic: " + resultUrl);
-                        twitter.updateStatus(message + " " + resultUrl);
+                        Status s = twitter.updateStatus(message + " " + resultUrl);
+                        final String tweetUrl = "http://twitter.com/"+s.getUser().getScreenName()+"/status/"+s.getId();
                         Core.getShared().defer(new Runnable(){
                             public void run() {
-                                context.getUndoOverlay().showIndicator("Done uploading to twitter");
+                                context.getUndoOverlay().showIndicator("Done uploading to Twitter");
+                                OSUtil.openBrowser(tweetUrl);
                             }
                         });
                     } catch (TwitterException e) {
