@@ -13,6 +13,7 @@
         </tstamp>
         <echo message="timestamp = ${TIMESTAMP}"/>
 
+        <property  name="publish.dir" value="dist/foo"/>
         <property  name="lib.jogl.dir" value="lib/jogl/"/>
 
         <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
@@ -212,7 +213,7 @@
     </target>
     
     <target name="publish">
-        <copy todir="/home/joshy/public_html/Leonardo/daily/">
+        <copy todir="${publish.dir}">
             <fileset dir="dist/">
             </fileset>
         </copy>
