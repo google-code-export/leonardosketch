@@ -44,11 +44,19 @@
             <fileset dir = "build/classes/Sketch"></fileset>
         </jar>
         
+    </target>
+
+    <target name="build-mac" depends="build-sketch">
         <!-- build the mac bundle -->
         <java classpath="lib/AppBundler.jar;lib/XMLLib.jar" classname="com.joshondesign.appbundler.Bundler" fork="true">
-            <arg value="bundler.xml"/>
-            <arg value="dist/"/>
-            <arg value="build/jars/"/>
+
+
+
+
+            <arg value="--file=bundler.xml"/>
+            <arg value="--target=mac"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=build/jars/"/>
         </java>
 
         <property name="app.name" value="Leonardo"/>
@@ -59,7 +67,36 @@
                 <exclude name="${app.name}.app/Contents/MacOS/JavaApplicationStub"/>
             </zipfileset>
             <zipfileset dir="dist/mac" includes="${app.name}.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>
-        </zip>
+        </zip>        
+    </target>
+
+    <target  name="build-jnlp" depends="build-sketch">
+        <echo message="doing jnlp version"/>
+        <java classpath="lib/AppBundler.jar;lib/XMLLib.jar" classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="--file=bundler.xml"/>
+            <arg value="--target=jnlp"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=build/jars/"/>
+            <arg value="--codebase=${jnlp.codebase}"/>
+        </java>
+
+        <!-- copy over the icon -->
+        <copy todir="dist/jnlp/" file="resources/Turtle.png"/>
+
+        <!-- resign all of the jars -->
+
+        <unsignjar jar="dist/jnlp/lib/Sketch.jar"/>
+        <unsignjar jar="dist/jnlp/lib/Core.jar"/>
+        <unsignjar jar="dist/jnlp/lib/parboiled-0.9.7.3.jar"/>
+        <property name="keystore" value="bin/testkeystore"/>
+        <property name="alias" value="joshy2"/>
+
+        <signjar alias="${alias}" storepass="password" keystore="${keystore}">
+            <fileset dir="dist/jnlp/lib/">
+                <include name="*.jar"/>
+            </fileset>
+        </signjar>
+
     </target>
     
     <target name="build-core" depends="init">
@@ -92,85 +129,6 @@
         </copy>
 
 
-    </target>
-
-    <target name="signjars">
-        <copy  todir="dist/jnlp">
-            <fileset dir="build/jars">
-                <include name="*.jar"/>
-            </fileset>
-        </copy>
-        
-        <unsignjar jar="dist/jnlp/Sketch.jar"/>
-        <unsignjar jar="dist/jnlp/Core.jar"/>
-        <unsignjar jar="dist/jnlp/parboiled-0.9.7.3.jar"/>
-        <property name="keystore" value="bin/testkeystore"/>
-        <property name="alias" value="joshy2"/>
-
-        <signjar alias="${alias}" storepass="password" keystore="${keystore}">
-            <fileset dir="dist/jnlp/">
-                <include name="*.jar"/>
-            </fileset>
-        </signjar>
-    </target>
-
-    <target name="jnlp" depends="init">
-        <!--<copy todir="dist" file="splash.png"/>-->
-        <mkdir  dir="dist/jnlp"/>
-        <echoxml file="dist/jnlp/Leonardo.jnlp">
-            <jnlp spec="1.0+" codebase="${jnlp.codebase}" href="Leonardo.jnlp">
-                <information>
-                    <title>Leonardo</title>
-                    <vendor>Josh Marinacci</vendor>
-                    <homepage href="http://leonardosketch.org/"/>
-                    <description>general purpose drawing tool</description>
-                    <offline-allowed/>
-                    <icon href="Turtle.png"/>
-                    <!--
-                    <icon kind="splash" href="splash.png"/>
-                    <association mime-type="application-x/maitai" extensions="maitai">
-                        <description>Mai Tai graphics file</description>
-                        <icon href="doc-icon.png"/>
-                    </association>
-                    <shortcut online="false">
-                      <desktop/>
-                      <menu submenu="Mai Tai"/>
-                    </shortcut>
-                    -->
-                </information>
-                <security>
-                    <all-permissions/>
-                </security>
-                <update check="always" policy="prompt-update"/>
-                <resources>
-                    <j2se version='1.6+'
-                        initial-heap-size="64m"
-                        max-heap-size="512m"
-                        />
-<!--                                                java-vm-args="-d32"-->
-
-                    <jar href="Sketch.jar" main="true" download="eager"/>
-                    <jar href="Core.jar" main="false" download="eager"/>
-                    <jar href="MacStubs.jar"/>
-                    <jar href="parboiled-0.9.7.3.jar"/>
-                    <jar href="apache-mime4j-0.6.jar"/>
-                    <jar href="commons-codec-1.4.jar"/>
-                    <jar href="commons-logging-1.1.1.jar"/>
-                    <jar href="httpclient-4.0.1.jar"/>
-                    <jar href="httpcore-4.0.1.jar"/>
-                    <jar href="httpcore-nio-4.0.1.jar"/>
-                    <jar href="httpmime-4.0.1.jar"/>
-                    <jar href="XMLLib.jar"/>
-                    <jar href="twitter4j-core-2.1.4-SNAPSHOT.jar"/>
-                    <property name="apple.laf.useScreenMenuBar" value="true"/>
-                </resources>
-                <application-desc main-class="org.joshy.sketch.Main">
-                </application-desc>
-            </jnlp>
-
-        </echoxml>   
-        
-        <copy todir="dist/jnlp/" file="resources/Turtle.png"/>
     </target>
 
     <macrodef name="unsignjar">
@@ -210,7 +168,7 @@
     </macrodef>
 
     
-    <target name="dist" depends="build-sketch, signjars, jnlp">
+    <target name="dist" depends="build-sketch, build-mac, build-jnlp">
     </target>
     
     <target name="publish">
