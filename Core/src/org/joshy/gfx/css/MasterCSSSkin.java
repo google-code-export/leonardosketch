@@ -6,7 +6,6 @@ import org.joshy.gfx.css.values.LinearGradientValue;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
-import org.joshy.gfx.node.Skin;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.util.URLUtils;
 
@@ -19,7 +18,7 @@ import java.net.URI;
  * Time: 11:33:29 PM
  * To change this template use File | Settings | File Templates.
  */
-public class MasterCSSSkin extends Skin {
+public class MasterCSSSkin {
     protected CSSRuleSet set;
     private Font defaultFont = Font.name("Arial").size(13).resolve();
 
@@ -62,6 +61,10 @@ public class MasterCSSSkin extends Skin {
         int margin_top = set.findIntegerValue(name,prefix+"margin-top");
         int margin_bottom = set.findIntegerValue(name,prefix+"margin-bottom");
         return new Insets(margin_top,margin_right,margin_bottom,margin_left);
+    }
+
+    protected Insets getMargin(CSSMatcher matcher) {
+        return getMargin(matcher.element, "");
     }
 
     protected Insets getBorderWidth(String name) {

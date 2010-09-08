@@ -19,6 +19,23 @@ import org.joshy.gfx.util.GraphicsUtil;
 * To change this template use File | Settings | File Templates.
 */
 public class CSSSkin extends MasterCSSSkin {
+    public CSSSkin() {
+    }
+
+    /* good functions */
+    public CSSRuleSet getCSSSet() {
+        return this.set;
+    }
+    public enum State {
+        Pressed, Hover, Selected, None
+    }
+    protected Font getFont(CSSMatcher matcher) {
+        int fontSize = set.findIntegerValue(matcher.element, "font-size");
+        Font font = Font.name("Arial").size(fontSize).resolve();
+        return font;
+    }
+
+    /* old stuff */
 
     public BoxState getSize(Control control, String content) {
         BoxState size = super.getSize(control);
@@ -177,26 +194,9 @@ public class CSSSkin extends MasterCSSSkin {
         }
     }
 
-    private Font getFont(CSSMatcher matcher) {
-        int fontSize = set.findIntegerValue(matcher.element, "font-size");
-        Font font = Font.name("Arial").size(fontSize).resolve();
-        return font;
-    }
-
-    public CSSRuleSet getCSSSet() {
-        return this.set;
-    }
-
-
-    public enum State {
-        Pressed, Hover, Selected, None
-    }
-
     public Insets getInsets(Control control) {
         CSSMatcher matcher = createMatcher(control,null);
         return getMargin(matcher.element);
-        //int margin = set.findIntegerValue(matcher.element,"margin");
-        //return new Insets(margin);
     }
     public void draw(GFX g, Scrollbar scrollbar, BoxState size, Bounds thumbBounds, Bounds leftArrowBounds, Bounds rightArrowBounds) {
         if(set == null) {

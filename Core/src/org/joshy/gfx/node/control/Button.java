@@ -167,22 +167,24 @@ public class Button extends Control {
             if(size == null) {
                 doPrefLayout();
             }
-            cssSkin.draw(g, this, text, size, buttonStateToCssState(state));
+            //cssSkin.draw(g, this, text, size, buttonStateToCssState(state));
+            cssSkin.draw2(g, size, this, text, buttonStateToCssState(state));
 
+            //debugging
             if(false) {
                 g.setPaint(FlatColor.WHITE);
                 g.fillRect(0,0,50,50);
                 g.setPaint(FlatColor.BLUE);
-                g.fillRoundRect(10,10,30,30,10,10);
+                g.fillRoundRect(10,10,20,20,10,10);
                 g.setPaint(FlatColor.BLACK);
-                g.drawRoundRect(10,10,30,30,10,10);
+                g.drawRoundRect(10,10,20,20,10,10);
             }
             return;
         }
 
 
 
-
+        /* called only if no css is active */ 
         g.setPaint(new FlatColor(0,0,0,1.0));
         g.drawRect(0,0,width,height);
         g.drawLine(0,0,width,height);

@@ -1,7 +1,7 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SuperSkin;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 
@@ -21,7 +21,7 @@ public abstract class Control extends Node {
     
     protected boolean skinsDirty;
     protected boolean layoutDirty;
-    protected CSSSkin cssSkin;
+    protected SuperSkin cssSkin;
     private String id;
     protected List<String> cssClasses;
 

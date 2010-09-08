@@ -4,7 +4,7 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSProcessor;
 import org.joshy.gfx.css.CSSRuleSet;
-import org.joshy.gfx.css.CSSSkin;
+import org.joshy.gfx.css.SuperSkin;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
@@ -49,7 +49,7 @@ public class SwingCore extends Core {
         ParsingResult<?> result = CSSProcessor.parseCSS(url.openStream());
         CSSRuleSet set = new CSSRuleSet();
         set.setBaseURI(url.toURI());
-        CSSSkin cssskin = new CSSSkin();
+        SuperSkin cssskin = new SuperSkin();
         cssskin.setRuleSet(set);
         CSSProcessor.condense(result.parseTreeRoot,set);
         u.p("default css parsed from: " + url);
