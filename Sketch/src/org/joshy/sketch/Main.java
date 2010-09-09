@@ -19,6 +19,7 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.WindowEvent;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.StackPanel;
 import org.joshy.gfx.node.layout.VFlexBox;
@@ -129,7 +130,12 @@ public class Main implements Runnable {
         context.setupActions();
         context.setupPalettes();
         context.stackPanel = new StackPanel();
-        context.stackPanel.add(context.getCanvas());
+        context.stackPanel.add(
+                new ScrollPane(
+                        context.getCanvas()
+                        .setWidth(300)
+                        .setHeight(300)
+                ));
         context.stackPanel.add(context.getUndoOverlay());
         if(context instanceof VectorDocContext) {
             context.pageList = new PageListPanel((VectorDocContext)context);
@@ -187,10 +193,11 @@ public class Main implements Runnable {
             @Override
             public void doLayout() {
                 for(Control c : controlChildren()) {
+                    double w= 4*50+20;
                     if(c == context.stackPanel) {
                         c.setTranslateY(0);
                         c.setTranslateX(0);
-                        c.setWidth(getWidth());
+                        c.setWidth(getWidth()-w);
                         c.setHeight(getHeight());
                     }
                     if(c == context.getToolbar()) {
@@ -198,7 +205,6 @@ public class Main implements Runnable {
                         c.setTranslateY(0);
                         c.setHeight(getHeight());
                     }
-                    double w= 4*50+20;
                     if(c == context.getSidebar()) {
                         c.setWidth(w);
                         c.setHeight(getHeight());

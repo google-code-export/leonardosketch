@@ -10,7 +10,7 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
     private double gridWidth = 20;
     private double gridHeight = 20;
     private boolean snapGrid;
-    private boolean docBoundsActive;
+    private boolean docBoundsActive = true;
     private FlatColor backgroundFill = FlatColor.WHITE;
     private boolean presentation;
     private boolean snapDocBounds;

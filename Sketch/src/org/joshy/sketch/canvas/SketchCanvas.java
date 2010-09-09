@@ -148,6 +148,16 @@ public class SketchCanvas extends DocumentCanvas {
     }
 
     @Override
+    public double getWidth() {
+        return document.getWidth();
+    }
+
+    @Override
+    public double getHeight() {
+        return document.getHeight();
+    }
+
+    @Override
     public Bounds getInputBounds() {
         return getVisualBounds();
     }
