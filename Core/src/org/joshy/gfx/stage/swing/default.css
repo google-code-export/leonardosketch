@@ -77,6 +77,7 @@ Togglebutton:selected {
 }
 
 Linkbutton {
+    background-color: #ffffff;
     shrink-to-fit: true;
     color: #000000;
     border-width: 0px;
