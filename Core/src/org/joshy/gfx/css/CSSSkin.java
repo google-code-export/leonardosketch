@@ -118,6 +118,13 @@ public class CSSSkin {
 
     }
 
+    private void drawBackground(GFX g, CSSMatcher matcher, String prefix, BoxState box) {
+        double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
+        double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
+        Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
+        drawBackground(g, matcher, prefix, bounds);
+    }
+    
     public void drawBackground(GFX g, CSSMatcher matcher, String prefix, Bounds bounds) {
         g.translate(bounds.getX(),bounds.getY());
         Insets margin = getMargin(matcher,prefix);
@@ -148,39 +155,7 @@ public class CSSSkin {
         }
         g.translate(-bounds.getX(),-bounds.getY());
     }
-    private void drawBackground(GFX g, CSSMatcher matcher, String prefix, BoxState box) {
-        double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
-        double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
-        Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
 
-        g.translate(bounds.getX(),bounds.getY());
-        //Insets margin = getMargin(matcher.element,prefix);
-        BaseValue background = set.findValue(matcher,prefix+"background");
-        int radius = set.findIntegerValue(matcher,prefix+"border-radius");
-
-        if(!"transparent".equals(set.findStringValue(matcher,prefix+"background-color"))) {
-            g.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"background-color")));
-            if(background instanceof LinearGradientValue) {
-                g.setPaint(toGradientFill((LinearGradientValue)background,bounds.getWidth(),bounds.getHeight()));
-            }
-            if(radius == 0) {
-                g.fillRect(
-                        box.margin.getLeft(),
-                        box.margin.getTop(),
-                        bounds.getWidth()-box.margin.getLeft()-box.margin.getRight(),
-                        bounds.getHeight()-box.margin.getTop()-box.margin.getBottom());
-            } else {
-                g.fillRoundRect(
-                        box.margin.getLeft(),
-                        box.margin.getTop(),
-                        bounds.getWidth()-box.margin.getLeft()-box.margin.getRight(),
-                        bounds.getHeight()-box.margin.getTop()-box.margin.getBottom(),
-                        radius,
-                        radius);
-            }
-        }
-        g.translate(-bounds.getX(),-bounds.getY());
-    }
 
     public void drawBorder(GFX gfx, CSSMatcher matcher, String prefix, Bounds bounds) {
         Insets margin = getMargin(matcher,prefix);
