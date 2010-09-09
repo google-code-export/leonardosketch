@@ -6,7 +6,6 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 /**
  * Created by IntelliJ IDEA.
@@ -141,10 +140,12 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                 }
             }
         });
+
+        setDefaultColumnWidth(50);
     }
 
     private void setSelectedColumn(int selectedColumn) {
-        u.p("selected createColumn set to " + selectedColumn);
+        //u.p("selected createColumn set to " + selectedColumn);
         this.selectedColumn = selectedColumn;
         setDrawingDirty();
     }
@@ -188,8 +189,13 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     }
 
     @Override
+    public void doPrefLayout() {
+        super.doPrefLayout();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
     public void doLayout() {
-        setWidth(getModel().getColumnCount()*defaultColumnWidth);
+        //setWidth(getModel().getColumnCount()*defaultColumnWidth);
     }
     final double rowHeight = 20;
 
@@ -201,7 +207,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         g.setPaint(FlatColor.WHITE);
         g.fillRect(0,0,width,height);
 
-        double columnWidth = defaultColumnWidth;
+        double columnWidth = getWidth()/model.getColumnCount();
 
         //draw headers
         for(int col = 0; col<model.getColumnCount(); col++) {
@@ -217,7 +223,11 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                 if(row+startRow < model.getRowCount()) {
                     item = model.get(row+startRow,col);
                 }
-                renderer.draw(g, this, item, row+startRow, col, col*columnWidth+scrollX, row*20+1+20, columnWidth, 20);
+                renderer.draw(g, this, item,
+                        row+startRow, col,
+                        (int)(col*columnWidth+scrollX),
+                        (int)(row*20+1+20),
+                        (int)columnWidth, 20);
             }
         }
 
@@ -233,6 +243,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
 
     public void setDefaultColumnWidth(double defaultColumnWidth) {
         this.defaultColumnWidth = defaultColumnWidth;
+        setWidth(getModel().getColumnCount()*defaultColumnWidth);
     }
 
     public double getFullWidth(double width, double height) {

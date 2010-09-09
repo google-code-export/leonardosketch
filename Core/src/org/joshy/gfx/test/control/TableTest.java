@@ -4,8 +4,6 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.node.control.TableView;
 import org.joshy.gfx.stage.Stage;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: josh
@@ -22,6 +20,7 @@ public class TableTest implements Runnable {
 
     public void run() {
         TableView table = new TableView();
+        table.setWidth(500);
         Stage s = Stage.createStage();
         s.setContent(table);
     }
