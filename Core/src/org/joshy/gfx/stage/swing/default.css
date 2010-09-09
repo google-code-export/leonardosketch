@@ -19,17 +19,20 @@
 }
 
 /* =========== buttons =========== */
-.-class-Button {
-/*Button, Checkbox, Radiobutton, Togglebutton {*/
+.-class-Button { /* this selects all subclasses of Button as well */
     margin: 3px;
     padding: 8px;
     background-color: #c0c0c0;
     border-width: 1px;
     color: #444444;
-    border-color: #f8f8f8;
+    border-color: #808080;
     border-radius: 11px;
     text-align: center;
     shrink-to-fit: true;
+}
+
+Label {
+    border-width: 0px;
 }
 
 Button, Togglebutton {
@@ -108,8 +111,8 @@ ProgressBar {
 }
 
 /* =========== panels ======== */
-Panel, HBox, VBox {
-    background-color: #aaaaaa;
+Panel, HFlexBox, VFlexBox, GridBox {
+    background-color: #cccccc;
     border-width: 0px;
 }
 

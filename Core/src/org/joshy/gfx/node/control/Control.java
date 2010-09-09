@@ -145,6 +145,14 @@ public abstract class Control extends Node {
     public Set<String> getCSSClasses() {
         return this.cssClasses;
     }
+
+    public double getPrefWidth() {
+        return prefWidth;
+    }
+
+    public double getPrefHeight() {
+        return prefHeight;
+    }
 }
 
 

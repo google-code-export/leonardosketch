@@ -67,6 +67,7 @@ public abstract class Container extends Control implements Parent {
     public void doLayout() {
         for(Node n : children()) {
             if(n instanceof Control) {
+                ((Control)n).doPrefLayout();
                 ((Control)n).doLayout();
             }
         }

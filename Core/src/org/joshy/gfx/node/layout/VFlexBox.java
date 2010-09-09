@@ -11,8 +11,36 @@ import org.joshy.gfx.util.u;
 * Time: 6:51:48 PM
 * To change this template use File | Settings | File Templates.
 */
-public class
-        VFlexBox extends FlexBox {
+public class VFlexBox extends FlexBox {
+
+    @Override
+    public void doPrefLayout() {
+        double totalHeight = 0;
+        double maxWidth = 0;
+        for(Control c : controlChildren()) {
+            c.doPrefLayout();
+            Bounds bounds = c.getLayoutBounds();
+            if(c instanceof SplitPane) {
+                //reset to 0
+                c.setHeight(0);
+            }
+            totalHeight += bounds.getHeight();
+            maxWidth = Math.max(maxWidth, bounds.getWidth());
+        }
+
+        if(getPrefWidth() == CALCULATED) {
+            setWidth(maxWidth);
+        } else {
+            setWidth(getPrefWidth());
+        }
+        if(getPrefHeight() == CALCULATED) {
+            setHeight(totalHeight);
+        } else {
+            setHeight(getPrefHeight());
+        }
+
+    }
+
     @Override
     public void doLayout() {
         //set children to their preferred width first
@@ -42,9 +70,7 @@ public class
             //set the height
             double flex = spaceMap.get(c);
             if(totalFlex > 0) {
-                u.p("before height = " + c.getHeight());
                 c.setHeight(c.getHeight()+flex/totalFlex*totalExcess);
-                u.p("set height to " + c.getHeight());
             }
             //update running total
             y = y + c.getHeight();

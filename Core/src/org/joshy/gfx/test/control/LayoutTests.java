@@ -36,6 +36,14 @@ public class LayoutTests implements Runnable {
     private static final String NEW_DOC_DIALOG_GRID_TEST = "Grid Test: New doc dialog";
     private static final String CONTROLS_BASELINE_TEST = "Controls baseline test";
     private static final String TEXTBOX_GRID_WIDTH = "Textbox Grid Width";
+    private static final String HBOX_SHRINK_TO_FIT = "HBox shrink to fit 1";
+    private static final String HBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH = "Hbox explicit preferred width";
+    private static final String HBOX_SHRINK_TO_FIT_EXPLICIT_HEIGHT = "HBox explicit preferred height";
+    private static final String HBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH_HEIGHT = "HBox explicit pref w & h";
+    private static final String VBOX_SHRINK_TO_FIT = "VBox shrink to fit 1";
+    private static final String VBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH = "VBox explicit preferred width";
+    private static final String VBOX_SHRINK_TO_FIT_EXPLICIT_HEIGHT = "VBox explicit preferred height";
+    private static final String VBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH_HEIGHT = "VBox explicit pref w & h";
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -45,8 +53,8 @@ public class LayoutTests implements Runnable {
 
     public void run() {
         Stage stage = Stage.createStage();
-        stage.setWidth(600);
-        stage.setHeight(400);
+        stage.setWidth(900);
+        stage.setHeight(600);
 
         split = new SplitPane(false);
         stage.setContent(split);
@@ -67,9 +75,17 @@ public class LayoutTests implements Runnable {
         tests.add(NEW_DOC_DIALOG_GRID_TEST);
         tests.add(CONTROLS_BASELINE_TEST);
         tests.add(TEXTBOX_GRID_WIDTH);
+        tests.add(HBOX_SHRINK_TO_FIT);
+        tests.add(HBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH);
+        tests.add(HBOX_SHRINK_TO_FIT_EXPLICIT_HEIGHT);
+        tests.add(HBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH_HEIGHT);
+        tests.add(VBOX_SHRINK_TO_FIT);
+        tests.add(VBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH);
+        tests.add(VBOX_SHRINK_TO_FIT_EXPLICIT_HEIGHT);
+        tests.add(VBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH_HEIGHT);
 
         final ListView<String> testView =new ListView<String>().setModel(ListView.createModel(tests)); 
-        split.setFirst(testView);
+        split.setFirst(new ScrollPane(testView));
         split.setSecond(new Panel());
         EventBus.getSystem().addListener(SelectionEvent.Changed, new Callback<SelectionEvent>() {
             public void call(SelectionEvent event) {
@@ -142,13 +158,13 @@ public class LayoutTests implements Runnable {
             toolbar.add(new Button("B1"),new Button("B2"), new Button("B3"));
             toolbar.add(new Spacer(),1);
             toolbar.add(new Button("B4"),new Button("B5"),new Button("B6"));
-            toolbar.setHeight(50);
+            //toolbar.setHeight(50);
 
             Control statusbar = new HFlexBox()
                     .add(new Label("left edge"))
                     .add(new Spacer(),1)
                     .add(new Label("right edge"))
-                    .setHeight(50);
+                    ;//.setHeight(50);
 
             return new VFlexBox()
                     .setBoxAlign(FlexBox.Align.Stretch)
@@ -262,6 +278,72 @@ public class LayoutTests implements Runnable {
                     .createColumn(100, GridBox.Align.Fill)
                     .addControl(new Label("Textbox: "))
                     .addControl(new Textbox("tb"));
+        }
+
+        if(HBOX_SHRINK_TO_FIT.equals(testName)) {
+            return new Panel().add(
+                    new HFlexBox().add(
+                            new Button("Label"),
+                            new Button("Button"),
+                            new Button("Popup List")
+                    ).setFill(FlatColor.RED));
+        }
+        if(HBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH.equals(testName)) {
+            return new Panel().add(
+                    new HFlexBox().add(
+                            new Button("Label"),
+                            new Button("Button"),
+                            new Button("Popup List")
+                    ).setFill(FlatColor.RED).setPrefWidth(100));
+        }
+        if(HBOX_SHRINK_TO_FIT_EXPLICIT_HEIGHT.equals(testName)) {
+            return new Panel().add(
+                    new HFlexBox().add(
+                            new Button("Label"),
+                            new Button("Button"),
+                            new Button("Popup List")
+                    ).setFill(FlatColor.RED).setPrefHeight(100));
+        }
+        if(HBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH_HEIGHT.equals(testName)) {
+            return new Panel().add(
+                    new HFlexBox().add(
+                            new Button("Label"),
+                            new Button("Button"),
+                            new Button("Popup List")
+                    ).setFill(FlatColor.RED).setPrefWidth(100).setPrefHeight(100));
+        }
+
+        if(VBOX_SHRINK_TO_FIT.equals(testName)) {
+            return new Panel().add(
+                    new VFlexBox().add(
+                            new Button("Label"),
+                            new Button("Button"),
+                            new Button("Popup List")
+                    ).setFill(FlatColor.RED));
+        }
+        if(VBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH.equals(testName)) {
+            return new Panel().add(
+                    new VFlexBox().add(
+                            new Button("Label"),
+                            new Button("Button"),
+                            new Button("Popup List")
+                    ).setFill(FlatColor.RED).setPrefWidth(100));
+        }
+        if(VBOX_SHRINK_TO_FIT_EXPLICIT_HEIGHT.equals(testName)) {
+            return new Panel().add(
+                    new VFlexBox().add(
+                            new Button("Label"),
+                            new Button("Button"),
+                            new Button("Popup List")
+                    ).setFill(FlatColor.RED).setPrefHeight(100));
+        }
+        if(VBOX_SHRINK_TO_FIT_EXPLICIT_WIDTH_HEIGHT.equals(testName)) {
+            return new Panel().add(
+                    new VFlexBox().add(
+                            new Button("Label"),
+                            new Button("Button"),
+                            new Button("Popup List")
+                    ).setFill(FlatColor.RED).setPrefWidth(100).setPrefHeight(100));
         }
 
         return new Panel();

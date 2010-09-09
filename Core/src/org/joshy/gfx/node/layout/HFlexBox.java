@@ -15,6 +15,30 @@ public class HFlexBox extends FlexBox {
     public HFlexBox() { }
     
     @Override
+    public void doPrefLayout() {
+        //do shrink to fit unless a preferred width has been set
+        double totalWidth = 0;
+        double maxHeight = 0;
+        for(Control c : controlChildren()) {
+            if(!c.isVisible()) continue;
+            c.doPrefLayout();
+            Bounds bounds = c.getLayoutBounds();
+            totalWidth += bounds.getWidth();
+            maxHeight = Math.max(maxHeight,bounds.getHeight());
+        }
+        if(getPrefWidth() == CALCULATED) {
+            setWidth(totalWidth);
+        } else {
+            setWidth(getPrefWidth());
+        }
+        if(getPrefHeight() == CALCULATED) {
+            setHeight(maxHeight);
+        } else {
+            setHeight(getPrefHeight());
+        }
+    }
+
+    @Override
     public void doLayout() {
 
         /*
@@ -75,11 +99,6 @@ public class HFlexBox extends FlexBox {
             //layout child
             c.doLayout();
         }
-    }
-
-
-    @Override
-    public void doPrefLayout() {
     }
 
 }
