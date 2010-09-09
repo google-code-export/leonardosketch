@@ -89,8 +89,8 @@ public class Textbox extends TextControl {
                 this.doPrefLayout();
             }
             CSSMatcher matcher = new CSSMatcher(this);
-            cssSkin.drawBackground2(g, matcher,"", new Bounds(0,0,getWidth(),getHeight()));
-            cssSkin.drawBorder2(g,matcher,"",new Bounds(0,0,getWidth(),getHeight()));
+            cssSkin.drawBackground(g, matcher,"", new Bounds(0,0,getWidth(),getHeight()));
+            cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,getWidth(),getHeight()));
         } else {
             //draw background
             if(focused) {

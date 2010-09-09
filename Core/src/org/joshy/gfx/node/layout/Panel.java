@@ -66,8 +66,8 @@ public class Panel extends Container {
         if(cssSkin != null) {
             Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
             CSSMatcher matcher = new CSSMatcher(this);
-            cssSkin.drawBackground2(g,matcher,"",bounds);
-            cssSkin.drawBorder2(g,matcher,"",bounds);
+            cssSkin.drawBackground(g,matcher,"",bounds);
+            cssSkin.drawBorder(g,matcher,"",bounds);
             //cssSkin.draw(g, this, null, new CSSSkin.BoxState(getWidth(),getHeight()),CSSSkin.State.None);
             return;
         }

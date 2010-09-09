@@ -64,10 +64,10 @@ public class ProgressBar extends Control {
                 doPrefLayout();
             }
             CSSMatcher matcher = new CSSMatcher("ProgressBar");
-            cssSkin.drawBackground2(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
-            cssSkin.drawBorder2(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
-            cssSkin.drawBackground2(g, matcher, "bar-", new Bounds(0,0,getWidth()*percentage, getHeight()));
-            cssSkin.drawBorder2(g, matcher, "bar-", new Bounds(0,0,getWidth()*percentage, getHeight()));
+            cssSkin.drawBackground(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
+            cssSkin.drawBorder(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
+            cssSkin.drawBackground(g, matcher, "bar-", new Bounds(0,0,getWidth()*percentage, getHeight()));
+            cssSkin.drawBorder(g, matcher, "bar-", new Bounds(0,0,getWidth()*percentage, getHeight()));
         }
     }
 

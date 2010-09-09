@@ -76,12 +76,12 @@ public class PopupMenuButton<E> extends Button implements SelectableControl {
         if(cssSkin != null) {
             CSSMatcher matcher = new CSSMatcher("PopupMenuButton");
             Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
-            cssSkin.drawBackground2(g,matcher,"", bounds);
+            cssSkin.drawBackground(g,matcher,"", bounds);
             int col = cssSkin.getCSSSet().findColorValue(matcher, "color");
             g.setPaint(new FlatColor(col));
             drawText(g);
             drawTriangle(g);
-            cssSkin.drawBorder2(g,matcher,"",bounds);
+            cssSkin.drawBorder(g,matcher,"",bounds);
             return;
         } else {
             g.setPaint(FlatColor.WHITE);

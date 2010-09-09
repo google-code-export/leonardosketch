@@ -20,13 +20,14 @@ import java.net.URI;
  * comes from the BoxStage instance passed in along with the control.
  */
 public class CSSSkin {
-    protected CSSRuleSet set;
+    private CSSRuleSet set;
     private Font defaultFont = Font.name("Arial").size(13).resolve();
 
     /* good functions */
     public CSSRuleSet getCSSSet() {
         return this.set;
     }
+
     public enum State {
         Pressed, Hover, Selected, None
     }
@@ -36,14 +37,14 @@ public class CSSSkin {
         return font;
     }
 
-    public void draw2(GFX gfx, BoxState box, Control control, String content, State state) {
+    public void draw(GFX gfx, BoxState box, Control control, String content, State state) {
         CSSMatcher matcher = createMatcher(control,state);
         //draw background
-        drawBackground2(gfx, matcher, "", box);
+        drawBackground(gfx, matcher, "", box);
         //draw content
         drawContent(gfx, matcher, "", box, content);
         //draw border
-        drawBorder2(gfx,matcher,"",box);
+        drawBorder(gfx,matcher,"",box);
         //debug overlay
         drawDebugOverlay(gfx,matcher,"",box);
     }
@@ -117,8 +118,8 @@ public class CSSSkin {
 
     }
 
-    public void drawBackground2(GFX g, CSSMatcher matcher, String prefix, Bounds bounds) {
-//        g.translate(bounds.getX(),bounds.getY());
+    public void drawBackground(GFX g, CSSMatcher matcher, String prefix, Bounds bounds) {
+        g.translate(bounds.getX(),bounds.getY());
         Insets margin = getMargin(matcher,prefix);
         BaseValue background = set.findValue(matcher,prefix+"background");
         int radius = set.findIntegerValue(matcher,prefix+"border-radius");
@@ -130,24 +131,24 @@ public class CSSSkin {
             }
             if(radius == 0) {
                 g.fillRect(
-                        bounds.getX()+margin.getLeft(),
-                        bounds.getY()+margin.getTop(),
+                        0+margin.getLeft(),
+                        0+margin.getTop(),
                         bounds.getWidth()-margin.getLeft()-margin.getRight(),
                         bounds.getHeight()-margin.getTop()-margin.getBottom()
                         );
             } else {
                 g.fillRoundRect(
-                        bounds.getX()+margin.getLeft(),
-                        bounds.getY()+margin.getTop(),
+                        0+margin.getLeft(),
+                        0+margin.getTop(),
                         bounds.getWidth()-margin.getLeft()-margin.getRight(),
                         bounds.getHeight()-margin.getTop()-margin.getBottom(),
                         radius,
                         radius);
             }
         }
-  //      g.translate(-bounds.getX(),-bounds.getY());
+        g.translate(-bounds.getX(),-bounds.getY());
     }
-    private void drawBackground2(GFX g, CSSMatcher matcher, String prefix, BoxState box) {
+    private void drawBackground(GFX g, CSSMatcher matcher, String prefix, BoxState box) {
         double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
         double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
@@ -181,7 +182,7 @@ public class CSSSkin {
         g.translate(-bounds.getX(),-bounds.getY());
     }
 
-    public void drawBorder2(GFX gfx, CSSMatcher matcher, String prefix, Bounds bounds) {
+    public void drawBorder(GFX gfx, CSSMatcher matcher, String prefix, Bounds bounds) {
         Insets margin = getMargin(matcher,prefix);
         Insets borderWidth = getBorderWidth(matcher,prefix);
         int borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
@@ -209,7 +210,7 @@ public class CSSSkin {
         }
     }
 
-    private void drawBorder2(GFX gfx, CSSMatcher matcher, String prefix, BoxState box) {
+    private void drawBorder(GFX gfx, CSSMatcher matcher, String prefix, BoxState box) {
         double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
         double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
@@ -261,14 +262,14 @@ public class CSSSkin {
         double backHeight = size.height-margin.getTop()-margin.getBottom();
         Bounds backBounds = new Bounds(margin.getLeft(),margin.getTop(),backWidth,backHeight);
         //draw the background
-        drawBackground2(g,matcher,"",backBounds);
-        drawBorder2(    g,matcher,"",backBounds);
+        drawBackground(g,matcher,"",backBounds);
+        drawBorder(    g,matcher,"",backBounds);
         //draw the track
         //draw the arrows
-        drawBackground2(g,matcher,"left-arrow-",leftArrowBounds);
-        drawBackground2(g,matcher,"right-arrow-",rightArrowBounds);
-        drawBorder2(g,matcher,"left-arrow-",leftArrowBounds);
-        drawBorder2(g,matcher,"right-arrow-",rightArrowBounds);
+        drawBackground(g,matcher,"left-arrow-",leftArrowBounds);
+        drawBackground(g,matcher,"right-arrow-",rightArrowBounds);
+        drawBorder(g,matcher,"left-arrow-",leftArrowBounds);
+        drawBorder(g,matcher,"right-arrow-",rightArrowBounds);
         g.setPaint(FlatColor.BLACK);
         if(scrollbar.isVertical()) {
             GraphicsUtil.fillUpArrow(g,3,3,14);
@@ -279,8 +280,8 @@ public class CSSSkin {
         }
 
         //draw the thumb
-        drawBackground2(g, matcher, "thumb-", thumbBounds);
-        drawBorder2(    g,matcher,"thumb-",thumbBounds);
+        drawBackground(g, matcher, "thumb-", thumbBounds);
+        drawBorder(    g,matcher,"thumb-",thumbBounds);
     }
 
     public BoxState getSize(Control control) {

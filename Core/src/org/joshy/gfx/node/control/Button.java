@@ -168,7 +168,7 @@ public class Button extends Control {
                 doPrefLayout();
             }
             //cssSkin.draw(g, this, text, size, buttonStateToCssState(state));
-            cssSkin.draw2(g, size, this, text, buttonStateToCssState(state));
+            cssSkin.draw(g, size, this, text, buttonStateToCssState(state));
 
             //debugging
             if(false) {

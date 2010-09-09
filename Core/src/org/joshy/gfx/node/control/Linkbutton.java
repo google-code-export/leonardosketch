@@ -26,8 +26,8 @@ public class Linkbutton extends Button {
                 matcher = cssSkin.createMatcher(this, CSSSkin.State.Pressed);
             }
             Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
-            cssSkin.drawBackground2(g, matcher, "", bounds);
-            cssSkin.drawBorder2(g, matcher, "", bounds);
+            cssSkin.drawBackground(g, matcher, "", bounds);
+            cssSkin.drawBorder(g, matcher, "", bounds);
             cssSkin.drawText(g,matcher,"",bounds,text);
             return;
         }

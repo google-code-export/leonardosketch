@@ -58,8 +58,8 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                     if(getSelectedIndex() == row) {
                         prefix = "selected-item-";
                     }
-                    cssSkin.drawBackground2(g,matcher,prefix,bounds);
-                    cssSkin.drawBorder2(g,matcher,prefix,bounds);
+                    cssSkin.drawBackground(g,matcher,prefix,bounds);
+                    cssSkin.drawBorder(g,matcher,prefix,bounds);
                     int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
                     g.setPaint(new FlatColor(col));
                     if(cell != null) {
@@ -235,7 +235,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
 
         //draw bg
         if(cssSkin != null) {
-            cssSkin.drawBackground2(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBackground(g,matcher,"",new Bounds(0,0,width,height));
         } else {
             g.setPaint(FlatColor.WHITE);
             g.fillRect(0,0,width,height);
@@ -267,7 +267,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         //draw border
         g.setClipRect(clip);
         if(cssSkin != null) {
-            cssSkin.drawBorder2(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,width,height));
         }
     }
 

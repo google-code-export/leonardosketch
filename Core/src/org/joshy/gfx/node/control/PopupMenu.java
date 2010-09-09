@@ -98,8 +98,8 @@ public class PopupMenu extends Control {
         CSSMatcher matcher = new CSSMatcher("PopupMenu");
 
         if(cssSkin != null) {
-            cssSkin.drawBackground2(g,matcher,"",bounds);
-            cssSkin.drawBorder2(g,matcher,"",bounds);
+            cssSkin.drawBackground(g,matcher,"",bounds);
+            cssSkin.drawBorder(g,matcher,"",bounds);
         } else {
             g.setPaint(FlatColor.WHITE);
             g.fillRoundRect(0,0,getWidth(),getHeight(),arc,arc);
@@ -125,8 +125,8 @@ public class PopupMenu extends Control {
                 if(i == hoverRow) {
                     prefix = "selected-item-";
                 }
-                cssSkin.drawBackground2(g,matcher,prefix,itemBounds);
-                cssSkin.drawBorder2(g,matcher,prefix,itemBounds);
+                cssSkin.drawBackground(g,matcher,prefix,itemBounds);
+                cssSkin.drawBorder(g,matcher,prefix,itemBounds);
                 int col = cssSkin.getCSSSet().findColorValue(matcher, prefix+"color");
                 g.setPaint(new FlatColor(col));
                 drawText(g, o, rowy);
