@@ -14,7 +14,7 @@ import org.joshy.gfx.node.Bounds;
  * Time: 1:33:47 PM
  * To change this template use File | Settings | File Templates.
  */
-public class TableView extends Control implements Focusable, ScrollPane.ScrollingAware {
+public class TableView extends Control implements Focusable, ScrollPane.ScrollingAware, SelectableControl {
     private TableModel model;
     private DataRenderer renderer;
     private int selectedRow = -1;
@@ -24,6 +24,8 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     private double defaultColumnWidth = 50;
     private double scrollY = 0;
     private double scrollX = 0;
+    final double rowHeight = 20;
+    private ScrollPane scrollPane;
 
     public TableView() {
         setWidth(300);
@@ -32,7 +34,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         //set default model
         setModel(new TableModel() {
             public int getRowCount() {
-                return 10;
+                return 20;
             }
 
             public int getColumnCount() {
@@ -164,6 +166,14 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         } else {
             selectedRow = -1;
         }
+        if(scrollPane != null) {
+            Bounds bounds = new Bounds(0,
+                    getSelectedRow()*rowHeight,
+                    getWidth(),
+                    rowHeight+headerHeight);
+            scrollPane.scrollToShow(bounds);
+        }
+        EventBus.getSystem().publish(new SelectionEvent(SelectionEvent.Changed,this));
         setDrawingDirty();        
     }
 
@@ -197,8 +207,8 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     public void doLayout() {
         //setWidth(getModel().getColumnCount()*defaultColumnWidth);
     }
-    final double rowHeight = 20;
 
+    final int headerHeight = 20;
     @Override
     public void draw(GFX g) {
         Bounds clip = g.getClipRect();
@@ -209,15 +219,16 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
 
         double columnWidth = getWidth()/model.getColumnCount();
 
+
         //draw headers
         for(int col = 0; col<model.getColumnCount(); col++) {
             Object header = model.getColumnHeader(col);
-            headerRenderer.draw(g, this, header, col, col*columnWidth+scrollX, 0, columnWidth, 20);
+            headerRenderer.draw(g, this, header, col, col*columnWidth+scrollX, 0, columnWidth, headerHeight);
         }
 
         int startRow = (int)(-scrollY/rowHeight);
         //draw data
-        for(int row=0; row*rowHeight+20 < getHeight(); row++) {
+        for(int row=0; row*rowHeight+headerHeight < getHeight(); row++) {
             for(int col=0; col<model.getColumnCount(); col++) {
                 Object item = null;
                 if(row+startRow < model.getRowCount()) {
@@ -227,7 +238,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                         row+startRow, col,
                         (int)(col*columnWidth+scrollX),
                         (int)(row*20+1+20),
-                        (int)columnWidth, 20);
+                        (int)columnWidth, rowHeight);
             }
         }
 
@@ -263,7 +274,11 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     }
 
     public void setScrollParent(ScrollPane scrollPane) {
-        
+        this.scrollPane = scrollPane;
+    }
+
+    public int getSelectedIndex() {
+        return getSelectedColumn();
     }
 
 

@@ -1,6 +1,7 @@
 package org.joshy.gfx.test.control;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.control.TableView;
 import org.joshy.gfx.stage.Stage;
 
@@ -22,6 +23,6 @@ public class TableTest implements Runnable {
         TableView table = new TableView();
         table.setWidth(500);
         Stage s = Stage.createStage();
-        s.setContent(table);
+        s.setContent(new ScrollPane(table));
     }
 }

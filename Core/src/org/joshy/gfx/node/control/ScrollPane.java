@@ -58,6 +58,11 @@ public class ScrollPane extends AbstractPane {
         setContent(new Panel());
     }
 
+    public ScrollPane(Control content) {
+        this();
+        setContent(content);
+    }
+
     private void setVScrollValue(double vsv, boolean updateScrollbar) {
         vscrollValue = vsv;
         if(content instanceof ScrollingAware) {
