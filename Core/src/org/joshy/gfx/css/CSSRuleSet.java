@@ -40,7 +40,8 @@ public class CSSRuleSet {
     }
 
     public CSSProperty findMatchingRule(CSSMatcher elem, String propName) {
-        p("looking for property: " + propName);
+        p("----- looking for property: " + propName);
+        p("on element: " + elem);
         List<CSSRule> rulescopy = new ArrayList<CSSRule>();
         rulescopy.addAll(rules);
         Collections.reverse(rulescopy);

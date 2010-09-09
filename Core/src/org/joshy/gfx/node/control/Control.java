@@ -4,6 +4,7 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.css.SuperSkin;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
+import org.joshy.gfx.util.u;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -29,6 +30,7 @@ public abstract class Control extends Node {
     protected Control() {
         setSkinDirty();
         populateCSSClasses();
+        u.p("classes = " + this.getCSSClasses());
     }
 
     private void populateCSSClasses() {

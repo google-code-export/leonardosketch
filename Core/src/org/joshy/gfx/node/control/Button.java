@@ -55,6 +55,7 @@ public class Button extends Control {
 
 
     public Button() {
+        System.out.println("Button being created");
         text = "Button text";
         setSkinDirty();
         EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>(){

@@ -30,7 +30,7 @@ public class CSSSkin extends MasterCSSSkin {
         Pressed, Hover, Selected, None
     }
     protected Font getFont(CSSMatcher matcher) {
-        int fontSize = set.findIntegerValue(matcher.element, "font-size");
+        int fontSize = set.findIntegerValue(matcher, "font-size");
         Font font = Font.name("Arial").size(fontSize).resolve();
         return font;
     }
@@ -41,15 +41,14 @@ public class CSSSkin extends MasterCSSSkin {
         BoxState size = super.getSize(control);
         CSSMatcher matcher = createMatcher(control,null);
         Image icon = getIcon(matcher);
-        String name = control.getClass().getSimpleName();
-        size.margin = getMargin(name);
-        size.padding = getPadding(name);
-        size.borderWidth = getBorderWidth(name);
+        size.margin = getMargin(matcher);
+        size.padding = getPadding(matcher);
+        size.borderWidth = getBorderWidth(matcher);
         size.contentWidth =  control.getWidth()-size.margin.getLeft()-size.margin.getRight()-size.padding.getLeft()-size.padding.getRight();
         size.contentHeight = control.getHeight()-size.margin.getTop()-size.margin.getBottom()-size.padding.getTop()-size.padding.getBottom();
 
         //calc the sizes
-        if("true".equals(set.findStringValue(name,"shrink-to-fit"))) {
+        if("true".equals(set.findStringValue(matcher,"shrink-to-fit"))) {
             Font font = getFont(matcher);
             size.contentWidth = font.calculateWidth(content);
             size.contentHeight = font.calculateHeight(content);
@@ -76,10 +75,10 @@ public class CSSSkin extends MasterCSSSkin {
         CSSMatcher matcher = createMatcher(control,state);
         Image icon = getIcon(matcher);
 
-        Insets margin = getMargin(matcher.element);
-        Insets padding = getPadding(matcher.element);
-        Insets borderWidth = getBorderWidth(matcher.element);
-        int borderRadius = set.findIntegerValue(matcher.element,"border-radius");
+        Insets margin = getMargin(matcher);
+        Insets padding = getPadding(matcher);
+        Insets borderWidth = getBorderWidth(matcher);
+        int borderRadius = set.findIntegerValue(matcher,"border-radius");
         BaseValue background = set.findValue(matcher,"background");
 
         //BaseValue grad = set.findValue(matcher.element, "foo");
@@ -141,7 +140,7 @@ public class CSSSkin extends MasterCSSSkin {
 //        g.fillRect(contentX,contentY,size.contentWidth,size.contentHeight);
 //        g.setPaint(FlatColor.BLACK);
 
-        String textAlign = set.findStringValue(matcher.element,"text-align");
+        String textAlign = set.findStringValue(matcher,"text-align");
         g.setPaint(new FlatColor(set.findColorValue(matcher,"color")));
 
         double textX = contentX;
@@ -196,7 +195,7 @@ public class CSSSkin extends MasterCSSSkin {
 
     public Insets getInsets(Control control) {
         CSSMatcher matcher = createMatcher(control,null);
-        return getMargin(matcher.element);
+        return getMargin(matcher);
     }
     public void draw(GFX g, Scrollbar scrollbar, BoxState size, Bounds thumbBounds, Bounds leftArrowBounds, Bounds rightArrowBounds) {
         if(set == null) {
@@ -208,7 +207,7 @@ public class CSSSkin extends MasterCSSSkin {
         if(scrollbar.isVertical()) {
             matcher.pseudo = "vertical";
         }
-        Insets margin = getMargin(matcher.element);
+        Insets margin = getMargin(matcher);
 
         double backWidth = size.width-margin.getLeft()-margin.getRight();
         double backHeight = size.height-margin.getTop()-margin.getBottom();

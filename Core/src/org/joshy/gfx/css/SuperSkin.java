@@ -29,7 +29,7 @@ public class SuperSkin extends CSSSkin {
     }
 
     private void drawDebugOverlay(GFX gfx, CSSMatcher matcher, String prefix, BoxState box) {
-        Insets borderWidth = getBorderWidth(matcher.element);
+        Insets borderWidth = getBorderWidth(matcher);
 
         //debugging
         if("true".equals(set.findStringValue(matcher,"debug-margin"))) {
@@ -57,7 +57,7 @@ public class SuperSkin extends CSSSkin {
         Image icon = getIcon(matcher);
         Font font = getFont(matcher);
 
-        Insets borderWidth = getBorderWidth(matcher.element);
+        Insets borderWidth = getBorderWidth(matcher);
         //draw the internal content
         double contentX = box.margin.getLeft()+borderWidth.getLeft()+box.padding.getLeft();
         double contentY = box.margin.getTop()+borderWidth.getTop()+box.padding.getTop();
@@ -106,7 +106,7 @@ public class SuperSkin extends CSSSkin {
         g.translate(bounds.getX(),bounds.getY());
         //Insets margin = getMargin(matcher.element,prefix);
         BaseValue background = set.findValue(matcher,prefix+"background");
-        int radius = set.findIntegerValue(matcher.element,prefix+"border-radius");
+        int radius = set.findIntegerValue(matcher,prefix+"border-radius");
 
         if(!"transparent".equals(set.findStringValue(matcher,prefix+"background-color"))) {
             g.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"background-color")));
@@ -139,12 +139,12 @@ public class SuperSkin extends CSSSkin {
         Bounds bounds = new Bounds(box.margin.getLeft(),box.margin.getTop(),backWidth,backHeight);
 
         Insets margin = getMargin(matcher);
-        Insets borderWidth = getBorderWidth(matcher.element);
+        Insets borderWidth = getBorderWidth(matcher);
         /*if(prefix != null && !prefix.trim().equals("")) {
             margin = new Insets(set.findIntegerValue(matcher.element, prefix+"margin"));
             borderWidth = new Insets(set.findIntegerValue(matcher.element, prefix+"border-width"));
         }*/
-        int borderRadius = set.findIntegerValue(matcher.element,prefix+"border-radius");
+        int borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
         if(!borderWidth.allEquals(0)) {
             gfx.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
             double bw = 1;

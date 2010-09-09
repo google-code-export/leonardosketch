@@ -23,6 +23,7 @@ public class MasterCSSSkin {
     private Font defaultFont = Font.name("Arial").size(13).resolve();
 
     public BoxState getSize(Control control) {
+        CSSMatcher matcher = createMatcher(control, CSSSkin.State.None);
         BoxState size = new BoxState();
         size.width = control.getWidth();
         size.height = control.getHeight();
@@ -33,48 +34,47 @@ public class MasterCSSSkin {
             return size;
         }
 
-        String name = control.getClass().getSimpleName();
-        Insets margin = getMargin(name);
-        Insets padding = getPadding(name);
+        Insets margin = getMargin(matcher);
+        Insets padding = getPadding(matcher);
         size.contentWidth = control.getWidth()-margin.getLeft()-margin.getRight()-padding.getLeft()-padding.getRight();
         size.contentHeight = control.getHeight()-margin.getTop()-margin.getBottom()-padding.getTop()-padding.getBottom();
         return size;
     }
 
-    protected Insets getPadding(String name) {
-        return getPadding(name,"");
+    protected Insets getPadding(CSSMatcher matcher) {
+        return getPadding(matcher,"");
     }
-    protected Insets getPadding(String name, String prefix) {
-        int padding_left = set.findIntegerValue(name,prefix+"padding-left");
-        int padding_right = set.findIntegerValue(name,prefix+"padding-right");
-        int padding_top = set.findIntegerValue(name,prefix+"padding-top");
-        int padding_bottom = set.findIntegerValue(name,prefix+"padding-bottom");
+    protected Insets getPadding(CSSMatcher matcher, String prefix) {
+        int padding_left = set.findIntegerValue(matcher,prefix+"padding-left");
+        int padding_right = set.findIntegerValue(matcher,prefix+"padding-right");
+        int padding_top = set.findIntegerValue(matcher,prefix+"padding-top");
+        int padding_bottom = set.findIntegerValue(matcher,prefix+"padding-bottom");
         return new Insets(padding_top,padding_right,padding_bottom,padding_left);
     }
 
-    protected Insets getMargin(String name) {
+    /*protected Insets getMargin(String name) {
         return getMargin(name,"");
-    }
-    protected Insets getMargin(String name, String prefix) {
-        int margin_left = set.findIntegerValue(name,prefix+"margin-left");
-        int margin_right = set.findIntegerValue(name,prefix+"margin-right");
-        int margin_top = set.findIntegerValue(name,prefix+"margin-top");
-        int margin_bottom = set.findIntegerValue(name,prefix+"margin-bottom");
+    }*/
+    protected Insets getMargin(CSSMatcher matcher, String prefix) {
+        int margin_left = set.findIntegerValue(matcher,prefix+"margin-left");
+        int margin_right = set.findIntegerValue(matcher,prefix+"margin-right");
+        int margin_top = set.findIntegerValue(matcher,prefix+"margin-top");
+        int margin_bottom = set.findIntegerValue(matcher,prefix+"margin-bottom");
         return new Insets(margin_top,margin_right,margin_bottom,margin_left);
     }
 
     protected Insets getMargin(CSSMatcher matcher) {
-        return getMargin(matcher.element, "");
+        return getMargin(matcher, "");
     }
 
-    protected Insets getBorderWidth(String name) {
+    protected Insets getBorderWidth(CSSMatcher name) {
         return getBorderWidth(name,"");
     }
-    protected Insets getBorderWidth(String name, String prefix) {
-        int border_left = set.findIntegerValue(name,prefix+"border-left-width");
-        int border_right = set.findIntegerValue(name,prefix+"border-right-width");
-        int border_top = set.findIntegerValue(name,prefix+"border-top-width");
-        int border_bottom = set.findIntegerValue(name,prefix+"border-bottom-width");
+    protected Insets getBorderWidth(CSSMatcher matcher, String prefix) {
+        int border_left = set.findIntegerValue(matcher,prefix+"border-left-width");
+        int border_right = set.findIntegerValue(matcher,prefix+"border-right-width");
+        int border_top = set.findIntegerValue(matcher,prefix+"border-top-width");
+        int border_bottom = set.findIntegerValue(matcher,prefix+"border-bottom-width");
         return new Insets(border_top,border_right,border_bottom,border_left);
     }
 
@@ -89,7 +89,7 @@ public class MasterCSSSkin {
         if(Core.getShared().getFocusManager().getFocusedNode()==control) {
             matcher.pseudo = "active";
         }
-        Insets margin = getMargin(matcher.element);
+        Insets margin = getMargin(matcher);
 
         //draw the background
         double backWidth = size.width-margin.getLeft()-margin.getRight();
@@ -102,8 +102,8 @@ public class MasterCSSSkin {
     }
 
     public void drawBorder(GFX g, CSSMatcher matcher, String prefix, Bounds bounds) {
-        Insets margin = getMargin(matcher.element);
-        Insets borderWidth = getBorderWidth(matcher.element);
+        Insets margin = getMargin(matcher);
+        Insets borderWidth = getBorderWidth(matcher);
         if(prefix != null && !prefix.trim().equals("")) {
             margin = new Insets(set.findIntegerValue(matcher.element, prefix+"margin"));
             borderWidth = new Insets(set.findIntegerValue(matcher.element, prefix+"border-width"));
@@ -160,9 +160,7 @@ public class MasterCSSSkin {
     }
 
     public CSSMatcher createMatcher(Control control, CSSSkin.State state) {
-        CSSMatcher matcher = new CSSMatcher();
-        matcher.element = control.getClass().getSimpleName();
-        matcher.id = control.getId();
+        CSSMatcher matcher = new CSSMatcher(control);
         if(state == CSSSkin.State.Hover) {
             matcher.pseudo = "hover";
         }
@@ -194,7 +192,7 @@ public class MasterCSSSkin {
 
     public void drawBackground(GFX g, CSSMatcher matcher, String prefix, Bounds b) {
         g.translate(b.getX(),b.getY());
-        Insets margin = getMargin(matcher.element,prefix);
+        Insets margin = getMargin(matcher,prefix);
         BaseValue background = set.findValue(matcher,prefix+"background");
         int radius = set.findIntegerValue(matcher.element,prefix+"border-radius");
 
@@ -214,9 +212,9 @@ public class MasterCSSSkin {
 
     public void drawText(GFX g, CSSMatcher matcher, String prefix, Bounds b, String text) {
         g.translate(b.getX(),b.getY());
-        Insets margin = getMargin(matcher.element,prefix);
-        Insets borderWidth = getBorderWidth(matcher.element,prefix);
-        Insets padding = getPadding(matcher.element,prefix);
+        Insets margin = getMargin(matcher,prefix);
+        Insets borderWidth = getBorderWidth(matcher,prefix);
+        Insets padding = getPadding(matcher,prefix);
         g.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"color")));
         double x = margin.getLeft() + borderWidth.getLeft() + padding.getLeft();
         Font font = getDefaultFont();
