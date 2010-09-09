@@ -30,7 +30,6 @@ public abstract class Control extends Node {
     protected Control() {
         setSkinDirty();
         populateCSSClasses();
-        u.p("classes = " + this.getCSSClasses());
     }
 
     private void populateCSSClasses() {

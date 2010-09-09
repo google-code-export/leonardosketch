@@ -3,6 +3,7 @@ package org.joshy.sketch.controls;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Image;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Togglebutton;
 
 import javax.imageio.ImageIO;
@@ -26,10 +27,22 @@ public class ToolbarButton extends Togglebutton {
     }
 
     @Override
+    public void doPrefLayout() {
+        super.doPrefLayout();    //To change body of overridden methods use File | Settings | File Templates.
+        this.setWidth(this.icon.getWidth());
+        this.setHeight(this.icon.getHeight());
+    }
+
+    @Override
     public void doLayout() {
         //super.doLayout();
         this.setWidth(this.icon.getWidth());
         this.setHeight(this.icon.getHeight());
+    }
+
+    @Override
+    public Bounds getLayoutBounds() {
+        return new Bounds(getTranslateX(), getTranslateY(), this.icon.getWidth(), this.icon.getHeight());
     }
 
     @Override

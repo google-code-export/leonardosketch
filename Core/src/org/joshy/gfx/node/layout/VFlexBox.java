@@ -42,9 +42,9 @@ public class
             //set the height
             double flex = spaceMap.get(c);
             if(totalFlex > 0) {
-                //u.p("before height = " + c.getHeight());
+                u.p("before height = " + c.getHeight());
                 c.setHeight(c.getHeight()+flex/totalFlex*totalExcess);
-                //u.p("set height to " + c.getHeight());
+                u.p("set height to " + c.getHeight());
             }
             //update running total
             y = y + c.getHeight();
