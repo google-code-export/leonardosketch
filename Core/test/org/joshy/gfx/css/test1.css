@@ -104,3 +104,10 @@ Button.classmatch3 {
     border-width: 10px 11px 12px; /* top, left&right, bottom */
 }
 
+
+/* advanced CSS class tests */
+.class1 { dummy-prop: 1px; }
+.class2 { dummy-prop: 3px; }
+.-class-Button {
+    dummy-prop2: 10px; 
+}

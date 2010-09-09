@@ -2,6 +2,9 @@ package org.joshy.gfx.css;
 
 import org.joshy.gfx.node.control.Control;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by IntelliJ IDEA.
  * User: joshmarinacci
@@ -13,7 +16,7 @@ public class CSSMatcher {
     public String element;
     public String pseudo;
     public String id;
-    public String cssClass;
+    public Set<String> classes = new HashSet<String>();
 
     public CSSMatcher() {
     }
@@ -25,6 +28,7 @@ public class CSSMatcher {
     public CSSMatcher(Control c) {
         this.element = c.getClass().getSimpleName();
         this.id = c.getId();
+        classes.addAll(c.getCSSClasses());
     }
 
     @Override
@@ -33,7 +37,7 @@ public class CSSMatcher {
                 "element='" + element + '\'' +
                 ", pseudo='" + pseudo + '\'' +
                 ", id='" + id + '\'' +
-                ", cssClass='" + cssClass + '\'' +
+                ", cssClass='" + classes + '\'' +
                 '}';
     }
 }

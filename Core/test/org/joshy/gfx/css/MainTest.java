@@ -1,8 +1,10 @@
 package org.joshy.gfx.css;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.css.values.BaseValue;
 import org.joshy.gfx.css.values.ShadowValue;
 import org.joshy.gfx.css.values.StringListValue;
+import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.util.u;
 import org.junit.After;
 import org.junit.Before;
@@ -29,6 +31,8 @@ import static org.junit.Assert.assertTrue;
 public class MainTest {
     @Before
     public void setUp() throws Exception {
+        Core.setTesting(true);
+        Core.init();
     }
 
     @Test
@@ -82,7 +86,7 @@ public class MainTest {
 
         //match by class
         CSSMatcher classMatcher = new CSSMatcher();
-        classMatcher.cssClass = "classmatch1";
+        classMatcher.classes.add("classmatch1");
         assertTrue(set.findIntegerValue(classMatcher,"dummy-prop-name") == 88);
 
         //match by element against a rule with multiple elements
@@ -106,6 +110,18 @@ public class MainTest {
         marginTests(set);
         paddingTests(set);
         borderTests(set);
+
+        advancedClassTests(set);
+    }
+
+    private void advancedClassTests(CSSRuleSet set) {
+        Button button = new Button();
+        button.getCSSClasses().add("class1");
+        CSSMatcher matcher = new CSSMatcher(button);
+        assertTrue(set.findIntegerValue(matcher,"dummy-prop")==1);
+        button.getCSSClasses().add("class2");
+        assertTrue(set.findIntegerValue(new CSSMatcher(button),"dummy-prop")==3);
+        assertTrue(set.findIntegerValue(new CSSMatcher(button),"dummy-prop2")==10);
     }
 
     private void marginTests(CSSRuleSet set) {

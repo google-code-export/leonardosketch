@@ -86,11 +86,13 @@ public class CSSRuleSet {
             }
         }
 
-        if(matcher.cssClass != null) {
-            p("checking class: " + matcher.cssClass + " vs " + elem.cssClass);
-            if(matcher.cssClass.equals(elem.cssClass)) {
-               p("matched css class on: " + elem);
-                return true;
+        for(String c1 : matcher.classes) {
+            for(String c2 : elem.classes) {
+                p("checking css class: " + c1 + " vs " + c2);
+                if(c1.equals(c2)) {
+                    p("matched css class on: " + elem);
+                    return true;
+                }
             }
         }
 

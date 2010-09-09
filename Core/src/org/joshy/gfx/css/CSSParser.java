@@ -69,7 +69,7 @@ public class CSSParser extends BaseParser<Object> {
                     Sequence(LetterOrStar(),
                             toString,elem.set((String)value())),
                     //.foo : match css class
-                    Sequence(Period(),Sequence(Letter(),ZeroOrMore(LetterOrDigit())),
+                    Sequence(Period(),Sequence(LetterOrDash(),ZeroOrMore(LetterOrDigitOrDash())),
                             toString, cssClass.set((String)value()))
                 )
 
@@ -112,7 +112,7 @@ public class CSSParser extends BaseParser<Object> {
                     SEMICOLON,
                     new InsetsRuleAction("padding","",propValue)
                 ),
-                //padding shortcut
+                //border-width shortcut
                 Sequence(
                     Spacing(),
                     "border-width",
@@ -144,7 +144,7 @@ public class CSSParser extends BaseParser<Object> {
     public Action toString = new ToStringAction();
     
     public Rule PropertyName() {
-        return Sequence(OneOrMore(LetterOrDash()), toString);
+        return Sequence(OneOrMore(LetterOrDigitOrDash()), toString);
     }
 
     public static class LinearGradientAction implements Action {
@@ -304,6 +304,10 @@ public class CSSParser extends BaseParser<Object> {
         return FirstOf(CharRange('a', 'z'), CharRange('A', 'Z'), CharRange('0', '9'), '_');
     }
     @SuppressNode
+    public Rule LetterOrDigitOrDash() {
+        return FirstOf(CharRange('a', 'z'), CharRange('A', 'Z'), CharRange('0', '9'), '_','-');
+    }
+    @SuppressNode
     public Rule LetterOrStar() {
         return FirstOf(CharRange('a', 'z'), CharRange('A', 'Z'), '_', '*' );
     }
@@ -415,7 +419,9 @@ public class CSSParser extends BaseParser<Object> {
             match.element = elem.get();
             match.pseudo = pseudo.get();
             match.id = id.get();
-            match.cssClass = cssClass.get();
+            if(cssClass.get() != null) {
+                match.classes.add(cssClass.get());
+            }
             /*p("--------");
             p("elem = " + elem.get());
             p("pseudo = " + pseudo.get());

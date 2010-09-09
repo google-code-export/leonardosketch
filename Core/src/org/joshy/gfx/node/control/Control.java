@@ -5,7 +5,8 @@ import org.joshy.gfx.css.SuperSkin;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The base of all UI controls. It defines the layout contract, and
@@ -23,10 +24,21 @@ public abstract class Control extends Node {
     protected boolean layoutDirty;
     protected SuperSkin cssSkin;
     private String id;
-    protected List<String> cssClasses;
+    protected Set<String> cssClasses = new HashSet<String>();
 
     protected Control() {
         setSkinDirty();
+        populateCSSClasses();
+    }
+
+    private void populateCSSClasses() {
+        Class clz = this.getClass();
+        while(true) {
+            cssClasses.add("-class-"+clz.getName().replace(".","-"));
+            cssClasses.add("-class-"+clz.getSimpleName().replace(".","-"));
+            if(clz == Control.class) break;
+            clz = clz.getSuperclass();
+        }
     }
 
     public Control setWidth(double width) {
@@ -128,6 +140,10 @@ public abstract class Control extends Node {
     public Control setId(String id) {
         this.id = id;
         return this;
+    }
+
+    public Set<String> getCSSClasses() {
+        return this.cssClasses;
     }
 }
 
