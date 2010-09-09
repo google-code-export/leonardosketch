@@ -1,6 +1,8 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -26,6 +28,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     private double scrollX = 0;
     final double rowHeight = 20;
     private ScrollPane scrollPane;
+    private Font font;
 
     public TableView() {
         setWidth(300);
@@ -53,6 +56,26 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         //set default renderer
         setRenderer(new DataRenderer() {
             public void draw(GFX g, TableView table, Object cell, int row, int column, double x, double y, double width, double height) {
+                if(cssSkin != null) {
+                    CSSMatcher matcher = new CSSMatcher("TableView");
+                    Bounds bounds = new Bounds(x,y,width,height);
+                    String prefix = "item-";
+                    if(getSelectedIndex() == row) {
+                        prefix = "selected-item-";
+                    }
+                    cssSkin.drawBackground(g,matcher,prefix,bounds);
+                    cssSkin.drawBorder(g,matcher,prefix,bounds);
+                    int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
+                    g.setPaint(new FlatColor(col));
+                    if(cell != null) {
+                        //String s = textRenderer.toString(listView, item, index);
+                        String s = cell.toString();
+                        //g.drawText(s, font, x+2, y+15);
+                        Font.drawCenteredVertically(g, s, font, x+2, y, width, height, true);
+                    }
+                    return;
+                }
+
                 g.setPaint(FlatColor.WHITE);
                 if(row % 2 == 0) {
                     g.setPaint(new FlatColor("#eeeeee"));
@@ -196,38 +219,42 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
 
     @Override
     public void doSkins() {
+        cssSkin = SkinManager.getShared().getCSSSkin();
+        font = cssSkin.getDefaultFont();
+        setLayoutDirty();
     }
 
-    @Override
-    public void doPrefLayout() {
-        super.doPrefLayout();    //To change body of overridden methods use File | Settings | File Templates.
-    }
 
     @Override
     public void doLayout() {
-        //setWidth(getModel().getColumnCount()*defaultColumnWidth);
+        //do nothing. width and height are purely controlled by the container
     }
 
     final int headerHeight = 20;
     @Override
     public void draw(GFX g) {
+        CSSMatcher matcher = new CSSMatcher(this);
+
         Bounds clip = g.getClipRect();
         g.setClipRect(new Bounds(0,0,width,height));
+
         //draw bg
-        g.setPaint(FlatColor.WHITE);
-        g.fillRect(0,0,width,height);
-
-        double columnWidth = getWidth()/model.getColumnCount();
-
+        if(cssSkin != null) {
+            cssSkin.drawBackground(g,matcher,"",new Bounds(0,0,width,height));
+        } else {
+            g.setPaint(FlatColor.WHITE);
+            g.fillRect(0,0,width,height);
+        }
 
         //draw headers
+        double columnWidth = getWidth()/model.getColumnCount();
         for(int col = 0; col<model.getColumnCount(); col++) {
             Object header = model.getColumnHeader(col);
             headerRenderer.draw(g, this, header, col, col*columnWidth+scrollX, 0, columnWidth, headerHeight);
         }
 
-        int startRow = (int)(-scrollY/rowHeight);
         //draw data
+        int startRow = (int)(-scrollY/rowHeight);
         for(int row=0; row*rowHeight+headerHeight < getHeight(); row++) {
             for(int col=0; col<model.getColumnCount(); col++) {
                 Object item = null;
@@ -243,9 +270,10 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         }
 
         //draw border
-        g.setPaint(FlatColor.BLACK);
-        g.drawRect(0,0,width,height);
         g.setClipRect(clip);
+        if(cssSkin != null) {
+            cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,width,height));
+        }
     }
 
     public boolean isFocused() {
@@ -278,7 +306,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
     }
 
     public int getSelectedIndex() {
-        return getSelectedColumn();
+        return getSelectedRow();
     }
 
 

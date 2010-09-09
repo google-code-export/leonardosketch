@@ -184,7 +184,8 @@ PopupMenu {
 
 ListView {
     margin: 0px;
-    border-width: 0px;
+    border-width: 1px;
+    border-color: #a0a0a0;
     background-color:#f0f0f0;
     
     item-background-color: #f0f0f0;
@@ -199,3 +200,21 @@ ListView {
     selected-item-color: #ffffff;
 }
 
+TableView {
+    margin: 0px;
+    border-width: 1px;
+    border-color: #a0a0a0;
+    background-color:#f0f0f0;
+
+    item-background-color: #f0f0f0;
+    item-border-color: #00ff00;
+    item-border-width: 0px;
+    item-color: #000000;
+
+    selected-item-background-color: #0000ff;
+    selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+    selected-item-border-width: 1px;
+    selected-item-border-color: #000000;
+    selected-item-color: #ffffff;
+    selected-item-margin: 0px;
+}
