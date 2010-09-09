@@ -1,6 +1,6 @@
 package org.joshy.gfx;
 
-import org.joshy.gfx.css.SuperSkin;
+import org.joshy.gfx.css.CSSSkin;
 
 /**
  * Created by IntelliJ IDEA.
@@ -12,7 +12,7 @@ import org.joshy.gfx.css.SuperSkin;
 
 public class SkinManager {
     private static SkinManager _shared;
-    private SuperSkin cssSkin;
+    private CSSSkin cssSkin;
 
     private SkinManager() {
     }
@@ -24,11 +24,11 @@ public class SkinManager {
         return _shared;
     }
 
-    public void setCSSSkin(SuperSkin cssSkin) {
+    public void setCSSSkin(CSSSkin cssSkin) {
         this.cssSkin = cssSkin;
     }
 
-    public SuperSkin getCSSSkin() {
+    public CSSSkin getCSSSkin() {
         return cssSkin;
     }
 }

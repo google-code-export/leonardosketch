@@ -195,7 +195,10 @@ ListView {
     
     item-background-color: #f0f0f0;
     item-border-color: #00ff00;
-    item-border-width: 0px;
+    item-border-left-width: 0px;
+    item-border-right-width: 0px;
+    item-border-top-width: 0px;
+    item-border-bottom-width: 0px;
     item-color: #000000;
 
     selected-item-background-color: #0000ff;

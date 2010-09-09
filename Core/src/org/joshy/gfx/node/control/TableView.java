@@ -9,12 +9,7 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 
-/**
- * Created by IntelliJ IDEA.
- * User: josh
- * Date: Jan 31, 2010
- * Time: 1:33:47 PM
- * To change this template use File | Settings | File Templates.
+/** A table with columns and rows. Used for displaying tabular data.
  */
 public class TableView extends Control implements Focusable, ScrollPane.ScrollingAware, SelectableControl {
     private TableModel model;
@@ -63,7 +58,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                     if(getSelectedIndex() == row) {
                         prefix = "selected-item-";
                     }
-                    cssSkin.drawBackground(g,matcher,prefix,bounds);
+                    cssSkin.drawBackground2(g,matcher,prefix,bounds);
                     cssSkin.drawBorder2(g,matcher,prefix,bounds);
                     int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
                     g.setPaint(new FlatColor(col));
@@ -240,7 +235,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
 
         //draw bg
         if(cssSkin != null) {
-            cssSkin.drawBackground(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBackground2(g,matcher,"",new Bounds(0,0,width,height));
         } else {
             g.setPaint(FlatColor.WHITE);
             g.fillRect(0,0,width,height);
@@ -272,7 +267,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
         //draw border
         g.setClipRect(clip);
         if(cssSkin != null) {
-            cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBorder2(g,matcher,"",new Bounds(0,0,width,height));
         }
     }
 

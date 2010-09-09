@@ -2,7 +2,6 @@ package org.joshy.gfx.node.layout;
 
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
@@ -67,8 +66,8 @@ public class Panel extends Container {
         if(cssSkin != null) {
             Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
             CSSMatcher matcher = new CSSMatcher(this);
-            cssSkin.drawBackground(g,matcher,"",bounds);
-            cssSkin.drawBorder(g,matcher,"",bounds);
+            cssSkin.drawBackground2(g,matcher,"",bounds);
+            cssSkin.drawBorder2(g,matcher,"",bounds);
             //cssSkin.draw(g, this, null, new CSSSkin.BoxState(getWidth(),getHeight()),CSSSkin.State.None);
             return;
         }

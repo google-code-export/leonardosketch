@@ -1,8 +1,8 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.CSSMatcher;
 import org.joshy.gfx.css.CSSSkin;
-import org.joshy.gfx.css.MasterCSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -13,8 +13,7 @@ public class Textbox extends TextControl {
     private Insets insets;
     private double baseline;
     double xoff = 0;
-    private CSSSkin cssSkin;
-    private MasterCSSSkin.BoxState cssSize;
+    private CSSSkin.BoxState cssSize;
 
     public Textbox() {
         setWidth(100);
@@ -89,7 +88,9 @@ public class Textbox extends TextControl {
             if(cssSize == null) {
                 this.doPrefLayout();
             }
-            cssSkin.draw(g,this,cssSize);
+            CSSMatcher matcher = new CSSMatcher(this);
+            cssSkin.drawBackground2(g, matcher,"", new Bounds(0,0,getWidth(),getHeight()));
+            cssSkin.drawBorder2(g,matcher,"",new Bounds(0,0,getWidth(),getHeight()));
         } else {
             //draw background
             if(focused) {

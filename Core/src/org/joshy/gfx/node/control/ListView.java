@@ -3,7 +3,6 @@ package org.joshy.gfx.node.control;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -29,7 +28,6 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
     private Orientation orientation = Orientation.Vertical;
     private boolean dropIndicatorVisible;
     private int dropIndicatorIndex;
-    private CSSSkin cssSkin;
     private TextRenderer<E> textRenderer;
     private Font font;
 
@@ -181,7 +179,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         CSSMatcher matcher = new CSSMatcher("ListView");
         
         if(cssSkin != null) {
-            cssSkin.drawBackground(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBackground2(g,matcher,"",new Bounds(0,0,width,height));
         } else {
             g.setPaint(FlatColor.WHITE);
             g.fillRect(0,0,width,height);
@@ -263,7 +261,7 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         
         g.setClipRect(oldClip);
         if(cssSkin != null) {
-            cssSkin.drawBorder(g,matcher,"",new Bounds(0,0,width,height));
+            cssSkin.drawBorder2(g,matcher,"",new Bounds(0,0,width,height));
         }
 
     }
@@ -457,8 +455,8 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
                 if(listView.getSelectedIndex() == index) {
                     prefix = "selected-item-";
                 }
-                cssSkin.drawBackground(gfx,matcher,prefix,bounds);
-                cssSkin.drawBorder(gfx,matcher,prefix,bounds);
+                cssSkin.drawBackground2(gfx,matcher,prefix,bounds);
+                cssSkin.drawBorder2(gfx,matcher,prefix,bounds);
                 int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
                 gfx.setPaint(new FlatColor(col));
                 if(item != null) {

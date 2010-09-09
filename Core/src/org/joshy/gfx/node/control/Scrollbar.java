@@ -1,8 +1,7 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
-import org.joshy.gfx.css.MasterCSSSkin;
-import org.joshy.gfx.css.SuperSkin;
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
@@ -35,8 +34,7 @@ public class Scrollbar extends Control {
     private double span = 0;
     private Point2D.Double startPX;
     private double offPX;
-    private SuperSkin cssSkin;
-    private MasterCSSSkin.BoxState size;
+    private CSSSkin.BoxState size;
 
     public Scrollbar() {
         this(false);

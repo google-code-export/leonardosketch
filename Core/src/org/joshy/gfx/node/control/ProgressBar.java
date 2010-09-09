@@ -2,7 +2,7 @@ package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
-import org.joshy.gfx.css.MasterCSSSkin;
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.event.Callback;
@@ -19,7 +19,7 @@ import org.joshy.gfx.node.Bounds;
  */
 public class ProgressBar extends Control {
     double percentage = 0.0;
-    private MasterCSSSkin.BoxState size;
+    private CSSSkin.BoxState size;
 
     public ProgressBar() {
         doLayout();
@@ -64,10 +64,10 @@ public class ProgressBar extends Control {
                 doPrefLayout();
             }
             CSSMatcher matcher = new CSSMatcher("ProgressBar");
-            cssSkin.drawBackground(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
-            cssSkin.drawBorder(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
-            cssSkin.drawBackground(g, matcher, "bar-", new Bounds(0,0,getWidth()*percentage, getHeight()));
-            cssSkin.drawBorder(g, matcher, "bar-", new Bounds(0,0,getWidth()*percentage, getHeight()));
+            cssSkin.drawBackground2(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
+            cssSkin.drawBorder2(g, matcher, "", new Bounds(0,0,getWidth(), getHeight()));
+            cssSkin.drawBackground2(g, matcher, "bar-", new Bounds(0,0,getWidth()*percentage, getHeight()));
+            cssSkin.drawBorder2(g, matcher, "bar-", new Bounds(0,0,getWidth()*percentage, getHeight()));
         }
     }
 
