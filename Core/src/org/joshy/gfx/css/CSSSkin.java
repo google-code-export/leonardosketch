@@ -197,42 +197,5 @@ public class CSSSkin extends MasterCSSSkin {
         CSSMatcher matcher = createMatcher(control,null);
         return getMargin(matcher);
     }
-    public void draw(GFX g, Scrollbar scrollbar, BoxState size, Bounds thumbBounds, Bounds leftArrowBounds, Bounds rightArrowBounds) {
-        if(set == null) {
-            g.setPaint(FlatColor.BLUE);
-            g.fillRect(0,0,20,20);
-            return;
-        }
-        CSSMatcher matcher = createMatcher(scrollbar,null);
-        if(scrollbar.isVertical()) {
-            matcher.pseudo = "vertical";
-        }
-        Insets margin = getMargin(matcher);
 
-        double backWidth = size.width-margin.getLeft()-margin.getRight();
-        double backHeight = size.height-margin.getTop()-margin.getBottom();
-        Bounds backBounds = new Bounds(margin.getLeft(),margin.getTop(),backWidth,backHeight);
-        //draw the background
-        drawBackground(g,matcher,"",backBounds);
-        drawBorder(    g,matcher,"",backBounds);
-        //draw the track
-        //draw the arrows
-        drawBackground(g,matcher,"left-arrow-",leftArrowBounds);
-        drawBackground(g,matcher,"right-arrow-",rightArrowBounds);
-        drawBorder(g,matcher,"left-arrow-",leftArrowBounds);
-        drawBorder(g,matcher,"right-arrow-",rightArrowBounds);
-        g.setPaint(FlatColor.BLACK);
-        if(scrollbar.isVertical()) {
-            GraphicsUtil.fillUpArrow(g,3,3,14);
-            GraphicsUtil.fillDownArrow(g,3,scrollbar.getHeight()-3-14,14);
-        } else {
-            GraphicsUtil.fillLeftArrow(g,2,3,14);
-            GraphicsUtil.fillRightArrow(g,scrollbar.getWidth()-2-14,3,14);
-        }
-
-        //draw the thumb
-        drawBackground(g,matcher,"thumb-",thumbBounds);
-        drawBorder(    g,matcher,"thumb-",thumbBounds);
-    }
-
- }
+}

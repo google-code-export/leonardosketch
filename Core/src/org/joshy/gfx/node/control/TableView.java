@@ -64,7 +64,7 @@ public class TableView extends Control implements Focusable, ScrollPane.Scrollin
                         prefix = "selected-item-";
                     }
                     cssSkin.drawBackground(g,matcher,prefix,bounds);
-                    cssSkin.drawBorder(g,matcher,prefix,bounds);
+                    cssSkin.drawBorder2(g,matcher,prefix,bounds);
                     int col = cssSkin.getCSSSet().findColorValue(matcher, prefix + "color");
                     g.setPaint(new FlatColor(col));
                     if(cell != null) {

@@ -8,6 +8,8 @@ import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.Scrollbar;
+import org.joshy.gfx.util.GraphicsUtil;
 
 /**
  * Implements drawing Controls using the CSS box model.
@@ -97,7 +99,36 @@ public class SuperSkin extends CSSSkin {
 
     }
 
+    private void drawBackground2(GFX g, CSSMatcher matcher, String prefix, Bounds bounds) {
+//        g.translate(bounds.getX(),bounds.getY());
+        Insets margin = getMargin(matcher,prefix);
+        BaseValue background = set.findValue(matcher,prefix+"background");
+        int radius = set.findIntegerValue(matcher,prefix+"border-radius");
 
+        if(!"transparent".equals(set.findStringValue(matcher,prefix+"background-color"))) {
+            g.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"background-color")));
+            if(background instanceof LinearGradientValue) {
+                g.setPaint(toGradientFill((LinearGradientValue)background,bounds.getWidth(),bounds.getHeight()));
+            }
+            if(radius == 0) {
+                g.fillRect(
+                        bounds.getX()+margin.getLeft(),
+                        bounds.getY()+margin.getTop(),
+                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
+                        bounds.getHeight()-margin.getTop()-margin.getBottom()
+                        );
+            } else {
+                g.fillRoundRect(
+                        bounds.getX()+margin.getLeft(),
+                        bounds.getY()+margin.getTop(),
+                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
+                        bounds.getHeight()-margin.getTop()-margin.getBottom(),
+                        radius,
+                        radius);
+            }
+        }
+  //      g.translate(-bounds.getX(),-bounds.getY());
+    }
     private void drawBackground2(GFX g, CSSMatcher matcher, String prefix, BoxState box) {
         double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
         double backHeight = box.height-box.margin.getTop()-box.margin.getBottom();
@@ -132,6 +163,33 @@ public class SuperSkin extends CSSSkin {
         g.translate(-bounds.getX(),-bounds.getY());
     }
 
+    public void drawBorder2(GFX gfx, CSSMatcher matcher, String prefix, Bounds bounds) {
+        Insets margin = getMargin(matcher,prefix);
+        Insets borderWidth = getBorderWidth(matcher,prefix);
+        int borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
+        if(!borderWidth.allEquals(0)) {
+            gfx.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
+            double bw = 1;
+            gfx.setStrokeWidth(bw);
+            if(borderRadius == 0) {
+                gfx.drawRect(
+                        bounds.getX()+margin.getLeft(),
+                        bounds.getY()+margin.getTop(),
+                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
+                        bounds.getHeight()-margin.getTop()-margin.getBottom()
+                );
+            } else {
+                gfx.drawRoundRect(
+                        bounds.getX()+margin.getLeft(),
+                        bounds.getY()+margin.getTop(),
+                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
+                        bounds.getHeight()-margin.getTop()-margin.getBottom(),
+                        borderRadius,borderRadius
+                );
+            }
+            gfx.setStrokeWidth(1);
+        }
+    }
 
     private void drawBorder2(GFX gfx, CSSMatcher matcher, String prefix, BoxState box) {
         double backWidth = box.width-box.margin.getLeft()-box.margin.getRight();
@@ -169,4 +227,41 @@ public class SuperSkin extends CSSSkin {
         }
     }
 
+    public void draw(GFX g, Scrollbar scrollbar, BoxState size, Bounds thumbBounds, Bounds leftArrowBounds, Bounds rightArrowBounds) {
+        if(set == null) {
+            g.setPaint(FlatColor.BLUE);
+            g.fillRect(0,0,20,20);
+            return;
+        }
+        CSSMatcher matcher = createMatcher(scrollbar,null);
+        if(scrollbar.isVertical()) {
+            matcher.pseudo = "vertical";
+        }
+        Insets margin = getMargin(matcher);
+
+        double backWidth = size.width-margin.getLeft()-margin.getRight();
+        double backHeight = size.height-margin.getTop()-margin.getBottom();
+        Bounds backBounds = new Bounds(margin.getLeft(),margin.getTop(),backWidth,backHeight);
+        //draw the background
+        drawBackground(g,matcher,"",backBounds);
+        drawBorder(    g,matcher,"",backBounds);
+        //draw the track
+        //draw the arrows
+        drawBackground(g,matcher,"left-arrow-",leftArrowBounds);
+        drawBackground(g,matcher,"right-arrow-",rightArrowBounds);
+        drawBorder(g,matcher,"left-arrow-",leftArrowBounds);
+        drawBorder(g,matcher,"right-arrow-",rightArrowBounds);
+        g.setPaint(FlatColor.BLACK);
+        if(scrollbar.isVertical()) {
+            GraphicsUtil.fillUpArrow(g,3,3,14);
+            GraphicsUtil.fillDownArrow(g,3,scrollbar.getHeight()-3-14,14);
+        } else {
+            GraphicsUtil.fillLeftArrow(g,2,3,14);
+            GraphicsUtil.fillRightArrow(g,scrollbar.getWidth()-2-14,3,14);
+        }
+
+        //draw the thumb
+        drawBackground2(g, matcher, "thumb-", thumbBounds);
+        drawBorder2(    g,matcher,"thumb-",thumbBounds);
+    }
 }

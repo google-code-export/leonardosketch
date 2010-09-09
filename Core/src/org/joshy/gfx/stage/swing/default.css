@@ -116,6 +116,7 @@ Panel, HBox, VBox {
 /* =========== scroll bars ========== */
 Scrollbar {
     margin: 0px;
+    padding: 0px;
     border-width: 1px;
     border-color: #000000;
     background-color: #a0a0a0;
@@ -123,10 +124,14 @@ Scrollbar {
     thumb-background: linear-gradient(center top, #ffffff 0%, #808080 100%);
     thumb-background-color: #888888;
     thumb-border-color: #000000;
-    thumb-border-radius: 3px;
+    thumb-border-radius: 5px;
     thumb-border-width: 1px;
-    thumb-margin: 0px;
-    
+
+    thumb-margin-left: 0px;
+    thumb-margin-right: 1px;
+    thumb-margin-top: 0px;
+    thumb-margin-bottom: 1px;
+
     left-arrow-background-color: #888888;
     left-arrow-border-color: #000000;
     left-arrow-border-width: 1px;
@@ -208,12 +213,18 @@ TableView {
 
     item-background-color: #f0f0f0;
     item-border-color: #00ff00;
-    item-border-width: 0px;
+    item-border-left-width: 0px;
+    item-border-right-width: 0px;
+    item-border-top-width: 0px;
+    item-border-bottom-width: 0px;
     item-color: #000000;
 
     selected-item-background-color: #0000ff;
     selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-    selected-item-border-width: 1px;
+    selected-item-border-top-width: 1px;
+    selected-item-border-bottom-width: 1px;
+    selected-item-border-left-width: 0px;
+    selected-item-border-right-width: 0px;
     selected-item-border-color: #000000;
     selected-item-color: #ffffff;
     selected-item-margin: 0px;
