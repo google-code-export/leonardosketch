@@ -203,9 +203,17 @@ ListView {
 
     selected-item-background-color: #0000ff;
     selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-    selected-item-border-width: 1px;
     selected-item-border-color: #000000;
     selected-item-color: #ffffff;
+    
+    selected-item-margin-top: 0px;
+    selected-item-margin-bottom: 1px;
+    selected-item-margin-left: 0px;
+    selected-item-margin-right: 0px;
+    selected-item-border-top-width:    1px;
+    selected-item-border-bottom-width: 1px;
+    selected-item-border-left-width:   0px;
+    selected-item-border-right-width:  0px;
 }
 
 TableView {
@@ -224,11 +232,14 @@ TableView {
 
     selected-item-background-color: #0000ff;
     selected-item-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
-    selected-item-border-top-width: 1px;
+    selected-item-margin-top: 0px;
+    selected-item-margin-bottom: 1px;
+    selected-item-margin-left: 0px;
+    selected-item-margin-right: 0px;
+    selected-item-border-top-width:    1px;
     selected-item-border-bottom-width: 1px;
-    selected-item-border-left-width: 0px;
-    selected-item-border-right-width: 0px;
+    selected-item-border-left-width:   0px;
+    selected-item-border-right-width:  0px;
     selected-item-border-color: #000000;
     selected-item-color: #ffffff;
-    selected-item-margin: 0px;
 }

@@ -28,19 +28,32 @@ public class Insets {
         return top;
     }
 
-    public double getLeft() {
-        return left;
+    public double getRight() {
+        return right;
     }
 
     public double getBottom() {
         return bottom;
     }
 
-    public double getRight() {
-        return right;
+    public double getLeft() {
+        return left;
     }
 
+    public boolean allEqual() {
+        return (left == right && left == top && left == bottom);
+    }
     public boolean allEquals(double i) {
         return (left == i && right == i && top == i && bottom == i);
+    }
+
+    @Override
+    public String toString() {
+        return "Insets{" +
+                "top=" + top +
+                ", bottom=" + bottom +
+                ", left=" + left +
+                ", right=" + right +
+                '}';
     }
 }

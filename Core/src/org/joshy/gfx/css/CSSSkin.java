@@ -11,6 +11,7 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.gfx.util.URLUtils;
+import org.joshy.gfx.util.u;
 
 import java.net.URI;
 
@@ -163,15 +164,40 @@ public class CSSSkin {
         int borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
         if(!borderWidth.allEquals(0)) {
             gfx.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
-            double bw = 1;
-            gfx.setStrokeWidth(bw);
-            if(borderRadius == 0) {
-                gfx.drawRect(
-                        bounds.getX()+margin.getLeft(),
-                        bounds.getY()+margin.getTop(),
-                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
-                        bounds.getHeight()-margin.getTop()-margin.getBottom()
-                );
+            if(borderRadius <= 0) {
+                if(borderWidth.allEqual()) {
+                    if(borderWidth.getLeft() >0) {
+                        gfx.setStrokeWidth(borderWidth.getLeft());
+                        gfx.drawRect(
+                                bounds.getX()+margin.getLeft(),
+                                bounds.getY()+margin.getTop(),
+                                bounds.getWidth()-margin.getLeft()-margin.getRight(),
+                                bounds.getHeight()-margin.getTop()-margin.getBottom()
+                        );
+                    }
+                    gfx.setStrokeWidth(1);
+                } else {
+                    double x = bounds.getX()+margin.getLeft();
+                    double y = bounds.getY()+margin.getTop();
+                    double w = bounds.getWidth()-margin.getLeft()-margin.getRight()-1;
+                    double h = bounds.getHeight()-margin.getTop()-margin.getBottom()-1;
+                    if(borderWidth.getLeft()>0) {
+                        gfx.setStrokeWidth(borderWidth.getLeft());
+                        gfx.drawLine(x,y,x,y+h);
+                    }
+                    if(borderWidth.getTop()>0) {
+                        gfx.setStrokeWidth(borderWidth.getTop());
+                        gfx.drawLine(x,y,x+w,y);
+                    }
+                    if(borderWidth.getRight()>0) {
+                        gfx.setStrokeWidth(borderWidth.getRight());
+                        gfx.drawLine(x+w,y,x+w,y+h);
+                    }
+                    if(borderWidth.getBottom()>0) {
+                        gfx.setStrokeWidth(borderWidth.getBottom());
+                        gfx.drawLine(x,y+h,  x+w,y+h);
+                    }
+                }
             } else {
                 gfx.drawRoundRect(
                         bounds.getX()+margin.getLeft(),
@@ -199,15 +225,26 @@ public class CSSSkin {
         int borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
         if(!borderWidth.allEquals(0)) {
             gfx.setPaint(new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
-            double bw = 1;
-            gfx.setStrokeWidth(bw);
             if(borderRadius == 0) {
-                gfx.drawRect(
-                        bounds.getX()+margin.getLeft(),
-                        bounds.getY()+margin.getTop(),
-                        bounds.getWidth()-margin.getLeft()-margin.getRight(),
-                        bounds.getHeight()-margin.getTop()-margin.getBottom()
-                );
+                if(borderWidth.allEqual()) {
+                    gfx.setStrokeWidth(borderWidth.getLeft());
+                    gfx.drawRect(
+                            bounds.getX()+margin.getLeft(),
+                            bounds.getY()+margin.getTop(),
+                            bounds.getWidth()-margin.getLeft()-margin.getRight(),
+                            bounds.getHeight()-margin.getTop()-margin.getBottom()
+                    );
+                    gfx.setStrokeWidth(1);
+                } else {
+                    if(borderWidth.getLeft()>0) {
+                        gfx.setStrokeWidth(borderWidth.getLeft());
+                        gfx.drawLine(bounds.getX(),bounds.getY(),bounds.getX(),bounds.getY()+bounds.getHeight());
+                    }
+                    if(borderWidth.getTop()>0) {
+                        gfx.setStrokeWidth(borderWidth.getTop());
+                        gfx.drawLine(bounds.getX(),bounds.getY(),bounds.getX()+bounds.getWidth(),bounds.getY());
+                    }
+                }
             } else {
                 gfx.drawRoundRect(
                         bounds.getX()+margin.getLeft(),
@@ -217,7 +254,6 @@ public class CSSSkin {
                         borderRadius,borderRadius
                 );
             }
-            gfx.setStrokeWidth(1);
         }
     }
 
