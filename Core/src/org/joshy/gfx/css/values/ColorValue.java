@@ -1,5 +1,8 @@
 package org.joshy.gfx.css.values;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
 * Created by IntelliJ IDEA.
 * User: joshmarinacci
@@ -8,9 +11,23 @@ package org.joshy.gfx.css.values;
 * To change this template use File | Settings | File Templates.
 */
 public class ColorValue extends BaseValue {
+    private static Map<String,Integer> colorMap;
+    static {
+        colorMap = new HashMap<String, Integer>();
+        colorMap.put("red",    0xff0000);
+        colorMap.put("green",  0x00ff00);
+        colorMap.put("blue",   0x0000ff);
+        colorMap.put("black",  0x000000);
+        colorMap.put("white",  0xffffff);
+        colorMap.put("yellow", 0x00ffff);
+    }
     private int rgb;
 
     public ColorValue(String text) {
+        if(colorMap.containsKey(text.toLowerCase())) {
+            this.rgb = colorMap.get(text.toLowerCase());
+            return;
+        }
         this.rgb = Integer.parseInt(text.substring(1),16);
     }
 

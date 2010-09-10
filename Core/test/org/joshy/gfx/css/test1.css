@@ -111,3 +111,12 @@ Button.classmatch3 {
 .-class-Button {
     dummy-prop2: 10px; 
 }
+
+
+/* constants tests */
+
+#constant_color_1 {
+    prop1: red;
+    prop2: green;
+    prop3: blue;
+}

@@ -28,19 +28,21 @@ import static org.junit.Assert.assertTrue;
  * Time: 9:37:40 PM
  * To change this template use File | Settings | File Templates.
  */
-public class MainTest {
+public class MainCSSTest {
+    private CSSRuleSet set;
+
     @Before
     public void setUp() throws Exception {
         Core.setTesting(true);
         Core.init();
+        InputStream css = MainCSSTest.class.getResourceAsStream("test1.css");
+        ParsingResult<?> result = parseCSS(css);
+        set = new CSSRuleSet();
+        condense(result.parseTreeRoot,set);
     }
 
     @Test
-    public void doit() throws IOException {
-        InputStream css = MainTest.class.getResourceAsStream("test1.css");
-        ParsingResult<?> result = parseCSS(css);
-        CSSRuleSet set = new CSSRuleSet();
-        condense(result.parseTreeRoot,set);
+    public void basicTests() throws IOException {
 
         //basic matching
         assertTrue(set.findStringValue("button","color").equals("ff00aa"));
@@ -107,14 +109,15 @@ public class MainTest {
 //        assertTrue(set.findIntegerValue(classMatcher,"margin") == 1);
 //        assertTrue(set.findIntegerValue(classMatcher,"padding") == 8);
 
-        marginTests(set);
-        paddingTests(set);
-        borderTests(set);
-
-        advancedClassTests(set);
+//        marginTests(set);
+//        paddingTests(set);
+//        borderTests(set);
+//
+//        advancedClassTests(set);
     }
 
-    private void advancedClassTests(CSSRuleSet set) {
+    @Test
+    public void advancedClassTests() {
         Button button = new Button();
         button.getCSSClasses().add("class1");
         CSSMatcher matcher = new CSSMatcher(button);
@@ -124,7 +127,8 @@ public class MainTest {
         assertTrue(set.findIntegerValue(new CSSMatcher(button),"dummy-prop2")==10);
     }
 
-    private void marginTests(CSSRuleSet set) {
+    @Test
+    public void marginTests() {
         CSSMatcher m = new CSSMatcher();
         m.id = "margin_test_1";
         assertTrue(set.findIntegerValue(m,"margin-top")==1);
@@ -158,7 +162,8 @@ public class MainTest {
     }
 
 
-    private void paddingTests(CSSRuleSet set) {
+    @Test
+    public void paddingTests() {
         CSSMatcher m = new CSSMatcher();
         m.id = "padding_test_1";
         assertTrue(set.findIntegerValue(m,"padding-top")==1);
@@ -190,8 +195,9 @@ public class MainTest {
         assertTrue(set.findIntegerValue(m,"padding-bottom")==12);
         assertTrue(set.findIntegerValue(m,"padding-left")==11);
     }
-    
-    private void borderTests(CSSRuleSet set) {
+
+    @Test
+    public void borderTests() {
         CSSMatcher m = new CSSMatcher();
         m.id = "border_test_1";
         assertTrue(set.findIntegerValue(m,"border-top-width")==1);
@@ -223,6 +229,18 @@ public class MainTest {
         assertTrue(set.findIntegerValue(m,"border-bottom-width")==12);
         assertTrue(set.findIntegerValue(m,"border-left-width")==11);
     }
+
+    @Test
+    public void constantTests() {
+        CSSMatcher matcher = new CSSMatcher();
+        matcher.id = "constant_color_1";
+        //test for red
+        assertTrue(set.findColorValue(matcher,"prop1")== 0x00ff0000);
+        assertTrue(set.findColorValue(matcher,"prop2")== 0x0000ff00);
+        assertTrue(set.findColorValue(matcher,"prop3")== 0x000000ff);
+    }
+
+    /* -------------- support -------------- */
     private static void condense(Node<?> node, CSSRuleSet set) {
         if(node == null) return;
         if("CSSRule".equals(node.getLabel())) {

@@ -197,6 +197,8 @@ public class CSSParser extends BaseParser<Object> {
                     ),
             //image URL
             Sequence(Sequence("url(",OneOrMore(URLChar()),")"), new ImageURLAction()),
+                //color constants like 'red', 'green', and 'blue'
+            ColorConstant(),
                 //hex color values: #abc067
             HexValue(),
                 //pixel values: 90px
@@ -246,6 +248,17 @@ public class CSSParser extends BaseParser<Object> {
                 }
                 );
     }
+
+    public Rule ColorConstant() {
+        return Sequence(FirstOf("red","green","blue"), new Action() {
+            public boolean run(Context context) {
+                context.setNodeValue(new ColorValue(context.getPrevText()));
+                return true;
+            }
+        });
+    }
+
+
 
 
     /* common low level reusable rules */
