@@ -7,6 +7,8 @@ import org.joshy.gfx.event.*;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 
+import java.util.Date;
+
 /*
  redesign text control to fix all of the bugs
  first, there should be a text model which holds the actual strings of text
@@ -105,6 +107,23 @@ public abstract class TextControl extends Control implements Focusable {
             }
         });
 
+        EventBus.getSystem().addListener(this, MouseEvent.MouseReleased, new Callback<MouseEvent>() {
+            public long lastRelease = 0;
+            public int clickCount = 0;
+
+            public void call(MouseEvent event) {
+                long now = new Date().getTime();
+                if(now-lastRelease < 400) {
+                } else {
+                    clickCount = 0;
+                }
+                clickCount++;
+                lastRelease = now;
+                if(clickCount == 3) {
+                    selectAll();
+                }
+            }
+        });
     }
 
     protected double filterMouseY(double y) {
@@ -564,6 +583,7 @@ public abstract class TextControl extends Control implements Focusable {
     public void selectAll() {
         //To change body of created methods use File | Settings | File Templates.
         selection.selectAll();
+        setDrawingDirty();
     }
 
 }
