@@ -126,6 +126,9 @@ public class Scrollbar extends Control {
             length = getWidth();
         }
         double fraction = px / ((length-arrowLength*2)*(1.0-span));
+        if(span >= 1.0) {
+            fraction = 0;
+        }
         return getMin() + (getMax()-getMin())*fraction;
     }
 
