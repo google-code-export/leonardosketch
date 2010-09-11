@@ -34,6 +34,7 @@ import org.joshy.sketch.actions.pages.PageListPanel;
 import org.joshy.sketch.actions.symbols.SymbolManager;
 import org.joshy.sketch.canvas.DocumentCanvas;
 import org.joshy.sketch.controls.Menu;
+import org.joshy.sketch.controls.Ruler;
 import org.joshy.sketch.controls.StandardDialog;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.modes.DocContext;
@@ -130,12 +131,46 @@ public class Main implements Runnable {
         context.setupActions();
         context.setupPalettes();
         context.stackPanel = new StackPanel();
+
+        final Ruler hruler = new Ruler(false);
+        final Ruler vruler = new Ruler(true);
+
         context.stackPanel.add(
-                new ScrollPane(
-                        context.getCanvas()
-                        .setWidth(300)
-                        .setHeight(300)
-                ));
+                new Panel()
+                    .onDoLayout(new Callback<Panel>() {
+                        public void call(Panel panel) {
+                            for(Control c : panel.controlChildren()) {
+                                c.doPrefLayout();
+                                if(c == hruler) {
+                                    c.setWidth(panel.getWidth()-30);
+                                    c.setHeight(30);
+                                    c.setTranslateX(30);
+                                    c.setTranslateY(0);
+                                }
+                                if(c == vruler) {
+                                    c.setWidth(30);
+                                    c.setHeight(panel.getHeight()-30);
+                                    c.setTranslateX(0);
+                                    c.setTranslateY(30);
+                                }
+                                if(c instanceof ScrollPane) {
+                                    c.setWidth(panel.getWidth()-30);
+                                    c.setHeight(panel.getHeight()-30);
+                                    c.setTranslateX(30);
+                                    c.setTranslateY(30);
+                                }
+                                c.doLayout();
+                            }
+                        }
+                    })
+                    .add(hruler,vruler)
+                    .add(
+                        new ScrollPane(
+                                context.getCanvas()
+                                .setWidth(300)
+                                .setHeight(300)
+                        ))
+                );
         context.stackPanel.add(context.getUndoOverlay());
         if(context instanceof VectorDocContext) {
             context.pageList = new PageListPanel((VectorDocContext)context);
@@ -193,11 +228,11 @@ public class Main implements Runnable {
             @Override
             public void doLayout() {
                 for(Control c : controlChildren()) {
-                    double w= 4*50+20;
+                    double w= 4*50+20+30;
                     if(c == context.stackPanel) {
                         c.setTranslateY(0);
-                        c.setTranslateX(0);
-                        c.setWidth(getWidth()-w);
+                        c.setTranslateX(30);
+                        c.setWidth(getWidth()-w-30);
                         c.setHeight(getHeight());
                     }
                     if(c == context.getToolbar()) {
@@ -493,5 +528,6 @@ public class Main implements Runnable {
             context.getStage().raiseToTop();
         }
     }
+
 }
 
