@@ -141,9 +141,13 @@ Slider {
 
 
 /* =========== panels ======== */
-Panel, HFlexBox, VFlexBox, GridBox {
-    background-color: #cccccc;
+Panel, HFlexBox, VFlexBox, GridBox, .-class-Panel {
+    background-color: transparent;
     border-width: 0px;
+}
+
+#root {
+    background-color: #d0d0d0;
 }
 
 /* =========== scroll bars ========== */

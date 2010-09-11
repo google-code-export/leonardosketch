@@ -1,7 +1,6 @@
 package org.joshy.gfx.stage.swing;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
@@ -12,12 +11,8 @@ import org.joshy.gfx.stage.Camera;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.PerformanceTracker;
 
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import javax.swing.*;
+import java.awt.*;
 
 public class SwingStage extends Stage {
     private JFrame frame;
@@ -108,7 +103,7 @@ public class SwingStage extends Stage {
                 skinsDirty = true;
             }
         };
-        root.setFill(FlatColor.WHITE);
+        root.setId("root");
         scene = new SceneComponent();
         contentLayer = new Panel() {
             @Override
@@ -123,10 +118,9 @@ public class SwingStage extends Stage {
                 }
             }
         };
-        contentLayer.setFill(FlatColor.WHITE);
+
         root.add(contentLayer);
         popupLayer = new Panel();
-        popupLayer.setFill(FlatColor.WHITE);
         root.add(popupLayer);
         frame.add(scene);
         frame.setSize(500,500);
@@ -265,8 +259,8 @@ public class SwingStage extends Stage {
 
         private void doGFXDrawing(Graphics graphics, int width, int height) {
             PerformanceTracker.getInstance().drawStart();
-            graphics.setColor(Color.WHITE);
-            graphics.fillRect(0,0,getWidth(),getHeight());
+            //graphics.setColor(Color.BLUE);
+            //graphics.fillRect(0,0,getWidth(),getHeight());
             GFX gfx = new SwingGFX((Graphics2D) graphics);
             root.draw(gfx);
             gfx.dispose();
