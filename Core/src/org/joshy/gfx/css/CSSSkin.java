@@ -11,7 +11,6 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.gfx.util.URLUtils;
-import org.joshy.gfx.util.u;
 
 import java.net.URI;
 
@@ -298,14 +297,15 @@ public class CSSSkin {
     public BoxState getSize(Control control) {
         CSSMatcher matcher = createMatcher(control, State.None);
         BoxState size = new BoxState();
-        size.width = control.getWidth();
-        size.height = control.getHeight();
 
         if(set == null) {
             size.width = 100;
             size.height = 100;
             return size;
         }
+
+        size.width = set.findIntegerValue(matcher,"width");
+        size.height = set.findIntegerValue(matcher,"height");
 
         Insets margin = getMargin(matcher);
         Insets padding = getPadding(matcher);
@@ -435,6 +435,11 @@ public class CSSSkin {
         }
         if(state == State.Selected) {
             matcher.pseudo = "selected";
+        }
+        if(control instanceof Scrollbar) {
+            if(((Scrollbar)control).isVertical()) {
+                matcher.pseudo = "vertical";
+            }
         }
         return matcher;
     }

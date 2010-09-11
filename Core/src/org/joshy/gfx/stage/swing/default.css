@@ -115,6 +115,8 @@ ProgressBar {
 
 
 Slider {
+    width: 100px;
+    height: 20px;
     background-color: black;
     background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
     margin: 5px 1px 5px 1px;
@@ -155,6 +157,8 @@ Panel, HFlexBox, VFlexBox, GridBox, .-class-Panel {
 
 /* =========== scroll bars ========== */
 Scrollbar {
+    width: 100px;
+    height: 20px;
     margin: 0px;
     padding: 0px;
     border-width: 1px;
@@ -184,6 +188,8 @@ Scrollbar {
 
 Scrollbar:vertical {
     thumb-background: linear-gradient(left center, #ffffff 0%, #808080 100%);    
+    width: 20px;
+    height: 100px;
 }
 
 /* ============== text box ============= */

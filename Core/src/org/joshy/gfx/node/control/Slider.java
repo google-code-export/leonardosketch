@@ -32,8 +32,8 @@ public class Slider extends Control {
     public Slider(boolean vertical) {
         thumbFill = FlatColor.BLACK;
         trackFill = FlatColor.GRAY;
-        setWidth(100);
-        setHeight(20);
+        //setWidth(300);
+        //setHeight(20);
         this.vertical = vertical;
         EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public void call(MouseEvent event) {
@@ -118,16 +118,14 @@ public class Slider extends Control {
     
     @Override
     public void doPrefLayout() {
-        if(cssSkin != null) {
-            size = cssSkin.getSize(this);
-            if(prefWidth != CALCULATED) {
-                setWidth(prefWidth);
-                size.width = prefWidth;
-            } else {
-                setWidth(size.width);
-            }
-            setHeight(size.height);
+        size = cssSkin.getSize(this);
+        if(prefWidth != CALCULATED) {
+            setWidth(prefWidth);
+            size.width = prefWidth;
+        } else {
+            setWidth(size.width);
         }
+        setHeight(size.height);
     }
 
     @Override
@@ -140,29 +138,13 @@ public class Slider extends Control {
         Bounds thumbBounds = calculateThumbBounds();
         Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
 
-        if(cssSkin != null) {
-            if(size == null) doPrefLayout();
-            CSSMatcher matcher = new CSSMatcher(this);
-            cssSkin.drawBackground(g,matcher,"",bounds);
-            cssSkin.drawBorder(g,matcher,"",bounds);
+        if(size == null) doPrefLayout();
+        CSSMatcher matcher = new CSSMatcher(this);
+        cssSkin.drawBackground(g,matcher,"",bounds);
+        cssSkin.drawBorder(g,matcher,"",bounds);
 
-            cssSkin.drawBackground(g,matcher,"thumb-", thumbBounds);
-            cssSkin.drawBorder(g,matcher,"thumb-",thumbBounds);
-
-            return;
-        }
-        //draw the background
-        int rot = 0;
-        if (isVertical()) rot = 1;
-
-        //track
-        g.setPaint(trackFill);
-        double inset = 6;
-        g.fillRoundRect(0, inset, getWidth(), getHeight() - inset*2, 7,7);
-
-        //thumb
-        g.setPaint(thumbFill);
-        g.fillRoundRect(thumbBounds.getX(), thumbBounds.getY(), thumbBounds.getWidth(), thumbBounds.getHeight(),7,7);
+        cssSkin.drawBackground(g,matcher,"thumb-", thumbBounds);
+        cssSkin.drawBorder(g,matcher,"thumb-",thumbBounds);
     }
 
 

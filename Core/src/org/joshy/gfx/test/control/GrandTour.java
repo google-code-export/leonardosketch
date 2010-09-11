@@ -64,7 +64,7 @@ public class GrandTour implements Runnable {
                 psb.setWidth(200);
                 psb.setMin(0); psb.setMax(200); psb.setValue(100); psb.setSpan(0.5);
                 Slider slider = new Slider(false);
-                slider.setWidth(200);
+                //slider.setWidth(200);
                 slider.setMin(0);
                 slider.setMax(100);
                 slider.setValue(50);

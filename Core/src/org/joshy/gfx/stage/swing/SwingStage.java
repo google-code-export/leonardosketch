@@ -131,8 +131,8 @@ public class SwingStage extends Stage {
 
             @Override
             public void draw(GFX g) {
-                g.setPaint(FlatColor.RED);
-                g.fillRect(0,0,getWidth(),getHeight());
+                //g.setPaint(FlatColor.RED);
+                //g.fillRect(0,0,getWidth(),getHeight());
                 for(Node child : children) {
                     g.translate(child.getTranslateX(),child.getTranslateY());
                     child.draw(g);
