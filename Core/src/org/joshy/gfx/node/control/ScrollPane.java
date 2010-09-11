@@ -63,6 +63,10 @@ public class ScrollPane extends AbstractPane {
         setContent(content);
     }
 
+    public Scrollbar getVerticalScrollBar() {
+        return vscroll;
+    }
+
     private void setVScrollValue(double vsv, boolean updateScrollbar) {
         vscrollValue = vsv;
         if(content instanceof ScrollingAware) {
@@ -214,6 +218,10 @@ public class ScrollPane extends AbstractPane {
         if(diff2 <= 0) {
             setHScrollValue(hscrollValue - diff2, true);
         }
+    }
+
+    public Scrollbar getHorizontalScrollBar() {
+        return hscroll;
     }
 
     public interface ScrollingAware {

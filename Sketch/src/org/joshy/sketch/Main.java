@@ -13,10 +13,7 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.ActionEvent;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.WindowEvent;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.ScrollPane;
@@ -132,8 +129,15 @@ public class Main implements Runnable {
         context.setupPalettes();
         context.stackPanel = new StackPanel();
 
-        final Ruler hruler = new Ruler(false);
-        final Ruler vruler = new Ruler(true);
+
+        ScrollPane scrollPane = new ScrollPane(
+            context.getCanvas()
+                .setWidth(300)
+                .setHeight(300)
+        );
+        
+        final Ruler hruler = new Ruler(false,scrollPane);
+        final Ruler vruler = new Ruler(true,scrollPane);
 
         context.stackPanel.add(
                 new Panel()
@@ -164,12 +168,7 @@ public class Main implements Runnable {
                         }
                     })
                     .add(hruler,vruler)
-                    .add(
-                        new ScrollPane(
-                                context.getCanvas()
-                                .setWidth(300)
-                                .setHeight(300)
-                        ))
+                    .add(scrollPane)
                 );
         context.stackPanel.add(context.getUndoOverlay());
         if(context instanceof VectorDocContext) {
