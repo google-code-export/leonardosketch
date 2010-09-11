@@ -144,6 +144,9 @@ Slider {
 Panel, HFlexBox, VFlexBox, GridBox, .-class-Panel {
     background-color: transparent;
     border-width: 0px;
+    border-color: black;
+    margin: 0px;
+    padding: 3px;
 }
 
 #root {

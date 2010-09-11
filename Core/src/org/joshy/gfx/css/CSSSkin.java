@@ -391,7 +391,10 @@ public class CSSSkin {
 
     public Insets getInsets(Control control) {
         CSSMatcher matcher = createMatcher(control,null);
-        return getMargin(matcher,"");
+        Insets margin = getMargin(matcher, "");
+        Insets border = getBorderWidth(matcher, "");
+        Insets padding = getPadding(matcher,"");
+        return new Insets(margin,border,padding);
     }
     public void setRuleSet(CSSRuleSet set) {
         this.set = set;

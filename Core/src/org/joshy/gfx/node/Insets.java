@@ -24,6 +24,15 @@ public class Insets {
         this(w,w,w,w);
     }
 
+    public Insets(Insets ... ins) {
+        for(Insets in : ins) {
+            this.top += in.getTop();
+            this.bottom += in.getBottom();
+            this.left += in.getLeft();
+            this.right += in.getRight();
+        }
+    }
+
     public double getTop() {
         return top;
     }

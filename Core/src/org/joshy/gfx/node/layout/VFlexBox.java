@@ -2,7 +2,6 @@ package org.joshy.gfx.node.layout;
 
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.util.u;
 
 /**
 * Created by IntelliJ IDEA.
@@ -15,6 +14,8 @@ public class VFlexBox extends FlexBox {
 
     @Override
     public void doPrefLayout() {
+        insets = cssSkin.getInsets(this);
+
         double totalHeight = 0;
         double maxWidth = 0;
         for(Control c : controlChildren()) {
@@ -29,12 +30,12 @@ public class VFlexBox extends FlexBox {
         }
 
         if(getPrefWidth() == CALCULATED) {
-            setWidth(maxWidth);
+            setWidth(maxWidth+insets.getLeft()+insets.getRight());
         } else {
             setWidth(getPrefWidth());
         }
         if(getPrefHeight() == CALCULATED) {
-            setHeight(totalHeight);
+            setHeight(totalHeight+insets.getTop()+insets.getBottom());
         } else {
             setHeight(getPrefHeight());
         }
@@ -43,6 +44,7 @@ public class VFlexBox extends FlexBox {
 
     @Override
     public void doLayout() {
+        if(insets == null) doPrefLayout();
         //set children to their preferred width first
         //and calc total width & flex
         double totalHeight = 0;
@@ -65,8 +67,8 @@ public class VFlexBox extends FlexBox {
         for(Control c : controlChildren()) {
             Bounds bounds = c.getLayoutBounds();
             //position child first
-            c.setTranslateX(0);
-            c.setTranslateY(y);
+            c.setTranslateX(0+insets.getLeft());
+            c.setTranslateY(y+insets.getTop());
             //set the height
             double flex = spaceMap.get(c);
             if(totalFlex > 0) {

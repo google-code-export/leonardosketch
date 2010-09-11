@@ -5,17 +5,11 @@ import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.Insets;
-
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.net.URL;
 
 public class Button extends Control {
     protected String text;
@@ -24,10 +18,6 @@ public class Button extends Control {
     protected boolean selected;
     protected boolean selectable = false;
     protected String style;
-    protected Insets insets;
-    protected double baseline = 0;
-    private Image normalIcon;
-    private Image pressedIcon;
     private Callback<ActionEvent> callback;
     protected Font font;
 
@@ -114,7 +104,6 @@ public class Button extends Control {
     @Override
     public void doSkins() {
         cssSkin = SkinManager.getShared().getCSSSkin();
-        insets = cssSkin.getInsets(this);
         font = cssSkin.getDefaultFont();
         setLayoutDirty();
     }
@@ -181,30 +170,6 @@ public class Button extends Control {
             return;
         }
 
-
-
-        /* called only if no css is active */ 
-        g.setPaint(new FlatColor(0,0,0,1.0));
-        g.drawRect(0,0,width,height);
-        g.drawLine(0,0,width,height);
-        g.drawLine(width,0,0,height);
-
-        double x = insets.getLeft();
-        double y = insets.getTop();
-        if(pressed) {
-            if(pressedIcon != null) {
-                g.drawImage(pressedIcon,x,y);
-                x+= pressedIcon.getWidth();
-            }
-        } else {
-            if(normalIcon != null) {
-                g.drawImage(normalIcon,x,y);
-                x+= normalIcon.getWidth();
-            }
-        }
-        g.setPaint(FlatColor.BLACK);
-        Font.drawCenteredVertically(g, text, font,x,0,getWidth(),getHeight(),false);
-
     }
 
     @Override
@@ -238,31 +203,6 @@ public class Button extends Control {
         this.text = text;
         setLayoutDirty();
         setDrawingDirty();
-    }
-
-    public void setStyle(String style) {
-        this.style = style;
-        setDrawingDirty();
-    }
-    
-    public String getStyle() {
-        return style;
-    }
-
-    public Button setVariant(String variant) {
-        this.style = variant;
-        setSkinDirty();
-        setLayoutDirty();
-        setDrawingDirty();
-        return this;
-    }
-
-    public void setNormalIcon(URL url) throws IOException {
-        this.normalIcon = Image.create(ImageIO.read(url));
-    }
-
-    public void setPressedIcon(URL url) throws IOException {
-        this.pressedIcon = Image.create(ImageIO.read(url));
     }
 
     public void setSelected(boolean selected) {

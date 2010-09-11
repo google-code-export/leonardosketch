@@ -8,6 +8,7 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.layout.AbstractPane;
+import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.node.layout.Panel;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class ScrollPane extends AbstractPane {
     private Scrollbar vscroll;
     private Scrollbar hscroll;
     private Node content;
-    private Panel contentWrapper;
+    private Container contentWrapper;
     private double vscrollValue;
     private double hscrollValue;
     private boolean horizontalScrollVisible = true;
@@ -37,7 +38,20 @@ public class ScrollPane extends AbstractPane {
         hscroll = new Scrollbar(false);
         hscroll.setProportional(true);
         hscroll.setParent(this);
-        contentWrapper = new Panel();
+        contentWrapper = new Container() {
+
+            @Override
+            public void draw(GFX g) {
+                g.setPaint(FlatColor.BLACK);
+                g.fillRect(0,0,getWidth(),getHeight());
+                for(Node child : children) {
+                    g.translate(child.getTranslateX(),child.getTranslateY());
+                    child.draw(g);
+                    g.translate(-child.getTranslateX(),-child.getTranslateY());
+                }
+                this.drawingDirty = false;
+            }
+        };
         contentWrapper.setParent(this);
         EventBus.getSystem().addListener(vscroll,ChangedEvent.DoubleChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) {

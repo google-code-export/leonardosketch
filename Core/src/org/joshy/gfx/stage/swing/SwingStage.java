@@ -1,6 +1,7 @@
 package org.joshy.gfx.stage.swing;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
@@ -23,8 +24,8 @@ public class SwingStage extends Stage {
     private int minimumHeight = 10;
     private int minimumWidth = 10;
     protected Panel popupLayer;
-    protected Panel root;
-    protected Panel contentLayer;
+    protected Container root;
+    protected Container contentLayer;
     private Node contentNode;
 
     @Override
@@ -59,7 +60,7 @@ public class SwingStage extends Stage {
         frame = new JFrame("stage");
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setMinimumSize(new Dimension(200,200));
-        root = new Panel() {
+        root = new Container() {
             @Override
             protected void setSkinDirty() {
                 super.setSkinDirty();
@@ -102,10 +103,20 @@ public class SwingStage extends Stage {
                 scene.repaint();
                 skinsDirty = true;
             }
+
+            @Override
+            public void draw(GFX g) {
+                for(Node child : children) {
+                    g.translate(child.getTranslateX(),child.getTranslateY());
+                    child.draw(g);
+                    g.translate(-child.getTranslateX(),-child.getTranslateY());
+                }
+                this.drawingDirty = false;
+            }
         };
         root.setId("root");
         scene = new SceneComponent();
-        contentLayer = new Panel() {
+        contentLayer = new Container() {
             @Override
             public void doLayout() {
                 for(Node n : children()) {
@@ -117,8 +128,19 @@ public class SwingStage extends Stage {
                     }
                 }
             }
-        };
 
+            @Override
+            public void draw(GFX g) {
+                g.setPaint(FlatColor.RED);
+                g.fillRect(0,0,getWidth(),getHeight());
+                for(Node child : children) {
+                    g.translate(child.getTranslateX(),child.getTranslateY());
+                    child.draw(g);
+                    g.translate(-child.getTranslateX(),-child.getTranslateY());
+                }
+                this.drawingDirty = false;
+            }
+        };
         root.add(contentLayer);
         popupLayer = new Panel();
         root.add(popupLayer);

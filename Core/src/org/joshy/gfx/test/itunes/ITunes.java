@@ -8,9 +8,6 @@ import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.Spacer;
 import org.joshy.gfx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: josh
@@ -27,26 +24,26 @@ public class ITunes implements Runnable {
     }
 
     public void run() {
-        try {
+
             Stage stage = Stage.createStage();
             stage.setMinimumWidth(700);
             stage.setMinimumHeight(400);
 
 
             Button prevButton = new Button("");
-            prevButton.setVariant("imageOnly");
-            prevButton.setNormalIcon(new File("assets/itunes/prevButton.png").toURI().toURL());
-            prevButton.setPressedIcon(new File("assets/itunes/prevButton_pressed.png").toURI().toURL());
+//            prevButton.setVariant("imageOnly");
+//            prevButton.setNormalIcon(new File("assets/itunes/prevButton.png").toURI().toURL());
+//            prevButton.setPressedIcon(new File("assets/itunes/prevButton_pressed.png").toURI().toURL());
             
             Button playButton = new Button("");
-            playButton.setVariant("imageOnly");
-            playButton.setNormalIcon(new File("assets/itunes/play_button.png").toURI().toURL());
-            playButton.setPressedIcon(new File("assets/itunes/pause_button.png").toURI().toURL());
+//            playButton.setVariant("imageOnly");
+//            playButton.setNormalIcon(new File("assets/itunes/play_button.png").toURI().toURL());
+//            playButton.setPressedIcon(new File("assets/itunes/pause_button.png").toURI().toURL());
             
             Button nextButton = new Button("");
-            nextButton.setVariant("imageOnly");
-            nextButton.setNormalIcon(new File("assets/itunes/nextButton.png").toURI().toURL());
-            nextButton.setPressedIcon(new File("assets/itunes/nextButton_pressed.png").toURI().toURL());
+//            nextButton.setVariant("imageOnly");
+//            nextButton.setNormalIcon(new File("assets/itunes/nextButton.png").toURI().toURL());
+//            nextButton.setPressedIcon(new File("assets/itunes/nextButton_pressed.png").toURI().toURL());
 
             final Slider volume = new Slider(false);
             volume.setMin(1);
@@ -58,14 +55,14 @@ public class ITunes implements Runnable {
             statusPanel.setHeight(50);
             statusPanel.setFill(FlatColor.PURPLE);
             
-            Button listToggle = new Button("L").setVariant("footerControl");
-            Button gridToggle = new Button("G").setVariant("footerControl");
-            Button coverflowToggle = new Button("C").setVariant("footerControl");
+//            Button listToggle = new Button("L").setVariant("footerControl");
+//            Button gridToggle = new Button("G").setVariant("footerControl");
+//            Button coverflowToggle = new Button("C").setVariant("footerControl");
 
             final Textbox search = new Textbox();
 
-            final Panel header = new HFlexBox()
-                    .add(
+            final Panel header = new HFlexBox();
+            /*        .add(
                             ////new Growbar.Strut(20, 0),
                             new Spacer(),
                             prevButton,
@@ -87,23 +84,23 @@ public class ITunes implements Runnable {
                             search,
                             //new Growbar.Strut(20, 0));
                             new Spacer()
-                    );
+                    );*/
             header.setWidth(600);
             header.setHeight(80);
             
             final Label status = new Label("10 items, 40:07 total time, 46.1 MB");
             final Panel footer = new HFlexBox()
                     .add(new Spacer(),1)
-                    .add(new Button("+").setVariant("footerControl"),0)
-                    .add(new Button("s").setVariant("footerControl"),0)
-                    .add(new Button("r").setVariant("footerControl"),0)
-                    .add(new Button("^").setVariant("footerControl"),0)
+//                    .add(new Button("+").setVariant("footerControl"),0)
+//                    .add(new Button("s").setVariant("footerControl"),0)
+//                    .add(new Button("r").setVariant("footerControl"),0)
+//                    .add(new Button("^").setVariant("footerControl"),0)
                     .add(new Spacer(),1)
                     .add(status)
-                    .add(new Spacer(),1)
-                    .add(new Button("L").setVariant("footerControl"),0)
-                    .add(new Button("*").setVariant("footerControl"),0)
-                    .add(new Button("<").setVariant("footerControl"),0);
+                    .add(new Spacer(),1);
+//                    .add(new Button("L").setVariant("footerControl"),0)
+//                    .add(new Button("*").setVariant("footerControl"),0)
+//                    .add(new Button("<").setVariant("footerControl"),0);
 
             footer.setTranslateY(400);
             footer.setHeight(40);
@@ -150,9 +147,7 @@ public class ITunes implements Runnable {
 
             stage.setContent(top);
             stage.setWidth(800);
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+
 
     }
 

@@ -6,9 +6,11 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.Insets;
 import org.joshy.gfx.node.Node;
 
 public class Panel extends Container {
+    protected Insets insets;
     protected FlatColor fill = null;
     private FlatColor borderColor = FlatColor.BLACK;
     private Callback<Panel> callback;
@@ -23,7 +25,13 @@ public class Panel extends Container {
     }
 
     @Override
+    public void doPrefLayout() {
+        insets = cssSkin.getInsets(this);
+    }
+
+    @Override
     public void doLayout() {
+        if(insets == null) doPrefLayout();
         if(callback != null) {
             callback.call(this);
         } else {
@@ -43,34 +51,30 @@ public class Panel extends Container {
         g.setOpacity(getOpacity());
         drawSelf(g);
         for(Node child : children) {
-            g.translate(child.getTranslateX(),child.getTranslateY());
+            g.translate(child.getTranslateX()+insets.getLeft(),child.getTranslateY()+insets.getTop());
             child.draw(g);
-            g.translate(-child.getTranslateX(),-child.getTranslateY());
+            g.translate(-child.getTranslateX()-insets.getLeft(),-child.getTranslateY()-insets.getTop());
         }
         this.drawingDirty = false;
         g.setOpacity(1.0);
-
-        
     }
 
     protected void drawSelf(GFX g) {
         if(fill != null) {
             g.setPaint(fill);
-            Bounds bounds = getVisualBounds();
             g.fillRect(0,0,getWidth(),getHeight());
             g.setPaint(borderColor);
             g.drawRect(0,0,getWidth(),getHeight());
             return;
         }
         
-        if(cssSkin != null) {
-            Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
-            CSSMatcher matcher = new CSSMatcher(this);
-            cssSkin.drawBackground(g,matcher,"",bounds);
-            cssSkin.drawBorder(g,matcher,"",bounds);
-            //cssSkin.draw(g, this, null, new CSSSkin.BoxState(getWidth(),getHeight()),CSSSkin.State.None);
-            return;
-        }
+
+        Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
+        CSSMatcher matcher = new CSSMatcher(this);
+        cssSkin.drawBackground(g,matcher,"",bounds);
+        cssSkin.drawBorder(g,matcher,"",bounds);
+        return;
+
     }
 
     public Panel setFill(FlatColor fill) {

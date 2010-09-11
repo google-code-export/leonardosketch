@@ -16,6 +16,8 @@ public class HFlexBox extends FlexBox {
     
     @Override
     public void doPrefLayout() {
+        insets = cssSkin.getInsets(this);
+
         //do shrink to fit unless a preferred width has been set
         double totalWidth = 0;
         double maxHeight = 0;
@@ -27,12 +29,12 @@ public class HFlexBox extends FlexBox {
             maxHeight = Math.max(maxHeight,bounds.getHeight());
         }
         if(getPrefWidth() == CALCULATED) {
-            setWidth(totalWidth);
+            setWidth(totalWidth+insets.getLeft()+insets.getRight());
         } else {
             setWidth(getPrefWidth());
         }
         if(getPrefHeight() == CALCULATED) {
-            setHeight(maxHeight);
+            setHeight(maxHeight+insets.getTop()+insets.getBottom());
         } else {
             setHeight(getPrefHeight());
         }
@@ -40,6 +42,7 @@ public class HFlexBox extends FlexBox {
 
     @Override
     public void doLayout() {
+        if(insets == null) doPrefLayout();
 
         /*
           hbox.doLayout would do:
@@ -69,7 +72,7 @@ public class HFlexBox extends FlexBox {
             if(!c.isVisible()) continue;            
             Bounds bounds = c.getLayoutBounds();
             //position x
-            c.setTranslateX(x);
+            c.setTranslateX(x+insets.getLeft());
             //set the width
             double flex = spaceMap.get(c);
             if(totalFlex > 0) {
@@ -82,17 +85,17 @@ public class HFlexBox extends FlexBox {
 
             //position y
             if(align == Align.Top) {
-                c.setTranslateY(0);
+                c.setTranslateY(0+insets.getTop());
             } else if(align == Align.Baseline) {
                 double baseline = c.getBaseline();
-                c.setTranslateY(getHeight()-baseline);
+                c.setTranslateY(getHeight()-baseline+insets.getTop());
             } else if(align == Align.Bottom) {
-                c.setTranslateY(getHeight()-bounds.getHeight());
+                c.setTranslateY(getHeight()-bounds.getHeight()+insets.getTop());
             } else if (align == Align.Stretch) {
-                c.setTranslateY(0);
+                c.setTranslateY(0+insets.getTop());
                 c.setHeight(getHeight());
             } else {
-                c.setTranslateY(0);
+                c.setTranslateY(0+insets.getTop());
             }
 
 

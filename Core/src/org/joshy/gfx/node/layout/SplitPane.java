@@ -123,6 +123,7 @@ public class SplitPane extends AbstractPane {
         // the main layout pass
         for(Node n : children()) {
             if(n instanceof Control) {
+                ((Control)n).doPrefLayout();
                 ((Control)n).doLayout();
             }
         }
