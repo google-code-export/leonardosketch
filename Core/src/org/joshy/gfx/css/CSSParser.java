@@ -250,7 +250,9 @@ public class CSSParser extends BaseParser<Object> {
     }
 
     public Rule ColorConstant() {
-        return Sequence(FirstOf("red","green","blue"), new Action() {
+        return Sequence(FirstOf(
+                "red","green","blue",
+                "black","white"), new Action() {
             public boolean run(Context context) {
                 context.setNodeValue(new ColorValue(context.getPrevText()));
                 return true;

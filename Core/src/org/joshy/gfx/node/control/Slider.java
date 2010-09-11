@@ -1,5 +1,8 @@
 package org.joshy.gfx.node.control;
 
+import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.CSSMatcher;
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Paint;
@@ -8,7 +11,6 @@ import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 import java.awt.geom.Point2D;
 
@@ -25,6 +27,7 @@ public class Slider extends Control {
     private double largeScroll = 20;
     private FlatColor thumbFill;
     private Paint trackFill;
+    private CSSSkin.BoxState size;
 
     public Slider(boolean vertical) {
         thumbFill = FlatColor.BLACK;
@@ -107,8 +110,47 @@ public class Slider extends Control {
         );
     }
 
+    @Override
+    public void doSkins() {
+        cssSkin = SkinManager.getShared().getCSSSkin();
+        setLayoutDirty();
+    }
+    
+    @Override
+    public void doPrefLayout() {
+        if(cssSkin != null) {
+            size = cssSkin.getSize(this);
+            if(prefWidth != CALCULATED) {
+                setWidth(prefWidth);
+                size.width = prefWidth;
+            } else {
+                setWidth(size.width);
+            }
+            setHeight(size.height);
+        }
+    }
+
+    @Override
+    public void doLayout() {
+    }
+
     public void draw(GFX g) {
         if(!isVisible()) return;
+
+        Bounds thumbBounds = calculateThumbBounds();
+        Bounds bounds = new Bounds(0,0,getWidth(),getHeight());
+
+        if(cssSkin != null) {
+            if(size == null) doPrefLayout();
+            CSSMatcher matcher = new CSSMatcher(this);
+            cssSkin.drawBackground(g,matcher,"",bounds);
+            cssSkin.drawBorder(g,matcher,"",bounds);
+
+            cssSkin.drawBackground(g,matcher,"thumb-", thumbBounds);
+            cssSkin.drawBorder(g,matcher,"thumb-",thumbBounds);
+
+            return;
+        }
         //draw the background
         int rot = 0;
         if (isVertical()) rot = 1;
@@ -120,17 +162,9 @@ public class Slider extends Control {
 
         //thumb
         g.setPaint(thumbFill);
-        Bounds thumb = calculateThumbBounds();
-        g.fillRoundRect(thumb.getX(), thumb.getY(), thumb.getWidth(), thumb.getHeight(),7,7);
+        g.fillRoundRect(thumbBounds.getX(), thumbBounds.getY(), thumbBounds.getWidth(), thumbBounds.getHeight(),7,7);
     }
 
-    @Override
-    public void doLayout() {
-    }
-
-    @Override
-    public void doSkins() {
-    }
 
     public boolean isVertical() {
         return vertical;

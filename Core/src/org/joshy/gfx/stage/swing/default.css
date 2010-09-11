@@ -52,6 +52,31 @@ Checkbox:selected {
     icon: url(images/checkbox_selected.png);
 }
 
+Slider {
+    background-color: black;
+    background: linear-gradient(center top, #ebebeb 0%, #a1a1a1 100%);
+    margin: 5px 1px 5px 1px;
+
+    border-width: 1px;
+    border-color: black;
+    border-radius: 10px;
+
+    thumb-background-color: white;
+    thumb-background: linear-gradient(center top, #04acec 0%, #0186ba 100%);
+
+    thumb-border-color: black;
+
+    thumb-margin-left:   1px;
+    thumb-margin-right:  1px;
+    thumb-margin-top:    2px;
+    thumb-margin-bottom: 2px;
+
+    thumb-border-left-width: 1px;
+    thumb-border-right-width: 1px;
+    thumb-border-top-width: 1px;
+    thumb-border-bottom-width: 1px;
+}
+
 Radiobutton {
     border-width: 0px;
     border-radius: 0px;
@@ -80,7 +105,7 @@ Togglebutton:selected {
 }
 
 Linkbutton {
-    background-color: #ffffff;
+    background-color: transparent;
     shrink-to-fit: true;
     color: #000000;
     border-width: 0px;
