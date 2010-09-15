@@ -221,11 +221,19 @@ public class SelectMoveTool extends CanvasTool {
         for(SNode r : handles.keySet()) {
             for(Handle h : handles.get(r)) {
                 if(h.contains(cursor)) {
+                    if(r instanceof SResizeableNode) {
                     SResizeableNode sn = (SResizeableNode) r;
                     resizeStartBounds = new Bounds(sn.getX(),sn.getY(),sn.getWidth(),sn.getHeight());
                     selectedHandle = h;
                     fadeInIndicator();
                     return;
+                    }
+                    if(r instanceof SArrow) {
+                        SArrow a = (SArrow) r;
+                        selectedHandle = h;
+                        fadeInIndicator();
+                        return;
+                    }
                 }
             }
         }

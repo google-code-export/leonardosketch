@@ -1,6 +1,5 @@
 package org.joshy.sketch.model;
 
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.GeomUtil;
@@ -67,7 +66,7 @@ public class SArrow extends SShape implements SelfDrawable {
 
 
     public void draw(GFX g) {
-        g.setPaint(FlatColor.BLACK);
+        g.setPaint(getStrokePaint());
         double angle = Math.toDegrees(GeomUtil.calcAngle(start,end));
         g.drawLine(start.getX(),start.getY(),end.getX(),end.getY());
         Point2D ap1 = GeomUtil.calcPoint(start, angle + 45, 10);
@@ -107,5 +106,17 @@ public class SArrow extends SShape implements SelfDrawable {
         g.setStrokeWidth(1);
         g.setPureStrokes(false);
 
+    }
+
+    public Point2D getStart() {
+        return start;
+    }
+
+    public Point2D getEnd() {
+        return end;
+    }
+
+    public void setEnd(Point2D.Double end) {
+        this.end = end;
     }
 }

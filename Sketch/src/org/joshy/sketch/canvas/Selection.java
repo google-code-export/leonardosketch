@@ -4,6 +4,7 @@ import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
@@ -58,6 +59,12 @@ public class Selection {
                     hs.add(new GradientHandle(rect,GradientHandle.GradientPosition.End));
                 }
             }
+        }
+        if(node instanceof SArrow) {
+            u.p("created handles for: "+ node);
+            SArrow arrow = (SArrow) node;
+            hs.add(new ArrowHandle(arrow,ArrowHandle.Position.Start));
+            hs.add(new ArrowHandle(arrow,ArrowHandle.Position.End));
         }
         return hs;
     }

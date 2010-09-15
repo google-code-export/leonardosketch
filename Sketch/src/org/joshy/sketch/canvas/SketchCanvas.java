@@ -51,8 +51,14 @@ public class SketchCanvas extends DocumentCanvas {
 
         if(showSelection) {
             for(SNode node : selection.items()) {
+                List<Handle> handles = selection.getHandles().get(node);
+                if(handles != null && !handles.isEmpty()) {
+                    drawSelection(g,node,handles);
+                } else {
+                    drawSelection(g,node);
+                }
                 if(node instanceof SResizeableNode) {
-                    drawSelection(g,(SResizeableNode)node);
+                    //drawSelection(g,(SResizeableNode)node);
                 } else {
                     drawSelection(g,node);
                 }
@@ -116,8 +122,8 @@ public class SketchCanvas extends DocumentCanvas {
         button9.draw(g);
     }
 
-    private void drawSelection(GFX g, SResizeableNode node) {
-        List<Handle> handles = selection.getHandles().get(node);
+    private void drawSelection(GFX g, SNode node, List<Handle> handles) {
+        //List<Handle> handles = selection.getHandles().get(node);
         if(handles == null) return;
         for(Handle h : handles) {
             Point2D pt = new Point2D.Double(h.getX(),h.getY());
