@@ -35,6 +35,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
     private VectorDocContext context;
     private FlatColor gradient1 = new FlatColor(0,0,0,0);
     private static final GradientFill GRADIENT1 =new GradientFill(FlatColor.GRAY, FlatColor.GREEN,0,true, 50,0,50,100);
+    private PopupMenuButton<SArrow.HeadEnd> arrowHeadEnd;
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
@@ -245,6 +246,19 @@ public class FloatingPropertiesPanel extends HFlexBox {
         });
 
 
+        arrowHeadEnd = new PopupMenuButton<SArrow.HeadEnd>();
+        arrowHeadEnd.setModel(ListView.createModel(SArrow.HeadEnd.values()));
+        add(arrowHeadEnd);
+        arrowHeadEnd.setVisible(false);
+        EventBus.getSystem().addListener(arrowHeadEnd, SelectionEvent.Changed, new Callback<SelectionEvent>() {
+            public void call(SelectionEvent event) {
+                if(manager.propMan.isClassAvailable(SArrow.class)) {
+                    int index = event.getView().getSelectedIndex();
+                    manager.propMan.getProperty("headEnd").setValue(SArrow.HeadEnd.values()[index]);
+                }
+            }
+        });
+
         this.setBoxAlign(Align.Top);
         setVisible(false);
         //setPadding(new Insets(5,5,5,5));
@@ -273,6 +287,12 @@ public class FloatingPropertiesPanel extends HFlexBox {
             fontItalicButton.setVisible(false);
             fontPicker.setVisible(false);
         }
+        if(manager.propMan.isClassAvailable(SArrow.class)) {
+            arrowHeadEnd.setVisible(true);
+        } else {
+            arrowHeadEnd.setVisible(false);
+        }
+
         if(manager.propMan.isClassAvailable(SShape.class)) {
             colorButton.setVisible(true);
             fillOpacitySlider.setVisible(true);

@@ -66,13 +66,25 @@ public class SArrow extends SShape implements SelfDrawable {
 
 
     public void draw(GFX g) {
-        g.setPaint(getStrokePaint());
+        g.setPaint(getFillPaint());
+        g.setStrokeWidth(getStrokeWidth());
         double angle = Math.toDegrees(GeomUtil.calcAngle(start,end));
         g.drawLine(start.getX(),start.getY(),end.getX(),end.getY());
-        Point2D ap1 = GeomUtil.calcPoint(start, angle + 45, 10);
-        g.drawLine(start.getX(),start.getY(),ap1.getX(),ap1.getY());
-        Point2D ap2 = GeomUtil.calcPoint(start, angle - 45, 10);
-        g.drawLine(start.getX(),start.getY(),ap2.getX(),ap2.getY());
+
+        if(headEnd == HeadEnd.StartOnly || headEnd == HeadEnd.BothEnds) {
+            Point2D ap1 = GeomUtil.calcPoint(start, angle + 45, 10);
+            g.drawLine(start.getX(),start.getY(),ap1.getX(),ap1.getY());
+            Point2D ap2 = GeomUtil.calcPoint(start, angle - 45, 10);
+            g.drawLine(start.getX(),start.getY(),ap2.getX(),ap2.getY());
+        }
+        if(headEnd == HeadEnd.EndOnly || headEnd == HeadEnd.BothEnds) {
+            Point2D ap1 = GeomUtil.calcPoint(end, angle - 45-90, 10);
+            g.drawLine(end.getX(),end.getY(),ap1.getX(),ap1.getY());
+            Point2D ap2 = GeomUtil.calcPoint(end, angle + 45+90, 10);
+            g.drawLine(end.getX(),end.getY(),ap2.getX(),ap2.getY());
+        }
+
+        g.setStrokeWidth(1);
 
         //drawPath(g,calcBounds(getTranslateX(),getTranslateY()),true);
     }
@@ -119,4 +131,21 @@ public class SArrow extends SShape implements SelfDrawable {
     public void setEnd(Point2D.Double end) {
         this.end = end;
     }
+
+    public HeadEnd getHeadEnd() {
+        return headEnd;
+    }
+
+    public void setHeadEnd(HeadEnd headEnd) {
+        this.headEnd = headEnd;
+    }
+
+    public enum HeadEnd {
+        StartOnly,
+        EndOnly,
+        BothEnds
+    }
+
+    private HeadEnd headEnd = HeadEnd.StartOnly;
+
 }

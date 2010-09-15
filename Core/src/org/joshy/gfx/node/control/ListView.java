@@ -417,10 +417,10 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         }
     }
 
-    public static ListModel<String> createModel(final String[] strings) {
-        return new ListModel<String>() {
+    public static <T> ListModel<T> createModel(final T ... strings) {
+        return new ListModel<T>() {
 
-            public String get(int i) {
+            public T get(int i) {
                 if(i >= strings.length) {
                     return null;
                 }
