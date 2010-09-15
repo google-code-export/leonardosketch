@@ -4,7 +4,6 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.GeomUtil;
-import org.joshy.gfx.util.u;
 
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
@@ -35,7 +34,6 @@ public class SArrow extends SShape implements SelfDrawable {
 
     @Override
     public boolean contains(Point2D point) {
-        u.p("checking contains: " + point);
         double x = getTranslateX();
         double y = getTranslateY();
         return calcBounds(x,y).contains(point);
@@ -77,14 +75,15 @@ public class SArrow extends SShape implements SelfDrawable {
         Point2D ap2 = GeomUtil.calcPoint(start, angle - 45, 10);
         g.drawLine(start.getX(),start.getY(),ap2.getX(),ap2.getY());
 
+        //drawPath(g,calcBounds(getTranslateX(),getTranslateY()),true);
     }
-        /*
+
     private void drawPath(GFX g, Path2D pt, boolean closed) {
         PathIterator it = pt.getPathIterator(null,0.01);
         double x = 0;
         double y = 0;
-        g.setPaint(node.getStrokePaint());
-        g.setStrokeWidth(node.getStrokeWidth());
+        g.setPaint(this.getStrokePaint());
+        g.setStrokeWidth(this.getStrokeWidth());
         while(!it.isDone()) {
             double[] coords = new double[6];
             int n = it.currentSegment(coords);
@@ -108,5 +107,5 @@ public class SArrow extends SShape implements SelfDrawable {
         g.setStrokeWidth(1);
         g.setPureStrokes(false);
 
-    }*/
+    }
 }

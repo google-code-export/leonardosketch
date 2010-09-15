@@ -3,14 +3,14 @@ package org.joshy.sketch.tools;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
-import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
 import org.joshy.sketch.model.SArrow;
-import org.joshy.sketch.model.SketchDocument;
+import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.geom.Point2D;
 
-public class DrawArrowTool extends CanvasTool {
+public class
+        DrawArrowTool extends CanvasTool {
     private Point2D start;
     private SArrow node;
 
@@ -24,15 +24,14 @@ public class DrawArrowTool extends CanvasTool {
 
     @Override
     protected void mouseMoved(MouseEvent event, Point2D.Double cursor) {
-        //To change body of implemented methods use File | Settings | File Templates.
+
     }
 
     @Override
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
         start = event.getPointInNodeCoords(context.getCanvas());
         node = new SArrow(start,start);
-        SketchDocument doc = (SketchDocument) context.getDocument();
-        doc.getCurrentPage().add(node);
+        context.getDocument().getCurrentPage().add(node);
         context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"arrow"));
     }
 
