@@ -123,7 +123,7 @@ public class SwingStage extends Stage {
                         Control c = (Control) n;
                         c.setWidth(getWidth());
                         c.setHeight(getHeight());
-                        c.doPrefLayout();
+
                         c.doLayout();
                     }
                 }
@@ -275,7 +275,6 @@ public class SwingStage extends Stage {
             PerformanceTracker.getInstance().layoutStart();
             root.setWidth(width);
             root.setHeight(height);
-            root.doPrefLayout();
             root.doLayout();
             PerformanceTracker.getInstance().layoutEnd();
         }

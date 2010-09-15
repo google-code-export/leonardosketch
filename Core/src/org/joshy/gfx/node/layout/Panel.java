@@ -51,9 +51,9 @@ public class Panel extends Container {
         g.setOpacity(getOpacity());
         drawSelf(g);
         for(Node child : children) {
-            g.translate(child.getTranslateX()+insets.getLeft(),child.getTranslateY()+insets.getTop());
+            g.translate(child.getTranslateX(),child.getTranslateY());
             child.draw(g);
-            g.translate(-child.getTranslateX()-insets.getLeft(),-child.getTranslateY()-insets.getTop());
+            g.translate(-child.getTranslateX(),-child.getTranslateY());
         }
         this.drawingDirty = false;
         g.setOpacity(1.0);

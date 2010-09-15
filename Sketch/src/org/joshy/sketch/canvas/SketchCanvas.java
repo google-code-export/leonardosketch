@@ -127,6 +127,7 @@ public class SketchCanvas extends DocumentCanvas {
     }
 
     public void drawSelection(GFX g, SNode shape) {
+        if(shape == null) return;
         g.setPaint(new FlatColor(1.0,0.5,0.5,0.5));
         Bounds bounds = shape.getBounds();
         bounds = transformToDrawing(bounds);
