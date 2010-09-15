@@ -8,7 +8,6 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +39,7 @@ public class TabPanel extends Panel {
     @Override
     public void doLayout() {
         for(Control c : controlChildren()) {
+            c.doPrefLayout();
             if(c == tabtop) {
                 tabtop.setWidth(getWidth());
                 tabtop.setHeight(30);

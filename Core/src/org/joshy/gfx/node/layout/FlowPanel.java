@@ -20,6 +20,7 @@ public class FlowPanel extends Panel {
         for(Node child : children) {
             if(child instanceof Control) {
                 Control control = (Control) child;
+                control.doPrefLayout();
                 control.doLayout();
             }
             Bounds bounds = child.getVisualBounds();

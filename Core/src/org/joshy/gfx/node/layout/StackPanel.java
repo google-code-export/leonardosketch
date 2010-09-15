@@ -14,6 +14,7 @@ public class StackPanel extends Panel {
     @Override
     public void doLayout() {
         for(Control c : controlChildren()) {
+            c.doPrefLayout();
             c.doLayout();
             c.setWidth(getWidth());
             c.setHeight(getHeight());
