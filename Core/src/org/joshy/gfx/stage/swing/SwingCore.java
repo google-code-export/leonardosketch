@@ -30,10 +30,6 @@ public class SwingCore extends Core {
 
     public SwingCore() {
         super();
-        try {
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
 
     }
 

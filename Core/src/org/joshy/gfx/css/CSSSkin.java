@@ -97,12 +97,14 @@ public class CSSSkin {
             if(value instanceof ShadowValue) {
                 ShadowValue shadow = (ShadowValue) value;
                 ImageBuffer buf = gfx.createBuffer((int)textWidth,(int)box.contentHeight);
+                if(buf != null) {
                 GFX g2 = buf.getGFX();
                 g2.setPaint(new FlatColor(shadow.getColor(),0.3));
                 g2.translate(-textX,-contentY);
                 Font.drawCentered(g2,content,font,textX,contentY,textWidth,box.contentHeight,true);
                 buf.apply(new BlurEffect(3,3));
                 gfx.draw(buf,textX+shadow.getXoffset(),contentY+shadow.getYoffset());
+                }
             }
         }
 
