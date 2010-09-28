@@ -128,7 +128,6 @@
             <fileset dir="lib"><include  name="*.jar"/></fileset>
         </copy>
 
-
     </target>
 
     <macrodef name="unsignjar">
@@ -168,10 +167,33 @@
     </macrodef>
 
     
-    <target name="dist" depends="build-sketch, build-mac, build-jnlp">
+    <target name="core-docs">
+        <mkdir dir="dist/docs"/>
+        <javadoc destdir="dist/docs">
+        
+            <packageset dir="Core/src" defaultexcludes="yes">
+              <exclude name="org/joshy/gfx/test/**"/>
+              <exclude name="org/joshy/gfx/css/**"/>
+              <exclude name="org/joshy/gfx/node/geom3d/**"/>
+              <exclude name="org/joshy/gfx/stage/jogl/**"/>
+              <exclude name="org/joshy/gfx/stage/swing/**"/>
+              <exclude name="org/joshy/gfx/stage/testing/**"/>
+              <exclude name="org/joshy/gfx/text/**"/>
+              <include name="org/joshy/gfx/**"/>
+            </packageset>
+            
+            <classpath>
+                <pathelement path="lib/parboiled-0.9.7.3.jar"/>
+                <pathelement path="lib/XMLLib.jar"/>
+            </classpath>
+            
+        </javadoc>
     </target>
     
-    <target name="publish">
+    <target name="dist" depends="build-sketch, build-mac, build-jnlp, core-docs">
+    </target>
+    
+    <target name="publish" depends="dist">
         <copy todir="${publish.dir}">
             <fileset dir="dist/">
             </fileset>
