@@ -31,6 +31,49 @@ public class CSSSkin {
     public enum State {
         Pressed, Hover, Selected, None
     }
+
+    public BoxPainter createBoxPainter(Control control, BoxState boxState, String text, CSSSkin.State state) {
+        
+        CSSMatcher matcher = createMatcher(control, state);
+        double backWidth = boxState.width-boxState.margin.getLeft()-boxState.margin.getRight();
+        double backHeight = boxState.height-boxState.margin.getTop()-boxState.margin.getBottom();
+
+        Bounds bounds = new Bounds(boxState.margin.getLeft(),boxState.margin.getTop(),backWidth,backHeight);
+        String prefix = "";
+
+        BoxPainter boxPainter = new BoxPainter();
+        //background stuff
+        BaseValue background = set.findValue(matcher,prefix+"background");
+        boxPainter.borderRadius = set.findIntegerValue(matcher,prefix+"border-radius");
+        boxPainter.transparent = "transparent".equals(set.findStringValue(matcher,prefix+"background-color"));
+        if(!boxPainter.transparent) {
+            boxPainter.background_color = new FlatColor(set.findColorValue(matcher,prefix+"background-color"));
+        } else {
+            boxPainter.background_color = FlatColor.BLACK;
+        }
+        if(background instanceof LinearGradientValue) {
+            boxPainter.gradient = true;
+            boxPainter.gradientFill = toGradientFill((LinearGradientValue)background,bounds.getWidth(),bounds.getHeight());
+        }
+
+        //border stuff
+        boxPainter.margin = getMargin(matcher);
+        boxPainter.borderWidth = getBorderWidth(matcher,"");
+        if(!boxPainter.borderWidth.allEquals(0)) {
+            boxPainter.border_color = (new FlatColor(set.findColorValue(matcher,prefix+"border-color")));
+        }
+
+        //content stuff
+        boxPainter.icon = getIcon(matcher);
+        boxPainter.font = getFont(matcher);
+        boxPainter.textAlign = set.findStringValue(matcher.element,"text-align");
+        boxPainter.color = new FlatColor(set.findColorValue(matcher,"color"));
+        boxPainter.text_shadow = set.findValue(matcher, "text-shadow");
+
+        return boxPainter;
+    }
+
+
     protected Font getFont(CSSMatcher matcher) {
         int fontSize = set.findIntegerValue(matcher, "font-size");
         Font font = Font.name("Arial").size(fontSize).resolve();

@@ -404,8 +404,9 @@ public class ListView<E> extends Control implements Focusable, ScrollPane.Scroll
         this.dropIndicatorIndex = dropIndicatorIndex;
     }
 
-    public void setTextRenderer(TextRenderer<E> textRenderer) {
+    public ListView setTextRenderer(TextRenderer<E> textRenderer) {
         this.textRenderer = textRenderer;
+        return this;
     }
 
 

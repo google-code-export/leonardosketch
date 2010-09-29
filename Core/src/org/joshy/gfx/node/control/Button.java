@@ -1,6 +1,7 @@
 package org.joshy.gfx.node.control;
 
 import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.BoxPainter;
 import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
@@ -20,6 +21,7 @@ public class Button extends Control {
     protected String style;
     private Callback<ActionEvent> callback;
     protected Font font;
+    private BoxPainter boxPainter;
 
     public boolean isSelected() {
         return selected;
@@ -54,19 +56,23 @@ public class Button extends Control {
                     if(selectable) {
                         selected = !selected;
                     }
+                    setSkinDirty();
                     setDrawingDirty();
                 }
                 if(event.getType() == MouseEvent.MouseReleased) {
                     setPressed(false);
+                    setSkinDirty();
                     setDrawingDirty();
                     fireAction();
                 }
                 if(event.getType() == MouseEvent.MouseEntered) {
                     setHovered(true);
+                    setSkinDirty();
                     setDrawingDirty();
                 }
                 if(event.getType() == MouseEvent.MouseExited) {
                     setHovered(false);
+                    setSkinDirty();
                     setDrawingDirty();
                 }
             }
@@ -119,6 +125,8 @@ public class Button extends Control {
                 setWidth(size.width);
             }
             setHeight(size.height);
+            State state = calculateState();
+            boxPainter = cssSkin.createBoxPainter(this,size,text,buttonStateToCssState(state));
         }
     }
 
@@ -146,18 +154,14 @@ public class Button extends Control {
         if(!isVisible()) return;
         g.setPaint(new FlatColor(1,0,0,1));
 
-        State state = State.Normal;
-        if(hovered && !pressed) state = State.Hovered;
-        if(selected && !pressed) state = State.Selected;
-        if(!selected && pressed) state = State.Pressed;
-        if(selected && pressed) state = State.SelectedPressed;
 
         if(cssSkin != null) {
             if(size == null) {
                 doPrefLayout();
             }
-            cssSkin.draw(g, size, this, text, buttonStateToCssState(state));
 
+            boxPainter.draw(g, size, this, text);
+            //cssSkin.draw(g, size, this, text, buttonStateToCssState(state));
             //debugging
             if(false) {
                 g.setPaint(FlatColor.WHITE);
@@ -170,6 +174,15 @@ public class Button extends Control {
             return;
         }
 
+    }
+
+    private State calculateState() {
+        State state = State.Normal;
+        if(hovered && !pressed) state = State.Hovered;
+        if(selected && !pressed) state = State.Selected;
+        if(!selected && pressed) state = State.Pressed;
+        if(selected && pressed) state = State.SelectedPressed;
+        return state;        
     }
 
     @Override

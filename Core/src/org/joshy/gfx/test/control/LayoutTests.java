@@ -342,6 +342,21 @@ public class LayoutTests implements Runnable {
                     new VFlexBox().add(
                             new Button("Label"),
                             new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
+                            new Button("Button"),
                             new Button("Popup List")
                     ).setFill(FlatColor.RED).setPrefWidth(100).setPrefHeight(100));
         }
