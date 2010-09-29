@@ -22,6 +22,7 @@ import org.joshy.gfx.util.u;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
     private String username;
     private String password;
     private Callback<Doc> callback;
-    private METHOD method;
+    private METHOD method = METHOD.GET;
     private boolean multiPart = false;
     private boolean useUserPass = false;
     private File file;
@@ -110,14 +111,21 @@ public class XMLRequest extends BackgroundTask<String, Doc> {
             HttpRequestBase request = null;
             if(method == METHOD.GET) {
                 StringBuffer query = new StringBuffer();
-                query.append("?");
                 for(String key : parameters.keySet()) {
                     u.p("adding parameter: '" + key + "' =  '" + parameters.get(key) + "'");
                     query.append(key+"="+parameters.get(key)+"&");
                 }
-                HttpGet getRequest = new HttpGet(url.toURI().resolve(query.toString()));
-                request = getRequest;
-                u.p("final url = " + getRequest.getURI());
+                URI origUri = url.toURI();
+                URI finalUri = new URI(
+                        origUri.getScheme()
+                        ,origUri.getUserInfo()
+                        ,origUri.getHost()
+                        ,origUri.getPort()
+                        ,origUri.getPath()
+                        ,query.toString()
+                        ,origUri.getFragment());
+                request = new HttpGet(finalUri);
+                u.p("final url = " + request.getURI());
             }
             if(method == METHOD.POST) {
                 HttpPost postrequest = new HttpPost(url.toURI());
