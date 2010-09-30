@@ -20,7 +20,7 @@
         <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
         <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/LeonardoSketch/dist/jnlp/"/>
         
-        <property name="amino.core.dir" value="../amino/build/jars"/>
+        <property name="amino.core.dir" value="../amino/published/foo/lib"/>
     </target>
 
     <target name="clean">
