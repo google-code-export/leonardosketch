@@ -19,6 +19,8 @@
 
         <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
         <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/LeonardoSketch/dist/jnlp/"/>
+        
+        <property name="amino.core.dir" value="../amino/build/jars"/>
     </target>
 
     <target name="clean">
@@ -26,12 +28,13 @@
         <delete dir="dist"/>
     </target>
     
-    <target name="build-sketch" depends="build-core">
+    <target name="build-sketch" depends="init">
         <mkdir dir="build/classes/Sketch"/>
+        <mkdir dir="build/jars/Sketch"/>
         <javac destdir="build/classes/Sketch" debug="true">
             <src path="Sketch/src"/>
-            <classpath path="build/jars/Core.jar"/>
             <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
         </javac>
         <copy todir="build/classes/Sketch">
              <fileset dir="Sketch/src">
@@ -48,15 +51,16 @@
 
     <target name="build-mac" depends="build-sketch">
         <!-- build the mac bundle -->
-        <java classpath="lib/AppBundler.jar;lib/XMLLib.jar" classname="com.joshondesign.appbundler.Bundler" fork="true">
-
-
-
+        <java
+            classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
 
             <arg value="--file=bundler.xml"/>
             <arg value="--target=mac"/>
             <arg value="--outdir=dist/"/>
+            <arg value="--jardir=${amino.core.dir}"/>
             <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
         </java>
 
         <property name="app.name" value="Leonardo"/>
@@ -72,11 +76,13 @@
 
     <target  name="build-jnlp" depends="build-sketch">
         <echo message="doing jnlp version"/>
-        <java classpath="lib/AppBundler.jar;lib/XMLLib.jar" classname="com.joshondesign.appbundler.Bundler" fork="true">
+        <java classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar" classname="com.joshondesign.appbundler.Bundler" fork="true">
             <arg value="--file=bundler.xml"/>
             <arg value="--target=jnlp"/>
             <arg value="--outdir=dist/"/>
+            <arg value="--jardir=${amino.core.dir}"/>
             <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
             <arg value="--codebase=${jnlp.codebase}"/>
         </java>
 
@@ -86,7 +92,7 @@
         <!-- resign all of the jars -->
 
         <unsignjar jar="dist/jnlp/lib/Sketch.jar"/>
-        <unsignjar jar="dist/jnlp/lib/Core.jar"/>
+        <unsignjar jar="dist/jnlp/lib/amino-core.jar"/>
         <unsignjar jar="dist/jnlp/lib/parboiled-0.9.7.3.jar"/>
         <property name="keystore" value="bin/testkeystore"/>
         <property name="alias" value="joshy2"/>
@@ -99,36 +105,6 @@
 
     </target>
     
-    <target name="build-core" depends="init">
-        <mkdir dir="build"/>
-
-        <mkdir dir="build/classes/Core"/>
-
-        <javac destdir="build/classes/Core" debug="true">
-            <src path="Core/src"/>
-            <classpath path="${lib.jogl.dir}gluegen-rt.jar"></classpath>
-            <classpath path="${lib.jogl.dir}jogl.all.jar"></classpath>
-            <classpath path="${lib.jogl.dir}nativewindow.all.jar"></classpath>
-            <classpath path="${lib.jogl.dir}newt.all.jar"></classpath>
-            <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
-        </javac>
-        <copy todir="build/classes/Core">
-            <fileset dir="Core/src">
-                <include name="**"/>
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-
-        <mkdir dir="build/jars"/>
-        <jar destfile="build/jars/Core.jar">
-            <fileset dir = "build/classes/Core"></fileset>
-        </jar>
-
-        <copy todir="build/jars/">
-            <fileset dir="lib"><include  name="*.jar"/></fileset>
-        </copy>
-
-    </target>
 
     <macrodef name="unsignjar">
 
@@ -167,30 +143,7 @@
     </macrodef>
 
     
-    <target name="core-docs">
-        <mkdir dir="dist/docs"/>
-        <javadoc destdir="dist/docs">
-        
-            <packageset dir="Core/src" defaultexcludes="yes">
-              <exclude name="org/joshy/gfx/test/**"/>
-              <exclude name="org/joshy/gfx/css/**"/>
-              <exclude name="org/joshy/gfx/node/geom3d/**"/>
-              <exclude name="org/joshy/gfx/stage/jogl/**"/>
-              <exclude name="org/joshy/gfx/stage/swing/**"/>
-              <exclude name="org/joshy/gfx/stage/testing/**"/>
-              <exclude name="org/joshy/gfx/text/**"/>
-              <include name="org/joshy/gfx/**"/>
-            </packageset>
-            
-            <classpath>
-                <pathelement path="lib/parboiled-0.9.7.3.jar"/>
-                <pathelement path="lib/XMLLib.jar"/>
-            </classpath>
-            
-        </javadoc>
-    </target>
-    
-    <target name="dist" depends="build-sketch, build-mac, build-jnlp, core-docs">
+    <target name="dist" depends="build-sketch, build-mac, build-jnlp">
     </target>
     
     <target name="publish" depends="dist">

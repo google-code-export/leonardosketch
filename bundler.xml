@@ -2,7 +2,7 @@
 <app name="Leonardo">
     <jar name="Sketch.jar" main-class="org.joshy.sketch.Main"/>
     <jar name="XMLLib.jar"/>
-    <jar name="Core.jar"/>
+    <jar name="amino-core.jar"/>
     <jar name="commons-codec-1.4.jar"/>
     <jar name="apache-mime4j-0.6.jar"/>
     <jar name="commons-logging-1.1.1.jar"/>
@@ -11,7 +11,7 @@
     <jar name="httpcore-nio-4.0.1.jar"/>
     <jar name="httpmime-4.0.1.jar"/>
     <jar name="parboiled-0.9.7.3.jar"/>
-    <jar name="twitter4j-core-2.1.4-SNAPSHOT.jar"/>
+    <jar name="twitter4j-core-2.1.4.jar"/>
     <jar name="JGoogleAnalytics_0.2.jar"/>
     <jar name="iText-2.1.7.jar"/>
 </app>
