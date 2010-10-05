@@ -343,9 +343,9 @@ public class FloatingPropertiesPanel extends HFlexBox {
 
     @Override
     protected void drawSelf(GFX g) {
-        g.setPaint(new FlatColor(0,0,0,0.2));
+        g.setPaint(new FlatColor(0,0,0,0.4));
         g.fillRoundRect(0,0,getWidth(),getHeight(),10,10);
-        g.setPaint(new FlatColor(0,0,0,0.5));
+        g.setPaint(new FlatColor(0,0,0,0.8));
         g.drawRoundRect(0,0,getWidth(),getHeight(),10,10);
     }
     @Override
