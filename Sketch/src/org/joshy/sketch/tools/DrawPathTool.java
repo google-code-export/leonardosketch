@@ -512,6 +512,9 @@ public class DrawPathTool extends CanvasTool {
             g.setPaint(FlatColor.WHITE);
             g.fillRect(xy.x-size/2+sw,xy.y-size/2+sw,size-sw*2,size-sw*2);
             if(i == last) {
+                g.setPaint(FlatColor.BLACK);
+                g.fillRect(c1.x-2-1,c1.y-2-1,size+2,size+2);
+                g.fillRect(c2.x-2-1,c2.y-2-1,size+2,size+2);
                 g.setPaint(FlatColor.RED);
                 g.fillRect(c1.x-2,c1.y-2,size,size);
                 g.fillRect(c2.x-2,c2.y-2,size,size);
