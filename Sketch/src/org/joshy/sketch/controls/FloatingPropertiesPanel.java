@@ -6,6 +6,7 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.sketch.Main;
@@ -354,8 +355,9 @@ public class FloatingPropertiesPanel extends HFlexBox {
         if(selected) {
             Bounds bounds = selection.calculateBounds();
             bounds = context.getSketchCanvas().transformToDrawing(bounds);
-            setTranslateX(bounds.getX());
-            setTranslateY(bounds.getY() + bounds.getHeight()+20);
+            Point2D pt = NodeUtils.convertToScene(context.getSketchCanvas(), bounds.getX(), bounds.getY());
+            setTranslateX(pt.getX());
+            setTranslateY(pt.getY() + bounds.getHeight()+20);
             super.doLayout();
         }
     }
