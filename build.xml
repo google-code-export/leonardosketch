@@ -21,6 +21,7 @@
         <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/LeonardoSketch/dist/jnlp/"/>
         
         <property name="amino.core.dir" value="../amino/published/foo/lib"/>
+        <property name="app.name" value="Leonardo"/>
     </target>
 
     <target name="clean">
@@ -63,7 +64,6 @@
             <arg value="--jardir=lib/"/>
         </java>
 
-        <property name="app.name" value="Leonardo"/>
         <zip destfile="dist/${app.name}.app.zip">
             <zipfileset dir="dist/mac">
                 <include name="${app.name}.app"/>
@@ -143,7 +143,19 @@
     </macrodef>
 
     
-    <target name="dist" depends="build-sketch, build-mac, build-jnlp">
+    <target name="dist" depends="build-sketch, build-mac, build-jnlp, build-src">
+    </target>
+    
+    <target name="build-src" depends="init">
+        <zip destfile="dist/${app.name}.src.zip">
+            <zipfileset dir=".">
+                <include name="build.xml"/>
+                <include name="bundler.xml"/>
+                <include name="lib/**"/>
+                <include name="Sketch/**"/>
+            </zipfileset>
+<!--            <zipfileset dir="dist/mac" includes="${app.name}.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>-->
+        </zip>        
     </target>
     
     <target name="publish" depends="dist">
