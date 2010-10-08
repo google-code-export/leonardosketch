@@ -17,12 +17,8 @@ import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.WindowEvent;
-import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.ScrollPane;
-import org.joshy.gfx.node.layout.Panel;
-import org.joshy.gfx.node.layout.StackPanel;
-import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.localization.Localization;
@@ -39,7 +35,6 @@ import org.joshy.sketch.controls.StandardDialog;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.modes.DocModeHelper;
-import org.joshy.sketch.modes.pixel.PixelModeHelper;
 import org.joshy.sketch.modes.preso.PresoModeHelper;
 import org.joshy.sketch.modes.preso.ViewSlideshowAction;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -81,6 +76,7 @@ public class Main implements Runnable {
     public static FocusPoint mainApp;
     public static JGoogleAnalyticsTracker tracker;
     public static boolean trackingEnabled = false;
+    private Callback<ActionEvent> makeAWishAction;
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -231,6 +227,20 @@ public class Main implements Runnable {
     }
 
     private void setupStage(final DocContext context, DocModeHelper modeHelper) {
+        final TextControl wishBox = new Textbox().setText("I wish Leonardo would ...");
+        makeAWishAction = new Callback<ActionEvent>(){
+            public void call(ActionEvent actionEvent) {
+                u.p("making a wish to the fairies: " + wishBox.getText());
+            }
+        };
+        final HFlexBox statusBar = new HFlexBox();
+        statusBar.setBoxAlign(HFlexBox.Align.Baseline)
+                .add(wishBox,1)
+                .add(new Button("Make a wish!").onClicked(makeAWishAction))
+                ;
+        statusBar.setPrefWidth(300);
+
+
         context.mainPanel = new Panel() {
             @Override
             public void doLayout() {
@@ -241,7 +251,7 @@ public class Main implements Runnable {
                         c.setTranslateY(0);
                         c.setTranslateX(30);
                         c.setWidth(getWidth()-w-30);
-                        c.setHeight(getHeight());
+                        c.setHeight(getHeight()-40);
                     }
                     if(c == context.getToolbar()) {
                         c.setTranslateX(0);
@@ -260,6 +270,10 @@ public class Main implements Runnable {
                         c.setHeight(100);
                         c.setWidth(getWidth()-20-w);
                     }
+                    if(c == statusBar) {
+                        c.setTranslateX(20);
+                        c.setTranslateY(getHeight()-40);
+                    }
                     c.doLayout();
                 }
                 setDrawingDirty();
@@ -269,6 +283,7 @@ public class Main implements Runnable {
                 //no op
             }
         };
+        context.mainPanel.add(statusBar);
 
         if(modeHelper.isPageListVisible()) {
             context.mainPanel.add(context.pageList);

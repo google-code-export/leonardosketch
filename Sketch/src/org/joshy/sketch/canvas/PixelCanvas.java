@@ -39,11 +39,9 @@ public class PixelCanvas extends DocumentCanvas {
     public void draw(GFX g) {
         g.setPaint(FlatColor.WHITE);
         g.fillRect(0,0,getWidth(),getHeight());
-        g.translate(panX,panY);
         g.scale(scale,scale);
         draw(g, document);
         g.scale(1/scale,1/scale);
-        g.translate(-panX,-panY);
     }
     //draw the document
     private void draw(GFX g, PixelDocument pixelDocument) {
