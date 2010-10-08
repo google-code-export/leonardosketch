@@ -23,6 +23,7 @@ import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.localization.Localization;
 import org.joshy.gfx.util.u;
+import org.joshy.gfx.util.xml.XMLRequest;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.ViewSidebar;
 import org.joshy.sketch.actions.io.*;
@@ -46,6 +47,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -227,18 +229,38 @@ public class Main implements Runnable {
     }
 
     private void setupStage(final DocContext context, DocModeHelper modeHelper) {
-        final TextControl wishBox = new Textbox().setText("I wish Leonardo would ...");
+        final TextControl wishBox = new Textbox().setText("I wish Leonardo would...");
+        final Label wishStatus = new Label("");
+        wishStatus.setPrefWidth(100);
         makeAWishAction = new Callback<ActionEvent>(){
             public void call(ActionEvent actionEvent) {
-                u.p("making a wish to the fairies: " + wishBox.getText());
+                try {
+                    new XMLRequest()
+                            .setMethod(XMLRequest.METHOD.POST)
+                            .setURL("http://joshy.org:8081/AminoWebServices/MakeAWish")
+                            .setParameter("message",wishBox.getText())
+                            .onComplete(new Callback<Doc>(){
+                                public void call(Doc doc) {
+                                    u.p("request completed");
+                                    wishStatus.setText("Wish received!");
+                                }
+                            }).start();
+                    wishBox.setText("I wish Leonardo would...");
+                    wishStatus.setText("Making wish...");
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         };
         final HFlexBox statusBar = new HFlexBox();
         statusBar.setBoxAlign(HFlexBox.Align.Baseline)
                 .add(wishBox,1)
                 .add(new Button("Make a wish!").onClicked(makeAWishAction))
+                .add(wishStatus)
                 ;
-        statusBar.setPrefWidth(300);
+        statusBar.setPrefWidth(400);
 
 
         context.mainPanel = new Panel() {
