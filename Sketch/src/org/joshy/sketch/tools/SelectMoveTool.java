@@ -306,7 +306,7 @@ public class SelectMoveTool extends CanvasTool {
         contextMenu.addActions(new CreateResizableShape(context));
         contextMenu.addActions(new CreateResizableShape.Edit(context));
 
-        contextMenu.setWidth(100);
+        contextMenu.setWidth(170);
         contextMenu.setHeight(200);
         contextMenu.show(context.getCanvas(),event.getX(),event.getY());
     }

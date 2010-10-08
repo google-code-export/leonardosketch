@@ -3,6 +3,7 @@ package org.joshy.sketch.controls;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.node.Node;
+import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.PopupMenu;
 import org.joshy.gfx.node.layout.Container;
@@ -10,6 +11,7 @@ import org.joshy.gfx.stage.Stage;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.tools.SelectMoveTool;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 
@@ -66,8 +68,10 @@ public class ContextMenu extends PopupMenu {
         }
         Stage stage = node.getParent().getStage();
         sharedLayer = stage.getPopupLayer();
-        setTranslateX(x);
-        setTranslateY(y);
+        Point2D pt = NodeUtils.convertToScene(node, x, y);
+        pt = NodeUtils.convertFromScene(sharedLayer,pt);
+        setTranslateX(pt.getX()+2);
+        setTranslateY(pt.getY());
         setVisible(true);
         sharedContextMenu = this;
         sharedLayer.add(this);
