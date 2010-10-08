@@ -431,7 +431,6 @@ public class DrawPathTool extends CanvasTool {
         if(node != null) {
 
             //draw the path and handle overlays
-            g.translate(context.getSketchCanvas().getPanX(),context.getSketchCanvas().getPanY());
             g.scale(context.getSketchCanvas().getScale(),context.getSketchCanvas().getScale());
             g.translate(node.getTranslateX(),node.getTranslateY());
             node.drawPath(g,node);
@@ -445,7 +444,6 @@ public class DrawPathTool extends CanvasTool {
 
             g.translate(-node.getTranslateX(),-node.getTranslateY());
             g.scale(1/context.getSketchCanvas().getScale(),1/context.getSketchCanvas().getScale());
-            g.translate(-context.getSketchCanvas().getPanX(),-context.getSketchCanvas().getPanY());
             if(adjusting) {
                 drawHandles(g,hoverPoint);
             }

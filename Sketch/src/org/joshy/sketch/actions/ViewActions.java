@@ -60,8 +60,8 @@ public class ViewActions {
         @Override
         public void execute() {
             context.getCanvas().setScale(1);
-            context.getCanvas().setPanX(0);
-            context.getCanvas().setPanY(0);
+//            context.getCanvas().setPanX(0);
+//            context.getCanvas().setPanY(0);
         }
     }
 

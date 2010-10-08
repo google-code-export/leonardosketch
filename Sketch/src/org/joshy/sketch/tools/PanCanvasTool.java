@@ -37,8 +37,8 @@ public class PanCanvasTool extends CanvasTool {
     protected void mouseDragged(MouseEvent event, Point2D.Double cursor) {
         double deltaX = cursor.getX()-start.getX();
         double deltaY = cursor.getY()-start.getY();
-        context.getSketchCanvas().setPanX(context.getSketchCanvas().getPanX()+deltaX);
-        context.getSketchCanvas().setPanY(context.getSketchCanvas().getPanY()+deltaY);
+//        context.getSketchCanvas().setPanX(context.getSketchCanvas().getPanX()+deltaX);
+//        context.getSketchCanvas().setPanY(context.getSketchCanvas().getPanY()+deltaY);
         start = cursor;
     }
 

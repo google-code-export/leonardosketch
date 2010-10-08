@@ -80,7 +80,7 @@ public class Main implements Runnable {
     private List<DocContext> contexts = new ArrayList<DocContext>();
     public static FocusPoint mainApp;
     public static JGoogleAnalyticsTracker tracker;
-    private static boolean trackingEnabled = true;
+    public static boolean trackingEnabled = false;
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -90,18 +90,22 @@ public class Main implements Runnable {
         //Localization.init(Main.class.getResource("translation.xml"),"en_US");
         Localization.init(Main.class.getResource("translation.xml"),locale);
 
-        tracker = new JGoogleAnalyticsTracker("Leonardo","UA-17798312-2");
+        if(trackingEnabled) {
+            tracker = new JGoogleAnalyticsTracker("Leonardo","UA-17798312-2");
+        }
 
-        mainApp = new FocusPoint("MainApp");
-        tracker.setLoggingAdapter(new LoggingAdapter(){
-            public void logError(String s) {
-                u.p("logging error: " + s);
-            }
+        if(trackingEnabled) {
+            mainApp = new FocusPoint("MainApp");
+            tracker.setLoggingAdapter(new LoggingAdapter(){
+                public void logError(String s) {
+                    u.p("logging error: " + s);
+                }
 
-            public void logMessage(String s) {
-                u.p("logging message: " + s);
-            }
-        });
+                public void logMessage(String s) {
+                    u.p("logging message: " + s);
+                }
+            });
+        }
 
         trackEvent("launch");
         Core.setUseJOGL(false);

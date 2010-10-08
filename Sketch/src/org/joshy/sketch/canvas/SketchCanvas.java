@@ -29,6 +29,17 @@ public class SketchCanvas extends DocumentCanvas {
     }
 
     @Override
+    public Bounds getVisualBounds() {
+        return new Bounds(
+                getTranslateX()
+                ,getTranslateY()
+                ,document.getWidth()*getScale()
+                ,document.getHeight()*getScale()
+        );
+    }
+
+
+    @Override
     public void draw(GFX g) {
         SketchDocument sdoc = document;
         g.setPaint(sdoc.getBackgroundFill());
@@ -37,7 +48,7 @@ public class SketchCanvas extends DocumentCanvas {
     }
 
     private void draw(GFX g, SketchDocument sdoc) {
-        g.translate(panX,panY);
+//        g.translate(panX,panY);
         g.scale(getScale(),getScale());
         drawDocumentBounds(g,sdoc);
         drawDocumentGrid(g,sdoc);
@@ -47,7 +58,7 @@ public class SketchCanvas extends DocumentCanvas {
 
         drawSnaps(g,sdoc);
         g.scale(1/getScale(),1/getScale());
-        g.translate(-panX,-panY);
+//        g.translate(-panX,-panY);
 
         if(showSelection) {
             for(SNode node : selection.items()) {

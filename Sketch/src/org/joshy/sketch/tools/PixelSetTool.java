@@ -65,12 +65,12 @@ public class PixelSetTool implements Callback<MouseEvent> {
                         xoff *= -1;
                         yoff *= -1;
                     }
-                    context.getCanvas().setPanX(context.getCanvas().getPanX()+xoff);
-                    context.getCanvas().setPanY(context.getCanvas().getPanY()+yoff);
+//                    context.getCanvas().setPanX(context.getCanvas().getPanX()+xoff);
+//                    context.getCanvas().setPanY(context.getCanvas().getPanY()+yoff);
                     context.getCanvas().setScale(context.getCanvas().getScale()*scale);
                 } else {
-                    context.getCanvas().setPanX(context.getCanvas().getPanX()+diff.getX());
-                    context.getCanvas().setPanY(context.getCanvas().getPanY()+diff.getY());
+//                    context.getCanvas().setPanX(context.getCanvas().getPanX()+diff.getX());
+//                    context.getCanvas().setPanY(context.getCanvas().getPanY()+diff.getY());
                 }
                 panZoomStart = current;
                 return;

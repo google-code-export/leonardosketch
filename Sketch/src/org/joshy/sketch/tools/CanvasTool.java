@@ -44,8 +44,8 @@ public abstract class CanvasTool implements Callback<Event> {
         if(event.getType() == ScrollEvent.ScrollHorizontal) {
             diff = new Point2D.Double(event.getAmount()*scale,0);
         }
-        context.getSketchCanvas().setPanX(context.getSketchCanvas().getPanX()+diff.getX());
-        context.getSketchCanvas().setPanY(context.getSketchCanvas().getPanY()+diff.getY());
+//        context.getSketchCanvas().setPanX(context.getSketchCanvas().getPanX()+diff.getX());
+//        context.getSketchCanvas().setPanY(context.getSketchCanvas().getPanY()+diff.getY());
     }
 
     protected abstract void call(KeyEvent event);
@@ -91,12 +91,12 @@ public abstract class CanvasTool implements Callback<Event> {
                         xoff *= -1;
                         yoff *= -1;
                     }
-                    context.getSketchCanvas().setPanX(context.getSketchCanvas().getPanX()+xoff);
-                    context.getSketchCanvas().setPanY(context.getSketchCanvas().getPanY()+yoff);
+//                    context.getSketchCanvas().setPanX(context.getSketchCanvas().getPanX()+xoff);
+//                    context.getSketchCanvas().setPanY(context.getSketchCanvas().getPanY()+yoff);
                     context.getSketchCanvas().setScale(context.getSketchCanvas().getScale()*scale);
                 } else {
-                    context.getSketchCanvas().setPanX(context.getSketchCanvas().getPanX()+diff.getX());
-                    context.getSketchCanvas().setPanY(context.getSketchCanvas().getPanY()+diff.getY());
+//                    context.getSketchCanvas().setPanX(context.getSketchCanvas().getPanX()+diff.getX());
+//                    context.getSketchCanvas().setPanY(context.getSketchCanvas().getPanY()+diff.getY());
                 }
                 panZoomStart = current;
                 return;
