@@ -223,6 +223,8 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 .addItem(getString("menus.rotateNode90Left"), new PathActions.RotateClockwise(context,-Math.PI/2))
                 .addItem(getString("menus.rotateNodeFree"), new PathActions.Rotate(context))
                 .addItem(getString("menus.scaleNode"), new PathActions.Scale(context))
+                .separator()
+                .addItem("Union", new BooleanGeometry.Union(context))
                 .createJMenu());
         menubar.add(new Menu().setTitle(getString("menus.document"))
                 .addItem(getString("menus.setDocumentSize"), new DocumentActions.SetDocumentSize(this))
@@ -290,5 +292,5 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     public Panel getFlickrPanel() {
         return flickrPanel;
     }
-    
+
 }
