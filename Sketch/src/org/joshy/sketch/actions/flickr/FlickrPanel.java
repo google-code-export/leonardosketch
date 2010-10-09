@@ -120,10 +120,8 @@ public class FlickrPanel extends VFlexBox {
                     if(item.isLoaded()) {
                         gfx.drawImage(item.getImage(),x,y);
                     }
-                    gfx.setPaint(new FlatColor(0.0,0.0,0.0,0.8));
-                    gfx.drawText(item.getTitle(), Font.name("Helvetica").size(12).resolve(),x+5+1,y+17+1);
-                    gfx.setPaint(new FlatColor(0.9,0.9,0.9,1.0));
-                    gfx.drawText(item.getTitle(), Font.name("Helvetica").size(12).resolve(),x+5,y+17);
+                    gfx.setPaint(FlatColor.WHITE);
+                    drawWrappedText(gfx, item.getTitle(), Font.name("Helvetica").size(12).resolve(),x+80,y+17,110);
                 }
                 if(index == listView.getSelectedIndex()) {
                     gfx.setPaint(new FlatColor(1.0,1.0,1.0,0.2));
@@ -145,6 +143,20 @@ public class FlickrPanel extends VFlexBox {
         this.setBoxAlign(VFlexBox.Align.Stretch);
         this.add(box,0);
         this.add(scrollPane,1);
+    }
+
+    private void drawWrappedText(GFX g, String text, Font font, double x, double y, double width) {
+        String line = "";
+        String[] words = text.split(" ");
+        for(String word : words) {
+            if(font.calculateWidth(line) > width){
+                g.drawText(line, font, x, y);
+                y += font.calculateHeight(line);
+                line = "";
+            }
+            line += (word + " ");
+        }
+        g.drawText(line, font, x, y);
     }
 
 
