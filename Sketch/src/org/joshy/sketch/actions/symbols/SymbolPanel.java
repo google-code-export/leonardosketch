@@ -90,6 +90,7 @@ public class SymbolPanel extends Panel {
 
             public void call(MouseEvent event) {
                 if(event.getType() == MouseEvent.MousePressed) {
+                    ContextMenu.hideAll();
                     if(event.getButton() == 3) { // check for right clicks to open the context menu
                         showContextMenu(event);
                         return;
@@ -181,7 +182,7 @@ public class SymbolPanel extends Panel {
 
         contextMenu.setWidth(100);
         contextMenu.setHeight(200);
-        contextMenu.show(this,event.getPointInSceneCoords().getX(),event.getPointInSceneCoords().getY());
+        contextMenu.show(this,event.getX(),event.getY()+30);
     }
 
     @Override
