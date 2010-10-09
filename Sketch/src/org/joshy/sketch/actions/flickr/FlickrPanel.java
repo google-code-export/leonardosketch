@@ -147,6 +147,14 @@ public class FlickrPanel extends Panel {
         this.add(scrollPane);
     }
 
+
+    @Override
+    public void doPrefLayout() {
+        for(Control c : controlChildren()) {
+            c.doPrefLayout();
+        }
+    }
+
     @Override
     public void doLayout() {
         for(Control c : controlChildren()) {

@@ -208,6 +208,9 @@ public class SymbolPanel extends Panel {
             c.doLayout();
         }*/
 
+        for(Control c : controlChildren()) {
+            c.doPrefLayout();
+        }
         setSwitcher.doLayout();
         setSwitcher.setTranslateX(0);
         setSwitcher.setTranslateY(0);

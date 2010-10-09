@@ -146,36 +146,48 @@ public class Main implements Runnable {
         final Ruler vruler = new Ruler(true,scrollPane);
 
         context.stackPanel.add(
-                new Panel()
-                    .onDoLayout(new Callback<Panel>() {
-                        public void call(Panel panel) {
-                            for(Control c : panel.controlChildren()) {
-                                c.doPrefLayout();
-                                if(c == hruler) {
-                                    c.setWidth(panel.getWidth()-30);
-                                    c.setHeight(30);
-                                    c.setTranslateX(30);
-                                    c.setTranslateY(0);
-                                }
-                                if(c == vruler) {
-                                    c.setWidth(30);
-                                    c.setHeight(panel.getHeight()-30);
-                                    c.setTranslateX(0);
-                                    c.setTranslateY(30);
-                                }
-                                if(c instanceof ScrollPane) {
-                                    c.setWidth(panel.getWidth()-30);
-                                    c.setHeight(panel.getHeight()-30);
-                                    c.setTranslateX(30);
-                                    c.setTranslateY(30);
-                                }
-                                c.doLayout();
-                            }
+                new Panel() {
+                    @Override
+                    public void doPrefLayout() {
+                        super.doPrefLayout();
+                        for(Control c : controlChildren()) {
+                            c.doPrefLayout();
                         }
-                    })
-                    .add(hruler,vruler)
-                    .add(scrollPane)
+                    }
+
+                    @Override
+                    public void doLayout() {
+                        super.doLayout();
+                        for(Control c : controlChildren()) {
+                            //c.doPrefLayout();
+                            if(c == hruler) {
+                                c.setWidth(getWidth()-30);
+                                c.setHeight(30);
+                                c.setTranslateX(30);
+                                c.setTranslateY(0);
+                            }
+                            if(c == vruler) {
+                                c.setWidth(30);
+                                c.setHeight(getHeight()-30);
+                                c.setTranslateX(0);
+                                c.setTranslateY(30);
+                            }
+                            if(c instanceof ScrollPane) {
+                                c.setWidth(getWidth()-30);
+                                c.setHeight(getHeight()-30);
+                                c.setTranslateX(30);
+                                c.setTranslateY(30);
+                            }
+                            c.doLayout();
+                        }
+
+                    }
+                }
+                .setFill(FlatColor.GREEN)
+                .add(hruler,vruler)
+                .add(scrollPane)
                 );
+
         context.stackPanel.add(context.getUndoOverlay());
         if(context instanceof VectorDocContext) {
             context.pageList = new PageListPanel((VectorDocContext)context);
