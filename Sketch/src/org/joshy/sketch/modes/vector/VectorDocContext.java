@@ -224,7 +224,9 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 .addItem(getString("menus.rotateNodeFree"), new PathActions.Rotate(context))
                 .addItem(getString("menus.scaleNode"), new PathActions.Scale(context))
                 .separator()
-                .addItem("Union", new BooleanGeometry.Union(context))
+                .addItem("Add", new BooleanGeometry.Union(context))
+                .addItem("Subtract", new BooleanGeometry.Subtract(context))
+                .addItem("Intersection", new BooleanGeometry.Intersection(context))
                 .createJMenu());
         menubar.add(new Menu().setTitle(getString("menus.document"))
                 .addItem(getString("menus.setDocumentSize"), new DocumentActions.SetDocumentSize(this))
