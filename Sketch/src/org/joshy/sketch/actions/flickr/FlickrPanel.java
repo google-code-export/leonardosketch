@@ -132,6 +132,7 @@ public class FlickrPanel extends VFlexBox {
             }
         });
         scrollPane = new ScrollPane();
+        scrollPane.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
         scrollPane.setContent(photoList);
         searchBox = new Textbox();
         Control box = new HFlexBox()
