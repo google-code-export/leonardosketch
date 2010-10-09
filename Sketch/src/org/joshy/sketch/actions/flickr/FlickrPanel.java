@@ -37,7 +37,7 @@ import java.util.List;
  * Time: 4:52:03 PM
  * To change this template use File | Settings | File Templates.
  */
-public class FlickrPanel extends Panel {
+public class FlickrPanel extends VFlexBox {
     private ListView photoList;
     private List<Photo> photos;
     private Textbox searchBox;
@@ -122,7 +122,6 @@ public class FlickrPanel extends Panel {
                     }
                     gfx.setPaint(new FlatColor(0.0,0.0,0.0,0.8));
                     gfx.drawText(item.getTitle(), Font.name("Helvetica").size(12).resolve(),x+5+1,y+17+1);
-                    //gfx.drawText(item.getTitle(), Font.name("Helvetica").size(12).resolve(),x+5-1,y+17-1);
                     gfx.setPaint(new FlatColor(0.9,0.9,0.9,1.0));
                     gfx.drawText(item.getTitle(), Font.name("Helvetica").size(12).resolve(),x+5,y+17);
                 }
@@ -138,34 +137,16 @@ public class FlickrPanel extends Panel {
         scrollPane.setContent(photoList);
         searchBox = new Textbox();
         Control box = new HFlexBox()
-                .setBoxAlign(HFlexBox.Align.Top)
+                .setBoxAlign(HFlexBox.Align.Baseline)
                 .add(searchBox,1)
                 .add(new Button("Search").onClicked(doSearch),0)
                 .setHeight(40).setWidth(200);
 
-        this.add(box);
-        this.add(scrollPane);
+        this.setBoxAlign(VFlexBox.Align.Stretch);
+        this.add(box,0);
+        this.add(scrollPane,1);
     }
 
-
-    @Override
-    public void doPrefLayout() {
-        for(Control c : controlChildren()) {
-            c.doPrefLayout();
-        }
-    }
-
-    @Override
-    public void doLayout() {
-        for(Control c : controlChildren()) {
-            if(c == scrollPane){
-                c.setWidth(getWidth());
-                c.setHeight(getHeight()-40);
-                c.setTranslateY(40);
-            }
-            c.doLayout();
-        }
-    }
 
     Callback<ActionEvent> doSearch = new Callback<ActionEvent>() {
         public void call(ActionEvent event) {
