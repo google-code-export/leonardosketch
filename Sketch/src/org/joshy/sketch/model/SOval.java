@@ -1,5 +1,6 @@
 package org.joshy.sketch.model;
 
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 
 public class SOval extends AbstractResizeableNode implements SelfDrawable {
@@ -23,6 +24,9 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
     public void draw(GFX g) {
         if(getFillPaint() != null) {
             g.setPaint(this.getFillPaint());
+            if(getFillPaint() instanceof FlatColor) {
+                g.setPaint(((FlatColor)getFillPaint()).deriveWithAlpha(getFillOpacity()));
+            }
             g.fillOval(this.getX(), this.getY(), this.getWidth(), this.getHeight());
         }
         if(getStrokePaint() != null) {

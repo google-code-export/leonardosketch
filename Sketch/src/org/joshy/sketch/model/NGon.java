@@ -75,6 +75,9 @@ public class NGon extends SShape implements SelfDrawable {
         }
 
         g.setPaint(getFillPaint());
+        if(getFillPaint() instanceof FlatColor) {
+            g.setPaint(((FlatColor)getFillPaint()).deriveWithAlpha(getFillOpacity()));
+        }
         g.fillPolygon(points);
         g.setPaint(getStrokePaint());
         g.setStrokeWidth(getStrokeWidth());

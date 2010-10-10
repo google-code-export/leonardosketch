@@ -106,6 +106,9 @@ public class SPoly extends SShape implements SelfDrawable {
 
     public void draw(GFX g) {
         g.setPaint(this.getFillPaint());
+        if(getFillPaint() instanceof FlatColor) {
+            g.setPaint(((FlatColor)getFillPaint()).deriveWithAlpha(getFillOpacity()));
+        }        
         double[] points = new double[this.pointCount()*2];
         for(int i=0; i<this.pointCount(); i++) {
             points[i*2] = this.getPoint(i).getX();

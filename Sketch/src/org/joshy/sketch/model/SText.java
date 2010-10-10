@@ -1,5 +1,6 @@
 package org.joshy.sketch.model;
 
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 
@@ -98,6 +99,9 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
 
     public void draw(GFX g) {
         g.setPaint(this.getFillPaint());
+        if(getFillPaint() instanceof FlatColor) {
+            g.setPaint(((FlatColor)getFillPaint()).deriveWithAlpha(getFillOpacity()));
+        }
         Font font = Font.name(getFontName())
                 .size((float)this.getFontSize())
                 .weight(this.getWeight())
