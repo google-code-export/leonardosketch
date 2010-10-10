@@ -84,6 +84,9 @@ public class Ruler extends Control {
         g.setPaint(new FlatColor(0x505050));
         int o = (int) offset;
         int step = 50;
+
+        double scale = context.getCanvas().getScale();
+        
         if(vertical) {
             int y = 0;
             int w = (int) getWidth();
@@ -91,7 +94,7 @@ public class Ruler extends Control {
                 if(y-o > -step) {
                     //major ticks
                     g.drawLine(10,y-o,w,y-o);
-                    g.drawText(""+y, fnt,2, y+12-o);
+                    g.drawText(""+(int)(y/scale), fnt,2, y+12-o);
 
                     for(int i=1; i<=4; i++) {
                         g.drawLine(20,y+i*10-o,w,y+i*10-o);
@@ -108,7 +111,7 @@ public class Ruler extends Control {
             while(true) {
                 if(x-o > -step) {
                     g.drawLine(x-o,10,x-o,h);
-                    g.drawText(""+x, fnt,x+3-o, 12);
+                    g.drawText(""+(int)(x/scale), fnt,x+3-o, 12);
                     for(int i=1; i<=4; i++) {
                         g.drawLine(x+i*10-o,20,x+i*10-o,h);
                     }

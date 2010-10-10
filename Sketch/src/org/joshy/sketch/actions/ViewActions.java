@@ -33,7 +33,7 @@ public class ViewActions {
 
         @Override
         public void execute() {
-            context.getCanvas().setScale(context.getCanvas().getScale()*1.5);
+            context.getCanvas().setScale(context.getCanvas().getScale()*2.0);
         }
     }
 
@@ -46,7 +46,7 @@ public class ViewActions {
 
         @Override
         public void execute() {
-            context.getCanvas().setScale(context.getCanvas().getScale()/1.5);
+            context.getCanvas().setScale(context.getCanvas().getScale()/2.0);
         }
     }
 
