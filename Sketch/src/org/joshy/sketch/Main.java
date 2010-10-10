@@ -142,8 +142,8 @@ public class Main implements Runnable {
                 .setHeight(300)
         );
         
-        final Ruler hruler = new Ruler(false,scrollPane);
-        final Ruler vruler = new Ruler(true,scrollPane);
+        final Ruler hruler = new Ruler(false,scrollPane,context);
+        final Ruler vruler = new Ruler(true,scrollPane,context);
 
         context.stackPanel.add(
                 new Panel() {
