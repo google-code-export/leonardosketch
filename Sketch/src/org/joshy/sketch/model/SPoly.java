@@ -4,9 +4,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,6 +100,13 @@ public class SPoly extends SShape implements SelfDrawable {
         ((SPoly)dupe).setClosed(this.isClosed());
         ((SPoly)dupe).recalcPath();
         return super.duplicate(dupe);
+    }
+
+    @Override
+    public Area toArea() {
+        Area area = new Area(path);
+        area.transform(AffineTransform.getTranslateInstance(getTranslateX(),getTranslateY()));
+        return area;
     }
 
     public void draw(GFX g) {

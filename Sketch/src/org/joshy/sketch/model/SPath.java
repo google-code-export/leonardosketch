@@ -7,6 +7,8 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.u;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -372,5 +374,12 @@ public class SPath extends SShape implements SelfDrawable {
         ((SPath)dupe).setClosed(this.isClosed());
         ((SPath)dupe).recalcPath();
         return super.duplicate(dupe);
+    }
+
+    @Override
+    public Area toArea() {
+        Area area = new Area(this.path2d);
+        area.transform(AffineTransform.getTranslateInstance(getTranslateX(),getTranslateY()));
+        return area;        
     }
 }

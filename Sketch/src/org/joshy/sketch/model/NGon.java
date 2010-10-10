@@ -2,10 +2,11 @@ package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.node.Bounds;
 
-import java.awt.geom.Path2D;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 
 /**
@@ -60,6 +61,19 @@ public class NGon extends SShape implements SelfDrawable {
     }
 
     public void draw(GFX g) {
+        double[] points = toPoints();
+        g.setPaint(getFillPaint());
+        if(getFillPaint() instanceof FlatColor) {
+            g.setPaint(((FlatColor)getFillPaint()).deriveWithAlpha(getFillOpacity()));
+        }
+        g.fillPolygon(points);
+        g.setPaint(getStrokePaint());
+        g.setStrokeWidth(getStrokeWidth());
+        g.drawPolygon(points,true);
+        g.setStrokeWidth(1);
+    }
+
+    private double[] toPoints() {
         double[] points = new double[getSides()*2];
         double addAngle=2*Math.PI/getSides();
         double angle= -this.angle;
@@ -73,16 +87,7 @@ public class NGon extends SShape implements SelfDrawable {
             points[i*2] = resx;
             points[i*2+1] = resy;
         }
-
-        g.setPaint(getFillPaint());
-        if(getFillPaint() instanceof FlatColor) {
-            g.setPaint(((FlatColor)getFillPaint()).deriveWithAlpha(getFillOpacity()));
-        }
-        g.fillPolygon(points);
-        g.setPaint(getStrokePaint());
-        g.setStrokeWidth(getStrokeWidth());
-        g.drawPolygon(points,true);
-        g.setStrokeWidth(1);
+        return points;
     }
 
     @Override
@@ -93,6 +98,18 @@ public class NGon extends SShape implements SelfDrawable {
         ((NGon)dupe).setRadius(getRadius());
         ((NGon)dupe).setAngle(getAngle());
         return super.duplicate(dupe);
+    }
+
+    @Override
+    public Area toArea() {
+        Polygon poly = new Polygon();
+        double[] points = toPoints();
+        for(int i=0; i<points.length; i+=2) {
+            poly.addPoint((int)points[i],(int)points[i+1]);
+        }
+        Area area = new Area(poly);
+        area.transform(AffineTransform.getTranslateInstance(getTranslateX(),getTranslateY()));
+        return area;
     }
 
     public void setAngle(double angle) {

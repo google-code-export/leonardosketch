@@ -3,6 +3,7 @@ package org.joshy.sketch.model;
 import org.joshy.gfx.draw.*;
 
 import javax.imageio.ImageIO;
+import java.awt.geom.Area;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -30,5 +31,10 @@ public class Button9 extends AbstractResizeableNode {
         g.setPaint(FlatColor.BLACK);
         g.drawGridNine(g9, getX(), getY(), getWidth(), getHeight());
         Font.drawCentered(g,"Button",Font.DEFAULT, getX(), getY(), getWidth(), getHeight(),true);
+    }
+
+    @Override
+    public Area toArea() {
+        return new Area();
     }
 }

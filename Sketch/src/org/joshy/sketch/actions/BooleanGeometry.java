@@ -1,9 +1,6 @@
 package org.joshy.sketch.actions;
 
-import org.joshy.sketch.model.SArea;
-import org.joshy.sketch.model.SNode;
-import org.joshy.sketch.model.SOval;
-import org.joshy.sketch.model.SRect;
+import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.geom.Area;
@@ -18,22 +15,8 @@ import java.awt.geom.Area;
 public class BooleanGeometry {
 
     private static Area toArea(SNode node) {
-        if(node instanceof SRect) {
-            SRect r = (SRect) node;
-            return new Area(new java.awt.Rectangle.Double(
-                    r.getX()+node.getTranslateX(),
-                    r.getY()+node.getTranslateY(),
-                    r.getWidth(),r.getHeight()
-            ));
-        }
-        if(node instanceof SOval) {
-            SOval o = (SOval) node;
-            return new Area(new java.awt.geom.Ellipse2D.Double(
-                    o.getX()+node.getTranslateX(),
-                    o.getY()+node.getTranslateY(),
-                    o.getWidth(),
-                    o.getHeight()
-            ));
+        if(node instanceof SShape) {
+            return ((SShape)node).toArea();
         }
         return null;
     }

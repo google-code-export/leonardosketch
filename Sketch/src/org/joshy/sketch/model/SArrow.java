@@ -4,10 +4,7 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.GeomUtil;
 
-import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 
 /**
 * Created by IntelliJ IDEA.
@@ -138,6 +135,11 @@ public class SArrow extends SShape implements SelfDrawable {
 
     public void setHeadEnd(HeadEnd headEnd) {
         this.headEnd = headEnd;
+    }
+
+    @Override
+    public Area toArea() {
+        return new Area();
     }
 
     public enum HeadEnd {

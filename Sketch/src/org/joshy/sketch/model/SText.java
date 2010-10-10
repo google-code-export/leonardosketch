@@ -4,6 +4,8 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 
+import java.awt.geom.Area;
+
 public class SText extends AbstractResizeableNode implements SelfDrawable {
     public String text;
     private double fontSize;
@@ -95,6 +97,11 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
         ((SText)dupe).setWeight(this.getWeight());
         ((SText)dupe).setFontSize(this.getFontSize());
         return super.duplicate(dupe);
+    }
+
+    @Override
+    public Area toArea() {
+        return new Area();
     }
 
     public void draw(GFX g) {

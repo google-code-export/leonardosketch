@@ -4,6 +4,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
 
+import java.awt.geom.Area;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -229,6 +230,11 @@ public class ResizableGrid9Shape extends AbstractResizeableNode implements SelfD
         }
         ((ResizableGrid9Shape)dupe).setNodes(subdupes);
         return super.duplicate(dupe);
+    }
+
+    @Override
+    public Area toArea() {
+        return new Area();
     }
 
     public void setVLocked(boolean VLocked) {

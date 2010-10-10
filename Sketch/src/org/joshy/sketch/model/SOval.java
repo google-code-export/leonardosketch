@@ -3,6 +3,8 @@ package org.joshy.sketch.model;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 
+import java.awt.geom.Area;
+
 public class SOval extends AbstractResizeableNode implements SelfDrawable {
 
     public SOval() {
@@ -19,6 +21,16 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
             dupe = new SOval();
         }
         return super.duplicate(dupe);
+    }
+
+    @Override
+    public Area toArea() {
+        return new Area(new java.awt.geom.Ellipse2D.Double(
+                getX()+getTranslateX(),
+                getY()+getTranslateY(),
+                getWidth(),
+                getHeight()
+        ));
     }
 
     public void draw(GFX g) {

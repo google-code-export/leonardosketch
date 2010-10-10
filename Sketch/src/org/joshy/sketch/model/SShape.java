@@ -3,6 +3,8 @@ package org.joshy.sketch.model;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Paint;
 
+import java.awt.geom.Area;
+
 public abstract class SShape extends SNode {
     public Paint fillPaint = FlatColor.GRAY;
     public FlatColor strokePaint = FlatColor.BLACK;
@@ -48,4 +50,6 @@ public abstract class SShape extends SNode {
     public void setFillOpacity(double fillOpacity) {
         this.fillOpacity = fillOpacity;
     }
+
+    public abstract Area toArea();
 }

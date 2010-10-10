@@ -5,6 +5,8 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.draw.Paint;
 
+import java.awt.geom.Area;
+
 /**
  * Created by IntelliJ IDEA.
  * User: joshmarinacci
@@ -38,6 +40,15 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
         }
         ((SRect)dupe).setCorner(this.getCorner());
         return super.duplicate(dupe);
+    }
+
+    @Override
+    public Area toArea() {
+        return new Area(new java.awt.Rectangle.Double(
+                getX()+getTranslateX(),
+                getY()+getTranslateY(),
+                getWidth(),getHeight()
+        ));
     }
 
     public void draw(GFX g) {
