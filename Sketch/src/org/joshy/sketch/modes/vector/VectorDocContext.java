@@ -192,7 +192,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         VectorDocContext context = this;
         menubar.add(new org.joshy.sketch.controls.Menu().setTitle(getString("menus.node"))
                 .addItem(getString("menus.raiseNodeTop"),      "shift CLOSE_BRACKET", new NodeActions.RaiseTopSelectedNodeAction(this))
-                .addItem(getString("menus.raiseNode"),        "CLOSE_BRACKET", new NodeActions.RaiseSelectedNodeAction(this))
+                .addItem(getString("menus.raiseNode"),        "CLOSE_BRACKET",       new NodeActions.RaiseSelectedNodeAction(this))
                 .addItem(getString("menus.lowerNode"),        "OPEN_BRACKET",        new NodeActions.LowerSelectedNodeAction(this))
                 .addItem(getString("menus.lowerNodeBottom"),   "shift OPEN_BRACKET",  new NodeActions.LowerBottomSelectedNodeAction(this))
                 .separator()

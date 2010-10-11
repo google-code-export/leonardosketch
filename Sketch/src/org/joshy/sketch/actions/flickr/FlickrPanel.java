@@ -12,7 +12,9 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.*;
+import org.joshy.gfx.node.layout.HFlexBox;
+import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.image.MasterImageCache;
 import org.joshy.gfx.util.image.SizingMethod;
 import org.joshy.gfx.util.u;
@@ -27,8 +29,6 @@ import javax.xml.xpath.XPathExpressionException;
 import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -39,7 +39,7 @@ import java.util.List;
  */
 public class FlickrPanel extends VFlexBox {
     private ListView photoList;
-    private List<Photo> photos;
+    private ArrayListModel<Photo> photos;
     private Textbox searchBox;
     private MasterImageCache imageCache;
     private ScrollPane scrollPane;
@@ -56,21 +56,10 @@ public class FlickrPanel extends VFlexBox {
     public FlickrPanel(final VectorDocContext context) {
         this.context = context;
         imageCache = new MasterImageCache(false,10,"foo");
-        photos = new ArrayList<Photo>();
+        photos = new ArrayListModel<Photo>();
         photoList = new ListView();
         photoList.setRowHeight(75);
-        photoList.setModel(new ListModel<Photo>(){
-            public Photo get(int i) {
-                if(i < photos.size()) {
-                    return photos.get(i);
-                } else {
-                    return null;
-                }
-            }
-            public int size() {
-                return photos.size();
-            }
-        });
+        photoList.setModel(photos);
         EventBus.getSystem().addListener(photoList, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public double prevx;
             public boolean created;

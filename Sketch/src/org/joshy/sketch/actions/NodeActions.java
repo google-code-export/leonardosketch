@@ -1,10 +1,10 @@
 package org.joshy.sketch.actions;
 
-import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.model.SGroup;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SResizeableNode;
 import org.joshy.sketch.model.SketchDocument;
+import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +86,7 @@ public class NodeActions {
 
         public LowerSelectedNodeAction(VectorDocContext context) {
             super();
+            this.context = context;
         }
 
         @Override
