@@ -7,8 +7,8 @@ import java.util.List;
 
 public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
     private boolean gridActive = true;
-    private double gridWidth = 20;
-    private double gridHeight = 20;
+    private double gridWidth = 25;
+    private double gridHeight = 25;
     private boolean snapGrid;
     private boolean docBoundsActive = true;
     private FlatColor backgroundFill = FlatColor.WHITE;
