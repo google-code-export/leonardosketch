@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 
 /**
  * Created by IntelliJ IDEA.
@@ -88,6 +89,14 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
         u.p("loading image from local file: " + fileURI);
         this.file = new File(fileURI);
         img = ImageIO.read(fileURI.toURL());
+        image = Image.create(this.img);
+        init();
+    }
+
+    public SImage(URL url) throws IOException {
+        u.p("using URL : " + url);
+        this.file = null;
+        img = ImageIO.read(url);
         image = Image.create(this.img);
         init();
     }

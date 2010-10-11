@@ -68,7 +68,7 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
                 g.fillRect(0,0, this.getWidth(), this.getHeight());
             }
         }
-        if(this.getStrokePaint() != null) {
+        if(this.getStrokePaint() != null && getStrokeWidth() > 0) {
             g.setPaint(this.getStrokePaint());
             g.setStrokeWidth(this.getStrokeWidth());
 
