@@ -144,5 +144,10 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         public SketchDocument getDocument() {
             return doc;
         }
+
+        public void clear() {
+            model.clear();
+            doc.setDirty(true);
+        }
     }
 }

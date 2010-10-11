@@ -15,8 +15,9 @@ public abstract class SShape extends SNode {
         return fillPaint;
     }
 
-    public void setFillPaint(Paint fillPaint) {
+    public SShape setFillPaint(Paint fillPaint) {
         this.fillPaint = fillPaint;
+        return this;
     }
 
     public FlatColor getStrokePaint() {
