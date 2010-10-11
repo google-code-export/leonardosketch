@@ -8,10 +8,7 @@ import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a selection of nodes in a vector document.
@@ -74,7 +71,7 @@ public class Selection {
     }
 
     public Iterable<? extends SNode> items() {
-        return selected.keySet();
+        return Collections.unmodifiableSet(selected.keySet());
     }
 
     public void clear() {
