@@ -73,7 +73,7 @@ public class NGon extends SShape implements SelfDrawable {
         g.setStrokeWidth(1);
     }
 
-    private double[] toPoints() {
+    public double[] toPoints() {
         double[] points = new double[getSides()*2];
         double addAngle=2*Math.PI/getSides();
         double angle= -this.angle;

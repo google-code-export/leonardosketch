@@ -1,6 +1,6 @@
 package org.joshy.sketch.actions.io;
 
-import org.joshy.gfx.draw.*;
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class SaveSVGAction extends SAction {
     private DocContext context;
@@ -54,6 +55,7 @@ public class SaveSVGAction extends SAction {
 
     private static void draw(PrintWriter out, SRect rect) {
         out.println("<rect x='"+ rect.getX() +"' y='"+ rect.getY() +"' width='"+ rect.getWidth() +"' height='"+ rect.getHeight() +"'"+
+                " transform='translate("+rect.getTranslateX()+","+rect.getTranslateY()+")'"+
                 " fill='"+toRGBString(rect.getFillPaint())+"'"+
                 " stroke='"+toRGBString(rect.getStrokePaint())+"'" +
                 " stroke-width='"+rect.getStrokeWidth()+"'" +
@@ -66,6 +68,7 @@ public class SaveSVGAction extends SAction {
         out.println("    cy='"+(oval.getY() + oval.getHeight() /2)+"'");
         out.println("    rx='"+ oval.getWidth() /2+"'");
         out.println("    ry='"+ oval.getHeight() /2+"'");
+        out.println("    transform='translate("+oval.getTranslateX()+","+oval.getTranslateY()+")'");
         out.println("    fill='"+toRGBString(oval.getFillPaint())+"'");
         out.println("    stroke='"+toRGBString(oval.getStrokePaint())+"'");
         out.println("    stroke-width='"+oval.getStrokeWidth()+"'");
@@ -115,6 +118,55 @@ public class SaveSVGAction extends SAction {
         out.println("/>");
     }
 
+    private static void draw(PrintWriter out, NGon nGon) {
+        out.println("<polygon ");
+
+        //the vector data
+        out.print("    points='");
+        double[] points = nGon.toPoints();
+        for(int i=0; i<points.length; i+=2) {
+            out.print(""  + (points[i]+nGon.getTranslateX())
+                    + "," + (points[i+1]+nGon.getTranslateY()) + " ");
+        }
+        out.println("'");
+
+
+        out.println("    fill='"+toRGBString(nGon.getFillPaint())+"'");
+        out.println("    stroke='"+toRGBString(nGon.getStrokePaint())+"'");
+        out.println("    stroke-width='"+nGon.getStrokeWidth()+"'");
+        out.println("/>");
+
+    }
+
+    private static void draw(PrintWriter out, SPath path) {
+        out.println("<path ");
+
+        //the translate
+        out.println("    transform='translate("+path.getTranslateX()+","+path.getTranslateY()+")' ");
+        //the vector data
+        out.print("    d='");
+        int count = 0;
+        List<SPath.PathPoint> points = path.getPoints();
+        for(int i=0; i<points.size(); i++) {
+            if(i == 0) {
+                out.print(" M "+points.get(i).x + " " + points.get(i).y);
+            } else {
+                out.print(" C "
+                        +points.get(i-1).cx2 + " " + points.get(i-1).cy2 + " "
+                        +points.get(i).cx1 + " " + points.get(i).cy1 + " "
+                        +points.get(i).x + " " + points.get(i).y + " "
+                        );
+            }
+            out.print(" ");
+        }
+        out.println(" z'");
+
+        out.println("    fill='"+toRGBString(path.getFillPaint())+"'");
+        out.println("    stroke='"+toRGBString(path.getStrokePaint())+"'");
+        out.println("    stroke-width='"+path.getStrokeWidth()+"'");
+        out.println("/>");
+    }
+
     private static String toRGBString(Paint paint) {
         if(paint instanceof FlatColor){
             FlatColor color = (FlatColor) paint;
@@ -136,13 +188,19 @@ public class SaveSVGAction extends SAction {
         }
 
         public void exportPre(PrintWriter out, SNode shape) {
+            if(shape instanceof SGroup) {
+                out.println("<g transform='translate("+shape.getTranslateX()+","+shape.getTranslateY()+")'>");
+            }
             if(shape instanceof SRect) draw(out,(SRect)shape);
             if(shape instanceof SOval) draw(out,(SOval)shape);
             if(shape instanceof SText) draw(out,(SText)shape);
             if(shape instanceof SPoly) draw(out,(SPoly)shape);
+            if(shape instanceof NGon)  draw(out, (NGon)shape);
+            if(shape instanceof SPath)  draw(out, (SPath)shape);
         }
 
         public void exportPost(PrintWriter out, SNode shape) {
+            if(shape instanceof SGroup) out.println("</g>");
         }
 
         public void pageEnd(PrintWriter out, SketchDocument.SketchPage page) {
