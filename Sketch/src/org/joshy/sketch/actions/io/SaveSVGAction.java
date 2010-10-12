@@ -10,6 +10,9 @@ import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
+import java.awt.geom.PathIterator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
@@ -167,6 +170,58 @@ public class SaveSVGAction extends SAction {
         out.println("/>");
     }
 
+    private static void draw(PrintWriter out, SArea sArea) {
+        out.println("<path ");
+        out.println("    transform='translate("+ sArea.getTranslateX()+","+ sArea.getTranslateY()+")' ");
+        //the vector data
+        out.print("    d='");
+        int count = 0;
+        Area area = sArea.toArea();
+        PathIterator it = area.getPathIterator(new AffineTransform());
+        while(!it.isDone()) {
+            double[] coords = new double[6];
+            int n = it.currentSegment(coords);
+            if(n == PathIterator.SEG_MOVETO) {
+                out.println(" M "+coords[0]+" "+coords[1]);
+            }
+            if(n == PathIterator.SEG_LINETO) {
+                out.println(" L " + coords[0]+" " +coords[1]);
+            }
+            if(n == PathIterator.SEG_CUBICTO) {
+                out.println(" C "
+                        +coords[0]+" "+coords[1] + " "
+                        +coords[2]+" "+coords[3] + " "
+                        +coords[4]+" "+coords[5] + " "
+                        );
+            }
+            if(n == PathIterator.SEG_CLOSE) {
+                out.println(" z");
+                break;
+            }
+            it.next();
+        }
+        out.println("'");
+/*
+        for(int i=0; i<points.size(); i++) {
+            if(i == 0) {
+                out.print(" M "+points.get(i).x + " " + points.get(i).y);
+            } else {
+                out.print(" C "
+                        +points.get(i-1).cx2 + " " + points.get(i-1).cy2 + " "
+                        +points.get(i).cx1 + " " + points.get(i).cy1 + " "
+                        +points.get(i).x + " " + points.get(i).y + " "
+                        );
+            }
+            out.print(" ");
+        }*/
+        //out.println(" z'");
+
+        out.println("    fill='"+toRGBString(sArea.getFillPaint())+"'");
+        out.println("    stroke='"+toRGBString(sArea.getStrokePaint())+"'");
+        out.println("    stroke-width='"+ sArea.getStrokeWidth()+"'");
+        out.println("/>");
+    }
+
     private static String toRGBString(Paint paint) {
         if(paint instanceof FlatColor){
             FlatColor color = (FlatColor) paint;
@@ -192,6 +247,7 @@ public class SaveSVGAction extends SAction {
                 out.println("<g transform='translate("+shape.getTranslateX()+","+shape.getTranslateY()+")'>");
             }
             if(shape instanceof SRect) draw(out,(SRect)shape);
+            if(shape instanceof SArea) draw(out,(SArea)shape);
             if(shape instanceof SOval) draw(out,(SOval)shape);
             if(shape instanceof SText) draw(out,(SText)shape);
             if(shape instanceof SPoly) draw(out,(SPoly)shape);

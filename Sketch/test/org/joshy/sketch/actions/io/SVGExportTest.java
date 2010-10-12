@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.awt.*;
+import java.awt.geom.Area;
 import java.io.File;
 import java.io.IOException;
 
@@ -139,9 +140,24 @@ public class SVGExportTest {
     }
 
 
-    @Test public void testArea() throws IOException {
-
+    @Test public void testArea() throws Exception {
+        SRect rect = new SRect(0,0,10,10);
+        rect.setFillPaint(FlatColor.RED);
+        SOval oval = new SOval(5,5,10,10);
+        oval.setFillPaint(FlatColor.BLUE);
+        Area area = new Area();
+        area.add(rect.toArea());
+        area.add(oval.toArea());
+        SArea sarea = new SArea(area);
+        sarea.setTranslateX(10);
+        sarea.setTranslateY(10);
+        sarea.setFillPaint(FlatColor.GREEN);
+        page.clear();
+        page.add(sarea);
+        Doc xdoc = saveAndReadback(doc);
+        assertTrue("translate(10.0,10.0)".equals(xdoc.xpathString("/svg/path/@transform")));
     }
+
     @Test public void testArrow() {
 
     }
