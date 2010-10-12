@@ -105,6 +105,15 @@ public class RectPropsPalette extends Panel {
 
     }
 
+    @Override
+    public void doLayout() {
+        super.doLayout();
+        dragHandle.setTranslateX(0);
+        dragHandle.setTranslateY(0);
+        dragHandle.setWidth(200);
+        dragHandle.setHeight(20);
+    }
+
     private void updateRoundRect() {
         if(canvas.selection.size() == 1) {
             SNode shape = canvas.selection.items().iterator().next();

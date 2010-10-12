@@ -60,7 +60,7 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
                 g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
             }
             if(paint instanceof GradientFill) {
-                g.setPaint(paint);
+                g.setPaint(rescaleGradient((GradientFill) paint,this));
             }
             if(this.getCorner() > 0) {
                 g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),this.getCorner(),this.getCorner());
