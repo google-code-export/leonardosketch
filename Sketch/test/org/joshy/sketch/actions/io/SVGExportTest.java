@@ -1,9 +1,11 @@
 package org.joshy.sketch.actions.io;
 
 import com.joshondesign.xml.Doc;
+import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.*;
 import org.junit.Before;
@@ -162,8 +164,22 @@ public class SVGExportTest {
 
     }
 
-    @Test public void testGradientRect() throws IOException {
-
+    @Test public void testGradientRect() throws Exception {
+        GradientFill grad = new GradientFill(
+                FlatColor.BLUE,
+                FlatColor.RED,
+                0,//makes no difference
+                true,//makes no difference
+                3,0,97,0
+                );
+        SRect rect = new SRect(0,0,100,100);
+        rect.setFillPaint(grad);
+        rect.setStrokeWidth(0);
+        page.clear();
+        page.add(rect);
+        Doc xdoc = saveAndReadback(doc);
+        Elem e = xdoc.xpath("/svg/linearGradient/stop").iterator().next();
+        assertTrue("0.0".equals(e.attr("offset")));
     }
 
     private Doc saveAndReadback(SketchDocument doc) throws Exception {

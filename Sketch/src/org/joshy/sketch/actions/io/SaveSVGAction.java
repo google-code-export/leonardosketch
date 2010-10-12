@@ -1,6 +1,7 @@
 package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -57,10 +58,26 @@ public class SaveSVGAction extends SAction {
 
 
     private static void draw(PrintWriter out, SRect rect) {
+        //String id = Math.random();
+        String id = "A"+Long.toHexString(Double.doubleToLongBits(Math.random()));
+        if(rect.getFillPaint() instanceof GradientFill) {
+            GradientFill grad = (GradientFill) rect.getFillPaint();
+            out.println("  <linearGradient id='"+id+"'>");
+            out.println("    <stop offset='0.0' style='stop-color:"+toRGBString(grad.start)+"'/>");
+            out.println("    <stop offset='1.0' style='stop-color:"+toRGBString(grad.end)+"'/>");
+            out.println("  </linearGradient>");
+        }
         out.println("<rect x='"+ rect.getX() +"' y='"+ rect.getY() +"' width='"+ rect.getWidth() +"' height='"+ rect.getHeight() +"'"+
-                " transform='translate("+rect.getTranslateX()+","+rect.getTranslateY()+")'"+
-                " fill='"+toRGBString(rect.getFillPaint())+"'"+
-                " stroke='"+toRGBString(rect.getStrokePaint())+"'" +
+                " transform='translate("+rect.getTranslateX()+","+rect.getTranslateY()+")'");
+
+        if(rect.getFillPaint() instanceof FlatColor) {
+            out.println(" fill='"+toRGBString(rect.getFillPaint())+"'");
+        }
+        if(rect.getFillPaint() instanceof GradientFill) {
+            out.println(" fill='url(#"+id+")'");
+        }
+        
+        out.println(" stroke='"+toRGBString(rect.getStrokePaint())+"'" +
                 " stroke-width='"+rect.getStrokeWidth()+"'" +
                 "/>");
     }
