@@ -33,6 +33,7 @@ public class RectPropsPalette extends Panel {
     public RectPropsPalette(SketchCanvas canvas) throws IOException {
         this.canvas = canvas;
         setWidth(200);
+        setHeight(230);
         dragHandle = new DragHandle();
         dragHandle.setWidth(200);
         dragHandle.setHeight(20);
@@ -99,6 +100,8 @@ public class RectPropsPalette extends Panel {
                 }
             }
         });
+
+        this.setFill(FlatColor.GRAY);
 
     }
 
