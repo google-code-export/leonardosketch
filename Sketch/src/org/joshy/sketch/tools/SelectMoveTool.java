@@ -101,7 +101,11 @@ public class SelectMoveTool extends CanvasTool {
 
     protected void call(KeyEvent event) {
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_BACKSPACE) {
-            context.getDeleteSelectedNodeAction().execute();
+            try {
+                context.getDeleteSelectedNodeAction().execute();
+            } catch (Exception e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
             context.getPropPanel().setVisible(false);
         }
         double amount = 1.0;
@@ -312,7 +316,11 @@ public class SelectMoveTool extends CanvasTool {
     }
 
     private void duplicateAndReplaceSelection() {
-        context.getDuplicateNodeAction().execute();
+        try {
+            context.getDuplicateNodeAction().execute();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         didDuplicate = true;
     }
 

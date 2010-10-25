@@ -171,7 +171,7 @@ public class ViewActions {
         }
 
         @Override
-        public void execute() {
+        public void execute() throws Exception {
             if(undoFullscreen != null) {
                 undoFullscreen.call(null);
                 undoFullscreen = null;
@@ -209,7 +209,7 @@ public class ViewActions {
         }
 
         @Override
-        public void execute() {
+        public void execute() throws Exception {
             if(undoFullscreen != null) {
                 undoFullscreen.call(null);
                 undoFullscreen = null;

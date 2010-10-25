@@ -377,7 +377,7 @@ public class Main implements Runnable {
         Panel panel = new VFlexBox();
         for(final DocModeHelper mode : modeHelpers) {
             panel.add(new Button("New " + mode.getModeName()).onClicked(new Callback<ActionEvent>(){
-                public void call(ActionEvent event) {
+                public void call(ActionEvent event) throws Exception {
                     SAction action = mode.getNewDocAction(Main.this);
                     action.execute();
                     stage.hide();

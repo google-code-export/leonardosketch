@@ -110,7 +110,11 @@ public class Menu {
         }
 
         public void actionPerformed(java.awt.event.ActionEvent e) {
-            action.execute();
+            try {
+                action.execute();
+            } catch (Exception e1) {
+                e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
     }
 

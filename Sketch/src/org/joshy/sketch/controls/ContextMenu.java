@@ -42,7 +42,7 @@ public class ContextMenu extends PopupMenu {
         items = new ArrayList<SelectMoveTool.ActionItem>();
         setModel(mdl);
         setCallback(new Callback<ChangedEvent>() {
-            public void call(ChangedEvent event) {
+            public void call(ChangedEvent event) throws Exception {
                 int i = ((Integer)event.getValue());
                 SAction action = getAction(i);
                 action.execute();

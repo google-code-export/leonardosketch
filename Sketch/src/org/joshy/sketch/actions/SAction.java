@@ -14,5 +14,5 @@ public abstract class SAction {
     public String getDisplayName() {
         return "unknown saction";
     }
-    public abstract void execute();
+    public abstract void execute() throws Exception;
 }

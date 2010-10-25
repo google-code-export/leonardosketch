@@ -49,7 +49,11 @@ public class FlickrPanel extends VFlexBox {
         Core.init();
         Core.getShared().defer(new Runnable(){
             public void run() {
-                new FlickrPanel(null).doSearch.call(null);
+                try {
+                    new FlickrPanel(null).doSearch.call(null);
+                } catch (Exception e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
             }
         });
     }
