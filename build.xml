@@ -156,7 +156,7 @@
     </macrodef>
 
     
-    <target name="dist" depends="build-sketch, build-mac, build-jnlp, build-src">
+    <target name="dist" depends="build-sketch, build-mac, build-jnlp, build-onejar, build-src">
     </target>
     
     <target name="build-src" depends="init">
