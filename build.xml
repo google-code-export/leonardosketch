@@ -76,10 +76,13 @@
     </target>
     
     <target name="build-onejar" depends="build-sketch">
+        <mkdir dir="dist"/>
         <jar destfile="dist/${app.name}.onejar.jar">
-            <zipgroupfileset dir="lib" includes="**/*.jar" excludes="merged/"/>
+            <zipgroupfileset dir="${amino.core.dir}" includes="**/*.jar"/>
+            <zipgroupfileset dir="build/jars" includes="**/*.jar"/>
+            <zipgroupfileset dir="lib" includes="**/*.jar"/>
             <manifest>
-                <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Main-Class" value="org.joshy.sketch.Main"/>
             </manifest>
         </jar>
     </target>
