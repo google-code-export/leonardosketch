@@ -54,6 +54,11 @@ public class HistogramColorPicker extends Control implements Callback<MouseEvent
     }
 
     @Override
+    public void doPrefLayout() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public void doSkins() {
 
     }

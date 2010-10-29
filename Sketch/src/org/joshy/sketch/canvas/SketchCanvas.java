@@ -162,6 +162,11 @@ public class SketchCanvas extends DocumentCanvas {
     }
 
     @Override
+    public void doPrefLayout() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public void doSkins() {
     }
 

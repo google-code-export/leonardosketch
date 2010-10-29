@@ -20,7 +20,8 @@
         <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
         <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/LeonardoSketch/dist/jnlp/"/>
         
-        <property name="amino.core.dir" value="../amino/published/foo/lib"/>
+        <property name="amino.core.dir" value="../amino/build/jars"/>
+        <property name="amino.core.lib" value="../amino/out/artifacts/core/Amino-core.jar"/>
         <property name="app.name" value="Leonardo"/>
     </target>
 
@@ -72,6 +73,15 @@
             </zipfileset>
             <zipfileset dir="dist/mac" includes="${app.name}.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>
         </zip>        
+    </target>
+    
+    <target name="build-onejar" depends="build-sketch">
+        <jar destfile="dist/${app.name}.onejar.jar">
+            <zipgroupfileset dir="lib" includes="**/*.jar" excludes="merged/"/>
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+            </manifest>
+        </jar>
     </target>
 
     <target  name="build-jnlp" depends="build-sketch">
