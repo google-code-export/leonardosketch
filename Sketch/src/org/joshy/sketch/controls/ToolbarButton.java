@@ -28,14 +28,13 @@ public class ToolbarButton extends Togglebutton {
 
     @Override
     public void doPrefLayout() {
-        super.doPrefLayout();    //To change body of overridden methods use File | Settings | File Templates.
+        super.doPrefLayout();
         this.setWidth(this.icon.getWidth());
         this.setHeight(this.icon.getHeight());
     }
 
     @Override
     public void doLayout() {
-        //super.doLayout();
         this.setWidth(this.icon.getWidth());
         this.setHeight(this.icon.getHeight());
     }

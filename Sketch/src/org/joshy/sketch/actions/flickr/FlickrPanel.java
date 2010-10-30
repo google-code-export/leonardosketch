@@ -132,7 +132,7 @@ public class FlickrPanel extends VFlexBox {
                 .setBoxAlign(HFlexBox.Align.Baseline)
                 .add(searchBox,1)
                 .add(new Button("Search").onClicked(doSearch),0)
-                .setHeight(40).setWidth(200);
+                ;//.setHeight(40).setWidth(200);
 
         this.setBoxAlign(VFlexBox.Align.Stretch);
         this.add(box,0);

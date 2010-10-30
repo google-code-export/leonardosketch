@@ -291,8 +291,5 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         menubar.add(context.symbolMenuJMenu);
     }
 
-    public Panel getFlickrPanel() {
-        return flickrPanel;
-    }
 
 }

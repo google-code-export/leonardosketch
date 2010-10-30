@@ -148,18 +148,8 @@ public class Main implements Runnable {
         context.stackPanel.add(
                 new Panel() {
                     @Override
-                    public void doPrefLayout() {
-                        super.doPrefLayout();
-                        for(Control c : controlChildren()) {
-                            c.doPrefLayout();
-                        }
-                    }
-
-                    @Override
                     public void doLayout() {
-                        super.doLayout();
                         for(Control c : controlChildren()) {
-                            //c.doPrefLayout();
                             if(c == hruler) {
                                 c.setWidth(getWidth()-30);
                                 c.setHeight(30);
@@ -280,7 +270,6 @@ public class Main implements Runnable {
             public void doLayout() {
                 for(Control c : controlChildren()) {
                     double w= 4*50+20+30;
-                    c.doPrefLayout();
                     if(c == context.stackPanel) {
                         c.setTranslateY(0);
                         c.setTranslateX(30);
