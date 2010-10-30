@@ -1,7 +1,9 @@
 package org.joshy.sketch.tools;
 
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
+import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.control.Slider;
@@ -47,7 +49,14 @@ public class DrawNgonTool extends CanvasTool {
 
     public void enable() {
         super.enable();
+        panel.doSkins();
+        panel.doPrefLayout();
+        panel.doLayout();
+        panel.setFill(FlatColor.BLACK.deriveWithAlpha(0.3));
         context.getCanvas().getParent().getStage().getPopupLayer().add(panel);
+        Point2D pt = NodeUtils.convertToScene(context.getCanvas(), 20, 20);
+        panel.setTranslateX(pt.getX());
+        panel.setTranslateY(pt.getY());
     }
 
     public void disable() {
