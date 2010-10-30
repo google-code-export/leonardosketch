@@ -6,6 +6,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.Textbox;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
@@ -58,16 +59,19 @@ public class DrawTextTool extends CanvasTool {
         Point2D.Double point = context.getSketchCanvas().transformToCanvas(x,y);
         textNode.setX(point.x);
         textNode.setY(point.y);
+
+        Point2D pt2 = NodeUtils.convertToScene(context.getSketchCanvas(), point.x, point.y);
+
         overlayTextBox = new Textbox();
-        overlayTextBox.setTranslateX(x);
-        overlayTextBox.setTranslateY(y);
+        overlayTextBox.setTranslateX(pt2.getX());
+        overlayTextBox.setTranslateY(pt2.getY());
         overlayTextBox.setFont(Font.name("Arial")
             .size((float) (textNode.getFontSize()*context.getSketchCanvas().getScale()))
             .style(textNode.getStyle())
             .weight(textNode.getWeight())
             .resolve());
         overlayTextBox.setPrefWidth(300);
-        overlayTextBox.setPrefHeight(overlayTextBox.getFont().calculateHeight("WXYwxy"));
+        overlayTextBox.setPrefHeight(10+overlayTextBox.getFont().calculateHeight("WXYwxy"));
         context.getCanvas().getParent().getStage().getPopupLayer().add(overlayTextBox);
         overlayTextBox.selectAll();
         overlayTextBox.setVisible(true);
@@ -122,10 +126,12 @@ public class DrawTextTool extends CanvasTool {
         Point2D point = context.getSketchCanvas().transformToDrawing(offsetX+textNode.getTranslateX()+textNode.getX(),
                                                   offsetY+textNode.getTranslateY()+textNode.getY()
                 );
-        overlayTextBox.setTranslateX(point.getX());
-        overlayTextBox.setTranslateY(point.getY());
+
+        Point2D pt2 = NodeUtils.convertToScene(context.getSketchCanvas(), point.getX(), point.getY());
+        overlayTextBox.setTranslateX(pt2.getX());
+        overlayTextBox.setTranslateY(pt2.getY());
         overlayTextBox.setPrefWidth(overlayTextBox.getFont().calculateWidth(textNode.text)+100);
-        overlayTextBox.setPrefHeight(overlayTextBox.getFont().calculateHeight(textNode.text));
+        overlayTextBox.setPrefHeight(10+overlayTextBox.getFont().calculateHeight(textNode.text));
         context.getCanvas().getParent().getStage().getPopupLayer().add(overlayTextBox);
         overlayTextBox.selectAll();
         overlayTextBox.setVisible(true);
