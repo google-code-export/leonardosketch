@@ -85,7 +85,7 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
 
     private Paint rescaleGradient(GradientFill gf, SRect rect) {
         double angle = gf.angle;
-        int mode = 1;
+        int mode = 0;
         double a = Math.toRadians(angle);
         double a2 = Math.toRadians(angle+180.0);
         if(mode==1) {
@@ -99,10 +99,16 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
             }
         if(mode == 0) {
             //quadrant 1
-            if(a >=0 && a <90) {
-                gf.startX = 0; gf.endX = rect.getWidth();
-                gf.startY = 0; gf.endY = rect.getHeight();
-            }
+            //right
+            if(angle >=0 && angle <45)          { gf.startX = 0; gf.endX = rect.getWidth();  gf.startY = 0; gf.endY = 0;  }
+            //up
+            if(angle >=45 && angle <90+45)      { gf.startX = 0; gf.endX = 0;  gf.startY = 0; gf.endY = rect.getHeight(); }
+            //left
+            if(angle >=90+45 && angle <180+45)  { gf.startX = rect.getWidth(); gf.endX = 0;  gf.startY = 0; gf.endY = 0;  }
+            //down
+            if(angle >=180+45 && angle <270+45) { gf.startX = 0; gf.endX = 0; gf.startY = rect.getHeight(); gf.endY = 0;  }
+            //right
+            if(angle >=270+45 && angle <360+45) { gf.startX = 0; gf.endX = rect.getWidth();  gf.startY = 0; gf.endY = 0; }
         }
         return gf;
     }
