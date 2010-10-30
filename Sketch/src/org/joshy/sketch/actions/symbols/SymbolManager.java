@@ -67,6 +67,7 @@ public class SymbolManager {
         SymbolSet set = new SymbolSet();
         set.file = new File(basedir,name+".xml");
         sets.put(set.file,set);
+        list.add(set);
         return set;
     }
 

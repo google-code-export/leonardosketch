@@ -187,28 +187,6 @@ public class SymbolPanel extends Panel {
 
     @Override
     public void doLayout() {
-        /*
-        for(Control c : controlChildren()) {
-            if(c == setSwitcher) {
-                c.setTranslateY(0);
-                c.setTranslateX(0);
-                c.setWidth(getWidth());
-            }
-            if(c == symbolPane) {
-                c.setTranslateX(0);
-                c.setTranslateY(30);
-                c.setWidth(getWidth());
-                c.setHeight(getHeight()-50);
-            }
-            if(c == symbolAddButton) {
-                c.setWidth(getWidth());
-                c.setHeight(50);
-                c.setTranslateY(getHeight()-50);
-                c.setTranslateX(0);
-            }
-            c.doLayout();
-        }*/
-
         setSwitcher.doLayout();
         setSwitcher.setTranslateX(0);
         setSwitcher.setTranslateY(0);
