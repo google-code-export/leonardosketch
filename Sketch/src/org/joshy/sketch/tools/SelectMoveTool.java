@@ -112,6 +112,7 @@ public class SelectMoveTool extends CanvasTool {
         if(event.isShiftPressed()) {
             amount = 10.0;
         }
+        if(event.getType() == KeyEvent.KeyPressed) {
         switch(event.getKeyCode()) {
             case KEY_LEFT_ARROW:
                 for(SNode node : context.getSelection().items()) {
@@ -136,6 +137,7 @@ public class SelectMoveTool extends CanvasTool {
             case KEY_ENTER:
                 switchToEdit();
                 break;
+        }
         }
         context.redraw();
     }
