@@ -7,6 +7,8 @@ import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 
 import javax.imageio.ImageIO;
+import java.awt.geom.Area;
+import java.awt.geom.PathIterator;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -79,7 +81,9 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
         }
         if(shape instanceof NGon) {
             out.attr("type","ngon");
-
+        }
+        if(shape instanceof SArea) {
+            out.attr("type","area");
         }
 
         if(shape instanceof SImage) {
@@ -163,6 +167,33 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
                 out.attr("cx2",""+pt.cx2);
                 out.attr("cy2",""+pt.cy2);
                 out.end();
+            }
+        }
+        if(shape instanceof SArea) {
+            SArea area = (SArea) shape;
+            Area jarea = area.toArea();
+            PathIterator it = jarea.getPathIterator(null);
+            while(!it.isDone()) {
+                double[] coords = new double[6];
+                int n = it.currentSegment(coords);
+                if(n == PathIterator.SEG_MOVETO) {
+                    out.start("move","x",""+coords[0],"y",""+coords[1]).end();
+                }
+                if(n == PathIterator.SEG_LINETO) {
+                    out.start("lineto","x",""+coords[0],"y",""+coords[1]).end();
+                }
+                if(n == PathIterator.SEG_CUBICTO) {
+                    out.start("curveto",
+                            "cx1",""+coords[0],"cy1",""+coords[1],
+                            "cx2",""+coords[2],"cy2",""+coords[3],
+                            "x2",""+coords[4],"y2",""+coords[5]
+                    ).end();
+                }
+                if(n == PathIterator.SEG_CLOSE) {
+                    out.start("close").end();
+                    break;
+                }
+                it.next();
             }
         }
         exportProperties(out,shape);

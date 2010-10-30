@@ -56,4 +56,8 @@ public class SArea extends SShape implements SelfDrawable {
         g.drawPath(pth);
         g.setStrokeWidth(1);
     }
+
+    public void setArea(Area area) {
+        this.area = area;
+    }
 }

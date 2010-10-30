@@ -16,6 +16,8 @@ import org.joshy.sketch.modes.vector.VectorModeHelper;
 import javax.imageio.ImageIO;
 import javax.xml.xpath.XPathExpressionException;
 import java.awt.*;
+import java.awt.geom.Area;
+import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -222,6 +224,9 @@ public class OpenAction extends SAction {
             loadIntegerAttribute(e,shape,"sides");
             loadNumberAttribute(e,shape,"angle");
         }
+        if(e.attrEquals("type","area")) {
+            shape = new SArea(new Area());
+        }
         if(e.hasAttr("fillPaint")) {
             loadFlatColorAttribute(e,shape,"fillPaint", Paint.class);
         } else {
@@ -251,6 +256,39 @@ public class OpenAction extends SAction {
                 ));
             }
             path.recalcPath();
+        }
+
+        if(e.attrEquals("type","area")) {
+            SArea area = (SArea) shape;
+            Path2D.Double path = new Path2D.Double();
+            for(Elem element : e.xpath("*")) {
+                if(element.name().equals("move")) {
+                    path.moveTo(
+                            Double.parseDouble(element.attr("x")),
+                            Double.parseDouble(element.attr("y"))
+                    );
+                }
+                if(element.name().equals("lineto")) {
+                    path.lineTo(
+                            Double.parseDouble(element.attr("x")),
+                            Double.parseDouble(element.attr("y"))
+                    );
+                }
+                if(element.name().equals("curveto")) {
+                    path.curveTo(
+                            Double.parseDouble(element.attr("cx1")),
+                            Double.parseDouble(element.attr("cy1")),
+                            Double.parseDouble(element.attr("cx2")),
+                            Double.parseDouble(element.attr("cy2")),
+                            Double.parseDouble(element.attr("x2")),
+                            Double.parseDouble(element.attr("y2"))
+                    );
+                }
+                if(element.name().equals("close")) {
+                    path.closePath();
+                }
+            }
+            area.setArea(new Area(path));
         }
 
         loadProperties(e,shape);

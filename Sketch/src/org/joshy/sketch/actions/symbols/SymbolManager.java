@@ -94,6 +94,7 @@ public class SymbolManager {
         }
         for(File file : basedir.listFiles()) {
             if(file.getName().endsWith(".xml") && file.exists()) {
+                u.p("Loading: " + file.getAbsolutePath());
                 List<SNode> shapes = OpenAction.loadShapes(file);
                 SymbolSet set = new SymbolSet();
                 set.file = file;
