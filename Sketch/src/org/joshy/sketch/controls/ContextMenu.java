@@ -38,7 +38,6 @@ public class ContextMenu extends PopupMenu {
 
 
     public ContextMenu() {
-        super(null, null);
         items = new ArrayList<SelectMoveTool.ActionItem>();
         setModel(mdl);
         setCallback(new Callback<ChangedEvent>() {
