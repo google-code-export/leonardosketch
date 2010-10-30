@@ -56,6 +56,11 @@ public class SymbolManager {
 
     public void setCurrentSet(SymbolSet set) {
         currentSet = set;
+        fireUpdate();
+    }
+
+    private void fireUpdate() {
+        EventBus.getSystem().publish(new ListView.ListEvent(ListView.ListEvent.Updated,model));
     }
 
     public SymbolSet createNewSet(String name) {
@@ -112,11 +117,12 @@ public class SymbolManager {
             list.add(set);
             currentSet = set;
         }
+        fireUpdate();
     }
 
     public void add(SNode dupe) {
         currentSet.symbols.add(dupe);
-        EventBus.getSystem().publish(new ListView.ListEvent(ListView.ListEvent.Updated, model));
+        fireUpdate();
         try {
             saveSymbols(currentSet);
         } catch (Exception e) {
@@ -138,6 +144,7 @@ public class SymbolManager {
     
     public void remove(SNode shape) {
         currentSet.symbols.remove(shape);
+        fireUpdate();
         save();
     }
 
