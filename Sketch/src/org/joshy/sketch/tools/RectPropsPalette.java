@@ -7,7 +7,6 @@ import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.sketch.canvas.SketchCanvas;
 import org.joshy.sketch.model.SNode;
@@ -16,8 +15,7 @@ import org.joshy.sketch.model.SRect;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
-public class RectPropsPalette extends Panel {
-    private VFlexBox box;
+public class RectPropsPalette extends VFlexBox {
     private Checkbox useGradient;
     private SwatchColorPicker gradientStartButton;
     private SwatchColorPicker gradientEndButton;
@@ -32,25 +30,22 @@ public class RectPropsPalette extends Panel {
 
     public RectPropsPalette(SketchCanvas canvas) throws IOException {
         this.canvas = canvas;
-        setWidth(200);
-        setHeight(230);
         dragHandle = new DragHandle();
         dragHandle.setWidth(200);
         dragHandle.setHeight(20);
         add(dragHandle);
 
-        box = new VFlexBox();
         useGradient = new Checkbox("Gradient Fill");
-        box.add(useGradient);
+        add(useGradient);
         gradientStartButton = new SwatchColorPicker();
         gradientStartButton.setSelectedColor(FlatColor.RED);
-        box.add(gradientStartButton);
+        add(gradientStartButton);
         gradientEndButton = new SwatchColorPicker();
         gradientEndButton.setSelectedColor(FlatColor.BLUE);
-        box.add(gradientEndButton);
-        box.add(new Label("Angle"));
+        add(gradientEndButton);
+        add(new Label("Angle"));
         gradientAngle = new Slider(false).setMin(0).setMax(360).setValue(180);
-        box.add(gradientAngle);
+        add(gradientAngle);
 //        useShadow = new Checkbox("Shadow");
 //        box.add(useShadow);
         //shadowAngle = new Knob();
@@ -60,15 +55,9 @@ public class RectPropsPalette extends Panel {
 //        shadowDistance = new Slider(false);
 //        box.add(shadowDistance);
 
-        box.add(new Label("Corner Radius"));
+        add(new Label("Corner Radius"));
         cornerRadius = new Slider(false);
-        box.add(cornerRadius);
-
-        add(box);
-        box.setWidth(200);
-        box.setHeight(400);
-        box.setTranslateY(20);
-
+        add(cornerRadius);
 
         EventBus.getSystem().addListener(ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) {
@@ -101,17 +90,8 @@ public class RectPropsPalette extends Panel {
             }
         });
 
-        this.setFill(FlatColor.GRAY);
+        setFill(FlatColor.GRAY.deriveWithAlpha(0.8));
 
-    }
-
-    @Override
-    public void doLayout() {
-        super.doLayout();
-        dragHandle.setTranslateX(0);
-        dragHandle.setTranslateY(0);
-        dragHandle.setWidth(200);
-        dragHandle.setHeight(20);
     }
 
     private void updateRoundRect() {
