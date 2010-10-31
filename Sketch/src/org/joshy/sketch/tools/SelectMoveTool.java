@@ -180,6 +180,11 @@ public class SelectMoveTool extends CanvasTool {
             context.switchToPathEdit((SPath) node);
             return;
         }
+        if(node instanceof NGon) {
+            context.getSelection().clear();
+            context.switchToNGonEdit((NGon) node);
+            return;
+        }
     }
 
     @Override
@@ -209,6 +214,11 @@ public class SelectMoveTool extends CanvasTool {
             if(node instanceof SPath) {
                 context.getSelection().clear();
                 context.switchToPathEdit((SPath) node);
+                return;
+            }
+            if(node instanceof NGon) {
+                context.getSelection().clear();
+                context.switchToNGonEdit((NGon) node);
                 return;
             }
             if(node instanceof ResizableGrid9Shape) {

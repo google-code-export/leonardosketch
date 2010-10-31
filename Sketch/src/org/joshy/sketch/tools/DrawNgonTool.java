@@ -23,6 +23,7 @@ public class DrawNgonTool extends CanvasTool {
     private Control slider;
     private Label sliderLabel;
     private int nValue;
+    private boolean editingExisting = false;
 
     public DrawNgonTool(VectorDocContext context) {
         super(context);
@@ -36,6 +37,9 @@ public class DrawNgonTool extends CanvasTool {
             public void call(ChangedEvent event) {
                 nValue = ((Double)event.getValue()).intValue();
                 sliderLabel.setText(""+nValue);
+                if(node != null) {
+                    node.setSides(nValue);
+                }
             }
         });
         panel.setTranslateX(100);
@@ -71,10 +75,14 @@ public class DrawNgonTool extends CanvasTool {
 
     @Override
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
-        start = cursor;
-        node = new NGon(nValue);
-        node.setTranslateX(start.getX());
-        node.setTranslateY(start.getY());
+        if(!editingExisting) {
+            start = cursor;
+            node = new NGon(nValue);
+            node.setTranslateX(start.getX());
+            node.setTranslateY(start.getY());
+        } else {
+            start = new Point2D.Double(node.getTranslateX(),node.getTranslateY());
+        }
     }
     
     protected void mouseDragged(MouseEvent event, Point2D.Double cursor) {
@@ -99,6 +107,7 @@ public class DrawNgonTool extends CanvasTool {
         start = null;
         context.redraw();
         context.releaseControl();
+        editingExisting = false;
     }
 
     public void drawOverlay(GFX g) {
@@ -111,4 +120,8 @@ public class DrawNgonTool extends CanvasTool {
         }
     }
 
+    public void startEditing(NGon ngon) {
+        editingExisting = true;
+        this.node = ngon;
+    }
 }

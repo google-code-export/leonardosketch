@@ -18,10 +18,7 @@ import org.joshy.sketch.actions.symbols.SymbolPanel;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.canvas.SketchCanvas;
 import org.joshy.sketch.controls.*;
-import org.joshy.sketch.model.CanvasDocument;
-import org.joshy.sketch.model.SNode;
-import org.joshy.sketch.model.SPath;
-import org.joshy.sketch.model.SketchDocument;
+import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.tools.*;
 import org.joshy.sketch.util.BiList;
@@ -50,6 +47,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     public FloatingPropertiesPanel propPanel;
     public DeleteSelectedNodeAction deleteSelectedNodeAction;
     public NodeActions.DuplicateNodesAction duplicateNodeAction;
+    private DrawNgonTool drawNGonTool;
 
     public VectorDocContext(Main main, VectorModeHelper helper) {
         super(main,helper);
@@ -89,6 +87,12 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         selectButtonForTool(drawPathTool);
         drawPathTool.startEditing(path);
     }
+
+    public void switchToNGonEdit(NGon ngon) {
+        selectButtonForTool(drawNGonTool);
+        drawNGonTool.startEditing(ngon);
+    }
+
     public void setSelectedTool(CanvasTool tool) {
         selectedTool.disable();
         selectedTool = tool;
@@ -128,10 +132,13 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         moveRectTool = new SelectMoveTool(this);
         drawTextTool = new DrawTextTool(this);
         drawPathTool = new DrawPathTool(this);
+        drawNGonTool = new DrawNgonTool(this);
         editResizableShapeTool = new EditResizableShapeTool(this);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_select.png")),moveRectTool);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_text.png")),drawTextTool);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_insertknots.png")),drawPathTool);
+        tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_polygon.png")),drawNGonTool);
+
 
         modeHelper.setupToolbar(tools, getMain(),this);
 
