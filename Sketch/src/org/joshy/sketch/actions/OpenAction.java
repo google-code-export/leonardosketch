@@ -5,7 +5,7 @@ import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.draw.Paint;
+import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.io.NativeExport;
 import org.joshy.sketch.model.*;
@@ -228,7 +228,7 @@ public class OpenAction extends SAction {
             shape = new SArea(new Area());
         }
         if(e.hasAttr("fillPaint")) {
-            loadFlatColorAttribute(e,shape,"fillPaint", Paint.class);
+            loadFillPaint(e,shape);
         } else {
             shape.setFillPaint(null);
         }
@@ -295,6 +295,27 @@ public class OpenAction extends SAction {
         return shape;
     }
 
+    private static void loadFillPaint(Elem e, SShape shape) throws XPathExpressionException {
+        if("gradient".equals(e.attr("fillPaint"))) {
+            FlatColor start = null;
+            FlatColor end = null;
+            double angle = Double.parseDouble(e.xpathString("gradient/@angle"));
+            for(Elem stop : e.xpath("gradient/stop")) {
+                if(stop.attrEquals("name","start")) {
+                    start = new FlatColor(stop.attr("color"));
+                }
+                if(stop.attrEquals("name","end")) {
+                    end = new FlatColor(stop.attr("color"));
+                }
+            }
+            GradientFill fill = new GradientFill(start,end,angle,true);
+            shape.setFillPaint(fill);
+        } else {
+            FlatColor fc = new FlatColor(e.attr("fillPaint"));
+            shape.setFillPaint(fc);
+        }
+    }
+
     private static void loadProperties(Elem e, SNode shape) throws XPathExpressionException {
         for(Elem element : e.xpath("property")) {
             shape.setStringProperty(
@@ -339,7 +360,14 @@ public class OpenAction extends SAction {
         }
 
         if(node instanceof SShape) {
-            loadFlatColorAttribute(e,node,"fillPaint", Paint.class);
+            SShape shape = (SShape)node;
+            //loadFlatColorAttribute(e,node,"fillPaint", Paint.class);
+            if(e.hasAttr("fillPaint")) {
+                loadFillPaint(e,shape);
+            } else {
+                shape.setFillPaint(null);
+            }
+
             if(e.hasAttr("strokePaint")) {
                 loadFlatColorAttribute(e,node,"strokePaint", FlatColor.class);
             } else {

@@ -2,6 +2,7 @@ package org.joshy.sketch.actions.io;
 
 import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
@@ -95,7 +96,12 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             }
         }
         if(shape instanceof SShape) {
-            saveAttribute(out,"fillPaint",shape);
+            SShape sh = (SShape) shape;
+            if(sh.getFillPaint() instanceof GradientFill) {
+                out.attr("fillPaint","gradient");
+            } else {
+                saveAttribute(out,"fillPaint",shape);
+            }
             saveAttribute(out,"fillOpacity",shape);
             saveAttribute(out,"strokePaint",shape);
             saveAttribute(out,"strokeWidth",shape);
@@ -145,6 +151,26 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             saveAttribute(out,"radius",shape);
             saveAttribute(out,"sides",shape);
             saveAttribute(out,"angle",shape);
+        }
+
+
+
+        if(shape instanceof SShape) {
+            SShape sh = (SShape) shape;
+            if(sh.getFillPaint() instanceof GradientFill) {
+                GradientFill grad = (GradientFill) sh.getFillPaint();
+                out.start("gradient");
+                out.attr("angle",""+grad.angle);
+                out.start("stop"
+                        ,"name","start"
+                        ,"color",serialize(grad.start)
+                        ).end();
+                out.start("stop"
+                        ,"name","end"
+                        ,"color",serialize(grad.end)
+                        ).end();
+                out.end();
+            }
         }
 
 

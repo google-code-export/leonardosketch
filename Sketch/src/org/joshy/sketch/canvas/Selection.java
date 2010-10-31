@@ -52,8 +52,8 @@ public class Selection {
             if(rnode instanceof SRect) {
                 SRect rect = (SRect) rnode;
                 if(rect.getFillPaint() instanceof GradientFill) {
-                    hs.add(new GradientHandle(rect,GradientHandle.GradientPosition.Start));
-                    hs.add(new GradientHandle(rect,GradientHandle.GradientPosition.End));
+//                    hs.add(new GradientHandle(rect,GradientHandle.GradientPosition.Start));
+//                    hs.add(new GradientHandle(rect,GradientHandle.GradientPosition.End));
                 }
             }
         }
