@@ -49,6 +49,10 @@
             <value>to HTML</value>
             <value language="de-DE">zu HTML</value>
         </key>
+        <key name="tocanvas">
+            <value>to HTML Canvas</value>
+            <value language="de-DE">zu HTML Canvas</value>
+        </key>
         <key name="topdf">
             <value>to PDF</value>
             <value language="de-DE">zu PDF</value>
