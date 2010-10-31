@@ -8,9 +8,12 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.sketch.Main;
+import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.canvas.SketchCanvas;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SRect;
+import org.joshy.sketch.property.PropertyManager;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
@@ -27,8 +30,12 @@ public class RectPropsPalette extends VFlexBox {
     private Slider cornerRadius;
     private DragHandle dragHandle;
     private SketchCanvas canvas;
+    private Main manager;
+    private boolean selected;
+    private Selection selection;
 
-    public RectPropsPalette(SketchCanvas canvas) throws IOException {
+    public RectPropsPalette(final Main manager, final SketchCanvas canvas) throws IOException {
+        this.manager = manager;
         this.canvas = canvas;
         dragHandle = new DragHandle();
         dragHandle.setWidth(200);
@@ -92,6 +99,41 @@ public class RectPropsPalette extends VFlexBox {
 
         setFill(FlatColor.GRAY.deriveWithAlpha(0.8));
 
+        EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, new Callback<Selection.SelectionChangeEvent>(){
+            public void call(Selection.SelectionChangeEvent event) {
+                //only pay attention to events for our own context doc
+                if(event.getSelection().getDocument() != canvas.getDocument()) return;
+                if(!manager.propMan.isClassAvailable(SRect.class)) return;
+                selected = !event.getSelection().isEmpty();
+                selection = event.getSelection();
+                updatePanelContents();
+                setDrawingDirty();
+                setLayoutDirty();
+            }
+        });
+    }
+
+    private void updatePanelContents() {
+        SNode lastNode = null;
+        for(SNode node : selection.items()) {
+            lastNode = node;
+        }
+        if(manager.propMan.isClassAvailable(SRect.class)) {
+            SRect rect = (SRect) lastNode;
+            PropertyManager.Property fillColorProp = manager.propMan.getProperty("fillPaint");
+            if(fillColorProp.hasSingleValue()) {
+                Object value = fillColorProp.getValue();
+                if(value instanceof GradientFill) {
+                    GradientFill grad = (GradientFill) value;
+                    useGradient.setSelected(true);
+                    gradientAngle.setValue(grad.angle);
+                    gradientStartButton.setSelectedColor(grad.start);
+                    gradientEndButton.setSelectedColor(grad.end);
+                } else {
+                    useGradient.setSelected(false);
+                }
+            }
+        }
     }
 
     private void updateRoundRect() {

@@ -174,7 +174,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     @Override
     public void setupPalettes() throws IOException {
         propPanel = new FloatingPropertiesPanel(getMain(),this);
-        propsPalette = new RectPropsPalette(canvas);
+        propsPalette = new RectPropsPalette(getMain(),canvas);
         propsPalette.setVisible(false);
         propsPalette.setTranslateX(400);
         propsPalette.setTranslateY(50);
