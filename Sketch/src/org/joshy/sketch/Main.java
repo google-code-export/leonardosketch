@@ -18,10 +18,7 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.WindowEvent;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.HFlexBox;
-import org.joshy.gfx.node.layout.Panel;
-import org.joshy.gfx.node.layout.StackPanel;
-import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.localization.Localization;
@@ -171,6 +168,23 @@ public class Main implements Runnable {
     }
 
     private void verifyUpdate(Doc doc) throws XPathExpressionException {
+        final Stage stage = Stage.createStage();
+        Callback<ActionEvent> dismiss = new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                stage.hide();
+            }
+        };
+        Callback<ActionEvent> skipVersion = new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                stage.hide();
+            }
+        };
+        Callback<ActionEvent> getUpdate = new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                stage.hide();
+                OSUtil.openBrowser("http://projects.joshy.org/Leonardo/daily/");
+            }
+        };
         u.p("callback: " + doc);
         u.p("current build number = " + CURRENT_BUILD_NUMBER);
         List<Elem> newReleases = new ArrayList<Elem>();
@@ -184,12 +198,24 @@ public class Main implements Runnable {
             u.p("no new releases");
         } else {
             u.p("a new release!");
+            FlexBox box = new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch);
+            box.add(new Label("New Version Available!").setId("updates-header"));
+
             for(Elem release : newReleases) {
                 u.p("build = " + release.attr("buildNumber"));
                 u.p("date = " + release.attr("buildDate"));
                 u.p("version = " + release.attr("version"));
                 u.p("description = " + release.text());
+                box.add(new Label("Version: " + release.attr("version")).setPrefWidth(200));
+                box.add(new Label(release.text()).setPrefWidth(200));
             }
+            box.add(new Spacer(),1);
+            box.add(new HFlexBox()
+                    .add(new Button("Get the Update").onClicked(getUpdate))
+                    .add(new Button("Skip This Version").onClicked(skipVersion))
+                    .add(new Button("Remind Me Later").onClicked(dismiss))
+            );
+            stage.setContent(box);
         }
     }
 
