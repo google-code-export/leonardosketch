@@ -18,7 +18,10 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.WindowEvent;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.*;
+import org.joshy.gfx.node.layout.HFlexBox;
+import org.joshy.gfx.node.layout.Panel;
+import org.joshy.gfx.node.layout.StackPanel;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.localization.Localization;
@@ -42,9 +45,9 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
 import org.joshy.sketch.property.PropertyManager;
 import org.joshy.sketch.script.ScriptTools;
+import org.joshy.sketch.util.UpdateChecker;
 
 import javax.swing.*;
-import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -80,7 +83,7 @@ public class Main implements Runnable {
     public static JGoogleAnalyticsTracker tracker;
     public static boolean trackingEnabled = false;
     private Callback<ActionEvent> makeAWishAction;
-    private static int CURRENT_BUILD_NUMBER = 2;
+    public static int CURRENT_BUILD_NUMBER = 2;
     private static Properties releaseProperties;
 
     public static void main(String ... args) throws Exception {
@@ -142,80 +145,12 @@ public class Main implements Runnable {
 
     public void run() {
         try {
-            setupUpdateCheck();
+            UpdateChecker.setup(this);
             setupGlobals();
             setupNewDoc(defaultModeHelper,null);
             setupMac();
         } catch (Exception ex) {
             u.p(ex);
-        }
-    }
-
-    private void setupUpdateCheck() throws MalformedURLException, InterruptedException {
-        //ping the url & parse the result
-        //ignore errors
-        //if verify update
-        new XMLRequest()
-                .setURL("http://projects.joshy.org/Leonardo/daily/updates.xml")
-                .setMethod(XMLRequest.METHOD.GET)
-                .onComplete(new Callback<Doc>(){
-                    public void call(Doc doc) throws Exception {
-                        if(doc != null) {
-                            verifyUpdate(doc);
-                        }
-                    }
-                }).start();
-    }
-
-    private void verifyUpdate(Doc doc) throws XPathExpressionException {
-        u.p("callback: " + doc);
-        u.p("current build number = " + CURRENT_BUILD_NUMBER);
-        List<Elem> newReleases = new ArrayList<Elem>();
-        for(Elem release : doc.xpath("/updates/release")) {
-            u.p("build number = " + release.attr("buildNumber"));
-            if(Integer.parseInt(release.attr("buildNumber")) > CURRENT_BUILD_NUMBER) {
-                newReleases.add(release);
-            }
-        }
-        if(newReleases.isEmpty()) {
-            u.p("no new releases");
-        } else {
-            u.p("a new release!");
-            final Stage stage = Stage.createStage();
-            Callback<ActionEvent> dismiss = new Callback<ActionEvent>() {
-                public void call(ActionEvent actionEvent) throws Exception {
-                    stage.hide();
-                }
-            };
-            Callback<ActionEvent> skipVersion = new Callback<ActionEvent>() {
-                public void call(ActionEvent actionEvent) throws Exception {
-                    stage.hide();
-                }
-            };
-            Callback<ActionEvent> getUpdate = new Callback<ActionEvent>() {
-                public void call(ActionEvent actionEvent) throws Exception {
-                    stage.hide();
-                    OSUtil.openBrowser("http://projects.joshy.org/Leonardo/daily/");
-                }
-            };
-            FlexBox box = new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch);
-            box.add(new Label("New Version Available!").setId("updates-header"));
-
-            for(Elem release : newReleases) {
-                u.p("build = " + release.attr("buildNumber"));
-                u.p("date = " + release.attr("buildDate"));
-                u.p("version = " + release.attr("version"));
-                u.p("description = " + release.text());
-                box.add(new Label("Version: " + release.attr("version")).setPrefWidth(200));
-                box.add(new Label(release.text()).setPrefWidth(200));
-            }
-            box.add(new Spacer(),1);
-            box.add(new HFlexBox()
-                    .add(new Button("Get the Update").onClicked(getUpdate))
-                    .add(new Button("Skip This Version").onClicked(skipVersion))
-                    .add(new Button("Remind Me Later").onClicked(dismiss))
-            );
-            stage.setContent(box);
         }
     }
 
