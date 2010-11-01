@@ -168,23 +168,6 @@ public class Main implements Runnable {
     }
 
     private void verifyUpdate(Doc doc) throws XPathExpressionException {
-        final Stage stage = Stage.createStage();
-        Callback<ActionEvent> dismiss = new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-                stage.hide();
-            }
-        };
-        Callback<ActionEvent> skipVersion = new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-                stage.hide();
-            }
-        };
-        Callback<ActionEvent> getUpdate = new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-                stage.hide();
-                OSUtil.openBrowser("http://projects.joshy.org/Leonardo/daily/");
-            }
-        };
         u.p("callback: " + doc);
         u.p("current build number = " + CURRENT_BUILD_NUMBER);
         List<Elem> newReleases = new ArrayList<Elem>();
@@ -198,6 +181,23 @@ public class Main implements Runnable {
             u.p("no new releases");
         } else {
             u.p("a new release!");
+            final Stage stage = Stage.createStage();
+            Callback<ActionEvent> dismiss = new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    stage.hide();
+                }
+            };
+            Callback<ActionEvent> skipVersion = new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    stage.hide();
+                }
+            };
+            Callback<ActionEvent> getUpdate = new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    stage.hide();
+                    OSUtil.openBrowser("http://projects.joshy.org/Leonardo/daily/");
+                }
+            };
             FlexBox box = new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch);
             box.add(new Label("New Version Available!").setId("updates-header"));
 
