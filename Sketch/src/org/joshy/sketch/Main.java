@@ -18,7 +18,10 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.WindowEvent;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.*;
+import org.joshy.gfx.node.layout.HFlexBox;
+import org.joshy.gfx.node.layout.Panel;
+import org.joshy.gfx.node.layout.StackPanel;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.localization.Localization;
@@ -44,6 +47,7 @@ import org.joshy.sketch.property.PropertyManager;
 import org.joshy.sketch.script.ScriptTools;
 
 import javax.swing.*;
+import javax.xml.xpath.XPathExpressionException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -70,7 +74,7 @@ public class Main implements Runnable {
     public PropertyManager propMan;
     private QuitAction quitAction;
     public List<File> recentFiles;
-    public Properties settings;
+    public static Properties settings;
     
     private List<DocModeHelper> modeHelpers = new ArrayList<DocModeHelper>();
     public DocModeHelper defaultModeHelper;
@@ -79,15 +83,26 @@ public class Main implements Runnable {
     public static JGoogleAnalyticsTracker tracker;
     public static boolean trackingEnabled = false;
     private Callback<ActionEvent> makeAWishAction;
+    private static int CURRENT_BUILD_NUMBER = 2;
+    private static Properties releaseProperties;
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
         String locale = System.getProperty("user.language") + "_" + System.getProperty("user.country");
-        u.p("locale = " + locale);
+        u.p("Using locale = " + locale);
+
+        setupSettings();
+        setupTracking();
 
         //Localization.init(Main.class.getResource("translation.xml"),"en_US");
         Localization.init(Main.class.getResource("translation.xml"),locale);
 
+        Core.setUseJOGL(false);
+        Core.init();
+        Core.getShared().defer(new Main());
+    }
+
+    private static void setupTracking() {
         if(trackingEnabled) {
             tracker = new JGoogleAnalyticsTracker("Leonardo","UA-17798312-2");
         }
@@ -106,9 +121,20 @@ public class Main implements Runnable {
         }
 
         trackEvent("launch");
-        Core.setUseJOGL(false);
-        Core.init();
-        Core.getShared().defer(new Main());
+    }
+
+    private static void setupSettings() throws IOException {
+        releaseProperties = new Properties();
+        URL releaseURL = Main.class.getResource("release.properties");
+        u.p("url = " + releaseURL);
+        releaseProperties.load(releaseURL.openStream());//Main.class.getResourceAsStream("release.propertie"));
+        CURRENT_BUILD_NUMBER = Integer.parseInt(releaseProperties.getProperty("org.joshy.sketch.build.number"));
+
+        settings = new Properties();
+        if(SETTINGS_FILE.exists()) {
+            settings.load(new FileReader(SETTINGS_FILE));
+        }
+
     }
 
     public static void trackEvent(String event) {
@@ -119,11 +145,51 @@ public class Main implements Runnable {
 
     public void run() {
         try {
+            setupUpdateCheck();
             setupGlobals();
             setupNewDoc(defaultModeHelper,null);
             setupMac();
         } catch (Exception ex) {
             u.p(ex);
+        }
+    }
+
+    private void setupUpdateCheck() throws MalformedURLException, InterruptedException {
+        //ping the url & parse the result
+        //ignore errors
+        //if verify update
+        new XMLRequest()
+                .setURL("http://projects.joshy.org/Leonardo/daily/updates.xml")
+                .setMethod(XMLRequest.METHOD.GET)
+                .onComplete(new Callback<Doc>(){
+                    public void call(Doc doc) throws Exception {
+                        if(doc != null) {
+                            verifyUpdate(doc);
+                        }
+                    }
+                }).start();
+    }
+
+    private void verifyUpdate(Doc doc) throws XPathExpressionException {
+        u.p("callback: " + doc);
+        u.p("current build number = " + CURRENT_BUILD_NUMBER);
+        List<Elem> newReleases = new ArrayList<Elem>();
+        for(Elem release : doc.xpath("/updates/release")) {
+            u.p("build number = " + release.attr("buildNumber"));
+            if(Integer.parseInt(release.attr("buildNumber")) > CURRENT_BUILD_NUMBER) {
+                newReleases.add(release);
+            }
+        }
+        if(newReleases.isEmpty()) {
+            u.p("no new releases");
+        } else {
+            u.p("a new release!");
+            for(Elem release : newReleases) {
+                u.p("build = " + release.attr("buildNumber"));
+                u.p("date = " + release.attr("buildDate"));
+                u.p("version = " + release.attr("version"));
+                u.p("description = " + release.text());
+            }
         }
     }
 
@@ -388,10 +454,6 @@ public class Main implements Runnable {
         defaultModeHelper = modeHelpers.get(0);
 
         propMan = new PropertyManager();
-        settings = new Properties();
-        if(SETTINGS_FILE.exists()) {
-            settings.load(new FileReader(SETTINGS_FILE));
-        }
         if(!SCRIPTS_DIR.exists()) {
             SCRIPTS_DIR.mkdirs();
             try {
