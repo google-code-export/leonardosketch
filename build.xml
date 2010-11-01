@@ -14,6 +14,7 @@
         </tstamp>
         <echo message="timestamp = ${TIMESTAMP}"/>
 
+        <property name="build.version" value="0.01"/>
         <property  name="publish.dir" value="dist/foo"/>
         <property  name="lib.jogl.dir" value="lib/jogl/"/>
 
@@ -45,6 +46,14 @@
              </fileset>
         </copy>
 
+        <echoproperties />
+        <propertyfile
+                file="build/classes/Sketch/org/joshy/sketch/release.properties">
+            <entry key="org.joshy.sketch.build.date" value="now" type="date"/>
+            <entry key="org.joshy.sketch.build.number" value="${build.number}"/>
+            <entry key="org.joshy.sketch.build.version" value="${build.version}"/>
+
+        </propertyfile>
         <jar destfile="build/jars/Sketch.jar">
             <fileset dir = "build/classes/Sketch"></fileset>
         </jar>
