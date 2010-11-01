@@ -73,6 +73,8 @@ public class Main implements Runnable {
     public SymbolManager symbolManager = new SymbolManager(new File(homedir,"symbols"));
     public PropertyManager propMan;
     private QuitAction quitAction;
+    private SAction aboutAction;
+    private SAction prefsAction;
     public List<File> recentFiles;
     public static Properties settings;
     
@@ -84,7 +86,7 @@ public class Main implements Runnable {
     public static boolean trackingEnabled = false;
     private Callback<ActionEvent> makeAWishAction;
     public static int CURRENT_BUILD_NUMBER = 2;
-    private static Properties releaseProperties;
+    public static Properties releaseProperties;
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -149,6 +151,7 @@ public class Main implements Runnable {
             setupGlobals();
             setupNewDoc(defaultModeHelper,null);
             setupMac();
+            Core.setDebugCSS(new File("test.css"));
         } catch (Exception ex) {
             u.p(ex);
         }
@@ -457,8 +460,13 @@ public class Main implements Runnable {
                     .addItem(getString("menus.topdf"),    new SavePDFAction(context))
                 );
         quitAction = new QuitAction(this);
+        aboutAction = new AboutAction(this);
+        prefsAction = new PreferencesAction();
+
         if(!OSUtil.isMac()) {
             fileMenu.addItem(getString("menus.exit"),    "Q",       quitAction);
+            fileMenu.addItem("Settings",    null,       prefsAction);
+            fileMenu.addItem("About",    null,       aboutAction);
         }
         JMenuBar menubar = context.menubar;
         menubar.add(fileMenu.createJMenu());
@@ -553,11 +561,17 @@ public class Main implements Runnable {
 
     private void setupMac() {
         Application application = Application.getApplication();
-        application.setEnabledAboutMenu(false);
-        application.setEnabledPreferencesMenu(false);
+        application.setEnabledAboutMenu(true);
+        application.setEnabledPreferencesMenu(true);
         application.addApplicationListener(new ApplicationListener(){
 
             public void handleAbout(ApplicationEvent applicationEvent) {
+                try {
+                    aboutAction.execute();
+                    applicationEvent.setHandled(true);
+                } catch (Exception e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
             }
 
             public void handleOpenApplication(ApplicationEvent applicationEvent) {
@@ -567,6 +581,12 @@ public class Main implements Runnable {
             }
 
             public void handlePreferences(ApplicationEvent applicationEvent) {
+                try {
+                    prefsAction.execute();
+                    applicationEvent.setHandled(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             public void handlePrintFile(ApplicationEvent applicationEvent) {
@@ -574,6 +594,7 @@ public class Main implements Runnable {
 
             public void handleQuit(ApplicationEvent applicationEvent) {
                 quitAction.execute();
+                applicationEvent.setHandled(true);
             }
 
             public void handleReOpenApplication(ApplicationEvent applicationEvent) {
