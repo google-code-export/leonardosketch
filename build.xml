@@ -4,6 +4,7 @@
 
     <target name="help">
         <echo>ant build      build and package the entire project, including jnlps</echo>
+        <echo>ant build-onejar </echo>
     </target>
     
     <target name="init">
