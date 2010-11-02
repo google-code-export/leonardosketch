@@ -87,6 +87,7 @@ public class Main implements Runnable {
     private Callback<ActionEvent> makeAWishAction;
     public static int CURRENT_BUILD_NUMBER = 2;
     public static Properties releaseProperties;
+    private static final String TRACKING_PERMISSIONS = "org.joshy.gfx.sketch.tracking.allow";
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -94,7 +95,6 @@ public class Main implements Runnable {
         u.p("Using locale = " + locale);
 
         setupSettings();
-        setupTracking();
 
         //Localization.init(Main.class.getResource("translation.xml"),"en_US");
         Localization.init(Main.class.getResource("translation.xml"),locale);
@@ -105,11 +105,49 @@ public class Main implements Runnable {
     }
 
     private static void setupTracking() {
+        if(settings.containsKey(TRACKING_PERMISSIONS)) {
+            trackingEnabled = "true".equals(settings.getProperty(TRACKING_PERMISSIONS));
+        } else {
+            u.p("we've never asked about tracking!");
+            final Stage stage = Stage.createStage();
+            stage.setTitle("Usage Tracking?");
+            Callback<ActionEvent> noResponse = new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    stage.hide();
+                    settings.setProperty(TRACKING_PERMISSIONS,"false");
+                }
+            };
+            Callback<ActionEvent> yesResponse = new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    stage.hide();
+                    settings.setProperty(TRACKING_PERMISSIONS,"true");
+                }
+            };
+            Callback<ActionEvent> whatResponse = new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    OSUtil.openBrowser("http://code.google.com/p/leonardosketch/wiki/Tracking");
+                }
+            };
+            stage.setContent(new VFlexBox()
+                    .add(new Label("Can Leonardo track how often you run it?"))
+                    .add(new HFlexBox()
+                        .add(new Button("Yes").onClicked(yesResponse))
+                        .add(new Button("No").onClicked(noResponse))
+                        .add(new Button("What's This?").onClicked(whatResponse))
+                    )
+                    );
+            stage.setWidth(400);
+            stage.setHeight(200);
+            //stage.centerOnScreen();
+            Core.getShared().defer(new Runnable(){
+                public void run() {
+                    stage.raiseToTop();
+                }
+            });
+
+        }
         if(trackingEnabled) {
             tracker = new JGoogleAnalyticsTracker("Leonardo","UA-17798312-2");
-        }
-
-        if(trackingEnabled) {
             mainApp = new FocusPoint("MainApp");
             tracker.setLoggingAdapter(new LoggingAdapter(){
                 public void logError(String s) {
@@ -129,7 +167,7 @@ public class Main implements Runnable {
         releaseProperties = new Properties();
         URL releaseURL = Main.class.getResource("release.properties");
         u.p("url = " + releaseURL);
-        releaseProperties.load(releaseURL.openStream());//Main.class.getResourceAsStream("release.propertie"));
+        releaseProperties.load(releaseURL.openStream());
         CURRENT_BUILD_NUMBER = Integer.parseInt(releaseProperties.getProperty("org.joshy.sketch.build.number"));
 
         settings = new Properties();
@@ -147,6 +185,7 @@ public class Main implements Runnable {
 
     public void run() {
         try {
+            setupTracking();
             UpdateChecker.setup(this);
             setupGlobals();
             setupNewDoc(defaultModeHelper,null);
