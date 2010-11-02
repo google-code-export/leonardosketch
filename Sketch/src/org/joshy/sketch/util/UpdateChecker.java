@@ -37,16 +37,17 @@ public class UpdateChecker {
         //ignore errors
         //if verify update
         try {
-        new XMLRequest()
-                .setURL(Main.UPDATE_URL)
-                .setMethod(XMLRequest.METHOD.GET)
-                .onComplete(new Callback<Doc>(){
-                    public void call(Doc doc) throws Exception {
-                        if(doc != null) {
-                            verifyUpdate(doc);
+            u.p("checking for updates at: " + Main.UPDATE_URL);
+            new XMLRequest()
+                    .setURL(Main.UPDATE_URL)
+                    .setMethod(XMLRequest.METHOD.GET)
+                    .onComplete(new Callback<Doc>(){
+                        public void call(Doc doc) throws Exception {
+                            if(doc != null) {
+                                verifyUpdate(doc);
+                            }
                         }
-                    }
-                }).start();
+                    }).start();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
