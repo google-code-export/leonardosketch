@@ -36,8 +36,9 @@ public class UpdateChecker {
         //ping the url & parse the result
         //ignore errors
         //if verify update
+        try {
         new XMLRequest()
-                .setURL("http://projects.joshy.org/Leonardo/daily/updates.xml")
+                .setURL(Main.UPDATE_URL)
                 .setMethod(XMLRequest.METHOD.GET)
                 .onComplete(new Callback<Doc>(){
                     public void call(Doc doc) throws Exception {
@@ -46,6 +47,9 @@ public class UpdateChecker {
                         }
                     }
                 }).start();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private static void verifyUpdate(Doc doc) throws XPathExpressionException {

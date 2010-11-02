@@ -88,6 +88,7 @@ public class Main implements Runnable {
     public static int CURRENT_BUILD_NUMBER = 2;
     public static Properties releaseProperties;
     public static final String TRACKING_PERMISSIONS = "org.joshy.gfx.sketch.tracking.allow";
+    public static String UPDATE_URL = "";
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -169,6 +170,7 @@ public class Main implements Runnable {
         u.p("url = " + releaseURL);
         releaseProperties.load(releaseURL.openStream());
         CURRENT_BUILD_NUMBER = Integer.parseInt(releaseProperties.getProperty("org.joshy.sketch.build.number"));
+        UPDATE_URL = releaseProperties.getProperty("org.joshy.sketch.updateurl");
 
         settings = new Properties();
         if(SETTINGS_FILE.exists()) {
