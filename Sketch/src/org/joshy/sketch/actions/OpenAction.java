@@ -122,7 +122,7 @@ public class OpenAction extends SAction {
         }
 
         sdoc.setFile(file);
-        sdoc.setTitle(fileName+"foo");
+        sdoc.setTitle(fileName+"");
         //if(context.getStage() != null) {
         //            context.getStage().setTitle(fileName+"foo");
         //        }
