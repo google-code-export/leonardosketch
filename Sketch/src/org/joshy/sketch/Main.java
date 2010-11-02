@@ -87,7 +87,7 @@ public class Main implements Runnable {
     private Callback<ActionEvent> makeAWishAction;
     public static int CURRENT_BUILD_NUMBER = 2;
     public static Properties releaseProperties;
-    private static final String TRACKING_PERMISSIONS = "org.joshy.gfx.sketch.tracking.allow";
+    public static final String TRACKING_PERMISSIONS = "org.joshy.gfx.sketch.tracking.allow";
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -500,7 +500,7 @@ public class Main implements Runnable {
                 );
         quitAction = new QuitAction(this);
         aboutAction = new AboutAction(this);
-        prefsAction = new PreferencesAction();
+        prefsAction = new PreferencesAction(this);
 
         if(!OSUtil.isMac()) {
             fileMenu.addItem(getString("menus.exit"),    "Q",       quitAction);
