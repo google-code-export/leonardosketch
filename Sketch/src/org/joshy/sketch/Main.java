@@ -599,6 +599,7 @@ public class Main implements Runnable {
     }
 
     private void setupMac() {
+        if(!OSUtil.isMac()) return;
         Application application = Application.getApplication();
         application.setEnabledAboutMenu(true);
         application.setEnabledPreferencesMenu(true);
