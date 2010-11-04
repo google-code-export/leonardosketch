@@ -46,7 +46,7 @@ public class ToolbarButton extends Togglebutton {
 
     @Override
     public void draw(GFX g) {
-        if(selected) {
+        if(isSelected()) {
             g.setPaint(FlatColor.WHITE);
         } else {
             g.setPaint(FlatColor.GRAY);
