@@ -53,7 +53,7 @@ public class DrawNgonTool extends CanvasTool {
 
     public void enable() {
         super.enable();
-        panel.doSkins();
+        NodeUtils.doSkins(panel);
         panel.doPrefLayout();
         panel.doLayout();
         panel.setFill(FlatColor.BLACK.deriveWithAlpha(0.3));
