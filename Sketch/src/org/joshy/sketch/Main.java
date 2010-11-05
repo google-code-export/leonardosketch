@@ -192,7 +192,7 @@ public class Main implements Runnable {
             setupGlobals();
             setupNewDoc(defaultModeHelper,null);
             setupMac();
-            Core.setDebugCSS(new File("test.css"));
+            //Core.setDebugCSS(new File("test.css"));
         } catch (Exception ex) {
             u.p(ex);
         }
@@ -302,9 +302,9 @@ public class Main implements Runnable {
     }
 
     private void setupStage(final DocContext context, DocModeHelper modeHelper) {
-        final TextControl wishBox = new Textbox().setText("I wish Leonardo would...");
+        final Textbox wishBox = new Textbox().setHintText("type your wish for a feature here");
         final Label wishStatus = new Label("");
-        wishStatus.setPrefWidth(100);
+        wishStatus.setPrefWidth(130);
         makeAWishAction = new Callback<ActionEvent>(){
             public void call(ActionEvent actionEvent) {
                 try {
@@ -318,7 +318,7 @@ public class Main implements Runnable {
                                     wishStatus.setText("Wish received!");
                                 }
                             }).start();
-                    wishBox.setText("I wish Leonardo would...");
+                    wishBox.setText("");
                     wishStatus.setText("Making wish...");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
@@ -327,13 +327,14 @@ public class Main implements Runnable {
                 }
             }
         };
+        wishBox.onAction(makeAWishAction);
         final HFlexBox statusBar = new HFlexBox();
         statusBar.setBoxAlign(HFlexBox.Align.Baseline)
                 .add(wishBox,1)
                 .add(new Button("Make a wish!").onClicked(makeAWishAction))
                 .add(wishStatus)
                 ;
-        statusBar.setPrefWidth(400);
+        statusBar.setPrefWidth(450);
 
 
         context.mainPanel = new Panel() {
