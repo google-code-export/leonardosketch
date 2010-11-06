@@ -53,6 +53,8 @@ public class SelectMoveTool extends CanvasTool {
     private Bounds resizeStartBounds;
     private SwatchColorPicker gradientButton;
     private Handle lastHandle;
+    private Thread checkThread;
+    private long shownTime;
 
     public static class ActionItem {
         public SAction action;
@@ -118,21 +120,25 @@ public class SelectMoveTool extends CanvasTool {
                 for(SNode node : context.getSelection().items()) {
                     node.setTranslateX(node.getTranslateX()-amount);
                 }
+                moveFade();
                 break;
             case KEY_RIGHT_ARROW:
                 for(SNode node : context.getSelection().items()) {
                     node.setTranslateX(node.getTranslateX()+amount);
                 }
+                moveFade();
                 break;
             case KEY_UP_ARROW:
                 for(SNode node : context.getSelection().items()) {
                     node.setTranslateY(node.getTranslateY()-amount);
                 }
+                moveFade();
                 break;
             case KEY_DOWN_ARROW:
                 for(SNode node : context.getSelection().items()) {
                     node.setTranslateY(node.getTranslateY()+amount);
                 }
+                moveFade();
                 break;
             case KEY_ENTER:
                 switchToEdit();
@@ -140,6 +146,39 @@ public class SelectMoveTool extends CanvasTool {
         }
         }
         context.redraw();
+    }
+
+    private void moveFade() {
+        if(!showIndicator) {
+            fadeInIndicator();
+        }
+        shownTime = System.currentTimeMillis();
+        if(checkThread == null) {
+            checkThread = new Thread(new Runnable(){
+                public boolean threadStop;
+
+                public void run() {
+                    try {
+                        threadStop = false;
+                        while(!threadStop) {
+                            Thread.currentThread().sleep(100);
+                            Core.getShared().defer(new Runnable(){
+                                public void run() {
+                                    if(System.currentTimeMillis() - shownTime > 500) {
+                                        threadStop = true;
+                                    }
+                                }
+                            });
+                        }
+                        checkThread = null;
+                        fadeOutIndicator();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            checkThread.start();
+        }
     }
 
 
@@ -238,11 +277,11 @@ public class SelectMoveTool extends CanvasTool {
             for(Handle h : handles.get(r)) {
                 if(h.contains(cursor)) {
                     if(r instanceof SResizeableNode) {
-                    SResizeableNode sn = (SResizeableNode) r;
-                    resizeStartBounds = new Bounds(sn.getX(),sn.getY(),sn.getWidth(),sn.getHeight());
-                    selectedHandle = h;
-                    fadeInIndicator();
-                    return;
+                        SResizeableNode sn = (SResizeableNode) r;
+                        resizeStartBounds = new Bounds(sn.getX(),sn.getY(),sn.getWidth(),sn.getHeight());
+                        selectedHandle = h;
+                        fadeInIndicator();
+                        return;
                     }
                     if(r instanceof SArrow) {
                         SArrow a = (SArrow) r;
