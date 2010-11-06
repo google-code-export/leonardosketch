@@ -244,7 +244,7 @@ public class Main implements Runnable {
 
                     }
                 }
-                .setFill(FlatColor.GREEN)
+                //.setFill(FlatColor.GREEN)
                 .add(hruler,vruler)
                 .add(scrollPane)
                 );
@@ -506,9 +506,9 @@ public class Main implements Runnable {
         prefsAction = new PreferencesAction(this);
 
         if(!OSUtil.isMac()) {
-            fileMenu.addItem(getString("menus.exit"),    "Q",       quitAction);
-            fileMenu.addItem("Settings",    null,       prefsAction);
-            fileMenu.addItem("About",    null,       aboutAction);
+            fileMenu.addItem(getString("menus.settings"),  null,       prefsAction);
+            fileMenu.addItem(getString("menus.about"),     null,       aboutAction);
+            fileMenu.addItem(getString("menus.exit"),      "Q",        quitAction);
         }
         JMenuBar menubar = context.menubar;
         menubar.add(fileMenu.createJMenu());

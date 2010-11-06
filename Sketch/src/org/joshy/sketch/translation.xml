@@ -61,6 +61,13 @@
             <value>Exit</value>
             <value language="de-DE">Beenden</value>
         </key>
+        
+        <key name="settings">
+            <value>Settings</value>
+        </key>
+        <key name="about">
+            <value>About</value>
+        </key>
 
         <key name="window">
             <value>Window</value>

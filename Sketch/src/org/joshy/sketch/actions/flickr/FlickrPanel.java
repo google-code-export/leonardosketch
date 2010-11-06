@@ -52,11 +52,12 @@ public class FlickrPanel extends VFlexBox {
                 try {
                     new FlickrPanel(null).doSearch.call(null);
                 } catch (Exception e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
             }
         });
     }
+    
     public FlickrPanel(final VectorDocContext context) {
         this.context = context;
         imageCache = new MasterImageCache(false,10,"foo");
@@ -64,6 +65,7 @@ public class FlickrPanel extends VFlexBox {
         photoList = new ListView();
         photoList.setRowHeight(75);
         photoList.setModel(photos);
+
         EventBus.getSystem().addListener(photoList, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public double prevx;
             public boolean created;
@@ -128,11 +130,12 @@ public class FlickrPanel extends VFlexBox {
         scrollPane.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
         scrollPane.setContent(photoList);
         searchBox = new Textbox();
+        searchBox.onAction(doSearch);
         Control box = new HFlexBox()
                 .setBoxAlign(HFlexBox.Align.Baseline)
                 .add(searchBox,1)
                 .add(new Button("Search").onClicked(doSearch),0)
-                ;//.setHeight(40).setWidth(200);
+                ;
 
         this.setBoxAlign(VFlexBox.Align.Stretch);
         this.add(box,0);
