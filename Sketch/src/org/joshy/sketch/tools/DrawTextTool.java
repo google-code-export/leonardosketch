@@ -65,11 +65,12 @@ public class DrawTextTool extends CanvasTool {
         overlayTextBox = new Textbox();
         overlayTextBox.setTranslateX(pt2.getX());
         overlayTextBox.setTranslateY(pt2.getY());
-        overlayTextBox.setFont(Font.name("Arial")
-            .size((float) (textNode.getFontSize()*context.getSketchCanvas().getScale()))
-            .style(textNode.getStyle())
-            .weight(textNode.getWeight())
-            .resolve());
+        overlayTextBox.setFont(Font
+                .name(textNode.getFontName())
+                .size((float) (textNode.getFontSize()*context.getSketchCanvas().getScale()))
+                .style(textNode.getStyle())
+                .weight(textNode.getWeight())
+                .resolve());
         overlayTextBox.setPrefWidth(300);
         overlayTextBox.setPrefHeight(10+overlayTextBox.getFont().calculateHeight("WXYwxy"));
         context.getCanvas().getParent().getStage().getPopupLayer().add(overlayTextBox);
@@ -82,7 +83,8 @@ public class DrawTextTool extends CanvasTool {
         context.getCanvas().getParent().getStage().getPopupLayer().remove(overlayTextBox);
         overlayTextBox.setVisible(false);
         textNode.text = overlayTextBox.getText();
-        Font textFont = Font.name("Arial")
+        Font textFont = Font
+                .name(textNode.getFontName())
                 .size((float)textNode.getFontSize())
                 .style(textNode.getStyle())
                 .weight(textNode.getWeight())
@@ -91,7 +93,7 @@ public class DrawTextTool extends CanvasTool {
         textNode.setHeight(textFont.calculateHeight(overlayTextBox.getText()));
         overlayTextBox = null;
         if(!notInMainDocument) {
-            SketchDocument doc = (SketchDocument) context.getDocument();
+            SketchDocument doc = context.getDocument();
             doc.getCurrentPage().add(textNode);
             context.getSelection().setSelectedNode(textNode);
         }
@@ -101,7 +103,7 @@ public class DrawTextTool extends CanvasTool {
     }
 
     public void startEditing(SNode node) {
-        SketchDocument doc = (SketchDocument) context.getDocument();
+        SketchDocument doc = context.getDocument();
         double offsetX = 0;
         double offsetY = 0;
         if(node instanceof SText) {
@@ -117,7 +119,8 @@ public class DrawTextTool extends CanvasTool {
             offsetY = grid9.getTranslateY();
         }
         overlayTextBox = new Textbox();
-        overlayTextBox.setFont(Font.name("Arial")
+        overlayTextBox.setFont(Font
+            .name(textNode.getFontName())
             .size((float) (textNode.getFontSize()*context.getSketchCanvas().getScale()))
             .style(textNode.getStyle())
             .weight(textNode.getWeight())
