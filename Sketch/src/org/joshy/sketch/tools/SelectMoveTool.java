@@ -102,11 +102,11 @@ public class SelectMoveTool extends CanvasTool {
 
 
     protected void call(KeyEvent event) {
-        if(event.getKeyCode() == KeyEvent.KeyCode.KEY_BACKSPACE) {
+        if(event.getKeyCode() == KeyEvent.KeyCode.KEY_BACKSPACE || event.getKeyCode() == KeyEvent.KeyCode.KEY_DELETE) {
             try {
                 context.getDeleteSelectedNodeAction().execute();
             } catch (Exception e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             context.getPropPanel().setVisible(false);
         }
