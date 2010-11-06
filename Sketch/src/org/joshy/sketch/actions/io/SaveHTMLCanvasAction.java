@@ -76,6 +76,11 @@ public class SaveHTMLCanvasAction extends SAction {
                     out.println("ctx.translate("+shape.getTranslateX()+","+shape.getTranslateY()+");");
                     SRect rect = (SRect) shape;
                     out.println("ctx.fillRect ("+rect.getX()+", "+rect.getY()+","+rect.getWidth()+","+rect.getHeight()+");");
+                    if(rect.getStrokeWidth() > 0 && rect.getStrokePaint() != null) {
+                        out.println("ctx.strokeStyle = \"rgb("+serialize(shape.getStrokePaint())+");\"");
+                        out.println("ctx.lineWidth = " + shape.getStrokeWidth()+";");
+                        out.println("ctx.strokeRect ("+rect.getX()+", "+rect.getY()+","+rect.getWidth()+","+rect.getHeight()+");");
+                    }
                     out.println("ctx.translate(-"+shape.getTranslateX()+",-"+shape.getTranslateY()+");");
                 }
                 if(shape instanceof SOval) {
@@ -85,6 +90,11 @@ public class SaveHTMLCanvasAction extends SAction {
                     out.println("ctx.beginPath();");
                     out.println("ellipse(ctx,"+oval.getX()+","+oval.getY()+","+oval.getWidth()+","+oval.getHeight()+");");
                     out.println("ctx.fill();");
+                    if(oval.getStrokeWidth() > 0 && oval.getStrokePaint() != null) {
+                        out.println("ctx.strokeStyle = \"rgb("+serialize(shape.getStrokePaint())+");\"");
+                        out.println("ctx.lineWidth = " + shape.getStrokeWidth()+";");
+                        out.println("ctx.stroke();");
+                    }
                     out.println("ctx.translate(-"+shape.getTranslateX()+",-"+shape.getTranslateY()+");");
                 }
                 if(shape instanceof SPath || shape instanceof SArea || shape instanceof SPoly || shape instanceof NGon) {
@@ -119,6 +129,11 @@ public class SaveHTMLCanvasAction extends SAction {
                     }
 
                     out.println("ctx.fill();");
+                    if(shape.getStrokeWidth() > 0 && shape.getStrokePaint() != null) {
+                        out.println("ctx.strokeStyle = \"rgb("+serialize(shape.getStrokePaint())+");\"");
+                        out.println("ctx.lineWidth = " + shape.getStrokeWidth()+";");
+                        out.println("ctx.stroke();");
+                    }
                 }
 
                 if(shape instanceof SText) {
