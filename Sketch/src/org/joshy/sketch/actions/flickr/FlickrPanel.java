@@ -11,6 +11,7 @@ import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
@@ -130,6 +131,7 @@ public class FlickrPanel extends VFlexBox {
         scrollPane.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
         scrollPane.setContent(photoList);
         searchBox = new Textbox();
+        searchBox.setHintText("Flickr Keyword Search");
         searchBox.onAction(doSearch);
         Control box = new HFlexBox()
                 .setBoxAlign(HFlexBox.Align.Baseline)
@@ -203,6 +205,8 @@ public class FlickrPanel extends VFlexBox {
                             e.printStackTrace();
                         }
                         context.redraw();
+                        //scroll back to the top
+                        scrollPane.scrollToShow(new Bounds(0,0,10,10));
                     }
                 });
                 req.start();
