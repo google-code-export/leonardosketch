@@ -47,7 +47,13 @@ public class UpdateChecker {
                                 verifyUpdate(doc);
                             }
                         }
-                    }).start();
+                    })
+                    .onError(new Callback<Exception>() {
+                        public void call(Exception e) throws Exception {
+                            u.p("there was an error: " + e);
+                        }
+                    })
+                    .start();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
