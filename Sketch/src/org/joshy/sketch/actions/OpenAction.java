@@ -28,7 +28,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class OpenAction extends SAction {
     private File specificFile;
@@ -73,6 +76,13 @@ public class OpenAction extends SAction {
     private void load(File file) throws Exception {
         if(file.getName().toLowerCase().endsWith(".png")) {
             loadPng(file);
+        } if (file.getName().toLowerCase().endsWith(".leoz")) {
+            SketchDocument doc = loadZip(file);
+            if(doc.isPresentation()) {
+                context.getMain().setupNewDoc(new PresoModeHelper(context.getMain()),doc);
+            } else {
+                context.getMain().setupNewDoc(new VectorModeHelper(context.getMain()),doc);
+            }
         } else {
             SketchDocument doc = load(new FileInputStream(file), file, file.getName());
             if(doc.isPresentation()) {
@@ -130,6 +140,23 @@ public class OpenAction extends SAction {
         sdoc.setDirty(false);
         return sdoc;
     }
+
+    private SketchDocument loadZip(File file) throws Exception {
+        ZipFile zf = new ZipFile(file);
+        Enumeration<? extends ZipEntry> en = zf.entries();
+        while(true) {
+            if(!en.hasMoreElements()) break;
+            ZipEntry entry = en.nextElement();
+            u.p("loading entry = " + entry.getName());
+            if(entry.getName().endsWith("/leo.xml")) {
+                String name = entry.getName();
+                String dir = name.substring(0, name.indexOf("/leo.xml"));
+                return load(zf.getInputStream(entry),null,dir);
+            }
+        }
+        return null;
+    }
+
 
     private Doc upgradeDocument(Doc doc) {
         URL upgradeXSL = NativeExport.class.getResource("upgrade_-1_0.xsl");

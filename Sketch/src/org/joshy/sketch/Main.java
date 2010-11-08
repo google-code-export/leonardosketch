@@ -491,8 +491,8 @@ public class Main implements Runnable {
         fileMenu
                 .addItem(getString("menus.open"), "O", new OpenAction(context))
                 .addMenu(recentFilesMenu)
-                .addItem(getString("menus.save"), "S",    new SaveAction(context, false))
-                .addItem(getString("menus.saveas"), "shift S", new SaveAction(context, true))
+                .addItem(getString("menus.save"), "S",    new SaveAction(context, false,true))
+                .addItem(getString("menus.saveas"), "shift S", new SaveAction(context, true,true))
                 .addItem(getString("menus.close"), "W",   new CloseAction(canvas))
                 .addMenu(new Menu().setTitle("Export")
                     .addItem(getString("menus.topng"),    new SavePNGAction(context))

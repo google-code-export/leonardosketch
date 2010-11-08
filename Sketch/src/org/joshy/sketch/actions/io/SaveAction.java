@@ -8,14 +8,14 @@ import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class SaveAction extends SAction {
     private boolean forceSaveAs;
     private DocContext context;
+    private boolean useZip;
 
 
     public SaveAction(DocContext context, boolean forceSaveAs) {
@@ -23,10 +23,19 @@ public class SaveAction extends SAction {
         this.forceSaveAs = forceSaveAs;
     }
 
+    public SaveAction(DocContext context, boolean forceSaveAs, boolean useZip) {
+        this.context = context;
+        this.forceSaveAs = forceSaveAs;
+        this.useZip = useZip;
+    }
+
     @Override
     public void execute() {
         u.p("saving a file");
-
+        String extension = ".sketchy";
+        if(useZip) {
+            extension = ".leoz";
+        }
         if(forceSaveAs || context.getDocument().getFile() == null ) {
             FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
             fd.setMode(FileDialog.SAVE);
@@ -34,8 +43,8 @@ public class SaveAction extends SAction {
             fd.setVisible(true);
             if(fd.getFile() != null) {
                 String fileName = fd.getFile();
-                if(!fileName.toLowerCase().endsWith(".sketchy")) {
-                    fileName = fileName + ".sketchy";
+                if(!fileName.toLowerCase().endsWith(extension)) {
+                    fileName = fileName + extension;
                 }
                 File file = new File(fd.getDirectory(),fileName);
                 save(file);
@@ -48,9 +57,13 @@ public class SaveAction extends SAction {
     private void save(File file) {
         context.getUndoOverlay().showIndicator("Saving");
         try {
-            XMLWriter out = new XMLWriter(new PrintWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8")),file.toURI());
-            ExportProcessor.process(new NativeExport(), out, ((SketchDocument)context.getDocument()));
-            out.close();
+            if(useZip) {
+                saveAsZip(file);
+            } else {
+                XMLWriter out = new XMLWriter(new PrintWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8")),file.toURI());
+                ExportProcessor.process(new NativeExport(), out, ((SketchDocument)context.getDocument()));
+                out.close();
+            }
             context.getDocument().setFile(file);
             context.getDocument().setTitle(file.getName());
             context.getStage().setTitle(file.getName());
@@ -61,6 +74,16 @@ public class SaveAction extends SAction {
         }
     }
 
+    private void saveAsZip(File file) throws IOException {
+        ZipOutputStream out = new ZipOutputStream(new FileOutputStream(file));
+        String dir = file.getName().replace(".leoz", "");
+        ZipEntry entry = new ZipEntry(dir+"/leo.xml");
+        out.putNextEntry(entry);
+        XMLWriter outx = new XMLWriter(new PrintWriter(new OutputStreamWriter(out,"UTF-8")),file.toURI());
+        ExportProcessor.process(new NativeExport(), outx, ((SketchDocument)context.getDocument()));
+        outx.close();
+        out.close();
+    }
 
 
 }
