@@ -6,13 +6,14 @@ import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.geom.Point2D;
 import java.util.List;
 
-public class SketchCanvas extends DocumentCanvas {
+public class SketchCanvas extends DocumentCanvas implements ScrollPane.ScrollingAware {
     public Selection selection;
     private boolean showSelection;
     private VectorDocContext context;
@@ -21,6 +22,7 @@ public class SketchCanvas extends DocumentCanvas {
     private double hsnap;
     private boolean hsnapVisible;
     private double vsnap;
+    private ScrollPane scrollPane;
 
     public SketchCanvas(VectorDocContext context) {
         this.context = context;
@@ -38,6 +40,59 @@ public class SketchCanvas extends DocumentCanvas {
         );
     }
 
+    @Override
+    public Bounds getInputBounds() {
+        return new Bounds(
+                getTranslateX()
+                ,getTranslateY()
+                ,getWidth()
+                ,getHeight()
+        );
+    }
+
+    @Override
+    public void doLayout() {
+    }
+
+    @Override
+    public void doPrefLayout() {
+
+    }
+
+    @Override
+    public void doSkins() {
+    }
+
+    /*
+    @Override
+    public double getWidth() {
+        return document.getWidth()*getScale();
+    }
+
+    @Override
+    public double getHeight() {
+        return document.getHeight()*getScale();
+    }
+  */
+    public double getFullWidth(double width, double height) {
+        return Math.max(document.getWidth()*getScale(),width);
+    }
+
+    public double getFullHeight(double width, double height) {
+        return Math.max(document.getHeight()*getScale(),height);
+    }
+
+    public void setScrollX(double value) {
+        this.panX = value;
+    }
+
+    public void setScrollY(double value) {
+        this.panY = value;
+    }
+
+    public void setScrollParent(ScrollPane scrollPane) {
+        this.scrollPane = scrollPane;
+    }
 
     @Override
     public void draw(GFX g) {
@@ -48,7 +103,7 @@ public class SketchCanvas extends DocumentCanvas {
     }
 
     private void draw(GFX g, SketchDocument sdoc) {
-//        g.translate(panX,panY);
+        g.translate(panX,panY);
         g.scale(getScale(),getScale());
         drawDocumentBounds(g,sdoc);
         drawDocumentGrid(g,sdoc);
@@ -58,7 +113,7 @@ public class SketchCanvas extends DocumentCanvas {
 
         drawSnaps(g,sdoc);
         g.scale(1/getScale(),1/getScale());
-//        g.translate(-panX,-panY);
+        g.translate(-panX,-panY);
 
         if(showSelection) {
             for(SNode node : selection.items()) {
@@ -156,34 +211,6 @@ public class SketchCanvas extends DocumentCanvas {
     }
 
 
-
-    @Override
-    public void doLayout() {
-    }
-
-    @Override
-    public void doPrefLayout() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void doSkins() {
-    }
-
-    @Override
-    public double getWidth() {
-        return document.getWidth();
-    }
-
-    @Override
-    public double getHeight() {
-        return document.getHeight();
-    }
-
-    @Override
-    public Bounds getInputBounds() {
-        return getVisualBounds();
-    }
 
     public boolean isFocused() {
         return true;

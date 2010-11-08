@@ -15,6 +15,16 @@ import java.awt.geom.Point2D;
  */
 public abstract class DocumentCanvas extends Control implements Focusable {
     protected double scale = 1;
+    protected double panX;
+    protected double panY;
+
+    public void setPanX(double panX) {
+        this.panX = panX;
+    }
+
+    public void setPanY(double panY) {
+        this.panY = panY;
+    }
 
     public double getScale() {
         return scale;
@@ -33,34 +43,34 @@ public abstract class DocumentCanvas extends Control implements Focusable {
 
     public Point2D.Double transformToCanvas(double x, double y) {
         return new Point2D.Double(
-                (x)/scale,
-                (y)/scale);
+                (x-panX)/scale,
+                (y-panY)/scale);
     }
 
     public Point2D.Double transformToCanvas(Point2D point) {
         return new Point2D.Double(
-                (point.getX())/scale,
-                (point.getY())/scale);
+                (point.getX()-panX)/scale,
+                (point.getY()-panY)/scale);
     }
 
     public Point2D.Double transformToDrawing(double x, double y) {
         return new Point2D.Double(
-                x*scale,
-                y*scale);
+                x*scale+panX,
+                y*scale+panY);
     }
 
     public Bounds transformToDrawing(Bounds bounds) {
         return new Bounds(
-                bounds.getX()*scale,
-                bounds.getY()*scale,
+                bounds.getX()*scale+panX,
+                bounds.getY()*scale+panY,
                 bounds.getWidth()*scale,
                 bounds.getHeight()*scale);
     }
 
     public Point2D.Double transformToDrawing(Point2D point) {
         return new Point2D.Double(
-                point.getX()*scale,
-                point.getY()*scale
+                point.getX()*scale+panX,
+                point.getY()*scale+panY
         );
     }
 }
