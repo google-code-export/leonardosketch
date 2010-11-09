@@ -18,80 +18,95 @@
             <value>Recent Files</value>
             <value language="de-DE">Neuste Dateien</value>
             <value language="hr-HR">Zadnje otvoreni</value>
+            <value language="it-IT">File Recenti</value>
         </key>
         <key name="new">
             <value>New</value>
             <value language="de-DE">Neu</value>
             <value language="hr-HR">Novo</value>
+            <value language="it-IT">Nuovo</value>
         </key>
         <key name="open">
             <value>Open</value>
             <value language="de-DE">Oeffnen</value>
             <value language="hr-HR">Otvori</value>
+            <value language="it-IT">Apri</value>
         </key>
         <key name="save">
             <value>Save</value>
             <value language="de-DE">Speichern</value>
             <value language="hr-HR">Spremi</value>
+            <value language="it-IT">Salva</value>
         </key>
         <key name="saveas">
             <value>Save As</value>
             <value language="de-DE">Speichern unter</value>
             <value language="hr-HR">Spremi kao</value>
+            <value language="it-IT">Salva come</value>
         </key>
         <key name="close">
             <value>Close</value>
             <value language="de-DE">Schliessen</value>
             <value language="hr-HR">Zatvori</value>
+            <value language="it-IT">Chiudi</value>
         </key>
         <key name="topng">
             <value>to PNG</value>
             <value language="de-DE">zu PNG</value>
             <value language="hr-HR">kao PNG</value>
+            <value language="it-IT">in PNG</value>
         </key>
         <key name="tosvg">
             <value>to SVG</value>
             <value language="de-DE">zu SVG</value>
             <value language="hr-HR">kao SVG</value>
+            <value language="it-IT">in SVG</value>
         </key>
         <key name="tohtml">
             <value>to HTML</value>
             <value language="de-DE">zu HTML</value>
             <value language="hr-HR">kao HTML</value>
+            <value language="it-IT">in HTML</value>
         </key>
         <key name="tocanvas">
             <value>to HTML Canvas</value>
             <value language="de-DE">zu HTML Canvas</value>
             <value language="hr-HR">kao HTML Canvas</value>
+            <value language="it-IT">in HTML Canvas</value>
         </key>
         <key name="topdf">
             <value>to PDF</value>
             <value language="de-DE">zu PDF</value>
             <value language="hr-HR">kao PDF</value>
+            <value language="it-IT">in PDF</value>
         </key>
         <key name="exit">
             <value>Exit</value>
             <value language="de-DE">Beenden</value>
             <value language="hr-HR">Izlaz</value>
+            <value language="it-IT">Esci</value>
         </key>
         
         <key name="settings">
             <value>Settings</value>
             <value language="de-DE">Einstellungen</value>
             <value language="hr-HR">Postavke</value>
+            <value language="it-IT">Impostazioni</value>
         </key>
         <key name="about">
             <value>About</value>
             <value language="de-DE">√úber</value>
             <value language="hr-HR">O programu</value>
+            <value language="it-IT">Informazioni su</value>
         </key>
 
         <key name="window">
             <value>Window</value>
             <value language="de-DE">Window</value>
             <value language="en_US">Window</value>
-            <value language="zz_ZZ">Zindow</value>
             <value language="hr-HR">Prozor</value>
+            <value language="it-IT">Finestra</value>
+            <value language="zz_ZZ">Zindow</value>
         </key>
 
 
@@ -100,46 +115,55 @@
             <value>Edit</value>
             <value language="de-DE">Bearbeiten</value>
             <value language="hr-HR">Uredi</value>
+            <value language="it-IT">Modifica</value>
         </key>
         <key name="cut">
             <value>Cut</value>
             <value language="de-DE">Ausschneiden</value>
             <value language="hr-HR">Izre≈æi</value>
+            <value language="it-IT">Taglia</value>
         </key>
         <key name="copy">
             <value>Copy</value>
             <value language="de-DE">Kopieren</value>
             <value language="hr-HR">Kopiraj</value>
+            <value language="it-IT">Copia</value>
         </key>
         <key name="paste">
             <value>Paste</value>
             <value language="de-DE">Einf√ºgen</value>
             <value language="hr-HR">Zalijepi</value>
+            <value language="it-IT">Incolla</value>
         </key>
         <key name="delete">
             <value>Delete</value>
             <value language="de-DE">L√∂schen</value>
             <value language="hr-HR">Obri≈°i</value>
+            <value language="it-IT">Elimina</value>
         </key>
         <key name="undo">
             <value>Undo</value>
             <value language="de-DE">R√ºckg√§ngig</value>
             <value language="hr-HR">Poni≈°ti izmjenu</value>
+            <value language="it-IT">Annulla</value>
         </key>
         <key name="redo">
             <value>Redo</value>
             <value language="de-DE">Wiederholen</value>
             <value language="hr-HR">Ponovi izmjenu</value>
+            <value language="it-IT">Ripristina</value>
         </key>
         <key name="clearSelection">
             <value>Clear Selection</value>
             <value language="de-DE">Auswahl l√∂schen</value>
             <value language="hr-HR">Poƒçisti odabir</value>
+            <value language="it-IT">Annulla Selezione</value>
         </key>
         <key name="setBackgroundColor">
             <value>Set Background Color</value>
             <value language="de-DE">Hintergrundfarbe setzen</value>
             <value language="hr-HR">Postavi pozadinsku boju</value>
+            <value language="it-IT">Imposta Colore di Sfondo</value>
         </key>
 
 
@@ -148,101 +172,121 @@
             <value>Node</value>
             <value language="de-DE">Element</value>
             <value language="hr-HR">Element</value>
+            <value language="it-IT">Nodo</value>
         </key>
         <key name="raiseNodeTop">
             <value>Raise to Top</value>
             <value language="de-DE">An den Anfang setzen</value>
             <value language="hr-HR">Podigni na vrh</value>
+            <value language="it-IT">Porta in cima</value>
         </key>
         <key name="raiseNode">
             <value>Raise Node</value>
             <value language="de-DE">Element h√∂her setzen</value>
             <value language="hr-HR">Podigni element</value>
+            <value language="it-IT">Alza di un livello</value>
         </key>
         <key name="lowerNode">
             <value>Lower Node</value>
             <value language="de-DE">Element niedriger setzen</value>
             <value language="hr-HR">Spusti element</value>
+            <value language="it-IT">Abbassa di un livello</value>
         </key>
         <key name="lowerNodeBottom">
             <value>Lower to Bottom</value>
             <value language="de-DE">niedriger setzen</value>
             <value language="hr-HR">Spusti na dno</value>
+            <value language="it-IT">Porta in fondo</value>
         </key>
         <key name="alignNodeTop">
             <value>Align Top</value>
             <value language="de-DE">Oben ausrichten</value>
             <value language="hr-HR">Poravnaj vrh</value>
+            <value language="it-IT">Allinea in Alto</value>
         </key>
         <key name="alignNodeBottom">
             <value>Align Bottom</value>
             <value language="de-DE">Unten ausrichten</value>
             <value language="hr-HR">Poravnaj dno</value>
+            <value language="it-IT">Allinea in Basso</value>
         </key>
         <key name="alignNodeLeft">
             <value>Align Left</value>
             <value language="de-DE">Links ausrichten</value>
             <value language="hr-HR">Poravnaj lijevo</value>
+            <value language="it-IT">Allinea a Sinistra</value>
         </key>
         <key name="alignNodeRight">
             <value>Align Right</value>
             <value language="de-DE">Rechts ausrichten</value>
             <value language="hr-HR">Poravnaj desno</value>
+            <value language="it-IT">Allinea a Destra</value>
         </key>
         <key name="alignNodeCenterHorizontal">
             <value>Align Center Horizontal</value>
             <value language="de-DE">Horizontal zentriert ausrichten</value>
             <value language="hr-HR">Centriraj horizontalno</value>
+            <value language="it-IT">Centra in Orizzontale</value>
         </key>
         <key name="alignNodeCenterVertical">
             <value>Align Center Vertical</value>
             <value language="de-DE">Vertikal zentriert ausrichten</value>
             <value language="hr-HR">Centriraj vertikalno</value>
+            <value language="it-IT">Centra in Verticale</value>
         </key>
         <key name="matchNodeWidth">
             <value>Same Width</value>
             <value language="de-DE">Gleiche Breite</value>
             <value language="hr-HR">Ista ≈°irina</value>
+            <value language="it-IT">Stessa Larghezza</value>
         </key>
         <key name="matchNodeHeight">
             <value>Same Height</value>
             <value language="de-DE">Gleiche H√∂he</value>
             <value language="hr-HR">Ista visina</value>
+            <value language="it-IT">Stessa Altezza</value>
         </key>
         <key name="groupSelection">
             <value>Group Selection</value>
             <value language="de-DE">Auswahl der Gruppe</value>
             <value language="hr-HR">Grupni odabir</value>
+            <value language="it-IT">Raggruppa Selezione</value>
         </key>
         <key name="ungroupSelection">
             <value>Ungroup Selection</value>
             <value language="de-DE">Gruppenauswahl aufheben</value>
             <value language="hr-HR">Rastavi grupu</value>
+            <value language="it-IT">Elimina Raggruppamento</value>
         </key>
         <key name="createSymbol">
             <value>Create Symbol from Selection</value>
             <value language="de-DE">Symbol aus Selektion erzeugen</value>
             <value language="hr-HR">Kreiraj simbol od odabranog</value>
+            <value language="it-IT">Crea Simbolo dalla Selezione</value>
         </key>
         <key name="createResizableShape">
             <value>Create Resizable Shape from Selection</value>
             <value language="de-DE">Ver√§nderbare Form aus Selektion erstellen</value>
             <value language="hr-HR">Kreiraj rastezljivi oblik od odabira</value>
+            <value language="it-IT">Crea Forma Ridimensionabile dalla Selezione</value>
         </key>
         <key name="editResizableShape">
             <value>Edit Resizable Shape</value>
             <value language="de-DE">Ver√§nderbaren Schnitt bearbeiten</value>
             <value language="hr-HR">Izmjeni rastezljivi oblik</value>
+            <value language="it-IT">Modifica Forma Ridimensionabile</value>
         </key>
         <key name="duplicateNode">
             <value>Duplicate</value>
             <value language="de-DE">Dublikat</value>
             <value language="hr-HR">Dupliciraj</value>
+            <value language="it-IT">Duplica</value>
         </key>
         <key name="resetTransforms">
             <value>Reset Transforms</value>
             <value language="de-DE">Transformationen zur√ºcksetzen</value>
             <value language="hr-HR">Resetiraj transformacije</value>
+            <value language="it-IT">Annulla Trasformazioni</value>
         </key>
 
     <!-- the Path menu -->
@@ -270,16 +314,19 @@
             <value>Rotate 90° Counter Clockwise</value>
             <value language="de-DE">90° gegen Uhrzeigersinn drehen</value>
             <value language="hr-HR">Rotiraj 90° obrnuto od smjera kazaljke</value>
+            <value language="it-IT">Ruota di 90° in Senso Antiorario</value>
         </key>
         <key name="rotateNodeFree">
             <value>Free Rotate</value>
             <value language="de-DE">Freie Rotation</value>
             <value language="hr-HR">Rotiraj proizvoljno</value>
+            <value language="it-IT">Ruota Arbitrariamente</value>
         </key>
         <key name="scaleNode">
             <value>Scale Transform</value>
             <value language="de-DE">Transformation skalieren</value>
             <value language="hr-HR">Rastegni</value>
+            <value language="it-IT">Scala</value>
         </key>
 
     <!-- the Document menu -->
@@ -287,11 +334,13 @@
             <value>Document</value>
             <value language="de-DE">DoKument</value>
             <value language="hr-HR">Dokument</value>
+            <value language="it-IT">Documento</value>
         </key>
         <key name="setDocumentSize">
             <value>Set Document Size</value>
             <value language="de-DE">Setze Dokument Gr√∂√üe</value>
             <value language="hr-HR">Podesi veliƒçinu dokumenta</value>
+            <value language="it-IT">Imposta Dimensioni Documento</value>
         </key>
 
     <!-- the View menu -->
@@ -299,77 +348,92 @@
             <value>View</value>
             <value language="de-DE">Ansicht</value>
             <value language="hr-HR">Pogled</value>
+            <value language="it-IT">Visualizza</value>
         </key>
         <key name="zoomIn">
             <value>Zoom In</value>
             <value language="de-DE">Hineinzoomen</value>
             <value language="hr-HR">Pribli≈æi</value>
+            <value language="it-IT">Aumenta Zoom</value>
         </key>
         <key name="zoomOut">
             <value>Zoom Out</value>
             <value language="de-DE">Herauszoomen</value>
             <value language="hr-HR">Odalji</value>
+            <value language="it-IT">Riduci Zoom</value>
         </key>
         <key name="zoomActual">
             <value>Actual Size</value>
             <value language="de-DE">Aktuelle Gr√∂√üe</value>
             <value language="hr-HR">Stvarna veliƒçina</value>
+            <value language="it-IT">Dimensione Originale</value>
         </key>
         <key name="fullScreen">
             <value>Full Screen</value>
             <value language="de-DE">Vollbild</value>
             <value language="hr-HR">Preko cijelog ekrana</value>
+            <value language="it-IT">A Tutto Schermo</value>
         </key>
         <key name="fullScreenWithMenubar">
             <value>Full Screen with Menubar</value>
             <value language="de-DE">Vollbild mit Men√ºleiste</value>
             <value language="hr-HR">Preko cijelog ekrana sa menijem</value>
+            <value language="it-IT">A Tutto Schermo con Barra dei Menu</value>
         </key>
         <key name="newView">
             <value>New View</value>
             <value language="de-DE">Neue Ansicht</value>
             <value language="hr-HR">Novi pogled</value>
+            <value language="it-IT">Nuova Visualizzazione</value>
         </key>
 
         <key name="showDocumentBounds">
             <value>Show Document Edges</value>
             <value language="de-DE">Dokumentecken zeigen</value>
             <value language="hr-HR">Prika≈æi granice dokumenta</value>
+            <value language="it-IT">Visualizza Bordi Documento</value>
         </key>
         <key name="showGrid">
             <value>Show Grid</value>
             <value language="de-DE">zeige Raster</value>
             <value language="hr-HR">Prika≈æi mre≈æu</value>
+            <value language="it-IT">Visualizza Griglia</value>
         </key>
         <key name="snapGrid">
             <value>Snap to Grid</value>
             <value language="de-DE">Raster fangen</value>
             <value language="hr-HR">Lijepi na mre≈æu</value>
+            <value language="it-IT">Aggancia alla Griglia</value>
         </key>
         <key name="snapDocEdges">
             <value>Snap to Doc Edges</value>
             <value language="de-DE">Dokumentecken fangen</value>
             <value language="hr-HR">Lijepi za rubove dokumenta</value>
+            <value language="it-IT">Aggancia ai Bordi del Documento</value>
         </key>
         <key name="snapNodeEdges">
             <value>Snap to Node Edges</value>
             <value language="de-DE">An Elementecken fangen</value>
             <value language="hr-HR">Lijepi za rubove elementa</value>
+            <value language="it-IT">Aggancia ai Bordi del Nodo</value>
         </key>
         <key name="viewFlickrSidebar">
             <value>Flickr Search</value>
             <value language="de-DE">Flickr Suche</value>
             <value language="hr-HR">Flickr pretraga</value>
+            <value language="it-IT">Ricerca su Flickr</value>
         </key>
         <key name="viewSymbolSidebar">
             <value>Symbol Panel</value>
             <value language="de-DE">Symbol Paneel</value>
             <value language="hr-HR">Ploƒça sa simbolima</value>
+            <value language="it-IT">Pannello dei Simboli</value>
         </key>
         <key name="viewPresentation">
             <value>View Presentation</value>
             <value language="de-DE">Presentationsansicht</value>
             <value language="hr-HR">Pogledaj prezentaciju</value>
+            <value language="it-IT">Visualizza Presentazione</value>
         </key>
 
     <!-- the View menu -->
@@ -377,21 +441,25 @@
             <value>Share</value>
             <value language="de-DE">Mit Anderen teilen</value>
             <value language="hr-HR">Podijeli</value>
+            <value language="it-IT">Condividi</value>
         </key>
         <key name="sendTwitter">
             <value>Send to Twitter</value>
             <value language="de-DE">Zu Twitter senden</value>
             <value language="hr-HR">Po≈°alji na Twitter</value>
+            <value language="it-IT">Invia a Twitter</value>
         </key>
         <key name="configTwitter">
             <value>Change Twitter Settings</value>
             <value language="de-DE">Twitter Einstellungen √§ndern</value>
             <value language="hr-HR">Izmijeni postavke za Twitter</value>
+            <value language="it-IT">Cambia Impostazioni Twitter</value>
         </key>
         <key name="sendEmailPNG">
             <value>Email as PNG</value>
             <value language="de-DE">Email als PNG</value>
             <value language="hr-HR">Po≈°alji na emial kao PNG</value>
+            <value language="it-IT">Invia via Email in Formato PNG</value>
         </key>
 
     <!-- the Scripts menu -->
@@ -399,6 +467,7 @@
             <value>Scripts</value>
             <value language="de-DE">Scripte</value>
             <value language="hr-HR">Skripte</value>
+            <value language="it-IT">Scripts</value>
         </key>
     </set>
 
@@ -408,11 +477,13 @@
             <value>Symbols</value>
             <value language="de-DE">Symbole</value>
             <value language="hr-HR">Simboli</value>
+            <value language="it-IT">Simboli</value>
         </key>
         <key name="flickr">
             <value>Flickr Search</value>
             <value language="de-DE">Flickr Suche</value>
             <value language="hr-HR">Pretraga na Flickr</value>
+            <value language="it-IT">Ricerca su Flickr</value>
         </key>
     </set>
 
