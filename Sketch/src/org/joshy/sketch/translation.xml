@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <sets>
 
@@ -8,7 +8,7 @@
     <!-- this is an example of a string with a default and a translation -->
         <key name="file">
             <value>File</value>
-            <value language="de-DE">German File</value>
+            <value language="de-DE">Deutsche Datei</value>
         </key>
 
 
@@ -64,9 +64,10 @@
         
         <key name="settings">
             <value>Settings</value>
+            <value language="de-DE">Einstellungen</value>
         </key>
         <key name="about">
-            <value>About</value>
+            <value>√úber</value>
         </key>
 
         <key name="window">
@@ -80,191 +81,249 @@
     <!-- the Edit menu -->
         <key name="edit">
             <value>Edit</value>
+            <value language="de-DE">Bearbeiten</value>
         </key>
         <key name="cut">
             <value>Cut</value>
+            <value language="de-DE">Ausschneiden</value>
         </key>
         <key name="copy">
             <value>Copy</value>
+            <value language="de-DE">Kopieren</value>
         </key>
         <key name="paste">
             <value>Paste</value>
+            <value language="de-DE">Einf√ºgen</value>
         </key>
         <key name="delete">
             <value>Delete</value>
+            <value language="de-DE">L√∂schen</value>
         </key>
         <key name="undo">
             <value>Undo</value>
+            <value language="de-DE">R√ºckg√§ngig</value>
         </key>
         <key name="redo">
             <value>Redo</value>
+            <value language="de-DE">Wiederholen</value>
         </key>
         <key name="clearSelection">
             <value>Clear Selection</value>
+            <value language="de-DE">Auswahl l√∂schen</value>
         </key>
         <key name="setBackgroundColor">
             <value>Set Background Color</value>
+            <value language="de-DE">Hintergrundfarbe setzen</value>
         </key>
 
 
     <!-- the Node menu -->
         <key name="node">
             <value>Node</value>
+            <value language="de-DE">Element</value>
         </key>
         <key name="raiseNodeTop">
             <value>Raise to Top</value>
+            <value language="de-DE">An den Anfang setzen</value>
         </key>
         <key name="raiseNode">
             <value>Raise Node</value>
+            <value language="de-DE">Element h√∂her setzen</value>
         </key>
         <key name="lowerNode">
             <value>Lower Node</value>
+            <value language="de-DE">Element niedriger setzen</value>
         </key>
         <key name="lowerNodeBottom">
             <value>Lower to Bottom</value>
+            <value language="de-DE">niedriger setzen</value>
         </key>
         <key name="alignNodeTop">
             <value>Align Top</value>
+            <value language="de-DE">Oben ausrichten</value>
         </key>
         <key name="alignNodeBottom">
             <value>Align Bottom</value>
+            <value language="de-DE">Unten ausrichten</value>
         </key>
         <key name="alignNodeLeft">
             <value>Align Left</value>
+            <value language="de-DE">Links ausrichten</value>
         </key>
         <key name="alignNodeRight">
             <value>Align Right</value>
+            <value language="de-DE">Rechts ausrichten</value>
         </key>
         <key name="alignNodeCenterHorizontal">
             <value>Align Center Horizontal</value>
+            <value language="de-DE">Horizontal zentriert ausrichten</value>
         </key>
         <key name="alignNodeCenterVertical">
             <value>Align Center Vertical</value>
+            <value language="de-DE">Vertikal zentriert ausrichten</value>
         </key>
         <key name="matchNodeWidth">
             <value>Same Width</value>
+            <value language="de-DE">Gleiche Breite</value>
         </key>
         <key name="matchNodeHeight">
             <value>Same Height</value>
+            <value language="de-DE">Gleiche H√∂he</value>
         </key>
         <key name="groupSelection">
             <value>Group Selection</value>
+            <value language="de-DE">Auswahl der Gruppe</value>
         </key>
         <key name="ungroupSelection">
             <value>Ungroup Selection</value>
+            <value language="de-DE">Gruppenauswahl aufheben</value>
         </key>
         <key name="createSymbol">
             <value>Create Symbol from Selection</value>
+            <value language="de-DE">Symbol aus Selektion erzeugen</value>
         </key>
         <key name="createResizableShape">
             <value>Create Resizable Shape from Selection</value>
+            <value language="de-DE">Ver√§nderbare Form aus Selektion erstellen</value>
         </key>
         <key name="editResizableShape">
             <value>Edit Resizable Shape</value>
+            <value language="de-DE">Ver√§nderbaren Schnitt bearbeiten</value>
         </key>
         <key name="duplicateNode">
             <value>Duplicate</value>
+            <value language="de-DE">Dublikat</value>
         </key>
         <key name="resetTransforms">
             <value>Reset Transforms</value>
+            <value language="de-DE">Transformationen zur√ºcksetzen</value>
         </key>
 
     <!-- the Path menu -->
         <key name="path">
             <value>Path</value>
+            <value language="de-DE">Pfad</value>
         </key>
         <key name="flipNodeHorizontal">
             <value>Flip Horizontal</value>
+            <value language="de-DE">Horizontal drehen</value>
         </key>
         <key name="flipNodeVertical">
             <value>Flip Vertical</value>
+            <value language="de-DE">Vertikal drehen</value>
         </key>
         <key name="rotateNode90Right">
-            <value>Rotate 90ø Clockwise</value>
+            <value>Rotate 90° Clockwise</value>
+            <value language="de-DE">90° in Uhrzeigersinn drehen</value>
         </key>
         <key name="rotateNode90Left">
-            <value>Rotate 90ø Counter Clockwise</value>
+            <value>Rotate 90° Counter Clockwise</value>
+            <value language="de-DE">90° gegen Uhrzeigersinn drehen</value>
         </key>
         <key name="rotateNodeFree">
             <value>Free Rotate</value>
+            <value language="de-DE">Freie Rotation</value>
         </key>
         <key name="scaleNode">
             <value>Scale Transform</value>
+            <value language="de-DE">Transformation skalieren</value>
         </key>
 
     <!-- the Document menu -->
         <key name="document">
             <value>Document</value>
+            <value language="de-DE">DoKument</value>
         </key>
         <key name="setDocumentSize">
             <value>Set Document Size</value>
+            <value language="de-DE">Setze Dokument Gr√∂√üe</value>
         </key>
 
     <!-- the View menu -->
         <key name="view">
             <value>View</value>
+            <value language="de-DE">Ansicht</value>
         </key>
         <key name="zoomIn">
             <value>Zoom In</value>
+            <value language="de-DE">Hineinzoomen</value>
         </key>
         <key name="zoomOut">
             <value>Zoom Out</value>
+            <value language="de-DE">Herauszoomen</value>
         </key>
         <key name="zoomActual">
             <value>Actual Size</value>
+            <value language="de-DE">Aktuelle Gr√∂√üe</value>
         </key>
         <key name="fullScreen">
             <value>Full Screen</value>
+            <value language="de-DE">Vollbild</value>
         </key>
         <key name="fullScreenWithMenubar">
             <value>Full Screen with Menubar</value>
+            <value language="de-DE">Vollbild mit Men√ºleiste</value>
         </key>
         <key name="newView">
             <value>New View</value>
+            <value language="de-DE">Neue Ansicht</value>
         </key>
 
         <key name="showDocumentBounds">
             <value>Show Document Edges</value>
+            <value language="de-DE">Dokumentecken zeigen</value>
         </key>
         <key name="showGrid">
             <value>Show Grid</value>
+            <value language="de-DE">zeige Raster</value>
         </key>
         <key name="snapGrid">
             <value>Snap to Grid</value>
+            <value language="de-DE">Raster fangen</value>
         </key>
         <key name="snapDocEdges">
             <value>Snap to Doc Edges</value>
+            <value language="de-DE">Dokumentecken fangen</value>
         </key>
         <key name="snapNodeEdges">
             <value>Snap to Node Edges</value>
+            <value language="de-DE">An Elementecken fangen</value>
         </key>
         <key name="viewFlickrSidebar">
             <value>Flickr Search</value>
+            <value language="de-DE">Flickr Suche</value>
         </key>
         <key name="viewSymbolSidebar">
             <value>Symbol Panel</value>
+            <value language="de-DE">Symbol Paneel</value>
         </key>
         <key name="viewPresentation">
             <value>View Presentation</value>
+            <value language="de-DE">Presentationsansicht</value>
         </key>
 
     <!-- the View menu -->
         <key name="share">
             <value>Share</value>
+            <value language="de-DE">Mit Anderen teilen</value>
         </key>
         <key name="sendTwitter">
             <value>Send to Twitter</value>
+            <value language="de-DE">Zu Twitter senden</value>
         </key>
         <key name="configTwitter">
             <value>Change Twitter Settings</value>
+            <value language="de-DE">Twitter Einstellungen √§ndern</value>
         </key>
         <key name="sendEmailPNG">
             <value>Email as PNG</value>
+            <value language="de-DE">Email als PNG</value>
         </key>
 
     <!-- the Scripts menu -->
         <key name="scripts">
             <value>Scripts</value>
+            <value language="de-DE">Scripte</value>
         </key>
     </set>
 
@@ -272,9 +331,11 @@
     <set name="sidebar">
         <key name="symbols">
             <value>Symbols</value>
+            <value language="de-DE">Symbole</value>
         </key>
         <key name="flickr">
             <value>Flickr Search</value>
+            <value language="de-DE">Flickr Suche</value>
         </key>
     </set>
 
