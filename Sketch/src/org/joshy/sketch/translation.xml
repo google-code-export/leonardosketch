@@ -8,6 +8,7 @@
     <!-- this is an example of a string with a default and a translation -->
         <key name="file">
             <value>File</value>
+            <value language="en-US">File</value>
             <value language="de-DE">Datei</value>
             <value language="hr-HR">File</value>
         </key>
@@ -106,7 +107,7 @@
         <key name="window">
             <value>Window</value>
             <value language="de-DE">Fenster</value>
-            <value language="en_US">Window</value>
+            <value language="en-US">Window</value>
             <value language="hr-HR">Prozor</value>
             <value language="it-IT">Finestra</value>
             <value language="zz_ZZ">Zindow</value>

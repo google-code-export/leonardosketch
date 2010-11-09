@@ -92,7 +92,7 @@ public class Main implements Runnable {
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
-        String locale = System.getProperty("user.language") + "_" + System.getProperty("user.country");
+        String locale = System.getProperty("user.language") + "-" + System.getProperty("user.country");
         u.p("Using locale = " + locale);
 
         setupSettings();
