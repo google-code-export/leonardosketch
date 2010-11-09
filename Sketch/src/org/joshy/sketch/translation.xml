@@ -8,9 +8,11 @@
     <!-- this is an example of a string with a default and a translation -->
         <key name="file">
             <value>File</value>
-            <value language="de-DE">Deutsche Datei</value>
-            <value language="hr-HR">Croatian File</value>
+            <value language="de-DE">Datei</value>
+            <value language="hr-HR">File</value>
         </key>
+
+
 
 
     <!-- we need to translate the rest of these -->
@@ -95,19 +97,22 @@
         </key>
         <key name="about">
             <value>About</value>
-            <value language="de-DE">√úber</value>
+            <value language="de-DE">Ueber</value>
             <value language="hr-HR">O programu</value>
             <value language="it-IT">Informazioni su</value>
         </key>
 
+
         <key name="window">
             <value>Window</value>
-            <value language="de-DE">Window</value>
+            <value language="de-DE">Fenster</value>
             <value language="en_US">Window</value>
             <value language="hr-HR">Prozor</value>
             <value language="it-IT">Finestra</value>
             <value language="zz_ZZ">Zindow</value>
         </key>
+
+
 
 
     <!-- the Edit menu -->
@@ -131,19 +136,19 @@
         </key>
         <key name="paste">
             <value>Paste</value>
-            <value language="de-DE">Einf√ºgen</value>
+            <value language="de-DE">Einfuegen</value>
             <value language="hr-HR">Zalijepi</value>
             <value language="it-IT">Incolla</value>
         </key>
         <key name="delete">
             <value>Delete</value>
-            <value language="de-DE">L√∂schen</value>
+            <value language="de-DE">Loeschen</value>
             <value language="hr-HR">Obri≈°i</value>
             <value language="it-IT">Elimina</value>
         </key>
         <key name="undo">
             <value>Undo</value>
-            <value language="de-DE">R√ºckg√§ngig</value>
+            <value language="de-DE">Rueckgaengig</value>
             <value language="hr-HR">Poni≈°ti izmjenu</value>
             <value language="it-IT">Annulla</value>
         </key>
@@ -155,7 +160,7 @@
         </key>
         <key name="clearSelection">
             <value>Clear Selection</value>
-            <value language="de-DE">Auswahl l√∂schen</value>
+            <value language="de-DE">Auswahl loeschen</value>
             <value language="hr-HR">Poƒçisti odabir</value>
             <value language="it-IT">Annulla Selezione</value>
         </key>
@@ -165,6 +170,8 @@
             <value language="hr-HR">Postavi pozadinsku boju</value>
             <value language="it-IT">Imposta Colore di Sfondo</value>
         </key>
+
+
 
 
     <!-- the Node menu -->
@@ -182,7 +189,7 @@
         </key>
         <key name="raiseNode">
             <value>Raise Node</value>
-            <value language="de-DE">Element h√∂her setzen</value>
+            <value language="de-DE">Element hoeher setzen</value>
             <value language="hr-HR">Podigni element</value>
             <value language="it-IT">Alza di un livello</value>
         </key>
@@ -242,7 +249,7 @@
         </key>
         <key name="matchNodeHeight">
             <value>Same Height</value>
-            <value language="de-DE">Gleiche H√∂he</value>
+            <value language="de-DE">Gleiche Hoehe</value>
             <value language="hr-HR">Ista visina</value>
             <value language="it-IT">Stessa Altezza</value>
         </key>
@@ -266,13 +273,13 @@
         </key>
         <key name="createResizableShape">
             <value>Create Resizable Shape from Selection</value>
-            <value language="de-DE">Ver√§nderbare Form aus Selektion erstellen</value>
+            <value language="de-DE">Veraenderbare Form aus Selektion erstellen</value>
             <value language="hr-HR">Kreiraj rastezljivi oblik od odabira</value>
             <value language="it-IT">Crea Forma Ridimensionabile dalla Selezione</value>
         </key>
         <key name="editResizableShape">
             <value>Edit Resizable Shape</value>
-            <value language="de-DE">Ver√§nderbaren Schnitt bearbeiten</value>
+            <value language="de-DE">Veraenderbaren Schnitt bearbeiten</value>
             <value language="hr-HR">Izmjeni rastezljivi oblik</value>
             <value language="it-IT">Modifica Forma Ridimensionabile</value>
         </key>
@@ -284,10 +291,11 @@
         </key>
         <key name="resetTransforms">
             <value>Reset Transforms</value>
-            <value language="de-DE">Transformationen zur√ºcksetzen</value>
+            <value language="de-DE">Transformationen zuruecksetzen</value>
             <value language="hr-HR">Resetiraj transformacije</value>
             <value language="it-IT">Annulla Trasformazioni</value>
         </key>
+
 
     <!-- the Path menu -->
         <key name="path">
@@ -329,19 +337,21 @@
             <value language="it-IT">Scala</value>
         </key>
 
+
     <!-- the Document menu -->
         <key name="document">
             <value>Document</value>
-            <value language="de-DE">DoKument</value>
+            <value language="de-DE">Dokument</value>
             <value language="hr-HR">Dokument</value>
             <value language="it-IT">Documento</value>
         </key>
         <key name="setDocumentSize">
             <value>Set Document Size</value>
-            <value language="de-DE">Setze Dokument Gr√∂√üe</value>
+            <value language="de-DE">Setze Dokument Groesse</value>
             <value language="hr-HR">Podesi veliƒçinu dokumenta</value>
             <value language="it-IT">Imposta Dimensioni Documento</value>
         </key>
+
 
     <!-- the View menu -->
         <key name="view">
@@ -364,7 +374,7 @@
         </key>
         <key name="zoomActual">
             <value>Actual Size</value>
-            <value language="de-DE">Aktuelle Gr√∂√üe</value>
+            <value language="de-DE">Aktuelle Groesse</value>
             <value language="hr-HR">Stvarna veliƒçina</value>
             <value language="it-IT">Dimensione Originale</value>
         </key>
@@ -376,7 +386,7 @@
         </key>
         <key name="fullScreenWithMenubar">
             <value>Full Screen with Menubar</value>
-            <value language="de-DE">Vollbild mit Men√ºleiste</value>
+            <value language="de-DE">Vollbild mit Menueleiste</value>
             <value language="hr-HR">Preko cijelog ekrana sa menijem</value>
             <value language="it-IT">A Tutto Schermo con Barra dei Menu</value>
         </key>
@@ -386,6 +396,7 @@
             <value language="hr-HR">Novi pogled</value>
             <value language="it-IT">Nuova Visualizzazione</value>
         </key>
+
 
         <key name="showDocumentBounds">
             <value>Show Document Edges</value>
@@ -436,6 +447,7 @@
             <value language="it-IT">Visualizza Presentazione</value>
         </key>
 
+
     <!-- the View menu -->
         <key name="share">
             <value>Share</value>
@@ -462,6 +474,7 @@
             <value language="it-IT">Invia via Email in Formato PNG</value>
         </key>
 
+
     <!-- the Scripts menu -->
         <key name="scripts">
             <value>Scripts</value>
@@ -470,6 +483,8 @@
             <value language="it-IT">Scripts</value>
         </key>
     </set>
+
+
 
 
     <set name="sidebar">
