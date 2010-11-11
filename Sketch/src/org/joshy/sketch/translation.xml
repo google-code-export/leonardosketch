@@ -143,7 +143,7 @@
         <key name="cut">
             <value>Cut</value>
             <value language="de-DE">Ausschneiden</value>
-            <value language="hr-HR">Izre≈æi</value>
+            <value language="hr-HR">Izreži</value>
             <value language="it-IT">Taglia</value>
             <value language="tr-TR">Kes</value>
         </key>
@@ -164,14 +164,14 @@
         <key name="delete">
             <value>Delete</value>
             <value language="de-DE">Löschen</value>
-            <value language="hr-HR">Obri≈°i</value>
+            <value language="hr-HR">Obriši</value>
             <value language="it-IT">Elimina</value>
             <value language="tr-TR">Sil</value>
         </key>
         <key name="undo">
             <value>Undo</value>
             <value language="de-DE">Rueckgängig</value>
-            <value language="hr-HR">Poni≈°ti izmjenu</value>
+            <value language="hr-HR">Poništi izmjenu</value>
             <value language="it-IT">Annulla</value>
             <value language="tr-TR">Geri al</value>
         </key>
@@ -185,7 +185,7 @@
         <key name="clearSelection">
             <value>Clear Selection</value>
             <value language="de-DE">Auswahl löschen</value>
-            <value language="hr-HR">Poƒçisti odabir</value>
+            <value language="hr-HR">Počisti odabir</value>
             <value language="it-IT">Annulla Selezione</value>
             <value language="tr-TR">Seçileni sil</value>
         </key>
@@ -281,7 +281,7 @@
         <key name="matchNodeWidth">
             <value>Same Width</value>
             <value language="de-DE">Gleiche Breite</value>
-            <value language="hr-HR">Ista ≈°irina</value>
+            <value language="hr-HR">Ista širina</value>
             <value language="it-IT">Stessa Larghezza</value>
             <value language="tr-TR">Aynı ene getir</value>
         </key>
@@ -402,7 +402,7 @@
         <key name="setDocumentSize">
             <value>Set Document Size</value>
             <value language="de-DE">Setze Dokument Größe</value>
-            <value language="hr-HR">Podesi veliƒçinu dokumenta</value>
+            <value language="hr-HR">Podesi veličinu dokumenta</value>
             <value language="it-IT">Imposta Dimensioni Documento</value>
             <value language="tr-TR">Dosya büyüklüğü</value>
         </key>
@@ -419,7 +419,7 @@
         <key name="zoomIn">
             <value>Zoom In</value>
             <value language="de-DE">Hineinzoomen</value>
-            <value language="hr-HR">Pribli≈æi</value>
+            <value language="hr-HR">Približi</value>
             <value language="it-IT">Aumenta Zoom</value>
             <value language="tr-TR">Yakınlaştır</value>
         </key>
@@ -433,7 +433,7 @@
         <key name="zoomActual">
             <value>Actual Size</value>
             <value language="de-DE">Aktuelle Größe</value>
-            <value language="hr-HR">Stvarna veliƒçina</value>
+            <value language="hr-HR">Stvarna veličina</value>
             <value language="it-IT">Dimensione Originale</value>
             <value language="tr-TR">Asıl boyuta getir</value>
         </key>
@@ -462,21 +462,21 @@
         <key name="showDocumentBounds">
             <value>Show Document Edges</value>
             <value language="de-DE">Dokumentecken zeigen</value>
-            <value language="hr-HR">Prika≈æi granice dokumenta</value>
+            <value language="hr-HR">Prikaži granice dokumenta</value>
             <value language="it-IT">Visualizza Bordi Documento</value>
             <value language="tr-TR">Dosya köşelerini göster</value>
         </key>
         <key name="showGrid">
             <value>Show Grid</value>
             <value language="de-DE">zeige Raster</value>
-            <value language="hr-HR">Prika≈æi mre≈æu</value>
+            <value language="hr-HR">Prikaži mrežu</value>
             <value language="it-IT">Visualizza Griglia</value>
             <value language="tr-TR">Izgarayı göster</value>
         </key>
         <key name="snapGrid">
             <value>Snap to Grid</value>
             <value language="de-DE">Raster fangen</value>
-            <value language="hr-HR">Lijepi na mre≈æu</value>
+            <value language="hr-HR">Lijepi na mrežu</value>
             <value language="it-IT">Aggancia alla Griglia</value>
             <value language="tr-TR">Izgaraya yanaştır</value>
         </key>
@@ -504,7 +504,7 @@
         <key name="viewSymbolSidebar">
             <value>Symbol Panel</value>
             <value language="de-DE">Symbol Paneel</value>
-            <value language="hr-HR">Ploƒça sa simbolima</value>
+            <value language="hr-HR">Ploča sa simbolima</value>
             <value language="it-IT">Pannello dei Simboli</value>
             <value language="tr-TR">Sembol paneli</value>
         </key>
@@ -528,7 +528,7 @@
         <key name="sendTwitter">
             <value>Send to Twitter</value>
             <value language="de-DE">Zu Twitter senden</value>
-            <value language="hr-HR">Po≈°alji na Twitter</value>
+            <value language="hr-HR">Pošalji na Twitter</value>
             <value language="it-IT">Invia a Twitter</value>
             <value language="tr-TR">Twitter'a gönder</value>
         </key>
@@ -542,7 +542,7 @@
         <key name="sendEmailPNG">
             <value>Email as PNG</value>
             <value language="de-DE">Email als PNG</value>
-            <value language="hr-HR">Po≈°alji na emial kao PNG</value>
+            <value language="hr-HR">Pošalji na emial kao PNG</value>
             <value language="it-IT">Invia via Email in Formato PNG</value>
             <value language="tr-TR">PNG Email gönder</value>
         </key>
