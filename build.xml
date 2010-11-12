@@ -188,6 +188,35 @@
             <fileset dir="dist/">
             </fileset>
         </copy>
+        <echo file="${publish.dir}/index.html"><![CDATA[
+            <html>
+                <head>
+                    <title>Leonardo Daily Build ${build.number} ${TIMESTAMP}</title>
+                    <link rel="stylesheet" type="text/css" href="index.css"></link>
+                </head>
+                <body>
+                    <h1>Leonardo Daily Build</h1>
+                    <h2>Build number: ${build.number}</h2>
+                    <h2>Build date: ${TIMESTAMP}</h2>
+                    <h3>Builds</h3>
+                    
+                    <ul>
+                        <li><a href="Leonardo.app.zip">Leonardo</a> Mac OS X version</li>
+                        <li><a href="Leonardo.onejar.jar">Leonardo</a> double-clickable jar version</li>
+                        <li><a href="jnlp/Leonardo.jnlp">Leonardo</a> JNLP version</li>
+                        <li><a href="Leonardo.src.zip">source</a> zip</li>
+                        <li><a href="lib/">all jars</a></li>
+                    </ul>
+
+
+
+
+
+                </body>
+            </html>
+            ]]>
+        </echo>
+        <copy todir="${publish.dir}" file="bin/index.css"/>
     </target>
 
     <target name="run" depends="build-sketch">
