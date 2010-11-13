@@ -168,7 +168,7 @@
     </macrodef>
 
     
-    <target name="dist" depends="build-sketch, build-mac, build-jnlp, build-onejar, build-src">
+    <target name="dist" depends="build-sketch, build-mac, build-jnlp, build-onejar, build-src, windows-exe">
     </target>
     
     <target name="build-src" depends="init">
@@ -241,6 +241,25 @@
             <src path="t/"/>
 
         </javac>
+    </target>
+    
+    <target name="windows-exe">
+        <taskdef name="jsmoothgen"
+             classname="net.charabia.jsmoothgen.ant.JSmoothGen"
+             classpath="bin/jsmooth/lib/jsmoothgen-ant.jar"/>        
+        <jsmoothgen project="bin/LeonardoSketch.jsmooth" 
+            skeletonroot="bin/jsmooth/skeletons"/>        
+            
+        <copy todir="dist" file="bin/LeonardoSketch.exe"/>
+        <zip destfile="dist/LeonardoSketch-windows.zip">
+            <zipfileset dir="dist" prefix="LeonardoSketch">
+                <include name="*.exe"/>
+                <include name="jnlp/**"/>
+            </zipfileset>
+        </zip>
+
+
+
 
     </target>
 </project>
