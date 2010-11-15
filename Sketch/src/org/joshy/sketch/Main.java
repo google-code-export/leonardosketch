@@ -220,6 +220,7 @@ public class Main implements Runnable {
                 new Panel() {
                     @Override
                     public void doLayout() {
+                        super.doLayout();
                         for(Control c : controlChildren()) {
                             if(c == hruler) {
                                 c.setWidth(getWidth()-30);
