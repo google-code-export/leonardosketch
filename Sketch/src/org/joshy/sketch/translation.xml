@@ -11,6 +11,7 @@
             <value language="en-US">File</value>
             <value language="de-DE">Datei</value>
             <value language="hr-HR">File</value>
+            <value language="fr-FR">Fichier</value>
             <value language="tr-TR" author="Rıdvan Ağar">Turkish File</value>
         </key>
 
@@ -23,6 +24,7 @@
             <value language="de-DE">Neuste Dateien</value>
             <value language="hr-HR">Zadnje otvoreni</value>
             <value language="it-IT">File Recenti</value>
+            <value language="fr-FR">Fichiers récents</value>
             <value language="tr-TR">En son dosyalar</value>
         </key>
         <key name="new">
@@ -30,6 +32,7 @@
             <value language="de-DE">Neu</value>
             <value language="hr-HR">Novo</value>
             <value language="it-IT">Nuovo</value>
+            <value language="fr-FR">Nouveau</value>
             <value language="tr-TR">Yeni</value>
         </key>
         <key name="open">
@@ -37,6 +40,7 @@
             <value language="de-DE">Öffnen</value>
             <value language="hr-HR">Otvori</value>
             <value language="it-IT">Apri</value>
+            <value language="fr-FR">Ouvrir</value>
             <value language="tr-TR">Aç</value>
         </key>
         <key name="save">
@@ -45,6 +49,7 @@
             <value language="hr-HR">Spremi</value>
             <value language="it-IT">Salva</value>
             <value language="tr-TR">Kaydet</value>
+            <value language="fr-FR">Enregistrer</value>
         </key>
         <key name="saveas">
             <value>Save As</value>
@@ -52,6 +57,7 @@
             <value language="hr-HR">Spremi kao</value>
             <value language="it-IT">Salva come</value>
             <value language="tr-TR">Farklı kaydet</value>
+            <value language="fr-FR">Enregistrer sous</value>
         </key>
         <key name="close">
             <value>Close</value>
@@ -59,6 +65,7 @@
             <value language="hr-HR">Zatvori</value>
             <value language="it-IT">Chiudi</value>
             <value language="tr-TR">Kapat</value>
+            <value language="fr-FR">Fermer</value>
         </key>
         <key name="topng">
             <value>to PNG</value>
@@ -66,6 +73,7 @@
             <value language="hr-HR">kao PNG</value>
             <value language="it-IT">in PNG</value>
             <value language="tr-TR">PNG</value>
+            <value language="fr-FR">en PNG</value>
         </key>
         <key name="tosvg">
             <value>to SVG</value>
@@ -73,6 +81,7 @@
             <value language="hr-HR">kao SVG</value>
             <value language="it-IT">in SVG</value>
             <value language="tr-TR">SVG</value>
+            <value language="fr-FR">en SVG</value>
         </key>
         <key name="tohtml">
             <value>to HTML</value>
@@ -80,6 +89,7 @@
             <value language="hr-HR">kao HTML</value>
             <value language="it-IT">in HTML</value>
             <value language="tr-TR">HTML</value>
+            <value language="fr-FR">en HTML</value>
         </key>
         <key name="tocanvas">
             <value>to HTML Canvas</value>
@@ -87,6 +97,7 @@
             <value language="hr-HR">kao HTML Canvas</value>
             <value language="it-IT">in HTML Canvas</value>
             <value language="tr-TR">HTML Canvas</value>
+            <value language="fr-FR">en Canvas HTML</value>
         </key>
         <key name="topdf">
             <value>to PDF</value>
@@ -94,6 +105,7 @@
             <value language="hr-HR">kao PDF</value>
             <value language="it-IT">in PDF</value>
             <value language="tr-TR">PDF</value>
+            <value language="fr-FR">en PDF</value>
         </key>
         <key name="exit">
             <value>Exit</value>
@@ -101,6 +113,7 @@
             <value language="hr-HR">Izlaz</value>
             <value language="it-IT">Esci</value>
             <value language="tr-TR">Çık</value>
+            <value language="fr-FR">Quitter</value>
         </key>
         
         <key name="settings">
@@ -109,6 +122,7 @@
             <value language="hr-HR">Postavke</value>
             <value language="it-IT">Impostazioni</value>
             <value language="tr-TR">Ayarlar</value>
+            <value language="fr-FR">Préférences</value>
         </key>
         <key name="about">
             <value>About</value>
@@ -116,6 +130,7 @@
             <value language="hr-HR">O programu</value>
             <value language="it-IT">Informazioni su</value>
             <value language="tr-TR">Program hakkında</value>
+            <value language="fr-FR">A propos</value>
         </key>
 
 
@@ -126,6 +141,7 @@
             <value language="hr-HR">Prozor</value>
             <value language="it-IT">Finestra</value>
             <value language="tr-TR">Pencere</value>
+            <value language="fr-FR">Fenêtre</value>
             <value language="zz_ZZ">Zindow</value>
         </key>
 
@@ -139,6 +155,7 @@
             <value language="hr-HR">Uredi</value>
             <value language="it-IT">Modifica</value>
             <value language="tr-TR">Değiştir</value>
+            <value language="fr-FR">Edition</value>
         </key>
         <key name="cut">
             <value>Cut</value>
@@ -146,6 +163,7 @@
             <value language="hr-HR">Izreži</value>
             <value language="it-IT">Taglia</value>
             <value language="tr-TR">Kes</value>
+            <value language="fr-FR">Couper</value>
         </key>
         <key name="copy">
             <value>Copy</value>
@@ -153,6 +171,7 @@
             <value language="hr-HR">Kopiraj</value>
             <value language="it-IT">Copia</value>
             <value language="tr-TR">Kopyala</value>
+            <value language="fr-FR">Copier</value>
         </key>
         <key name="paste">
             <value>Paste</value>
@@ -160,6 +179,7 @@
             <value language="hr-HR">Zalijepi</value>
             <value language="it-IT">Incolla</value>
             <value language="tr-TR">Yapıştır</value>
+            <value language="fr-FR">Coller</value>
         </key>
         <key name="delete">
             <value>Delete</value>
@@ -167,6 +187,7 @@
             <value language="hr-HR">Obriši</value>
             <value language="it-IT">Elimina</value>
             <value language="tr-TR">Sil</value>
+            <value language="fr-FR">Supprimer</value>
         </key>
         <key name="undo">
             <value>Undo</value>
@@ -174,6 +195,7 @@
             <value language="hr-HR">Poništi izmjenu</value>
             <value language="it-IT">Annulla</value>
             <value language="tr-TR">Geri al</value>
+            <value language="fr-FR">Annuler</value>
         </key>
         <key name="redo">
             <value>Redo</value>
@@ -181,6 +203,7 @@
             <value language="hr-HR">Ponovi izmjenu</value>
             <value language="it-IT">Ripristina</value>
             <value language="tr-TR">Tekrarla</value>
+            <value language="fr-FR">Rétablir</value>
         </key>
         <key name="clearSelection">
             <value>Clear Selection</value>
@@ -188,6 +211,7 @@
             <value language="hr-HR">Počisti odabir</value>
             <value language="it-IT">Annulla Selezione</value>
             <value language="tr-TR">Seçileni sil</value>
+            <value language="fr-FR">Désélectionner</value>
         </key>
         <key name="setBackgroundColor">
             <value>Set Background Color</value>
@@ -195,6 +219,7 @@
             <value language="hr-HR">Postavi pozadinsku boju</value>
             <value language="it-IT">Imposta Colore di Sfondo</value>
             <value language="tr-TR">Arka plan rengini değiştir</value>
+            <value language="fr-FR">Choisir la couleur de fond</value>
         </key>
 
 
@@ -207,6 +232,7 @@
             <value language="hr-HR">Element</value>
             <value language="it-IT">Nodo</value>
             <value language="tr-TR">Öğe</value>
+            <value language="fr-FR">Elément</value>
         </key>
         <key name="raiseNodeTop">
             <value>Raise to Top</value>
@@ -214,6 +240,7 @@
             <value language="hr-HR">Podigni na vrh</value>
             <value language="it-IT">Porta in cima</value>
             <value language="tr-TR">Öne getir</value>
+            <value language="fr-FR">Monter au premier plan</value>
         </key>
         <key name="raiseNode">
             <value>Raise Node</value>
@@ -221,6 +248,7 @@
             <value language="hr-HR">Podigni element</value>
             <value language="it-IT">Alza di un livello</value>
             <value language="tr-TR">Öğeyi bir basamak yukarı çıkar</value>
+            <value language="fr-FR">Monter</value>
         </key>
         <key name="lowerNode">
             <value>Lower Node</value>
@@ -228,6 +256,7 @@
             <value language="hr-HR">Spusti element</value>
             <value language="it-IT">Abbassa di un livello</value>
             <value language="tr-TR">Öğeyi bir basamak aşağı indir</value>
+            <value language="fr-FR">Descendre</value>
         </key>
         <key name="lowerNodeBottom">
             <value>Lower to Bottom</value>
@@ -235,6 +264,7 @@
             <value language="hr-HR">Spusti na dno</value>
             <value language="it-IT">Porta in fondo</value>
             <value language="tr-TR">En aşağı indir</value>
+            <value language="fr-FR">Descendre à l'arrière plan</value>
         </key>
         <key name="alignNodeTop">
             <value>Align Top</value>
@@ -242,6 +272,7 @@
             <value language="hr-HR">Poravnaj vrh</value>
             <value language="it-IT">Allinea in Alto</value>
             <value language="tr-TR">En yukarı yasla</value>
+            <value language="fr-FR">Aligner en haut</value>
         </key>
         <key name="alignNodeBottom">
             <value>Align Bottom</value>
@@ -249,6 +280,7 @@
             <value language="hr-HR">Poravnaj dno</value>
             <value language="it-IT">Allinea in Basso</value>
             <value language="tr-TR">En aşağı yasla</value>
+            <value language="fr-FR">Aligner en bas</value>
         </key>
         <key name="alignNodeLeft">
             <value>Align Left</value>
@@ -256,6 +288,7 @@
             <value language="hr-HR">Poravnaj lijevo</value>
             <value language="it-IT">Allinea a Sinistra</value>
             <value language="tr-TR">Sola yasla</value>
+            <value language="fr-FR">Aligner à gauche</value>
         </key>
         <key name="alignNodeRight">
             <value>Align Right</value>
@@ -263,6 +296,7 @@
             <value language="hr-HR">Poravnaj desno</value>
             <value language="it-IT">Allinea a Destra</value>
             <value language="tr-TR">Sağa yasla</value>
+            <value language="fr-FR">Aligner à droite</value>
         </key>
         <key name="alignNodeCenterHorizontal">
             <value>Align Center Horizontal</value>
@@ -270,6 +304,7 @@
             <value language="hr-HR">Centriraj horizontalno</value>
             <value language="it-IT">Centra in Orizzontale</value>
             <value language="tr-TR">Yatay ortala</value>
+            <value language="fr-FR">Centrer horizontalement</value>
         </key>
         <key name="alignNodeCenterVertical">
             <value>Align Center Vertical</value>
@@ -277,6 +312,7 @@
             <value language="hr-HR">Centriraj vertikalno</value>
             <value language="it-IT">Centra in Verticale</value>
             <value language="tr-TR">Dikey ortala</value>
+            <value language="fr-FR">Centrer verticalement</value>
         </key>
         <key name="matchNodeWidth">
             <value>Same Width</value>
@@ -284,6 +320,7 @@
             <value language="hr-HR">Ista širina</value>
             <value language="it-IT">Stessa Larghezza</value>
             <value language="tr-TR">Aynı ene getir</value>
+            <value language="fr-FR">Même largeur</value>
         </key>
         <key name="matchNodeHeight">
             <value>Same Height</value>
@@ -291,6 +328,7 @@
             <value language="hr-HR">Ista visina</value>
             <value language="it-IT">Stessa Altezza</value>
             <value language="tr-TR">Aynı boya getir</value>
+            <value language="fr-FR">Même hauteur</value>
         </key>
         <key name="groupSelection">
             <value>Group Selection</value>
@@ -298,6 +336,7 @@
             <value language="hr-HR">Grupni odabir</value>
             <value language="it-IT">Raggruppa Selezione</value>
             <value language="tr-TR">Grup seç</value>
+            <value language="fr-FR">Grouper</value>
         </key>
         <key name="ungroupSelection">
             <value>Ungroup Selection</value>
@@ -305,6 +344,7 @@
             <value language="hr-HR">Rastavi grupu</value>
             <value language="it-IT">Elimina Raggruppamento</value>
             <value language="tr-TR">Grup seçimini kaldır</value>
+            <value language="fr-FR">Dégrouper</value>
         </key>
         <key name="createSymbol">
             <value>Create Symbol from Selection</value>
@@ -312,6 +352,7 @@
             <value language="hr-HR">Kreiraj simbol od odabranog</value>
             <value language="it-IT">Crea Simbolo dalla Selezione</value>
             <value language="tr-TR">Seçilenden sembol oluştur</value>
+            <value language="fr-FR">Créér un symbole avec la sélection</value>
         </key>
         <key name="createResizableShape">
             <value>Create Resizable Shape from Selection</value>
@@ -319,6 +360,7 @@
             <value language="hr-HR">Kreiraj rastezljivi oblik od odabira</value>
             <value language="it-IT">Crea Forma Ridimensionabile dalla Selezione</value>
             <value language="tr-TR">Seçilenden boyutlandırılabilir şekil oluştur</value>
+            <value language="fr-FR">Crééer une forme redimentionnable avec la sélection</value>
         </key>
         <key name="editResizableShape">
             <value>Edit Resizable Shape</value>
@@ -326,6 +368,7 @@
             <value language="hr-HR">Izmjeni rastezljivi oblik</value>
             <value language="it-IT">Modifica Forma Ridimensionabile</value>
             <value language="tr-TR">Boyutlandırılabilir şekli değiştir</value>
+            <value language="fr-FR">Editer la forme redimentionnable</value>
         </key>
         <key name="duplicateNode">
             <value>Duplicate</value>
@@ -333,6 +376,7 @@
             <value language="hr-HR">Dupliciraj</value>
             <value language="it-IT">Duplica</value>
             <value language="tr-TR">Kopyasını çikar</value>
+            <value language="fr-FR">Dupliquer</value>
         </key>
         <key name="resetTransforms">
             <value>Reset Transforms</value>
@@ -340,6 +384,7 @@
             <value language="hr-HR">Resetiraj transformacije</value>
             <value language="it-IT">Annulla Trasformazioni</value>
             <value language="tr-TR">Transformasyonu geri al</value>
+            <value language="fr-FR">Réinitialiser les transformations</value>
         </key>
 
 
@@ -349,24 +394,28 @@
             <value language="de-DE">Pfad</value>
             <value language="hr-HR">Krivulja</value>
             <value language="tr-TR">Dosya adresi</value>
+            <value language="fr-FR">Chemin</value>
         </key>
         <key name="flipNodeHorizontal">
             <value>Flip Horizontal</value>
             <value language="de-DE">Horizontal drehen</value>
             <value language="hr-HR">Preokreni horizontalno</value>
             <value language="tr-TR">Yatay dönder</value>
+            <value language="fr-FR">Retourner horizontalement</value>
         </key>
         <key name="flipNodeVertical">
             <value>Flip Vertical</value>
             <value language="de-DE">Vertikal drehen</value>
             <value language="hr-HR">Preokreni vertikalno</value>
             <value language="tr-TR">Dikey dönder</value>
+            <value language="fr-FR">Retourner verticalement</value>
         </key>
         <key name="rotateNode90Right">
             <value>Rotate 90° Clockwise</value>
             <value language="de-DE">90° in Uhrzeigersinn drehen</value>
             <value language="hr-HR">Rotiraj 90° u smjeru kazaljke</value>
             <value language="tr-TR">90° saat yönünde dönder</value>
+            <value language="fr-FR">Tourner de 90° vers la droite</value>
         </key>
         <key name="rotateNode90Left">
             <value>Rotate 90° Counter Clockwise</value>
@@ -374,6 +423,7 @@
             <value language="hr-HR">Rotiraj 90° obrnuto od smjera kazaljke</value>
             <value language="it-IT">Ruota di 90° in Senso Antiorario</value>
             <value language="tr-TR">90° sola dönder</value>
+            <value language="fr-FR">Tourner de 90° vers la gauche</value>
         </key>
         <key name="rotateNodeFree">
             <value>Free Rotate</value>
@@ -381,6 +431,7 @@
             <value language="hr-HR">Rotiraj proizvoljno</value>
             <value language="it-IT">Ruota Arbitrariamente</value>
             <value language="tr-TR">Her yöne dönder</value>
+            <value language="fr-FR">Rotation libre</value>
         </key>
         <key name="scaleNode">
             <value>Scale Transform</value>
@@ -388,6 +439,7 @@
             <value language="hr-HR">Rastegni</value>
             <value language="it-IT">Scala</value>
             <value language="tr-TR">Transformasyonu ayarla</value>
+            <value language="fr-FR">Mettre à l'échelle</value>
         </key>
 
 
@@ -398,6 +450,7 @@
             <value language="hr-HR">Dokument</value>
             <value language="it-IT">Documento</value>
             <value language="tr-TR">Dosya</value>
+            <value language="fr-FR">Document</value>
         </key>
         <key name="setDocumentSize">
             <value>Set Document Size</value>
@@ -405,6 +458,7 @@
             <value language="hr-HR">Podesi veličinu dokumenta</value>
             <value language="it-IT">Imposta Dimensioni Documento</value>
             <value language="tr-TR">Dosya büyüklüğü</value>
+            <value language="fr-FR">Choisir la taille du document</value>
         </key>
 
 
@@ -415,6 +469,7 @@
             <value language="hr-HR">Pogled</value>
             <value language="it-IT">Visualizza</value>
             <value language="tr-TR">İzle</value>
+            <value language="fr-FR">Affichage</value>
         </key>
         <key name="zoomIn">
             <value>Zoom In</value>
@@ -422,6 +477,7 @@
             <value language="hr-HR">Približi</value>
             <value language="it-IT">Aumenta Zoom</value>
             <value language="tr-TR">Yakınlaştır</value>
+            <value language="fr-FR">Zoomer</value>
         </key>
         <key name="zoomOut">
             <value>Zoom Out</value>
@@ -429,6 +485,7 @@
             <value language="hr-HR">Odalji</value>
             <value language="it-IT">Riduci Zoom</value>
             <value language="tr-TR">Uzaklaştır</value>
+            <value language="fr-FR">Dézoomer</value>
         </key>
         <key name="zoomActual">
             <value>Actual Size</value>
@@ -436,6 +493,7 @@
             <value language="hr-HR">Stvarna veličina</value>
             <value language="it-IT">Dimensione Originale</value>
             <value language="tr-TR">Asıl boyuta getir</value>
+            <value language="fr-FR">Taille d'origine</value>
         </key>
         <key name="fullScreen">
             <value>Full Screen</value>
@@ -443,12 +501,14 @@
             <value language="hr-HR">Preko cijelog ekrana</value>
             <value language="it-IT">A Tutto Schermo</value>
             <value language="tr-TR">Tam ekran</value>
+            <value language="fr-FR">Plein écran</value>
         </key>
         <key name="fullScreenWithMenubar">
             <value>Full Screen with Menubar</value>
             <value language="de-DE">Vollbild mit Menueleiste</value>
             <value language="hr-HR">Preko cijelog ekrana sa menijem</value>
             <value language="it-IT">A Tutto Schermo con Barra dei Menu</value>
+            <value language="fr-FR">Plein écran avec barre de menu</value>
         </key>
         <key name="newView">
             <value>New View</value>
@@ -456,6 +516,7 @@
             <value language="hr-HR">Novi pogled</value>
             <value language="it-IT">Nuova Visualizzazione</value>
             <value language="tr-TR">Yeni izleme</value>
+            <value language="fr-FR">Nouvelle vue</value>
         </key>
 
 
@@ -465,6 +526,7 @@
             <value language="hr-HR">Prikaži granice dokumenta</value>
             <value language="it-IT">Visualizza Bordi Documento</value>
             <value language="tr-TR">Dosya köşelerini göster</value>
+            <value language="fr-FR">Afficher les bords du document</value>
         </key>
         <key name="showGrid">
             <value>Show Grid</value>
@@ -472,6 +534,7 @@
             <value language="hr-HR">Prikaži mrežu</value>
             <value language="it-IT">Visualizza Griglia</value>
             <value language="tr-TR">Izgarayı göster</value>
+            <value language="fr-FR">Afficher la grille</value>
         </key>
         <key name="snapGrid">
             <value>Snap to Grid</value>
@@ -479,6 +542,7 @@
             <value language="hr-HR">Lijepi na mrežu</value>
             <value language="it-IT">Aggancia alla Griglia</value>
             <value language="tr-TR">Izgaraya yanaştır</value>
+            <value language="fr-FR">Magnétisme avec la grille</value>
         </key>
         <key name="snapDocEdges">
             <value>Snap to Doc Edges</value>
@@ -486,6 +550,7 @@
             <value language="hr-HR">Lijepi za rubove dokumenta</value>
             <value language="it-IT">Aggancia ai Bordi del Documento</value>
             <value language="tr-TR">Dosya köşelerine yanaştır</value>
+            <value language="fr-FR">Magnétisme avec les bords du document</value>
         </key>
         <key name="snapNodeEdges">
             <value>Snap to Node Edges</value>
@@ -493,6 +558,7 @@
             <value language="hr-HR">Lijepi za rubove elementa</value>
             <value language="it-IT">Aggancia ai Bordi del Nodo</value>
             <value language="tr-TR">Öğe köşelerine yanaştır</value>
+            <value language="fr-FR">Magnétisme avec les bords des éléments</value>
         </key>
         <key name="viewFlickrSidebar">
             <value>Flickr Search</value>
@@ -500,6 +566,7 @@
             <value language="hr-HR">Flickr pretraga</value>
             <value language="it-IT">Ricerca su Flickr</value>
             <value language="tr-TR">Flickr'da ara</value>
+            <value language="fr-FR">Recherche Flickr</value>
         </key>
         <key name="viewSymbolSidebar">
             <value>Symbol Panel</value>
@@ -507,6 +574,7 @@
             <value language="hr-HR">Ploča sa simbolima</value>
             <value language="it-IT">Pannello dei Simboli</value>
             <value language="tr-TR">Sembol paneli</value>
+            <value language="fr-FR">Panneau des symboles</value>
         </key>
         <key name="viewPresentation">
             <value>View Presentation</value>
@@ -514,6 +582,7 @@
             <value language="hr-HR">Pogledaj prezentaciju</value>
             <value language="it-IT">Visualizza Presentazione</value>
             <value language="tr-TR">Sunumu göster</value>
+            <value language="fr-FR">Afficher présentation</value>
         </key>
 
 
@@ -524,6 +593,7 @@
             <value language="hr-HR">Podijeli</value>
             <value language="it-IT">Condividi</value>
             <value language="tr-TR">Paylaş</value>
+            <value language="fr-FR">Partager</value>
         </key>
         <key name="sendTwitter">
             <value>Send to Twitter</value>
@@ -531,6 +601,7 @@
             <value language="hr-HR">Pošalji na Twitter</value>
             <value language="it-IT">Invia a Twitter</value>
             <value language="tr-TR">Twitter'a gönder</value>
+            <value language="fr-FR">Sur Twitter</value>
         </key>
         <key name="configTwitter">
             <value>Change Twitter Settings</value>
@@ -538,6 +609,7 @@
             <value language="hr-HR">Izmijeni postavke za Twitter</value>
             <value language="it-IT">Cambia Impostazioni Twitter</value>
             <value language="tr-TR">Twitter ayarları</value>
+            <value language="fr-FR">Changer les paramètres pour Twitter</value>
         </key>
         <key name="sendEmailPNG">
             <value>Email as PNG</value>
@@ -545,6 +617,7 @@
             <value language="hr-HR">Pošalji na emial kao PNG</value>
             <value language="it-IT">Invia via Email in Formato PNG</value>
             <value language="tr-TR">PNG Email gönder</value>
+            <value language="fr-FR">Envoyer par mail en PNG</value>
         </key>
 
 
@@ -555,6 +628,7 @@
             <value language="hr-HR">Skripte</value>
             <value language="it-IT">Scripts</value>
             <value language="tr-TR">Scriptler</value>
+            <value language="fr-FR">Scripts</value>
         </key>
     </set>
 
@@ -568,6 +642,7 @@
             <value language="hr-HR">Simboli</value>
             <value language="it-IT">Simboli</value>
             <value language="tr-TR">Semboller</value>
+            <value language="fr-FR">Symboles</value>
         </key>
         <key name="flickr">
             <value>Flickr Search</value>
@@ -575,6 +650,7 @@
             <value language="hr-HR">Pretraga na Flickr</value>
             <value language="it-IT">Ricerca su Flickr</value>
             <value language="tr-TR">Flickr'da ara</value>
+            <value language="fr-FR">Recherche Flickr</value>
         </key>
     </set>
 
