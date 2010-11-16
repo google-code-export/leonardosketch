@@ -308,23 +308,27 @@ public class Main implements Runnable {
         wishStatus.setPrefWidth(130);
         makeAWishAction = new Callback<ActionEvent>(){
             public void call(ActionEvent actionEvent) {
-                try {
-                    new XMLRequest()
-                            .setMethod(XMLRequest.METHOD.POST)
-                            .setURL("http://joshy.org:8081/AminoWebServices/MakeAWish")
-                            .setParameter("message",wishBox.getText())
-                            .onComplete(new Callback<Doc>(){
-                                public void call(Doc doc) {
-                                    u.p("request completed");
-                                    wishStatus.setText("Wish received!");
-                                }
-                            }).start();
-                    wishBox.setText("");
-                    wishStatus.setText("Making wish...");
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if(wishBox.getText().trim().length() < 2) {
+                    StandardDialog.showError("You must type in your wish for a feature before sending.");
+                } else {
+                    try {
+                        new XMLRequest()
+                                .setMethod(XMLRequest.METHOD.POST)
+                                .setURL("http://joshy.org:8081/AminoWebServices/MakeAWish")
+                                .setParameter("message",wishBox.getText())
+                                .onComplete(new Callback<Doc>(){
+                                    public void call(Doc doc) {
+                                        u.p("request completed");
+                                        wishStatus.setText("Wish received!");
+                                    }
+                                }).start();
+                        wishBox.setText("");
+                        wishStatus.setText("Making wish...");
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         };

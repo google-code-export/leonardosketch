@@ -1,7 +1,6 @@
 package org.joshy.sketch.controls;
 
 import org.joshy.gfx.util.u;
-import org.joshy.sketch.actions.NewAction;
 
 import javax.swing.*;
 
@@ -13,6 +12,14 @@ import javax.swing.*;
 * To change this template use File | Settings | File Templates.
 */
 public class StandardDialog {
+    public static void showError(String message) {
+        JOptionPane.showMessageDialog(null
+                , message
+                , message
+                , JOptionPane.OK_OPTION
+        );
+
+    }
 
     public static enum Result {Yes, No, Cancel};
     public static Result showYesNoCancel(String text, String yesText, String noText, String cancelText) {
