@@ -156,6 +156,7 @@ public class TwitPicAction extends SAction {
                                                 context.getSettings().setProperty(TWITTER_TOKEN_SECRET,accessToken.getTokenSecret());
                                             } catch (TwitterException e) {
                                                 e.printStackTrace();
+                                                StandardDialog.showError("Twitter authentication failed.\nPlease try again.");
                                             }
                                         }
                                     }))
