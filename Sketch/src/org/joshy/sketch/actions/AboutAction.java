@@ -11,6 +11,7 @@ import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.Main;
+import org.joshy.sketch.controls.ImageBox.ImageBox;
 
 
 /**
@@ -49,8 +50,10 @@ public class AboutAction extends SAction {
         
         //leonardo sketch
         stage.setContent(new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
+                .add(new HFlexBox()
+                        .add(new ImageBox().setImage(Main.class.getResource("resources/Turtle.png"))))
                 .add(new HFlexBox().add(new Label("Leonardo")).setId("aboutHeader"))
-                .add(new Linkbutton("http://leonardosketch.org/").onClicked(openLink))
+                .add(new HFlexBox().add(new Linkbutton("http://leonardosketch.org/").onClicked(openLink)))
                 .add(new HFlexBox()
                         .add(new Label("Version"))
                         .add(new Label(Main.releaseProperties.getProperty("org.joshy.sketch.build.version"))))
@@ -64,6 +67,8 @@ public class AboutAction extends SAction {
                 .add(new HFlexBox().add(new Spacer(),1).add(new Button("Close").onClicked(closeStage)))
         );
         stage.setWidth(400);
-        stage.setHeight(300);
+        stage.setHeight(350);
+        stage.centerOnScreen();
     }
 }
+                                       
