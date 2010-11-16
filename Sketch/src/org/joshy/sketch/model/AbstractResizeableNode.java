@@ -52,10 +52,10 @@ public abstract class AbstractResizeableNode extends SShape implements SResizeab
     @Override
     public Bounds getBounds() {
         return new Bounds(
-                getTranslateX()+getX(),
-                getTranslateY()+getY(),
-                getWidth(),
-                getHeight());
+                getTranslateX()+getX()-getStrokeWidth()/2,
+                getTranslateY()+getY()-getStrokeWidth()/2,
+                getWidth()+getStrokeWidth(),
+                getHeight()+getStrokeWidth());
     }
 
     @Override
