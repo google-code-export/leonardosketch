@@ -48,8 +48,8 @@ public class UpdateChecker {
                             }
                         }
                     })
-                    .onError(new Callback<Exception>() {
-                        public void call(Exception e) throws Exception {
+                    .onError(new Callback<Throwable>() {
+                        public void call(Throwable e) throws Exception {
                             u.p("there was an error: " + e);
                         }
                     })

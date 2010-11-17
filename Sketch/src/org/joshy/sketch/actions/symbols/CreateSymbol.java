@@ -4,6 +4,8 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.model.SNode;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 public class CreateSymbol extends SAction {
     private VectorDocContext context;
 
@@ -14,7 +16,7 @@ public class CreateSymbol extends SAction {
 
     @Override
     public String getDisplayName() {
-        return "Create Symbol";
+        return getString("menus.createSymbol");
     }
 
     @Override

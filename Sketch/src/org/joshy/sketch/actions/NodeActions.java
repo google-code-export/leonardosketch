@@ -9,6 +9,8 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 public class NodeActions {
 
 
@@ -22,7 +24,7 @@ public class NodeActions {
 
         @Override
         public String getDisplayName() {
-            return "Raise to Top";
+            return getString("menus.raiseNodeTop");
         }
 
         @Override
@@ -49,7 +51,7 @@ public class NodeActions {
 
         @Override
         public String getDisplayName() {
-            return "Raise";
+            return getString("menus.raiseNode");
         }
 
         @Override
@@ -91,7 +93,7 @@ public class NodeActions {
 
         @Override
         public String getDisplayName() {
-            return "Lower";
+            return getString("menus.lowerNode");
         }
 
         @Override
@@ -131,7 +133,7 @@ public class NodeActions {
 
         @Override
         public String getDisplayName() {
-            return "Lower to Bottom";
+            return getString("menus.lowerNodeBottom");
         }
 
         @Override
@@ -164,7 +166,7 @@ public class NodeActions {
 
         @Override
         public String getDisplayName() {
-            return "Align Top";
+            return getString("menus.alignNodeTop");
         }
 
         @Override
@@ -191,7 +193,7 @@ public class NodeActions {
 
         @Override
         public String getDisplayName() {
-            return "Align Bottom";
+            return getString("menus.alignNodeBottom");
         }
 
         @Override
@@ -218,7 +220,7 @@ public class NodeActions {
 
         @Override
         public String getDisplayName() {
-            return "Align Left";
+            return getString("menus.alignNodeLeft");
         }
 
         @Override
@@ -245,7 +247,7 @@ public class NodeActions {
 
         @Override
         public String getDisplayName() {
-            return "Align Right";
+            return getString("menus.alignNodeRight");
         }
 
         @Override
@@ -271,6 +273,11 @@ public class NodeActions {
         }
 
         @Override
+        public String getDisplayName() {
+            return getString("menus.alignNodeCenterVertical");
+        }
+
+        @Override
         public void execute() {
             double top = Integer.MAX_VALUE;
             double height = Integer.MIN_VALUE;
@@ -293,6 +300,11 @@ public class NodeActions {
     public static class AlignCenterH extends NodeAction {
         public AlignCenterH(VectorDocContext context) {
             super(context);
+        }
+
+        @Override
+        public String getDisplayName() {
+            return getString("menus.alignNodeCenterHorizontal");
         }
 
         @Override
@@ -325,7 +337,7 @@ public class NodeActions {
 
         @Override
         public String getDisplayName() {
-            return "Group";
+            return getString("menus.groupSelection");
         }
 
         @Override
@@ -361,6 +373,11 @@ public class NodeActions {
         }
 
         @Override
+        public String getDisplayName() {
+            return getString("menus.ungroupSelection");
+        }
+
+        @Override
         public void execute() {
             if(context.getSelection().size() != 1) return;
             SNode n = context.getSelection().items().iterator().next();
@@ -387,6 +404,11 @@ public class NodeActions {
         public SameWidth(VectorDocContext context, boolean doWidth) {
             super(context);
             this.doWidth = doWidth;
+        }
+
+        @Override
+        public String getDisplayName() {
+            return getString("menus.matchNodeWidth");
         }
 
         @Override
@@ -424,6 +446,11 @@ public class NodeActions {
         public DuplicateNodesAction(VectorDocContext context, boolean offset) {
             this.context = context;
             this.offset = offset;
+        }
+
+        @Override
+        public String getDisplayName() {
+            return getString("menus.matchNodeHeight");
         }
 
         @Override

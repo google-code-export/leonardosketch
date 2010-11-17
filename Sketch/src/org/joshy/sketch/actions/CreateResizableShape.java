@@ -6,6 +6,8 @@ import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 /**
  * Created by IntelliJ IDEA.
  * User: joshmarinacci
@@ -22,7 +24,7 @@ public class CreateResizableShape extends SAction {
 
     @Override
     public String getDisplayName() {
-        return "Create Resizable Shape";
+        return getString("menus.createResizableShape");
     }
 
     @Override
@@ -53,7 +55,7 @@ public class CreateResizableShape extends SAction {
 
         @Override
         public String getDisplayName() {
-            return "Edit Resizable Shape";
+            return getString("menus.editResizableShape");
         }
 
         @Override

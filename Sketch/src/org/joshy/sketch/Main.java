@@ -97,8 +97,8 @@ public class Main implements Runnable {
 
         setupSettings();
 
-        //Localization.init(Main.class.getResource("translation.xml"),"en_US");
-        Localization.init(Main.class.getResource("translation.xml"),locale);
+        Localization.init(Main.class.getResource("translation.xml"),"de-DE");
+        //Localization.init(Main.class.getResource("translation.xml"),locale);
 
         Core.setUseJOGL(false);
         Core.init();
@@ -303,7 +303,7 @@ public class Main implements Runnable {
     }
 
     private void setupStage(final DocContext context, DocModeHelper modeHelper) {
-        final Textbox wishBox = new Textbox().setHintText("type your wish for a feature here");
+        final Textbox wishBox = new Textbox().setHintText(getString("misc.wish.box"));
         final Label wishStatus = new Label("");
         wishStatus.setPrefWidth(130);
         makeAWishAction = new Callback<ActionEvent>(){
@@ -336,7 +336,7 @@ public class Main implements Runnable {
         final HFlexBox statusBar = new HFlexBox();
         statusBar.setBoxAlign(HFlexBox.Align.Baseline)
                 .add(wishBox,1)
-                .add(new Button("Make a wish!").onClicked(makeAWishAction))
+                .add(new Button(getString("misc.wish.button")).onClicked(makeAWishAction))
                 .add(wishStatus)
                 ;
         statusBar.setPrefWidth(450);

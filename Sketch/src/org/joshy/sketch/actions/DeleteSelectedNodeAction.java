@@ -7,6 +7,8 @@ import org.joshy.sketch.model.SketchDocument;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 /**
  * Created by IntelliJ IDEA.
  * User: joshmarinacci
@@ -23,7 +25,7 @@ public class DeleteSelectedNodeAction extends SAction {
 
     @Override
     public String getDisplayName() {
-        return "Delete";
+        return getString("menus.delete");
     }
 
     @Override

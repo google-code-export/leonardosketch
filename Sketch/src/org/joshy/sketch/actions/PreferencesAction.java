@@ -12,6 +12,7 @@ import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.Main;
+import static org.joshy.gfx.util.localization.Localization.getString;
 
 /**
 * Created by IntelliJ IDEA.
@@ -36,7 +37,7 @@ public class PreferencesAction extends SAction {
     public void execute() throws Exception {
         final Stage stage = Stage.createStage();
         boolean trackingEnabled = "true".equals(manager.settings.getProperty(Main.TRACKING_PERMISSIONS));
-        Checkbox trackingCheckbox = new Checkbox("Enable Launch Tracking");
+        Checkbox trackingCheckbox = new Checkbox(getString("preferences.enable.analytics.tracking"));
         trackingCheckbox.setSelected(trackingEnabled);
         trackingCheckbox.onClicked(new Callback<ActionEvent>(){
                 public void call(ActionEvent actionEvent) throws Exception {

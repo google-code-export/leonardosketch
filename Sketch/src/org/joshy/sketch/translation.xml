@@ -447,6 +447,18 @@
             <value language="tr-TR">Transformasyonu ayarla</value>
             <value language="fr-FR">Mettre à l'échelle</value>
         </key>
+        <key name="add">
+            <value>Add</value>
+            <value language="de-DE">Hinzufügen</value>
+        </key>
+        <key name="subtract">
+            <value>Subtract</value>
+            <value language="de-DE">Entpacken</value>
+        </key>
+        <key name="intersection">
+            <value>Intersection</value>
+            <value language="de-DE">Schnitt</value>
+        </key>
 
 
     <!-- the Document menu -->
@@ -525,6 +537,10 @@
             <value language="fr-FR">Nouvelle vue</value>
         </key>
 
+        <key name="create.new.set">
+            <value>Create New Set</value>
+            <value language="de-DE">Neuen Satz erzeugen</value>
+        </key>
 
         <key name="showDocumentBounds">
             <value>Show Document Edges</value>
@@ -659,6 +675,23 @@
             <value language="fr-FR">Recherche Flickr</value>
         </key>
     </set>
+    
+    <set name="misc">
+        <key name="wish.box">
+            <value>Type your wish for a feature here</value>
+            <value language="de-DE">Hier neues Werkzeug wünschen</value>
+        </key>
+        <key name="wish.button">
+            <value>Make a wish!</value>
+            <value language="de-DE">Hier wünschen</value>
+        </key>
+    </set>
 
+    <set name="preferences">
+        <key name="enable.analytics.tracking">
+            <value>Enable Analytics tracking</value>
+            <value language="de-DE">Analyse einschalten</value>
+        </key>
+    </set>
 
 </sets>

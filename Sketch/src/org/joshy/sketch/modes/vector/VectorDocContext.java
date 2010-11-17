@@ -231,9 +231,9 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 .addItem(getString("menus.rotateNodeFree"), new PathActions.Rotate(context))
                 .addItem(getString("menus.scaleNode"), new PathActions.Scale(context))
                 .separator()
-                .addItem("Add", new BooleanGeometry.Union(context))
-                .addItem("Subtract", new BooleanGeometry.Subtract(context))
-                .addItem("Intersection", new BooleanGeometry.Intersection(context))
+                .addItem(getString("menus.add"), new BooleanGeometry.Union(context))
+                .addItem(getString("menus.subtract"), new BooleanGeometry.Subtract(context))
+                .addItem(getString("menus.intersection"), new BooleanGeometry.Intersection(context))
                 .createJMenu());
         menubar.add(new Menu().setTitle(getString("menus.document"))
                 .addItem(getString("menus.setDocumentSize"), new DocumentActions.SetDocumentSize(this))
@@ -272,7 +272,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
             menubar.remove(context.symbolMenuJMenu);
         }
         context.symbolMenu = new Menu().setTitle("Symbol Sets");
-        context.symbolMenu.addItem("Create New Set", new SAction(){
+        context.symbolMenu.addItem(getString("menus.create.new.set"), new SAction(){
             @Override
             public void execute() {
                 String value = StandardDialog.showEditText("Name for new symbol set","untitled");
