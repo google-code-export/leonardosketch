@@ -18,6 +18,8 @@ import org.joshy.sketch.property.PropertyManager;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 public class FloatingPropertiesPanel extends HFlexBox {
     private boolean selected = false;
     private Selection selection;
@@ -132,7 +134,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
                 }
             }
         });
-        fillOpacityLabel = new Label("Opacity:");
+        fillOpacityLabel = new Label(getString("toolbar.opacity")+":");
         add(fillOpacityLabel);
         add(fillOpacitySlider);
 
@@ -194,7 +196,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
                 }
             }
         });
-        strokeWidthLabel = new Label("Stroke:");
+        strokeWidthLabel = new Label(getString("toolbar.stroke")+":");
         add(strokeWidthLabel);
         add(strokeWidthSlider);
 

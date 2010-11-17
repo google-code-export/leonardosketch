@@ -676,6 +676,17 @@
         </key>
     </set>
     
+    <set name="toolbar">
+        <key name="stroke">
+            <value>Stroke</value>
+            <value language="de-DE">Stärke</value>
+        </key>
+        <key name="opacity">
+            <value>Opacity</value>
+            <value language="de-DE">Deckkraft</value>
+        </key>
+    </set>
+    
     <set name="misc">
         <key name="wish.box">
             <value>Type your wish for a feature here</value>

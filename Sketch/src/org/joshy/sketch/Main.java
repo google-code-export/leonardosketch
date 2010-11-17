@@ -97,8 +97,8 @@ public class Main implements Runnable {
 
         setupSettings();
 
-        Localization.init(Main.class.getResource("translation.xml"),"de-DE");
-        //Localization.init(Main.class.getResource("translation.xml"),locale);
+        //Localization.init(Main.class.getResource("translation.xml"),"de-DE");
+        Localization.init(Main.class.getResource("translation.xml"),locale);
 
         Core.setUseJOGL(false);
         Core.init();
