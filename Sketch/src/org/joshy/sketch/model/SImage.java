@@ -90,6 +90,7 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
 
     public SImage(BufferedImage img, String relativeURL) {
         this.img = img;
+        image = Image.create(this.img);
         this.relativeURL = relativeURL;
         init();
     }
