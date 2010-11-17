@@ -499,7 +499,14 @@ public class Main implements Runnable {
                 .addItem(getString("menus.save"), "S",    new SaveAction(context, false,true))
                 .addItem(getString("menus.saveas"), "shift S", new SaveAction(context, true,true))
                 .addItem(getString("menus.close"), "W",   new CloseAction(canvas))
-                .addMenu(new Menu().setTitle("Export")
+                ;
+        
+        if("true".equals(System.getProperty("org.joshy.sketch.actions.enableImport"))) {
+            fileMenu.addItem(getString("menus.import"), new ImportAction(context));
+        }
+
+        fileMenu
+                .addMenu(new Menu().setTitle(getString("menus.export"))
                     .addItem(getString("menus.topng"),    new SavePNGAction(context))
                     .addItem(getString("menus.tosvg"),    new SaveSVGAction(context))
                     .addItem(getString("menus.tohtml"),   new SaveHTMLAction(context))

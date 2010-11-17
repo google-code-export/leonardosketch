@@ -67,6 +67,12 @@
             <value language="tr-TR">Kapat</value>
             <value language="fr-FR">Fermer</value>
         </key>
+        <key name="import">
+            <value>Import</value>
+        </key>
+        <key name="export">
+            <value>Export</value>
+        </key>
         <key name="topng">
             <value>to PNG</value>
             <value language="de-DE">zu PNG</value>
