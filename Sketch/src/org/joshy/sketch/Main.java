@@ -604,7 +604,11 @@ public class Main implements Runnable {
             try {
                 Doc doc = XMLParser.parse(file);
                 for(Elem e : doc.xpath("//file")) {
-                    files.add(new File(e.attr("filepath")));
+                    File f = new File(e.attr("filepath"));
+                    //files.add(new File(e.attr("filepath")));
+                    if(f.exists()) {
+                        files.add(f);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
