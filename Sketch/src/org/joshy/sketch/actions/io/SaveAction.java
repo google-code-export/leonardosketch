@@ -9,6 +9,7 @@ import org.joshy.sketch.modes.DocContext;
 
 import java.awt.*;
 import java.io.*;
+import java.net.URI;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -81,6 +82,17 @@ public class SaveAction extends SAction {
         out.putNextEntry(entry);
         XMLWriter outx = new XMLWriter(new PrintWriter(new OutputStreamWriter(out,"UTF-8")),file.toURI());
         ExportProcessor.process(new NativeExport(), outx, ((SketchDocument)context.getDocument()));
+        outx.close();
+        out.close();
+    }
+
+    public static void saveAsZip(OutputStream fout, String fileName, URI fileURI, SketchDocument doc) throws IOException {
+        ZipOutputStream out = new ZipOutputStream(fout);
+        String dir = fileName.replace(".leoz", "");
+        ZipEntry entry = new ZipEntry(dir+"/leo.xml");
+        out.putNextEntry(entry);
+        XMLWriter outx = new XMLWriter(new PrintWriter(new OutputStreamWriter(out,"UTF-8")),fileURI);
+        ExportProcessor.process(new NativeExport(), outx, doc);
         outx.close();
         out.close();
     }

@@ -103,7 +103,7 @@ public class OpenAction extends SAction {
         }
     }
 
-    public SketchDocument load(InputStream in, File file, String fileName) throws Exception {
+    public static SketchDocument load(InputStream in, File file, String fileName) throws Exception {
         Doc doc = XMLParser.parse(in);
         if(file != null) {
             doc.setBaseURI(file.toURI());
@@ -141,7 +141,7 @@ public class OpenAction extends SAction {
         return sdoc;
     }
 
-    private SketchDocument loadZip(File file) throws Exception {
+    public static SketchDocument loadZip(File file) throws Exception {
         ZipFile zf = new ZipFile(file);
         Enumeration<? extends ZipEntry> en = zf.entries();
         while(true) {
@@ -158,7 +158,7 @@ public class OpenAction extends SAction {
     }
 
 
-    private Doc upgradeDocument(Doc doc) {
+    private static Doc upgradeDocument(Doc doc) {
         URL upgradeXSL = NativeExport.class.getResource("upgrade_-1_0.xsl");
         //u.p("upgrade XSL = " + upgradeXSL);
         try {
@@ -171,7 +171,7 @@ public class OpenAction extends SAction {
         return doc;
     }
 
-    private void loadPage(SketchDocument sdoc, Elem epage) throws XPathExpressionException {
+    private static void loadPage(SketchDocument sdoc, Elem epage) throws XPathExpressionException {
         SketchDocument.SketchPage page = sdoc.addPage();
         for(Elem e : epage.xpath("./*")) {
             page.add(loadAnyShape(e));
