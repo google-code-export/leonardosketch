@@ -101,7 +101,7 @@ public class PNGExportTest {
 
     @Test public void testImage() throws IOException {
         URL url = this.getClass().getResource("redrect.png");
-        SImage image = new SImage(url);
+        SImage image = new SImage(url,"redrect.png");
         page.clear();
         page.add(image);
         assertTrue(saveAndReadbackPixel(doc,10,10) == 0xffff0000);

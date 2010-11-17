@@ -1,6 +1,7 @@
 package org.joshy.sketch.actions.io;
 
 import com.joshondesign.xml.XMLWriter;
+import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -10,7 +11,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 import static org.junit.Assert.assertTrue;
 
@@ -67,6 +70,30 @@ public class NativeExportTest {
 
         SketchDocument doc2 = OpenAction.loadZip(file);
         assertTrue(doc2.getPages().get(0).model.get(0) instanceof SRect);
+    }
+    @Test
+    public void exportLeozWithImage() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SketchDocument doc = new SketchDocument();
+        doc.getCurrentPage().model.add(new SRect(0,0,100,50));
+        SImage image = new SImage(NativeExportTest.class.getResource("redrect.png"),"redrect.png");
+        doc.getCurrentPage().model.add(image);
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing test to file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(
+                new FileOutputStream(file)
+                ,file.getName()
+                ,file.toURI()
+                ,doc
+        );
+        SketchDocument doc2 = OpenAction.loadZip(file);
+        assertTrue(doc2.getPages().get(0).model.get(0) instanceof SRect);
+        SNode node = doc2.getPages().get(0).model.get(1);
+        assertTrue(node instanceof SImage);
+        SImage img = (SImage) node;
+        u.p("relative url = " + img.getRelativeURL());
+        assertTrue(img.getRelativeURL().equals("redrect.png"));
     }
 
     @After

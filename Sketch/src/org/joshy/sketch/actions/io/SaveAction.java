@@ -4,12 +4,15 @@ import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.SAction;
+import org.joshy.sketch.model.SImage;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.*;
 import java.net.URI;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -81,8 +84,18 @@ public class SaveAction extends SAction {
         ZipEntry entry = new ZipEntry(dir+"/leo.xml");
         out.putNextEntry(entry);
         XMLWriter outx = new XMLWriter(new PrintWriter(new OutputStreamWriter(out,"UTF-8")),file.toURI());
-        ExportProcessor.process(new NativeExport(), outx, ((SketchDocument)context.getDocument()));
-        outx.close();
+        NativeExport export = new NativeExport();
+        export.setDelayedImageWriting(true);
+        ExportProcessor.process(export, outx, ((SketchDocument)context.getDocument()));
+        outx.flush();
+
+        List<SImage> images = export.getDelayedImages();
+        for(SImage image : images) {
+            ZipEntry ie = new ZipEntry(dir+"/"+image.getRelativeURL());
+            out.putNextEntry(ie);
+            ImageIO.write(image.getBufferedImage(),"png",out);
+            out.flush();
+        }
         out.close();
     }
 
@@ -92,8 +105,17 @@ public class SaveAction extends SAction {
         ZipEntry entry = new ZipEntry(dir+"/leo.xml");
         out.putNextEntry(entry);
         XMLWriter outx = new XMLWriter(new PrintWriter(new OutputStreamWriter(out,"UTF-8")),fileURI);
-        ExportProcessor.process(new NativeExport(), outx, doc);
-        outx.close();
+        NativeExport export = new NativeExport();
+        export.setDelayedImageWriting(true);
+        ExportProcessor.process(export, outx, doc);
+        outx.flush();
+        List<SImage> images = export.getDelayedImages();
+        for(SImage image : images) {
+            ZipEntry ie = new ZipEntry(dir+"/"+image.getRelativeURL());
+            out.putNextEntry(ie);
+            ImageIO.write(image.getBufferedImage(),"png",out);
+            out.flush();
+        }
         out.close();
     }
 

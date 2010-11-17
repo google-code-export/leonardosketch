@@ -5,7 +5,6 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.modes.DocContext;
 
 import javax.imageio.ImageIO;
@@ -17,11 +16,9 @@ import java.net.URI;
 import java.net.URL;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joshmarinacci
- * Date: Jun 9, 2010
- * Time: 3:55:46 PM
- * To change this template use File | Settings | File Templates.
+ * A sketch node representing an image. It is resizable.
+ * It can be created from a file, a buffered image, or a url, or an input stream.
+ * This lets us load images directly out of zip files, for example.
  */
 public class SImage extends SNode implements SelfDrawable, SResizeableNode {
     private File file;
@@ -33,6 +30,7 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
     private double x;
     private BackgroundTask<URI, BufferedImage> bgload;
     private Image thumb;
+    private String relativeURL = null;
 
     public SImage(File file) throws IOException {
         super();
@@ -83,19 +81,22 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
     }
 
     public SImage(URI baseURI, String fileName) throws IOException {
-        u.p("using uri: " + baseURI);
-        u.p("filename = " + fileName);
         URI fileURI = baseURI.resolve(fileName);
-        u.p("loading image from local file: " + fileURI);
         this.file = new File(fileURI);
         img = ImageIO.read(fileURI.toURL());
         image = Image.create(this.img);
         init();
     }
 
-    public SImage(URL url) throws IOException {
-        u.p("using URL : " + url);
+    public SImage(BufferedImage img, String relativeURL) {
+        this.img = img;
+        this.relativeURL = relativeURL;
+        init();
+    }
+
+    public SImage(URL url, String relativeURLString) throws IOException {
         this.file = null;
+        this.relativeURL = relativeURLString;
         img = ImageIO.read(url);
         image = Image.create(this.img);
         init();
@@ -153,6 +154,7 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
     }
 
     public String getRelativeURL() {
+        if(relativeURL != null) return relativeURL;
         return file.getName();
     }
 

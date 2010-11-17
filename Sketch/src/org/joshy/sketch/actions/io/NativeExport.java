@@ -17,11 +17,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class NativeExport implements ShapeExporter<XMLWriter> {
     public static final int CURRENT_VERSION = 0;
+    private boolean delayedImageWriting = false;
+    private List<SImage> delayedImages = new ArrayList<SImage>();
 
     public void docStart(XMLWriter out, SketchDocument doc) {
         out.header();
@@ -89,10 +93,14 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
 
         if(shape instanceof SImage) {
             saveAttribute(out,"relativeURL",shape);
-            try {
-                saveRelativeImage(out,(SImage)shape);
-            } catch (Exception e) {
-                e.printStackTrace();
+            if(delayedImageWriting) {
+                delayedImages.add((SImage)shape);
+            } else {
+                try {
+                    saveRelativeImage(out,(SImage)shape);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
         if(shape instanceof SShape) {
@@ -311,5 +319,13 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             return "#"+Integer.toHexString(((FlatColor)value).getRGBA());
         }
         return ""+value;
+    }
+
+    public void setDelayedImageWriting(boolean delayedImageWriting) {
+        this.delayedImageWriting = delayedImageWriting;
+    }
+
+    public List<SImage> getDelayedImages() {
+        return delayedImages;
     }
 }

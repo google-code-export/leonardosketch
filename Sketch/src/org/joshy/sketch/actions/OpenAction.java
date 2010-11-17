@@ -84,7 +84,7 @@ public class OpenAction extends SAction {
                 context.getMain().setupNewDoc(new VectorModeHelper(context.getMain()),doc);
             }
         } else {
-            SketchDocument doc = load(new FileInputStream(file), file, file.getName());
+            SketchDocument doc = load(new FileInputStream(file), file, file.getName(),null);
             if(doc.isPresentation()) {
                 context.getMain().setupNewDoc(new PresoModeHelper(context.getMain()),doc);
             } else {
@@ -103,7 +103,7 @@ public class OpenAction extends SAction {
         }
     }
 
-    public static SketchDocument load(InputStream in, File file, String fileName) throws Exception {
+    public static SketchDocument load(InputStream in, File file, String fileName, ZipFile zipFile) throws Exception {
         Doc doc = XMLParser.parse(in);
         if(file != null) {
             doc.setBaseURI(file.toURI());
@@ -117,7 +117,7 @@ public class OpenAction extends SAction {
             doc = upgradeDocument(doc);
         }
         for(Elem e : doc.xpath("/sketchy/page")) {
-            loadPage(sdoc,e);
+            loadPage(sdoc,e,zipFile);
         }
         String type = doc.xpathString("/sketchy/info/@type");
         if("presentation".equals(type)) {
@@ -151,7 +151,7 @@ public class OpenAction extends SAction {
             if(entry.getName().endsWith("/leo.xml")) {
                 String name = entry.getName();
                 String dir = name.substring(0, name.indexOf("/leo.xml"));
-                return load(zf.getInputStream(entry),null,dir);
+                return load(zf.getInputStream(entry),file,dir,zf);
             }
         }
         return null;
@@ -171,45 +171,45 @@ public class OpenAction extends SAction {
         return doc;
     }
 
-    private static void loadPage(SketchDocument sdoc, Elem epage) throws XPathExpressionException {
+    private static void loadPage(SketchDocument sdoc, Elem epage, ZipFile zipFile) throws XPathExpressionException {
         SketchDocument.SketchPage page = sdoc.addPage();
         for(Elem e : epage.xpath("./*")) {
-            page.add(loadAnyShape(e));
+            page.add(loadAnyShape(e,zipFile));
         }
     }
 
-    private static SNode loadAnyShape(Elem e) throws XPathExpressionException {
+    private static SNode loadAnyShape(Elem e, ZipFile zipFile) throws XPathExpressionException {
         if("group".equals(e.name())) {
-            return loadGroup(e);
+            return loadGroup(e,zipFile);
         }
         if("node".equals(e.name())) {
-            return loadNode(e);
+            return loadNode(e,zipFile);
         }
         if("shape".equals(e.name())) {
-            return loadShape(e);
+            return loadShape(e,zipFile);
         }
         if("resizeableNode".equals(e.name())) {
-            return (SNode) loadResizableNode(e);
+            return (SNode) loadResizableNode(e,zipFile);
         }
         return null;
     }
 
-    public static List<SNode> loadShapes(File file) throws Exception {
+    public static List<SNode> loadShapes(File file, ZipFile zipFile) throws Exception {
         Doc doc = XMLParser.parse(new FileInputStream(file));
         doc.setBaseURI(file.toURI());
         List<SNode> shapes = new ArrayList<SNode>();
         for(Elem e : doc.xpath("/sketchy/*")) {
-            shapes.add(loadAnyShape(e));
+            shapes.add(loadAnyShape(e,zipFile));
         }
         return shapes;
     }
 
-    private static SNode loadGroup(Elem elem) throws XPathExpressionException {
+    private static SNode loadGroup(Elem elem, ZipFile zipFile) throws XPathExpressionException {
         SGroup group = new SGroup();
         List<SNode> nodes = new ArrayList<SNode>();
         
         for(Elem element : elem.xpath("*")) {
-            SNode node = loadAnyShape(element);
+            SNode node = loadAnyShape(element,zipFile);
             if(node != null) nodes.add(node);
         }
         
@@ -220,11 +220,15 @@ public class OpenAction extends SAction {
         return group;
     }
 
-    private static SNode loadNode(Elem e) throws XPathExpressionException {
+    private static SNode loadNode(Elem e, ZipFile zipFile) throws XPathExpressionException {
         SNode node = null;
         if(e.attrEquals("type","image")) {
             try {
-                node = new SImage(e.getDoc().getBaseURI(),"resources/"+e.attr("relativeURL"));
+                if(zipFile == null) {
+                    node = new SImage(e.getDoc().getBaseURI(),"resources/"+e.attr("relativeURL"));
+                } else {
+                    node = loadSImageFromFile(e,zipFile);
+                }
                 loadNumberAttribute(e,node,"translateX");
                 loadNumberAttribute(e,node,"translateY");
             } catch (IOException e1) {
@@ -235,7 +239,19 @@ public class OpenAction extends SAction {
         return node;
     }
 
-    private static SNode loadShape(Elem e) throws XPathExpressionException {
+    private static SImage loadSImageFromFile(Elem e, ZipFile zipFile) throws IOException {
+        String path = e.attr("relativeURL");
+        String zfname = zipFile.getName();
+        String pth = zfname.substring(
+                        zfname.lastIndexOf("/")+1,
+                        zfname.lastIndexOf(".")
+                    )+"/"+path;
+        ZipEntry entry = zipFile.getEntry(pth);
+        BufferedImage img = ImageIO.read(zipFile.getInputStream(entry));
+        return new SImage(img,path);
+    }
+
+    private static SNode loadShape(Elem e, ZipFile zipFile) throws XPathExpressionException {
         SShape shape = null;
         if(e.attrEquals("type","path")) {
             shape = new SPath();
@@ -351,7 +367,7 @@ public class OpenAction extends SAction {
         }
     }
 
-    private static SResizeableNode loadResizableNode(Elem e) throws XPathExpressionException {
+    private static SResizeableNode loadResizableNode(Elem e, ZipFile zipFile) throws XPathExpressionException {
         SResizeableNode node = null;
         if(e.attrEquals("type","rect")) {
             node = new SRect();
@@ -380,7 +396,11 @@ public class OpenAction extends SAction {
         }
         if(e.attrEquals("type","image")) {
             try {
-                node = new SImage(e.getDoc().getBaseURI(),"resources/"+e.attr("relativeURL"));
+                if(zipFile == null) {
+                    node = new SImage(e.getDoc().getBaseURI(),"resources/"+e.attr("relativeURL"));
+                } else {
+                    node = loadSImageFromFile(e,zipFile);
+                }
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -415,7 +435,7 @@ public class OpenAction extends SAction {
         if(e.attrEquals("type","grid9")) {
             List<SNode> nodes = new ArrayList<SNode>();
             for(Elem element : e.xpath("*")) {
-                SNode nd = loadAnyShape(element);
+                SNode nd = loadAnyShape(element,zipFile);
                 if(nd != null) nodes.add(nd);
             }
 

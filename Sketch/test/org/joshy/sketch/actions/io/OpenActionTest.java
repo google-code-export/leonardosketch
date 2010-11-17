@@ -28,7 +28,7 @@ public class OpenActionTest {
         SketchCanvas canvas = new SketchCanvas(context);
         OpenAction action = new OpenAction(context);
         u.p("Url = " + this.getClass().getResource("simple.xml"));
-        action.load(this.getClass().getResourceAsStream("simple.xml"),null,"simple.xml");
+        action.load(this.getClass().getResourceAsStream("simple.xml"),null,"simple.xml",null);
         SketchDocument doc = canvas.getDocument();
         u.p("canvas doc = " + doc);
         for(SketchDocument.SketchPage page : doc.getPages()) {
@@ -47,7 +47,7 @@ public class OpenActionTest {
         SketchCanvas canvas = new SketchCanvas(context);
         OpenAction action = new OpenAction(context);
         u.p("Url = " + this.getClass().getResource("oldVersion_-1.xml"));
-        action.load(this.getClass().getResourceAsStream("oldVersion_-1.xml"),null,"oldVersion_-1.xml");
+        action.load(this.getClass().getResourceAsStream("oldVersion_-1.xml"),null,"oldVersion_-1.xml",null);
         SketchDocument doc = canvas.getDocument();
         u.p("canvas doc = " + doc);
         for(SNode shape : doc.getCurrentPage().getNodes()) {
