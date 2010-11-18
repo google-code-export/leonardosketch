@@ -1,6 +1,5 @@
 package org.joshy.sketch.modes.vector;
 
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
@@ -25,6 +24,7 @@ import org.joshy.sketch.util.BiList;
 
 import javax.swing.*;
 import java.io.IOException;
+
 import static org.joshy.gfx.util.localization.Localization.getString;
 
 /**
@@ -167,7 +167,6 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         this.symbolPanel = new SymbolPanel(getMain().symbolManager, this);
         this.sideBar.add(getString("sidebar.symbols"),this.symbolPanel);
         this.flickrPanel = new FlickrPanel(this);
-        this.flickrPanel.setFill(new FlatColor(0x808080));
         this.sideBar.add(getString("sidebar.flickr"), this.flickrPanel);
         this.flickrPanel.setVisible(false);
     }

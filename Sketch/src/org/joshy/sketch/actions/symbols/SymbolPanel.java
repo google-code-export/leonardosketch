@@ -72,6 +72,7 @@ public class SymbolPanel extends Panel {
 
         symbolPane = new ScrollPane();
         symbolPane.setContent(listView);
+        symbolPane.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
 
         symbolAddButton = new Button("Add");
         symbolAddButton.onClicked(new Callback<ActionEvent>() { public void call(ActionEvent event) {
@@ -145,7 +146,7 @@ public class SymbolPanel extends Panel {
         this.add(symbolPane);
         this.add(symbolAddButton);
 
-        this.setFill(new FlatColor(0x808080));
+        //this.setFill(new FlatColor(0x808080));
     }
 
     private void showContextMenu(MouseEvent event) {
@@ -187,6 +188,7 @@ public class SymbolPanel extends Panel {
 
     @Override
     public void doLayout() {
+        super.doLayout();
         setSwitcher.doLayout();
         setSwitcher.setTranslateX(0);
         setSwitcher.setTranslateY(0);
