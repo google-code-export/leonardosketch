@@ -295,7 +295,7 @@ public class Main implements Runnable {
             }
             Menu windowMenu = new Menu().setTitle(getString("menus.window"));
             for(ShowWindow a : windowOpeners) {
-                windowMenu.addItem("Window: " + a.context.getDocument().getTitle(), a);
+                windowMenu.addItem(getString("menus.window")+": " + a.context.getDocument().getTitle(), a);
             }
             context.windowJMenu = windowMenu.createJMenu();
             context.menubar.add(context.windowJMenu);
@@ -410,8 +410,8 @@ public class Main implements Runnable {
                     event.veto();
                     u.p("doc is still dirty!!!");
                     StandardDialog.Result result = StandardDialog.showYesNoCancel(
-                            "This document hasn't been saved yet. Save?",
-                            "Save","Don't Save","Cancel");
+                            getString("dialog.docNotSaved"),
+                            getString("dialog.save"),getString("dialog.dontsave"),getString("dialog.cancel"));
                     if(result== StandardDialog.Result.Yes) {
                         new SaveAction(context,false).execute();
                     }

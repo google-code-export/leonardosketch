@@ -4,6 +4,8 @@ import org.joshy.gfx.util.u;
 
 import javax.swing.*;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 /**
 * Created by IntelliJ IDEA.
 * User: joshmarinacci
@@ -25,7 +27,7 @@ public class StandardDialog {
     public static Result showYesNoCancel(String text, String yesText, String noText, String cancelText) {
         int result = JOptionPane.showOptionDialog(null
                 , text
-                , "Warning"
+                , getString("dialog.warning")
                 , JOptionPane.YES_NO_CANCEL_OPTION
                 , JOptionPane.WARNING_MESSAGE
                 , null

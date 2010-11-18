@@ -674,6 +674,18 @@
             <value language="tr-TR">Flickr'da ara</value>
             <value language="fr-FR">Recherche Flickr</value>
         </key>
+        <key name="flickr.search.hint">
+            <value>Flickr Keyword Search</value>
+            <value language="de-DE">Flickr Keyword Suche</value>
+            <value language="hr-HR">Pretraga na Flickr Keyword</value>
+            <value language="it-IT">Ricerca su Flickr Keyword</value>
+            <value language="tr-TR">Flickr'da ara Keyword</value>
+            <value language="fr-FR">Recherche Flickr Keyword</value>
+        </key>
+        <key name="search">
+            <value>Search</value>
+            <value language="de-DE">Suche</value>
+        </key>
     </set>
     
     <set name="toolbar">
@@ -684,6 +696,29 @@
         <key name="opacity">
             <value>Opacity</value>
             <value language="de-DE">Deckkraft</value>
+        </key>
+    </set>
+    
+    <set name="dialog">
+        <key name="warning">
+            <value>Warning</value>
+            <value language="de-DE">Warnung</value>
+        </key>
+        <key name="docNotSaved">
+            <value>This document hasn't been saved yet. Save?</value>
+            <value language="de-DE">Dieses Dokument wurde noch nicht gespeichert! Speichern?</value>
+        </key>
+        <key name="save">
+            <value>Save</value>
+            <value language="de-DE">Speichern</value>
+        </key>
+        <key name="dontsave">
+            <value>Don't Save</value>
+            <value language="de-DE">Nicht speichern</value>
+        </key>
+        <key name="cancel">
+            <value>Cancel</value>
+            <value language="de-DE">Abbrechen</value>
         </key>
     </set>
     

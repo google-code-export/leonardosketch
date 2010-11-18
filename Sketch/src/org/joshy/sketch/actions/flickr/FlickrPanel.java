@@ -31,6 +31,8 @@ import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 /**
  * Created by IntelliJ IDEA.
  * User: joshmarinacci
@@ -131,12 +133,12 @@ public class FlickrPanel extends VFlexBox {
         scrollPane.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
         scrollPane.setContent(photoList);
         searchBox = new Textbox();
-        searchBox.setHintText("Flickr Keyword Search");
+        searchBox.setHintText(getString("sidebar.flickr.search.hint"));
         searchBox.onAction(doSearch);
         Control box = new HFlexBox()
                 .setBoxAlign(HFlexBox.Align.Baseline)
                 .add(searchBox,1)
-                .add(new Button("Search").onClicked(doSearch),0)
+                .add(new Button(getString("sidebar.search")).onClicked(doSearch),0)
                 ;
 
         this.setBoxAlign(VFlexBox.Align.Stretch);
@@ -161,7 +163,6 @@ public class FlickrPanel extends VFlexBox {
 
     Callback<ActionEvent> doSearch = new Callback<ActionEvent>() {
         public void call(ActionEvent event) {
-            u.p("doing a search on flickr");
             try {
                 XMLRequest req = new XMLRequest().setURL("http://api.flickr.com/services/rest/?");//?method=flickr.test.echo&name=value");
                 req.setMethod(XMLRequest.METHOD.GET);
@@ -170,25 +171,12 @@ public class FlickrPanel extends VFlexBox {
                 req.setParameter("tags",searchBox.getText());
                 req.setParameter("sort","relevance");
                 req.setParameter("license","4,5,7");
-                //http://farm{farm-id}.static.flickr.com/{server-id}/{id}_{secret}.jpg
-                //http://farm5.static.flickr.com/4102/4753003371_6e12cf0eb7.jpg
-
-                //http://www.flickr.com/photos/{user-id}/{photo-id} - individual photo
-                //http://api.flickr.com/services/rest/?method=flickr.test.echo&name=foo&api_key=7659144a7b5510b894b33cb105737618
-                //req.setURL("http://api.flickr.com/services/rest/?method=flickr.test.echo&name=foo&api_key=7659144a7b5510b894b33cb105737618");
                 req.onComplete(new Callback<Doc>() {
                     public void call(Doc doc) {
                         doc.dump();
                         photos.clear();
                         try {
                             for(Elem photo : doc.xpath("//photo")) {
-                                /*
-                                u.p("http://farm"
-                                        +photo.attr("farm")
-                                        +".static.flickr.com/"
-                                        +photo.attr("server")
-                                        +"/"+photo.attr("id")+"_"+photo.attr("secret")+"_s.jpg");
-                                u.p("http://www.flickr.com/photos/"+photo.attr("owner")+"/"+photo.attr("id"));*/
                                 Photo ph = new Photo(
                                         context,
                                         photo.attr("farm"),
