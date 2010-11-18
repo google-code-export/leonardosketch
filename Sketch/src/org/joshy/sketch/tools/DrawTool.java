@@ -50,9 +50,18 @@ public abstract class DrawTool extends CanvasTool {
         if(diffy >= 0) {
             node.setTranslateY(startY);
             node.setHeight(diffy);
+            if(event.isShiftPressed()) {
+                double ratio = node.getPreferredAspectRatio();
+                node.setHeight(node.getWidth()*ratio);
+            }
         } else {
             node.setTranslateY(cursor.getY());
             node.setHeight(-diffy);
+            if(event.isShiftPressed()) {
+                double ratio = node.getPreferredAspectRatio();
+                node.setHeight(node.getWidth()*ratio);
+                node.setTranslateY(startY-node.getWidth()*ratio);
+            }
         }
         context.redraw();
     }
