@@ -1,16 +1,17 @@
 package org.joshy.sketch.tools;
 
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Font;
+import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.util.u;
-import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.Main;
+import org.joshy.sketch.actions.UndoManager;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
 import org.joshy.sketch.model.SPath;
 import org.joshy.sketch.model.SketchDocument;
+import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -75,6 +76,8 @@ public class DrawPathTool extends CanvasTool {
     private Cursor reshapeCursor;
     private Cursor deleteCursor;
     private Cursor addCursor;
+    private SPath.PathPoint undoReference;
+    private SPath.PathPoint redoReference;
 
     private enum Tool { Delete, Reshape, Move };
     private Tool defaultTool = Tool.Move;
@@ -276,11 +279,14 @@ public class DrawPathTool extends CanvasTool {
             node = new SPath();
             currentPoint = new SPath.PathPoint(start.x,start.y);
             node.addPoint(currentPoint);
+            context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"path"));
             context.redraw();
             return;
         }
 
         if(selectedPoint != null && (defaultTool == Tool.Move || defaultTool == Tool.Reshape)) {
+            undoReference = selectedPoint.copy();
+            redoReference = selectedPoint;
             if(start.distance(selectedPoint.x,selectedPoint.y) < getPointThreshold()) {
                 u.p("can reshape the center of the point");
                 adjusting = true;
@@ -306,6 +312,8 @@ public class DrawPathTool extends CanvasTool {
         if(couldMove) {
             adjusting = true;
             selectedPoint = hoverPoint;
+            undoReference = selectedPoint.copy();
+            redoReference = selectedPoint;
             context.redraw();
             return;
         }
@@ -314,15 +322,19 @@ public class DrawPathTool extends CanvasTool {
             context.redraw();
             return;
         }
+        
+        undoReference = null;
+        redoReference = null;
 
         if(couldClose) {
             SPath.PathPoint start = node.points.get(0);
             if(start.distance(start.x,start.y) < getPointThreshold()) {
                 couldClose = false;
                 node.close(true);
-                SketchDocument doc = (SketchDocument) context.getDocument();
+                SketchDocument doc = context.getDocument();
                 doc.getCurrentPage().add(node);
-                context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"path"));
+                //node already added at this point
+                //context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"path"));
                 node.normalize();
                 currentPoint = null;
                 node = null;
@@ -339,29 +351,83 @@ public class DrawPathTool extends CanvasTool {
             hoverPoint.cy2 = hoverPoint.y;
             selectedPoint = hoverPoint;
             adjusting = true;
+            undoReference = selectedPoint.copy();
+            redoReference = selectedPoint;
             context.redraw();
             return;
         }
 
         if(couldDelete) {
-            node.points.remove(hoverPoint);
-            context.redraw();
+            deletePoint(hoverPoint);
             return;
         }
         
         if(addLocation != null) {
-            node.splitPath(addLocation);
-            context.redraw();
-            addLocation = null;
+            insertPoint();
             return;
         }
 
 
         if(!editingExisting) {
-            currentPoint = new SPath.PathPoint(start.x,start.y);
-            node.addPoint(currentPoint);
-            context.redraw();
+            addPoint(start);
+            return;
         }
+    }
+
+    private void addPoint(Point2D.Double start) {
+        currentPoint = new SPath.PathPoint(start.x,start.y);
+        final SPath.PathPoint temp = currentPoint;
+        node.addPoint(currentPoint);
+        context.redraw();
+        context.getUndoManager().pushAction(new UndoManager.UndoableAction(){
+            public void executeUndo() {
+                node.points.remove(temp);
+            }
+            public void executeRedo() {
+                node.points.add(temp);
+            }
+            public String getName() {
+                return "add point";
+            }
+        });
+    }
+
+    private void insertPoint() {
+        final SPath.PathTuple temp = addLocation.copy();
+        final SPath.PathPoint a = addLocation.a.copy();
+        final SPath.PathPoint b = addLocation.b.copy();
+        final SPath.PathPoint pt = node.splitPath(addLocation);
+        context.getUndoManager().pushAction(new UndoManager.UndoableAction(){
+            public void executeUndo() {
+                node.unSplitPath(temp,a,b,pt);
+            }
+            public void executeRedo() {
+                node.splitPath(temp);
+            }
+            public String getName() {
+                return "insert point";
+            }
+        });
+        context.redraw();
+        addLocation = null;
+    }
+
+    private void deletePoint(SPath.PathPoint hoverPoint) {
+        final SPath.PathPoint temp = hoverPoint.copy();
+        final int tempIndex = node.points.indexOf(hoverPoint);
+        node.points.remove(hoverPoint);
+        context.getUndoManager().pushAction(new UndoManager.UndoableAction(){
+            public void executeUndo() {
+                node.points.add(tempIndex,temp);
+            }
+            public void executeRedo() {
+                node.points.remove(temp);
+            }
+            public String getName() {
+                return "remove point";
+            }
+        });
+        context.redraw();
     }
 
     @Override
@@ -416,6 +482,25 @@ public class DrawPathTool extends CanvasTool {
 
     @Override
     protected void mouseReleased(MouseEvent event, Point2D.Double cursor) {
+        if(adjusting || adjustingControlPoint) {
+            final SPath.PathPoint startReference = undoReference.copy();
+            final SPath.PathPoint endReference = redoReference.copy();
+            final SPath.PathPoint tempPathPoint = redoReference;
+            context.getUndoManager().pushAction(new UndoManager.UndoableAction(){
+                public void executeUndo() {
+                    tempPathPoint.copyFrom(startReference);
+                    context.redraw();
+                }
+                public void executeRedo() {
+                    tempPathPoint.copyFrom(endReference);
+                    context.redraw();
+                }
+                public String getName() {
+                    return "modify point";
+                }
+            });
+        }
+
         if(node != null) {
             node.recalcPath();
         }

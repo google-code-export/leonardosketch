@@ -171,7 +171,7 @@ public class SPath extends SShape implements SelfDrawable {
     }
 
 
-    public void splitPath(PathTuple location) {
+    public PathPoint splitPath(PathTuple location) {
         PathPoint a = location.a;
         PathPoint b = location.b;
         PathPoint c = new PathPoint(0,0);
@@ -192,6 +192,13 @@ public class SPath extends SShape implements SelfDrawable {
         b.x = co[12];   b.y = co[13];
         u.p("added the new point: " + c.x + " " + c.y);
         points.add(location.index+1,c);
+        return c;
+    }
+
+    public void unSplitPath(PathTuple temp, PathPoint a, PathPoint b, PathPoint pt) {
+        temp.a.copyFrom(a);
+        temp.b.copyFrom(b);
+        points.remove(pt);
     }
     
     /*
@@ -262,6 +269,17 @@ public class SPath extends SShape implements SelfDrawable {
         public PathPoint a;
         public PathPoint b;
         public int index;
+
+        public PathTuple copy() {
+            PathTuple pt = new PathTuple();
+            pt.distance = distance;
+            pt.t = t;
+            pt.point = point;
+            pt.a = a;
+            pt.b = b;
+            pt.index = index;
+            return pt;
+        }
     }
 
     public static class PathSegment {
@@ -360,6 +378,15 @@ public class SPath extends SShape implements SelfDrawable {
 
         public PathPoint copy() {
             return new PathPoint(x,y,cx1,cy1,cx2,cy2);
+        }
+
+        public void copyFrom(PathPoint a) {
+            this.x = a.x;
+            this.y = a.y;
+            this.cx1 = a.cx1;
+            this.cy1 = a.cy1;
+            this.cx2 = a.cx2;
+            this.cy2 = a.cy2;
         }
     }
 
