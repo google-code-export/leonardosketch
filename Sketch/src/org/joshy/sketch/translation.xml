@@ -819,4 +819,18 @@
         </key>
     </set>
 
+    <set name="rectPropsDialog">
+        <key name="gradientFill">
+            <value>Gradient Fill</value>
+            <value language="de-DE">Farbverlauf</value>
+        </key>
+        <key name="angle">
+            <value>Angle</value>
+            <value language="de-DE">Winkel</value>
+        </key>
+        <key name="cornerRadius">
+            <value>Corner Radius</value>
+            <value language="de-DE">Eckradius</value>
+        </key>
+    </set>
 </sets>

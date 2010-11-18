@@ -18,6 +18,8 @@ import org.joshy.sketch.property.PropertyManager;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 public class RectPropsPalette extends VFlexBox {
     private Checkbox useGradient;
     private SwatchColorPicker gradientStartButton;
@@ -42,7 +44,7 @@ public class RectPropsPalette extends VFlexBox {
         dragHandle.setHeight(20);
         add(dragHandle);
 
-        useGradient = new Checkbox("Gradient Fill");
+        useGradient = new Checkbox(getString("rectPropsDialog.gradientFill"));
         add(useGradient);
         gradientStartButton = new SwatchColorPicker();
         gradientStartButton.setSelectedColor(FlatColor.RED);
@@ -50,7 +52,7 @@ public class RectPropsPalette extends VFlexBox {
         gradientEndButton = new SwatchColorPicker();
         gradientEndButton.setSelectedColor(FlatColor.BLUE);
         add(gradientEndButton);
-        add(new Label("Angle"));
+        add(new Label(getString("rectPropsDialog.angle")));
         gradientAngle = new Slider(false).setMin(0).setMax(360).setValue(180);
         add(gradientAngle);
 //        useShadow = new Checkbox("Shadow");
@@ -62,7 +64,7 @@ public class RectPropsPalette extends VFlexBox {
 //        shadowDistance = new Slider(false);
 //        box.add(shadowDistance);
 
-        add(new Label("Corner Radius"));
+        add(new Label(getString("rectPropsDialog.cornerRadius")));
         cornerRadius = new Slider(false);
         add(cornerRadius);
 
