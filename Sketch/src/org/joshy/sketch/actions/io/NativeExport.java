@@ -39,6 +39,14 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             out.attr("type","generic-drawing");
         }
         saveAttribute(out,"backgroundFill",doc);
+        
+        if(!doc.getProperties().isEmpty()) {
+            for(Map.Entry entry : (Set<Map.Entry>)doc.getProperties().entrySet()) {
+                out.start("property","name",""+entry.getKey(),"value",""+entry.getValue());
+                out.end();
+            }
+        }
+
         out.end();
     }
 

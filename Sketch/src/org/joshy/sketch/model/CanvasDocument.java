@@ -5,11 +5,14 @@ import org.joshy.gfx.event.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CanvasDocument<P extends Page> {
     protected List<P> pages = new ArrayList<P>();
     protected int index;
+    private Map<String,String> props = new HashMap<String,String>();
 
     public static enum LengthUnits {
         Pixels(1.0),
@@ -95,6 +98,18 @@ public class CanvasDocument<P extends Page> {
 
     public void setUnits(LengthUnits units) {
         this.units = units;
+    }
+
+    public String getStringProperty(String key) {
+        return props.get(key);
+    }
+
+    public void setStringProperty(String key, String value) {
+        props.put(key,value);
+    }
+
+    public Map getProperties() {
+        return props;
     }
 
     private void fireDocDirty() {

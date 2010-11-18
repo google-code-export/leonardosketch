@@ -9,10 +9,12 @@ import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 
+import java.awt.*;
 import java.awt.geom.PathIterator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,12 +30,39 @@ public class SaveHTMLCanvasAction extends SAction {
         this.context = context;
     }
 
+    private static String HTML_CANVAS_PATH_KEY = "export.htmlcanvas.path";
+
     @Override
     public void execute() throws Exception {
-        File file = new File("foo.html");
+        File file = null;
+        Map props = context.getDocument().getProperties();
+        if(props.containsKey(HTML_CANVAS_PATH_KEY)) {
+            File ffile = new File((String)props.get(HTML_CANVAS_PATH_KEY));
+            if(ffile.exists()) {
+                file = ffile;
+            }
+        }
+
+        if(file == null) {
+            String extension = ".html";
+            FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
+            fd.setMode(FileDialog.SAVE);
+            fd.setTitle("Export to Canvas");
+            fd.setVisible(true);
+            //cancel
+            if(fd.getFile() == null) return;
+
+            String fileName = fd.getFile();
+            if(!fileName.toLowerCase().endsWith(extension)) {
+                fileName = fileName + extension;
+            }
+            file = new File(fd.getDirectory(),fileName);
+        }
+
         ExportProcessor.process(new HTMLCanvasExport(),
                 new PrintWriter(new FileOutputStream(file)),
                 (SketchDocument) context.getDocument());
+        context.getDocument().setStringProperty(HTML_CANVAS_PATH_KEY,file.getAbsolutePath());
         OSUtil.openBrowser(file.toURI().toASCIIString());
     }
 

@@ -129,6 +129,12 @@ public class OpenAction extends SAction {
             if(info.hasAttr("backgroundFill")) {
                 loadFlatColorAttribute(info,sdoc,"backgroundFill", FlatColor.class);
             }
+            for(Elem element : info.xpath("property")) {
+                sdoc.setStringProperty(
+                        element.attr("name"),
+                        element.attr("value"));
+            }
+
         }
 
         sdoc.setFile(file);
