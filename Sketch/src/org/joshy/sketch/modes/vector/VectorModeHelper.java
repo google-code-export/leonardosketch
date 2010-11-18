@@ -13,6 +13,8 @@ import org.joshy.sketch.util.BiList;
 
 import javax.swing.*;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 /**
  * Mode helper for vector docs
  */
@@ -44,7 +46,7 @@ public class VectorModeHelper extends DocModeHelper<VectorDocContext> {
 
     @Override
     public String getModeName() {
-        return "Vector";
+        return getString("misc.vector");
     }
 
     @Override

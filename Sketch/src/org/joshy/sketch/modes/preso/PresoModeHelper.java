@@ -12,6 +12,8 @@ import org.joshy.sketch.modes.vector.VectorModeHelper;
 
 import javax.swing.*;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 /**
  * A context for Presentation documents
  */
@@ -82,7 +84,7 @@ public class PresoModeHelper extends VectorModeHelper {
     
     @Override
     public String getModeName() {
-        return "Presentation";
+        return getString("misc.presentation");
     }
 
     @Override

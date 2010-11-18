@@ -676,7 +676,7 @@
         </key>
         <key name="flickr.search.hint">
             <value>Flickr Keyword Search</value>
-            <value language="de-DE">Flickr Keyword Suche</value>
+            <value language="de-DE">Flickr Stichwortsuche</value>
             <value language="hr-HR">Pretraga na Flickr Keyword</value>
             <value language="it-IT">Ricerca su Flickr Keyword</value>
             <value language="tr-TR">Flickr'da ara Keyword</value>
@@ -720,6 +720,28 @@
             <value>Cancel</value>
             <value language="de-DE">Abbrechen</value>
         </key>
+        <key name="okay">
+            <value>Okay</value>
+        </key>
+    </set>
+
+    <set name="newDocumentDialog">
+        <key name="title">
+            <value>New Document</value>
+            <value language="de-DE">Neues Dokument</value>
+        </key>
+        <key name="preset">
+            <value>New Document</value>
+            <value language="de-DE">Größe</value>
+        </key>
+        <key name="width">
+            <value>New Document</value>
+            <value language="de-DE">Breite</value>
+        </key>
+        <key name="height">
+            <value>New Document</value>
+            <value language="de-DE">Höhe</value>
+        </key>
     </set>
     
     <set name="misc">
@@ -731,12 +753,69 @@
             <value>Make a wish!</value>
             <value language="de-DE">Hier wünschen</value>
         </key>
+        <key name="wish.dialog">
+            <value>You must type in your wish for a feature before sending.</value>
+            <value language="de-DE">Bitte Text einfügen vor dem Senden"</value>
+        </key>
+        <key name="new">
+            <value>New</value>
+            <value language="de-DE">Neues</value>
+        </key>
+        <key name="vector">
+            <value>Vector Document</value>
+            <value language="de-DE">Vektor Dokument</value>
+        </key>
+        <key name="presentation">
+            <value>Presentation</value>
+            <value language="de-DE">Präsentation</value>
+        </key>
+        <key name="saveFile">
+            <value>Save File</value>
+            <value language="de-DE">Datei speichern</value>
+        </key>
+        <key name="whatsthis">
+            <value>What's this?</value>
+            <value language="de-DE">Was ist das?</value>
+        </key>
+        <key name="close">
+            <value>Close</value>
+            <value language="de-DE">Schließen</value>
+        </key>
+    </set>
+
+    <set name="trackingDialog">
+        <key name="title">
+            <value>Usage Tracking?</value>
+            <value language="de-DE">Zuordnung</value>
+        </key>
     </set>
 
     <set name="preferences">
         <key name="enable.analytics.tracking">
             <value>Enable Analytics tracking</value>
             <value language="de-DE">Analyse einschalten</value>
+        </key>
+    </set>
+
+    <set name="twitterAuthDialog">
+        <key name="text1">
+            <value>Please login to Twitter</value>
+            <value language="de-DE">Bitte in Twitter einloggen</value>
+        </key>
+         <key name="text2">
+            <value>and enter the PIN here</value>
+            <value language="de-DE">und PIN hier eintragen</value>
+        </key>
+        <key name="authenticate">
+            <value>Authenticate</value>
+            <value language="de-DE">Authentifizieren</value>
+        </key>
+    </set>
+
+    <set name="drawNgonTool">
+        <key name="sides">
+            <value>Sides</value>
+            <value language="de-DE">Seiten</value>
         </key>
     </set>
 

@@ -55,7 +55,7 @@ public class PreferencesAction extends SAction {
         TabPanel tab = new TabPanel();
         tab.add("tracking",new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
             .add(trackingCheckbox)
-            .add(new Linkbutton("what's this?").onClicked(new Callback<ActionEvent>() {
+            .add(new Linkbutton(getString("misc.whatsthis")).onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
                     OSUtil.openBrowser("http://code.google.com/p/leonardosketch/wiki/Tracking");
                 }
@@ -64,7 +64,7 @@ public class PreferencesAction extends SAction {
 
         stage.setContent(new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
                 .add(tab,1)
-                .add(new HFlexBox().add(new Spacer(),1).add(new Button("close").onClicked(closeAction)))
+                .add(new HFlexBox().add(new Spacer(),1).add(new Button(getString("misc.close")).onClicked(closeAction)))
         );
     }
 }

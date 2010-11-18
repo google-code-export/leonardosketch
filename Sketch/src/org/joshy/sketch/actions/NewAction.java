@@ -10,6 +10,8 @@ import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 public class NewAction extends SAction {
     protected Main main;
 
@@ -49,7 +51,7 @@ public class NewAction extends SAction {
                  */
 
         final Stage dialog = Stage.createStage();
-        dialog.setTitle("New Document");
+        dialog.setTitle(getString("newDocumentDialog.title"));
 
         final Textbox width = new Textbox("800");
         width.setPrefWidth(100);
@@ -96,17 +98,17 @@ public class NewAction extends SAction {
                         .setPadding(5)
                         .createColumn(70, GridBox.Align.Right)
                         .createColumn(100, GridBox.Align.Left)
-                        .addControl(new Label("Preset:"))
+                        .addControl(new Label(getString("newDocumentDialog.preset")))
                         .addControl(popup)
                         .nextRow()
-                        .addControl(new Label("Width (px):"))
+                        .addControl(new Label(getString("newDocumentDialog.width") +" (px):"))
                         .addControl(width)
                         .nextRow()
-                        .addControl(new Label("Height (px):"))
+                        .addControl(new Label(getString("newDocumentDialog.height")+" (px):"))
                         .addControl(height)
                         .nextRow()
-                        .addControl(new Button("Cancel").onClicked(canceled))
-                        .addControl(new Button("Okay").onClicked(okay))
+                        .addControl(new Button(getString("dialog.cancel")).onClicked(canceled))
+                        .addControl(new Button(getString("dialog.okay")).onClicked(okay))
                 );
         dialog.setWidth(300);
         dialog.setHeight(200);

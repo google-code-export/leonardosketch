@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 public class SaveAction extends SAction {
     private boolean forceSaveAs;
     private DocContext context;
@@ -43,7 +45,7 @@ public class SaveAction extends SAction {
         if(forceSaveAs || context.getDocument().getFile() == null ) {
             FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
             fd.setMode(FileDialog.SAVE);
-            fd.setTitle("Save Sketchy File");
+            fd.setTitle(getString("misc.saveFile"));
             fd.setVisible(true);
             if(fd.getFile() != null) {
                 String fileName = fd.getFile();

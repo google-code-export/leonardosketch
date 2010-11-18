@@ -13,6 +13,8 @@ import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.controls.ImageBox.ImageBox;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 
 /**
 * Created by IntelliJ IDEA.
@@ -30,7 +32,7 @@ public class AboutAction extends SAction {
 
     @Override
     public String getDisplayName() {
-        return "About Leonardo";
+        return getString("menus.about");
     }
 
     @Override

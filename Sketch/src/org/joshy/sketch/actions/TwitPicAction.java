@@ -29,6 +29,8 @@ import twitter4j.util.ImageUpload;
 import java.io.File;
 import java.util.Properties;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 /**
  * Uploads a snapshot of the current document to twitter
  */
@@ -115,7 +117,7 @@ public class TwitPicAction extends SAction {
                 twitter.setOAuthConsumer(consumerKey,consumerSecret);
 
                 if(!context.getSettings().containsKey(TWITTER_TOKEN) || force) {
-                    u.p("no auth info already");
+                    //u.p("no auth info already");
                     final RequestToken requestToken = twitter.getOAuthRequestToken();
                     final String url = requestToken.getAuthorizationURL();
 
@@ -127,8 +129,8 @@ public class TwitPicAction extends SAction {
                             new GridBox()
                                     .createColumn(50,GridBox.Align.Right)
                                     .createColumn(50,GridBox.Align.Fill)
-                                    .addControl(new Label("Please login to Twitter"))
-                                    .addControl(new Label("and enter the PIN here"))
+                                    .addControl(new Label(getString("twitterAuthDialog.text1")))
+                                    .addControl(new Label(getString("twitterAuthDialog.text2")))
                                     .nextRow()
                                     .addControl(new Spacer())
                                     .addControl(new Button("Goto Twitter.com").onClicked(new Callback<ActionEvent>() {
@@ -140,17 +142,17 @@ public class TwitPicAction extends SAction {
                                     .addControl(new Label("PIN"))
                                     .addControl(pin)
                                     .nextRow()
-                                    .addControl(new Button("Cancel").onClicked(new Callback<ActionEvent>(){
+                                    .addControl(new Button(getString("dialog.cancel")).onClicked(new Callback<ActionEvent>(){
                                         public void call(ActionEvent event) {
                                             stage.hide();
                                         }
                                     }))
-                                    .addControl(new Button("Authenticate").onClicked(new Callback<ActionEvent>(){
+                                    .addControl(new Button(getString("twitterAuthDialog.authenticate")).onClicked(new Callback<ActionEvent>(){
                                         public void call(ActionEvent event) {
                                             stage.hide();
                                             try {
                                                 String pinText = pin.getText();
-                                                u.p("using pin text " + pinText);
+                                                //u.p("using pin text " + pinText);
                                                 AccessToken accessToken = twitter.getOAuthAccessToken(requestToken,pinText);
                                                 context.getSettings().setProperty(TWITTER_TOKEN,accessToken.getToken());
                                                 context.getSettings().setProperty(TWITTER_TOKEN_SECRET,accessToken.getTokenSecret());

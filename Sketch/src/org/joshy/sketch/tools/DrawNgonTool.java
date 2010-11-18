@@ -16,6 +16,8 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.geom.Point2D;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 public class DrawNgonTool extends CanvasTool {
     private Point2D start;
     private NGon node;
@@ -28,7 +30,7 @@ public class DrawNgonTool extends CanvasTool {
     public DrawNgonTool(VectorDocContext context) {
         super(context);
         panel = new HFlexBox();
-        panel.add(new Label("sides"));
+        panel.add(new Label(getString("drawNgonTool.sides")));
         slider = new Slider(false).setMin(3).setMax(20).setValue(5).setWidth(200);
         panel.add(slider);
         sliderLabel = new Label("N");

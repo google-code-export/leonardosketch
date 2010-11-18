@@ -3,8 +3,9 @@
 <project default="help">
 
     <target name="help">
-        <echo>ant build      build and package the entire project, including jnlps</echo>
-        <echo>ant build-onejar </echo>
+        <echo>ant build-sketch       just build leonardo</echo>
+        <echo>ant dist               build everything</echo>
+        <echo>ant publish            publish to publish dir</echo>
     </target>
     
     <target name="init">

@@ -109,9 +109,8 @@ public class Main implements Runnable {
         if(settings.containsKey(TRACKING_PERMISSIONS)) {
             trackingEnabled = "true".equals(settings.getProperty(TRACKING_PERMISSIONS));
         } else {
-            u.p("we've never asked about tracking!");
             final Stage stage = Stage.createStage();
-            stage.setTitle("Usage Tracking?");
+            stage.setTitle(getString("trackingDialog.title"));
             Callback<ActionEvent> noResponse = new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
                     stage.hide();
@@ -309,7 +308,7 @@ public class Main implements Runnable {
         makeAWishAction = new Callback<ActionEvent>(){
             public void call(ActionEvent actionEvent) {
                 if(wishBox.getText().trim().length() < 2) {
-                    StandardDialog.showError("You must type in your wish for a feature before sending.");
+                    StandardDialog.showError(getString("misc.wish.dialog"));
                 } else {
                     try {
                         new XMLRequest()
@@ -442,7 +441,7 @@ public class Main implements Runnable {
         final Stage stage = Stage.createStage();
         Panel panel = new VFlexBox();
         for(final DocModeHelper mode : modeHelpers) {
-            panel.add(new Button("New " + mode.getModeName()).onClicked(new Callback<ActionEvent>(){
+            panel.add(new Button(getString("misc.new") + mode.getModeName()).onClicked(new Callback<ActionEvent>(){
                 public void call(ActionEvent event) throws Exception {
                     SAction action = mode.getNewDocAction(Main.this);
                     action.execute();
