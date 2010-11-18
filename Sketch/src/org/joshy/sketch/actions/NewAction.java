@@ -51,62 +51,66 @@ public class NewAction extends SAction {
         final Stage dialog = Stage.createStage();
         dialog.setTitle("New Document");
 
-            final Textbox width = new Textbox("800");
-            final Textbox height = new Textbox("500");
-            Callback<ActionEvent> canceled = new Callback<ActionEvent>() {
-                public void call(ActionEvent event) {
-                    dialog.hide();
+        final Textbox width = new Textbox("800");
+        width.setPrefWidth(100);
+        final Textbox height = new Textbox("500");
+        height.setPrefWidth(100);
+        Callback<ActionEvent> canceled = new Callback<ActionEvent>() {
+            public void call(ActionEvent event) {
+                dialog.hide();
+            }
+        };
+
+        Callback<ActionEvent> okay = new Callback<ActionEvent>() {
+            public void call(ActionEvent event) {
+                dialog.hide();
+                double dwidth = Double.parseDouble(width.getText());
+                double dheight = Double.parseDouble(height.getText());
+                SketchDocument doc = new SketchDocument();
+                doc.setDocBoundsActive(true);
+                doc.setUnits(CanvasDocument.LengthUnits.Pixels);
+                doc.setWidth(dwidth);
+                doc.setHeight(dheight);
+                try {
+                    newDocCreated(doc);
+                } catch (Exception e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
-            };
-            Callback<ActionEvent> okay = new Callback<ActionEvent>() {
-                public void call(ActionEvent event) {
-                    dialog.hide();
-                    double dwidth = Double.parseDouble(width.getText());
-                    double dheight = Double.parseDouble(height.getText());
-                    SketchDocument doc = new SketchDocument();
-                    doc.setDocBoundsActive(true);
-                    doc.setUnits(CanvasDocument.LengthUnits.Pixels);
-                    doc.setWidth(dwidth);
-                    doc.setHeight(dheight);
-                    try {
-                        newDocCreated(doc);
-                    } catch (Exception e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    }
-                }
-            };
+            }
+        };
 
 
-            final PopupMenuButton popup = new PopupMenuButton();
-            popup.setModel(ListView.createModel(new String[]{"16x16","1024x1024"}));
-            Callback<ActionEvent> clicked = new Callback<ActionEvent>() {
-                public void call(ActionEvent event) {
-                    switch(popup.getSelectedIndex()) {
-                        case 0: width.setText("16"); height.setText("16"); break;
-                        case 1: width.setText("1024"); height.setText("768"); break;
-                    }
+        final PopupMenuButton popup = new PopupMenuButton();
+        popup.setModel(ListView.createModel(new String[]{"16x16","1024x1024"}));
+        Callback<ActionEvent> clicked = new Callback<ActionEvent>() {
+            public void call(ActionEvent event) {
+                switch(popup.getSelectedIndex()) {
+                    case 0: width.setText("16"); height.setText("16"); break;
+                    case 1: width.setText("1024"); height.setText("768"); break;
                 }
-            };
-            popup.onClicked(clicked);
-            dialog.setContent(
-                    new GridBox()
-                            .setPadding(5)
-                            .createColumn(70, GridBox.Align.Right)
-                            .createColumn(100, GridBox.Align.Left)
-                            .addControl(new Label("Preset:"))
-                            .addControl(popup)
-                            .nextRow()
-                            .addControl(new Label("Width (px):"))
-                            .addControl(width)
-                            .nextRow()
-                            .addControl(new Label("Height (px):"))
-                            .addControl(height)
-                            .nextRow()
-                            .addControl(new Button("Cancel").onClicked(canceled))
-                            .addControl(new Button("Okay").onClicked(okay))
-                    );
-        dialog.setWidth(400);
-        dialog.setHeight(400);
+            }
+        };
+        popup.onClicked(clicked);
+        dialog.setContent(
+                new GridBox()
+                        .setPadding(5)
+                        .createColumn(70, GridBox.Align.Right)
+                        .createColumn(100, GridBox.Align.Left)
+                        .addControl(new Label("Preset:"))
+                        .addControl(popup)
+                        .nextRow()
+                        .addControl(new Label("Width (px):"))
+                        .addControl(width)
+                        .nextRow()
+                        .addControl(new Label("Height (px):"))
+                        .addControl(height)
+                        .nextRow()
+                        .addControl(new Button("Cancel").onClicked(canceled))
+                        .addControl(new Button("Okay").onClicked(okay))
+                );
+        dialog.setWidth(300);
+        dialog.setHeight(200);
+        dialog.centerOnScreen();
     }
 
     protected void newDocCreated(SketchDocument doc) throws Exception {
