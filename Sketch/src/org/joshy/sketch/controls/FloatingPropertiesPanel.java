@@ -262,7 +262,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
             }
         });
 
-        this.setBoxAlign(Align.Top);
+        this.setBoxAlign(Align.Baseline);
         setVisible(false);
         //setPadding(new Insets(5,5,5,5));
     }
@@ -352,8 +352,6 @@ public class FloatingPropertiesPanel extends HFlexBox {
     }
     @Override
     public void doLayout() {
-        setWidth(500);
-        setHeight(40);
         if(selected) {
             Bounds bounds = selection.calculateBounds();
             bounds = context.getSketchCanvas().transformToDrawing(bounds);
@@ -364,32 +362,6 @@ public class FloatingPropertiesPanel extends HFlexBox {
         }
     }
 
-    /*
-    @Override
-    public void doLayout() {
-        if(selected) {
-            Bounds bounds = selection.calculateBounds();
-            bounds = context.getSketchCanvas().transformToDrawing(bounds);
-            setTranslateX(bounds.getX());
-            setTranslateY(bounds.getY() + bounds.getHeight()+20);
-            double x = 10;
-            double y = 10;
-            double maxHeight = -1;
-            for(Control c : controlChildren()) {
-                if(!c.isVisible()) continue;
-                c.doLayout();
-                Bounds layout = c.getLayoutBounds();
-                c.setTranslateX(x);
-                c.setTranslateY(y);
-                x+= layout.getWidth();
-                x+=10;
-                maxHeight = Math.max(maxHeight,layout.getHeight());
-            }
-            setHeight(maxHeight+10*2);
-            setWidth(x);
-        }
-    }
-      */
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
