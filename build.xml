@@ -4,6 +4,7 @@
 
     <target name="help">
         <echo>ant build-sketch       just build leonardo</echo>
+        <echo>ant build-onejar       build leonardo onejar</echo>
         <echo>ant dist               build everything</echo>
         <echo>ant publish            publish to publish dir</echo>
     </target>
