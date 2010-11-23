@@ -87,7 +87,7 @@ public class UpdateChecker {
             Callback<ActionEvent> getUpdate = new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
                     stage.hide();
-                    OSUtil.openBrowser("http://projects.joshy.org/Leonardo/daily/");
+                    OSUtil.openBrowser(Main.DOWNLOAD_URL);
                 }
             };
             FlexBox box = new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch);

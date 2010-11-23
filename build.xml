@@ -21,6 +21,7 @@
         <property  name="publish.dir" value="dist/foo"/>
         <property  name="lib.jogl.dir" value="lib/jogl/"/>
         <property  name="update.url" value="MUST_SET_UPDATE.URL"/>
+        <property  name="download.url" value="MUST_SET_DOWNLOAD.URL"/>
 
         <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
         <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/LeonardoSketch/dist/jnlp/"/>
@@ -59,6 +60,7 @@
             <entry key="org.joshy.sketch.build.number" value="${build.number}"/>
             <entry key="org.joshy.sketch.build.version" value="${build.version}"/>
             <entry key="org.joshy.sketch.updateurl" value="${update.url}"/>
+            <entry key="org.joshy.sketch.downloadurl" value="${download.url}"/>
         </propertyfile>
 
         <jar destfile="build/jars/Sketch.jar">
