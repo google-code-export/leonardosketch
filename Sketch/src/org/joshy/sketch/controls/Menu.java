@@ -7,6 +7,7 @@ import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ToggleAction;
 import org.joshy.sketch.canvas.SketchCanvas;
+import org.joshy.gfx.util.OSUtil;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -102,7 +103,11 @@ public class Menu {
             }
             if(Action.ACCELERATOR_KEY.equals(key)) {
                 if(acceleratorKey != null) {
-                    return KeyStroke.getKeyStroke("meta " + acceleratorKey);
+                    if(OSUtil.isMac()) {
+                        return KeyStroke.getKeyStroke("meta " + acceleratorKey);
+                    } else {
+                        return KeyStroke.getKeyStroke("control " + acceleratorKey);
+                    }
                 }
                 return null;
             }
