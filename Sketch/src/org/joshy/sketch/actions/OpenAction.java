@@ -249,7 +249,7 @@ public class OpenAction extends SAction {
         String path = e.attr("relativeURL");
         String zfname = zipFile.getName();
         String pth = zfname.substring(
-                        zfname.lastIndexOf("/")+1,
+                        zfname.lastIndexOf(File.separator)+1,
                         zfname.lastIndexOf(".")
                     )+"/"+path;
         ZipEntry entry = zipFile.getEntry(pth);
