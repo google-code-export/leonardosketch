@@ -10,7 +10,7 @@
     </target>
     
     <target name="init">
-        <echo message="in init after the R1B0 tag"/>
+        <echo message="in init"/>
         <buildnumber file="../leobuild.number"/>
         <tstamp>
             <format property="TIMESTAMP" pattern="yyyy-MM-dd_kk-mm"/>

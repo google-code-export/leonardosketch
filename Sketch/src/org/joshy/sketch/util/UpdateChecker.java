@@ -51,6 +51,7 @@ public class UpdateChecker {
                     .onError(new Callback<Throwable>() {
                         public void call(Throwable e) throws Exception {
                             u.p("there was an error: " + e);
+                            u.dumpStack();
                         }
                     })
                     .start();
