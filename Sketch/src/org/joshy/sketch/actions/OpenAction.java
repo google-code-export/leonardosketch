@@ -180,7 +180,13 @@ public class OpenAction extends SAction {
     private static void loadPage(SketchDocument sdoc, Elem epage, ZipFile zipFile) throws XPathExpressionException {
         SketchDocument.SketchPage page = sdoc.addPage();
         for(Elem e : epage.xpath("./*")) {
-            page.add(loadAnyShape(e,zipFile));
+            SNode sh = loadAnyShape(e,zipFile);
+            if(sh == null) {
+                u.p("WARNING: Unknown shape parsed: " + epage);
+            }
+            if(sh != null) {
+                page.add(sh);
+            }
         }
     }
 
@@ -275,6 +281,11 @@ public class OpenAction extends SAction {
         }
         if(e.attrEquals("type","area")) {
             shape = new SArea(new Area());
+        }
+
+        if(shape == null) {
+            u.p("warning. shape not detected. Shape type is: " + e.attr("type"));
+            return null;
         }
         if(e.hasAttr("fillPaint")) {
             loadFillPaint(e,shape);
