@@ -28,6 +28,7 @@ import org.joshy.gfx.util.localization.Localization;
 import org.joshy.gfx.util.u;
 import org.joshy.gfx.util.xml.XMLRequest;
 import org.joshy.sketch.actions.*;
+import org.joshy.sketch.actions.flickr.FlickrUploadAction;
 import org.joshy.sketch.actions.flickr.ViewSidebar;
 import org.joshy.sketch.actions.io.*;
 import org.joshy.sketch.actions.pages.PageListPanel;
@@ -582,7 +583,11 @@ public class Main implements Runnable {
 
         Menu shareMenu = new Menu().setTitle(getString("menus.share"))
                 .addItem(getString("menus.sendTwitter"), new TwitPicAction(context))
-                .addItem(getString("menus.configTwitter"), new TwitPicAction.ChangeSettingsAction(context, true));
+                .addItem(getString("menus.configTwitter"), new TwitPicAction.ChangeSettingsAction(context, true))
+                .addItem("Send to Flickr", new FlickrUploadAction(context))
+                .addItem("Change Flickr Settings", new FlickrUploadAction.ChangeFlickrSettingsAction(context,true))
+        ;
+
         if(OSUtil.isMac()) {
             shareMenu.addItem(getString("menus.sendEmailPNG"), new SendMacMail(context));
         }
