@@ -160,6 +160,8 @@ public class FloatingPropertiesPanel extends HFlexBox {
                 
             }
         });
+        Label fontSizeLabel = new Label(getString("toolbar.fontSize")+":");
+        add(fontSizeLabel);
         add(fontSizeSlider);
 
         final Font[] fonts = new Font[]{Main.HANDDRAWN_FONT,Main.SERIF_FONT,Main.SANSSERIF_FONT};

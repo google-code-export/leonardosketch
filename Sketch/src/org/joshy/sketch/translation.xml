@@ -697,6 +697,9 @@
             <value>Opacity</value>
             <value language="de-DE">Deckkraft</value>
         </key>
+        <key name="fontSize">
+            <value>Font Size</value>
+        </key>
     </set>
     
     <set name="dialog">
