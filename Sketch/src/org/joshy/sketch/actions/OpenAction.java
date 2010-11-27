@@ -7,9 +7,10 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.util.u;
+import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.io.NativeExport;
 import org.joshy.sketch.model.*;
-import org.joshy.sketch.modes.DocContext;
+import org.joshy.sketch.modes.pixel.PixelModeHelper;
 import org.joshy.sketch.modes.preso.PresoModeHelper;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
 
@@ -35,17 +36,25 @@ import java.util.zip.ZipFile;
 
 public class OpenAction extends SAction {
     private File specificFile;
-    private DocContext context;
+    private Main main;
 
-    public OpenAction(DocContext context) {
-        this.context = context;
+    public OpenAction(Main main) {
+        this.main = main;
     }
 
-    public OpenAction(DocContext context, File specificFile) {
-        this.context = context;
+    public OpenAction(Main main, File specificFile) {
+        this.main = main;
         this.specificFile = specificFile;
     }
 
+    public void execute(List<File> files) {
+        try {
+            load(files.get(0));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
     @Override
     public void execute() {
         if(specificFile != null) {
@@ -55,7 +64,7 @@ public class OpenAction extends SAction {
                 e.printStackTrace();
             }
         } else {
-            FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
+            FileDialog fd = new FileDialog((Frame)null);//context.getStage().getNativeWindow());
             fd.setMode(FileDialog.LOAD);
             fd.setTitle("Open Sketchy File");
             fd.setVisible(true);
@@ -64,7 +73,7 @@ public class OpenAction extends SAction {
                 u.p("opening a file" + file);
                 try {
                     load(file);
-                    context.main.recentFiles.add(file);
+                    main.recentFiles.add(file);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -79,16 +88,16 @@ public class OpenAction extends SAction {
         } if (file.getName().toLowerCase().endsWith(".leoz")) {
             SketchDocument doc = loadZip(file);
             if(doc.isPresentation()) {
-                context.getMain().setupNewDoc(new PresoModeHelper(context.getMain()),doc);
+                main.setupNewDoc(new PresoModeHelper(main),doc);
             } else {
-                context.getMain().setupNewDoc(new VectorModeHelper(context.getMain()),doc);
+                main.setupNewDoc(new VectorModeHelper(main),doc);
             }
         } else {
             SketchDocument doc = load(new FileInputStream(file), file, file.getName(),null);
             if(doc.isPresentation()) {
-                context.getMain().setupNewDoc(new PresoModeHelper(context.getMain()),doc);
+                main.setupNewDoc(new PresoModeHelper(main),doc);
             } else {
-                context.getMain().setupNewDoc(new VectorModeHelper(context.getMain()),doc);
+                main.setupNewDoc(new VectorModeHelper(main),doc);
             }
         }
     }
@@ -97,9 +106,11 @@ public class OpenAction extends SAction {
         try {
             BufferedImage img = ImageIO.read(file);
             PixelDocument doc = new PixelDocument(img);
-            context.setDocument(doc);
+            main.setupNewDoc(new PixelModeHelper(main),doc);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 

@@ -1,8 +1,6 @@
 package org.joshy.sketch;
 
-import com.apple.eawt.Application;
-import com.apple.eawt.ApplicationEvent;
-import com.apple.eawt.ApplicationListener;
+import com.apple.eawt.*;
 import com.boxysystems.jgoogleanalytics.FocusPoint;
 import com.boxysystems.jgoogleanalytics.JGoogleAnalyticsTracker;
 import com.boxysystems.jgoogleanalytics.LoggingAdapter;
@@ -46,6 +44,7 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
 import org.joshy.sketch.property.PropertyManager;
 import org.joshy.sketch.script.ScriptTools;
+import org.joshy.sketch.util.FileOpenEvent;
 import org.joshy.sketch.util.UpdateChecker;
 
 import javax.swing.*;
@@ -477,6 +476,15 @@ public class Main implements Runnable {
         }
 
         recentFiles = loadRecentDocs(RECENT_FILES);
+        
+        EventBus.getSystem().addListener(FileOpenEvent.FileOpen, new Callback<FileOpenEvent>() {
+            public void call(FileOpenEvent fileOpenEvent) throws Exception {
+                u.p("got a file open event!");
+                OpenAction act = new OpenAction(Main.this);
+                act.execute(fileOpenEvent.getFiles());
+            }
+        });
+
     }
 
     private void buildCommonMenubar(DocContext context) {
@@ -486,7 +494,7 @@ public class Main implements Runnable {
         List<File> f2 = new ArrayList<File>(recentFiles);
         Collections.reverse(f2);
         for(File f : f2) {
-            recentFilesMenu.addItem(f.getName(), new OpenAction(context,f));
+            recentFilesMenu.addItem(f.getName(), new OpenAction(this,f));
         }
         //file menu
         Menu fileMenu = new Menu().setTitle(getString("menus.file"));
@@ -496,13 +504,13 @@ public class Main implements Runnable {
         }
         fileMenu.addMenu(newMenu);
         fileMenu
-                .addItem(getString("menus.open"), "O", new OpenAction(context))
+                .addItem(getString("menus.open"), "O", new OpenAction(this))
                 .addMenu(recentFilesMenu)
                 .addItem(getString("menus.save"), "S",    new SaveAction(context, false,true))
                 .addItem(getString("menus.saveas"), "shift S", new SaveAction(context, true,true))
                 .addItem(getString("menus.close"), "W",   new CloseAction(canvas))
                 ;
-        
+
         if("true".equals(System.getProperty("org.joshy.sketch.actions.enableImport"))) {
             fileMenu.addItem(getString("menus.import"), new ImportAction(context));
         }
@@ -635,7 +643,7 @@ public class Main implements Runnable {
                     aboutAction.execute();
                     applicationEvent.setHandled(true);
                 } catch (Exception e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
             }
 
@@ -663,6 +671,17 @@ public class Main implements Runnable {
             }
 
             public void handleReOpenApplication(ApplicationEvent applicationEvent) {
+            }
+        });
+        application.setOpenFileHandler(new OpenFilesHandler(){
+            public void openFiles(AppEvent.OpenFilesEvent openFilesEvent) {
+                u.p("files were opened: " + openFilesEvent);
+                u.p("search term = " + openFilesEvent.getSearchTerm());
+                u.p("files = ");
+                for(File f : openFilesEvent.getFiles()) {
+                    u.p("file = " + f.getAbsolutePath());
+                }
+                EventBus.getSystem().publish(new FileOpenEvent(openFilesEvent.getFiles()));
             }
         });
     }
