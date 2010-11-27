@@ -9,6 +9,7 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
+import org.joshy.gfx.stage.Stage;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.*;
@@ -39,6 +40,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
     private FlatColor gradient1 = new FlatColor(0,0,0,0);
     private static final GradientFill GRADIENT1 =new GradientFill(FlatColor.GRAY, FlatColor.GREEN,0,true, 50,0,50,100);
     private PopupMenuButton<SArrow.HeadEnd> arrowHeadEnd;
+    private Label rgbLabel;
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
@@ -77,12 +79,35 @@ public class FloatingPropertiesPanel extends HFlexBox {
             public FlatColor call(MouseEvent event) {
                 Point2D point = event.getPointInNodeCoords(context.getCanvas());
                 SketchDocument doc = context.getDocument();
+                Stage stage = context.getSketchCanvas().getParent().getStage();
+                if(rgbLabel == null) {
+                    rgbLabel = new Label("RGB");
+                    rgbLabel.setId("rgblabel");
+                    stage.getPopupLayer().add(rgbLabel);
+                    rgbLabel.setTranslateX(100);
+                    rgbLabel.setTranslateY(100);
+                }
+                rgbLabel.setVisible(true);
+                rgbLabel.setTranslateX(event.getPointInSceneCoords().getX()+70);
+                rgbLabel.setTranslateY(event.getPointInSceneCoords().getY());
                 for(SNode node : doc.getCurrentPage().model) {
                     if(node.contains(point) && node instanceof SShape) {
-                        return (FlatColor) ((SShape)node).getFillPaint();
+                        FlatColor color =  (FlatColor) ((SShape)node).getFillPaint();
+                        int val = color.getRGBA();
+                        val = val & 0x00FFFFFF;
+                        rgbLabel.setText("RGB: " + Integer.toHexString(val).toUpperCase());        
+                        return color;
                     }
                 }
+                rgbLabel.setText("RGB: ------");
                 return FlatColor.BLUE;
+            }
+        });
+        EventBus.getSystem().addListener(colorButton,ChangedEvent.FinalChange, new Callback<ChangedEvent>() {
+            public void call(ChangedEvent changedEvent) throws Exception {
+                if(rgbLabel != null) {
+                    rgbLabel.setVisible(false);
+                }
             }
         });
         strokeColorButton = new SwatchColorPicker();
