@@ -6,7 +6,6 @@ import org.joshy.gfx.animation.KeyFrameAnimator;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.ListModel;
@@ -361,7 +360,12 @@ public class SelectMoveTool extends CanvasTool {
 
         contextMenu.addActions(new CreateSymbol(context));
         contextMenu.addActions(new CreateResizableShape(context));
-        contextMenu.addActions(new CreateResizableShape.Edit(context));
+        if(context.getSelection().size() == 1){
+            SNode node = context.getSelection().firstItem();
+            if(node instanceof ResizableGrid9Shape) {
+                contextMenu.addActions(new CreateResizableShape.Edit(context));
+            }
+        }
 
         contextMenu.setWidth(170);
         contextMenu.setHeight(200);

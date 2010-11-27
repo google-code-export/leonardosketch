@@ -29,7 +29,6 @@ public class DrawUtils {
         s = 5;
         //g.setPaint(new FlatColor(0xa00000));
         double hue = color.getHue();
-        u.p("color = " + color + " hue = " + hue);
         GradientFill fill = new GradientFill(
                 FlatColor.hsb(hue,0.4,1.0)
                 ,FlatColor.hsb(hue,1.0,1.0)
