@@ -18,6 +18,7 @@ import org.joshy.sketch.controls.ContextMenu;
 import org.joshy.sketch.controls.FloatingPropertiesPanel;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
+import org.joshy.sketch.util.DrawUtils;
 
 import java.awt.geom.Point2D;
 import java.text.DecimalFormat;
@@ -766,21 +767,7 @@ public class SelectMoveTool extends CanvasTool {
         //draw a hover over the hovered handle
         if(hoverHandle != null) {
             Point2D.Double pt = context.getSketchCanvas().transformToDrawing(hoverHandle.getX(),hoverHandle.getY());
-            double s = 0;
-
-            s = 7;
-            g.setPaint(FlatColor.WHITE);
-            g.fillOval(pt.x-s,pt.y-s,s*2,s*2);
-
-            s = 5;
-            GradientFill fill = new GradientFill(
-                    new FlatColor(0xffa0a0)
-                    ,new FlatColor(0xff2020)
-                    ,90,true, 0,0, 0,s*2);
-            g.setPaint(fill);
-            g.translate(pt.x-s,pt.y-s);
-            g.fillOval(0,0,s*2,s*2);
-            g.translate(-pt.x+s,-pt.y+s);
+            DrawUtils.drawStandardHandle(g,pt.x,pt.y,FlatColor.RED);
         }
         
 
