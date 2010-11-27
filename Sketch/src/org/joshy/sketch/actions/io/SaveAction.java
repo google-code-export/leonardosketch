@@ -90,6 +90,7 @@ public class SaveAction extends SAction {
         export.setDelayedImageWriting(true);
         ExportProcessor.process(export, outx, ((SketchDocument)context.getDocument()));
         outx.flush();
+        out.closeEntry();
 
         List<SImage> images = export.getDelayedImages();
         for(SImage image : images) {
@@ -97,6 +98,7 @@ public class SaveAction extends SAction {
             out.putNextEntry(ie);
             ImageIO.write(image.getBufferedImage(),"png",out);
             out.flush();
+            out.closeEntry();
         }
         out.close();
     }
@@ -111,12 +113,14 @@ public class SaveAction extends SAction {
         export.setDelayedImageWriting(true);
         ExportProcessor.process(export, outx, doc);
         outx.flush();
+        out.closeEntry();
         List<SImage> images = export.getDelayedImages();
         for(SImage image : images) {
             ZipEntry ie = new ZipEntry(dir+"/"+image.getRelativeURL());
             out.putNextEntry(ie);
             ImageIO.write(image.getBufferedImage(),"png",out);
             out.flush();
+            out.closeEntry();
         }
         out.close();
     }
