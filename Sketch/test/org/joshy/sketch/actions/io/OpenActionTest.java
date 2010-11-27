@@ -26,7 +26,7 @@ public class OpenActionTest {
         VectorModeHelper helper = new VectorModeHelper(null);
         VectorDocContext context = helper.createDocContext(null);
         SketchCanvas canvas = new SketchCanvas(context);
-        OpenAction action = new OpenAction(context);
+        OpenAction action = new OpenAction(null);
         u.p("Url = " + this.getClass().getResource("simple.xml"));
         action.load(this.getClass().getResourceAsStream("simple.xml"),null,"simple.xml",null);
         SketchDocument doc = canvas.getDocument();
@@ -45,7 +45,7 @@ public class OpenActionTest {
         VectorModeHelper helper = new VectorModeHelper(null);
         VectorDocContext context = helper.createDocContext(null);
         SketchCanvas canvas = new SketchCanvas(context);
-        OpenAction action = new OpenAction(context);
+        OpenAction action = new OpenAction(null);
         u.p("Url = " + this.getClass().getResource("oldVersion_-1.xml"));
         action.load(this.getClass().getResourceAsStream("oldVersion_-1.xml"),null,"oldVersion_-1.xml",null);
         SketchDocument doc = canvas.getDocument();
