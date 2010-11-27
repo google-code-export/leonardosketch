@@ -98,7 +98,6 @@ public class FlickrUploadAction extends SAction {
 
                     List<String> tags = new ArrayList<String>();
                     tags.add("leosketch");
-                    tags.add("webos");
                     meta.setTags(tags);
                     meta.setTitle(message);
                     u.p("starting to upload");
