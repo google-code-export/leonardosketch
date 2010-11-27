@@ -2,8 +2,8 @@ package org.joshy.sketch.canvas;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.GradientFill;
 import org.joshy.sketch.model.SResizeableNode;
+import org.joshy.sketch.util.DrawUtils;
 
 import java.awt.geom.Point2D;
 
@@ -108,27 +108,7 @@ public class ResizeHandle extends PositionHandle {
         double x = pt.getX();
         double y = pt.getY();
         double s = 0;
-
-        //shadow
-        s = 7;
-        g.setPaint(new FlatColor(0x404040).deriveWithAlpha(0.5));
-        g.fillOval(x-s,y-s+1,s*2,s*2);
-        //border
-        s = 7;
-        g.setPaint(FlatColor.WHITE);
-        g.fillOval(x-s,y-s,s*2,s*2);
-
-        //center
-        s = 5;
-        //g.setPaint(new FlatColor(0xa00000));
-        GradientFill fill = new GradientFill(
-                new FlatColor(0x8DA8DF)
-                ,new FlatColor(0x4069b9)
-                ,90,true, 0,0, 0,s*2);
-        g.setPaint(fill);
-        g.translate(x-s,y-s);
-        g.fillOval(0,0,s*2,s*2);
-        g.translate(-x+s,-y+s);
+        DrawUtils.drawStandardHandle(g,x,y, FlatColor.BLUE);
     }
 
 }

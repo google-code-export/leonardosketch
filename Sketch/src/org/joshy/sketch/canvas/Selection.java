@@ -56,6 +56,10 @@ public class Selection {
 //                    hs.add(new GradientHandle(rect,GradientHandle.GradientPosition.End));
                 }
             }
+            if(rnode instanceof SRect) {
+                SRect rect = (SRect) rnode;
+                hs.add(new SRect.RoundRectMasterHandle(rect));
+            }
         }
         if(node instanceof SArrow) {
             u.p("created handles for: "+ node);

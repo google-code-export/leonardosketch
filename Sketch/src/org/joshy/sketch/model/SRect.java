@@ -4,8 +4,11 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.draw.Paint;
+import org.joshy.sketch.canvas.SketchCanvas;
+import org.joshy.sketch.util.DrawUtils;
 
 import java.awt.geom.Area;
+import java.awt.geom.Point2D;
 
 /**
  * Created by IntelliJ IDEA.
@@ -113,4 +116,54 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
         return gf;
     }
 
+    public static class RoundRectMasterHandle extends Handle {
+        private SRect rect;
+
+        public RoundRectMasterHandle(SRect rect) {
+            this.rect = rect;
+        }
+
+        @Override
+        public double getX() {
+            return rect.getX()+10 + rect.getTranslateX() + this.rect.getCorner()/2;
+        }
+
+        @Override
+        public void setX(double x, boolean constrain) {
+            double d = x - rect.getX()-rect.getTranslateX()-10;
+            d = d *2;
+            if(d < 0) d = 0;
+            rect.setCorner(d);
+        }
+
+        @Override
+        public double getY() {
+            return rect.getY()+10 + rect.getTranslateY() + this.rect.getCorner()/2;
+        }
+
+        @Override
+        public void setY(double y, boolean constrain) {
+
+        }
+
+        @Override
+        public void draw(GFX g, SketchCanvas sketchCanvas) {
+            Point2D pt = new Point2D.Double(getX(),getY());
+            pt = sketchCanvas.transformToDrawing(pt);
+
+            Point2D top = new Point2D.Double(getX(),rect.getY()+rect.getTranslateY());
+            top = sketchCanvas.transformToDrawing(top);
+            Point2D left = new Point2D.Double(rect.getX()+rect.getTranslateX(),getY());
+            left = sketchCanvas.transformToDrawing(left);
+
+            g.setPaint(FlatColor.GREEN);
+            double x = pt.getX();
+            double y = pt.getY();
+            //g.fillOval(getX()-5,getY()-5,10,10);
+            g.drawLine(x-10,y-10,left.getX(),y-10);
+            g.drawLine(x-10,y-10,x-10,top.getY());
+            g.drawLine(x-10,y-10,x,y);
+            DrawUtils.drawStandardHandle(g,x,y,FlatColor.GREEN);
+        }
+    }
 }
