@@ -2,6 +2,7 @@ package org.joshy.sketch.canvas;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.GradientFill;
 import org.joshy.sketch.model.SResizeableNode;
 
 import java.awt.geom.Point2D;
@@ -72,22 +73,6 @@ public class ResizeHandle extends PositionHandle {
     }
 
     @Override
-    public void draw(GFX g, SketchCanvas canvas) {
-        Point2D pt = new Point2D.Double(getX(),getY());
-        pt = canvas.transformToDrawing(pt);
-
-        double x = pt.getX();
-        double y = pt.getY();
-        double s = 6;
-        g.setPaint(new FlatColor(0xd0d0d0));
-        g.fillOval(x-s,y-s,s*2,s*2);
-
-        s = 5;
-        g.setPaint(new FlatColor(0x999999));
-        g.fillOval(x-s,y-s,s*2,s*2);
-    }
-
-    @Override
     public double getX() {
         double x = rect.getTranslateX() + rect.getX();
         switch (position) {
@@ -113,6 +98,37 @@ public class ResizeHandle extends PositionHandle {
             case TopRight: rect.setWidth(x - rect.getX() - rect.getTranslateX()); break;
             case BottomRight: rect.setWidth(x - rect.getX() - rect.getTranslateX()); break;
         }
+    }
+
+    @Override
+    public void draw(GFX g, SketchCanvas canvas) {
+        Point2D pt = new Point2D.Double(getX(),getY());
+        pt = canvas.transformToDrawing(pt);
+
+        double x = pt.getX();
+        double y = pt.getY();
+        double s = 0;
+
+        //shadow
+        s = 7;
+        g.setPaint(new FlatColor(0x404040).deriveWithAlpha(0.5));
+        g.fillOval(x-s,y-s+1,s*2,s*2);
+        //border
+        s = 7;
+        g.setPaint(FlatColor.WHITE);
+        g.fillOval(x-s,y-s,s*2,s*2);
+
+        //center
+        s = 5;
+        //g.setPaint(new FlatColor(0xa00000));
+        GradientFill fill = new GradientFill(
+                new FlatColor(0x8DA8DF)
+                ,new FlatColor(0x4069b9)
+                ,90,true, 0,0, 0,s*2);
+        g.setPaint(fill);
+        g.translate(x-s,y-s);
+        g.fillOval(0,0,s*2,s*2);
+        g.translate(-x+s,-y+s);
     }
 
 }
