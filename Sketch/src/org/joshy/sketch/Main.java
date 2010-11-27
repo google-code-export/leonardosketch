@@ -103,7 +103,7 @@ public class Main implements Runnable {
 
         Core.setUseJOGL(false);
         Core.init();
-        Core.setDebugCSS(new File("test.css"));
+        Core.getShared().loadCSS(Main.class.getResourceAsStream("style.css"),Main.class.getResource("style.css"));
         Core.getShared().defer(new Main());
     }
 

@@ -95,7 +95,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
                         FlatColor color =  (FlatColor) ((SShape)node).getFillPaint();
                         int val = color.getRGBA();
                         val = val & 0x00FFFFFF;
-                        rgbLabel.setText("RGB: " + Integer.toHexString(val).toUpperCase());        
+                        rgbLabel.setText("RGB: " + Integer.toHexString(val).toUpperCase());
                         return color;
                     }
                 }
