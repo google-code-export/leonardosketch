@@ -6,6 +6,7 @@ import org.joshy.gfx.animation.KeyFrameAnimator;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.ListModel;
@@ -764,15 +765,22 @@ public class SelectMoveTool extends CanvasTool {
 
         //draw a hover over the hovered handle
         if(hoverHandle != null) {
-            g.setPaint(FlatColor.RED);
             Point2D.Double pt = context.getSketchCanvas().transformToDrawing(hoverHandle.getX(),hoverHandle.getY());
-            double s = 6;
-            g.setPaint(FlatColor.BLACK);
+            double s = 0;
+
+            s = 7;
+            g.setPaint(FlatColor.WHITE);
             g.fillOval(pt.x-s,pt.y-s,s*2,s*2);
 
             s = 5;
-            g.setPaint(FlatColor.RED);
-            g.fillOval(pt.x-s,pt.y-s,s*2,s*2);
+            GradientFill fill = new GradientFill(
+                    new FlatColor(0xffa0a0)
+                    ,new FlatColor(0xff2020)
+                    ,90,true, 0,0, 0,s*2);
+            g.setPaint(fill);
+            g.translate(pt.x-s,pt.y-s);
+            g.fillOval(0,0,s*2,s*2);
+            g.translate(-pt.x+s,-pt.y+s);
         }
         
 
