@@ -138,7 +138,7 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
     }
 
     private void drawGridlines(GFX g, SketchDocument sdoc) {
-        for(SketchDocument.Guideline guideline : sdoc.getGuidelines()) {
+        for(SketchDocument.Guideline guideline : sdoc.getCurrentPage().getGuidelines()) {
             guideline.draw(g);
         }
     }

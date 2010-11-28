@@ -80,7 +80,7 @@ public class Ruler extends Container {
                         if(Ruler.this.vertical) {
                             if(mouseEvent.getPointInNodeCoords(Ruler.this).getX() > getWidth()) {
                                 if(newGuide == null) {
-                                    newGuide = sdoc.createGuideline(0,true);
+                                    newGuide = sdoc.getCurrentPage().createGuideline(0,true);
                                 } else {
                                     newGuide.setPosition(mouseEvent.getPointInNodeCoords(context.getCanvas()).getX());
                                 }
@@ -88,7 +88,7 @@ public class Ruler extends Container {
                         } else {
                             if(mouseEvent.getPointInNodeCoords(Ruler.this).getY() > getHeight()) {
                                 if(newGuide == null) {
-                                    newGuide = sdoc.createGuideline(0,false);
+                                    newGuide = sdoc.getCurrentPage().createGuideline(0,false);
                                 } else {
                                     newGuide.setPosition(mouseEvent.getPointInNodeCoords(context.getCanvas()).getY());
                                 }
@@ -186,7 +186,7 @@ public class Ruler extends Container {
         this.doc = doc;
         if(doc instanceof SketchDocument) {
             final SketchDocument sdoc = (SketchDocument) doc;
-            for(SketchDocument.Guideline g : sdoc.getGuidelines()) {
+            for(SketchDocument.Guideline g : sdoc.getCurrentPage().getGuidelines()) {
                 if(g.isVertical() && !vertical) {
                     GuidelineHandle gl = new GuidelineHandle(this, sdoc, g);
                     gl.setTranslateY(17);
@@ -272,11 +272,11 @@ public class Ruler extends Container {
                     Point2D pt = mouseEvent.getPointInNodeCoords(ruler);
                     if(guideline.isVertical()) {
                         if(pt.getX() < 0) {
-                            doc.removeGuideline(guideline);
+                            doc.getCurrentPage().removeGuideline(guideline);
                         }
                     } else {
                         if(pt.getY() < 0) {
-                            doc.removeGuideline(guideline);
+                            doc.getCurrentPage().removeGuideline(guideline);
                         }
                     }
                 }

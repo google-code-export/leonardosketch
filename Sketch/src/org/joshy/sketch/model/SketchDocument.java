@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
-    private List<Guideline> guidelines = new ArrayList<Guideline>();
     private boolean gridActive = true;
     private double gridWidth = 25;
     private double gridHeight = 25;
@@ -24,9 +23,6 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         setHeight(800);
         this.pages.add(new SketchPage(this));
         setCurrentPage(0);
-
-        this.guidelines.add(new Guideline(this,true,100));
-        this.guidelines.add(new Guideline(this,false,100));
     }
 
     public boolean isGridActive() {
@@ -124,26 +120,8 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         this.snapNodeBounds = snapNodeBounds;
     }
 
-    public Iterable<? extends Guideline> getGuidelines() {
-        return guidelines;
-    }
-
-    public Guideline createGuideline(double pos, boolean vertical) {
-        Guideline g = new Guideline(this,vertical,pos);
-        this.guidelines.add(g);
-        fireDocDirty();
-        fireViewDirty();
-        EventBus.getSystem().publish(new DocumentEvent(this,DocumentEvent.PageGuidelineAdded,g));
-        return g;
-    }
-
-    public void removeGuideline(Guideline guideline) {
-        this.guidelines.remove(guideline);
-        fireViewDirty();
-        EventBus.getSystem().publish(new DocumentEvent(this,DocumentEvent.PageGuidelineRemoved,guideline));
-    }
-
     public static class SketchPage extends Page {
+        private List<Guideline> guidelines = new ArrayList<Guideline>();
         public List<SNode> model;
         private SketchDocument doc;
 
@@ -174,15 +152,33 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
             model.clear();
             doc.setDirty(true);
         }
+        public void removeGuideline(Guideline guideline) {
+            this.guidelines.remove(guideline);
+            getDocument().fireViewDirty();
+            EventBus.getSystem().publish(new DocumentEvent(this.getDocument(),DocumentEvent.PageGuidelineRemoved,guideline));
+        }
+
+        public Iterable<? extends Guideline> getGuidelines() {
+            return guidelines;
+        }
+
+        public Guideline createGuideline(double pos, boolean vertical) {
+            Guideline g = new Guideline(this,vertical,pos);
+            this.guidelines.add(g);
+            getDocument().fireDocDirty();
+            getDocument().fireViewDirty();
+            EventBus.getSystem().publish(new DocumentEvent(this.getDocument(),DocumentEvent.PageGuidelineAdded,g));
+            return g;
+        }
     }
 
     public static class Guideline {
-        private SketchDocument doc;
+        private SketchPage page;
         private boolean vertical;
         private double position;
 
-        public Guideline(SketchDocument document, boolean vertical, double position) {
-            this.doc = document;
+        public Guideline(SketchPage page, boolean vertical, double position) {
+            this.page = page;
             this.vertical = vertical;
             this.position = position;
         }
@@ -190,16 +186,16 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         public void draw(GFX g) {
             if(vertical) {
                 g.setPaint(FlatColor.BLACK.deriveWithAlpha(0.5));
-                g.drawLine(position-1,0,position-1,doc.getHeight());
-                g.drawLine(position+1,0,position+1,doc.getHeight());
+                g.drawLine(position-1,0,position-1, page.getDocument().getHeight());
+                g.drawLine(position+1,0,position+1, page.getDocument().getHeight());
                 g.setPaint(FlatColor.RED);
-                g.drawLine(position,0,position,doc.getHeight());
+                g.drawLine(position,0,position, page.getDocument().getHeight());
             } else {
                 g.setPaint(FlatColor.BLACK.deriveWithAlpha(0.5));
-                g.drawLine(0,position-1,doc.getWidth(),position-1);
-                g.drawLine(0,position+1,doc.getWidth(),position+1);
+                g.drawLine(0,position-1, page.getDocument().getWidth(),position-1);
+                g.drawLine(0,position+1, page.getDocument().getWidth(),position+1);
                 g.setPaint(FlatColor.RED);
-                g.drawLine(0,position,doc.getWidth(),position);
+                g.drawLine(0,position, page.getDocument().getWidth(),position);
             }
         }
 
@@ -213,7 +209,7 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
 
         public void setPosition(double position) {
             this.position = position;
-            EventBus.getSystem().publish(new DocumentEvent(doc,DocumentEvent.PageGuidelineMoved,this));
+            EventBus.getSystem().publish(new DocumentEvent(page.getDocument(),DocumentEvent.PageGuidelineMoved,this));
         }
     }
 }
