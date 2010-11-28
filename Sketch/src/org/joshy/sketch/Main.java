@@ -265,7 +265,9 @@ public class Main implements Runnable {
         if(doc == null) {
             doc = modeHelper.createNewDoc();
         }
-        context.setDocument(doc);        
+        context.setDocument(doc);
+        hruler.setDocument(doc);
+        vruler.setDocument(doc);
         context.getStage().setTitle(context.getDocument().getTitle());
 
         if(modeHelper.isPageListVisible()) {

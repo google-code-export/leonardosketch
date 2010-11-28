@@ -14,9 +14,15 @@ import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.control.Scrollbar;
+import org.joshy.gfx.node.layout.Container;
+import org.joshy.sketch.model.CanvasDocument;
+import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
+import org.joshy.sketch.util.DrawUtils;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
 * Created by IntelliJ IDEA.
@@ -25,11 +31,12 @@ import java.awt.geom.Point2D;
 * Time: 5:12:39 PM
 * To change this template use File | Settings | File Templates.
 */
-public class Ruler extends Control {
+public class Ruler extends Container {
     private boolean vertical;
     private double offset;
     private DocContext context;
     private MouseEvent lastMouse;
+    private List<GuidelineHandle> guideHandles = new ArrayList<GuidelineHandle>();
 
     public Ruler(boolean vertical, ScrollPane scrollPane, DocContext context) {
         this.vertical = vertical;
@@ -45,6 +52,13 @@ public class Ruler extends Control {
         EventBus.getSystem().addListener(sp, ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
             public void call(ChangedEvent event) {
                 offset = (Double) event.getValue();
+                for(GuidelineHandle g : guideHandles) {
+                    if(g.guideline.isVertical()) {
+                        g.setTranslateX(g.guideline.getPosition() - g.size / 2 - offset);
+                    } else {
+                        g.setTranslateY(g.guideline.getPosition() - g.size / 2 - offset);
+                    }
+                }
                 setDrawingDirty();
             }
         });
@@ -56,20 +70,6 @@ public class Ruler extends Control {
         });
     }
 
-    @Override
-    public void doLayout() {
-
-    }
-
-    @Override
-    public void doPrefLayout() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void doSkins() {
-
-    }
 
     @Override
     public void draw(GFX g) {
@@ -125,6 +125,8 @@ public class Ruler extends Control {
                 if(x-o > getWidth()) break;
             }
         }
+
+        //draw the mouse indicator
         if(lastMouse != null) {
             g.setPaint(FlatColor.BLUE);
             Point2D pt = NodeUtils.convertToScene((Node) lastMouse.getSource(), lastMouse.getX(), lastMouse.getY());
@@ -137,6 +139,86 @@ public class Ruler extends Control {
                 g.drawLine(pt.getX(),0,pt.getX(),getHeight());
             }
         }
+
+        for(Node child : children()) {
+            g.translate(child.getTranslateX(),child.getTranslateY());
+            child.draw(g);
+            g.translate(-child.getTranslateX(),-child.getTranslateY());
+        }
+        
         g.setClipRect(oldBounds);
+    }
+
+    public void setDocument(CanvasDocument doc) {
+        if(doc instanceof SketchDocument) {
+            SketchDocument sdoc = (SketchDocument) doc;
+            for(SketchDocument.Guideline g : sdoc.getGuidelines()) {
+                if(g.isVertical() && !vertical) {
+                    GuidelineHandle gl = new GuidelineHandle(this, g);
+                    gl.setTranslateY(10);
+                    gl.setTranslateX(g.getPosition()-GuidelineHandle.size/2);
+                    this.add(gl);
+                    guideHandles.add(gl);
+                }
+                if(!g.isVertical() && vertical) {
+                    GuidelineHandle gl = new GuidelineHandle(this, g);
+                    gl.setTranslateX(10);
+                    gl.setTranslateY(g.getPosition()-GuidelineHandle.size/2);
+                    this.add(gl);
+                    guideHandles.add(gl);
+                }
+            }
+        }
+    }
+
+    private class GuidelineHandle extends Control {
+        private SketchDocument.Guideline guideline;
+        private Ruler ruler;
+        static final double size = 10;
+
+        private GuidelineHandle(final Ruler ruler, final SketchDocument.Guideline guideline) {
+            this.ruler = ruler;
+            this.guideline = guideline;
+            EventBus.getSystem().addListener(this,MouseEvent.MouseDragged,new Callback<MouseEvent>() {
+                public void call(MouseEvent mouseEvent) throws Exception {
+                    Point2D pt = mouseEvent.getPointInNodeCoords(ruler);
+                    if(guideline.isVertical()) {
+                        guideline.setPosition(pt.getX() + offset);
+                        setTranslateX(guideline.getPosition()- size /2 - offset);
+                    } else {
+                        guideline.setPosition(pt.getY() + offset);
+                        setTranslateY(guideline.getPosition()- size /2 - offset);
+                    }
+                }
+            });
+            setWidth(size);
+            setHeight(size);
+        }
+
+        @Override
+        public void doLayout() {
+            this.setWidth(size);
+            this.setHeight(size);
+        }
+
+        @Override
+        public void doPrefLayout() {
+
+        }
+
+        @Override
+        public void doSkins() {
+
+        }
+
+        @Override
+        public void draw(GFX gfx) {
+            if(guideline.isVertical() && !vertical) {
+                DrawUtils.drawTriangleHandle(gfx,getWidth()/2,getHeight()/2,FlatColor.RED,true);
+            }
+            if(!guideline.isVertical() && vertical) {
+                DrawUtils.drawTriangleHandle(gfx,getWidth()/2,getHeight()/2,FlatColor.RED,false);
+            }
+        }
     }
 }
