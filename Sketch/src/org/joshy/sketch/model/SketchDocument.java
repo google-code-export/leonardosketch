@@ -2,6 +2,8 @@ package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,6 +129,16 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         return guidelines;
     }
 
+    public Guideline createGuideline(double pos, boolean vertical) {
+        u.p("created a guideline");
+        Guideline g = new Guideline(this,vertical,pos);
+        this.guidelines.add(g);
+        fireDocDirty();
+        fireViewDirty();
+        EventBus.getSystem().publish(new DocumentEvent(this,DocumentEvent.PageGuidelineAdded,g));
+        return g;
+    }
+
     public static class SketchPage extends Page {
         public List<SNode> model;
         private SketchDocument doc;
@@ -197,6 +209,7 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
 
         public void setPosition(double position) {
             this.position = position;
+            EventBus.getSystem().publish(new DocumentEvent(doc,DocumentEvent.PageGuidelineMoved,this));
         }
     }
 }

@@ -247,7 +247,6 @@ public class Main implements Runnable {
 
                     }
                 }
-                //.setFill(FlatColor.GREEN)
                 .add(hruler,vruler)
                 .add(scrollPane)
                 );

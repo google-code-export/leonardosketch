@@ -15,6 +15,7 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.node.layout.Container;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
@@ -37,8 +38,9 @@ public class Ruler extends Container {
     private DocContext context;
     private MouseEvent lastMouse;
     private List<GuidelineHandle> guideHandles = new ArrayList<GuidelineHandle>();
+    private CanvasDocument doc;
 
-    public Ruler(boolean vertical, ScrollPane scrollPane, DocContext context) {
+    public Ruler(boolean vertical, ScrollPane scrollPane, final DocContext context) {
         this.vertical = vertical;
         this.context = context;
 
@@ -66,6 +68,37 @@ public class Ruler extends Container {
             public void call(MouseEvent mouseEvent) {
                 lastMouse = mouseEvent;
                 setDrawingDirty();
+            }
+        });
+        EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
+            public SketchDocument.Guideline newGuide;
+
+            public void call(MouseEvent mouseEvent) throws Exception {
+                if(mouseEvent.getType() == MouseEvent.MouseDragged) {
+                    if(doc instanceof SketchDocument) {
+                        SketchDocument sdoc = (SketchDocument) doc;
+                        if(Ruler.this.vertical) {
+                            if(mouseEvent.getPointInNodeCoords(Ruler.this).getX() > getWidth()) {
+                                if(newGuide == null) {
+                                    newGuide = sdoc.createGuideline(0,true);
+                                } else {
+                                    newGuide.setPosition(mouseEvent.getPointInNodeCoords(context.getCanvas()).getX());
+                                }
+                            }
+                        } else {
+                            if(mouseEvent.getPointInNodeCoords(Ruler.this).getY() > getHeight()) {
+                                if(newGuide == null) {
+                                    newGuide = sdoc.createGuideline(0,false);
+                                } else {
+                                    newGuide.setPosition(mouseEvent.getPointInNodeCoords(context.getCanvas()).getY());
+                                }
+                            }
+                        }
+                    }
+                }
+                if(mouseEvent.getType() == MouseEvent.MouseReleased) {
+                    newGuide = null;
+                }
             }
         });
     }
@@ -149,25 +182,49 @@ public class Ruler extends Container {
         g.setClipRect(oldBounds);
     }
 
-    public void setDocument(CanvasDocument doc) {
+    public void setDocument(final CanvasDocument doc) {
+        this.doc = doc;
         if(doc instanceof SketchDocument) {
-            SketchDocument sdoc = (SketchDocument) doc;
+            final SketchDocument sdoc = (SketchDocument) doc;
             for(SketchDocument.Guideline g : sdoc.getGuidelines()) {
                 if(g.isVertical() && !vertical) {
-                    GuidelineHandle gl = new GuidelineHandle(this, g);
+                    GuidelineHandle gl = new GuidelineHandle(this, sdoc, g);
                     gl.setTranslateY(10);
                     gl.setTranslateX(g.getPosition()-GuidelineHandle.size/2);
                     this.add(gl);
                     guideHandles.add(gl);
                 }
                 if(!g.isVertical() && vertical) {
-                    GuidelineHandle gl = new GuidelineHandle(this, g);
+                    GuidelineHandle gl = new GuidelineHandle(this, sdoc, g);
                     gl.setTranslateX(10);
                     gl.setTranslateY(g.getPosition()-GuidelineHandle.size/2);
                     this.add(gl);
                     guideHandles.add(gl);
                 }
             }
+            EventBus.getSystem().addListener(sdoc,CanvasDocument.DocumentEvent.PageGuidelineAdded, new Callback<CanvasDocument.DocumentEvent>(){
+                public void call(CanvasDocument.DocumentEvent documentEvent) throws Exception {
+                    u.p("guideline added!");
+                    Object target = documentEvent.getTarget();
+                    if(target instanceof SketchDocument.Guideline) {
+                        SketchDocument.Guideline g = (SketchDocument.Guideline) target;
+                        if(vertical && !g.isVertical()) {
+                            GuidelineHandle gl = new GuidelineHandle(Ruler.this, sdoc, g);
+                            gl.setTranslateX(10);
+                            gl.setTranslateY(g.getPosition()-GuidelineHandle.size/2);
+                            Ruler.this.add(gl);
+                            guideHandles.add(gl);
+                        }
+                        if(!vertical && g.isVertical()) {
+                            GuidelineHandle gl = new GuidelineHandle(Ruler.this, sdoc, g);
+                            gl.setTranslateY(10);
+                            gl.setTranslateX(g.getPosition()-GuidelineHandle.size/2);
+                            Ruler.this.add(gl);
+                            guideHandles.add(gl);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -176,7 +233,7 @@ public class Ruler extends Container {
         private Ruler ruler;
         static final double size = 10;
 
-        private GuidelineHandle(final Ruler ruler, final SketchDocument.Guideline guideline) {
+        private GuidelineHandle(final Ruler ruler, SketchDocument doc, final SketchDocument.Guideline guideline) {
             this.ruler = ruler;
             this.guideline = guideline;
             EventBus.getSystem().addListener(this,MouseEvent.MouseDragged,new Callback<MouseEvent>() {
@@ -188,6 +245,17 @@ public class Ruler extends Container {
                     } else {
                         guideline.setPosition(pt.getY() + offset);
                         setTranslateY(guideline.getPosition()- size /2 - offset);
+                    }
+                }
+            });
+            EventBus.getSystem().addListener(doc, CanvasDocument.DocumentEvent.PageGuidelineMoved, new Callback<CanvasDocument.DocumentEvent>(){
+                public void call(CanvasDocument.DocumentEvent documentEvent) throws Exception {
+                    if(documentEvent.getTarget() == guideline) {
+                        if(guideline.isVertical()) {
+                            setTranslateX(guideline.getPosition()- size /2 - offset);
+                        } else {
+                            setTranslateY(guideline.getPosition()- size /2 - offset);
+                        }
                     }
                 }
             });
