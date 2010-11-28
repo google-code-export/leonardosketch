@@ -24,6 +24,7 @@ import org.joshy.sketch.util.DrawUtils;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
 * Created by IntelliJ IDEA.
@@ -202,9 +203,9 @@ public class Ruler extends Container {
                     guideHandles.add(gl);
                 }
             }
+
             EventBus.getSystem().addListener(sdoc,CanvasDocument.DocumentEvent.PageGuidelineAdded, new Callback<CanvasDocument.DocumentEvent>(){
                 public void call(CanvasDocument.DocumentEvent documentEvent) throws Exception {
-                    u.p("guideline added!");
                     Object target = documentEvent.getTarget();
                     if(target instanceof SketchDocument.Guideline) {
                         SketchDocument.Guideline g = (SketchDocument.Guideline) target;
@@ -225,6 +226,24 @@ public class Ruler extends Container {
                     }
                 }
             });
+
+            EventBus.getSystem().addListener(sdoc,CanvasDocument.DocumentEvent.PageGuidelineRemoved, new Callback<CanvasDocument.DocumentEvent>(){
+                public void call(CanvasDocument.DocumentEvent documentEvent) throws Exception {
+                    Object target = documentEvent.getTarget();
+                    if(target instanceof SketchDocument.Guideline) {
+                        SketchDocument.Guideline g = (SketchDocument.Guideline) target;
+                        ListIterator<GuidelineHandle> it = guideHandles.listIterator();
+                        while(it.hasNext()) {
+                            GuidelineHandle gh = it.next();
+                            if(gh.guideline == g) {
+                                it.remove();
+                                remove(gh);
+                            }
+                        }
+                    }
+                }
+            });
+
         }
     }
 
@@ -233,7 +252,7 @@ public class Ruler extends Container {
         private Ruler ruler;
         static final double size = 10;
 
-        private GuidelineHandle(final Ruler ruler, SketchDocument doc, final SketchDocument.Guideline guideline) {
+        private GuidelineHandle(final Ruler ruler, final SketchDocument doc, final SketchDocument.Guideline guideline) {
             this.ruler = ruler;
             this.guideline = guideline;
             EventBus.getSystem().addListener(this,MouseEvent.MouseDragged,new Callback<MouseEvent>() {
@@ -242,9 +261,24 @@ public class Ruler extends Container {
                     if(guideline.isVertical()) {
                         guideline.setPosition(pt.getX() + offset);
                         setTranslateX(guideline.getPosition()- size /2 - offset);
+
                     } else {
                         guideline.setPosition(pt.getY() + offset);
                         setTranslateY(guideline.getPosition()- size /2 - offset);
+                    }
+                }
+            });
+            EventBus.getSystem().addListener(this,MouseEvent.MouseReleased,new Callback<MouseEvent>() {
+                public void call(MouseEvent mouseEvent) throws Exception {
+                    Point2D pt = mouseEvent.getPointInNodeCoords(ruler);
+                    if(guideline.isVertical()) {
+                        if(pt.getX() < 0) {
+                            doc.removeGuideline(guideline);
+                        }
+                    } else {
+                        if(pt.getY() < 0) {
+                            doc.removeGuideline(guideline);
+                        }
                     }
                 }
             });

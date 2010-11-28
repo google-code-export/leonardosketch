@@ -3,7 +3,6 @@ package org.joshy.sketch.model;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,6 +135,12 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         fireViewDirty();
         EventBus.getSystem().publish(new DocumentEvent(this,DocumentEvent.PageGuidelineAdded,g));
         return g;
+    }
+
+    public void removeGuideline(Guideline guideline) {
+        this.guidelines.remove(guideline);
+        fireViewDirty();
+        EventBus.getSystem().publish(new DocumentEvent(this,DocumentEvent.PageGuidelineRemoved,guideline));
     }
 
     public static class SketchPage extends Page {

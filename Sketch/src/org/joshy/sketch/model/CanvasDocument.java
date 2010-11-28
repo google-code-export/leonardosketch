@@ -127,6 +127,7 @@ public class CanvasDocument<P extends Page> {
         public static final EventType PageChanged = new EventType("PageChanged");
         public static final EventType PageGuidelineAdded = new EventType("PageGuidelineAdded");
         public static final EventType PageGuidelineMoved = new EventType("PageGuidelineMoved");
+        public static final EventType PageGuidelineRemoved = new EventType("PageGuidelineRemoved");
         private boolean isDirty;
         private CanvasDocument document;
         private Object target;
