@@ -15,7 +15,6 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.node.layout.Container;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
@@ -190,14 +189,14 @@ public class Ruler extends Container {
             for(SketchDocument.Guideline g : sdoc.getGuidelines()) {
                 if(g.isVertical() && !vertical) {
                     GuidelineHandle gl = new GuidelineHandle(this, sdoc, g);
-                    gl.setTranslateY(10);
+                    gl.setTranslateY(17);
                     gl.setTranslateX(g.getPosition()-GuidelineHandle.size/2);
                     this.add(gl);
                     guideHandles.add(gl);
                 }
                 if(!g.isVertical() && vertical) {
                     GuidelineHandle gl = new GuidelineHandle(this, sdoc, g);
-                    gl.setTranslateX(10);
+                    gl.setTranslateX(17);
                     gl.setTranslateY(g.getPosition()-GuidelineHandle.size/2);
                     this.add(gl);
                     guideHandles.add(gl);
@@ -211,14 +210,14 @@ public class Ruler extends Container {
                         SketchDocument.Guideline g = (SketchDocument.Guideline) target;
                         if(vertical && !g.isVertical()) {
                             GuidelineHandle gl = new GuidelineHandle(Ruler.this, sdoc, g);
-                            gl.setTranslateX(10);
+                            gl.setTranslateX(17);
                             gl.setTranslateY(g.getPosition()-GuidelineHandle.size/2);
                             Ruler.this.add(gl);
                             guideHandles.add(gl);
                         }
                         if(!vertical && g.isVertical()) {
                             GuidelineHandle gl = new GuidelineHandle(Ruler.this, sdoc, g);
-                            gl.setTranslateY(10);
+                            gl.setTranslateY(17);
                             gl.setTranslateX(g.getPosition()-GuidelineHandle.size/2);
                             Ruler.this.add(gl);
                             guideHandles.add(gl);
@@ -250,7 +249,7 @@ public class Ruler extends Container {
     private class GuidelineHandle extends Control {
         private SketchDocument.Guideline guideline;
         private Ruler ruler;
-        static final double size = 10;
+        static final double size = 14;
 
         private GuidelineHandle(final Ruler ruler, final SketchDocument doc, final SketchDocument.Guideline guideline) {
             this.ruler = ruler;
@@ -317,21 +316,11 @@ public class Ruler extends Container {
         public void draw(GFX gfx) {
             if(guideline.isVertical() && !vertical) {
                 gfx.translate(size/2,0);
-                gfx.setPaint(FlatColor.BLACK);
-                gfx.drawLine(-1,5,-1,20);
-                gfx.drawLine(+1,5,+1,20);
-                gfx.setPaint(FlatColor.RED);
-                gfx.drawLine( 0,5, 0,20);
                 DrawUtils.drawTriangleHandle(gfx,getWidth()/2,getHeight()/2,FlatColor.RED,true);
                 gfx.translate(-size/2,0);
             }
             if(!guideline.isVertical() && vertical) {
                 gfx.translate(0,size/2);
-                gfx.setPaint(FlatColor.BLACK);
-                gfx.drawLine(5,-1,20,-1);
-                gfx.drawLine(5,+1,20,+1);
-                gfx.setPaint(FlatColor.RED);
-                gfx.drawLine(5, 0,20, 0);
                 DrawUtils.drawTriangleHandle(gfx,getWidth()/2,getHeight()/2,FlatColor.RED,false);
                 gfx.translate(0,-size/2);
             }
