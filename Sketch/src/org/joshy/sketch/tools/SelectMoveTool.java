@@ -451,6 +451,19 @@ public class SelectMoveTool extends CanvasTool {
                 vsnap = snapVerticalBounds(cursor,docBounds);
             }
         }
+
+        //snap with guidelines next if not already snapped
+        for(SketchDocument.Guideline gl : context.getDocument().getCurrentPage().getGuidelines()) {
+            if(!gl.isVertical()) {
+                if(!vsnap) {
+                    vsnap = snapVerticalPosition(cursor, gl.getPosition());
+                }
+            } else {
+                if(!hsnap) {
+                    hsnap = snapHorizontalPosition(cursor, gl.getPosition());
+                }
+            }
+        }
         
         if(!hsnap) context.getCanvas().hideHSnap();
         if(!vsnap) context.getCanvas().hideVSnap();
@@ -536,6 +549,61 @@ public class SelectMoveTool extends CanvasTool {
         return false;
     }
 
+    private boolean snapVerticalPosition(Point2D.Double cursor, double position) {
+        Bounds selb = calculateUnSnappedSelectionBounds(cursor);
+        double threshold = 15;
+        if(Math.abs(selb.getY()-position) < threshold) {
+            for(SNode n : context.getSelection().items()) {
+                Point2D start = starts.get(n);
+                double dy = start.getY() + cursor.getY()-startY;
+                dy = dy-selb.getY();
+                n.setTranslateY(position+dy);
+            }
+            context.getCanvas().showVSnap(position);
+            return true;
+        }
+        if(Math.abs(selb.getY()+selb.getHeight()-position) < threshold) {
+            for(SNode n : context.getSelection().items()) {
+                Point2D start = starts.get(n);
+                //calc where the edge would be with no snapping
+                double dy = start.getY() + cursor.getY()-startY;
+                dy = dy-selb.getY(); // calc y within the bounds of the selection
+                n.setTranslateY(position-selb.getHeight()+dy);
+            }
+            context.getCanvas().showVSnap(position);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean snapHorizontalPosition(Point2D.Double cursor, double position) {
+        Bounds selb = calculateUnSnappedSelectionBounds(cursor);
+        double threshold = 15;
+        if(Math.abs(selb.getX()-position) < threshold) {
+            for(SNode n : context.getSelection().items()) {
+                Point2D start = starts.get(n);
+                double dx = start.getX() + cursor.getX()-startX;
+                dx = dx-selb.getX();
+                n.setTranslateX(position+dx);
+            }
+            context.getCanvas().showHSnap(position);
+            return true;
+        }
+        if(Math.abs(selb.getX()+selb.getWidth()-position) < threshold) {
+            for(SNode n : context.getSelection().items()) {
+                //bounds.x + offset within the bounds
+                Point2D start = starts.get(n);
+                //calc where the edge would be with no snapping
+                double dx = start.getX() + cursor.getX()-startX;
+                dx = dx-selb.getX(); //calc x within the bounds of the selection
+                n.setTranslateX(position-selb.getWidth()+dx);
+            }
+            context.getCanvas().showHSnap(position);
+            return true;
+        }
+
+        return false;
+    }
 
     private boolean snapVerticalBounds(Point2D.Double cursor, Bounds doc) {
         Bounds selb = calculateUnSnappedSelectionBounds(cursor);
