@@ -185,16 +185,10 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
 
         public void draw(GFX g) {
             if(vertical) {
-                g.setPaint(FlatColor.BLACK.deriveWithAlpha(0.5));
-                g.drawLine(position-1,0,position-1, page.getDocument().getHeight());
-                g.drawLine(position+1,0,position+1, page.getDocument().getHeight());
-                g.setPaint(FlatColor.RED);
+                g.setPaint(FlatColor.RED.deriveWithAlpha(0.5));
                 g.drawLine(position,0,position, page.getDocument().getHeight());
             } else {
-                g.setPaint(FlatColor.BLACK.deriveWithAlpha(0.5));
-                g.drawLine(0,position-1, page.getDocument().getWidth(),position-1);
-                g.drawLine(0,position+1, page.getDocument().getWidth(),position+1);
-                g.setPaint(FlatColor.RED);
+                g.setPaint(FlatColor.RED.deriveWithAlpha(0.5));
                 g.drawLine(0,position, page.getDocument().getWidth(),position);
             }
         }
