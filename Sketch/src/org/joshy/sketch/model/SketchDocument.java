@@ -130,7 +130,6 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
     }
 
     public Guideline createGuideline(double pos, boolean vertical) {
-        u.p("created a guideline");
         Guideline g = new Guideline(this,vertical,pos);
         this.guidelines.add(g);
         fireDocDirty();
