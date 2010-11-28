@@ -52,6 +52,14 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
 
     public void pageStart(XMLWriter out, SketchDocument.SketchPage page) {
         out.start("page");
+        out.start("guidelines");
+        for(SketchDocument.Guideline gl : page.getGuidelines()) {
+            out.start("guideline")
+                    .attr("position",""+gl.getPosition())
+                    .attr("vertical",""+gl.isVertical())
+                    .end();
+        }
+        out.end();
     }
 
     public void exportPre(XMLWriter out, SNode shape) {

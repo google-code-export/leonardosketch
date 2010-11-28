@@ -190,10 +190,19 @@ public class OpenAction extends SAction {
 
     private static void loadPage(SketchDocument sdoc, Elem epage, ZipFile zipFile) throws XPathExpressionException {
         SketchDocument.SketchPage page = sdoc.addPage();
+        for(Elem e : epage.xpath("./guidelines/guideline")) {
+            page.createGuideline(
+                    Double.parseDouble(e.attr("position")),
+                    Boolean.parseBoolean(e.attr("vertical"))
+                    );
+        }
         for(Elem e : epage.xpath("./*")) {
+            //skip guidelines
+            if("guidelines".equals(e.name())) continue;
+            //do all shapes
             SNode sh = loadAnyShape(e,zipFile);
             if(sh == null) {
-                u.p("WARNING: Unknown shape parsed: " + epage);
+                u.p("WARNING: Unknown shape parsed: " + e.name());
             }
             if(sh != null) {
                 page.add(sh);
