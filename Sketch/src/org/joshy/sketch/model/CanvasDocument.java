@@ -112,7 +112,7 @@ public class CanvasDocument<P extends Page> {
         return props;
     }
 
-    private void fireDocDirty() {
+    protected void fireDocDirty() {
         EventBus.getSystem().publish(new DocumentEvent(this,isDirty()));
     }
 
@@ -125,8 +125,11 @@ public class CanvasDocument<P extends Page> {
         public static final EventType Dirty = new EventType("DocumentDirty");
         public static final EventType ViewDirty = new EventType("ViewDirty");
         public static final EventType PageChanged = new EventType("PageChanged");
+        public static final EventType PageGuidelineAdded = new EventType("PageGuidelineAdded");
+        public static final EventType PageGuidelineMoved = new EventType("PageGuidelineMoved");
         private boolean isDirty;
         private CanvasDocument document;
+        private Object target;
 
         public DocumentEvent(CanvasDocument document, boolean isDirty) {
             super(Dirty,document);
@@ -135,12 +138,22 @@ public class CanvasDocument<P extends Page> {
         }
 
         public DocumentEvent(CanvasDocument document, EventType type) {
-            super(type);
+            super(type,document);
             this.document = document;
+        }
+
+        public DocumentEvent(CanvasDocument document, EventType type, Object target) {
+            super(type,document);
+            this.document = document;
+            this.target = target;
         }
 
         public CanvasDocument getDocument() {
             return document;
+        }
+
+        public Object getTarget() {
+            return target;
         }
     }
 
