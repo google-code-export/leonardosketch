@@ -214,10 +214,24 @@ public class Ruler extends Container {
         @Override
         public void draw(GFX gfx) {
             if(guideline.isVertical() && !vertical) {
+                gfx.translate(size/2,0);
+                gfx.setPaint(FlatColor.BLACK);
+                gfx.drawLine(-1,5,-1,20);
+                gfx.drawLine(+1,5,+1,20);
+                gfx.setPaint(FlatColor.RED);
+                gfx.drawLine( 0,5, 0,20);
                 DrawUtils.drawTriangleHandle(gfx,getWidth()/2,getHeight()/2,FlatColor.RED,true);
+                gfx.translate(-size/2,0);
             }
             if(!guideline.isVertical() && vertical) {
+                gfx.translate(0,size/2);
+                gfx.setPaint(FlatColor.BLACK);
+                gfx.drawLine(5,-1,20,-1);
+                gfx.drawLine(5,+1,20,+1);
+                gfx.setPaint(FlatColor.RED);
+                gfx.drawLine(5, 0,20, 0);
                 DrawUtils.drawTriangleHandle(gfx,getWidth()/2,getHeight()/2,FlatColor.RED,false);
+                gfx.translate(0,-size/2);
             }
         }
     }
