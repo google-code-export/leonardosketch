@@ -111,6 +111,7 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
             draw(g,node);
         }
 
+        drawGridlines(g,sdoc);
         drawSnaps(g,sdoc);
         g.scale(1/getScale(),1/getScale());
         g.translate(-panX,-panY);
@@ -133,6 +134,12 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
 
         if(context.selectedTool != null) {
             context.selectedTool.drawOverlay(g);
+        }
+    }
+
+    private void drawGridlines(GFX g, SketchDocument sdoc) {
+        for(SketchDocument.Guideline guideline : sdoc.getGuidelines()) {
+            guideline.draw(g);
         }
     }
 

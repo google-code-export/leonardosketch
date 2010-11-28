@@ -1,11 +1,13 @@
 package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.GFX;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
+    private List<Guideline> guidelines = new ArrayList<Guideline>();
     private boolean gridActive = true;
     private double gridWidth = 25;
     private double gridHeight = 25;
@@ -21,6 +23,9 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         setHeight(800);
         this.pages.add(new SketchPage(this));
         setCurrentPage(0);
+
+        this.guidelines.add(new Guideline(this,true,100));
+        this.guidelines.add(new Guideline(this,false,100));
     }
 
     public boolean isGridActive() {
@@ -118,6 +123,10 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         this.snapNodeBounds = snapNodeBounds;
     }
 
+    public Iterable<? extends Guideline> getGuidelines() {
+        return guidelines;
+    }
+
     public static class SketchPage extends Page {
         public List<SNode> model;
         private SketchDocument doc;
@@ -148,6 +157,46 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         public void clear() {
             model.clear();
             doc.setDirty(true);
+        }
+    }
+
+    public static class Guideline {
+        private SketchDocument doc;
+        private boolean vertical;
+        private double position;
+
+        public Guideline(SketchDocument document, boolean vertical, double position) {
+            this.doc = document;
+            this.vertical = vertical;
+            this.position = position;
+        }
+
+        public void draw(GFX g) {
+            if(vertical) {
+                g.setPaint(FlatColor.BLACK.deriveWithAlpha(0.5));
+                g.drawLine(position-1,0,position-1,doc.getHeight());
+                g.drawLine(position+1,0,position+1,doc.getHeight());
+                g.setPaint(FlatColor.RED);
+                g.drawLine(position,0,position,doc.getHeight());
+            } else {
+                g.setPaint(FlatColor.BLACK.deriveWithAlpha(0.5));
+                g.drawLine(0,position-1,doc.getWidth(),position-1);
+                g.drawLine(0,position+1,doc.getWidth(),position+1);
+                g.setPaint(FlatColor.RED);
+                g.drawLine(0,position,doc.getWidth(),position);
+            }
+        }
+
+        public boolean isVertical() {
+            return vertical;
+        }
+
+        public double getPosition() {
+            return position;
+        }
+
+        public void setPosition(double position) {
+            this.position = position;
         }
     }
 }
