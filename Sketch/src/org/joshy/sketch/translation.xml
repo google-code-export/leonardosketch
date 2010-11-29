@@ -652,6 +652,9 @@
             <value language="tr-TR">Scriptler</value>
             <value language="fr-FR">Scripts</value>
         </key>
+        <key name="debug">
+            <value>Debug</value>
+        </key>
     </set>
 
 
@@ -784,6 +787,9 @@
             <value>Close</value>
             <value language="de-DE">Schließen</value>
         </key>
+        <key name="changesAppliedLater">
+            <value>Changes will applied after Leonardo restarts</value>            
+        </key>
     </set>
 
     <set name="trackingDialog">
@@ -797,6 +803,9 @@
         <key name="enable.analytics.tracking">
             <value>Enable Analytics tracking</value>
             <value language="de-DE">Analyse einschalten</value>
+        </key>
+        <key name="enable.debug.menu">
+            <value>Enable Debug menug</value>
         </key>
     </set>
 
