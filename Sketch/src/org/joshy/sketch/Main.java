@@ -88,6 +88,7 @@ public class Main implements Runnable {
     public static int CURRENT_BUILD_NUMBER = 2;
     public static Properties releaseProperties;
     public static final String TRACKING_PERMISSIONS = "org.joshy.gfx.sketch.tracking.allow";
+    public static final String DEBUG_MENU = "org.joshy.gfx.sketch.debug.menuEnabled";
     public static String UPDATE_URL = "";
     public static String DOWNLOAD_URL = "";
 
@@ -612,6 +613,26 @@ public class Main implements Runnable {
             }
         }
         menubar.add(scriptMenu.createJMenu());
+
+        if(settings.containsKey(DEBUG_MENU)) {
+            if("true".equals(settings.getProperty(DEBUG_MENU))) {
+                Menu debugMenu = new Menu().setTitle(getString("menus.debug"));
+                debugMenu.addItem("Show Console", new SAction(){
+                    @Override
+                    public void execute() throws Exception {
+
+                    }
+                })
+                .addItem("Edit Translations", new SAction() {
+                    @Override
+                    public void execute() throws Exception {
+
+                    }
+                });
+                menubar.add(debugMenu.createJMenu());
+            }
+        }
+
     }
 
     private List<File> loadRecentDocs(File file) {
