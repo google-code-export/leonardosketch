@@ -73,12 +73,14 @@ public class Ruler extends Container {
                 setDrawingDirty();
             }
         });
+
         EventBus.getSystem().addListener(context.getCanvas(), MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public void call(MouseEvent mouseEvent) {
                 lastMouse = mouseEvent;
                 setDrawingDirty();
             }
         });
+        
         EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public SketchDocument.Guideline newGuide;
 
@@ -91,7 +93,9 @@ public class Ruler extends Container {
                                 if(newGuide == null) {
                                     newGuide = sdoc.getCurrentPage().createGuideline(0,true);
                                 } else {
-                                    newGuide.setPosition(mouseEvent.getPointInNodeCoords(context.getCanvas()).getX());
+                                    Point2D pt = mouseEvent.getPointInNodeCoords(context.getCanvas());
+                                    pt = context.getCanvas().transformToCanvas(pt);
+                                    newGuide.setPosition(pt.getX());
                                 }
                             }
                         } else {
@@ -99,7 +103,9 @@ public class Ruler extends Container {
                                 if(newGuide == null) {
                                     newGuide = sdoc.getCurrentPage().createGuideline(0,false);
                                 } else {
-                                    newGuide.setPosition(mouseEvent.getPointInNodeCoords(context.getCanvas()).getY());
+                                    Point2D pt = mouseEvent.getPointInNodeCoords(context.getCanvas());
+                                    pt = context.getCanvas().transformToCanvas(pt);
+                                    newGuide.setPosition(pt.getY());
                                 }
                             }
                         }
@@ -266,13 +272,13 @@ public class Ruler extends Container {
             EventBus.getSystem().addListener(this,MouseEvent.MouseDragged,new Callback<MouseEvent>() {
                 public void call(MouseEvent mouseEvent) throws Exception {
                     Point2D pt = mouseEvent.getPointInNodeCoords(ruler);
+                    pt = context.getCanvas().transformToCanvas(pt);
                     if(guideline.isVertical()) {
-                        guideline.setPosition(pt.getX() + offset);
-                        setTranslateX(guideline.getPosition()- size /2 - offset);
-
+                        guideline.setPosition(pt.getX());
+                        setTranslateX(guideline.getPosition() - size /2);
                     } else {
-                        guideline.setPosition(pt.getY() + offset);
-                        setTranslateY(guideline.getPosition()- size /2 - offset);
+                        guideline.setPosition(pt.getY());
+                        setTranslateY(guideline.getPosition() - size /2);
                     }
                 }
             });
@@ -294,9 +300,13 @@ public class Ruler extends Container {
                 public void call(CanvasDocument.DocumentEvent documentEvent) throws Exception {
                     if(documentEvent.getTarget() == guideline) {
                         if(guideline.isVertical()) {
-                            setTranslateX(guideline.getPosition()- size /2 - offset);
+                            Point2D pt = new Point2D.Double(guideline.getPosition(),0);
+                            pt = context.getCanvas().transformToDrawing(pt);
+                            setTranslateX(pt.getX()- size /2);
                         } else {
-                            setTranslateY(guideline.getPosition()- size /2 - offset);
+                            Point2D pt = new Point2D.Double(0,guideline.getPosition());
+                            pt = context.getCanvas().transformToDrawing(pt);
+                            setTranslateY(pt.getY()- size /2);
                         }
                     }
                 }
