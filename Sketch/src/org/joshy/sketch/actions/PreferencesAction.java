@@ -49,6 +49,7 @@ public class PreferencesAction extends SAction {
                 }
             });
 
+        //starting on translations
         //debug menu
         Checkbox debugMenuCheckbox = new Checkbox(getString("preferences.enable.debug.menu"));
         boolean debugMenuEnabled = "true".equals(manager.settings.getProperty(Main.DEBUG_MENU));
