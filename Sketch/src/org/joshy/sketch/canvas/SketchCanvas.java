@@ -10,7 +10,6 @@ import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
-import java.awt.geom.Point2D;
 import java.util.List;
 
 public class SketchCanvas extends DocumentCanvas implements ScrollPane.ScrollingAware {
@@ -23,11 +22,15 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
     private boolean hsnapVisible;
     private double vsnap;
     private ScrollPane scrollPane;
+    private Bounds maxExtent;
+    public double offsetX = 0;
+    public double offsetY = 0;
 
     public SketchCanvas(VectorDocContext context) {
         this.context = context;
         document = new SketchDocument();
         selection = new Selection(context);
+        maxExtent = new Bounds(0,0,0,0);
     }
 
     @Override
@@ -63,31 +66,42 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
     public void doSkins() {
     }
 
-    /*
-    @Override
-    public double getWidth() {
-        return document.getWidth()*getScale();
+    private Bounds calcFinalBounds() {
+        Bounds maxExtent = getMaxExtent();
+        Bounds docbounds = new Bounds(0,0,document.getWidth(),document.getHeight());
+        Bounds finalBounds = maxExtent.union(docbounds);
+        double extra = 500;
+        finalBounds = new Bounds(
+                finalBounds.getX()-extra,
+                finalBounds.getY()-extra,
+                finalBounds.getWidth()+extra*2,
+                finalBounds.getHeight()+extra*2
+                );
+        offsetX = finalBounds.getX()*getScale();
+        offsetY = finalBounds.getY()*getScale();
+        double nvx = -(offsetX+panX);
+        double nvy = -(offsetY+panY);
+        scrollPane.getHorizontalScrollBar().setValue(nvx);
+        scrollPane.getVerticalScrollBar().setValue(nvy);
+        return finalBounds;
     }
 
-    @Override
-    public double getHeight() {
-        return document.getHeight()*getScale();
-    }
-  */
     public double getFullWidth(double width, double height) {
-        return Math.max(document.getWidth()*getScale(),width);
+        Bounds finalBounds = calcFinalBounds();
+        return Math.max(finalBounds.getWidth()*getScale(),width);
     }
 
     public double getFullHeight(double width, double height) {
-        return Math.max(document.getHeight()*getScale(),height);
+        Bounds finalBounds = calcFinalBounds();
+        return Math.max(finalBounds.getHeight()*getScale(),height);
     }
 
     public void setScrollX(double value) {
-        this.panX = value;
+        this.panX = value-offsetX;
     }
 
     public void setScrollY(double value) {
-        this.panY = value;
+        this.panY = value-offsetY;
     }
 
     public void setScrollParent(ScrollPane scrollPane) {
@@ -96,6 +110,7 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
 
     @Override
     public void draw(GFX g) {
+        recalcMaxExtent();
         SketchDocument sdoc = document;
         g.setPaint(sdoc.getBackgroundFill());
         g.fillRect(0,0,getWidth(),getHeight());
@@ -196,11 +211,8 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
     }
 
     private void drawSelection(GFX g, SNode node, List<Handle> handles) {
-        //List<Handle> handles = selection.getHandles().get(node);
         if(handles == null) return;
         for(Handle h : handles) {
-            Point2D pt = new Point2D.Double(h.getX(),h.getY());
-            pt = transformToDrawing(pt);
             h.draw(g,this);
         }
     }
@@ -237,6 +249,7 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
         EventBus.getSystem().addListener(SketchDocument.DocumentEvent.PageChanged, new Callback<SketchDocument.DocumentEvent>() {
             public void call(CanvasDocument.DocumentEvent event) {
                 setDrawingDirty();
+                recalcMaxExtent();
             }
         });
     }
@@ -261,6 +274,17 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
 
     public void hideVSnap() {
         vsnapVisible = false;
+    }
+
+    public Bounds getMaxExtent() {
+        return maxExtent;
+    }
+
+    private void recalcMaxExtent() {
+        maxExtent = new Bounds(0,0,0,0);
+        for(SNode n : document.getCurrentPage().model) {
+            maxExtent = maxExtent.union(n.getBounds());
+        }
     }
 
 }

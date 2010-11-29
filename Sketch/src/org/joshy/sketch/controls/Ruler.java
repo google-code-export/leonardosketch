@@ -15,6 +15,7 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.control.Scrollbar;
 import org.joshy.gfx.node.layout.Container;
+import org.joshy.sketch.canvas.SketchCanvas;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
@@ -40,7 +41,7 @@ public class Ruler extends Container {
     private List<GuidelineHandle> guideHandles = new ArrayList<GuidelineHandle>();
     private CanvasDocument doc;
 
-    public Ruler(boolean vertical, ScrollPane scrollPane, final DocContext context) {
+    public Ruler(final boolean vertical, ScrollPane scrollPane, final DocContext context) {
         this.vertical = vertical;
         this.context = context;
 
@@ -54,6 +55,14 @@ public class Ruler extends Container {
         EventBus.getSystem().addListener(sp, ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
             public void call(ChangedEvent event) {
                 offset = (Double) event.getValue();
+                if(context.getCanvas() instanceof SketchCanvas) {
+                    SketchCanvas sc = (SketchCanvas) context.getCanvas();
+                    if(vertical) {
+                        offset += sc.offsetY;
+                    } else {
+                        offset += sc.offsetX;
+                    }
+                }
                 for(GuidelineHandle g : guideHandles) {
                     if(g.guideline.isVertical()) {
                         g.setTranslateX(g.guideline.getPosition() - g.size / 2 - offset);
