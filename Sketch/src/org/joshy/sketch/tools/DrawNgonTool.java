@@ -114,11 +114,13 @@ public class DrawNgonTool extends CanvasTool {
 
     public void drawOverlay(GFX g) {
         if(node != null) {
+            g.translate(context.getSketchCanvas().getPanX(),context.getSketchCanvas().getPanY());
             g.scale(context.getSketchCanvas().getScale(),context.getSketchCanvas().getScale());
             g.translate(node.getTranslateX(),node.getTranslateY());
             node.draw(g);
             g.translate(-node.getTranslateX(),-node.getTranslateY());
             g.scale(1/context.getSketchCanvas().getScale(),1/context.getSketchCanvas().getScale());
+            g.translate(-context.getSketchCanvas().getPanX(),-context.getSketchCanvas().getPanY());
         }
     }
 

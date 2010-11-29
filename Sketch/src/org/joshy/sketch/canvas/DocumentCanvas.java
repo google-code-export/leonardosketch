@@ -26,6 +26,14 @@ public abstract class DocumentCanvas extends Control implements Focusable {
         this.panY = panY;
     }
 
+    public double getPanX() {
+        return panX;
+    }
+
+    public double getPanY() {
+        return panY;
+    }
+
     public double getScale() {
         return scale;
     }

@@ -99,15 +99,16 @@ public class Selection {
     public Bounds calculateBounds() {
         double x = Double.MAX_VALUE;
         double y = Double.MAX_VALUE;
-        double w = Double.MIN_VALUE;
-        double h = Double.MIN_VALUE;
+        double x2 = Double.NEGATIVE_INFINITY;
+        double y2 = Double.NEGATIVE_INFINITY;
         for(SNode n : items()) {
-            x = Math.min(x, n.getBounds().getX());
-            y = Math.min(y, n.getBounds().getY());
-            w = Math.max(w, n.getBounds().getX() + n.getBounds().getWidth());
-            h = Math.max(h, n.getBounds().getY() + n.getBounds().getHeight());
+            Bounds b = n.getBounds();
+            x  = Math.min(x,  b.getX());
+            y  = Math.min(y,  b.getY());
+            x2 = Math.max(x2, b.getX2());
+            y2 = Math.max(y2, b.getY2());
         }
-        return new Bounds(x,y,w-x,h-y);
+        return new Bounds(x,y,x2-x,y2-y);
     }
 
     public Iterable<? extends SNode> sortedItems(SketchDocument doc) {
