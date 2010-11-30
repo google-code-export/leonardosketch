@@ -10,6 +10,7 @@
     </target>
     
     <target name="init">
+	<echo message="this is from the translation branch!"/>
         <echo message="in init"/>
         <buildnumber file="../leobuild.number"/>
         <tstamp>
