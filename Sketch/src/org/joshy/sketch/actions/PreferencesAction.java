@@ -13,6 +13,7 @@ import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.Main;
+
 import static org.joshy.gfx.util.localization.Localization.getString;
 
 /**
@@ -78,7 +79,7 @@ public class PreferencesAction extends SAction {
         );
         tab.add("debug", new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
             .add(debugMenuCheckbox)
-            .add(new Label(getString("misc.changesAppliedLater")))
+            .add(new Label(getString("misc.changesAppliedLater").toString()))
         );
 
         stage.setContent(new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)

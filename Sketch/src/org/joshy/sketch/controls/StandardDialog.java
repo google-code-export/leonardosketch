@@ -27,7 +27,7 @@ public class StandardDialog {
     public static Result showYesNoCancel(String text, String yesText, String noText, String cancelText) {
         int result = JOptionPane.showOptionDialog(null
                 , text
-                , getString("dialog.warning")
+                , getString("dialog.warning").toString()
                 , JOptionPane.YES_NO_CANCEL_OPTION
                 , JOptionPane.WARNING_MESSAGE
                 , null

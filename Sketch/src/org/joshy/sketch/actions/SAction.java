@@ -11,7 +11,7 @@ package org.joshy.sketch.actions;
  * attached to UI controls.
  */
 public abstract class SAction {
-    public String getDisplayName() {
+    public CharSequence getDisplayName() {
         return "unknown saction";
     }
     public abstract void execute() throws Exception;

@@ -15,7 +15,7 @@ public class CreateSymbol extends SAction {
 
 
     @Override
-    public String getDisplayName() {
+    public CharSequence getDisplayName() {
         return getString("menus.createSymbol");
     }
 

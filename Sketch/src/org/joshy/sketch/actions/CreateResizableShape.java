@@ -23,7 +23,7 @@ public class CreateResizableShape extends SAction {
     }
 
     @Override
-    public String getDisplayName() {
+    public CharSequence getDisplayName() {
         return getString("menus.createResizableShape");
     }
 
@@ -54,7 +54,7 @@ public class CreateResizableShape extends SAction {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.editResizableShape");
         }
 

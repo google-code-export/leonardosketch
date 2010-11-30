@@ -31,7 +31,7 @@ public class AboutAction extends SAction {
     }
 
     @Override
-    public String getDisplayName() {
+    public CharSequence getDisplayName() {
         return getString("menus.about");
     }
 

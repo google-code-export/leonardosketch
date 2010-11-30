@@ -3,11 +3,10 @@ package org.joshy.sketch.modes;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.SAction;
+import org.joshy.sketch.controls.Menu;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.tools.CanvasTool;
 import org.joshy.sketch.util.BiList;
-
-import javax.swing.*;
 
 /**
  * The base class for all editing modes. You will always use a doc type specific subclassn
@@ -23,9 +22,9 @@ public abstract class DocModeHelper<D extends DocContext> {
 
     public abstract boolean isPageListVisible();
 
-    public abstract JMenu buildPageMenu(D context);
+    public abstract Menu buildPageMenu(D context);
 
-    public abstract String getModeName();
+    public abstract CharSequence getModeName();
 
     public abstract D createDocContext(Main main);
 

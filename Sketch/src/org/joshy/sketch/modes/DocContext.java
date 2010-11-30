@@ -11,9 +11,9 @@ import org.joshy.sketch.actions.pages.PageListPanel;
 import org.joshy.sketch.actions.symbols.SymbolPanel;
 import org.joshy.sketch.canvas.DocumentCanvas;
 import org.joshy.sketch.controls.Menu;
+import org.joshy.sketch.controls.Menubar;
 import org.joshy.sketch.model.CanvasDocument;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -30,14 +30,13 @@ public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocum
     public PageListPanel pageList;
     private UndoManager undoManager;
     public Menu symbolMenu;
-    public JMenu symbolMenuJMenu;
-    public JMenu pageMenu;
+    public Menu pageMenu;
     public SymbolPanel symbolPanel;
-    public JMenuBar menubar;
+    public Menubar menubar;
     public Panel mainPanel;
     private Stage stage;
     protected DocModeHelper modeHelper;
-    public JMenu windowJMenu;
+    public Menu windowJMenu;
 
     public DocContext(Main main, DocModeHelper mode) {
         this.main = main;
@@ -80,7 +79,7 @@ public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocum
 
     public abstract void setupPopupLayer();
 
-    public abstract void createAfterEditMenu(JMenuBar menubar);
+    public abstract void createAfterEditMenu(Menubar menubar);
 
     public abstract Control getToolbar();
 

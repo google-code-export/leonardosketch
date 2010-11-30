@@ -24,7 +24,7 @@ public class DeleteSelectedNodeAction extends SAction {
     }
 
     @Override
-    public String getDisplayName() {
+    public CharSequence getDisplayName() {
         return getString("menus.delete");
     }
 

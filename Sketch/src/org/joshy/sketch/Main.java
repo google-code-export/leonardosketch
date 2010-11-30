@@ -23,6 +23,7 @@ import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.localization.Localization;
+import org.joshy.gfx.util.localization.TranslationEditor;
 import org.joshy.gfx.util.u;
 import org.joshy.gfx.util.xml.XMLRequest;
 import org.joshy.sketch.actions.*;
@@ -33,6 +34,7 @@ import org.joshy.sketch.actions.pages.PageListPanel;
 import org.joshy.sketch.actions.symbols.SymbolManager;
 import org.joshy.sketch.canvas.DocumentCanvas;
 import org.joshy.sketch.controls.Menu;
+import org.joshy.sketch.controls.Menubar;
 import org.joshy.sketch.controls.Ruler;
 import org.joshy.sketch.controls.StandardDialog;
 import org.joshy.sketch.model.CanvasDocument;
@@ -113,7 +115,7 @@ public class Main implements Runnable {
             trackingEnabled = "true".equals(settings.getProperty(TRACKING_PERMISSIONS));
         } else {
             final Stage stage = Stage.createStage();
-            stage.setTitle(getString("trackingDialog.title"));
+            stage.setTitle(getString("trackingDialog.title").toString());
             Callback<ActionEvent> noResponse = new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
                     stage.hide();
@@ -301,7 +303,7 @@ public class Main implements Runnable {
             for(ShowWindow a : windowOpeners) {
                 windowMenu.addItem(getString("menus.window")+": " + a.context.getDocument().getTitle(), a);
             }
-            context.windowJMenu = windowMenu.createJMenu();
+            context.windowJMenu = windowMenu;//windowMenu.createJMenu();
             context.menubar.add(context.windowJMenu);
         }                                               
     }
@@ -313,7 +315,7 @@ public class Main implements Runnable {
         makeAWishAction = new Callback<ActionEvent>(){
             public void call(ActionEvent actionEvent) {
                 if(wishBox.getText().trim().length() < 2) {
-                    StandardDialog.showError(getString("misc.wish.dialog"));
+                    StandardDialog.showError(getString("misc.wish.dialog").toString());
                 } else {
                     try {
                         new XMLRequest()
@@ -405,17 +407,18 @@ public class Main implements Runnable {
         context.getStage().setHeight(600);
 
         final JFrame frame = (JFrame) context.getStage().getNativeWindow();
-        context.menubar = new JMenuBar();
+        context.menubar = new Menubar(frame);
         buildCommonMenubar(context);
-        frame.setJMenuBar(context.menubar);
         EventBus.getSystem().addListener(context.getStage(), WindowEvent.Closing,new Callback<WindowEvent>() {
             public void call(WindowEvent event) {
                 if(context.getDocument().isDirty()) {
                     event.veto();
                     u.p("doc is still dirty!!!");
                     StandardDialog.Result result = StandardDialog.showYesNoCancel(
-                            getString("dialog.docNotSaved"),
-                            getString("dialog.save"),getString("dialog.dontsave"),getString("dialog.cancel"));
+                            getString("dialog.docNotSaved").toString(),
+                            getString("dialog.save").toString(),
+                            getString("dialog.dontsave").toString(),
+                            getString("dialog.cancel").toString());
                     if(result== StandardDialog.Result.Yes) {
                         new SaveAction(context,false).execute();
                     }
@@ -446,7 +449,7 @@ public class Main implements Runnable {
         final Stage stage = Stage.createStage();
         Panel panel = new VFlexBox();
         for(final DocModeHelper mode : modeHelpers) {
-            panel.add(new Button(getString("misc.new") + mode.getModeName()).onClicked(new Callback<ActionEvent>(){
+            panel.add(new Button(getString("misc.new").toString() + mode.getModeName()).onClicked(new Callback<ActionEvent>(){
                 public void call(ActionEvent event) throws Exception {
                     SAction action = mode.getNewDocAction(Main.this);
                     action.execute();
@@ -535,8 +538,8 @@ public class Main implements Runnable {
             fileMenu.addItem(getString("menus.about"),     null,       aboutAction);
             fileMenu.addItem(getString("menus.exit"),      "Q",        quitAction);
         }
-        JMenuBar menubar = context.menubar;
-        menubar.add(fileMenu.createJMenu());
+        Menubar menubar = context.menubar;
+        menubar.add(fileMenu);
         Menu editMenu = new Menu().setTitle(getString("menus.edit"))
                 .addItem(getString("menus.cut"), "X", new Clipboard.CutAction(context))
                 .addItem(getString("menus.copy"), "C", new Clipboard.CopyAction(context))
@@ -561,7 +564,7 @@ public class Main implements Runnable {
                 trackingEnabled = toggleState;
             }
         });
-        menubar.add(editMenu.createJMenu());
+        menubar.add(editMenu);
         context.createAfterEditMenu(menubar);
 
         Menu viewMenu = new Menu().setTitle(getString("menus.view"))
@@ -590,7 +593,7 @@ public class Main implements Runnable {
         }
 
         //view menu
-        menubar.add(viewMenu.createJMenu());
+        menubar.add(viewMenu);
 
         Menu shareMenu = new Menu().setTitle(getString("menus.share"))
                 .addItem(getString("menus.sendTwitter"), new TwitPicAction(context))
@@ -602,7 +605,7 @@ public class Main implements Runnable {
         if(OSUtil.isMac()) {
             shareMenu.addItem(getString("menus.sendEmailPNG"), new SendMacMail(context));
         }
-        menubar.add(shareMenu.createJMenu());
+        menubar.add(shareMenu);
 
         Menu scriptMenu = new Menu().setTitle(getString("menus.scripts"));
         if(SCRIPTS_DIR.exists()) {
@@ -612,7 +615,7 @@ public class Main implements Runnable {
                 }
             }
         }
-        menubar.add(scriptMenu.createJMenu());
+        menubar.add(scriptMenu);
 
         if(settings.containsKey(DEBUG_MENU)) {
             if("true".equals(settings.getProperty(DEBUG_MENU))) {
@@ -626,10 +629,14 @@ public class Main implements Runnable {
                 .addItem("Edit Translations", new SAction() {
                     @Override
                     public void execute() throws Exception {
-
+                        Stage s = Stage.createStage();
+                        s.setContent(new TranslationEditor());
+                        s.setWidth(800);
+                        s.setHeight(400);
+                        s.centerOnScreen();
                     }
                 });
-                menubar.add(debugMenu.createJMenu());
+                menubar.add(debugMenu);
             }
         }
 

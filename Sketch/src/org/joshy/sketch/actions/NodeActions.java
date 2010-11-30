@@ -23,7 +23,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.raiseNodeTop");
         }
 
@@ -50,7 +50,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.raiseNode");
         }
 
@@ -92,7 +92,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.lowerNode");
         }
 
@@ -132,7 +132,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.lowerNodeBottom");
         }
 
@@ -165,7 +165,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.alignNodeTop");
         }
 
@@ -192,7 +192,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.alignNodeBottom");
         }
 
@@ -219,7 +219,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.alignNodeLeft");
         }
 
@@ -246,7 +246,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.alignNodeRight");
         }
 
@@ -273,7 +273,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.alignNodeCenterVertical");
         }
 
@@ -303,7 +303,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.alignNodeCenterHorizontal");
         }
 
@@ -336,7 +336,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.groupSelection");
         }
 
@@ -373,7 +373,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.ungroupSelection");
         }
 
@@ -407,7 +407,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.matchNodeWidth");
         }
 
@@ -449,7 +449,7 @@ public class NodeActions {
         }
 
         @Override
-        public String getDisplayName() {
+        public CharSequence getDisplayName() {
             return getString("menus.matchNodeHeight");
         }
 

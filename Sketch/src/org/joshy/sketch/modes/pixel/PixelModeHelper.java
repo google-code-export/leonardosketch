@@ -4,13 +4,12 @@ import org.joshy.gfx.node.control.Button;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.NewPixelDocAction;
 import org.joshy.sketch.actions.SAction;
+import org.joshy.sketch.controls.Menu;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.model.PixelDocument;
 import org.joshy.sketch.modes.DocModeHelper;
 import org.joshy.sketch.tools.CanvasTool;
 import org.joshy.sketch.util.BiList;
-
-import javax.swing.*;
 
 /**
  * The mode helper for pixel documents.
@@ -31,12 +30,12 @@ public class PixelModeHelper extends DocModeHelper<PixelDocContext> {
     }
 
     @Override
-    public JMenu buildPageMenu(PixelDocContext context) {
+    public Menu buildPageMenu(PixelDocContext context) {
         return null;
     }
 
     @Override
-    public String getModeName() {
+    public CharSequence getModeName() {
         return "Bitmap";
     }
 

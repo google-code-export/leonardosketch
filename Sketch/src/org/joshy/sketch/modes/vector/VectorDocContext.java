@@ -193,10 +193,10 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     }
 
     @Override
-    public void createAfterEditMenu(JMenuBar menubar) {
+    public void createAfterEditMenu(Menubar menubar) {
         //node menu
         VectorDocContext context = this;
-        menubar.add(new org.joshy.sketch.controls.Menu().setTitle(getString("menus.node"))
+        menubar.add(new Menu().setTitle(getString("menus.node"))
                 .addItem(getString("menus.raiseNodeTop"),      "shift CLOSE_BRACKET", new NodeActions.RaiseTopSelectedNodeAction(this))
                 .addItem(getString("menus.raiseNode"),        "CLOSE_BRACKET",       new NodeActions.RaiseSelectedNodeAction(this))
                 .addItem(getString("menus.lowerNode"),        "OPEN_BRACKET",        new NodeActions.LowerSelectedNodeAction(this))
@@ -221,7 +221,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 .addItem(getString("menus.duplicateNode"), new NodeActions.DuplicateNodesAction(context,true))
                 .separator()
                 .addItem(getString("menus.resetTransforms"), new NodeActions.ResetTransforms(context))
-                .createJMenu());
+                );
         menubar.add(new Menu().setTitle(getString("menus.path"))
                 .addItem(getString("menus.flipNodeHorizontal"), new PathActions.Flip(context,true))
                 .addItem(getString("menus.flipNodeVertical"),   new PathActions.Flip(context,false))
@@ -233,10 +233,10 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 .addItem(getString("menus.add"), new BooleanGeometry.Union(context))
                 .addItem(getString("menus.subtract"), new BooleanGeometry.Subtract(context))
                 .addItem(getString("menus.intersection"), new BooleanGeometry.Intersection(context))
-                .createJMenu());
+                );
         menubar.add(new Menu().setTitle(getString("menus.document"))
                 .addItem(getString("menus.setDocumentSize"), new DocumentActions.SetDocumentSize(this))
-                .createJMenu());
+                );
 
         rebuildSymbolMenu(menubar);
 
@@ -265,10 +265,10 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     }
 
 
-    private void rebuildSymbolMenu(final JMenuBar menubar) {
+    private void rebuildSymbolMenu(final Menubar menubar) {
         VectorDocContext context = this;
-        if(context.symbolMenuJMenu != null) {
-            menubar.remove(context.symbolMenuJMenu);
+        if(context.symbolMenu != null) {
+            menubar.remove(context.symbolMenu);
         }
         context.symbolMenu = new Menu().setTitle("Symbol Sets");
         context.symbolMenu.addItem(getString("menus.create.new.set"), new SAction(){
@@ -293,8 +293,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 }
             });
         }
-        context.symbolMenuJMenu = context.symbolMenu.createJMenu();
-        menubar.add(context.symbolMenuJMenu);
+        menubar.add(context.symbolMenu);
     }
 
 

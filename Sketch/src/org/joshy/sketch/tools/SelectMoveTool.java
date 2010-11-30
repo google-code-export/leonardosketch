@@ -42,7 +42,7 @@ public class SelectMoveTool extends CanvasTool {
     private boolean pressed;
     private long lastClickTime = 0;
     private ArrayList<ActionItem> menuActions;
-    private ListModel<String> menuModel;
+    private ListModel<CharSequence> menuModel;
     private Point2D dragRectStartPoint;
     private Point2D dragRectEndPoint;
     private List<SNode> tempSelection = new ArrayList<SNode>();
@@ -59,14 +59,14 @@ public class SelectMoveTool extends CanvasTool {
 
     public static class ActionItem {
         public SAction action;
-        public String label;
+        public CharSequence label;
 
-        public ActionItem(SAction action, String label) {
+        public ActionItem(SAction action, CharSequence label) {
             this.action = action;
             this.label = label;
         }
 
-        public String getLabel() {
+        public CharSequence getLabel() {
             if(label != null) return label;
             return action.getDisplayName();
         }
@@ -79,8 +79,8 @@ public class SelectMoveTool extends CanvasTool {
         menuActions.add(new ActionItem(new NodeActions.GroupSelection(context),"Group"));
         menuActions.add(new ActionItem(new NodeActions.UngroupSelection(context),"Ungroup"));
 
-        menuModel = new ListModel<String>() {
-            public String get(int i) {
+        menuModel = new ListModel<CharSequence>() {
+            public CharSequence get(int i) {
                 return menuActions.get(i).label;
             }
             public int size() {

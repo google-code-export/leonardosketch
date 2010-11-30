@@ -56,7 +56,7 @@ public class UndoManager {
     public static interface UndoableAction {
         public void executeUndo();
         public void executeRedo();
-        public String getName();
+        public CharSequence getName();
     }
 
     public void stepBackwards() {
