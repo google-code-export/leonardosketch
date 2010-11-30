@@ -28,13 +28,13 @@
         <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/LeonardoSketch/dist/jnlp/"/>
         
         <property name="amino.core.dir" value="../amino/build/jars"/>
-        <property name="amino.core.lib" value="../amino/out/artifacts/core/Amino-core.jar"/>
+
         <property name="app.name" value="Leonardo"/>
         <echo message="amino core dir = ${amino.core.dir}"/>
-        <echo message="amino core lib = ${amino.core.lib}"/>
+
     </target>
 
-    <target name="clean">
+    <target m="clean">
         <delete dir="build"/>
         <delete dir="dist"/>
     </target>
