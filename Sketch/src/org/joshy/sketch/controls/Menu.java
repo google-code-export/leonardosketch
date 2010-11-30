@@ -1,13 +1,9 @@
 package org.joshy.sketch.controls;
 
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.ChangedEvent;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.util.u;
+import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ToggleAction;
 import org.joshy.sketch.canvas.SketchCanvas;
-import org.joshy.gfx.util.OSUtil;
 
 import javax.swing.*;
 import java.util.ArrayList;
@@ -21,23 +17,23 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class Menu {
-    private String title;
+    private CharSequence title;
     private List actions;
 
     public Menu() {
         actions = new ArrayList();
     }
 
-    public Menu setTitle(String title) {
+    public Menu setTitle(CharSequence title) {
         this.title = title;
         return this;
     }
 
-    public Menu addItem(String title, SAction action) {
+    public Menu addItem(CharSequence title, SAction action) {
         return this.addItem(title,null,action);
     }
 
-    public Menu addItem(String title, String key, SAction action) {
+    public Menu addItem(CharSequence title, String key, SAction action) {
         if(action instanceof ToggleAction) {
             actions.add(new ToggleActionAdapter(title,key, (ToggleAction) action));
         } else {
@@ -56,8 +52,8 @@ public class Menu {
         return this;
     }
 
-    public JMenu createJMenu() {
-        JMenu menu = new JMenu(title);
+    JMenu createJMenu() {
+        JMenu menu = new JMenu(title.toString());
         for(Object action : actions) {
             if(action instanceof JSeparator) {
                 menu.add((JSeparator)action);
@@ -81,25 +77,25 @@ public class Menu {
 
     private static class ActionAdapter extends AbstractAction {
         private final SketchCanvas canvas;
-        private String name;
+        private CharSequence name;
         private SAction action;
         private String acceleratorKey;
 
-        public ActionAdapter(SketchCanvas canvas, String name, String acceleratorKey, SAction action) {
+        public ActionAdapter(SketchCanvas canvas, CharSequence name, String acceleratorKey, SAction action) {
             this.canvas = canvas;
             this.name = name;
             this.action = action;
             this.acceleratorKey = acceleratorKey;
         }
-        public ActionAdapter(String name, String acceleratorKey, SAction action) {
+        public ActionAdapter(CharSequence name, String acceleratorKey, SAction action) {
             this(null,name,acceleratorKey,action);
         }
 
         @Override
         public Object getValue(String key) {
             if(Action.NAME.equals(key)) {
-                if(name != null) return name;
-                return action.getDisplayName();
+                if(name != null) return name.toString();
+                return action.getDisplayName().toString();
             }
             if(Action.ACCELERATOR_KEY.equals(key)) {
                 if(acceleratorKey != null) {
@@ -126,7 +122,7 @@ public class Menu {
     private class ToggleActionAdapter extends ActionAdapter {
         private ToggleAction toggleAction;
 
-        public ToggleActionAdapter(String title, String key, ToggleAction action) {
+        public ToggleActionAdapter(CharSequence title, String key, ToggleAction action) {
             super(title,key,action);
             toggleAction = action;
         }

@@ -45,7 +45,7 @@ public class SaveAction extends SAction {
         if(forceSaveAs || context.getDocument().getFile() == null ) {
             FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
             fd.setMode(FileDialog.SAVE);
-            fd.setTitle(getString("misc.saveFile"));
+            fd.setTitle(getString("misc.saveFile").toString());
             fd.setVisible(true);
             if(fd.getFile() != null) {
                 String fileName = fd.getFile();

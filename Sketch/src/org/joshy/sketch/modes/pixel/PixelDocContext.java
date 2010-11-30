@@ -6,11 +6,11 @@ import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.NewPixelDocAction;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.canvas.PixelCanvas;
+import org.joshy.sketch.controls.Menubar;
 import org.joshy.sketch.model.PixelDocument;
 import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.tools.PixelSetTool;
 
-import javax.swing.*;
 import java.io.IOException;
 
 /**
@@ -74,7 +74,7 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDocument> {
     }
 
     @Override
-    public void createAfterEditMenu(JMenuBar menubar) {
+    public void createAfterEditMenu(Menubar menubar) {
         
     }
 

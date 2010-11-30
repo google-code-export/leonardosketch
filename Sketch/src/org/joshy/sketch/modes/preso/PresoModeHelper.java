@@ -10,8 +10,6 @@ import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
 
-import javax.swing.*;
-
 import static org.joshy.gfx.util.localization.Localization.getString;
 
 /**
@@ -30,13 +28,13 @@ public class PresoModeHelper extends VectorModeHelper {
     }
 
     @Override
-    public JMenu buildPageMenu(VectorDocContext context) {
+    public Menu buildPageMenu(VectorDocContext context) {
         Menu menu = new Menu();
         menu.setTitle("Page");
         menu.addItem("Add Title Page", new AddTitlePage(context));
         menu.addItem("Add Content Page", new AddContentPage(context));
         menu.addItem("Delete Selected Page", new DeletePageAction());
-        return menu.createJMenu();
+        return menu;
     }
 
     static class AddTitlePage extends SAction {
@@ -83,7 +81,7 @@ public class PresoModeHelper extends VectorModeHelper {
     }
     
     @Override
-    public String getModeName() {
+    public CharSequence getModeName() {
         return getString("misc.presentation");
     }
 

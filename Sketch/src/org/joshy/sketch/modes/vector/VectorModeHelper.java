@@ -4,14 +4,13 @@ import org.joshy.gfx.node.control.Button;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.NewAction;
 import org.joshy.sketch.actions.SAction;
+import org.joshy.sketch.controls.Menu;
 import org.joshy.sketch.controls.ToolbarButton;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocModeHelper;
 import org.joshy.sketch.tools.*;
 import org.joshy.sketch.util.BiList;
-
-import javax.swing.*;
 
 import static org.joshy.gfx.util.localization.Localization.getString;
 
@@ -40,12 +39,12 @@ public class VectorModeHelper extends DocModeHelper<VectorDocContext> {
     }
 
     @Override
-    public JMenu buildPageMenu(VectorDocContext context) {
+    public Menu buildPageMenu(VectorDocContext context) {
         return null;
     }
 
     @Override
-    public String getModeName() {
+    public CharSequence getModeName() {
         return getString("misc.vector");
     }
 

@@ -121,7 +121,7 @@
             <value language="tr-TR">Çık</value>
             <value language="fr-FR">Quitter</value>
         </key>
-        
+
         <key name="settings">
             <value>Settings</value>
             <value language="de-DE">Einstellungen</value>
@@ -690,7 +690,7 @@
             <value language="de-DE">Suche</value>
         </key>
     </set>
-    
+
     <set name="toolbar">
         <key name="stroke">
             <value>Stroke</value>
@@ -704,7 +704,7 @@
             <value>Font Size</value>
         </key>
     </set>
-    
+
     <set name="dialog">
         <key name="warning">
             <value>Warning</value>
@@ -749,7 +749,7 @@
             <value language="de-DE">Höhe</value>
         </key>
     </set>
-    
+
     <set name="misc">
         <key name="wish.box">
             <value>Type your wish for a feature here</value>
@@ -788,7 +788,7 @@
             <value language="de-DE">Schließen</value>
         </key>
         <key name="changesAppliedLater">
-            <value>Changes will applied after Leonardo restarts</value>            
+            <value>Changes will applied after Leonardo restarts</value>
         </key>
     </set>
 

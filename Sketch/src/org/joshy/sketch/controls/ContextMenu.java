@@ -27,8 +27,8 @@ public class ContextMenu extends PopupMenu {
     private static Container sharedLayer;
 
     private ArrayList<SelectMoveTool.ActionItem> items;
-    ListModel mdl = new ListModel<String>() {
-        public String get(int i) {
+    ListModel mdl = new ListModel<CharSequence>() {
+        public CharSequence get(int i) {
             return items.get(i).getLabel();
         }
         public int size() {

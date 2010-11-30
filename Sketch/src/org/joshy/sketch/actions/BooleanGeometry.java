@@ -134,7 +134,7 @@ public class BooleanGeometry {
                         context.getSelection().setSelectedNode(sarea);
                     }
 
-                    public String getName() {
+                    public CharSequence getName() {
                         return BooleanOpAction.this.getDisplayName();
                     }
                 });
