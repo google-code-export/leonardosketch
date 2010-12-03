@@ -104,16 +104,18 @@ public class ImportAction extends SAction {
         if("g".equals(root.name())) {
             SGroup g = new SGroup();
             for(Elem n : root.xpath("./*")) {
-                g.addAll(loadNode(n));
+                SNode nn = loadNode(n);
+                g.addAll(false,nn);
             }
+            g.normalize();
             return g;
         }
         if("rect".equals(root.name())) {
             SRect rect = new SRect();
             rect.setX(Double.parseDouble(root.attr("x")));
             rect.setY(Double.parseDouble(root.attr("y")));
-            //rect.setFillPaint(Double.parseDouble(root.attr("x")));
             parseFill(rect,root);
+            parseStroke(rect,root);
             rect.setWidth(Double.parseDouble(root.attr("width")));
             rect.setHeight(Double.parseDouble(root.attr("height")));
             return rect;
@@ -121,11 +123,9 @@ public class ImportAction extends SAction {
         if("polygon".equals(root.name())) {
             String pointsString = root.attr("points");
             String[] points = pointsString.split("\\s");
-            //u.p(points);
             SPoly poly = new SPoly();
             for(String pt : points) {
                 if(pt != null && pt.trim().equals("")) continue;
-                //u.p("pt = " + pt);
                 String[] xy = pt.split(",");
                 poly.addPoint(new Point2D.Double(
                         Double.parseDouble(xy[0]),
@@ -145,7 +145,6 @@ public class ImportAction extends SAction {
     private static SNode parsePathNode(Elem root) throws IOException {
         SPath path = new SPath();
         String d = root.attr("d");
-        u.p("data = " + d);
 
         PushbackReader read = new PushbackReader(new StringReader(d));
         int count = 0;
@@ -234,8 +233,9 @@ public class ImportAction extends SAction {
             //u.p("read char: " + ch);
         }
 
-        path.close(false);
+        path.close(true);
         parseFill(path,root);
+        parseStroke(path,root);
         return path;
     }
 
@@ -278,4 +278,10 @@ public class ImportAction extends SAction {
         }
         u.p("trouble parsing fill: " + sfill);
     }
+    private static void parseStroke(SShape rect, Elem root) {
+        if(!root.hasAttr("stroke")) {
+            rect.setStrokeWidth(0);
+        }
+    }
+
 }

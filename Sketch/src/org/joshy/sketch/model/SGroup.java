@@ -46,6 +46,38 @@ public class SGroup extends SNode implements SelfDrawable {
         }
     }
 
+    public void normalize() {
+        double x = Double.MAX_VALUE;
+        double y = Double.MAX_VALUE;
+        double x2 = Double.MIN_VALUE;
+        double y2 = Double.MIN_VALUE;
+
+        for(SNode node : nodes) {
+            x = Math.min(x,node.getBounds().getX());
+            y = Math.min(y,node.getBounds().getY());
+            x2 = Math.max(x2,node.getBounds().getX()+node.getBounds().getWidth());
+            y2 = Math.max(y2,node.getBounds().getY()+node.getBounds().getHeight());
+        }
+
+        this.boundsWidth = x2-x;
+        this.boundsHeight = y2-y;
+
+        setTranslateX(x);
+        setTranslateY(y);
+        for(SNode node : nodes) {
+            node.setTranslateX(node.getTranslateX()-x);
+            node.setTranslateY(node.getTranslateY()-y);
+        }
+    }
+    
+    public void addAll(boolean normalize, SNode node) {
+        if(normalize) {
+            addAll(node);
+        } else {
+            this.nodes.add(node);
+        }
+    }
+
     public List<? extends SNode> getNodes() {
         return nodes;
     }
