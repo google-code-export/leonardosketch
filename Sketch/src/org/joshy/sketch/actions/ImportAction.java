@@ -13,9 +13,7 @@ import org.joshy.sketch.modes.vector.VectorModeHelper;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 
 /**
@@ -102,6 +100,7 @@ public class ImportAction extends SAction {
     }
 
     private static SNode loadNode(Elem root) throws Exception {
+        u.p("loading SVG element: " + root.name());
         if("g".equals(root.name())) {
             SGroup g = new SGroup();
             for(Elem n : root.xpath("./*")) {
@@ -136,7 +135,106 @@ public class ImportAction extends SAction {
             parseFill(poly,root);
             return poly;
         }
+        if("path".equals(root.name())) {
+            return parsePathNode(root);
+        }
         throw new Exception("unrecognized SVG element: " + root.name());
+    }
+
+    private static SNode parsePathNode(Elem root) throws IOException {
+        SPath path = new SPath();
+        String d = root.attr("d");
+        u.p("data = " + d);
+
+        PushbackReader read = new PushbackReader(new StringReader(d));
+        int count = 0;
+        double x = 0;
+        double y = 0;
+        while(true) {
+            count++;
+            if(count > 20)break;
+            char ch = (char) read.read();
+            if(ch == -1) break;
+            //absolute move
+            if(ch == 'M') {
+                x = readDouble(read);
+                y = readDouble(read);
+                u.p("move " + x + " , " + y);
+                path.addPoint(new SPath.PathPoint(x,y));
+                continue;
+            }
+            //relative vertical lineto
+            if(ch == 'v') {
+                y+= readDouble(read);
+                u.p("vertical " + y);
+                path.addPoint(new SPath.PathPoint(x,y));
+                continue;
+            }
+            //relative horiz lineto
+            if(ch == 'h') {
+                x+= readDouble(read);
+                u.p("horizontal " + x);
+                path.addPoint(new SPath.PathPoint(x,y));
+                continue;
+            }
+            //relative lineto
+            if(ch == 'l') {
+                x+= readDouble(read);
+                y+= readDouble(read);
+                u.p("line to: " + x + " " + y);
+                path.addPoint(new SPath.PathPoint(x,y));
+                continue;
+            }
+            //relative cubic curve
+            if(ch == 'c') {
+                double x1 = x+readDouble(read);
+                double y1 = y+readDouble(read);
+                double x2 = x+readDouble(read);
+                double y2 = y+readDouble(read);
+                x += readDouble(read);
+                y += readDouble(read);
+                
+                u.p("cubic " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + x + " " + y);
+                path.addPoint(new SPath.PathPoint(x,y,x1,y1,x2,y2));
+                continue;
+            }
+            if(ch == 'z') {
+                u.p("close path");
+                path.setClosed(true);
+                break;
+            }
+            if(ch == ' ') continue;
+            if(ch == '\n') continue;
+            u.p("read char: " + ch);
+        }
+
+        path.close(false);
+        parseFill(path,root);
+        return path;
+    }
+
+    private static double readDouble(PushbackReader read) throws IOException {
+        StringBuffer s = new StringBuffer();
+        int count = -1;
+        while(true) {
+            count++;
+            char ch = (char) read.read();
+            if(ch == '-' && count == 0) {
+                //u.p("negative number");
+                s.append(ch);
+                continue;
+            }
+            if((ch >= '0' && ch <= '9') || ch == '.') {
+                //u.p("got double part " + ch);
+                s.append(ch);
+            } else {
+                if(ch != ',') {
+                    read.unread(ch);
+                }
+                break;
+            }
+        }
+        return Double.parseDouble(s.toString());
     }
 
     private static void parseFill(SShape node, Elem root) {
