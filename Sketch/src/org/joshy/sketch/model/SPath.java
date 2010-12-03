@@ -263,18 +263,21 @@ public class SPath extends SShape implements SelfDrawable {
     }
 
     public PathPoint moveTo(double x, double y) {
+//        u.p("move to: " + x + " " + y);
         PathPoint p = new PathPoint(x, y);
         addPoint(p);
         return p;
     }
 
     public PathPoint lineTo(double x, double y) {
+//        u.p("line to: " + x + " " + y);
         PathPoint p = new PathPoint(x, y);
         addPoint(p);
         return p;
     }
 
     public PathPoint curveTo(PathPoint prev, double x1, double y1, double x2, double y2, double x, double y) {
+//        u.p("curve to: " + x + " " + y);
         PathPoint p = new PathPoint(x,y,x2,y2,x,y);
         prev.cx2 = x1;
         prev.cy2 = y1;
