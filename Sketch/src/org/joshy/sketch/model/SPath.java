@@ -89,7 +89,7 @@ public class SPath extends SShape implements SelfDrawable {
                 }
             }
         }
-        //if(node.isClosed()){
+        if(node.isClosed()){
         Paint fp = node.getFillPaint();
         if(fp != null) {
             if(fp instanceof FlatColor) {
@@ -98,7 +98,7 @@ public class SPath extends SShape implements SelfDrawable {
             g.setPaint(fp);
             g.fillPath(pt);
         }
-        //}
+        }
         if(node.getStrokeWidth() > 0) {
             g.setPaint(node.getStrokePaint());
             g.setStrokeWidth(node.getStrokeWidth());
