@@ -113,6 +113,7 @@ public class ImportAction extends SAction {
             rect.setX(Double.parseDouble(root.attr("x")));
             rect.setY(Double.parseDouble(root.attr("y")));
             //rect.setFillPaint(Double.parseDouble(root.attr("x")));
+            parseFill(rect,root);
             rect.setWidth(Double.parseDouble(root.attr("width")));
             rect.setHeight(Double.parseDouble(root.attr("height")));
             return rect;
@@ -150,39 +151,52 @@ public class ImportAction extends SAction {
         int count = 0;
         double x = 0;
         double y = 0;
+        double prevx1 = 0;
+        double prevy1 = 0;
+        SPath.PathPoint prev = null;
         while(true) {
             count++;
             if(count > 20)break;
             char ch = (char) read.read();
             if(ch == -1) break;
+
             //absolute move
             if(ch == 'M') {
                 x = readDouble(read);
                 y = readDouble(read);
-                u.p("move " + x + " , " + y);
-                path.addPoint(new SPath.PathPoint(x,y));
+                //u.p("move " + x + " , " + y);
+                prev = path.moveTo(x,y);
                 continue;
             }
+            
             //relative vertical lineto
             if(ch == 'v') {
                 y+= readDouble(read);
-                u.p("vertical " + y);
-                path.addPoint(new SPath.PathPoint(x,y));
+                //u.p("vertical line " + y);
+                prev = path.lineTo(x,y);
+                continue;
+            }
+            
+            //absolute vertical lineto
+            if(ch == 'V') {
+                y = readDouble(read);
+                //u.p("vertical line " + y);
+                prev = path.lineTo(x,y);
                 continue;
             }
             //relative horiz lineto
             if(ch == 'h') {
                 x+= readDouble(read);
-                u.p("horizontal " + x);
-                path.addPoint(new SPath.PathPoint(x,y));
+                //u.p("horizontal line " + x);
+                prev = path.lineTo(x,y);
                 continue;
             }
             //relative lineto
             if(ch == 'l') {
                 x+= readDouble(read);
                 y+= readDouble(read);
-                u.p("line to: " + x + " " + y);
-                path.addPoint(new SPath.PathPoint(x,y));
+                //u.p("line to: " + x + " " + y);
+                prev = path.lineTo(x, y);
                 continue;
             }
             //relative cubic curve
@@ -193,19 +207,31 @@ public class ImportAction extends SAction {
                 double y2 = y+readDouble(read);
                 x += readDouble(read);
                 y += readDouble(read);
-                
-                u.p("cubic " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + x + " " + y);
-                path.addPoint(new SPath.PathPoint(x,y,x1,y1,x2,y2));
+
+                //u.p("cubic c1" + x1 + "," + y1 + " c2 " + x2 + ", " + y2 + " -> " + x + "," + y);
+                prev = path.curveTo(prev,x1,y1,x2,y2,x,y);
+                continue;
+            }
+            if(ch == 'C') {
+                double x1 = readDouble(read);
+                double y1 = readDouble(read);
+                double x2 = readDouble(read);
+                double y2 = readDouble(read);
+                x = readDouble(read);
+                y = readDouble(read);
+
+                //u.p("cubic " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + x + " " + y);
+                prev = path.curveTo(prev,x1,y1,x2,y2,x,y);
                 continue;
             }
             if(ch == 'z') {
-                u.p("close path");
+                //u.p("close path");
                 path.setClosed(true);
                 break;
             }
             if(ch == ' ') continue;
             if(ch == '\n') continue;
-            u.p("read char: " + ch);
+            //u.p("read char: " + ch);
         }
 
         path.close(false);
@@ -217,8 +243,11 @@ public class ImportAction extends SAction {
         StringBuffer s = new StringBuffer();
         int count = -1;
         while(true) {
-            count++;
             char ch = (char) read.read();
+            //skip spaces
+            if(ch == ' ') continue;
+            count++;
+            //allow a - only if at the beginning
             if(ch == '-' && count == 0) {
                 //u.p("negative number");
                 s.append(ch);
