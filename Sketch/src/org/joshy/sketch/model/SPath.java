@@ -262,6 +262,26 @@ public class SPath extends SShape implements SelfDrawable {
         recalcPath();
     }
 
+    public PathPoint moveTo(double x, double y) {
+        PathPoint p = new PathPoint(x, y);
+        addPoint(p);
+        return p;
+    }
+
+    public PathPoint lineTo(double x, double y) {
+        PathPoint p = new PathPoint(x, y);
+        addPoint(p);
+        return p;
+    }
+
+    public PathPoint curveTo(PathPoint prev, double x1, double y1, double x2, double y2, double x, double y) {
+        PathPoint p = new PathPoint(x,y,x2,y2,x,y);
+        prev.cx2 = x1;
+        prev.cy2 = y1;
+        addPoint(p);
+        return p;
+    }
+
     public static class PathTuple {
         public double distance;
         public double t;
