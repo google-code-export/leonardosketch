@@ -107,11 +107,13 @@ public class SGroup extends SNode implements SelfDrawable {
 
     public void draw(GFX g) {
         for(SNode node : this.getNodes()) {
-            g.translate(node.getTranslateX(),node.getTranslateY());
+            double x = node.getTranslateX();
+            double y = node.getTranslateY();
+            g.translate(x,y);
             if(node instanceof SelfDrawable) {
                 ((SelfDrawable)node).draw(g);
             }
-            g.translate(-node.getTranslateX(),-node.getTranslateY());
+            g.translate(-x,-y);
         }
     }
 

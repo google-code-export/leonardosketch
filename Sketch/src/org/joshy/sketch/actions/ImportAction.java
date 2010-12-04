@@ -134,6 +134,7 @@ public class ImportAction extends SAction {
             }
             poly.setClosed(true);
             parseFill(poly,root);
+            parseStroke(poly,root);
             return poly;
         }
         if("path".equals(root.name())) {
@@ -150,90 +151,99 @@ public class ImportAction extends SAction {
         int count = 0;
         double x = 0;
         double y = 0;
-        double prevx1 = 0;
-        double prevy1 = 0;
+        boolean closed = false;
         SPath.PathPoint prev = null;
-        while(true) {
+        boolean go = true;
+        while(go) {
             count++;
-            if(count > 20)break;
             char ch = (char) read.read();
             if(ch == -1) break;
+            double x1,x2,y1,y2;
 
-            //absolute move
-            if(ch == 'M') {
-                x = readDouble(read);
-                y = readDouble(read);
-                //u.p("move " + x + " , " + y);
-                prev = path.moveTo(x,y);
-                continue;
+            switch(ch) {
+                //absolute move
+                case 'M':
+                    x = readDouble(read);
+                    y = readDouble(read);
+                    prev = path.moveTo(x,y);
+                    continue;
+                //relative vertical lineto
+                case 'v':
+                    y+= readDouble(read);
+                    prev = path.lineTo(x,y);
+                    continue;
+                //absolute vertical lineto
+                case 'V':
+                    y = readDouble(read);
+                    prev = path.lineTo(x,y);
+                    continue;
+                //relative horiz lineto
+                case 'h':
+                    x+= readDouble(read);
+                    prev = path.lineTo(x,y);
+                    continue;
+                //relative lineto
+                case 'l':
+                    x+= readDouble(read);
+                    y+= readDouble(read);
+                    prev = path.lineTo(x, y);
+                    continue;
+                case 'L':
+                    x = readDouble(read);
+                    y = readDouble(read);
+                    prev = path.lineTo(x, y);
+                    continue;
+                //relative cubic curve
+                case 'c':
+                    x1 = x+readDouble(read);
+                    y1 = y+readDouble(read);
+                    x2 = x+readDouble(read);
+                    y2 = y+readDouble(read);
+                    x += readDouble(read);
+                    y += readDouble(read);
+                    prev = path.curveTo(prev,x1,y1,x2,y2,x,y);
+                    continue;
+                //relative shorthand curve
+                case 's':
+                    x2 = x+readDouble(read);
+                    y2 = y+readDouble(read);
+                    x += readDouble(read);
+                    y += readDouble(read);
+                    double dx = prev.x-prev.cx1;
+                    double dy = prev.y-prev.cy1;
+                    double rx = prev.x+dx;
+                    double ry = prev.y+dy;
+                    prev = path.curveTo(prev,rx,ry,x2,y2,x,y);
+                    continue;
+                //absolute cubic curve
+                case 'C':
+                    x1 = readDouble(read);
+                    y1 = readDouble(read);
+                    x2 = readDouble(read);
+                    y2 = readDouble(read);
+                    x = readDouble(read);
+                    y = readDouble(read);
+                    prev = path.curveTo(prev,x1,y1,x2,y2,x,y);
+                    continue;
+               case 'z':
+                    path.setClosed(true);
+                    closed = true;
+                    go = false;
+                    break;
+               case ' ': continue;
+               case '\n': continue;
+               //end of string
+               case (char)-1:
+                   go = false;
+                   break;
+               default:
+                   u.p("unrecognized character! " + ch + " " + ((int)ch));
+                   go = false;
+                   break;
             }
-            
-            //relative vertical lineto
-            if(ch == 'v') {
-                y+= readDouble(read);
-                //u.p("vertical line " + y);
-                prev = path.lineTo(x,y);
-                continue;
-            }
-            
-            //absolute vertical lineto
-            if(ch == 'V') {
-                y = readDouble(read);
-                //u.p("vertical line " + y);
-                prev = path.lineTo(x,y);
-                continue;
-            }
-            //relative horiz lineto
-            if(ch == 'h') {
-                x+= readDouble(read);
-                //u.p("horizontal line " + x);
-                prev = path.lineTo(x,y);
-                continue;
-            }
-            //relative lineto
-            if(ch == 'l') {
-                x+= readDouble(read);
-                y+= readDouble(read);
-                //u.p("line to: " + x + " " + y);
-                prev = path.lineTo(x, y);
-                continue;
-            }
-            //relative cubic curve
-            if(ch == 'c') {
-                double x1 = x+readDouble(read);
-                double y1 = y+readDouble(read);
-                double x2 = x+readDouble(read);
-                double y2 = y+readDouble(read);
-                x += readDouble(read);
-                y += readDouble(read);
-
-                //u.p("cubic c1" + x1 + "," + y1 + " c2 " + x2 + ", " + y2 + " -> " + x + "," + y);
-                prev = path.curveTo(prev,x1,y1,x2,y2,x,y);
-                continue;
-            }
-            if(ch == 'C') {
-                double x1 = readDouble(read);
-                double y1 = readDouble(read);
-                double x2 = readDouble(read);
-                double y2 = readDouble(read);
-                x = readDouble(read);
-                y = readDouble(read);
-
-                //u.p("cubic " + x1 + " " + y1 + " " + x2 + " " + y2 + " " + x + " " + y);
-                prev = path.curveTo(prev,x1,y1,x2,y2,x,y);
-                continue;
-            }
-            if(ch == 'z') {
-                //u.p("close path");
-                path.setClosed(true);
-                break;
-            }
-            if(ch == ' ') continue;
-            if(ch == '\n') continue;
-            //u.p("read char: " + ch);
         }
 
-        path.close(true);
+        path.close(closed);
         parseFill(path,root);
         parseStroke(path,root);
         return path;
@@ -266,21 +276,40 @@ public class ImportAction extends SAction {
         return Double.parseDouble(s.toString());
     }
 
-    private static void parseFill(SShape node, Elem root) {
+    private static void parseFill(SShape shape, Elem root) {
+        if(!root.hasAttr("fill")) {
+            shape.setFillPaint(null);
+            return;
+        }
         String sfill = root.attr("fill");
         if(sfill.equals("none")) {
-            node.setFillPaint(null);
+            shape.setFillPaint(null);
             return;
         }
         if(sfill.startsWith("#")) {
-            node.setFillPaint(new FlatColor(sfill));
+            shape.setFillPaint(new FlatColor(sfill));
             return;
         }
         u.p("trouble parsing fill: " + sfill);
     }
-    private static void parseStroke(SShape rect, Elem root) {
+    private static void parseStroke(SShape shape, Elem root) {
         if(!root.hasAttr("stroke")) {
-            rect.setStrokeWidth(0);
+            shape.setStrokeWidth(0);
+        }
+        String sstroke = root.attr("stroke");
+        if(sstroke.equals("none")) {
+            shape.setStrokePaint(null);
+        }
+        if(sstroke.startsWith("#")) {
+            shape.setStrokePaint(new FlatColor(sstroke));
+        }
+
+        if(!root.hasAttr("stroke-width")) {
+            shape.setStrokeWidth(0);
+        } else {
+            String sstrokeWidth = root.attr("stroke-width");
+            double strokeWidth = Double.parseDouble(sstrokeWidth);
+            shape.setStrokeWidth(strokeWidth);
         }
     }
 
