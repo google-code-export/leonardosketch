@@ -5,6 +5,7 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.modes.DocContext;
 
 import javax.imageio.ImageIO;
@@ -31,6 +32,8 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
     private BackgroundTask<URI, BufferedImage> bgload;
     private Image thumb;
     private String relativeURL = null;
+    private FlatColor strokePaint = FlatColor.BLACK;
+    private double strokeWidth = 0.0;
 
     public SImage(File file) throws IOException {
         super();
@@ -138,6 +141,12 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
             g.drawImage(image,0,0);
             g.setSmoothImage(false);
             g.scale(1/sx,1/sy);
+            if(getStrokeWidth() > 0) {
+                g.setStrokeWidth(getStrokeWidth());
+                g.setPaint(getStrokePaint());
+                g.drawRect(0,0,getWidth(),getHeight());
+                g.setStrokeWidth(1);
+            }
         }
         g.translate(-getX(),-getY());
     }
@@ -150,6 +159,8 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            ((SImage)dupe).setStrokePaint(this.getStrokePaint());
+            ((SImage)dupe).setStrokeWidth(this.getStrokeWidth());
         }
         return super.duplicate(dupe);
     }
@@ -197,6 +208,22 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
 
     public void setX(double x) {
         this.x = x;
+    }
+
+    public FlatColor getStrokePaint() {
+        return strokePaint;
+    }
+
+    public void setStrokePaint(FlatColor strokePaint) {
+        this.strokePaint = strokePaint;
+    }
+
+    public void setStrokeWidth(double strokeWidth) {
+        this.strokeWidth = strokeWidth;
+    }
+
+    public double getStrokeWidth() {
+        return strokeWidth;
     }
 
     public double getPreferredAspectRatio() {
