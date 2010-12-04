@@ -75,6 +75,7 @@ public class SaveAction extends SAction {
             context.getStage().setTitle(file.getName());
             context.getDocument().setDirty(false);
             context.main.rebuildWindowMenu();
+            context.main.addRecentFile(file);
         } catch (Exception ex) {
             u.p(ex);
         }

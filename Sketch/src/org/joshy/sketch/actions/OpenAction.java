@@ -73,7 +73,7 @@ public class OpenAction extends SAction {
                 u.p("opening a file" + file);
                 try {
                     load(file);
-                    main.recentFiles.add(file);
+                    main.addRecentFile(file);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

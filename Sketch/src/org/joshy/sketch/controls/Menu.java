@@ -19,6 +19,7 @@ import java.util.List;
 public class Menu {
     private CharSequence title;
     private List actions;
+    private JMenu jMenu;
 
     public Menu() {
         actions = new ArrayList();
@@ -35,9 +36,25 @@ public class Menu {
 
     public Menu addItem(CharSequence title, String key, SAction action) {
         if(action instanceof ToggleAction) {
-            actions.add(new ToggleActionAdapter(title,key, (ToggleAction) action));
+            ToggleActionAdapter act = new ToggleActionAdapter(title,key, (ToggleAction) action);
+            actions.add(act);
+            if(jMenu != null) {
+                jMenu.add(new JCheckBoxMenuItem(act));
+            }
         } else {
-            actions.add(new ActionAdapter(title,key,action));
+            ActionAdapter act = new ActionAdapter(title,key,action);
+            actions.add(act);
+            if(jMenu != null) {
+                jMenu.add(act);
+            }
+        }
+        return this;
+    }
+
+    public Menu removeAll() {
+        actions.clear();
+        if(jMenu != null) {
+            jMenu.removeAll();
         }
         return this;
     }
@@ -53,27 +70,28 @@ public class Menu {
     }
 
     JMenu createJMenu() {
-        JMenu menu = new JMenu(title.toString());
+        jMenu = new JMenu(title.toString());
         for(Object action : actions) {
             if(action instanceof JSeparator) {
-                menu.add((JSeparator)action);
+                jMenu.add((JSeparator)action);
                 continue;
             }
             if(action instanceof ToggleActionAdapter) {
-                menu.add(new JCheckBoxMenuItem((ToggleActionAdapter)action));
+                jMenu.add(new JCheckBoxMenuItem((ToggleActionAdapter)action));
                 continue;
             }
             if(action instanceof ActionAdapter) {
-                menu.add((ActionAdapter)action);
+                jMenu.add((ActionAdapter)action);
                 continue;
             }
             if(action instanceof Menu) {
-                menu.add(((Menu)action).createJMenu());
+                jMenu.add(((Menu)action).createJMenu());
                 continue;
             }
         }
-        return menu;
+        return jMenu;
     }
+    
 
     private static class ActionAdapter extends AbstractAction {
         private final SketchCanvas canvas;
