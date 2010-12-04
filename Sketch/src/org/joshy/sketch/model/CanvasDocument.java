@@ -2,6 +2,7 @@ package org.joshy.sketch.model;
 
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.util.u;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -112,6 +113,11 @@ public class CanvasDocument<P extends Page> {
         return props;
     }
 
+    public void close() {
+        u.p("publishing a closing event");
+        EventBus.getSystem().publish(new DocumentEvent(this,DocumentEvent.Closing));
+    }
+
     protected void fireDocDirty() {
         EventBus.getSystem().publish(new DocumentEvent(this,isDirty()));
     }
@@ -123,6 +129,7 @@ public class CanvasDocument<P extends Page> {
 
     public static class DocumentEvent extends Event {
         public static final EventType Dirty = new EventType("DocumentDirty");
+        public static final EventType Closing = new EventType("DocumentClosing");
         public static final EventType ViewDirty = new EventType("ViewDirty");
         public static final EventType PageChanged = new EventType("PageChanged");
         public static final EventType PageGuidelineAdded = new EventType("PageGuidelineAdded");

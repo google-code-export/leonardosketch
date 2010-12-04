@@ -408,8 +408,38 @@ public class Main implements Runnable {
         final JFrame frame = (JFrame) context.getStage().getNativeWindow();
         context.menubar = new Menubar(frame);
         buildCommonMenubar(context);
+        u.p("setting up with context doc = " + context.getDocument());
+        EventBus.getSystem().addListener(CanvasDocument.DocumentEvent.Closing,new Callback<CanvasDocument.DocumentEvent>() {
+            public void call(CanvasDocument.DocumentEvent documentEvent) throws Exception {
+                u.p("document closing");
+                if(documentEvent.getDocument() == context.getDocument()) {
+                    if(context.getDocument().isDirty()) {
+                        u.p("doc is still dirty!!!");
+                        StandardDialog.Result result = StandardDialog.showYesNoCancel(
+                                getString("dialog.docNotSaved").toString(),
+                                getString("dialog.save").toString(),
+                                getString("dialog.dontsave").toString(),
+                                getString("dialog.cancel").toString());
+                        if(result== StandardDialog.Result.Yes) {
+                            new SaveAction(context,false).execute();
+                        }
+                        if(result==StandardDialog.Result.No) {
+                            context.getStage().hide();
+                            closeWindow(context);
+                        }
+                        if(result==StandardDialog.Result.Cancel) {
+                            //do nothing
+                        }
+                    } else {
+                        closeWindow(context);
+                    }
+                }
+
+            }
+        });
         EventBus.getSystem().addListener(context.getStage(), WindowEvent.Closing,new Callback<WindowEvent>() {
             public void call(WindowEvent event) {
+                u.p("window closing event");
                 if(context.getDocument().isDirty()) {
                     event.veto();
                     u.p("doc is still dirty!!!");
@@ -456,7 +486,13 @@ public class Main implements Runnable {
                 }
             }));
         }
+        panel.add(new Button("Exit").onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                System.exit(0);
+            }
+        }));
         stage.setContent(panel);
+        stage.centerOnScreen();
 
     }
 
@@ -511,7 +547,7 @@ public class Main implements Runnable {
                 .addMenu(recentFilesMenu)
                 .addItem(getString("menus.save"), "S",    new SaveAction(context, false,true))
                 .addItem(getString("menus.saveas"), "shift S", new SaveAction(context, true,true))
-                .addItem(getString("menus.close"), "W",   new CloseAction(canvas))
+                .addItem(getString("menus.close"), "W",   new CloseAction(context))
                 ;
 
         if("true".equals(System.getProperty("org.joshy.sketch.actions.enableImport"))) {
