@@ -68,6 +68,7 @@ public class SaveJava2DAction extends SAction {
         public void docStart(PrintWriter out, SketchDocument doc) {
             out.println("import java.awt.Color;");
             out.println("import java.awt.Graphics2D;");
+            out.println("import java.awt.AlphaComposite;");
             out.println("import java.awt.Graphics;");
             out.println("import javax.swing.JComponent;");
             out.println("import javax.swing.JFrame;");
