@@ -7,6 +7,7 @@ import com.boxysystems.jgoogleanalytics.LoggingAdapter;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
+import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
@@ -55,10 +56,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import static org.joshy.gfx.util.localization.Localization.getString;
 
@@ -93,6 +91,7 @@ public class Main implements Runnable {
     public static final String DEBUG_MENU = "org.joshy.gfx.sketch.debug.menuEnabled";
     public static String UPDATE_URL = "";
     public static String DOWNLOAD_URL = "";
+    private List<Menu> recentFilesMenus = new ArrayList<Menu>();
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -497,11 +496,9 @@ public class Main implements Runnable {
         DocumentCanvas canvas = context.getCanvas();
         //recent files menu
         Menu recentFilesMenu = new Menu().setTitle(getString("menus.recentfiles"));
-        List<File> f2 = new ArrayList<File>(recentFiles);
-        Collections.reverse(f2);
-        for(File f : f2) {
-            recentFilesMenu.addItem(f.getName(), new OpenAction(this,f));
-        }
+        recentFilesMenus.add(recentFilesMenu);
+        regenRecentFilesMenus();
+
         //file menu
         Menu fileMenu = new Menu().setTitle(getString("menus.file"));
         Menu newMenu = new Menu().setTitle(getString("menus.new"));
@@ -553,7 +550,7 @@ public class Main implements Runnable {
                 editMenu.addItem(getString("menus.clearSelection"), "D", new NodeActions.ClearSelection((VectorDocContext) context));
         }
         editMenu.addItem(getString("menus.setBackgroundColor"), new DocumentActions.SetBackground(context));
-        editMenu.addItem("Enable Analytics Tracking", new ToggleAction(){
+        /*editMenu.addItem("Enable Analytics Tracking", new ToggleAction(){
             @Override
             public boolean getToggleState() {
                 return trackingEnabled;
@@ -564,7 +561,7 @@ public class Main implements Runnable {
                 trackingEnabled = toggleState;
             }
         });
-        menubar.add(editMenu);
+        menubar.add(editMenu);*/
         context.createAfterEditMenu(menubar);
 
         Menu viewMenu = new Menu().setTitle(getString("menus.view"))
@@ -659,6 +656,55 @@ public class Main implements Runnable {
             }
         }
         return files;
+    }
+
+
+    private void saveRecentFiles(List<File> recentFiles, File file) {
+        try {
+            XMLWriter out = new XMLWriter(file);
+            out.start("files");
+            for(File f : recentFiles) {
+                out.start("file","filepath",f.getAbsolutePath());
+                out.end();
+            }
+            out.end();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void addRecentFile(File file) {
+        recentFiles.add(file);
+        recalcAndSaveRecentFiles();
+    }
+
+    private void recalcAndSaveRecentFiles() {
+
+        Map<String,File> map = new HashMap<String,File>();
+        List<String> unique = new ArrayList<String>();
+        for(File f : recentFiles) {
+            if(!unique.contains(f.getAbsolutePath())) {
+                unique.add(f.getAbsolutePath());
+            }
+            map.put(f.getAbsolutePath(), f);
+        }
+        recentFiles.clear();
+        for(String name : unique) {
+            recentFiles.add(map.get(name));
+        }
+        saveRecentFiles(recentFiles, Main.RECENT_FILES);
+        regenRecentFilesMenus();
+    }
+
+    private void regenRecentFilesMenus() {
+        for(Menu menu : recentFilesMenus) {
+            menu.removeAll();
+            List<File> f2 = new ArrayList<File>(recentFiles);
+            Collections.reverse(f2);
+            for(File f : f2) {
+                menu.addItem(f.getName(), new OpenAction(this,f));
+            }
+        }
     }
 
     private void setupMac() {
