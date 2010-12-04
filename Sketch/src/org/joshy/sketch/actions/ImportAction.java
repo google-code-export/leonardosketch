@@ -76,7 +76,7 @@ public class ImportAction extends SAction {
         for(Elem n : svg.xpath("./*")) {
             u.p("node = " + n + " " + n.name());
             SNode node = loadNode(n);
-            page.add(node);
+            if(node != null) page.add(node);
         }
         return sdoc;
     }
@@ -105,7 +105,7 @@ public class ImportAction extends SAction {
             SGroup g = new SGroup();
             for(Elem n : root.xpath("./*")) {
                 SNode nn = loadNode(n);
-                g.addAll(false,nn);
+                if(nn != null) g.addAll(false,nn);
             }
             g.normalize();
             return g;
@@ -120,7 +120,7 @@ public class ImportAction extends SAction {
             rect.setHeight(Double.parseDouble(root.attr("height")));
             return rect;
         }
-        if("polygon".equals(root.name())) {
+        if("polygon".equals(root.name()) || "polyline".equals(root.name())) {
             String pointsString = root.attr("points");
             String[] points = pointsString.split("\\s");
             SPoly poly = new SPoly();
@@ -132,7 +132,8 @@ public class ImportAction extends SAction {
                         Double.parseDouble(xy[1])
                 ));
             }
-            poly.setClosed(true);
+            //the polygon is closed, poly lines aren't
+            poly.setClosed("polygon".equals(root.name()));
             parseFill(poly,root);
             parseStroke(poly,root);
             return poly;
@@ -140,7 +141,10 @@ public class ImportAction extends SAction {
         if("path".equals(root.name())) {
             return parsePathNode(root);
         }
-        throw new Exception("unrecognized SVG element: " + root.name());
+
+        Exception ex = new Exception("unrecognized SVG element: " + root.name());
+        u.p(ex);
+        return null;
     }
 
     private static SNode parsePathNode(Elem root) throws IOException {
