@@ -41,6 +41,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
     private static final GradientFill GRADIENT1 =new GradientFill(FlatColor.GRAY, FlatColor.GREEN,0,true, 50,0,50,100);
     private PopupMenuButton<SArrow.HeadEnd> arrowHeadEnd;
     private Label rgbLabel;
+    private Label fontSizeLabel;
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
@@ -136,7 +137,8 @@ public class FloatingPropertiesPanel extends HFlexBox {
                     }
                 }
                 if(event.getSource() == strokeColorButton) {
-                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                    if(manager.propMan.isClassAvailable(SShape.class) ||
+                            manager.propMan.isClassAvailable(SImage.class)) {
                         manager.propMan.getProperty("strokePaint").setValue(event.getValue());
                     }
                 }
@@ -185,7 +187,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
                 
             }
         });
-        Label fontSizeLabel = new Label(getString("toolbar.fontSize")+":");
+        fontSizeLabel = new Label(getString("toolbar.fontSize")+":");
         add(fontSizeLabel);
         add(fontSizeSlider);
 
@@ -217,7 +219,8 @@ public class FloatingPropertiesPanel extends HFlexBox {
         strokeWidthSlider.setValue(3);
         EventBus.getSystem().addListener(strokeWidthSlider, ChangedEvent.DoubleChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) {
-                if(manager.propMan.isClassAvailable(SShape.class)) {
+                if(manager.propMan.isClassAvailable(SShape.class) ||
+                        manager.propMan.isClassAvailable(SImage.class)) {
                     int sw = (int)((Double)event.getValue()).doubleValue();
                     manager.propMan.getProperty("strokeWidth").setValue(sw);
                 }
@@ -302,6 +305,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
 
         if(manager.propMan.isClassAvailable(SText.class)) {
             fontSizeSlider.setVisible(true);
+            fontSizeLabel.setVisible(true);
             double dval = manager.propMan.getProperty("fontSize").getDoubleValue();
             if(selection.size() == 1) {
                 fontSizeSlider.setValue(dval);
@@ -313,6 +317,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
             fontPicker.setVisible(true);
         } else {
             fontSizeSlider.setVisible(false);
+            fontSizeLabel.setVisible(false);
             fontBoldButton.setVisible(false);
             fontItalicButton.setVisible(false);
             fontPicker.setVisible(false);
@@ -327,9 +332,6 @@ public class FloatingPropertiesPanel extends HFlexBox {
             colorButton.setVisible(true);
             fillOpacitySlider.setVisible(true);
             fillOpacityLabel.setVisible(true);
-            strokeColorButton.setVisible(true);
-            strokeWidthSlider.setVisible(true);
-            strokeWidthLabel.setVisible(true);
             if(lastNode != null) {
                 PropertyManager.Property fillColorProp = manager.propMan.getProperty("fillPaint");
                 if(fillColorProp.hasSingleValue()) {
@@ -341,14 +343,6 @@ public class FloatingPropertiesPanel extends HFlexBox {
                     }
                 }
 
-                PropertyManager.Property strokeProp = manager.propMan.getProperty("strokeWidth");
-                if(strokeProp.hasSingleValue()) {
-                    strokeWidthSlider.setValue(strokeProp.getDoubleValue());
-                }
-                PropertyManager.Property strokeColorProp = manager.propMan.getProperty("strokePaint");
-                if(strokeColorProp.hasSingleValue()) {
-                    strokeColorButton.setSelectedColor((FlatColor)strokeColorProp.getValue());
-                }
                 PropertyManager.Property fillOpacityProp = manager.propMan.getProperty("fillOpacity");
                 if(fillOpacityProp.hasSingleValue()) {
                     fillOpacitySlider.setValue(fillOpacityProp.getDoubleValue()*100.0);
@@ -361,6 +355,22 @@ public class FloatingPropertiesPanel extends HFlexBox {
             strokeColorButton.setVisible(false);
             strokeWidthSlider.setVisible(false);
             strokeWidthLabel.setVisible(false);
+        }
+        if(manager.propMan.isClassAvailable(SShape.class) ||
+            manager.propMan.isClassAvailable(SImage.class)) {
+            strokeColorButton.setVisible(true);
+            strokeWidthSlider.setVisible(true);
+            strokeWidthLabel.setVisible(true);
+            if(lastNode != null) {
+                PropertyManager.Property strokeProp = manager.propMan.getProperty("strokeWidth");
+                if(strokeProp.hasSingleValue()) {
+                    strokeWidthSlider.setValue(strokeProp.getDoubleValue());
+                }
+                PropertyManager.Property strokeColorProp = manager.propMan.getProperty("strokePaint");
+                if(strokeColorProp.hasSingleValue()) {
+                    strokeColorButton.setSelectedColor((FlatColor)strokeColorProp.getValue());
+                }
+            }
         }
 
         //show the rect props button only if a single rect is selected

@@ -108,6 +108,8 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
         }
 
         if(shape instanceof SImage) {
+            saveAttribute(out,"strokePaint",shape);
+            saveAttribute(out,"strokeWidth",shape);
             saveAttribute(out,"relativeURL",shape);
             if(delayedImageWriting) {
                 delayedImages.add((SImage)shape);

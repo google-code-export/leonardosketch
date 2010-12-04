@@ -27,7 +27,7 @@ public class VectorModeHelper extends DocModeHelper<VectorDocContext> {
         tools.add(new ToolbarButton(main.getClass().getResource("resources/cr22-action-14_rectangle.png")),new DrawRectTool(context));
         tools.add(new ToolbarButton(main.getClass().getResource("resources/cr22-action-14_ellipse.png")),new DrawOvalTool(context));
         tools.add(new ToolbarButton(main.getClass().getResource("resources/cr22-action-14_polyline.png")),new DrawPolyTool(context));
-        tools.add(new ToolbarButton(main.getClass().getResource("resources/cr22-action-14_shear.png")),new DrawArrowTool(context));
+        //tools.add(new ToolbarButton(main.getClass().getResource("resources/cr22-action-14_shear.png")),new DrawArrowTool(context));
         //tools.add(new ToolbarButton(main.getClass().getResource("resources/cr22-action-move.png")),new PanCanvasTool(context));
         tools.add(new ToolbarButton(main.getClass().getResource("resources/cr22-action-14_image.png")),new AddImageTool(context));
         //tools.add(new ToolbarButton(main.getClass().getResource("resources/cr22-action-move.png")), new TransformTool(context));

@@ -261,8 +261,15 @@ public class OpenAction extends SAction {
                 } else {
                     node = loadSImageFromFile(e,zipFile);
                 }
-                loadNumberAttribute(e,node,"translateX");
-                loadNumberAttribute(e,node,"translateY");
+                SImage image = (SImage) node;
+                loadNumberAttribute(e,image,"translateX");
+                loadNumberAttribute(e,image,"translateY");
+                if(e.hasAttr("strokePaint")) {
+                    loadFlatColorAttribute(e,image,"strokePaint", FlatColor.class);
+                } else {
+                    image.setStrokePaint(null);
+                }
+                loadNumberAttribute(e,image,"strokeWidth");
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -438,6 +445,13 @@ public class OpenAction extends SAction {
                 } else {
                     node = loadSImageFromFile(e,zipFile);
                 }
+                SImage image = (SImage) node;
+                if(e.hasAttr("strokePaint")) {
+                    loadFlatColorAttribute(e,image,"strokePaint", FlatColor.class);
+                } else {
+                    image.setStrokePaint(null);
+                }
+                loadNumberAttribute(e,image,"strokeWidth");
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
