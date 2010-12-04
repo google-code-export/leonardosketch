@@ -118,26 +118,42 @@ public class SelectMoveTool extends CanvasTool {
         if(event.getType() == KeyEvent.KeyPressed) {
         switch(event.getKeyCode()) {
             case KEY_LEFT_ARROW:
-                for(SNode node : context.getSelection().items()) {
-                    node.setTranslateX(node.getTranslateX()-amount);
+                if(hoverHandle != null) {
+                    hoverHandle.setX(hoverHandle.getX()-amount,false);
+                } else {
+                    for(SNode node : context.getSelection().items()) {
+                        node.setTranslateX(node.getTranslateX()-amount);
+                    }
                 }
                 moveFade();
                 break;
             case KEY_RIGHT_ARROW:
-                for(SNode node : context.getSelection().items()) {
-                    node.setTranslateX(node.getTranslateX()+amount);
+                if(hoverHandle != null) {
+                    hoverHandle.setX(hoverHandle.getX()+amount,false);
+                } else {
+                    for(SNode node : context.getSelection().items()) {
+                        node.setTranslateX(node.getTranslateX()+amount);
+                    }
                 }
                 moveFade();
                 break;
             case KEY_UP_ARROW:
-                for(SNode node : context.getSelection().items()) {
-                    node.setTranslateY(node.getTranslateY()-amount);
+                if(hoverHandle != null) {
+                    hoverHandle.setY(hoverHandle.getY()-amount,false);
+                } else {
+                    for(SNode node : context.getSelection().items()) {
+                        node.setTranslateY(node.getTranslateY()-amount);
+                    }
                 }
                 moveFade();
                 break;
             case KEY_DOWN_ARROW:
-                for(SNode node : context.getSelection().items()) {
-                    node.setTranslateY(node.getTranslateY()+amount);
+                if(hoverHandle != null) {
+                    hoverHandle.setY(hoverHandle.getY()+amount,false);
+                } else {
+                    for(SNode node : context.getSelection().items()) {
+                        node.setTranslateY(node.getTranslateY()+amount);
+                    }
                 }
                 moveFade();
                 break;
