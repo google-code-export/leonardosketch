@@ -120,6 +120,19 @@ public class ImportAction extends SAction {
             rect.setHeight(Double.parseDouble(root.attr("height")));
             return rect;
         }
+        if("line".equals(root.name())) {
+            SPoly poly = new SPoly();
+            double x1 = Double.parseDouble(root.attr("x1"));
+            double y1 = Double.parseDouble(root.attr("y1"));
+            double x2 = Double.parseDouble(root.attr("x2"));
+            double y2 = Double.parseDouble(root.attr("y2"));
+            poly.addPoint(new Point2D.Double(x1,y1));
+            poly.addPoint(new Point2D.Double(x2,y2));
+            poly.setClosed(false);
+            parseFill(poly,root);
+            parseStroke(poly,root);
+            return poly;
+        }
         if("polygon".equals(root.name()) || "polyline".equals(root.name())) {
             String pointsString = root.attr("points");
             String[] points = pointsString.split("\\s");
