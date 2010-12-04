@@ -168,7 +168,7 @@ public class FlickrPanel extends VFlexBox {
                 req.setMethod(XMLRequest.METHOD.GET);
                 req.setParameter("api_key","7659144a7b5510b894b33cb105737618");
                 req.setParameter("method","flickr.photos.search");
-                req.setParameter("tags",searchBox.getText());
+                req.setParameter("tags",searchBox.getText().replaceAll("\\s+",","));
                 req.setParameter("sort","relevance");
                 req.setParameter("license","4,5,7");
                 req.onComplete(new Callback<Doc>() {
