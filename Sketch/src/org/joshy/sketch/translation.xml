@@ -105,6 +105,14 @@
             <value language="tr-TR">HTML Canvas</value>
             <value language="fr-FR">en Canvas HTML</value>
         </key>
+        <key name="tojava2d">
+            <value>to Java2D</value>
+            <value language="de-DE">zu Java2D</value>
+            <value language="hr-HR">kao Java2D</value>
+            <value language="it-IT">in Java2D</value>
+            <value language="tr-TR">Java2D</value>
+            <value language="fr-FR">en Java2D</value>
+        </key>
         <key name="topdf">
             <value>to PDF</value>
             <value language="de-DE">zu PDF</value>

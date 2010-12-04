@@ -31,6 +31,7 @@ import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrUploadAction;
 import org.joshy.sketch.actions.flickr.ViewSidebar;
 import org.joshy.sketch.actions.io.*;
+import org.joshy.sketch.actions.io.SaveJava2DAction;
 import org.joshy.sketch.actions.pages.PageListPanel;
 import org.joshy.sketch.actions.symbols.SymbolManager;
 import org.joshy.sketch.canvas.DocumentCanvas;
@@ -556,11 +557,12 @@ public class Main implements Runnable {
 
         fileMenu
                 .addMenu(new Menu().setTitle(getString("menus.export"))
-                    .addItem(getString("menus.topng"),    new SavePNGAction(context))
-                    .addItem(getString("menus.tosvg"),    new SaveSVGAction(context))
-                    .addItem(getString("menus.tohtml"),   new SaveHTMLAction(context))
-                    .addItem(getString("menus.tocanvas"), new SaveHTMLCanvasAction(context))
-                    .addItem(getString("menus.topdf"),    new SavePDFAction(context))
+                    .addItem(getString("menus.topng"),       new SavePNGAction(context))
+                    .addItem(getString("menus.tosvg"),       new SaveSVGAction(context))
+                    .addItem(getString("menus.tohtml"),      new SaveHTMLAction(context))
+                    .addItem(getString("menus.tocanvas"),    new SaveHTMLCanvasAction(context))
+                    .addItem(getString("menus.topdf"),       new SavePDFAction(context))
+                    .addItem(getString("menus.tojava2d"),    new SaveJava2DAction(context))
                 );
         quitAction = new QuitAction(this);
         aboutAction = new AboutAction(this);
