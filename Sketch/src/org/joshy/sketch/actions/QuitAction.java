@@ -33,9 +33,8 @@ public class QuitAction extends SAction {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         if(Main.trackingEnabled) {
-            Main.tracker.trackAsynchronously(new FocusPoint("exit", Main.mainApp));
+            Main.tracker.trackSynchronously(new FocusPoint("exit", Main.mainApp));
         }
 
         System.exit(0);
