@@ -1,6 +1,5 @@
 package org.joshy.sketch;
 
-import com.apple.eawt.*;
 import com.boxysystems.jgoogleanalytics.FocusPoint;
 import com.boxysystems.jgoogleanalytics.JGoogleAnalyticsTracker;
 import com.boxysystems.jgoogleanalytics.LoggingAdapter;
@@ -12,26 +11,22 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.ActionEvent;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.WindowEvent;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.StackPanel;
 import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.gfx.sidehatch.TranslationEditor;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.localization.Localization;
-import org.joshy.gfx.util.localization.TranslationEditor;
 import org.joshy.gfx.util.u;
 import org.joshy.gfx.util.xml.XMLRequest;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrUploadAction;
 import org.joshy.sketch.actions.flickr.ViewSidebar;
 import org.joshy.sketch.actions.io.*;
-import org.joshy.sketch.actions.io.SaveJava2DAction;
 import org.joshy.sketch.actions.pages.PageListPanel;
 import org.joshy.sketch.actions.symbols.SymbolManager;
 import org.joshy.sketch.canvas.DocumentCanvas;
@@ -48,7 +43,6 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
 import org.joshy.sketch.property.PropertyManager;
 import org.joshy.sketch.script.ScriptTools;
-import org.joshy.sketch.util.FileOpenEvent;
 import org.joshy.sketch.util.UpdateChecker;
 
 import javax.swing.*;
@@ -747,55 +741,17 @@ public class Main implements Runnable {
 
     private void setupMac() {
         if(!OSUtil.isMac()) return;
-        Application application = Application.getApplication();
-        application.setEnabledAboutMenu(true);
-        application.setEnabledPreferencesMenu(true);
-        application.addApplicationListener(new ApplicationListener(){
-
-            public void handleAbout(ApplicationEvent applicationEvent) {
-                try {
+        EventBus.getSystem().addListener(SystemMenuEvent.All, new Callback<SystemMenuEvent>(){
+            public void call(SystemMenuEvent systemMenuEvent) throws Exception {
+                if(systemMenuEvent.getType() == SystemMenuEvent.About) {
                     aboutAction.execute();
-                    applicationEvent.setHandled(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-
-            public void handleOpenApplication(ApplicationEvent applicationEvent) {
-            }
-
-            public void handleOpenFile(ApplicationEvent applicationEvent) {
-            }
-
-            public void handlePreferences(ApplicationEvent applicationEvent) {
-                try {
+                if(systemMenuEvent.getType() == SystemMenuEvent.Preferences) {
                     prefsAction.execute();
-                    applicationEvent.setHandled(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
-
-            public void handlePrintFile(ApplicationEvent applicationEvent) {
-            }
-
-            public void handleQuit(ApplicationEvent applicationEvent) {
-                quitAction.execute();
-                applicationEvent.setHandled(true);
-            }
-
-            public void handleReOpenApplication(ApplicationEvent applicationEvent) {
-            }
-        });
-        application.setOpenFileHandler(new OpenFilesHandler(){
-            public void openFiles(AppEvent.OpenFilesEvent openFilesEvent) {
-                u.p("files were opened: " + openFilesEvent);
-                u.p("search term = " + openFilesEvent.getSearchTerm());
-                u.p("files = ");
-                for(File f : openFilesEvent.getFiles()) {
-                    u.p("file = " + f.getAbsolutePath());
+                if(systemMenuEvent.getType() == SystemMenuEvent.Quit) {                    
+                    quitAction.execute();
                 }
-                EventBus.getSystem().publish(new FileOpenEvent(openFilesEvent.getFiles()));
             }
         });
     }
