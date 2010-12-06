@@ -66,10 +66,7 @@ public class SaveJava2DAction extends SAction {
         }
 
         public void docStart(PrintWriter out, SketchDocument doc) {
-            out.println("import java.awt.Color;");
-            out.println("import java.awt.Graphics2D;");
-            out.println("import java.awt.AlphaComposite;");
-            out.println("import java.awt.Graphics;");
+            out.println("import java.awt.*;");
             out.println("import javax.swing.JComponent;");
             out.println("import javax.swing.JFrame;");
             out.println("import javax.swing.SwingUtilities;");
@@ -85,6 +82,9 @@ public class SaveJava2DAction extends SAction {
             out.println("            super.paintComponent(graphics);");
             out.println("            drawPage((Graphics2D)graphics);");
             out.println("        }});");
+            out.println("        frame.pack();");
+            out.println("        frame.setSize(640,480);");            
+            out.println("        frame.show();");
             out.println("    }});");
             out.println("}");
             out.println();
@@ -93,6 +93,7 @@ public class SaveJava2DAction extends SAction {
 
         public void pageStart(PrintWriter out, SketchDocument.SketchPage page) {
             out.println("public static void drawPage(Graphics2D g) {");
+            out.println("  g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);");
         }
 
         public void exportPre(PrintWriter out, SNode node) {
@@ -103,14 +104,27 @@ public class SaveJava2DAction extends SAction {
                 SShape shape = (SShape) node;
                 out.println("  g.setPaint("+serialize(shape.getFillPaint())+");");
                 out.println("  g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,"+shape.getFillOpacity()+"f));");
-                //g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,0.0f));
                 if(shape instanceof SRect) {
                     SRect rect = (SRect) shape;
-                    out.println("  g.drawRect("+(int)rect.getX()+","+(int)rect.getY()+","+(int)rect.getWidth()+","+(int)rect.getHeight()+");");
+                    out.println("  g.fillRect("+(int)rect.getX()+","+(int)rect.getY()+","+(int)rect.getWidth()+","+(int)rect.getHeight()+");");
                 }
                 if(shape instanceof SOval) {
                     SOval oval = (SOval) shape;
-                    out.println("  g.drawOval("+(int)oval.getX()+","+(int)oval.getY()+","+(int)oval.getWidth()+","+(int)oval.getHeight()+");");
+                    out.println("  g.fillOval("+(int)oval.getX()+","+(int)oval.getY()+","+(int)oval.getWidth()+","+(int)oval.getHeight()+");");
+                }
+                if(shape.getStrokeWidth() > 0) {
+                    Graphics2D g2 = null;
+                    out.println("  g.setStroke(new BasicStroke((float) "+shape.getStrokeWidth()+"));");
+                    out.println("  g.setPaint("+serialize(shape.getStrokePaint())+");");
+                    out.println("  g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,"+1.0+"f));");
+                    if(shape instanceof SRect) {
+                        SRect rect = (SRect) shape;
+                        out.println("  g.drawRect("+(int)rect.getX()+","+(int)rect.getY()+","+(int)rect.getWidth()+","+(int)rect.getHeight()+");");
+                    }
+                    if(shape instanceof SOval) {
+                        SOval oval = (SOval) shape;
+                        out.println("  g.drawOval("+(int)oval.getX()+","+(int)oval.getY()+","+(int)oval.getWidth()+","+(int)oval.getHeight()+");");
+                    }
                 }
             }
             out.println("  g.translate("+(-node.getTranslateX())+","+(-node.getTranslateY())+");");
