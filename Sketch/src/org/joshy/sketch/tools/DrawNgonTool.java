@@ -10,9 +10,12 @@ import org.joshy.gfx.node.control.Slider;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.util.GeomUtil;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
+import org.joshy.sketch.canvas.SketchCanvas;
+import org.joshy.sketch.model.Handle;
 import org.joshy.sketch.model.NGon;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
+import org.joshy.sketch.util.DrawUtils;
 
 import java.awt.geom.Point2D;
 
@@ -26,6 +29,9 @@ public class DrawNgonTool extends CanvasTool {
     private Label sliderLabel;
     private int nValue;
     private boolean editingExisting = false;
+    private NGonSizeHandle sizeHandle;
+    private boolean sizeHandleSelected;
+    private boolean startedEditing;
 
     public DrawNgonTool(VectorDocContext context) {
         super(context);
@@ -83,33 +89,56 @@ public class DrawNgonTool extends CanvasTool {
             node.setTranslateX(start.getX());
             node.setTranslateY(start.getY());
         } else {
-            start = new Point2D.Double(node.getTranslateX(),node.getTranslateY());
+            if(sizeHandle != null) {
+                if(sizeHandle.contains(cursor)) {
+                    sizeHandleSelected = true;
+                }
+            }
         }
     }
     
     protected void mouseDragged(MouseEvent event, Point2D.Double cursor) {
-        double radius = start.distance(cursor);
-        double angle = GeomUtil.calcAngle(start,cursor);
-        if(event.isShiftPressed()) {
-            angle = Math.toRadians(GeomUtil.snapTo45(angle));
+        if(sizeHandle != null && sizeHandleSelected == true) {
+            sizeHandle.setX(cursor.getX(),false);
+            sizeHandle.setY(cursor.getY(),false);
+            context.redraw();
+            return;
         }
-        angle = angle - Math.PI/2;
-        node.setAngle(angle);
-        node.setRadius(radius);
-        context.redraw();
+        if(!editingExisting) {
+            double radius = start.distance(cursor);
+            double angle = GeomUtil.calcAngle(start,cursor);
+            if(event.isShiftPressed()) {
+                angle = Math.toRadians(GeomUtil.snapTo45(angle));
+            }
+            angle = angle - Math.PI/2;
+            node.setAngle(angle);
+            node.setRadius(radius);
+            context.redraw();
+        }
     }
 
     @Override
     protected void mouseReleased(MouseEvent event, Point2D.Double cursor) {
-        SketchDocument doc = (SketchDocument) context.getDocument();
-        doc.getCurrentPage().add(node);
-        context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"Ngon"));
-        context.getSelection().setSelectedNode(node);
-        node = null;
-        start = null;
-        context.redraw();
-        context.releaseControl();
-        editingExisting = false;
+        if(editingExisting) {
+            if(sizeHandleSelected == false && startedEditing==false) {
+                context.redraw();
+                context.releaseControl();
+                editingExisting = false;
+            }
+            sizeHandleSelected = false;
+            startedEditing = false;
+            return;
+        } else {
+            SketchDocument doc = (SketchDocument) context.getDocument();
+            doc.getCurrentPage().add(node);
+            context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"Ngon"));
+            context.getSelection().setSelectedNode(node);
+            node = null;
+            start = null;
+            context.redraw();
+            context.releaseControl();
+            editingExisting = false;
+        }
     }
 
     public void drawOverlay(GFX g) {
@@ -122,10 +151,69 @@ public class DrawNgonTool extends CanvasTool {
             g.scale(1/context.getSketchCanvas().getScale(),1/context.getSketchCanvas().getScale());
             g.translate(-context.getSketchCanvas().getPanX(),-context.getSketchCanvas().getPanY());
         }
+        if(sizeHandle != null) {
+            DrawUtils.drawStandardHandle(g,sizeHandle.getX(),sizeHandle.getY(),FlatColor.BLUE);
+        }
     }
 
     public void startEditing(NGon ngon) {
         editingExisting = true;
         this.node = ngon;
+        sizeHandle = new NGonSizeHandle(node);
+        startedEditing = true;
+    }
+
+    private class NGonSizeHandle extends Handle {
+        private NGon node;
+        private double x;
+        private double y;
+
+        public NGonSizeHandle(NGon node) {
+            this.node = node;
+            double angle = node.getAngle() + Math.PI/2;
+            Point2D pt = GeomUtil.calcPoint(new Point2D.Double(node.getTranslateX(), node.getTranslateY()),
+                    Math.toDegrees(angle), node.getRadius());
+            this.x = pt.getX();
+            this.y = pt.getY();
+        }
+
+        @Override
+        public double getX() {
+            return this.x;
+        }
+
+        @Override
+        public void setX(double x, boolean constrain) {
+            this.x = x;
+            update(constrain);
+        }
+
+        private void update(boolean constrain) {
+            Point2D center = new Point2D.Double(node.getTranslateX(),node.getTranslateY());
+            double radius = center.distance(x,y);
+            node.setRadius(radius);
+
+            double angle = GeomUtil.calcAngle(center,new Point2D.Double(x,y));
+            if(constrain) {
+                angle = Math.toRadians(GeomUtil.snapTo45(angle));
+            }
+            angle = angle - Math.PI/2;
+            node.setAngle(angle);
+        }
+
+        @Override
+        public double getY() {
+            return this.y;
+        }
+
+        @Override
+        public void setY(double y, boolean constrain) {
+            this.y = y;
+            update(constrain);
+        }
+
+        @Override
+        public void draw(GFX g, SketchCanvas sketchCanvas) {
+        }
     }
 }
