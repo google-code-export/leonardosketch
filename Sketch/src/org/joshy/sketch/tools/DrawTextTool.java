@@ -63,8 +63,9 @@ public class DrawTextTool extends CanvasTool {
         Point2D pt2 = NodeUtils.convertToScene(context.getSketchCanvas(), point.x, point.y);
 
         overlayTextBox = new Textbox();
-        overlayTextBox.setTranslateX(pt2.getX());
-        overlayTextBox.setTranslateY(pt2.getY());
+        //the -9 is to account for the textbox's insets
+        overlayTextBox.setTranslateX(pt2.getX()-9);
+        overlayTextBox.setTranslateY(pt2.getY()-9);
         overlayTextBox.setFont(Font
                 .name(textNode.getFontName())
                 .size((float) (textNode.getFontSize()*context.getSketchCanvas().getScale()))
@@ -130,7 +131,8 @@ public class DrawTextTool extends CanvasTool {
                                                   offsetY+textNode.getTranslateY()+textNode.getY()
                 );
 
-        Point2D pt2 = NodeUtils.convertToScene(context.getSketchCanvas(), point.getX(), point.getY());
+        //the -9 is to account for the textbox's insets
+        Point2D pt2 = NodeUtils.convertToScene(context.getSketchCanvas(), point.getX()-9, point.getY()-9);
         overlayTextBox.setTranslateX(pt2.getX());
         overlayTextBox.setTranslateY(pt2.getY());
         overlayTextBox.setPrefWidth(overlayTextBox.getFont().calculateWidth(textNode.text)+100);
