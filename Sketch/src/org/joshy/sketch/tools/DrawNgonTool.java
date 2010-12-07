@@ -32,6 +32,7 @@ public class DrawNgonTool extends CanvasTool {
     private NGonSizeHandle sizeHandle;
     private boolean sizeHandleSelected;
     private boolean startedEditing;
+    private boolean sizeHandleHovered;
 
     public DrawNgonTool(VectorDocContext context) {
         super(context);
@@ -78,11 +79,18 @@ public class DrawNgonTool extends CanvasTool {
 
     @Override
     protected void mouseMoved(MouseEvent event, Point2D.Double cursor) {
+        if(editingExisting) {
+            if(sizeHandle != null) {
+                sizeHandleHovered = sizeHandle.contains(cursor);
+                context.redraw();
+            }
+        }
     }
 
 
     @Override
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
+        sizeHandleHovered = false;
         if(!editingExisting) {
             start = cursor;
             node = new NGon(nValue);
@@ -98,9 +106,10 @@ public class DrawNgonTool extends CanvasTool {
     }
     
     protected void mouseDragged(MouseEvent event, Point2D.Double cursor) {
+
         if(sizeHandle != null && sizeHandleSelected == true) {
-            sizeHandle.setX(cursor.getX(),false);
-            sizeHandle.setY(cursor.getY(),false);
+            sizeHandle.setX(cursor.getX(),event.isShiftPressed());
+            sizeHandle.setY(cursor.getY(),event.isShiftPressed());
             context.redraw();
             return;
         }
@@ -152,7 +161,20 @@ public class DrawNgonTool extends CanvasTool {
             g.translate(-context.getSketchCanvas().getPanX(),-context.getSketchCanvas().getPanY());
         }
         if(sizeHandle != null) {
-            DrawUtils.drawStandardHandle(g,sizeHandle.getX(),sizeHandle.getY(),FlatColor.BLUE);
+            Point2D.Double center = context.getSketchCanvas().transformToDrawing(node.getTranslateX(),node.getTranslateY());
+            g.setPaint(FlatColor.GRAY);
+            g.fillOval(center.getX()-5,center.getY()-5,10,10);
+            g.setPaint(FlatColor.BLACK);
+            g.drawOval(center.getX()-5,center.getY()-5,10,10);
+            Point2D.Double pt = context.getSketchCanvas().transformToDrawing(sizeHandle.getX(),sizeHandle.getY());
+            g.setPaint(FlatColor.BLACK);
+            g.drawLine(center.getX(),center.getY(),pt.getX(),pt.getY());
+
+            FlatColor color = FlatColor.BLUE;
+            if(sizeHandleHovered) {
+                color = FlatColor.RED;
+            }
+            DrawUtils.drawStandardHandle(g,pt.getX(),pt.getY(),color);
         }
     }
 
