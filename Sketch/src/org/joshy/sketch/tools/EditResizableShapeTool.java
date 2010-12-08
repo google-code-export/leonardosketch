@@ -37,7 +37,6 @@ public class EditResizableShapeTool extends CanvasTool {
     public void enable() {
         super.enable();
         context.getSketchCanvas().setShowSelection(false);
-        u.p("enabled resizeable shape editor!");
         shape = (ResizableGrid9Shape)context.getSelection().items().iterator().next();
         sizedWidth = shape.getWidth();
         sizedHeight = shape.getHeight();
@@ -100,7 +99,6 @@ public class EditResizableShapeTool extends CanvasTool {
         //grow by 5 pixels on a side to account for the handles
         bounds = new Bounds(bounds.getX()-5,bounds.getY()-5,bounds.getWidth()+10,bounds.getHeight()+10);
         if(bounds.contains(cursor)) {
-            u.p("inside");
             for(VHandle handle : handles) {
                 if((handle.getPosition() == PositionHandle.Position.Left) || (handle.getPosition() == PositionHandle.Position.Right)) {
                     if(Math.abs(event.getX()-handle.getX()) < 10) {
@@ -116,7 +114,6 @@ public class EditResizableShapeTool extends CanvasTool {
                 }
             }
         } else {
-            u.p("outside");
             context.releaseControl();
         }
     }

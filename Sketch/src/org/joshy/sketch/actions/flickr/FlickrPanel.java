@@ -18,7 +18,6 @@ import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.image.MasterImageCache;
 import org.joshy.gfx.util.image.SizingMethod;
-import org.joshy.gfx.util.u;
 import org.joshy.gfx.util.xml.XMLRequest;
 import org.joshy.sketch.model.SImage;
 import org.joshy.sketch.model.SNode;
@@ -175,7 +174,6 @@ public class FlickrPanel extends VFlexBox {
                 req.setParameter("license","4,5,7");
                 req.onComplete(new Callback<Doc>() {
                     public void call(Doc doc) {
-                        doc.dump();
                         photos.clear();
                         try {
                             for(Elem photo : doc.xpath("//photo")) {
@@ -247,7 +245,6 @@ public class FlickrPanel extends VFlexBox {
             try {
                 imageCache.getImage(getThumbnailURL().toString(),null,75,75, SizingMethod.Preserve,new MasterImageCache.Callback() {
                     public void fullImageLoaded(BufferedImage image) {
-                        u.p("image loaded!");
                         loaded = true;
                         Photo.this.image = Image.create(image);
                         context.redraw();
