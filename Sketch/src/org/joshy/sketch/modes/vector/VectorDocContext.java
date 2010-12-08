@@ -8,6 +8,7 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.gfx.stage.Stage;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrPanel;
@@ -195,8 +196,17 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
 
     @Override
     public void setupPopupLayer() {
-        getStage().getPopupLayer().add(propPanel);
-        getStage().getPopupLayer().add(propsPalette);        
+        if(FloatingPropertiesPanel.TRUE_PALLETTE) {
+            Stage s = Stage.createStage();
+            s.setContent(propPanel);
+            s.centerOnScreen();
+            s.setUndecorated(false);
+            s.setOpacity(0);
+            s.setAlwaysOnTop(true);
+        } else {
+            getStage().getPopupLayer().add(propPanel);
+        }
+        getStage().getPopupLayer().add(propsPalette);
     }
 
     @Override

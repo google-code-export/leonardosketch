@@ -10,6 +10,7 @@ import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.*;
@@ -42,6 +43,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
     private PopupMenuButton<SArrow.HeadEnd> arrowHeadEnd;
     private Label rgbLabel;
     private Label fontSizeLabel;
+    public static final boolean TRUE_PALLETTE = OSUtil.isMac();
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
@@ -78,9 +80,11 @@ public class FloatingPropertiesPanel extends HFlexBox {
         });
         colorButton.setOutsideColorCallback(new SwatchColorPicker.ColorCallback(){
             public FlatColor call(MouseEvent event) {
-                Point2D point = event.getPointInNodeCoords(context.getCanvas());
                 SketchDocument doc = context.getDocument();
                 Stage stage = context.getSketchCanvas().getParent().getStage();
+                Point2D point = event.getPointInScreenCoords();
+                point = new Point2D.Double(point.getX()-stage.getX(),point.getY()-stage.getY());
+                point = NodeUtils.convertFromScene(context.getCanvas(),point);
                 if(rgbLabel == null) {
                     rgbLabel = new Label("RGB");
                     rgbLabel.setId("rgblabel");
@@ -89,8 +93,10 @@ public class FloatingPropertiesPanel extends HFlexBox {
                     rgbLabel.setTranslateY(100);
                 }
                 rgbLabel.setVisible(true);
-                rgbLabel.setTranslateX(event.getPointInSceneCoords().getX()+70);
-                rgbLabel.setTranslateY(event.getPointInSceneCoords().getY());
+                Point2D dx = event.getPointInScreenCoords();
+
+                rgbLabel.setTranslateX(dx.getX()-stage.getX()+70);
+                rgbLabel.setTranslateY(dx.getY()-stage.getY());
                 for(SNode node : doc.getCurrentPage().model) {
                     if(node.contains(point) && node instanceof SShape) {
                         FlatColor color =  (FlatColor) ((SShape)node).getFillPaint();
@@ -135,11 +141,13 @@ public class FloatingPropertiesPanel extends HFlexBox {
                             sel.regenHandles(sel.firstItem());
                         }
                     }
+                    context.redraw();
                 }
                 if(event.getSource() == strokeColorButton) {
                     if(manager.propMan.isClassAvailable(SShape.class) ||
                             manager.propMan.isClassAvailable(SImage.class)) {
                         manager.propMan.getProperty("strokePaint").setValue(event.getValue());
+                        context.redraw();
                     }
                 }
             }
@@ -157,6 +165,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
                     if(manager.propMan.isClassAvailable(SShape.class)) {
                         double v = (Double)event.getValue();
                         manager.propMan.getProperty("fillOpacity").setValue(v/100.0);
+                        context.redraw();
                     }
                 }
             }
@@ -183,6 +192,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
                             }
                         }
                     }
+                    context.redraw();
                 }
                 
             }
@@ -207,6 +217,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
                 if(manager.propMan.isClassAvailable(SText.class)) {
                     int index = event.getView().getSelectedIndex();
                     manager.propMan.getProperty("fontName").setValue(fonts[index].getName());
+                    context.redraw();
                 }
             }
         });
@@ -223,6 +234,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
                         manager.propMan.isClassAvailable(SImage.class)) {
                     int sw = (int)((Double)event.getValue()).doubleValue();
                     manager.propMan.getProperty("strokeWidth").setValue(sw);
+                    context.redraw();
                 }
             }
         });
@@ -235,16 +247,17 @@ public class FloatingPropertiesPanel extends HFlexBox {
         fontBoldButton.onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent event) {
                 if(selection != null) {
-                for(SNode node: selection.items()) {
-                    if(node instanceof SText) {
-                        SText text = (SText) node;
-                        if(fontBoldButton.isSelected()) {
-                            text.setWeight(Font.Weight.Bold);
-                        } else {
-                            text.setWeight(Font.Weight.Regular);
+                    for(SNode node: selection.items()) {
+                        if(node instanceof SText) {
+                            SText text = (SText) node;
+                            if(fontBoldButton.isSelected()) {
+                                text.setWeight(Font.Weight.Bold);
+                            } else {
+                                text.setWeight(Font.Weight.Regular);
+                            }
                         }
                     }
-                }
+                    context.redraw();
                 }
 
             }
@@ -255,16 +268,17 @@ public class FloatingPropertiesPanel extends HFlexBox {
         fontItalicButton.onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent event) {
                 if(selection != null) {
-                for(SNode node: selection.items()) {
-                    if(node instanceof SText) {
-                        SText text = (SText) node;
-                        if(fontItalicButton.isSelected()) {
-                            text.setStyle(Font.Style.Italic);
-                        } else {
-                            text.setStyle(Font.Style.Regular);
+                    for(SNode node: selection.items()) {
+                        if(node instanceof SText) {
+                            SText text = (SText) node;
+                            if(fontItalicButton.isSelected()) {
+                                text.setStyle(Font.Style.Italic);
+                            } else {
+                                text.setStyle(Font.Style.Regular);
+                            }
                         }
                     }
-                }
+                    context.redraw();
                 }
 
             }
@@ -382,10 +396,11 @@ public class FloatingPropertiesPanel extends HFlexBox {
 
     @Override
     protected void drawSelf(GFX g) {
-        g.setPaint(new FlatColor(0,0,0,0.4));
-        g.fillRoundRect(0,0,getWidth(),getHeight(),10,10);
+        double h = 50;
+        g.setPaint(new FlatColor(0.3,0.3,0.3,0.4));
+        g.fillRoundRect(0,0,getWidth()-1,h-1,10,10);
         g.setPaint(new FlatColor(0,0,0,0.8));
-        g.drawRoundRect(0,0,getWidth(),getHeight(),10,10);
+        g.drawRoundRect(0,0,getWidth()-1,h-1,10,10);
     }
     @Override
     public void doLayout() {
@@ -393,8 +408,18 @@ public class FloatingPropertiesPanel extends HFlexBox {
             Bounds bounds = selection.calculateBounds();
             bounds = context.getSketchCanvas().transformToDrawing(bounds);
             Point2D pt = NodeUtils.convertToScene(context.getSketchCanvas(), bounds.getX(), bounds.getY());
-            setTranslateX(pt.getX());
-            setTranslateY(pt.getY() + bounds.getHeight()+20);
+            if(TRUE_PALLETTE) {
+                Stage s = getParent().getStage();
+                Stage cs = context.getStage();
+                s.setWidth(400);
+                s.setHeight(230);
+                pt = new Point2D.Double(pt.getX()+cs.getX(),pt.getY()+cs.getY());
+                s.setX(pt.getX());
+                s.setY(pt.getY()+bounds.getHeight()+40);
+            } else {
+                setTranslateX(pt.getX());
+                setTranslateY(pt.getY() + bounds.getHeight()+20);
+            }
             super.doLayout();
         }
     }
