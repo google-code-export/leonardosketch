@@ -164,7 +164,6 @@ public class Main implements Runnable {
     private static void setupSettings() throws IOException {
         releaseProperties = new Properties();
         URL releaseURL = Main.class.getResource("release.properties");
-        u.p("url = " + releaseURL);
         releaseProperties.load(releaseURL.openStream());
         CURRENT_BUILD_NUMBER = Integer.parseInt(releaseProperties.getProperty("org.joshy.sketch.build.number"));
         UPDATE_URL = releaseProperties.getProperty("org.joshy.sketch.updateurl");
@@ -317,7 +316,6 @@ public class Main implements Runnable {
                                 .setParameter("message",wishBox.getText())
                                 .onComplete(new Callback<Doc>(){
                                     public void call(Doc doc) {
-                                        u.p("request completed");
                                         wishStatus.setText("Wish received!");
                                     }
                                 }).start();
@@ -406,10 +404,8 @@ public class Main implements Runnable {
         final JFrame frame = (JFrame) context.getStage().getNativeWindow();
         context.menubar = new Menubar(frame);
         buildCommonMenubar(context);
-        u.p("setting up with context doc = " + context.getDocument());
         EventBus.getSystem().addListener(CanvasDocument.DocumentEvent.Closing,new Callback<CanvasDocument.DocumentEvent>() {
             public void call(CanvasDocument.DocumentEvent documentEvent) throws Exception {
-                u.p("document closing");
                 if(documentEvent.getDocument() == context.getDocument()) {
                     if(context.getDocument().isDirty()) {
                         u.p("doc is still dirty!!!");
@@ -437,7 +433,6 @@ public class Main implements Runnable {
         });
         EventBus.getSystem().addListener(context.getStage(), WindowEvent.Closing,new Callback<WindowEvent>() {
             public void call(WindowEvent event) {
-                u.p("window closing event");
                 if(context.getDocument().isDirty()) {
                     event.veto();
                     u.p("doc is still dirty!!!");
@@ -518,7 +513,6 @@ public class Main implements Runnable {
         
         EventBus.getSystem().addListener(FileOpenEvent.FileOpen, new Callback<FileOpenEvent>() {
             public void call(FileOpenEvent fileOpenEvent) throws Exception {
-                u.p("got a file open event!");
                 OpenAction act = new OpenAction(Main.this);
                 act.execute(fileOpenEvent.getFiles());
             }

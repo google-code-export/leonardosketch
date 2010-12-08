@@ -4,14 +4,10 @@ import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.ListView;
-import org.joshy.gfx.node.layout.TabPanel;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.OpenAction;
-import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.io.NativeExport;
 import org.joshy.sketch.model.SNode;
-import org.joshy.sketch.modes.DocContext;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -84,7 +80,6 @@ public class SymbolManager {
     }
 
     private void loadSymbols(File basedir) throws Exception {
-        u.p("Loading symbols from base dir " + basedir);
         if(!basedir.exists()) {
             boolean success = basedir.mkdirs();
             if(!success) {
@@ -100,7 +95,6 @@ public class SymbolManager {
         }
         for(File file : basedir.listFiles()) {
             if(file.getName().endsWith(".xml") && file.exists()) {
-                u.p("Loading: " + file.getAbsolutePath());
                 List<SNode> shapes = OpenAction.loadShapes(file,null);
                 SymbolSet set = new SymbolSet();
                 set.file = file;
@@ -108,7 +102,6 @@ public class SymbolManager {
                 currentSet = set;
                 sets.put(file,set);
                 list.add(set);
-                u.p("successfully loaded: " + file.getName() + " symbols count " +set.symbols.size());
             }
         }
         if(sets.isEmpty()) {
@@ -150,7 +143,6 @@ public class SymbolManager {
     }
 
     private void saveSymbols(SymbolSet set) throws FileNotFoundException, UnsupportedEncodingException {
-        u.p("saving to file: "+ set.file.getAbsolutePath());
         XMLWriter out = new XMLWriter(new PrintWriter(new OutputStreamWriter(new FileOutputStream(set.file), "UTF-8")),
                 set.file.toURI());
         out.header();

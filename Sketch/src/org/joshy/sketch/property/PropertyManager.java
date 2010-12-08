@@ -22,7 +22,6 @@ public class PropertyManager {
     public PropertyManager() {
         EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, new Callback<Selection.SelectionChangeEvent>(){
             public void call(Selection.SelectionChangeEvent event) {
-                u.p("PROPMAN selection changed. size = " + event.getSelection().size());
                 selection = event.getSelection();
             }
         });
