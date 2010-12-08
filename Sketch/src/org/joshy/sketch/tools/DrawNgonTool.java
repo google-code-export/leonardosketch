@@ -4,9 +4,8 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.NodeUtils;
-import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.Label;
-import org.joshy.gfx.node.control.Slider;
+import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.layout.FlexBox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.util.GeomUtil;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
@@ -24,24 +23,36 @@ import static org.joshy.gfx.util.localization.Localization.getString;
 public class DrawNgonTool extends CanvasTool {
     private Point2D start;
     private NGon node;
-    private HFlexBox panel;
+    private FlexBox panel;
     private Control slider;
     private Label sliderLabel;
     private int nValue;
     private boolean editingExisting = false;
     private NGonSizeHandle sizeHandle;
-    private boolean sizeHandleSelected;
+    private NGonSizeHandle starHandle;
     private boolean startedEditing;
-    private boolean sizeHandleHovered;
+    private boolean isStar;
 
-    public DrawNgonTool(VectorDocContext context) {
+    public DrawNgonTool(final VectorDocContext context) {
         super(context);
-        panel = new HFlexBox();
+        panel = new HFlexBox().setBoxAlign(HFlexBox.Align.Baseline);
+
         panel.add(new Label(getString("drawNgonTool.sides")));
         slider = new Slider(false).setMin(3).setMax(20).setValue(5).setWidth(200);
         panel.add(slider);
         sliderLabel = new Label("N");
         panel.add(sliderLabel);
+        
+        panel.add(new Checkbox("Star").onClicked(new Callback<ActionEvent>(){
+            public void call(ActionEvent actionEvent) throws Exception {
+                if(node != null) {
+                    isStar = ((Button)actionEvent.getSource()).isSelected();
+                    node.setStar(isStar);
+                }
+                context.redraw();
+            }
+        }));
+        
         EventBus.getSystem().addListener(slider, ChangedEvent.DoubleChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) {
                 nValue = ((Double)event.getValue()).intValue();
@@ -80,37 +91,31 @@ public class DrawNgonTool extends CanvasTool {
     @Override
     protected void mouseMoved(MouseEvent event, Point2D.Double cursor) {
         if(editingExisting) {
-            if(sizeHandle != null) {
-                sizeHandleHovered = sizeHandle.contains(cursor);
-                context.redraw();
-            }
+            sizeHandle.processMouseMove(event,cursor);
+            starHandle.processMouseMove(event,cursor);
+            context.redraw();
         }
     }
 
 
     @Override
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
-        sizeHandleHovered = false;
-        if(!editingExisting) {
+        if(editingExisting) {
+            sizeHandle.processMousePressed(event,cursor);
+            starHandle.processMousePressed(event,cursor);
+        } else {
             start = cursor;
             node = new NGon(nValue);
+            node.setStar(isStar);
             node.setTranslateX(start.getX());
             node.setTranslateY(start.getY());
-        } else {
-            if(sizeHandle != null) {
-                if(sizeHandle.contains(cursor)) {
-                    sizeHandleSelected = true;
-                }
-            }
         }
     }
     
     protected void mouseDragged(MouseEvent event, Point2D.Double cursor) {
-
-        if(sizeHandle != null && sizeHandleSelected == true) {
-            sizeHandle.setX(cursor.getX(),event.isShiftPressed());
-            sizeHandle.setY(cursor.getY(),event.isShiftPressed());
-            context.redraw();
+        if(editingExisting) {
+            sizeHandle.processMouseDragged(event,cursor);
+            starHandle.processMouseDragged(event,cursor);
             return;
         }
         if(!editingExisting) {
@@ -129,16 +134,21 @@ public class DrawNgonTool extends CanvasTool {
     @Override
     protected void mouseReleased(MouseEvent event, Point2D.Double cursor) {
         if(editingExisting) {
-            if(sizeHandleSelected == false && startedEditing==false) {
+            boolean quit = false;
+            if(!sizeHandle.selected && !starHandle.selected) {
+                quit = true;
+            }
+            sizeHandle.selected = false;
+            starHandle.selected = false;
+            if(quit && startedEditing==false) {
                 context.redraw();
                 context.releaseControl();
                 editingExisting = false;
             }
-            sizeHandleSelected = false;
             startedEditing = false;
             return;
         } else {
-            SketchDocument doc = (SketchDocument) context.getDocument();
+            SketchDocument doc = context.getDocument();
             doc.getCurrentPage().add(node);
             context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"Ngon"));
             context.getSelection().setSelectedNode(node);
@@ -162,26 +172,32 @@ public class DrawNgonTool extends CanvasTool {
         }
         if(sizeHandle != null) {
             Point2D.Double center = context.getSketchCanvas().transformToDrawing(node.getTranslateX(),node.getTranslateY());
+            Point2D.Double pt = context.getSketchCanvas().transformToDrawing(sizeHandle.getX(),sizeHandle.getY());
+
+            g.setPaint(new FlatColor(0x404040));
+            g.drawLine(center.getX(),center.getY(),pt.getX(),pt.getY());
+            if(isStar) {
+                pt = context.getSketchCanvas().transformToDrawing(starHandle.getX(),starHandle.getY());
+                g.drawLine(center.getX(),center.getY(),pt.getX(),pt.getY());
+            }
+
             g.setPaint(FlatColor.GRAY);
             g.fillOval(center.getX()-5,center.getY()-5,10,10);
             g.setPaint(FlatColor.BLACK);
             g.drawOval(center.getX()-5,center.getY()-5,10,10);
-            Point2D.Double pt = context.getSketchCanvas().transformToDrawing(sizeHandle.getX(),sizeHandle.getY());
-            g.setPaint(FlatColor.BLACK);
-            g.drawLine(center.getX(),center.getY(),pt.getX(),pt.getY());
 
-            FlatColor color = FlatColor.BLUE;
-            if(sizeHandleHovered) {
-                color = FlatColor.RED;
+            sizeHandle.draw(g);
+            if(isStar) {
+                starHandle.draw(g);
             }
-            DrawUtils.drawStandardHandle(g,pt.getX(),pt.getY(),color);
         }
     }
 
     public void startEditing(NGon ngon) {
         editingExisting = true;
         this.node = ngon;
-        sizeHandle = new NGonSizeHandle(node);
+        sizeHandle = new NGonSizeHandle(node,true);
+        starHandle = new NGonSizeHandle(node,false);
         startedEditing = true;
     }
 
@@ -189,18 +205,37 @@ public class DrawNgonTool extends CanvasTool {
         private NGon node;
         private double x;
         private double y;
+        private boolean outer;
+        private boolean hovered;
+        private boolean selected;
 
-        public NGonSizeHandle(NGon node) {
+        public NGonSizeHandle(NGon node, boolean outer) {
             this.node = node;
+            this.outer = outer;
             double angle = node.getAngle() + Math.PI/2;
             Point2D pt = GeomUtil.calcPoint(new Point2D.Double(node.getTranslateX(), node.getTranslateY()),
-                    Math.toDegrees(angle), node.getRadius());
+                    Math.toDegrees(angle), getRadius());
             this.x = pt.getX();
             this.y = pt.getY();
         }
 
+        private double getRadius() {
+            if(outer) {
+                return node.getRadius();
+            } else {
+                return node.getInnerRadius();
+            }
+        }
+
         @Override
         public double getX() {
+            if(!outer) {
+                double angle = node.getAngle() + Math.PI/2;
+                angle += Math.PI*2.0/node.getSides()/2.0;
+                Point2D pt = GeomUtil.calcPoint(new Point2D.Double(node.getTranslateX(), node.getTranslateY()),
+                        Math.toDegrees(angle), getRadius());
+                return pt.getX();
+            }
             return this.x;
         }
 
@@ -213,18 +248,31 @@ public class DrawNgonTool extends CanvasTool {
         private void update(boolean constrain) {
             Point2D center = new Point2D.Double(node.getTranslateX(),node.getTranslateY());
             double radius = center.distance(x,y);
-            node.setRadius(radius);
+            if(outer) {
+                node.setRadius(radius);
+            } else {
+                node.setInnerRadius(radius);
+            }
 
             double angle = GeomUtil.calcAngle(center,new Point2D.Double(x,y));
             if(constrain) {
                 angle = Math.toRadians(GeomUtil.snapTo45(angle));
             }
             angle = angle - Math.PI/2;
-            node.setAngle(angle);
+            if(outer) {
+                node.setAngle(angle);
+            }
         }
 
         @Override
         public double getY() {
+            if(!outer) {
+                double angle = node.getAngle() + Math.PI/2;
+                angle += Math.PI*2.0/node.getSides()/2.0;
+                Point2D pt = GeomUtil.calcPoint(new Point2D.Double(node.getTranslateX(), node.getTranslateY()),
+                        Math.toDegrees(angle), getRadius());
+                return pt.getY();
+            }
             return this.y;
         }
 
@@ -237,5 +285,31 @@ public class DrawNgonTool extends CanvasTool {
         @Override
         public void draw(GFX g, SketchCanvas sketchCanvas) {
         }
+
+        public void processMouseMove(MouseEvent event, Point2D.Double cursor) {
+            hovered = contains(cursor);
+            context.redraw();
+        }
+
+        public void processMousePressed(MouseEvent event, Point2D cursor) {
+            selected = contains(cursor);
+        }
+
+        public void processMouseDragged(MouseEvent event, Point2D.Double cursor) {
+            if(selected) {
+                setX(cursor.getX(),event.isShiftPressed());
+                setY(cursor.getY(),event.isShiftPressed());
+                context.redraw();
+            }
+        }
+        public void draw(GFX g) {
+            FlatColor color = FlatColor.BLUE;
+            if(hovered) {
+                color = FlatColor.RED;
+            }
+            Point2D.Double pt = context.getSketchCanvas().transformToDrawing(getX(),getY());
+            DrawUtils.drawStandardHandle(g,pt.getX(),pt.getY(),color);
+        }
+
     }
 }

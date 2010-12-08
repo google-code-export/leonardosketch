@@ -18,8 +18,10 @@ import java.awt.geom.Point2D;
 */
 public class NGon extends SShape implements SelfDrawable {
     private int sides;
-    private double radius;
+    private double radius = 50;
+    private double innerRadius = 40;
     private double angle;
+    private boolean star;
 
     public NGon(int sides) {
         this.sides = sides;
@@ -74,6 +76,23 @@ public class NGon extends SShape implements SelfDrawable {
     }
 
     public double[] toPoints() {
+        if(isStar()) {
+            double[] points = new double[getSides()*4];
+            double addAngle=2*Math.PI/getSides();
+            double angle= -this.angle;
+            double x = 0;
+            double y = 0;
+            double or = getRadius();
+            double ir = getInnerRadius();
+            for (int i=0; i<getSides(); i++) {
+                points[i*4] =   (int)Math.round(or*Math.cos(angle))+x;
+                points[i*4+1] = (int)Math.round(or*Math.sin(angle))+y;
+                points[i*4+2] = (int)Math.round(ir*Math.cos(angle+addAngle/2))+x;
+                points[i*4+3] = (int)Math.round(ir*Math.sin(angle+addAngle/2))+y;
+                angle+=addAngle;
+            }
+            return points;
+        }
         double[] points = new double[getSides()*2];
         double addAngle=2*Math.PI/getSides();
         double angle= -this.angle;
@@ -118,5 +137,21 @@ public class NGon extends SShape implements SelfDrawable {
 
     public double getAngle() {
         return angle;
+    }
+
+    public void setStar(boolean star) {
+        this.star = star;
+    }
+
+    public boolean isStar() {
+        return star;
+    }
+
+    public double getInnerRadius() {
+        return innerRadius;
+    }
+
+    public void setInnerRadius(double innerRadius) {
+        this.innerRadius = innerRadius;
     }
 }
