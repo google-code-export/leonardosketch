@@ -590,7 +590,8 @@ public class Main implements Runnable {
                 trackingEnabled = toggleState;
             }
         });
-        menubar.add(editMenu);*/
+        */
+        menubar.add(editMenu);
         context.createAfterEditMenu(menubar);
 
         Menu viewMenu = new Menu().setTitle(getString("menus.view"))
@@ -648,13 +649,13 @@ public class Main implements Runnable {
         if(settings.containsKey(DEBUG_MENU)) {
             if("true".equals(settings.getProperty(DEBUG_MENU))) {
                 Menu debugMenu = new Menu().setTitle(getString("menus.debug"));
-                debugMenu.addItem("Show Console", new SAction(){
+                /*debugMenu.addItem("Show Console", new SAction(){
                     @Override
                     public void execute() throws Exception {
 
                     }
-                })
-                .addItem("Edit Translations", new SAction() {
+                })*/
+                debugMenu.addItem("Edit Translations", new SAction() {
                     @Override
                     public void execute() throws Exception {
                         Stage s = Stage.createStage();
