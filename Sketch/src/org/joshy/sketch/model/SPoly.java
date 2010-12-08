@@ -18,6 +18,7 @@ public class SPoly extends SShape implements SelfDrawable {
         points = new ArrayList<Point2D>();
         this.setFillPaint(FlatColor.BLUE);
         closed = false;
+        bounds = new Bounds(0,0,0,0);
     }
 
     public void addPoint(Point2D point) {
