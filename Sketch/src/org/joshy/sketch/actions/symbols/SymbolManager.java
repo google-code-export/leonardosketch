@@ -160,20 +160,4 @@ public class SymbolManager {
         out.close();
     }
 
-    public static class ShowSymbolPanel extends SAction {
-        private DocContext context;
-
-        public ShowSymbolPanel(DocContext context) {
-            super();
-            this.context = context;
-        }
-
-        @Override
-        public void execute() {
-            TabPanel sideBar = context.getSidebar();
-            if(sideBar!=null) {
-                sideBar.setSelected(context.symbolPanel);
-            }
-        }
-    }
 }

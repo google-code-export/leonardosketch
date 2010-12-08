@@ -31,7 +31,6 @@ public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocum
     private UndoManager undoManager;
     public Menu symbolMenu;
     public Menu pageMenu;
-    public SymbolPanel symbolPanel;
     public Menubar menubar;
     public Panel mainPanel;
     private Stage stage;

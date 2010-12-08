@@ -11,6 +11,7 @@ import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrPanel;
+import org.joshy.sketch.actions.flickr.ViewSidebar;
 import org.joshy.sketch.actions.symbols.CreateSymbol;
 import org.joshy.sketch.actions.symbols.SymbolManager;
 import org.joshy.sketch.actions.symbols.SymbolPanel;
@@ -24,6 +25,8 @@ import org.joshy.sketch.util.BiList;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.joshy.gfx.util.localization.Localization.getString;
 
@@ -36,6 +39,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     private VFlexBox toolbar;
     private TabPanel sideBar;
     private Panel flickrPanel;
+    private SymbolPanel symbolPanel;
     private SketchCanvas canvas;
     protected ToggleGroup group;
     protected BiList<Button, CanvasTool> tools = new BiList<Button, CanvasTool>();
@@ -48,6 +52,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     public DeleteSelectedNodeAction deleteSelectedNodeAction;
     public NodeActions.DuplicateNodesAction duplicateNodeAction;
     private DrawNgonTool drawNGonTool;
+    private List<SAction> viewActions = new ArrayList<SAction>();
 
     public VectorDocContext(Main main, VectorModeHelper helper) {
         super(main,helper);
@@ -169,6 +174,8 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         this.flickrPanel = new FlickrPanel(this);
         this.sideBar.add(getString("sidebar.flickr"), this.flickrPanel);
         this.flickrPanel.setVisible(false);
+        this.viewActions.add(new ViewSidebar("menus.viewSymbolSidebar",this,symbolPanel));
+        this.viewActions.add(new ViewSidebar("menus.viewFlickrSidebar",this,flickrPanel));
     }
 
     @Override
@@ -297,4 +304,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     }
 
 
+    public List<SAction> getSidebarPanelViewActions() {
+        return viewActions;
+    }
 }

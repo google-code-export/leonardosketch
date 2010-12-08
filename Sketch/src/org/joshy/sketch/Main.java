@@ -25,7 +25,6 @@ import org.joshy.gfx.util.u;
 import org.joshy.gfx.util.xml.XMLRequest;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrUploadAction;
-import org.joshy.sketch.actions.flickr.ViewSidebar;
 import org.joshy.sketch.actions.io.*;
 import org.joshy.sketch.actions.pages.PageListPanel;
 import org.joshy.sketch.actions.symbols.SymbolManager;
@@ -614,10 +613,11 @@ public class Main implements Runnable {
                     .addItem(getString("menus.snapGrid"),          new ViewActions.SnapGridAction(vdc))
                     .addItem(getString("menus.snapDocEdges"),          new ViewActions.SnapDocBoundsAction(vdc))
                     .addItem(getString("menus.snapNodeEdges"),          new ViewActions.SnapNodeBoundsAction(vdc))
-                    .separator()
-                    .addItem(getString("menus.viewFlickrSidebar"), new ViewSidebar(vdc))
-                    .addItem(getString("menus.viewSymbolSidebar"), new SymbolManager.ShowSymbolPanel(vdc))
-                    .separator()
+                    .separator();
+            for(SAction a : vdc.getSidebarPanelViewActions()) {
+                viewMenu.addItem(a.getDisplayName(), a);
+            }
+            viewMenu.separator()
                     .addItem(getString("menus.viewPresentation"),"", new ViewSlideshowAction(vdc));
         }
 
