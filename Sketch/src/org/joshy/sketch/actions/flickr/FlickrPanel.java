@@ -63,7 +63,7 @@ public class FlickrPanel extends VFlexBox {
     
     public FlickrPanel(final VectorDocContext context) {
         this.context = context;
-        imageCache = new MasterImageCache(false,10,"foo");
+        imageCache = new MasterImageCache(true,10,"LeonardoFlickrSearchCache");
         photos = new ArrayListModel<Photo>();
         photoList = new ListView();
         photoList.setRowHeight(75);
