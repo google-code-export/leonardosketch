@@ -13,6 +13,8 @@ import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.pixel.PixelModeHelper;
 import org.joshy.sketch.modes.preso.PresoModeHelper;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
+import org.joshy.sketch.util.Log;
+import org.joshy.sketch.util.LogDialog;
 
 import javax.imageio.ImageIO;
 import javax.xml.xpath.XPathExpressionException;
@@ -25,7 +27,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -64,7 +65,7 @@ public class OpenAction extends SAction {
                 e.printStackTrace();
             }
         } else {
-            FileDialog fd = new FileDialog((Frame)null);//context.getStage().getNativeWindow());
+            FileDialog fd = new FileDialog((Frame)null);
             fd.setMode(FileDialog.LOAD);
             fd.setTitle("Open Sketchy File");
             fd.setVisible(true);
@@ -82,23 +83,41 @@ public class OpenAction extends SAction {
     }
 
 
-    private void load(File file) throws Exception {
-        if(file.getName().toLowerCase().endsWith(".png")) {
-            loadPng(file);
-        } if (file.getName().toLowerCase().endsWith(".leoz")) {
-            SketchDocument doc = loadZip(file);
-            if(doc.isPresentation()) {
-                main.setupNewDoc(new PresoModeHelper(main),doc);
+    private void load(File file) {
+
+        Log.LogCollector col = new ClassFilterLogCollector(OpenAction.class);
+        Log.addCollector(col);
+        try {
+            if(file.getName().toLowerCase().endsWith(".png")) {
+                loadPng(file);
+            } if (file.getName().toLowerCase().endsWith(".leoz")) {
+                SketchDocument doc = loadZip(file);
+                if(doc.isPresentation()) {
+                    main.setupNewDoc(new PresoModeHelper(main),doc);
+                } else {
+                    main.setupNewDoc(new VectorModeHelper(main),doc);
+                }
             } else {
-                main.setupNewDoc(new VectorModeHelper(main),doc);
+                SketchDocument doc = load(new FileInputStream(file), file, file.getName(),null);
+                if(doc.isPresentation()) {
+                    main.setupNewDoc(new PresoModeHelper(main),doc);
+                } else {
+                    main.setupNewDoc(new VectorModeHelper(main),doc);
+                }
             }
-        } else {
-            SketchDocument doc = load(new FileInputStream(file), file, file.getName(),null);
-            if(doc.isPresentation()) {
-                main.setupNewDoc(new PresoModeHelper(main),doc);
-            } else {
-                main.setupNewDoc(new VectorModeHelper(main),doc);
-            }
+        } catch (Exception ex) {
+            Log.error(ex);
+        }
+
+        Log.removeCollector(col);
+        if(col.hasErrors()) {
+            LogDialog.show("There were errors while loading the application",col);
+        }
+        if(col.hasWarnings()) {
+            LogDialog.show("There were warnings while loading the application",col);
+        }
+        if(col.hasInfo()) {
+            //LogDialog.show("there were infos while loading the application");
         }
     }
 
@@ -107,10 +126,8 @@ public class OpenAction extends SAction {
             BufferedImage img = ImageIO.read(file);
             PixelDocument doc = new PixelDocument(img);
             main.setupNewDoc(new PixelModeHelper(main),doc);
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            Log.error(e);
         }
     }
 
@@ -123,7 +140,7 @@ public class OpenAction extends SAction {
         sdoc.removePage(sdoc.getCurrentPage());
         int version = Integer.parseInt(doc.xpathString("/sketchy/@version"));
 
-        u.p("version = " + version);
+        Log.info("version = ",version);
         if(version < NativeExport.CURRENT_VERSION) {
             doc = upgradeDocument(doc);
         }
@@ -150,9 +167,6 @@ public class OpenAction extends SAction {
 
         sdoc.setFile(file);
         sdoc.setTitle(fileName+"");
-        //if(context.getStage() != null) {
-        //            context.getStage().setTitle(fileName+"foo");
-        //        }
         sdoc.setCurrentPage(0);
         sdoc.setDirty(false);
         return sdoc;
@@ -164,7 +178,7 @@ public class OpenAction extends SAction {
         while(true) {
             if(!en.hasMoreElements()) break;
             ZipEntry entry = en.nextElement();
-            u.p("loading entry = " + entry.getName());
+            Log.info("loading entry",entry.getName());
             if(entry.getName().endsWith("/leo.xml")) {
                 String name = entry.getName();
                 String dir = name.substring(0, name.indexOf("/leo.xml"));
@@ -177,11 +191,9 @@ public class OpenAction extends SAction {
 
     private static Doc upgradeDocument(Doc doc) {
         URL upgradeXSL = NativeExport.class.getResource("upgrade_-1_0.xsl");
-        //u.p("upgrade XSL = " + upgradeXSL);
         try {
-            u.p("upgrading document to version 0");
+            Log.info("upgrading document to version 0");
             doc = XMLParser.translate(doc,upgradeXSL.toURI());
-            //doc.dump();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -202,7 +214,7 @@ public class OpenAction extends SAction {
             //do all shapes
             SNode sh = loadAnyShape(e,zipFile);
             if(sh == null) {
-                u.p("WARNING: Unknown shape parsed: " + e.name());
+                Log.warning("Unknown shape parsed: " + e.name());
             }
             if(sh != null) {
                 page.add(sh);
@@ -271,7 +283,7 @@ public class OpenAction extends SAction {
                 }
                 loadNumberAttribute(e,image,"strokeWidth");
             } catch (IOException e1) {
-                e1.printStackTrace();
+                Log.warning(e1);
             }
         }
         loadProperties(e,node);
@@ -311,7 +323,7 @@ public class OpenAction extends SAction {
         }
 
         if(shape == null) {
-            u.p("warning. shape not detected. Shape type is: " + e.attr("type"));
+            Log.warning("warning. shape not detected. Shape type is: ",e.attr("type"));
             return null;
         }
         if(e.hasAttr("fillPaint")) {
@@ -459,7 +471,6 @@ public class OpenAction extends SAction {
 
         if(node instanceof SShape) {
             SShape shape = (SShape)node;
-            //loadFlatColorAttribute(e,node,"fillPaint", Paint.class);
             if(e.hasAttr("fillPaint")) {
                 loadFillPaint(e,shape);
             } else {
@@ -474,6 +485,10 @@ public class OpenAction extends SAction {
             loadNumberAttribute(e,node,"strokeWidth");
         }
 
+        if(node == null) {
+            Log.warning("we couldn't recognize the resizable rect with type = ",e.attr("type"));
+            return null;
+        }
         loadNumberAttribute(e,node,"x");
         loadNumberAttribute(e,node,"y");
         loadNumberAttribute(e,node,"translateX");
@@ -512,12 +527,8 @@ public class OpenAction extends SAction {
                     "set"+name.substring(0,1).toUpperCase()+name.substring(1),
                     boolean.class);
             method.invoke(node,bool);
-        } catch (NoSuchMethodException e1) {
-            e1.printStackTrace();
-        } catch (InvocationTargetException e1) {
-            e1.printStackTrace();
-        } catch (IllegalAccessException e1) {
-            e1.printStackTrace();
+        } catch (Exception e1) {
+            Log.error(e1);
         }
     }
 
@@ -529,7 +540,7 @@ public class OpenAction extends SAction {
                     String.class);
             method.invoke(node,value);
         } catch (Exception e1) {
-            e1.printStackTrace();
+            Log.error(e1);
         }
     }
 
@@ -543,7 +554,7 @@ public class OpenAction extends SAction {
                     en.getClass());
             method.invoke(node,en);
         } catch (Exception e1) {
-            e1.printStackTrace();
+            Log.error(e1);
         }
 
 
@@ -559,7 +570,7 @@ public class OpenAction extends SAction {
                     double.class);
             method.invoke(node,dval);
         } catch (Exception e1) {
-            e1.printStackTrace();
+            Log.error(e1);
         }
     }
 
@@ -568,27 +579,84 @@ public class OpenAction extends SAction {
         Integer ival = Integer.parseInt(value);
         try {
             String methodName = "set"+name.substring(0,1).toUpperCase()+name.substring(1);
-//            u.p("looking for method: " + methodName + " with args: " + value);
-//            u.p("object = " + shape);
             Method method = shape.getClass().getMethod(methodName, int.class);
             method.invoke(shape,ival);
         } catch (Exception e1) {
-            e1.printStackTrace();
+            Log.error(e1);
         }
     }
 
     private static void loadFlatColorAttribute(Elem e, Object node, String name, Class clazz) {
         String value = e.attr(name);
-        //u.p("looking at value: "+ value + " in object: " + node + " from element: " + e + " " + e.attr("type"));
         FlatColor fc = new FlatColor(value);
         try {
             String methodName = "set"+name.substring(0,1).toUpperCase()+name.substring(1);
-            //u.p("looking for method: " + methodName + " with args: " + clazz + " on object " + node);
             Method method = node.getClass().getMethod(methodName, clazz);
             method.invoke(node,fc);
         } catch (Exception e1) {
-            e1.printStackTrace();
+            Log.error(e1);
         }
 
+    }
+
+    private class ClassFilterLogCollector extends Log.LogCollector {
+        private Class clss;
+        private List<Log.LogEvent> infos;
+        private List<Log.LogEvent> warnings;
+        private List<Log.LogEvent> errors;
+        private List<Log.LogEvent> events;
+
+        public ClassFilterLogCollector(Class clss) {
+            super();
+            this.clss = clss; 
+            infos = new ArrayList<Log.LogEvent>();
+            warnings = new ArrayList<Log.LogEvent>();
+            errors = new ArrayList<Log.LogEvent>();
+            events = new ArrayList<Log.LogEvent>();
+        }
+
+        @Override
+        public void info(Log.LogEvent evt) {
+            if(clss.getName().equals(evt.getReportingClass())) {
+                infos.add(evt);
+                events.add(evt);
+            }
+        }
+
+        @Override
+        public void warning(Log.LogEvent evt) {
+            if(clss.getName().equals(evt.getReportingClass())) {
+                warnings.add(evt);
+                events.add(evt);
+            }
+        }
+
+        @Override
+        public void error(Log.LogEvent evt) {
+            if(clss.getName().equals(evt.getReportingClass())) {
+                errors.add(evt);
+                events.add(evt);
+            }
+        }
+
+        @Override
+        public boolean hasInfo() {
+            return !infos.isEmpty();
+        }
+
+        @Override
+        public boolean hasErrors() {
+            return !errors.isEmpty();
+        }
+
+        @Override
+        public boolean hasWarnings() {
+            return !warnings.isEmpty();
+        }
+
+        @Override
+        public List<Log.LogEvent> getEvents() {
+            return events;
+        }
     }
 }
