@@ -26,7 +26,6 @@ public class QuitAction extends SAction {
 
     @Override
     public void execute() {
-        u.p("quitting");
 
         try {
             saveSettings(this.main.settings,Main.SETTINGS_FILE);
