@@ -109,19 +109,19 @@
         </java>
 
     </target>
-    
     <target name="build-onejar" depends="build-sketch">
         <mkdir dir="dist"/>
-        <jar destfile="dist/${app.name}.onejar.jar">
-            <zipgroupfileset dir="${amino.core.dir}" includes="**/*.jar"/>
-            <zipgroupfileset dir="build/jars" includes="**/*.jar"/>
-            <zipgroupfileset dir="lib" includes="**/*.jar"/>
-            <manifest>
-                <attribute name="Main-Class" value="org.joshy.sketch.Main"/>
-            </manifest>
-        </jar>
+        <java
+            classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="--file=bundler.xml"/>
+            <arg value="--target=onejar"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=${amino.core.dir}"/>
+            <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
+        </java>
     </target>
-
     <target  name="build-jnlp" depends="build-sketch">
         <echo message="doing jnlp version"/>
         <java classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar" classname="com.joshondesign.appbundler.Bundler" fork="true">
