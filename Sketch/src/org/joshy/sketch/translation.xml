@@ -606,6 +606,9 @@
             <value language="tr-TR">Sembol paneli</value>
             <value language="fr-FR">Panneau des symboles</value>
         </key>
+        <key name="viewSidebar">
+            <value>Sidebar</value>
+        </key>
         <key name="viewPresentation">
             <value>View Presentation</value>
             <value language="de-DE">Presentationsansicht</value>

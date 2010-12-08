@@ -345,29 +345,33 @@ public class Main implements Runnable {
             @Override
             public void doLayout() {
                 for(Control c : controlChildren()) {
-                    double w= 75*3 + 20 + 10;
+                    double sidebarWidth= 75*3 + 20 + 10;
                     if(c == context.stackPanel) {
                         c.setTranslateY(0);
-                        c.setTranslateX(30);
-                        c.setWidth(getWidth()-w-30);
                         c.setHeight(getHeight()-40);
+                        c.setTranslateX(30);
+                        if(context.getSidebar().isVisible()) {
+                            c.setWidth(getWidth()-sidebarWidth-30);
+                        } else {
+                            c.setWidth(getWidth()-30);
+                        }
                     }
                     if(c == context.getToolbar()) {
                         c.setTranslateX(0);
                         c.setTranslateY(0);
                         c.setHeight(getHeight());
                     }
-                    if(c == context.getSidebar()) {
-                        c.setWidth(w);
+                    if(c == context.getSidebar() && context.getSidebar().isVisible()) {
+                        c.setWidth(sidebarWidth);
                         c.setHeight(getHeight());
-                        c.setTranslateX(getWidth()-w);
+                        c.setTranslateX(getWidth()-sidebarWidth);
                         c.setTranslateY(0);
                     }
                     if(c == context.pageList) {
                         c.setTranslateX(20);
                         c.setTranslateY(getHeight()-100);
                         c.setHeight(100);
-                        c.setWidth(getWidth()-20-w);
+                        c.setWidth(getWidth()-20-sidebarWidth);
                     }
                     if(c == statusBar) {
                         c.setTranslateX(20);
@@ -614,6 +618,7 @@ public class Main implements Runnable {
                     .addItem(getString("menus.snapDocEdges"),          new ViewActions.SnapDocBoundsAction(vdc))
                     .addItem(getString("menus.snapNodeEdges"),          new ViewActions.SnapNodeBoundsAction(vdc))
                     .separator();
+            viewMenu.addItem(getString("menus.viewSidebar"), new ViewActions.ViewSidebarAction(vdc));
             for(SAction a : vdc.getSidebarPanelViewActions()) {
                 viewMenu.addItem(a.getDisplayName(), a);
             }
