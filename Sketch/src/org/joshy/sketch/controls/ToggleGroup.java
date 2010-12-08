@@ -29,7 +29,6 @@ public class ToggleGroup {
         buttons.add(button);
         EventBus.getSystem().addListener(button,ActionEvent.Action, new Callback<ActionEvent>() {
             public void call(ActionEvent event) {
-                u.p("action for : " + event.getSource());
                 setSelectedButton((Button)event.getSource());
             }
         });

@@ -246,7 +246,6 @@ public class SPath extends SShape implements SelfDrawable {
             minX = Math.min(pt.x,minX);
             minY = Math.min(pt.y,minY);
         }
-        u.p("smallest points = " + minX + " " + minY);
         for(PathPoint pt : points) {
             pt.x -= minX;
             pt.y -= minY;

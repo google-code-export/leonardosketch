@@ -288,20 +288,20 @@ public class DrawPathTool extends CanvasTool {
             undoReference = selectedPoint.copy();
             redoReference = selectedPoint;
             if(start.distance(selectedPoint.x,selectedPoint.y) < getPointThreshold()) {
-                u.p("can reshape the center of the point");
+                //u.p("can reshape the center of the point");
                 adjusting = true;
                 context.redraw();
                 return;
             }
             if(start.distance(selectedPoint.cx1,selectedPoint.cy1) < getPointThreshold()) {
-                u.p("can adjust the control point 1");
+                //u.p("can adjust the control point 1");
                 adjustingControlPoint = true;
                 activeControlPoint = 1;
                 context.redraw();
                 return;
             }
             if(start.distance(selectedPoint.cx2,selectedPoint.cy2) < getPointThreshold()) {
-                u.p("can adjust the control point 2");
+                //u.p("can adjust the control point 2");
                 adjustingControlPoint = true;
                 activeControlPoint = 2;
                 context.redraw();
