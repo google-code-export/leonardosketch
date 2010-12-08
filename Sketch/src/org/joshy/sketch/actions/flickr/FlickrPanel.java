@@ -67,7 +67,9 @@ public class FlickrPanel extends VFlexBox {
         photos = new ArrayListModel<Photo>();
         photoList = new ListView();
         photoList.setRowHeight(75);
+        photoList.setColumnWidth(75);
         photoList.setModel(photos);
+        photoList.setOrientation(ListView.Orientation.HorizontalWrap);
 
         EventBus.getSystem().addListener(photoList, MouseEvent.MouseAll, new Callback<MouseEvent>() {
             public double prevx;

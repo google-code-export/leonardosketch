@@ -346,7 +346,7 @@ public class Main implements Runnable {
             @Override
             public void doLayout() {
                 for(Control c : controlChildren()) {
-                    double w= 4*50+20+30;
+                    double w= 75*3 + 20 + 10;
                     if(c == context.stackPanel) {
                         c.setTranslateY(0);
                         c.setTranslateX(30);
