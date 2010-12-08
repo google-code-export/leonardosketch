@@ -13,6 +13,7 @@ import org.joshy.gfx.util.u;
 import org.joshy.sketch.canvas.PositionHandle;
 import org.joshy.sketch.model.ResizableGrid9Shape;
 import org.joshy.sketch.modes.vector.VectorDocContext;
+import org.joshy.sketch.util.DrawUtils;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -96,6 +97,8 @@ public class EditResizableShapeTool extends CanvasTool {
     @Override
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
         Bounds bounds = shape.getBounds();
+        //grow by 5 pixels on a side to account for the handles
+        bounds = new Bounds(bounds.getX()-5,bounds.getY()-5,bounds.getWidth()+10,bounds.getHeight()+10);
         if(bounds.contains(cursor)) {
             u.p("inside");
             for(VHandle handle : handles) {
@@ -137,16 +140,22 @@ public class EditResizableShapeTool extends CanvasTool {
         g.setPaint(FlatColor.RED);
         Bounds bounds = shape.getBounds();
         g.drawRect(bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
-        g.setPaint(FlatColor.BLUE);
+        FlatColor color = new FlatColor(0xff097d);
         for(VHandle handle : handles) {
             switch(handle.getPosition()) {
                 case Top:
                 case Bottom:
+                    g.setPaint(color);
                     g.drawLine(bounds.getX(),handle.getY(),bounds.getX()+bounds.getWidth(),handle.getY());
+                    DrawUtils.drawStandardHandle(g,bounds.getX(),handle.getY(),color);
+                    DrawUtils.drawStandardHandle(g,bounds.getX()+bounds.getWidth(),handle.getY(),color);
                     break;
                 case Right:
                 case Left:
+                    g.setPaint(color);
                     g.drawLine(handle.getX(),bounds.getY(),handle.getX(),bounds.getY()+bounds.getHeight());
+                    DrawUtils.drawStandardHandle(g,handle.getX(),bounds.getY(),color);
+                    DrawUtils.drawStandardHandle(g,handle.getX(),bounds.getY()+bounds.getHeight(),color);
                     break;
             }
         }
