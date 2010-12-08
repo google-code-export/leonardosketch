@@ -301,4 +301,22 @@ public class ViewActions {
             g.translate(-node.getTranslateX(),-node.getTranslateY());
         }
     }
+
+    public static class ViewSidebarAction extends ToggleAction {
+        private VectorDocContext context;
+
+        public ViewSidebarAction(VectorDocContext vdc) {
+            this.context = vdc;
+        }
+
+        @Override
+        public boolean getToggleState() {
+            return context.getSidebar().isVisible();
+        }
+
+        @Override
+        public void setToggleState(boolean toggleState) {
+            context.getSidebar().setVisible(toggleState);
+        }
+    }
 }
