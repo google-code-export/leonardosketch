@@ -120,8 +120,8 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
     private void draw(GFX g, SketchDocument sdoc) {
         g.translate(panX,panY);
         g.scale(getScale(),getScale());
-        drawDocumentBounds(g,sdoc);
         drawDocumentGrid(g,sdoc);
+        drawDocumentBounds(g,sdoc);
         for(SNode node : sdoc.getCurrentPage().getNodes()) {
             draw(g,node);
         }

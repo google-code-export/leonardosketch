@@ -125,23 +125,56 @@ public class Ruler extends Container {
         Bounds oldBounds = g.getClipRect();
         g.setClipRect(new Bounds(0,0,getWidth(),getHeight()));
 
-        g.setPaint(FlatColor.RED);
+        //draw the background
         if(vertical) {
             g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.9),FlatColor.hsb(0,0,0.5),90,false,0,0,getWidth(),0));
         } else {
             g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.9),FlatColor.hsb(0,0,0.5),90,false,0,0,0,getHeight()));
         }
         g.fillRect(0,0,getWidth()-1,getHeight()-1);
+        int o = (int) offset;
+
+        //draw negative area background
+        double extraBefore = -o;
+        if(vertical) {
+            double extraAfter = o + getHeight() - context.getDocument().getHeight();
+            if(extraBefore > 0) {
+                g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,getWidth(),0));
+                g.fillRect(0,0,getWidth(),extraBefore);
+            }
+            if(extraAfter > 0) {
+                g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,getWidth(),0));
+                g.fillRect(0,getHeight()-extraAfter,getWidth(),extraAfter);
+            }
+        } else {
+            double extraAfter = o + getWidth() - context.getDocument().getWidth();
+            if(extraBefore > 0) {
+                g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,0,getHeight()));
+                g.fillRect(0,0,extraBefore, getHeight());
+            }
+            if(extraAfter > 0) {
+                g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,0,getHeight()));
+                g.fillRect(getWidth()-extraAfter,0, extraAfter, getHeight());
+            }
+        }
+
+
+        //draw a border
         g.setPaint(FlatColor.BLACK);
         g.drawRect(0,0,getWidth()-1,getHeight()-1);
         g.setPaint(new FlatColor(0x505050));
-        int o = (int) offset;
-        int step = 50;
 
+
+
+        //draw the ruler marks
         double scale = context.getCanvas().getScale();
-        
+        int step = 50;
         if(vertical) {
             int y = 0;
+            while(true) {
+                if(y < o) break;
+                y-=step;
+            }
             int w = (int) getWidth();
             while(true) {
                 if(y-o > -step) {
@@ -160,6 +193,10 @@ public class Ruler extends Container {
 
         } else {
             int x = 0;
+            while(true) {
+                if(x < o) break;
+                x-=step;
+            }
             int h = (int) getHeight();
             while(true) {
                 if(x-o > -step) {
@@ -188,6 +225,7 @@ public class Ruler extends Container {
             }
         }
 
+        //draw any children
         for(Node child : children()) {
             g.translate(child.getTranslateX(),child.getTranslateY());
             child.draw(g);
