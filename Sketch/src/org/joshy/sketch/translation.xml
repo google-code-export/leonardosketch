@@ -21,7 +21,7 @@
     <!-- we need to translate the rest of these -->
         <key name="recentfiles">
             <value>Recent Files</value>
-            <value language="de-DE">Neuste Dateien</value>
+            <value language="de-DE">Letzte Dateien</value>
             <value language="hr-HR">Zadnje otvoreni</value>
             <value language="it-IT">File Recenti</value>
             <value language="fr-FR">Fichiers récents</value>
@@ -61,7 +61,7 @@
         </key>
         <key name="close">
             <value>Close</value>
-            <value language="de-DE">Schliessen</value>
+            <value language="de-DE">Schließen</value>
             <value language="hr-HR">Zatvori</value>
             <value language="it-IT">Chiudi</value>
             <value language="tr-TR">Kapat</value>
@@ -189,7 +189,7 @@
         </key>
         <key name="paste">
             <value>Paste</value>
-            <value language="de-DE">Einfuegen</value>
+            <value language="de-DE">Einfügen</value>
             <value language="hr-HR">Zalijepi</value>
             <value language="it-IT">Incolla</value>
             <value language="tr-TR">Yapıştır</value>
@@ -205,7 +205,7 @@
         </key>
         <key name="undo">
             <value>Undo</value>
-            <value language="de-DE">Rueckgängig</value>
+            <value language="de-DE">Rückgängig</value>
             <value language="hr-HR">Poništi izmjenu</value>
             <value language="it-IT">Annulla</value>
             <value language="tr-TR">Geri al</value>
@@ -250,7 +250,7 @@
         </key>
         <key name="raiseNodeTop">
             <value>Raise to Top</value>
-            <value language="de-DE">An den Anfang setzen</value>
+            <value language="de-DE">In den Fordergrund</value>
             <value language="hr-HR">Podigni na vrh</value>
             <value language="it-IT">Porta in cima</value>
             <value language="tr-TR">Öne getir</value>
@@ -258,7 +258,7 @@
         </key>
         <key name="raiseNode">
             <value>Raise Node</value>
-            <value language="de-DE">Element hoeher setzen</value>
+            <value language="de-DE">Anheben</value>
             <value language="hr-HR">Podigni element</value>
             <value language="it-IT">Alza di un livello</value>
             <value language="tr-TR">Öğeyi bir basamak yukarı çıkar</value>
@@ -266,7 +266,7 @@
         </key>
         <key name="lowerNode">
             <value>Lower Node</value>
-            <value language="de-DE">Element niedriger setzen</value>
+            <value language="de-DE">Absenken</value>
             <value language="hr-HR">Spusti element</value>
             <value language="it-IT">Abbassa di un livello</value>
             <value language="tr-TR">Öğeyi bir basamak aşağı indir</value>
@@ -274,7 +274,7 @@
         </key>
         <key name="lowerNodeBottom">
             <value>Lower to Bottom</value>
-            <value language="de-DE">niedriger setzen</value>
+            <value language="de-DE">In den Hintergrund</value>
             <value language="hr-HR">Spusti na dno</value>
             <value language="it-IT">Porta in fondo</value>
             <value language="tr-TR">En aşağı indir</value>
@@ -338,7 +338,7 @@
         </key>
         <key name="matchNodeHeight">
             <value>Same Height</value>
-            <value language="de-DE">Gleiche Hoehe</value>
+            <value language="de-DE">Gleiche Höhe</value>
             <value language="hr-HR">Ista visina</value>
             <value language="it-IT">Stessa Altezza</value>
             <value language="tr-TR">Aynı boya getir</value>
@@ -346,7 +346,7 @@
         </key>
         <key name="groupSelection">
             <value>Group Selection</value>
-            <value language="de-DE">Auswahl der Gruppe</value>
+            <value language="de-DE">Gruppieren</value>
             <value language="hr-HR">Grupni odabir</value>
             <value language="it-IT">Raggruppa Selezione</value>
             <value language="tr-TR">Grup seç</value>
@@ -354,7 +354,7 @@
         </key>
         <key name="ungroupSelection">
             <value>Ungroup Selection</value>
-            <value language="de-DE">Gruppenauswahl aufheben</value>
+            <value language="de-DE">Gruppierung aufheben</value>
             <value language="hr-HR">Rastavi grupu</value>
             <value language="it-IT">Elimina Raggruppamento</value>
             <value language="tr-TR">Grup seçimini kaldır</value>
@@ -362,7 +362,7 @@
         </key>
         <key name="createSymbol">
             <value>Create Symbol from Selection</value>
-            <value language="de-DE">Symbol aus Selektion erzeugen</value>
+            <value language="de-DE">Symbol aus Selektion erstellen</value>
             <value language="hr-HR">Kreiraj simbol od odabranog</value>
             <value language="it-IT">Crea Simbolo dalla Selezione</value>
             <value language="tr-TR">Seçilenden sembol oluştur</value>
@@ -370,7 +370,7 @@
         </key>
         <key name="createResizableShape">
             <value>Create Resizable Shape from Selection</value>
-            <value language="de-DE">Veraenderbare Form aus Selektion erstellen</value>
+            <value language="de-DE">Veränderbare Form aus Selektion erstellen</value>
             <value language="hr-HR">Kreiraj rastezljivi oblik od odabira</value>
             <value language="it-IT">Crea Forma Ridimensionabile dalla Selezione</value>
             <value language="tr-TR">Seçilenden boyutlandırılabilir şekil oluştur</value>
@@ -386,7 +386,7 @@
         </key>
         <key name="duplicateNode">
             <value>Duplicate</value>
-            <value language="de-DE">Dublikat</value>
+            <value language="de-DE">Dublikat erstellen</value>
             <value language="hr-HR">Dupliciraj</value>
             <value language="it-IT">Duplica</value>
             <value language="tr-TR">Kopyasını çikar</value>
@@ -457,15 +457,15 @@
         </key>
         <key name="add">
             <value>Add</value>
-            <value language="de-DE">Hinzufügen</value>
+            <value language="de-DE">Vereinigung</value>
         </key>
         <key name="subtract">
             <value>Subtract</value>
-            <value language="de-DE">Entpacken</value>
+            <value language="de-DE">Subtraktion</value>
         </key>
         <key name="intersection">
             <value>Intersection</value>
-            <value language="de-DE">Schnitt</value>
+            <value language="de-DE">Schnittmenge</value>
         </key>
 
 
@@ -480,7 +480,7 @@
         </key>
         <key name="setDocumentSize">
             <value>Set Document Size</value>
-            <value language="de-DE">Setze Dokument Größe</value>
+            <value language="de-DE">Dokumentgröße</value>
             <value language="hr-HR">Podesi veličinu dokumenta</value>
             <value language="it-IT">Imposta Dimensioni Documento</value>
             <value language="tr-TR">Dosya büyüklüğü</value>
@@ -515,7 +515,7 @@
         </key>
         <key name="zoomActual">
             <value>Actual Size</value>
-            <value language="de-DE">Aktuelle Größe</value>
+            <value language="de-DE">Standard Größe</value>
             <value language="hr-HR">Stvarna veličina</value>
             <value language="it-IT">Dimensione Originale</value>
             <value language="tr-TR">Asıl boyuta getir</value>
@@ -531,7 +531,7 @@
         </key>
         <key name="fullScreenWithMenubar">
             <value>Full Screen with Menubar</value>
-            <value language="de-DE">Vollbild mit Menueleiste</value>
+            <value language="de-DE">Vollbild mit Menüleiste</value>
             <value language="hr-HR">Preko cijelog ekrana sa menijem</value>
             <value language="it-IT">A Tutto Schermo con Barra dei Menu</value>
             <value language="fr-FR">Plein écran avec barre de menu</value>
@@ -547,12 +547,12 @@
 
         <key name="create.new.set">
             <value>Create New Set</value>
-            <value language="de-DE">Neuen Satz erzeugen</value>
+            <value language="de-DE">Neue Sammlung</value>
         </key>
 
         <key name="showDocumentBounds">
             <value>Show Document Edges</value>
-            <value language="de-DE">Dokumentecken zeigen</value>
+            <value language="de-DE">Dokumentrahmen zeigen</value>
             <value language="hr-HR">Prikaži granice dokumenta</value>
             <value language="it-IT">Visualizza Bordi Documento</value>
             <value language="tr-TR">Dosya köşelerini göster</value>
@@ -560,7 +560,7 @@
         </key>
         <key name="showGrid">
             <value>Show Grid</value>
-            <value language="de-DE">zeige Raster</value>
+            <value language="de-DE">Raster zeigen</value>
             <value language="hr-HR">Prikaži mrežu</value>
             <value language="it-IT">Visualizza Griglia</value>
             <value language="tr-TR">Izgarayı göster</value>
@@ -568,7 +568,7 @@
         </key>
         <key name="snapGrid">
             <value>Snap to Grid</value>
-            <value language="de-DE">Raster fangen</value>
+            <value language="de-DE">Am Raster fangen</value>
             <value language="hr-HR">Lijepi na mrežu</value>
             <value language="it-IT">Aggancia alla Griglia</value>
             <value language="tr-TR">Izgaraya yanaştır</value>
@@ -576,7 +576,7 @@
         </key>
         <key name="snapDocEdges">
             <value>Snap to Doc Edges</value>
-            <value language="de-DE">Dokumentecken fangen</value>
+            <value language="de-DE">An Dokumentrahmen fangen</value>
             <value language="hr-HR">Lijepi za rubove dokumenta</value>
             <value language="it-IT">Aggancia ai Bordi del Documento</value>
             <value language="tr-TR">Dosya köşelerine yanaştır</value>
@@ -584,7 +584,7 @@
         </key>
         <key name="snapNodeEdges">
             <value>Snap to Node Edges</value>
-            <value language="de-DE">An Elementecken fangen</value>
+            <value language="de-DE">An Elementrahmen fangen</value>
             <value language="hr-HR">Lijepi za rubove elementa</value>
             <value language="it-IT">Aggancia ai Bordi del Nodo</value>
             <value language="tr-TR">Öğe köşelerine yanaştır</value>
@@ -600,7 +600,7 @@
         </key>
         <key name="viewSymbolSidebar">
             <value>Symbol Panel</value>
-            <value language="de-DE">Symbol Paneel</value>
+            <value language="de-DE">Symbol Leiste</value>
             <value language="hr-HR">Ploča sa simbolima</value>
             <value language="it-IT">Pannello dei Simboli</value>
             <value language="tr-TR">Sembol paneli</value>
@@ -611,7 +611,7 @@
         </key>
         <key name="viewPresentation">
             <value>View Presentation</value>
-            <value language="de-DE">Presentationsansicht</value>
+            <value language="de-DE">Präsentationsansicht</value>
             <value language="hr-HR">Pogledaj prezentaciju</value>
             <value language="it-IT">Visualizza Presentazione</value>
             <value language="tr-TR">Sunumu göster</value>
@@ -622,7 +622,7 @@
     <!-- the View menu -->
         <key name="share">
             <value>Share</value>
-            <value language="de-DE">Mit Anderen teilen</value>
+            <value language="de-DE">Veröffentlichen</value>
             <value language="hr-HR">Podijeli</value>
             <value language="it-IT">Condividi</value>
             <value language="tr-TR">Paylaş</value>
@@ -657,7 +657,7 @@
     <!-- the Scripts menu -->
         <key name="scripts">
             <value>Scripts</value>
-            <value language="de-DE">Scripte</value>
+            <value language="de-DE">Skripte</value>
             <value language="hr-HR">Skripte</value>
             <value language="it-IT">Scripts</value>
             <value language="tr-TR">Scriptler</value>
@@ -698,14 +698,14 @@
         </key>
         <key name="search">
             <value>Search</value>
-            <value language="de-DE">Suche</value>
+            <value language="de-DE">Suchen</value>
         </key>
     </set>
-
+    
     <set name="toolbar">
         <key name="stroke">
             <value>Stroke</value>
-            <value language="de-DE">Stärke</value>
+            <value language="de-DE">Linie</value>
         </key>
         <key name="opacity">
             <value>Opacity</value>
@@ -749,7 +749,7 @@
         </key>
         <key name="preset">
             <value>New Document</value>
-            <value language="de-DE">Größe</value>
+            <value language="de-DE">Vorlage</value>
         </key>
         <key name="width">
             <value>New Document</value>
@@ -764,23 +764,23 @@
     <set name="misc">
         <key name="wish.box">
             <value>Type your wish for a feature here</value>
-            <value language="de-DE">Hier neues Werkzeug wünschen</value>
+            <value language="de-DE">Wunsch hier eingeben</value>
         </key>
         <key name="wish.button">
             <value>Make a wish!</value>
-            <value language="de-DE">Hier wünschen</value>
+            <value language="de-DE">Wunsch senden</value>
         </key>
         <key name="wish.dialog">
             <value>You must type in your wish for a feature before sending.</value>
-            <value language="de-DE">Bitte Text einfügen vor dem Senden"</value>
+            <value language="de-DE">Bitte einen Text vor dem Senden eingeben</value>
         </key>
         <key name="new">
             <value>New</value>
-            <value language="de-DE">Neues</value>
+            <value language="de-DE">Neue </value>
         </key>
         <key name="vector">
             <value>Vector Document</value>
-            <value language="de-DE">Vektor Dokument</value>
+            <value language="de-DE">Vektorzeichnung</value>
         </key>
         <key name="presentation">
             <value>Presentation</value>
@@ -806,14 +806,14 @@
     <set name="trackingDialog">
         <key name="title">
             <value>Usage Tracking?</value>
-            <value language="de-DE">Zuordnung</value>
+            <value language="de-DE">Nutzungstatistiken aufzeichnen?</value>
         </key>
     </set>
 
     <set name="preferences">
         <key name="enable.analytics.tracking">
             <value>Enable Analytics tracking</value>
-            <value language="de-DE">Analyse einschalten</value>
+            <value language="de-DE">Nutzungstatistiken senden?</value>
         </key>
         <key name="enable.debug.menu">
             <value>Enable Debug menug</value>
