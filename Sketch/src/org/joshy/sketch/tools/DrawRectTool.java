@@ -4,8 +4,8 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
-import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.model.SRect;
+import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.geom.Point2D;
 
