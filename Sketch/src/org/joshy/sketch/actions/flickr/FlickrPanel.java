@@ -18,6 +18,7 @@ import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.image.MasterImageCache;
 import org.joshy.gfx.util.image.SizingMethod;
+import org.joshy.gfx.util.u;
 import org.joshy.gfx.util.xml.XMLRequest;
 import org.joshy.sketch.model.SImage;
 import org.joshy.sketch.model.SNode;
@@ -88,7 +89,9 @@ public class FlickrPanel extends VFlexBox {
                         Photo photo  = (Photo) photoList.getModel().get(photoList.getSelectedIndex());
                         try {
                             SketchDocument sd = context.getDocument();
-                            dupe = new SImage(photo.getFullURL().toURI(),true, photo.getImage(), context);
+                            String file = photo.getFullURL().getFile();
+                            file = file.substring(file.lastIndexOf("/")+1);
+                            dupe = new SImage(photo.getFullURL().toURI(), file, true, photo.getImage(), context);
                             sd.getCurrentPage().model.add(dupe);
                         } catch (Exception e) {
                             e.printStackTrace();

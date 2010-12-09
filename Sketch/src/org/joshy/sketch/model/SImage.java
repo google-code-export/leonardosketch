@@ -5,7 +5,6 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.modes.DocContext;
 
 import javax.imageio.ImageIO;
@@ -43,9 +42,10 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
         init();
     }
 
-    public SImage(URI remoteURI, boolean backgroundLoading, Image thumb, final DocContext ctx) throws IOException, InterruptedException {
+    public SImage(URI remoteURI, String relativeURL, boolean backgroundLoading, Image thumb, final DocContext ctx) throws IOException, InterruptedException {
         this.file = null;
         this.thumb = thumb;
+        this.relativeURL = relativeURL;
         if(backgroundLoading) {
             this.width = 100;
             this.height = 100;
