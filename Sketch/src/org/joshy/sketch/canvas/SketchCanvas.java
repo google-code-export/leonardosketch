@@ -96,12 +96,38 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
         return Math.max(finalBounds.getHeight()*getScale(),height);
     }
 
+    private boolean doRecenter;
+    @Override
+    public void setScale(double scale) {
+        updateCenter();
+        super.setScale(scale);
+        doRecenter = true;
+    }
+
+    double cx, cy;
+    private void updateCenter() {
+        cx = (-panX+(scrollPane.getWidth()-20)/2)/getScale();
+        cy = (-panY+(scrollPane.getHeight()-20)/2)/getScale();
+    }
+
     public void setScrollX(double value) {
         this.panX = value-offsetX;
+        if(doRecenter) {
+            doRecenter = false;
+            //cx = (p + w/2)/s
+            //cx*s - w/2 = p
+            double nvx = cx*getScale()-(scrollPane.getWidth()-20)/2 - offsetX;
+            double nvy = cy*getScale()-(scrollPane.getHeight()-20)/2 - offsetY;
+            scrollPane.getHorizontalScrollBar().setValue(nvx);
+            scrollPane.getVerticalScrollBar().setValue(nvy);
+        }
     }
 
     public void setScrollY(double value) {
         this.panY = value-offsetY;
+        if(doRecenter) {
+            doRecenter = false;
+        }
     }
 
     public void setScrollParent(ScrollPane scrollPane) {
