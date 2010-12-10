@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <app name="Leonardo">
+    <icon name="resources/Turtle.png"/>
+    <icon name="resources/Turtle.icns"/>
     <jar name="Sketch.jar" main-class="org.joshy.sketch.Main"/>
     <jar name="XMLLib.jar"/>
     <jar name="amino-core.jar"/>
