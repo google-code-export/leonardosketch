@@ -15,11 +15,12 @@ import java.awt.geom.Point2D;
 public abstract class Handle {
     protected double size = 5;
 
-    public boolean contains(Point2D cursor) {
-        return contains(cursor.getX(),cursor.getY());
+    public boolean contains(Point2D cursor, double scale) {
+        return contains(cursor.getX(),cursor.getY(), scale);
     }
 
-    public boolean contains(double x, double y) {
+    public boolean contains(double x, double y, double scale) {
+        double size = this.size/scale;
         if(x >= getX()-size && x <= getX()+size) {
             if(y >= getY()-size && y <= getY()+size) {
                 return true;
