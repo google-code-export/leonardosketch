@@ -137,7 +137,7 @@ public class Ruler extends Container {
         //draw negative area background
         double extraBefore = -o;
         if(vertical) {
-            double extraAfter = o + getHeight() - context.getDocument().getHeight();
+            double extraAfter = o + getHeight() - context.getDocument().getHeight()* context.getCanvas().getScale();
             if(extraBefore > 0) {
                 g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,getWidth(),0));
                 g.fillRect(0,0,getWidth(),extraBefore);
@@ -147,7 +147,7 @@ public class Ruler extends Container {
                 g.fillRect(0,getHeight()-extraAfter,getWidth(),extraAfter);
             }
         } else {
-            double extraAfter = o + getWidth() - context.getDocument().getWidth();
+            double extraAfter = o + getWidth() - context.getDocument().getWidth() * context.getCanvas().getScale();
             if(extraBefore > 0) {
                 g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,0,getHeight()));
                 g.fillRect(0,0,extraBefore, getHeight());

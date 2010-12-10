@@ -287,12 +287,12 @@ public class DrawNgonTool extends CanvasTool {
         }
 
         public void processMouseMove(MouseEvent event, Point2D.Double cursor) {
-            hovered = contains(cursor);
+            hovered = contains(cursor,context.getCanvas().getScale());
             context.redraw();
         }
 
         public void processMousePressed(MouseEvent event, Point2D cursor) {
-            selected = contains(cursor);
+            selected = contains(cursor,context.getCanvas().getScale());
         }
 
         public void processMouseDragged(MouseEvent event, Point2D.Double cursor) {

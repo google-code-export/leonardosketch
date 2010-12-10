@@ -10,6 +10,7 @@ import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.SwatchColorPicker;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.symbols.CreateSymbol;
 import org.joshy.sketch.canvas.ResizeHandle;
@@ -211,7 +212,7 @@ public class SelectMoveTool extends CanvasTool {
         boolean setHover = false;
         for(SNode r : handles.keySet()) {
             for(Handle h : handles.get(r)) {
-                if(h.contains(cursor)) {
+                if(h.contains(cursor, context.getCanvas().getScale())) {
                     hoverHandle = h;
                     setHover = true;
                     context.redraw();
@@ -292,7 +293,7 @@ public class SelectMoveTool extends CanvasTool {
         Map<SNode,List<Handle>> handles = context.getSelection().getHandles();
         for(SNode r : handles.keySet()) {
             for(Handle h : handles.get(r)) {
-                if(h.contains(cursor)) {
+                if(h.contains(cursor,context.getCanvas().getScale())) {
                     if(r instanceof SResizeableNode) {
                         SResizeableNode sn = (SResizeableNode) r;
                         resizeStartBounds = new Bounds(sn.getX(),sn.getY(),sn.getWidth(),sn.getHeight());

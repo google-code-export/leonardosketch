@@ -70,7 +70,7 @@ public class TransformTool extends CanvasTool {
         if(context.getSelection().size() != 1) return;
 
         for(ScaleHandle h : handles) {
-            if(h.contains(event.getPointInNodeCoords(context.getCanvas()))) {
+            if(h.contains(event.getPointInNodeCoords(context.getCanvas()),context.getCanvas().getScale())) {
                 hoverHandle = h;
                 context.redraw();
             }
@@ -88,8 +88,6 @@ public class TransformTool extends CanvasTool {
     @Override
     protected void mouseDragged(MouseEvent event, Point2D.Double cursor) {
         if(dragHandle == null) return;
-
-        u.p("scaling");
         dragHandle.setX(event.getX(),false);
         dragHandle.setY(event.getY(),false);
         context.redraw();
