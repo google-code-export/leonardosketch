@@ -43,7 +43,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
     private PopupMenuButton<SArrow.HeadEnd> arrowHeadEnd;
     private Label rgbLabel;
     private Label fontSizeLabel;
-    public static final boolean TRUE_PALLETTE = OSUtil.isMac();
+    public static final boolean TRUE_PALLETTE = false;//OSUtil.isMac();
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
