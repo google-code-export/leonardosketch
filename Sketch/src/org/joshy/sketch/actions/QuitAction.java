@@ -1,13 +1,7 @@
 package org.joshy.sketch.actions;
 
 import com.boxysystems.jgoogleanalytics.FocusPoint;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Properties;
 
 /**
  * Created by IntelliJ IDEA.
@@ -28,7 +22,7 @@ public class QuitAction extends SAction {
     public void execute() {
 
         try {
-            saveSettings(this.main.settings,Main.SETTINGS_FILE);
+            Main.saveSettings();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -37,10 +31,6 @@ public class QuitAction extends SAction {
         }
 
         System.exit(0);
-    }
-
-    private void saveSettings(Properties settings, File settingsFile) throws IOException {
-        settings.store(new FileWriter(settingsFile),"sketchy settings");
     }
 
 }

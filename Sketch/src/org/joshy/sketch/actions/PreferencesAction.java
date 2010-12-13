@@ -1,5 +1,6 @@
 package org.joshy.sketch.actions;
 
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.node.control.Button;
@@ -65,19 +66,25 @@ public class PreferencesAction extends SAction {
         Callback<ActionEvent> closeAction = new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
                 stage.hide();
+                Main.saveSettings();
             }
         };
 
         TabPanel tab = new TabPanel();
-        tab.add("tracking",new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
-            .add(trackingCheckbox)
-            .add(new Linkbutton(getString("misc.whatsthis")).onClicked(new Callback<ActionEvent>() {
+        tab.add("General",new VFlexBox().setBoxAlign(VFlexBox.Align.Left)
+            .add(new HFlexBox()
+                    .setBoxAlign(HFlexBox.Align.Baseline)
+                    .add(trackingCheckbox)
+                    .add(new Linkbutton(getString("misc.whatsthis")).onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
                     OSUtil.openBrowser("http://code.google.com/p/leonardosketch/wiki/Tracking");
                 }
-            }))
+            })))
+            .add(new Label("Flickr Cache"))
+            .add(new Label(Main.FlickrSearchCache.getCacheDir().getAbsolutePath()).setColor(new FlatColor(0x606060)))
+            .add(new Button("Delete Cache").onClicked(clearFlickrCache))
         );
-        tab.add("debug", new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
+        tab.add("Advanced", new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
             .add(debugMenuCheckbox)
             .add(new Label(getString("misc.changesAppliedLater").toString()))
         );
@@ -87,4 +94,10 @@ public class PreferencesAction extends SAction {
                 .add(new HFlexBox().add(new Spacer(),1).add(new Button(getString("misc.close")).onClicked(closeAction)))
         );
     }
+
+    Callback<ActionEvent> clearFlickrCache = new Callback<ActionEvent>() {
+        public void call(ActionEvent actionEvent) throws Exception {
+            Main.FlickrSearchCache.cleanCache();
+        }
+    };
 }
