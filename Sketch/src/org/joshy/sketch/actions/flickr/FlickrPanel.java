@@ -18,8 +18,8 @@ import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.image.MasterImageCache;
 import org.joshy.gfx.util.image.SizingMethod;
-import org.joshy.gfx.util.u;
 import org.joshy.gfx.util.xml.XMLRequest;
+import org.joshy.sketch.Main;
 import org.joshy.sketch.model.SImage;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SketchDocument;
@@ -63,7 +63,7 @@ public class FlickrPanel extends VFlexBox {
     
     public FlickrPanel(final VectorDocContext context) {
         this.context = context;
-        imageCache = new MasterImageCache(true,10,"LeonardoFlickrSearchCache");
+        imageCache = Main.FlickrSearchCache;
         photos = new ArrayListModel<Photo>();
         photoList = new ListView();
         photoList.setRowHeight(75);

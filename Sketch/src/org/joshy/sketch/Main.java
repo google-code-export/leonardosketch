@@ -20,6 +20,7 @@ import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.sidehatch.TranslationEditor;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
+import org.joshy.gfx.util.image.MasterImageCache;
 import org.joshy.gfx.util.localization.Localization;
 import org.joshy.gfx.util.u;
 import org.joshy.gfx.util.xml.XMLRequest;
@@ -47,6 +48,7 @@ import org.joshy.sketch.util.UpdateChecker;
 import javax.swing.*;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -86,6 +88,7 @@ public class Main implements Runnable {
     public static String UPDATE_URL = "";
     public static String DOWNLOAD_URL = "";
     private List<Menu> recentFilesMenus = new ArrayList<Menu>();
+    public static MasterImageCache FlickrSearchCache = new MasterImageCache(true,10,"LeonardoFlickrSearchCache");
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -758,6 +761,11 @@ public class Main implements Runnable {
 
     public static URL getIcon(String s) {
         return Main.class.getResource("resources/"+s);
+    }
+
+    public static void saveSettings() throws IOException {
+        u.p("saving settings to : " + SETTINGS_FILE.getAbsolutePath());
+        settings.store(new FileWriter(SETTINGS_FILE),"sketchy settings");
     }
 
     private class ShowWindow extends SAction {
