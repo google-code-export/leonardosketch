@@ -199,6 +199,10 @@ public class ImportAction extends SAction {
                     x+= readDouble(read);
                     prev = path.lineTo(x,y);
                     continue;
+                case 'H':
+                    x = readDouble(read);
+                    prev = path.lineTo(x,y);
+                    continue;
                 //relative lineto
                 case 'l':
                     x+= readDouble(read);
@@ -295,7 +299,7 @@ public class ImportAction extends SAction {
 
     private static void parseFill(SShape shape, Elem root) {
         if(!root.hasAttr("fill")) {
-            shape.setFillPaint(null);
+            shape.setFillPaint(FlatColor.BLACK);
             return;
         }
         String sfill = root.attr("fill");
@@ -311,7 +315,8 @@ public class ImportAction extends SAction {
     }
     private static void parseStroke(SShape shape, Elem root) {
         if(!root.hasAttr("stroke")) {
-            shape.setStrokeWidth(0);
+            shape.setStrokeWidth(1);
+            shape.setStrokePaint(null);
         }
         String sstroke = root.attr("stroke");
         if(sstroke.equals("none")) {
@@ -322,7 +327,7 @@ public class ImportAction extends SAction {
         }
 
         if(!root.hasAttr("stroke-width")) {
-            shape.setStrokeWidth(0);
+            shape.setStrokeWidth(1);
         } else {
             String sstrokeWidth = root.attr("stroke-width");
             double strokeWidth = Double.parseDouble(sstrokeWidth);
