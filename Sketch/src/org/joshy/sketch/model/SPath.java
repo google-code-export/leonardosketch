@@ -15,16 +15,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-* Created by IntelliJ IDEA.
-* User: joshmarinacci
-* Date: May 12, 2010
-* Time: 7:41:09 PM
-* To change this template use File | Settings | File Templates.
+ * Spath represents a path composed of line segments and curves. It may contain
+ * multiple subpaths by closing a path and doing a 'moveto' to start a new one.
+ * All points are represented by a pathpoint. A pathpoint with closeto=true means
+ * the current subpath is completed by going back to the previous moveto and the
+ * next subpath begins with a new moveto.
+ *
+ *
+ *
 */
 public class SPath extends SShape implements SelfDrawable {
     public List<PathPoint> points;
     private boolean closed;
     private Path2D.Double path2d;
+    private PathPoint lastMoveTo;
 
     public SPath() {
         this.points = new ArrayList<PathPoint>();
@@ -62,49 +66,52 @@ public class SPath extends SShape implements SelfDrawable {
 
 
     public static void drawPath(GFX g, SPath node) {
+
         g.setPureStrokes(true);
         g.setPaint(FlatColor.BLACK);
-        Path2D.Double pt = new Path2D.Double();
+        Path2D.Double pth = new Path2D.Double();
         int last = node.points.size()-1;
+
         for(int i=0; i<node.points.size(); i++) {
             SPath.PathPoint point = node.points.get(i);
             g.setPaint(FlatColor.BLACK);
-            if(i == 0) {
-                pt.moveTo(point.x,point.y);
+            if(point.startPath) {
+                pth.moveTo(point.x, point.y);
                 continue;
             }
             SPath.PathPoint prev = node.points.get(i - 1);
-            pt.curveTo(prev.cx2,prev.cy2,
-                    point.cx1,point.cy1,
-                    point.x,point.y
-                    );
-            if(i == node.points.size()-1) {
+            pth.curveTo(prev.cx2, prev.cy2,
+                    point.cx1, point.cy1,
+                    point.x, point.y
+            );
+            if(point.closePath) {
                 if(node.isClosed()) {
                     SPath.PathPoint first = node.points.get(0);
-                    pt.curveTo(point.cx2,point.cy2,
-                        first.cx1,first.cy1,
-                        first.x,first.y
-                        );
-                    pt.closePath();
+                    pth.curveTo(point.cx2, point.cy2,
+                            first.cx1, first.cy1,
+                            first.x, first.y
+                    );
+                    pth.closePath();
                 }
             }
         }
-        if(node.isClosed()){
+
         Paint fp = node.getFillPaint();
         if(fp != null) {
             if(fp instanceof FlatColor) {
                 fp = ((FlatColor)fp).deriveWithAlpha(node.getFillOpacity());
-            }            
+            }
             g.setPaint(fp);
-            g.fillPath(pt);
+            g.fillPath(pth);
         }
-        }
-        if(node.getStrokeWidth() > 0) {
+
+        if(node.getStrokeWidth() > 0 && node.getStrokePaint() != null) {
             g.setPaint(node.getStrokePaint());
             g.setStrokeWidth(node.getStrokeWidth());
-            g.drawPath(pt);
+            g.drawPath(pth);
             g.setStrokeWidth(1);
         }
+
         g.setPureStrokes(false);
     }
 
@@ -208,35 +215,35 @@ public class SPath extends SShape implements SelfDrawable {
      * into the array at coords[pos...pos+7] and coords[pos+6...pos+13].
      */
     public static void split(double coords[], int pos, double t) {
-	double x0, y0, cx0, cy0, cx1, cy1, x1, y1;
-	coords[pos+12] = x1 = coords[pos+6];
-	coords[pos+13] = y1 = coords[pos+7];
-	cx1 = coords[pos+4];
-	cy1 = coords[pos+5];
-	x1 = cx1 + (x1 - cx1) * t;
-	y1 = cy1 + (y1 - cy1) * t;
-	x0 = coords[pos+0];
-	y0 = coords[pos+1];
-	cx0 = coords[pos+2];
-	cy0 = coords[pos+3];
-	x0 = x0 + (cx0 - x0) * t;
-	y0 = y0 + (cy0 - y0) * t;
-	cx0 = cx0 + (cx1 - cx0) * t;
-	cy0 = cy0 + (cy1 - cy0) * t;
-	cx1 = cx0 + (x1 - cx0) * t;
-	cy1 = cy0 + (y1 - cy0) * t;
-	cx0 = x0 + (cx0 - x0) * t;
-	cy0 = y0 + (cy0 - y0) * t;
-	coords[pos+2] = x0;
-	coords[pos+3] = y0;
-	coords[pos+4] = cx0;
-	coords[pos+5] = cy0;
-	coords[pos+6] = cx0 + (cx1 - cx0) * t;
-	coords[pos+7] = cy0 + (cy1 - cy0) * t;
-	coords[pos+8] = cx1;
-	coords[pos+9] = cy1;
-	coords[pos+10] = x1;
-	coords[pos+11] = y1;
+        double x0, y0, cx0, cy0, cx1, cy1, x1, y1;
+        coords[pos+12] = x1 = coords[pos+6];
+        coords[pos+13] = y1 = coords[pos+7];
+        cx1 = coords[pos+4];
+        cy1 = coords[pos+5];
+        x1 = cx1 + (x1 - cx1) * t;
+        y1 = cy1 + (y1 - cy1) * t;
+        x0 = coords[pos+0];
+        y0 = coords[pos+1];
+        cx0 = coords[pos+2];
+        cy0 = coords[pos+3];
+        x0 = x0 + (cx0 - x0) * t;
+        y0 = y0 + (cy0 - y0) * t;
+        cx0 = cx0 + (cx1 - cx0) * t;
+        cy0 = cy0 + (cy1 - cy0) * t;
+        cx1 = cx0 + (x1 - cx0) * t;
+        cy1 = cy0 + (y1 - cy0) * t;
+        cx0 = x0 + (cx0 - x0) * t;
+        cy0 = y0 + (cy0 - y0) * t;
+        coords[pos+2] = x0;
+        coords[pos+3] = y0;
+        coords[pos+4] = cx0;
+        coords[pos+5] = cy0;
+        coords[pos+6] = cx0 + (cx1 - cx0) * t;
+        coords[pos+7] = cy0 + (cy1 - cy0) * t;
+        coords[pos+8] = cx1;
+        coords[pos+9] = cy1;
+        coords[pos+10] = x1;
+        coords[pos+11] = y1;
     }
 
     public void normalize() {
@@ -262,26 +269,35 @@ public class SPath extends SShape implements SelfDrawable {
     }
 
     public PathPoint moveTo(double x, double y) {
-//        u.p("move to: " + x + " " + y);
+        //u.p("move to: " + x + " " + y);
         PathPoint p = new PathPoint(x, y);
+        p.startPath = true;
         addPoint(p);
+        lastMoveTo = p;
         return p;
     }
 
     public PathPoint lineTo(double x, double y) {
-//        u.p("line to: " + x + " " + y);
+        //u.p("line to: " + x + " " + y);
         PathPoint p = new PathPoint(x, y);
         addPoint(p);
         return p;
     }
 
     public PathPoint curveTo(PathPoint prev, double x1, double y1, double x2, double y2, double x, double y) {
-//        u.p("curve to: " + x + " " + y);
+        //u.p("curve to: " + x + " " + y);
         PathPoint p = new PathPoint(x,y,x2,y2,x,y);
         prev.cx2 = x1;
         prev.cy2 = y1;
         addPoint(p);
         return p;
+    }
+
+    public PathPoint closeTo(PathPoint prev) {
+        //u.p("closing subpath");
+        prev.closePath = true;
+        prev.endPath = true;
+        return prev;
     }
 
     public static class PathTuple {
@@ -372,6 +388,9 @@ public class SPath extends SShape implements SelfDrawable {
         public double cy1;
         public double cx2;
         public double cy2;
+        public boolean startPath = false;
+        public boolean endPath = false;
+        public boolean closePath = false;
 
         public PathPoint(double x, double y, double cx1, double cy1, double cx2, double cy2) {
             this.x = x;
@@ -399,7 +418,10 @@ public class SPath extends SShape implements SelfDrawable {
         }
 
         public PathPoint copy() {
-            return new PathPoint(x,y,cx1,cy1,cx2,cy2);
+            PathPoint cp = new PathPoint(x, y, cx1, cy1, cx2, cy2);
+            cp.startPath = startPath;
+            cp.closePath = closePath;
+            return cp;
         }
 
         public void copyFrom(PathPoint a) {
@@ -409,6 +431,8 @@ public class SPath extends SShape implements SelfDrawable {
             this.cy1 = a.cy1;
             this.cx2 = a.cx2;
             this.cy2 = a.cy2;
+            this.startPath = a.startPath;
+            this.closePath = a.closePath;
         }
     }
 

@@ -176,7 +176,7 @@ public class ImportAction extends SAction {
             char ch = (char) read.read();
             if(ch == -1) break;
             double x1,x2,y1,y2;
-
+            u.p("ch = " + ch);
             switch(ch) {
                 //absolute move
                 case 'M':
@@ -247,9 +247,7 @@ public class ImportAction extends SAction {
                     prev = path.curveTo(prev,x1,y1,x2,y2,x,y);
                     continue;
                case 'z':
-                    path.setClosed(true);
-                    closed = true;
-                    go = false;
+                    prev = path.closeTo(prev);
                     break;
                case ' ': continue;
                case '\n': continue;

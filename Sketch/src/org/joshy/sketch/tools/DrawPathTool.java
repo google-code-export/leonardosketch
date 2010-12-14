@@ -5,7 +5,6 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.UndoManager;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
@@ -278,6 +277,7 @@ public class DrawPathTool extends CanvasTool {
         if(node == null) {
             node = new SPath();
             currentPoint = new SPath.PathPoint(start.x,start.y);
+            currentPoint.startPath = true;
             node.addPoint(currentPoint);
             context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"path"));
             context.redraw();
