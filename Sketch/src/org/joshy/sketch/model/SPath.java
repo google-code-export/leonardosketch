@@ -144,6 +144,9 @@ public class SPath extends SShape implements SelfDrawable {
 
     public void setClosed(boolean closed) {
         this.closed = closed;
+        if(points.size() > 1) {
+            points.get(points.size()-1).closePath = closed;
+        }
     }
 
     public boolean isClosed() {
@@ -157,10 +160,6 @@ public class SPath extends SShape implements SelfDrawable {
     public void setPoints(List<PathPoint> points) {
         this.points = points;
         recalcPath();
-    }
-
-    public void addAllPoints(List<PathPoint> points) {
-        this.points.addAll(points);
     }
 
     public Iterable<PathSegment> calculateSegments() {
