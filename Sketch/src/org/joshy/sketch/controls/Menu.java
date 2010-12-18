@@ -1,5 +1,8 @@
 package org.joshy.sketch.controls;
 
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.ChangedEvent;
+import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ToggleAction;
@@ -104,6 +107,11 @@ public class Menu {
             this.name = name;
             this.action = action;
             this.acceleratorKey = acceleratorKey;
+            EventBus.getSystem().addListener(action, ChangedEvent.BooleanChanged, new Callback<ChangedEvent>() {
+                public void call(ChangedEvent changedEvent) throws Exception {
+                    setEnabled(changedEvent.getBooleanValue());
+                }
+            });
         }
         public ActionAdapter(CharSequence name, String acceleratorKey, SAction action) {
             this(null,name,acceleratorKey,action);
@@ -128,11 +136,14 @@ public class Menu {
             return super.getValue(key);
         }
 
+        public boolean isEnabled() {
+            return action.isEnabled();
+        }
         public void actionPerformed(java.awt.event.ActionEvent e) {
             try {
                 action.execute();
             } catch (Exception e1) {
-                e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e1.printStackTrace();
             }
         }
     }
