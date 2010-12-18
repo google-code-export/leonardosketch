@@ -1,5 +1,8 @@
 package org.joshy.sketch.actions;
 
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.SArea;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SShape;
@@ -91,6 +94,12 @@ public class BooleanGeometry {
 
         public BooleanOpAction(VectorDocContext context) {
             this.context = context;
+            EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, new Callback<Selection.SelectionChangeEvent>() {
+                public void call(Selection.SelectionChangeEvent event) throws Exception {
+                    setEnabled(event.getSelection().size() >= 2);
+                }
+            });
+
         }
 
         @Override

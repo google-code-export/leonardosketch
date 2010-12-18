@@ -1,6 +1,9 @@
 package org.joshy.sketch.actions;
 
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SPath;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -16,6 +19,18 @@ public class PathActions {
 
         PathModifyAction(VectorDocContext context) {
             this.context = context;
+            EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, new Callback<Selection.SelectionChangeEvent>() {
+                public void call(Selection.SelectionChangeEvent selectionChangeEvent) throws Exception {
+                    int size = selectionChangeEvent.getSelection().size();
+                    if(size != 1) {
+                        setEnabled(false);
+                        return;
+                    }
+                    SNode node = selectionChangeEvent.getSelection().firstItem();
+                    setEnabled(node instanceof SPath);
+                }
+            });
+
         }
 
         @Override
