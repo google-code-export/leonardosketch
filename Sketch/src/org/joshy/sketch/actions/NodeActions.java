@@ -1,5 +1,8 @@
 package org.joshy.sketch.actions;
 
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.SGroup;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SResizeableNode;
@@ -159,7 +162,19 @@ public class NodeActions {
             this.context = context;
         }
     }
-    public static class AlignTop extends NodeAction {
+
+    public static abstract class MultiNodeAction extends NodeAction {
+        protected MultiNodeAction(VectorDocContext context) {
+            super(context);
+            EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, new Callback<Selection.SelectionChangeEvent>() {
+                public void call(Selection.SelectionChangeEvent selectionChangeEvent) throws Exception {
+                    setEnabled(selectionChangeEvent.getSelection().size() >= 2);
+                }
+            });
+        }
+    }
+
+    public static class AlignTop extends MultiNodeAction {
         public AlignTop(VectorDocContext context) {
             super(context);
         }
@@ -186,7 +201,7 @@ public class NodeActions {
         }
     }
 
-    public static class AlignBottom extends NodeAction {
+    public static class AlignBottom extends MultiNodeAction {
         public AlignBottom(VectorDocContext context) {
             super(context);
         }
@@ -213,7 +228,7 @@ public class NodeActions {
         }
     }
 
-    public static class AlignLeft extends NodeAction {
+    public static class AlignLeft extends MultiNodeAction {
         public AlignLeft(VectorDocContext context) {
             super(context);
         }
@@ -240,7 +255,7 @@ public class NodeActions {
         }
     }
 
-    public static class AlignRight extends NodeAction {
+    public static class AlignRight extends MultiNodeAction {
         public AlignRight(VectorDocContext context) {
             super(context);
         }
@@ -267,7 +282,7 @@ public class NodeActions {
         }
     }
 
-    public static class AlignCenterV extends NodeAction {
+    public static class AlignCenterV extends MultiNodeAction {
         public AlignCenterV(VectorDocContext context) {
             super(context);
         }
@@ -297,7 +312,7 @@ public class NodeActions {
         }
     }
 
-    public static class AlignCenterH extends NodeAction {
+    public static class AlignCenterH extends MultiNodeAction {
         public AlignCenterH(VectorDocContext context) {
             super(context);
         }
@@ -398,7 +413,7 @@ public class NodeActions {
         }
     }
 
-    public static class SameWidth extends NodeAction {
+    public static class SameWidth extends MultiNodeAction {
         private boolean doWidth;
 
         public SameWidth(VectorDocContext context, boolean doWidth) {
