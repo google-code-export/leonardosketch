@@ -60,7 +60,7 @@
         </key>
         <key name='add'>
             <value language='DEFAULT'>Add</value>
-            <value language='de-DE'>Vereinigung</value>
+            <value language='de-DE'>Hinzufügen</value>
             <value language='en-US'>Add</value>
             <value language='hr-HR'>Dodaj</value>
             <value language='ja-JP'>追加</value>
@@ -243,8 +243,8 @@
             <value language='ja-JP'>変形可能な図形の編集</value>
             <value language='tr-TR'>Boyutlandırılabilir şekli değiştir</value>
         </key>
-        <key name="editTranslations">
-            <value language="DEFAULT">Edit Translations</value>
+        <key name='editTranslations'>
+            <value language='DEFAULT'>Edit Translations</value>
             <value language='de-DE'>Übersetzungen bearbeiten</value>
         </key>
         <key name='exit'>
@@ -423,7 +423,7 @@
         </key>
         <key name='raiseNodeTop'>
             <value language='DEFAULT'>Raise to Top</value>
-            <value language='de-DE'>In den Fordergrund</value>
+            <value language='de-DE'>In den Vordergrund</value>
             <value language='fr-FR'>Monter au premier plan</value>
             <value language='hr-HR'>Podigni na vrh</value>
             <value language='it-IT'>Porta in cima</value>
@@ -530,6 +530,7 @@
         </key>
         <key name='sendFlickr'>
             <value language='DEFAULT'>Send to Flickr</value>
+            <value language='de-DE'>Zu Flickr senden</value>
         </key>
         <key name='sendTwitter'>
             <value language='DEFAULT'>Send to Twitter</value>
@@ -627,7 +628,7 @@
             <value language='hr-HR'>Oduzmi</value>
             <value language='ja-JP'>切り抜き</value>
         </key>
-        <key name="symbolSets">
+        <key name='symbolSets'>
             <value language='DEFAULT'>Symbol Sets</value>
         </key>
         <key name='tocanvas'>
@@ -785,6 +786,7 @@
     <set name='misc'>
         <key name='changesAppliedLater'>
             <value language='DEFAULT'>Changes will applied after Leonardo restarts</value>
+            <value language='de-DE'>Änderungen werden nach einem Neustart aktiviert</value>
             <value language='hr-HR'>Promjene će biti primjenjene nako restarta</value>
             <value language='ja-JP'>変更は Leonardo 再起動後に有効になります</value>
         </key>
@@ -796,7 +798,7 @@
         </key>
         <key name='new'>
             <value language='DEFAULT'>New</value>
-            <value language='de-DE'>Neue</value>
+            <value language='de-DE'>Neu</value>
             <value language='hr-HR'>Novo</value>
             <value language='ja-JP'>新規</value>
         </key>
@@ -904,6 +906,7 @@
         </key>
         <key name='flickrCache'>
             <value language='DEFAULT'>Flickr Cache</value>
+            <value language='de-DE'>Flickr Cache</value>
             <value language='en-US'>Flickr Cache</value>
         </key>
         <key name='generalTab'>
@@ -913,9 +916,11 @@
         </key>
         <key name='preferredLocale'>
             <value language='DEFAULT'>Preferred Language</value>
+            <value language='de-DE'>Gewünschte Sprache</value>
         </key>
         <key name='settings'>
             <value language='DEFAULT'>Settings</value>
+            <value language='de-DE'>Einstellungen</value>
             <value language='en-US'>Settings</value>
         </key>
     </set>
@@ -974,14 +979,16 @@
             <value language='tr-TR'>Semboller</value>
         </key>
     </set>
-    <set name="symbolSetDialog">
-        <key name="newSetName">
+    <set name='symbolSetDialog'>
+        <key name='newSetName'>
             <value language='DEFAULT'>Name for new symbol set</value>
+            <value language='de-DE'>Name für neuenSymbolsatz</value>
         </key>
     </set>
     <set name='toolbar'>
         <key name='fontSize'>
             <value language='DEFAULT'>Font Size</value>
+            <value language='de-DE'>Schriftgröße</value>
             <value language='hr-HR'>Veličina slova</value>
             <value language='ja-JP'>フォントサイズ</value>
         </key>
