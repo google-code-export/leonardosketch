@@ -85,6 +85,7 @@ public class Main implements Runnable {
     public static Properties releaseProperties;
     public static final String TRACKING_PERMISSIONS = "org.joshy.gfx.sketch.tracking.allow";
     public static final String DEBUG_MENU = "org.joshy.gfx.sketch.debug.menuEnabled";
+    public static final String DEFAULT_LOCALE = "org.joshy.gfx.sketch.defaultLocale";
     public static String UPDATE_URL = "";
     public static String DOWNLOAD_URL = "";
     private List<Menu> recentFilesMenus = new ArrayList<Menu>();
@@ -93,11 +94,17 @@ public class Main implements Runnable {
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
         String locale = System.getProperty("user.language") + "-" + System.getProperty("user.country");
-        u.p("Using locale = " + locale);
 
         setupSettings();
 
         //Localization.init(Main.class.getResource("translation.xml"),"de-DE");
+        if(settings.containsKey(DEFAULT_LOCALE)) {
+            String dl = settings.getProperty(DEFAULT_LOCALE);
+            if(!dl.equals("DEFAULT")) {
+                locale = dl;
+            }
+        }
+        u.p("Using locale = " + locale);
         Localization.init(Main.class.getResource("translation.xml"),locale);
 
         Core.setUseJOGL(false);

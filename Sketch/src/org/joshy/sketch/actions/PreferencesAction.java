@@ -1,19 +1,21 @@
 package org.joshy.sketch.actions;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.Checkbox;
-import org.joshy.gfx.node.control.Label;
-import org.joshy.gfx.node.control.Linkbutton;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.Spacer;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.OSUtil;
+import org.joshy.gfx.util.localization.Localization;
 import org.joshy.sketch.Main;
+
+import java.util.Collections;
 
 import static org.joshy.gfx.util.localization.Localization.getString;
 
@@ -63,12 +65,33 @@ public class PreferencesAction extends SAction {
             }
         });
 
+        ArrayListModel<String> locale = new ArrayListModel<String>();
+        locale.addAll(Localization.getSupportedLocales());
+        Collections.sort(locale);
+        final PopupMenuButton<String> localeChoice = new PopupMenuButton<String>();
+        localeChoice.setModel(locale);
+        if(Main.settings.containsKey(Main.DEFAULT_LOCALE)) {
+            int n = locale.indexOf(Main.settings.getProperty(Main.DEFAULT_LOCALE));
+            if(n >= 0) {
+                localeChoice.setSelectedIndex(n);
+            }
+        }
+        localeChoice.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+            }
+        });
+
         Callback<ActionEvent> closeAction = new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
                 stage.hide();
+                String l = localeChoice.getModel().get(localeChoice.getSelectedIndex());
+                Main.settings.setProperty(Main.DEFAULT_LOCALE, l);
                 Main.saveSettings();
+                Localization.setCurrentLocale(l);
+                Core.getShared().reloadSkins();
             }
         };
+
 
         TabPanel tab = new TabPanel();
         tab.add("General",new VFlexBox().setBoxAlign(VFlexBox.Align.Left)
@@ -85,8 +108,10 @@ public class PreferencesAction extends SAction {
             .add(new Button("Delete Cache").onClicked(clearFlickrCache))
         );
         tab.add("Advanced", new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
-            .add(debugMenuCheckbox)
-            .add(new Label(getString("misc.changesAppliedLater").toString()))
+                .add(debugMenuCheckbox)
+                .add(new Label("Default Locale"))
+                .add(localeChoice)
+                .add(new Label(getString("misc.changesAppliedLater").toString()))
         );
 
         stage.setContent(new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
