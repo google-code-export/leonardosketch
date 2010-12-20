@@ -75,7 +75,7 @@ public class SPath extends SShape implements SelfDrawable {
         for(int i=0; i<node.points.size(); i++) {
             SPath.PathPoint point = node.points.get(i);
             g.setPaint(FlatColor.BLACK);
-            if(point.startPath) {
+            if(point.startPath || i == 0) {
                 pth.moveTo(point.x, point.y);
                 continue;
             }
