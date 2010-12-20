@@ -4,6 +4,7 @@
         <key name='cancel'>
             <value language='DEFAULT'>Cancel</value>
             <value language='de-DE'>Abbrechen</value>
+            <value language='hr-HR'>Odustani</value>
             <value language='en-US'>Cancel</value>
             <value language='ja-JP'>キャンセル</value>
             <value language='zz_ZZ'>zz_Cancel</value>
@@ -11,25 +12,30 @@
         <key name='docNotSaved'>
             <value language='DEFAULT'>This document hasn't been saved yet. Save?</value>
             <value language='de-DE'>Dieses Dokument wurde noch nicht gespeichert! Speichern?</value>
+            <value language='hr-HR'>Ovaj dokument još nije spremljen. Spremiti ?</value>
             <value language='ja-JP'>このファイルは保存されていません。保存しますか？</value>
         </key>
         <key name='dontsave'>
             <value language='DEFAULT'>Don't Save</value>
             <value language='de-DE'>Nicht speichern</value>
+            <value language='hr-HR'>Ne spremiti</value>
             <value language='ja-JP'>保存しない</value>
         </key>
         <key name='okay'>
             <value language='DEFAULT'>Okay</value>
+            <value language='hr-HR'>Uredu</value>
             <value language='ja-JP'>OK</value>
         </key>
         <key name='save'>
             <value language='DEFAULT'>Save</value>
             <value language='de-DE'>Speichern</value>
+            <value language='hr-HR'>Spremi</value>
             <value language='ja-JP'>保存</value>
         </key>
         <key name='warning'>
             <value language='DEFAULT'>Warning</value>
             <value language='de-DE'>Warnung</value>
+            <value language='hr-HR'>Upozorenje</value>
             <value language='ja-JP'>警告</value>
         </key>
     </set>
@@ -37,6 +43,7 @@
         <key name='sides'>
             <value language='DEFAULT'>Sides</value>
             <value language='de-DE'>Seiten</value>
+            <value language='hr-HR'>Strane</value>
             <value language='ja-JP'>サイド</value>
         </key>
     </set>
@@ -54,6 +61,7 @@
             <value language='DEFAULT'>Add</value>
             <value language='de-DE'>Vereinigung</value>
             <value language='en-US'>Add</value>
+            <value language='hr-HR'>Dodaj</value>
             <value language='ja-JP'>追加</value>
             <value language='zz_ZZ'>zz_Add</value>
         </key>
@@ -150,6 +158,7 @@
         <key name='create.new.set'>
             <value language='DEFAULT'>Create New Set</value>
             <value language='de-DE'>Neue Sammlung</value>
+            <value language='hr-HR'>Kreiraj novi set</value>
             <value language='ja-JP'>新規作成</value>
         </key>
         <key name='createResizableShape'>
@@ -181,6 +190,7 @@
         </key>
         <key name='debug'>
             <value language='DEFAULT'>Debug</value>
+            <value language='hr-HR'>Debugiraj</value>
             <value language='ja-JP'>デバッグ</value>
         </key>
         <key name='delete'>
@@ -239,6 +249,7 @@
         </key>
         <key name='export'>
             <value language='DEFAULT'>Export</value>
+            <value language='hr-HR'>Izvoz</value>
             <value language='ja-JP'>エクスポート</value>
         </key>
         <key name='file'>
@@ -246,7 +257,7 @@
             <value language='de-DE'>Datei</value>
             <value language='en-US'>File</value>
             <value language='fr-FR'>Fichier</value>
-            <value language='hr-HR'>File</value>
+            <value language='hr-HR'>Datoteka</value>
             <value language='ja-JP'>ファイル</value>
             <value language='tr-TR'>Turkish File</value>
         </key>
@@ -294,11 +305,13 @@
         </key>
         <key name='import'>
             <value language='DEFAULT'>Import</value>
+            <value language='hr-HR'>Uvoz</value>
             <value language='ja-JP'>インポート</value>
         </key>
         <key name='intersection'>
             <value language='DEFAULT'>Intersection</value>
             <value language='de-DE'>Schnittmenge</value>
+            <value language='hr-HR'>Presijek</value>
             <value language='ja-JP'>交差</value>
         </key>
         <key name='lowerNode'>
@@ -599,6 +612,7 @@
         <key name='subtract'>
             <value language='DEFAULT'>Subtract</value>
             <value language='de-DE'>Subtraktion</value>
+            <value language='hr-HR'>Oduzmi</value>
             <value language='ja-JP'>切り抜き</value>
         </key>
         <key name='tocanvas'>
@@ -702,6 +716,7 @@
         </key>
         <key name='viewSidebar'>
             <value language='DEFAULT'>Sidebar</value>
+            <value language='hr-HR'>Rubna traka</value>
             <value language='ja-JP'>サイドバー</value>
         </key>
         <key name='viewSymbolSidebar'>
@@ -746,7 +761,7 @@
             <value language='DEFAULT'>Zoom Out</value>
             <value language='de-DE'>Herauszoomen</value>
             <value language='fr-FR'>Dézoomer</value>
-            <value language='hr-HR'>Odalji</value>
+            <value language='hr-HR'>Udalji</value>
             <value language='it-IT'>Riduci Zoom</value>
             <value language='ja-JP'>ズームアウト</value>
             <value language='tr-TR'>Uzaklaştır</value>
@@ -755,51 +770,61 @@
     <set name='misc'>
         <key name='changesAppliedLater'>
             <value language='DEFAULT'>Changes will applied after Leonardo restarts</value>
+            <value language='hr-HR'>Promjene će biti primjenjene nako restarta</value>
             <value language='ja-JP'>変更は Leonardo 再起動後に有効になります</value>
         </key>
         <key name='close'>
             <value language='DEFAULT'>Close</value>
             <value language='de-DE'>Schließen</value>
+            <value language='hr-HR'>Zatvori</value>
             <value language='ja-JP'>閉じる</value>
         </key>
         <key name='new'>
             <value language='DEFAULT'>New</value>
             <value language='de-DE'>Neue</value>
+            <value language='hr-HR'>Novo</value>
             <value language='ja-JP'>新規</value>
         </key>
         <key name='presentation'>
             <value language='DEFAULT'>Presentation</value>
             <value language='de-DE'>Präsentation</value>
+            <value language='hr-HR'>Prezentacija</value>
             <value language='ja-JP'>プレゼンテーション</value>
         </key>
         <key name='saveFile'>
             <value language='DEFAULT'>Save File</value>
             <value language='de-DE'>Datei speichern</value>
+            <value language='hr-HR'>Spremi datoteku</value>
             <value language='ja-JP'>ファイルを保存</value>
         </key>
         <key name='vector'>
             <value language='DEFAULT'>Vector Document</value>
             <value language='de-DE'>Vektorzeichnung</value>
+            <value language='hr-HR'>Vektorski dokument</value>
             <value language='ja-JP'>ベクター形式ファイル</value>
         </key>
         <key name='whatsthis'>
             <value language='DEFAULT'>What's this?</value>
             <value language='de-DE'>Was ist das?</value>
+            <value language='hr-HR'>Što je ovo ?</value>
             <value language='ja-JP'>詳しい説明</value>
         </key>
         <key name='wish.box'>
             <value language='DEFAULT'>Type your wish for a feature here</value>
             <value language='de-DE'>Wunsch hier eingeben</value>
+            <value language='hr-HR'>Unesite ovdje želju za dodatnom funkcionalnošću</value>
             <value language='ja-JP'>リクエスト事項を入力してださい</value>
         </key>
         <key name='wish.button'>
             <value language='DEFAULT'>Make a wish!</value>
             <value language='de-DE'>Wunsch senden</value>
+            <value language='hr-HR'>Pošalji želju</value>
             <value language='ja-JP'>リクエスト</value>
         </key>
         <key name='wish.dialog'>
             <value language='DEFAULT'>You must type in your wish for a feature before sending.</value>
             <value language='de-DE'>Bitte einen Text vor dem Senden eingeben</value>
+            <value language='hr-HR'>Morate unijeti želju prije slanja.</value>
             <value language='ja-JP'>リクエストエリアが空欄です</value>
         </key>
     </set>
@@ -807,21 +832,25 @@
         <key name='height'>
             <value language='DEFAULT'>New Document</value>
             <value language='de-DE'>Höhe</value>
+            <value language='hr-HR'>Visina</value>
             <value language='ja-JP'>縦</value>
         </key>
         <key name='preset'>
             <value language='DEFAULT'>New Document</value>
             <value language='de-DE'>Vorlage</value>
+            <value language='hr-HR'>Predložak</value>
             <value language='ja-JP'>プリセット</value>
         </key>
         <key name='title'>
             <value language='DEFAULT'>New Document</value>
             <value language='de-DE'>Neues Dokument</value>
+            <value language='hr-HR'>Naslov</value>
             <value language='ja-JP'>新規ファイル</value>
         </key>
         <key name='width'>
             <value language='DEFAULT'>New Document</value>
             <value language='de-DE'>Breite</value>
+            <value language='hr-HR'>Širina</value>
             <value language='ja-JP'>横</value>
         </key>
     </set>
@@ -829,10 +858,12 @@
         <key name='enable.analytics.tracking'>
             <value language='DEFAULT'>Enable Analytics tracking</value>
             <value language='de-DE'>Nutzungstatistiken senden?</value>
+            <value language='hr-HR'>Omogići slanje statistike</value>
             <value language='ja-JP'>分析トラッキングを有効にする</value>
         </key>
         <key name='enable.debug.menu'>
             <value language='DEFAULT'>Enable Debug menug</value>
+            <value language='hr-HR'>Omogući debuge meni</value>
             <value language='ja-JP'>デバッグモードを有効にする</value>
         </key>
     </set>
@@ -840,16 +871,19 @@
         <key name='angle'>
             <value language='DEFAULT'>Angle</value>
             <value language='de-DE'>Winkel</value>
+            <value language='hr-HR'>Kut</value>
             <value language='ja-JP'>角度</value>
         </key>
         <key name='cornerRadius'>
             <value language='DEFAULT'>Corner Radius</value>
             <value language='de-DE'>Eckradius</value>
+            <value language='hr-HR'>Radijs ugla</value>
             <value language='ja-JP'>角の半径</value>
         </key>
         <key name='gradientFill'>
             <value language='DEFAULT'>Gradient Fill</value>
             <value language='de-DE'>Farbverlauf</value>
+            <value language='hr-HR'>Gradijent</value>
             <value language='ja-JP'>グラデーションで塗りつぶす</value>
         </key>
     </set>
@@ -875,6 +909,7 @@
         <key name='search'>
             <value language='DEFAULT'>Search</value>
             <value language='de-DE'>Suchen</value>
+            <value language='hr-HR'>Pretraži</value>
             <value language='ja-JP'>検索</value>
         </key>
         <key name='symbols'>
@@ -890,16 +925,19 @@
     <set name='toolbar'>
         <key name='fontSize'>
             <value language='DEFAULT'>Font Size</value>
+            <value language='hr-HR'>Veličina slova</value>
             <value language='ja-JP'>フォントサイズ</value>
         </key>
         <key name='opacity'>
             <value language='DEFAULT'>Opacity</value>
             <value language='de-DE'>Deckkraft</value>
+            <value language='hr-HR'>Neprozirnost</value>
             <value language='ja-JP'>不透明度</value>
         </key>
         <key name='stroke'>
             <value language='DEFAULT'>Stroke</value>
             <value language='de-DE'>Linie</value>
+            <value language='hr-HR'>Debljina</value>
             <value language='ja-JP'>境界線</value>
         </key>
     </set>
@@ -907,6 +945,7 @@
         <key name='title'>
             <value language='DEFAULT'>Usage Tracking?</value>
             <value language='de-DE'>Nutzungstatistiken aufzeichnen?</value>
+            <value language='hr-HR'>Praćenje korištenja</value>
             <value language='ja-JP'>分析トラッキングしますか？</value>
         </key>
     </set>
@@ -914,16 +953,19 @@
         <key name='authenticate'>
             <value language='DEFAULT'>Authenticate</value>
             <value language='de-DE'>Authentifizieren</value>
+            <value language='hr-HR'>Autorizacija</value>
             <value language='ja-JP'>認識</value>
         </key>
         <key name='text1'>
             <value language='DEFAULT'>Please login to Twitter</value>
             <value language='de-DE'>Bitte in Twitter einloggen</value>
+            <value language='hr-HR'>Molim prijavite se na Twitter</value>
             <value language='ja-JP'>Twitter にログインしてください</value>
         </key>
         <key name='text2'>
             <value language='DEFAULT'>and enter the PIN here</value>
             <value language='de-DE'>und PIN hier eintragen</value>
+            <value language='hr-HR'>i unesite PIN</value>
             <value language='ja-JP'>PIN ナンバーを入力してください</value>
         </key>
     </set>
