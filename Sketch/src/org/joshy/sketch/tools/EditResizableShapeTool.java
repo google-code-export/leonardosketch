@@ -133,6 +133,7 @@ public class EditResizableShapeTool extends CanvasTool {
     }
 
     public void drawOverlay(GFX g) {
+        g.push();
         g.translate(context.getSketchCanvas().getPanX(),context.getSketchCanvas().getPanY());
         g.scale(context.getSketchCanvas().getScale(),context.getSketchCanvas().getScale());
         g.setPaint(FlatColor.RED);
@@ -157,8 +158,7 @@ public class EditResizableShapeTool extends CanvasTool {
                     break;
             }
         }
-        g.scale(1/context.getSketchCanvas().getScale(),1/context.getSketchCanvas().getScale());
-        g.translate(-context.getSketchCanvas().getPanX(),-context.getSketchCanvas().getPanY());
+        g.pop();
     }
 
     public static class VHandle {
