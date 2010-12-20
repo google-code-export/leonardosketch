@@ -287,11 +287,11 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         if(context.symbolMenu != null) {
             menubar.remove(context.symbolMenu);
         }
-        context.symbolMenu = new Menu().setTitle("Symbol Sets");
+        context.symbolMenu = new Menu().setTitle(getString("menus.symbolSets"));
         context.symbolMenu.addItem(getString("menus.create.new.set"), new SAction(){
             @Override
             public void execute() {
-                String value = StandardDialog.showEditText("Name for new symbol set","untitled");
+                String value = StandardDialog.showEditText(getString("symbolSetDialog.newSetName").toString(),"untitled");
                 if(value != null) {
                     SymbolManager.SymbolSet set = getMain().symbolManager.createNewSet(value);
                     getMain().symbolManager.setCurrentSet(set);

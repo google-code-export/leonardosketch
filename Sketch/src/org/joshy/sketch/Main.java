@@ -137,11 +137,11 @@ public class Main implements Runnable {
                 }
             };
             stage.setContent(new VFlexBox()
-                    .add(new Label("Can Leonardo track how often you run it?"))
+                    .add(new Label(getString("trackingDialog.question")))//"Can Leonardo track how often you run it?"))
                     .add(new HFlexBox()
-                        .add(new Button("Yes").onClicked(yesResponse))
-                        .add(new Button("No").onClicked(noResponse))
-                        .add(new Button("What's This?").onClicked(whatResponse))
+                        .add(new Button(getString("misc.yes")).onClicked(yesResponse))
+                        .add(new Button(getString("misc.no")).onClicked(noResponse))
+                        .add(new Button(getString("misc.whatsthis")).onClicked(whatResponse))
                     )
                     );
             stage.setWidth(400);
@@ -637,8 +637,8 @@ public class Main implements Runnable {
         Menu shareMenu = new Menu().setTitle(getString("menus.share"))
                 .addItem(getString("menus.sendTwitter"), new TwitPicAction(context))
                 .addItem(getString("menus.configTwitter"), new TwitPicAction.ChangeSettingsAction(context, true))
-                .addItem("Send to Flickr", new FlickrUploadAction(context))
-                .addItem("Change Flickr Settings", new FlickrUploadAction.ChangeFlickrSettingsAction(context,true))
+                .addItem(getString("menus.sendFlickr"), new FlickrUploadAction(context))
+                .addItem(getString("menus.changeFlickrSettings"), new FlickrUploadAction.ChangeFlickrSettingsAction(context,true))
         ;
 
         if(OSUtil.isMac()) {
@@ -665,7 +665,7 @@ public class Main implements Runnable {
 
                     }
                 })*/
-                debugMenu.addItem("Edit Translations", new SAction() {
+                debugMenu.addItem(getString("menus.editTranslations"), new SAction() {
                     @Override
                     public void execute() throws Exception {
                         Stage s = Stage.createStage();

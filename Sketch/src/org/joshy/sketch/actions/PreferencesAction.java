@@ -35,7 +35,7 @@ public class PreferencesAction extends SAction {
 
     @Override
     public String getDisplayName() {
-        return "Settings";
+        return getString("preferences.settings").toString();
     }
 
     @Override
@@ -94,7 +94,7 @@ public class PreferencesAction extends SAction {
 
 
         TabPanel tab = new TabPanel();
-        tab.add("General",new VFlexBox().setBoxAlign(VFlexBox.Align.Left)
+        tab.add(getString("preferences.generalTab"),new VFlexBox().setBoxAlign(VFlexBox.Align.Left)
             .add(new HFlexBox()
                     .setBoxAlign(HFlexBox.Align.Baseline)
                     .add(trackingCheckbox)
@@ -103,13 +103,13 @@ public class PreferencesAction extends SAction {
                     OSUtil.openBrowser("http://code.google.com/p/leonardosketch/wiki/Tracking");
                 }
             })))
-            .add(new Label("Flickr Cache"))
+            .add(new Label(getString("preferences.flickrCache")))
             .add(new Label(Main.FlickrSearchCache.getCacheDir().getAbsolutePath()).setColor(new FlatColor(0x606060)))
-            .add(new Button("Delete Cache").onClicked(clearFlickrCache))
+            .add(new Button(getString("preferences.deleteFlickrCache")).onClicked(clearFlickrCache))
         );
-        tab.add("Advanced", new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
+        tab.add(getString("preferences.advancedTab"), new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
                 .add(debugMenuCheckbox)
-                .add(new Label("Default Locale"))
+                .add(new Label(getString("preferences.preferredLocale")))
                 .add(localeChoice)
                 .add(new Label(getString("misc.changesAppliedLater").toString()))
         );
