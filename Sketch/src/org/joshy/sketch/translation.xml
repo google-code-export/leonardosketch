@@ -4,8 +4,8 @@
         <key name='cancel'>
             <value language='DEFAULT'>Cancel</value>
             <value language='de-DE'>Abbrechen</value>
-            <value language='hr-HR'>Odustani</value>
             <value language='en-US'>Cancel</value>
+            <value language='hr-HR'>Odustani</value>
             <value language='ja-JP'>キャンセル</value>
             <value language='zz_ZZ'>zz_Cancel</value>
         </key>
@@ -23,6 +23,7 @@
         </key>
         <key name='okay'>
             <value language='DEFAULT'>Okay</value>
+            <value language='de-DE'>OK</value>
             <value language='hr-HR'>Uredu</value>
             <value language='ja-JP'>OK</value>
         </key>
@@ -118,6 +119,10 @@
             <value language='it-IT'>Allinea in Alto</value>
             <value language='ja-JP'>上端揃え</value>
             <value language='tr-TR'>En yukarı yasla</value>
+        </key>
+        <key name='changeFlickrSettings'>
+            <value language='DEFAULT'>Change Flickr Settings</value>
+            <value language='de-DE'>Flickr Einstellungen ändern</value>
         </key>
         <key name='clearSelection'>
             <value language='DEFAULT'>Clear Selection</value>
@@ -237,6 +242,10 @@
             <value language='it-IT'>Modifica Forma Ridimensionabile</value>
             <value language='ja-JP'>変形可能な図形の編集</value>
             <value language='tr-TR'>Boyutlandırılabilir şekli değiştir</value>
+        </key>
+        <key name="editTranslations">
+            <value language="DEFAULT">Edit Translations</value>
+            <value language='de-DE'>Übersetzungen bearbeiten</value>
         </key>
         <key name='exit'>
             <value language='DEFAULT'>Exit</value>
@@ -519,6 +528,9 @@
             <value language='ja-JP'>PNG 形式でメールを送信する</value>
             <value language='tr-TR'>PNG Email gönder</value>
         </key>
+        <key name='sendFlickr'>
+            <value language='DEFAULT'>Send to Flickr</value>
+        </key>
         <key name='sendTwitter'>
             <value language='DEFAULT'>Send to Twitter</value>
             <value language='de-DE'>Zu Twitter senden</value>
@@ -614,6 +626,9 @@
             <value language='de-DE'>Subtraktion</value>
             <value language='hr-HR'>Oduzmi</value>
             <value language='ja-JP'>切り抜き</value>
+        </key>
+        <key name="symbolSets">
+            <value language='DEFAULT'>Symbol Sets</value>
         </key>
         <key name='tocanvas'>
             <value language='DEFAULT'>to HTML Canvas</value>
@@ -785,6 +800,10 @@
             <value language='hr-HR'>Novo</value>
             <value language='ja-JP'>新規</value>
         </key>
+        <key name='no'>
+            <value language='DEFAULT'>No</value>
+            <value language='de-DE'>Nein</value>
+        </key>
         <key name='presentation'>
             <value language='DEFAULT'>Presentation</value>
             <value language='de-DE'>Präsentation</value>
@@ -805,7 +824,7 @@
         </key>
         <key name='whatsthis'>
             <value language='DEFAULT'>What's this?</value>
-            <value language='de-DE'>Was ist das?</value>
+            <value language='de-DE'>Was ist gemeint?</value>
             <value language='hr-HR'>Što je ovo ?</value>
             <value language='ja-JP'>詳しい説明</value>
         </key>
@@ -826,6 +845,10 @@
             <value language='de-DE'>Bitte einen Text vor dem Senden eingeben</value>
             <value language='hr-HR'>Morate unijeti želju prije slanja.</value>
             <value language='ja-JP'>リクエストエリアが空欄です</value>
+        </key>
+        <key name='yes'>
+            <value language='DEFAULT'>Yes</value>
+            <value language='de-DE'>Ja</value>
         </key>
     </set>
     <set name='newDocumentDialog'>
@@ -855,16 +878,45 @@
         </key>
     </set>
     <set name='preferences'>
+        <key name='advancedTab'>
+            <value language='DEFAULT'>Advanced</value>
+            <value language='de-DE'>Erweitert</value>
+            <value language='en-US'>Advanced</value>
+        </key>
+        <key name='deleteFlickrCache'>
+            <value language='DEFAULT'>Delete Cache</value>
+            <value language='de-DE'>Cache leeren</value>
+            <value language='en-US'>Delete Cache</value>
+        </key>
         <key name='enable.analytics.tracking'>
             <value language='DEFAULT'>Enable Analytics tracking</value>
             <value language='de-DE'>Nutzungstatistiken senden?</value>
+            <value language='en-US'>Enable Analytics tracking</value>
             <value language='hr-HR'>Omogići slanje statistike</value>
             <value language='ja-JP'>分析トラッキングを有効にする</value>
         </key>
         <key name='enable.debug.menu'>
-            <value language='DEFAULT'>Enable Debug menug</value>
+            <value language='DEFAULT'>Enable Debug menu</value>
+            <value language='de-DE'>Fehlermenü aktivieren</value>
+            <value language='en-US'>Enable Debug menu</value>
             <value language='hr-HR'>Omogući debuge meni</value>
             <value language='ja-JP'>デバッグモードを有効にする</value>
+        </key>
+        <key name='flickrCache'>
+            <value language='DEFAULT'>Flickr Cache</value>
+            <value language='en-US'>Flickr Cache</value>
+        </key>
+        <key name='generalTab'>
+            <value language='DEFAULT'>General</value>
+            <value language='de-DE'>Allgemein</value>
+            <value language='en-US'>General</value>
+        </key>
+        <key name='preferredLocale'>
+            <value language='DEFAULT'>Preferred Language</value>
+        </key>
+        <key name='settings'>
+            <value language='DEFAULT'>Settings</value>
+            <value language='en-US'>Settings</value>
         </key>
     </set>
     <set name='rectPropsDialog'>
@@ -922,6 +974,11 @@
             <value language='tr-TR'>Semboller</value>
         </key>
     </set>
+    <set name="symbolSetDialog">
+        <key name="newSetName">
+            <value language='DEFAULT'>Name for new symbol set</value>
+        </key>
+    </set>
     <set name='toolbar'>
         <key name='fontSize'>
             <value language='DEFAULT'>Font Size</value>
@@ -942,6 +999,10 @@
         </key>
     </set>
     <set name='trackingDialog'>
+        <key name='question'>
+            <value language='DEFAULT'>Can Leonardo track how often you run it?</value>
+            <value language='de-DE'>Darf Leo die Nutzung begleiten?</value>
+        </key>
         <key name='title'>
             <value language='DEFAULT'>Usage Tracking?</value>
             <value language='de-DE'>Nutzungstatistiken aufzeichnen?</value>
