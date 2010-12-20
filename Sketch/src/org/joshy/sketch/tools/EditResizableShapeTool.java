@@ -9,7 +9,6 @@ import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Togglebutton;
 import org.joshy.gfx.node.layout.VFlexBox;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.canvas.PositionHandle;
 import org.joshy.sketch.model.ResizableGrid9Shape;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -101,13 +100,13 @@ public class EditResizableShapeTool extends CanvasTool {
         if(bounds.contains(cursor)) {
             for(VHandle handle : handles) {
                 if((handle.getPosition() == PositionHandle.Position.Left) || (handle.getPosition() == PositionHandle.Position.Right)) {
-                    if(Math.abs(event.getX()-handle.getX()) < 10) {
+                    if(Math.abs(cursor.getX()-handle.getX()) < 10) {
                         selectedHandle = handle;
                         return;
                     }
                 }
                 if((handle.getPosition() == PositionHandle.Position.Top || handle.getPosition() == PositionHandle.Position.Bottom)) {
-                    if(Math.abs(event.getY()-handle.getY()) < 10) {
+                    if(Math.abs(cursor.getY()-handle.getY()) < 10) {
                         selectedHandle = handle;
                         return;
                     }
@@ -121,9 +120,9 @@ public class EditResizableShapeTool extends CanvasTool {
     @Override
     protected void mouseDragged(MouseEvent event, Point2D.Double cursor) {
         if(selectedHandle != null) {
-            double x = event.getX();
+            double x = cursor.getX();
             selectedHandle.setX(x);
-            selectedHandle.setY(event.getY());
+            selectedHandle.setY(cursor.getY());
             context.redraw();
         }
     }
@@ -134,9 +133,11 @@ public class EditResizableShapeTool extends CanvasTool {
     }
 
     public void drawOverlay(GFX g) {
+        g.translate(context.getSketchCanvas().getPanX(),context.getSketchCanvas().getPanY());
+        g.scale(context.getSketchCanvas().getScale(),context.getSketchCanvas().getScale());
         g.setPaint(FlatColor.RED);
         Bounds bounds = shape.getBounds();
-        g.drawRect(bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
+        g.drawRect(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
         FlatColor color = new FlatColor(0xff097d);
         for(VHandle handle : handles) {
             switch(handle.getPosition()) {
@@ -156,6 +157,8 @@ public class EditResizableShapeTool extends CanvasTool {
                     break;
             }
         }
+        g.scale(1/context.getSketchCanvas().getScale(),1/context.getSketchCanvas().getScale());
+        g.translate(-context.getSketchCanvas().getPanX(),-context.getSketchCanvas().getPanY());
     }
 
     public static class VHandle {
