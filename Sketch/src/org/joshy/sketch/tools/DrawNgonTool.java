@@ -144,6 +144,8 @@ public class DrawNgonTool extends CanvasTool {
                 context.redraw();
                 context.releaseControl();
                 editingExisting = false;
+                node = null;
+                sizeHandle = null;
             }
             startedEditing = false;
             return;
