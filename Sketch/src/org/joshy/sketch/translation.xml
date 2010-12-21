@@ -978,6 +978,9 @@
             <value language='ja-JP'>シンボル</value>
             <value language='tr-TR'>Semboller</value>
         </key>
+        <key name="insertSymbol">
+            <value language="DEFAULT">Insert Symbol</value>
+        </key>
     </set>
     <set name='symbolSetDialog'>
         <key name='newSetName'>

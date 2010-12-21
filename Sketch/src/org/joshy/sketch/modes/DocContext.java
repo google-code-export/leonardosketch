@@ -1,6 +1,7 @@
 package org.joshy.sketch.modes;
 
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.DisclosurePanel;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.StackPanel;
 import org.joshy.gfx.node.layout.TabPanel;
@@ -8,7 +9,6 @@ import org.joshy.gfx.stage.Stage;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.UndoManager;
 import org.joshy.sketch.actions.pages.PageListPanel;
-import org.joshy.sketch.actions.symbols.SymbolPanel;
 import org.joshy.sketch.canvas.DocumentCanvas;
 import org.joshy.sketch.controls.Menu;
 import org.joshy.sketch.controls.Menubar;
@@ -36,6 +36,7 @@ public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocum
     private Stage stage;
     protected DocModeHelper modeHelper;
     public Menu windowJMenu;
+    public DisclosurePanel sidebarContainer;
 
     public DocContext(Main main, DocModeHelper mode) {
         this.main = main;

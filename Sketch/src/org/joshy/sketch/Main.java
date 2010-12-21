@@ -13,10 +13,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.*;
-import org.joshy.gfx.node.layout.HFlexBox;
-import org.joshy.gfx.node.layout.Panel;
-import org.joshy.gfx.node.layout.StackPanel;
-import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.gfx.node.layout.*;
 import org.joshy.gfx.sidehatch.TranslationEditor;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.OSUtil;
@@ -353,26 +350,25 @@ public class Main implements Runnable {
             @Override
             public void doLayout() {
                 for(Control c : controlChildren()) {
-                    double sidebarWidth= 75*3 + 20 + 10;
+                    double sidebarWidth= 75*3 + 20 + 10 + 30;
+                    if(!context.sidebarContainer.isOpen()) {
+                        sidebarWidth = 30;
+                    }
                     if(c == context.stackPanel) {
                         c.setTranslateY(0);
                         c.setHeight(getHeight()-40);
                         c.setTranslateX(30);
-                        if(context.getSidebar().isVisible()) {
-                            c.setWidth(getWidth()-sidebarWidth-30);
-                        } else {
-                            c.setWidth(getWidth()-30);
-                        }
+                        c.setWidth(getWidth()-sidebarWidth-30);
                     }
                     if(c == context.getToolbar()) {
                         c.setTranslateX(0);
                         c.setTranslateY(0);
                         c.setHeight(getHeight());
                     }
-                    if(c == context.getSidebar() && context.getSidebar().isVisible()) {
+                    if(c == context.sidebarContainer) {
                         c.setWidth(sidebarWidth);
-                        c.setHeight(getHeight());
                         c.setTranslateX(getWidth()-sidebarWidth);
+                        c.setHeight(getHeight());
                         c.setTranslateY(0);
                     }
                     if(c == context.pageList) {
@@ -401,8 +397,19 @@ public class Main implements Runnable {
         }
         context.mainPanel.add(context.stackPanel);
         context.mainPanel.add(context.getToolbar());
+        context.sidebarContainer = new DisclosurePanel()
+                .setTitle(new Label(getString("menus.viewSidebar"))
+                        .setFont(Font.name("Arial").size(18).resolve())
+                        .setColor(new FlatColor(0x404040))
+                )
+                .setPosition(DisclosurePanel.Position.Right)
+                .setOpen(true);
+        context.mainPanel.add(context.sidebarContainer);
         if(context.getSidebar() != null) {
-            context.mainPanel.add(context.getSidebar());
+            TabPanel sb = context.getSidebar();
+            sb.setPrefHeight(200);
+            //sb.setPrefWidth(200);
+            context.sidebarContainer.setContent(sb);
         }
         context.mainPanel.setFill(FlatColor.WHITE);
 

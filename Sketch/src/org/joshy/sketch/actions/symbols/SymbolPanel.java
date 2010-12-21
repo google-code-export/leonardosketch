@@ -15,6 +15,8 @@ import org.joshy.sketch.model.SelfDrawable;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
+import static org.joshy.gfx.util.localization.Localization.getString;
+
 public class SymbolPanel extends Panel {
     private ListView<SNode> listView;
     private ScrollPane symbolPane;
@@ -74,7 +76,7 @@ public class SymbolPanel extends Panel {
         symbolPane.setContent(listView);
         symbolPane.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
 
-        symbolAddButton = new Button("Add");
+        symbolAddButton = new Button(getString("sidebar.insertSymbol"));
         symbolAddButton.onClicked(new Callback<ActionEvent>() { public void call(ActionEvent event) {
             if(listView.getSelectedIndex() < 0) return;
             SNode node = listView.getModel().get(listView.getSelectedIndex());

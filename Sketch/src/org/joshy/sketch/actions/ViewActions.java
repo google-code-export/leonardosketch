@@ -311,12 +311,12 @@ public class ViewActions {
 
         @Override
         public boolean getToggleState() {
-            return context.getSidebar().isVisible();
+            return context.sidebarContainer.isOpen();
         }
 
         @Override
         public void setToggleState(boolean toggleState) {
-            context.getSidebar().setVisible(toggleState);
+            context.sidebarContainer.setOpen(!context.sidebarContainer.isOpen());
         }
     }
 }
