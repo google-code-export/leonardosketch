@@ -248,6 +248,7 @@ public class ImportAction extends SAction {
                     continue;
                case 'z':
                     prev = path.closeTo(prev);
+                   closed = true;
                     break;
                case ' ': continue;
                case '\n': continue;

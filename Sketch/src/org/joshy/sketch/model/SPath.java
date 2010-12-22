@@ -97,12 +97,14 @@ public class SPath extends SShape implements SelfDrawable {
         }
 
         Paint fp = node.getFillPaint();
-        if(fp != null) {
-            if(fp instanceof FlatColor) {
-                fp = ((FlatColor)fp).deriveWithAlpha(node.getFillOpacity());
+        if(node.isClosed()) {
+            if(fp != null) {
+                if(fp instanceof FlatColor) {
+                    fp = ((FlatColor)fp).deriveWithAlpha(node.getFillOpacity());
+                }
+                g.setPaint(fp);
+                g.fillPath(pth);
             }
-            g.setPaint(fp);
-            g.fillPath(pth);
         }
 
         if(node.getStrokeWidth() > 0 && node.getStrokePaint() != null) {
