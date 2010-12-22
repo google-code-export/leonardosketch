@@ -15,9 +15,12 @@ import org.joshy.sketch.model.SelfDrawable;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
+import java.awt.geom.Point2D;
+
 import static org.joshy.gfx.util.localization.Localization.getString;
 
 public class SymbolPanel extends Panel {
+    private double size = 75;
     private ListView<SNode> listView;
     private ScrollPane symbolPane;
     private Button symbolAddButton;
@@ -33,8 +36,8 @@ public class SymbolPanel extends Panel {
         this.symbolManager = symbolManager;
 
         listView.setModel(symbolManager.getModel());
-        listView.setRowHeight(50);
-        listView.setColumnWidth(50);
+        listView.setRowHeight(size);
+        listView.setColumnWidth(size);
         listView.setOrientation(ListView.Orientation.HorizontalWrap);
         listView.setRenderer(new ListView.ItemRenderer<SNode>(){
             public void draw(GFX gfx, ListView listView, SNode item, int index, double x, double y, double width, double height) {
@@ -42,12 +45,12 @@ public class SymbolPanel extends Panel {
                 gfx.translate(x,y);
                 if(item instanceof SelfDrawable) {
                     Bounds bounds = item.getBounds();
-                    double scaleX = 50.0/bounds.getWidth();
-                    double scaleY = 50.0/bounds.getHeight();
+                    double scaleX = size/bounds.getWidth();
+                    double scaleY = size/bounds.getHeight();
                     double scale = Math.min(scaleX,scaleY);
-                    scale = Math.max(scale,0.5);  //don't scale down by more than a factor of 5
+                    scale = Math.max(scale,0.2);  //don't scale down by more than a factor of 5
                     Bounds oldClip = gfx.getClipRect();
-                    gfx.setClipRect(new Bounds(0,0,50,50));
+                    gfx.setClipRect(new Bounds(0,0,size,size));
                     gfx.scale(scale,scale);
                     gfx.translate(-bounds.getX(),-bounds.getY());
                     SelfDrawable sd = (SelfDrawable) item;
@@ -56,16 +59,10 @@ public class SymbolPanel extends Panel {
                     gfx.scale(1/scale,1/scale);
                     gfx.setClipRect(oldClip);
                 }
-//                gfx.setPaint(FlatColor.BLACK);
-//                String name = item.getStringProperty(SYMBOL_NAME);
-//                if(name == null) {
-//                    name = item.getClass().getSimpleName();
-//                }
-//                gfx.drawText(name, Font.name("Arial").size(12).resolve(), 60, 20);
                 gfx.setPaint(FlatColor.BLACK);
                 gfx.drawRect(0,0,width,height);
                 if(listView.getSelectedIndex() == index) {
-                    gfx.setPaint(new FlatColor(0.8,0.8,1.0,0.5));//new FlatColor("#ccccff"));
+                    gfx.setPaint(new FlatColor(0.8,0.8,1.0,0.5));
                     gfx.fillRect(0,0,width,height);
                 }
                 gfx.translate(-x,-y);
@@ -101,8 +98,10 @@ public class SymbolPanel extends Panel {
                 }
                 if(event.getType() == MouseEvent.MouseDragged) {
                     if(created && dupe != null) {
-                        dupe.setTranslateX(event.getPointInNodeCoords(context.getCanvas()).getX());
-                        dupe.setTranslateY(event.getPointInNodeCoords(context.getCanvas()).getY());
+                        Point2D pt = event.getPointInNodeCoords(context.getCanvas());
+                        pt = context.getSketchCanvas().transformToCanvas(pt);
+                        dupe.setTranslateX(pt.getX());
+                        dupe.setTranslateY(pt.getY());
                         context.redraw();
                     }
                     if(event.getX() < 0 && prevx >= 0 && !created) {

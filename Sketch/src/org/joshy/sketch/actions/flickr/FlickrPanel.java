@@ -27,6 +27,7 @@ import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import javax.xml.xpath.XPathExpressionException;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -79,8 +80,10 @@ public class FlickrPanel extends VFlexBox {
             public void call(MouseEvent event) {
                 if(event.getType() == MouseEvent.MouseDragged) {
                     if(created && dupe != null) {
-                        dupe.setTranslateX(event.getPointInNodeCoords(context.getCanvas()).getX());
-                        dupe.setTranslateY(event.getPointInNodeCoords(context.getCanvas()).getY());
+                        Point2D pt = event.getPointInNodeCoords(context.getCanvas());
+                        pt = context.getSketchCanvas().transformToCanvas(pt);
+                        dupe.setTranslateX(pt.getX());
+                        dupe.setTranslateY(pt.getY());
                         context.redraw();
                     }
                     if(event.getX() < 0 && prevx >= 0 && !created) {
