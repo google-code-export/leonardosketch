@@ -46,7 +46,6 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     protected BiList<Button, CanvasTool> tools = new BiList<Button, CanvasTool>();
     protected EditResizableShapeTool editResizableShapeTool;
 
-    public RectPropsPalette propsPalette;
     public CanvasTool selectedTool;
     public SelectMoveTool moveRectTool;
     public FloatingPropertiesPanel propPanel;
@@ -188,10 +187,6 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     @Override
     public void setupPalettes() throws IOException {
         propPanel = new FloatingPropertiesPanel(getMain(),this);
-        propsPalette = new RectPropsPalette(getMain(),canvas);
-        propsPalette.setVisible(false);
-        propsPalette.setTranslateX(400);
-        propsPalette.setTranslateY(50);
     }
 
     @Override
@@ -206,7 +201,6 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         } else {
             getStage().getPopupLayer().add(propPanel);
         }
-        getStage().getPopupLayer().add(propsPalette);
     }
 
     @Override

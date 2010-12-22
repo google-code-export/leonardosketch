@@ -9,6 +9,8 @@ import org.joshy.sketch.util.DrawUtils;
 
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,6 +21,7 @@ import java.awt.geom.Point2D;
  */
 public class SRect extends AbstractResizeableNode implements SelfDrawable {
     private double corner = 0;
+    private List<SRectUpdateListener> listeners = new ArrayList<SRectUpdateListener>();
 
     public SRect(double x, double y, double w, double h) {
         super(x, y, w, h);
@@ -30,6 +33,71 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
 
     public void setCorner(double corner) {
         this.corner = corner;
+        fireUpdate();
+    }
+
+    @Override
+    public void setTranslateX(double translateX) {
+        super.setTranslateX(translateX);
+        fireUpdate();
+    }
+
+    @Override
+    public void setTranslateY(double translateY) {
+        super.setTranslateY(translateY);
+        fireUpdate();
+    }
+
+    @Override
+    public void setWidth(double width) {
+        super.setWidth(width);
+        rescaleGradient();
+        fireUpdate();
+    }
+
+    @Override
+    public void setHeight(double height) {
+        super.setHeight(height);
+        rescaleGradient();
+        fireUpdate();
+    }
+
+    private void rescaleGradient() {
+        if(getFillPaint() instanceof GradientFill) {
+            GradientFill grad = (GradientFill) getFillPaint();
+            if(grad.isStartSnapped() && grad.isEndSnapped()) {
+                double sx = grad.getStartX();
+                double sy = grad.getStartY();
+                double ex = grad.getEndX();
+                double ey = grad.getEndY();
+                if(grad.getStartY() == 0)  sy = 0;
+                if(grad.getStartY() > getHeight()/3 && grad.getStartY() < getHeight()/3*2) sy = getHeight()/2;
+                if(grad.getStartY() > getHeight()/3*2) sy = getHeight();
+
+                if(grad.getEndY() == 0) ey = 0;
+                if(grad.getEndY() > getHeight()/3 && grad.getEndY() < getHeight()/3*2) ey = getHeight()/2;
+                if(grad.getEndY() > getHeight()/3*2) ey = getHeight();
+
+                if(grad.getStartX() == 0) sx = 0;
+                if(grad.getStartX() > getWidth()/3 && grad.getStartY()<getWidth()/3*2) sx = getWidth()/2;
+                if(grad.getStartX() > getWidth()/3*2) sx = getWidth();
+
+                if(grad.getEndX() == 0) ex = 0;
+                if(grad.getEndX() > getWidth()/3 && grad.getEndX()<getWidth()/3*2) ex = getWidth()/2;
+                if(grad.getEndX() > getWidth()/3*2) ex = getWidth();
+
+                grad = grad.derive(sx,sy,ex,ey);
+                setFillPaint(grad);
+            }
+        }
+    }
+
+    private void fireUpdate() {
+        if(listeners != null) {
+            for(SRectUpdateListener c : listeners) {
+                c.updated();
+            }
+        }
     }
 
     public double getCorner() {
@@ -63,7 +131,7 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
                 g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
             }
             if(paint instanceof GradientFill) {
-                g.setPaint(rescaleGradient((GradientFill) paint,this));
+                g.setPaint(paint);
             }
             if(this.getCorner() > 0) {
                 g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),this.getCorner(),this.getCorner());
@@ -86,35 +154,10 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
         g.setStrokeWidth(1);
     }
 
-    private Paint rescaleGradient(GradientFill gf, SRect rect) {
-        double angle = gf.angle;
-        int mode = 0;
-        double a = Math.toRadians(angle);
-        double a2 = Math.toRadians(angle+180.0);
-        if(mode==1) {
-            double h = rect.getHeight()/2;
-            double cx = rect.getWidth()/2;
-            double cy = rect.getHeight()/2;
-            gf.startX = Math.cos(a)*h + cx;
-            gf.endX = Math.cos(a2)*h + cx;
-            gf.startY = Math.sin(a)*h + cy;
-            gf.endY =  Math.sin(a2)*h + cy;
-            }
-        if(mode == 0) {
-            //quadrant 1
-            //right
-            if(angle >=0 && angle <45)          { gf.startX = 0; gf.endX = rect.getWidth();  gf.startY = 0; gf.endY = 0;  }
-            //up
-            if(angle >=45 && angle <90+45)      { gf.startX = 0; gf.endX = 0;  gf.startY = 0; gf.endY = rect.getHeight(); }
-            //left
-            if(angle >=90+45 && angle <180+45)  { gf.startX = rect.getWidth(); gf.endX = 0;  gf.startY = 0; gf.endY = 0;  }
-            //down
-            if(angle >=180+45 && angle <270+45) { gf.startX = 0; gf.endX = 0; gf.startY = rect.getHeight(); gf.endY = 0;  }
-            //right
-            if(angle >=270+45 && angle <360+45) { gf.startX = 0; gf.endX = rect.getWidth();  gf.startY = 0; gf.endY = 0; }
-        }
-        return gf;
+    public void addListener(GradientHandle gradientHandle) {
+        listeners.add(gradientHandle);
     }
+
 
     public static class RoundRectMasterHandle extends Handle {
         private SRect rect;
@@ -165,5 +208,9 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
             g.drawLine(x-10,y-10,x,y);
             DrawUtils.drawStandardHandle(g,x,y,FlatColor.GREEN);
         }
+    }
+
+    public static interface SRectUpdateListener {
+        public void updated();
     }
 }
