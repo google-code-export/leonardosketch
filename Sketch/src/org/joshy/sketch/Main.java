@@ -35,7 +35,6 @@ import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.modes.DocModeHelper;
 import org.joshy.sketch.modes.preso.PresoModeHelper;
-import org.joshy.sketch.modes.preso.ViewSlideshowAction;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
 import org.joshy.sketch.property.PropertyManager;
@@ -634,8 +633,6 @@ public class Main implements Runnable {
             for(SAction a : vdc.getSidebarPanelViewActions()) {
                 viewMenu.addItem(a.getDisplayName(), a);
             }
-            viewMenu.separator()
-                    .addItem(getString("menus.viewPresentation"),"", new ViewSlideshowAction(vdc));
         }
 
         //view menu

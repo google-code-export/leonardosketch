@@ -34,6 +34,8 @@ public class PresoModeHelper extends VectorModeHelper {
         menu.addItem("Add Title Page", new AddTitlePage(context));
         menu.addItem("Add Content Page", new AddContentPage(context));
         menu.addItem("Delete Selected Page", new DeletePageAction());
+        menu.separator();
+        menu.addItem(getString("menus.viewPresentation"),"", new ViewSlideshowAction(context));
         return menu;
     }
 
