@@ -14,6 +14,8 @@ import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.sketch.Main;
+import org.joshy.sketch.actions.BooleanGeometry;
+import org.joshy.sketch.actions.NodeActions;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -49,6 +51,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private FlexBox groupPropertiesEditor;
     private FlexBox shapeProperties;
     private FlexBox fontProperties;
+    private FlexBox booleanPropsEditor;
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
@@ -178,14 +181,63 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
 
         groupPropertiesEditor = new HFlexBox()
-                .add(new Button("b1"))
-                .add(new Button("b2"));
+                .add(new IB("align-horizontal-left.png", new NodeActions.AlignLeft(context)))
+                .add(new IB("align-horizontal-center.png", new NodeActions.AlignCenterH(context)))
+                .add(new IB("align-horizontal-right.png", new NodeActions.AlignRight(context)))
+                .add(new IB("align-vertical-bottom.png", new NodeActions.AlignBottom(context)))
+                .add(new IB("align-vertical-center.png", new NodeActions.AlignCenterV(context)))
+                .add(new IB("align-vertical-top.png", new NodeActions.AlignTop(context)))
+                ;
         add(groupPropertiesEditor);
         groupPropertiesEditor.setVisible(false);
+        booleanPropsEditor = new HFlexBox()
+                .add(new Button(getString("menus.add")).onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        new BooleanGeometry.Union(context).execute();
+                    }
+                }))
+                .add(new Button(getString("menus.subtract")).onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        new BooleanGeometry.Subtract(context).execute();
+                    }
+                }))
+                .add(new Button(getString("menus.intersection")).onClicked(new Callback<ActionEvent>() {
+                    public void call(ActionEvent actionEvent) throws Exception {
+                        new BooleanGeometry.Intersection(context).execute();
+                    }
+                }))
+        ;
+        add(booleanPropsEditor);
+        booleanPropsEditor.setVisible(false);
 
         this.setBoxAlign(Align.Left);
         setVisible(false);
 
+    }
+
+    private static class IB extends ToolbarButton {
+        private NodeActions.MultiNodeAction action;
+
+        private IB(String s, NodeActions.MultiNodeAction act) throws IOException {
+            super(Main.class.getResource("resources/"+s));
+            this.selectable = false;
+            this.action = act;
+            onClicked(new Callback<ActionEvent>(){
+                public void call(ActionEvent actionEvent) throws Exception {
+                    action.execute();
+                }
+            });
+        }
+
+        @Override
+        public void draw(GFX g) {
+            g.setPaint(FlatColor.WHITE);
+            g.fillRect(0,0,getWidth(),getHeight());
+            //g.setPaint(FlatColor.BLACK);
+            //g.drawRect(0,0,getWidth(),getHeight());
+
+            g.drawImage(icon,0,0);
+        }
     }
 
     private void updatePanelContents() {
@@ -271,6 +323,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
         }
 
         groupPropertiesEditor.setVisible(selection.size()>1);
+        booleanPropsEditor.setVisible(selection.size()>1 && manager.propMan.isClassAvailable(SShape.class));
 
         setLayoutDirty();
         Core.getShared().defer(new Runnable() {
@@ -284,7 +337,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
     @Override
     protected void drawSelf(GFX g) {
         double h = getHeight();
-        g.setPaint(new FlatColor(0.3,0.3,0.3,0.4));
+        g.setPaint(new FlatColor(0.4,0.4,0.4,0.5));
         g.fillRoundRect(0,0,getWidth()-1,h-1,10,10);
         g.setPaint(new FlatColor(0,0,0,0.8));
         g.drawRoundRect(0,0,getWidth()-1,h-1,10,10);

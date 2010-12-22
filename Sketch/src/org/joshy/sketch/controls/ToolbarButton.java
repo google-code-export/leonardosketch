@@ -18,7 +18,7 @@ import java.net.URL;
  * To change this template use File | Settings | File Templates.
  */
 public class ToolbarButton extends Togglebutton {
-    private Image icon;
+    protected Image icon;
 
     public ToolbarButton(URL iconURL) throws IOException {
         super("");
