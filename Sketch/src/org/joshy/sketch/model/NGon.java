@@ -75,6 +75,30 @@ public class NGon extends SShape implements SelfDrawable {
         g.setStrokeWidth(1);
     }
 
+    public void setAngle(double angle) {
+        this.angle = angle;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public void setStar(boolean star) {
+        this.star = star;
+    }
+
+    public boolean isStar() {
+        return star;
+    }
+
+    public double getInnerRadius() {
+        return innerRadius;
+    }
+
+    public void setInnerRadius(double innerRadius) {
+        this.innerRadius = innerRadius;
+    }
+
     public double[] toPoints() {
         if(isStar()) {
             double[] points = new double[getSides()*4];
@@ -110,16 +134,6 @@ public class NGon extends SShape implements SelfDrawable {
     }
 
     @Override
-    public SNode duplicate(SNode dupe) {
-        if(dupe == null) {
-            dupe = new NGon(getSides());
-        }
-        ((NGon)dupe).setRadius(getRadius());
-        ((NGon)dupe).setAngle(getAngle());
-        return super.duplicate(dupe);
-    }
-
-    @Override
     public Area toArea() {
         Polygon poly = new Polygon();
         double[] points = toPoints();
@@ -131,27 +145,15 @@ public class NGon extends SShape implements SelfDrawable {
         return area;
     }
 
-    public void setAngle(double angle) {
-        this.angle = angle;
+    @Override
+    public SNode duplicate(SNode dupe) {
+        if(dupe == null) {
+            dupe = new NGon(getSides());
+        }
+        ((NGon)dupe).setRadius(getRadius());
+        ((NGon)dupe).setAngle(getAngle());
+        ((NGon)dupe).setStar(isStar());
+        return super.duplicate(dupe);
     }
 
-    public double getAngle() {
-        return angle;
-    }
-
-    public void setStar(boolean star) {
-        this.star = star;
-    }
-
-    public boolean isStar() {
-        return star;
-    }
-
-    public double getInnerRadius() {
-        return innerRadius;
-    }
-
-    public void setInnerRadius(double innerRadius) {
-        this.innerRadius = innerRadius;
-    }
 }
