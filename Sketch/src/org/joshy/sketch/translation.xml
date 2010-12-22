@@ -123,6 +123,7 @@
         <key name='changeFlickrSettings'>
             <value language='DEFAULT'>Change Flickr Settings</value>
             <value language='de-DE'>Flickr Einstellungen ändern</value>
+            <value language='ja-JP'>Flickr 設定を変更</value>
         </key>
         <key name='clearSelection'>
             <value language='DEFAULT'>Clear Selection</value>
@@ -148,7 +149,7 @@
             <value language='fr-FR'>Changer les paramètres pour Twitter</value>
             <value language='hr-HR'>Izmijeni postavke za Twitter</value>
             <value language='it-IT'>Cambia Impostazioni Twitter</value>
-            <value language='ja-JP'>Twitter 設定の変更</value>
+            <value language='ja-JP'>Twitter の設定を変更</value>
             <value language='tr-TR'>Twitter ayarları</value>
         </key>
         <key name='copy'>
@@ -246,6 +247,7 @@
         <key name='editTranslations'>
             <value language='DEFAULT'>Edit Translations</value>
             <value language='de-DE'>Übersetzungen bearbeiten</value>
+            <value language='ja-JP'>翻訳の編集</value>
         </key>
         <key name='exit'>
             <value language='DEFAULT'>Exit</value>
@@ -463,7 +465,7 @@
             <value language='fr-FR'>Tourner de 90° vers la gauche</value>
             <value language='hr-HR'>Rotiraj 90° obrnuto od smjera kazaljke</value>
             <value language='it-IT'>Ruota di 90° in Senso Antiorario</value>
-            <value language='ja-JP'>反時計周りに 90° 回転</value>
+            <value language='ja-JP'>反時計回りに 90° 回転</value>
             <value language='tr-TR'>90° sola dönder</value>
         </key>
         <key name='rotateNode90Right'>
@@ -525,12 +527,13 @@
             <value language='fr-FR'>Envoyer par mail en PNG</value>
             <value language='hr-HR'>Pošalji na emial kao PNG</value>
             <value language='it-IT'>Invia via Email in Formato PNG</value>
-            <value language='ja-JP'>PNG 形式でメールを送信する</value>
+            <value language='ja-JP'>PNG 形式でメールを送信</value>
             <value language='tr-TR'>PNG Email gönder</value>
         </key>
         <key name='sendFlickr'>
             <value language='DEFAULT'>Send to Flickr</value>
             <value language='de-DE'>Zu Flickr senden</value>
+            <value language='ja-JP'>Flickr に送信</value>
         </key>
         <key name='sendTwitter'>
             <value language='DEFAULT'>Send to Twitter</value>
@@ -630,6 +633,7 @@
         </key>
         <key name='symbolSets'>
             <value language='DEFAULT'>Symbol Sets</value>
+            <value language='ja-JP'>シンボルセット</value>
         </key>
         <key name='tocanvas'>
             <value language='DEFAULT'>to HTML Canvas</value>
@@ -727,7 +731,7 @@
             <value language='fr-FR'>Afficher présentation</value>
             <value language='hr-HR'>Pogledaj prezentaciju</value>
             <value language='it-IT'>Visualizza Presentazione</value>
-            <value language='ja-JP'>プレゼンテーションを見る</value>
+            <value language='ja-JP'>プレゼンテーションビュー</value>
             <value language='tr-TR'>Sunumu göster</value>
         </key>
         <key name='viewSidebar'>
@@ -805,6 +809,7 @@
         <key name='no'>
             <value language='DEFAULT'>No</value>
             <value language='de-DE'>Nein</value>
+            <value language='ja-JP'>いいえ</value>
         </key>
         <key name='presentation'>
             <value language='DEFAULT'>Presentation</value>
@@ -851,6 +856,7 @@
         <key name='yes'>
             <value language='DEFAULT'>Yes</value>
             <value language='de-DE'>Ja</value>
+            <value language='ja-JP'>はい</value>
         </key>
     </set>
     <set name='newDocumentDialog'>
@@ -884,6 +890,7 @@
             <value language='DEFAULT'>Advanced</value>
             <value language='de-DE'>Erweitert</value>
             <value language='en-US'>Advanced</value>
+            <value language='ja-JP'>詳細</value>
         </key>
         <key name='deleteFlickrCache'>
             <value language='DEFAULT'>Delete Cache</value>
@@ -908,20 +915,24 @@
             <value language='DEFAULT'>Flickr Cache</value>
             <value language='de-DE'>Flickr Cache</value>
             <value language='en-US'>Flickr Cache</value>
+            <value language='ja-JP'>Flickr キャッシュ</value>
         </key>
         <key name='generalTab'>
             <value language='DEFAULT'>General</value>
             <value language='de-DE'>Allgemein</value>
             <value language='en-US'>General</value>
+            <value language='ja-JP'>一般</value>
         </key>
         <key name='preferredLocale'>
             <value language='DEFAULT'>Preferred Language</value>
             <value language='de-DE'>Gewünschte Sprache</value>
+            <value language='ja-JP'>優先言語</value>
         </key>
         <key name='settings'>
             <value language='DEFAULT'>Settings</value>
             <value language='de-DE'>Einstellungen</value>
             <value language='en-US'>Settings</value>
+            <value language='ja-JP'>設定</value>
         </key>
     </set>
     <set name='rectPropsDialog'>
@@ -986,6 +997,7 @@
         <key name='newSetName'>
             <value language='DEFAULT'>Name for new symbol set</value>
             <value language='de-DE'>Name für neuenSymbolsatz</value>
+            <value language='ja-JP'>新規シンボルの名称</value>
         </key>
     </set>
     <set name='toolbar'>
@@ -1012,6 +1024,7 @@
         <key name='question'>
             <value language='DEFAULT'>Can Leonardo track how often you run it?</value>
             <value language='de-DE'>Darf Leo die Nutzung begleiten?</value>
+            <value language='ja-JP'>使用頻度のトラッキングを許可しますか？</value>
         </key>
         <key name='title'>
             <value language='DEFAULT'>Usage Tracking?</value>

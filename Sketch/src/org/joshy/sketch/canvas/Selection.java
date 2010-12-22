@@ -4,7 +4,8 @@ import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
+import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.layout.Container;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
@@ -24,12 +25,15 @@ public class Selection {
 
     public void setSelectedNode(SNode node) {
         selected.clear();
+        clearHandleControls();
         selected.put(node, genHandles(node));
+        regenHandleControls(node);
         fireEvents();
     }
-    
+
     public void addSelectedNode(SNode node) {
         selected.put(node, genHandles(node));
+        regenHandleControls(node);
         fireEvents();
     }
 
@@ -38,31 +42,64 @@ public class Selection {
     }
 
     public void regenHandles(SNode node) {
+        List<Handle> handles = selected.get(node);
+        Container popupLayer = context.getSketchCanvas().getParent().getStage().getPopupLayer();
+        for(Handle h : handles) {
+            for(Control c : h.getControls()) {
+                popupLayer.remove(c);
+                handleControls.remove(c);
+            }
+        }
+        selected.remove(node);
         selected.put(node,genHandles(node));
+        regenHandleControls(node);
     }
+
+    private List<Control> handleControls = new ArrayList<Control>();
+    private void regenHandleControls(SNode node) {
+        for(Handle h : selected.get(node)) {
+            if(h.hasControls()) {
+                Container popupLayer = context.getSketchCanvas().getParent().getStage().getPopupLayer();
+                for(Control c : h.getControls()) {
+                    if(!handleControls.contains(c)) {
+                        handleControls.add(c);
+                        popupLayer.add(c);
+                    }
+                }
+            }
+        }
+    }
+    private void clearHandleControls() {
+        for(Control c : handleControls) {
+            Container popupLayer = context.getSketchCanvas().getParent().getStage().getPopupLayer();
+            popupLayer.remove(c);
+        }
+        handleControls.clear();
+    }
+
+
     //generate handles. for now only resizable shapes have handles
     private List<Handle> genHandles(SNode node) {
         ArrayList<Handle> hs = new ArrayList<Handle>();
         if(node instanceof SResizeableNode) {
             SResizeableNode rnode = (SResizeableNode) node;
-            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopLeft));
-            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopRight));
-            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomLeft));
-            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomRight));
-            if(rnode instanceof SRect) {
-                SRect rect = (SRect) rnode;
-                if(rect.getFillPaint() instanceof GradientFill) {
-//                    hs.add(new GradientHandle(rect,GradientHandle.GradientPosition.Start));
-//                    hs.add(new GradientHandle(rect,GradientHandle.GradientPosition.End));
-                }
-            }
             if(rnode instanceof SRect) {
                 SRect rect = (SRect) rnode;
                 hs.add(new SRect.RoundRectMasterHandle(rect));
             }
+            if(rnode instanceof SRect) {
+                SRect rect = (SRect) rnode;
+                if(rect.getFillPaint() instanceof GradientFill) {
+                    hs.add(new GradientHandle(rect, GradientHandle.GradientPosition.Start, context));
+                    hs.add(new GradientHandle(rect, GradientHandle.GradientPosition.End, context));
+                }
+            }
+            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopLeft));
+            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopRight));
+            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomLeft));
+            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomRight));
         }
         if(node instanceof SArrow) {
-            u.p("created handles for: "+ node);
             SArrow arrow = (SArrow) node;
             hs.add(new ArrowHandle(arrow,ArrowHandle.Position.Start));
             hs.add(new ArrowHandle(arrow,ArrowHandle.Position.End));
@@ -80,6 +117,7 @@ public class Selection {
 
     public void clear() {
         selected.clear();
+        clearHandleControls();
         fireEvents();
     }
 

@@ -1,9 +1,11 @@
 package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.node.control.Control;
 import org.joshy.sketch.canvas.SketchCanvas;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,7 +17,7 @@ import java.awt.geom.Point2D;
 public abstract class Handle {
     protected double size = 5;
 
-    public boolean contains(Point2D cursor, double scale) {
+    public final boolean contains(Point2D cursor, double scale) {
         return contains(cursor.getX(),cursor.getY(), scale);
     }
 
@@ -38,4 +40,12 @@ public abstract class Handle {
     public abstract void setY(double y, boolean constrain);
 
     public abstract void draw(GFX g, SketchCanvas sketchCanvas);
+
+    public boolean hasControls() {
+        return false;
+    }
+
+    public Iterable<? extends Control> getControls() {
+        return new ArrayList<Control>();
+    }
 }

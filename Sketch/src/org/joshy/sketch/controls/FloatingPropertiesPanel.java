@@ -1,5 +1,6 @@
 package org.joshy.sketch.controls;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -10,7 +11,6 @@ import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.*;
@@ -32,18 +32,18 @@ public class FloatingPropertiesPanel extends HFlexBox {
     private Slider fontSizeSlider;
     private Togglebutton fontBoldButton;
     private Togglebutton fontItalicButton;
-    private Togglebutton rectPropsButton;
     private Main manager;
     private PopupMenuButton<String> fontPicker;
     private Label fillOpacityLabel;
     private Label strokeWidthLabel;
     private VectorDocContext context;
     private FlatColor gradient1 = new FlatColor(0,0,0,0);
-    private static final GradientFill GRADIENT1 =new GradientFill(FlatColor.GRAY, FlatColor.GREEN,0,true, 50,0,50,100);
+    private static final GradientFill GRADIENT1 =new GradientFill(FlatColor.BLACK, FlatColor.RED,0,false, 50,0,50,100);
     private PopupMenuButton<SArrow.HeadEnd> arrowHeadEnd;
     private Label rgbLabel;
     private Label fontSizeLabel;
     public static final boolean TRUE_PALLETTE = false;//OSUtil.isMac();
+    private boolean locked = false;
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
@@ -120,16 +120,23 @@ public class FloatingPropertiesPanel extends HFlexBox {
         strokeColorButton = new SwatchColorPicker();
         EventBus.getSystem().addListener(ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) {
+                if(locked) return;
                 if(event.getSource() == colorButton) {
                     FlatColor color = (FlatColor) event.getValue();
                     if(manager.propMan.isClassAvailable(SShape.class)) {
                         if(color == gradient1) {
                             if(manager.propMan.isClassAvailable(SRect.class)) {
                                 PropertyManager.Property prop = manager.propMan.getProperty("fillPaint");
+                                SRect rect = (SRect) context.getSelection().firstItem();
                                 if(prop.hasSingleValue() && prop.getValue() instanceof GradientFill) {
                                     //do nothing
                                 } else {
-                                    prop.setValue(GRADIENT1);
+                                    prop.setValue(GRADIENT1.derive(
+                                            rect.getWidth()/2,
+                                            0,
+                                            rect.getWidth()/2,
+                                            rect.getHeight()
+                                            ));
                                 }
                             }
                             //don't set the color if its a gradient but this isn't a rect
@@ -284,14 +291,6 @@ public class FloatingPropertiesPanel extends HFlexBox {
             }
         });
 
-        rectPropsButton = new Togglebutton("^");
-        add(rectPropsButton);
-        rectPropsButton.onClicked(new Callback<ActionEvent>() {
-            public void call(ActionEvent event) {
-                context.propsPalette.setVisible(!context.propsPalette.isVisible());
-            }
-        });
-
 
         arrowHeadEnd = new PopupMenuButton<SArrow.HeadEnd>();
         arrowHeadEnd.setModel(ListView.createModel(SArrow.HeadEnd.values()));
@@ -312,6 +311,7 @@ public class FloatingPropertiesPanel extends HFlexBox {
     }
 
     private void updatePanelContents() {
+        locked = true;
         SNode lastNode = null;
         for(SNode node : selection.items()) {
             lastNode = node;
@@ -387,10 +387,12 @@ public class FloatingPropertiesPanel extends HFlexBox {
             }
         }
 
-        //show the rect props button only if a single rect is selected
-        rectPropsButton.setVisible(manager.propMan.isClassAvailable(SRect.class));
-
         setLayoutDirty();
+        Core.getShared().defer(new Runnable() {
+            public void run() {
+                locked = false;
+            }
+        });
     }
 
 

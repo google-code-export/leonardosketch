@@ -6,11 +6,11 @@ import org.joshy.gfx.animation.KeyFrameAnimator;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.*;
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.KeyEvent;
+import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.ListModel;
-import org.joshy.gfx.node.control.SwatchColorPicker;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.symbols.CreateSymbol;
 import org.joshy.sketch.canvas.ResizeHandle;
@@ -53,7 +53,6 @@ public class SelectMoveTool extends CanvasTool {
     private Handle hoverHandle;
     private ContextMenu contextMenu;
     private Bounds resizeStartBounds;
-    private SwatchColorPicker gradientButton;
     private Handle lastHandle;
     private Thread checkThread;
     private long shownTime;
@@ -88,20 +87,7 @@ public class SelectMoveTool extends CanvasTool {
                 return menuActions.size();
             }
         };
-
-        gradientButton = new SwatchColorPicker();
-        EventBus.getSystem().addListener(gradientButton, ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
-            public void call(ChangedEvent event) {
-                if(lastHandle instanceof GradientHandle) {
-                    ((GradientHandle)lastHandle).setColor((FlatColor)event.getValue());
-                }
-            }
-        });
-        context.getStage().getPopupLayer().add(gradientButton);
-        gradientButton.setVisible(false);
-
     }
-
 
     protected void call(KeyEvent event) {
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_BACKSPACE || event.getKeyCode() == KeyEvent.KeyCode.KEY_DELETE) {
@@ -248,9 +234,9 @@ public class SelectMoveTool extends CanvasTool {
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
         if(!(context.getDocument() != null)) return;
 
+
         //hide the context menu if showing
         ContextMenu.hideAll();
-
         SketchDocument doc = context.getDocument();
         if(event.getButton() == 3) { // check for right clicks to open the context menu
             showContextMenu(event);
@@ -258,8 +244,11 @@ public class SelectMoveTool extends CanvasTool {
         }
         pressed = true;
         Core.getShared().getFocusManager().setFocusedNode(context.getCanvas());
+
+
         //always hide the selector when doing manipulation
         fadeOut(context.getPropPanel());
+
 
         //check for double clicks
         if(new Date().getTime() - lastClickTime < 500 && context.getSelection().size() == 1) {
@@ -761,13 +750,7 @@ public class SelectMoveTool extends CanvasTool {
                 }
             });
         }
-        if(selectedHandle instanceof GradientHandle) {
-            gradientButton.setTranslateX(selectedHandle.getX()+30);
-            gradientButton.setTranslateY(selectedHandle.getY());
-            gradientButton.setVisible(true);
-        } else {
-            gradientButton.setVisible(false);
-        }
+
         lastHandle = selectedHandle;
         selectedHandle = null;
         fadeOutIndicator();
