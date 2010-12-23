@@ -32,6 +32,7 @@ public class Menubar {
                 for(Menu m : menus) {
                     jmenubar.add(m.createJMenu());
                 }
+                jmenubar.validate();
             }
         });
     }
