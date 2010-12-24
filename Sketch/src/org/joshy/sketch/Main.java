@@ -58,9 +58,6 @@ public class Main implements Runnable {
     public static final File RECENT_FILES = new File(homedir,"recentfiles.xml");
     public static final File SETTINGS_FILE = new File(homedir,"settings.txt");
     public static final File SCRIPTS_DIR = new File(homedir,"scripts");
-    public static Font HANDDRAWN_FONT;
-    public static Font SERIF_FONT;
-    public static Font SANSSERIF_FONT;
 
     public SymbolManager symbolManager = new SymbolManager(new File(homedir,"symbols"));
     public PropertyManager propMan;
@@ -86,6 +83,7 @@ public class Main implements Runnable {
     public static String DOWNLOAD_URL = "";
     private List<Menu> recentFilesMenus = new ArrayList<Menu>();
     public static MasterImageCache FlickrSearchCache = new MasterImageCache(true,10,"LeonardoFlickrSearchCache");
+    public static Font[] fonts;
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -506,9 +504,17 @@ public class Main implements Runnable {
     }
 
     private void setupGlobals() throws IOException {
-        HANDDRAWN_FONT = Font.fromURL(Main.class.getResource("resources/belligerent.ttf")).size(30).resolve();
-        SERIF_FONT = Font.fromURL(Main.class.getResource("resources/OFLGoudyStMTT.ttf")).size(30).resolve();
-        SANSSERIF_FONT = Font.fromURL(Main.class.getResource("resources/Junction 02.ttf")).size(30).resolve();
+        fonts = new Font[]{
+                Font.fromURL(getFont("belligerent.ttf")).size(30).resolve(),
+                Font.fromURL(getFont("Chunk.ttf")).resolve(),
+                Font.fromURL(getFont("Junction.ttf")).size(30).resolve(),
+                Font.fromURL(getFont("OFLGoudyStMTT.ttf")).size(30).resolve(),
+                Font.fromURL(getFont("orbitron-medium.ttf")).resolve(),
+                Font.fromURL(getFont("ProcionoTT.ttf")).resolve(),
+                Font.fromURL(getFont("raleway_thin.ttf")).resolve(),
+                Font.fromURL(getFont("Sniglet_Regular.ttf")).resolve(),
+        };
+
 
         modeHelpers.add(new VectorModeHelper(this));
         //modeHelpers.add(new PixelModeHelper(this));
@@ -534,6 +540,10 @@ public class Main implements Runnable {
             }
         });
 
+    }
+
+    private URL getFont(String s) {
+        return Main.class.getResource("resources/fonts/"+s);
     }
 
     private void buildCommonMenubar(DocContext context) {

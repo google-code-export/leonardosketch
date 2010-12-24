@@ -1,13 +1,13 @@
 package org.joshy.sketch.tools;
 
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.event.ScrollEvent;
-import org.joshy.sketch.modes.vector.VectorDocContext;
-import org.joshy.sketch.Main;
 import org.joshy.sketch.model.SNode;
+import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.geom.Point2D;
 
@@ -26,7 +26,7 @@ public class IncrementalRotateTool extends CanvasTool {
     @Override
     public void drawOverlay(GFX g) {
         g.setPaint(FlatColor.BLACK);
-        g.drawText("ROTATE", Main.SANSSERIF_FONT,100,100);
+        g.drawText("ROTATE", Font.DEFAULT,100,100);
     }
 
     @Override
