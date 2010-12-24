@@ -41,7 +41,7 @@ public class AboutAction extends SAction {
         stage.setTitle("About Leonardo");
         Callback openLink = new org.joshy.gfx.event.Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
-                OSUtil.openBrowser("http://leonardosketch.org/");
+                OSUtil.openBrowser("http://leonardosketch.org/download-source/");
             }
         };
         Callback closeStage = new Callback<ActionEvent>() {
@@ -54,8 +54,12 @@ public class AboutAction extends SAction {
         stage.setContent(new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch)
                 .add(new HFlexBox()
                         .add(new ImageBox().setImage(Main.class.getResource("resources/Turtle.png"))))
-                .add(new HFlexBox().add(new Label("Leonardo")).setId("aboutHeader"))
-                .add(new HFlexBox().add(new Linkbutton("http://leonardosketch.org/").onClicked(openLink)))
+                //.add(new HFlexBox().add(new Label("Leonardo")).setId("aboutHeader"))
+                //.add(new HFlexBox().add(new Linkbutton("http://leonardosketch.org/").onClicked(openLink)))
+                .add(new HFlexBox().add(new Label("Leonardo is open source, BSD licensed."+
+                        " It contains software from Apache, Twitter4J, Parboiled."+
+                        " The icon was created by VisualPharm (Ivan Boyko)").setPrefWidth(360)))
+                .add(new HFlexBox().add(new Linkbutton("License Info").onClicked(openLink)))
                 .add(new HFlexBox()
                         .add(new Label("Version"))
                         .add(new Label(Main.releaseProperties.getProperty("org.joshy.sketch.build.version"))))
@@ -69,7 +73,7 @@ public class AboutAction extends SAction {
                 .add(new HFlexBox().add(new Spacer(),1).add(new Button("Close").onClicked(closeStage)))
         );
         stage.setWidth(400);
-        stage.setHeight(350);
+        stage.setHeight(400);
         stage.centerOnScreen();
     }
 }
