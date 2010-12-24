@@ -58,8 +58,9 @@ public class AboutAction extends SAction {
                 //.add(new HFlexBox().add(new Linkbutton("http://leonardosketch.org/").onClicked(openLink)))
                 .add(new HFlexBox().add(new Label("Leonardo is open source, BSD licensed."+
                         " It contains software from Apache, Twitter4J, Parboiled."+
-                        " The icon was created by VisualPharm (Ivan Boyko)").setPrefWidth(360)))
-                .add(new HFlexBox().add(new Linkbutton("License Info").onClicked(openLink)))
+                        " Fonts from The League Of Movable Type." +
+                        " Icon by VisualPharm (Ivan Boyko).").setPrefWidth(370)))
+                .add(new HFlexBox().add(new Linkbutton("Click for license info").onClicked(openLink)))
                 .add(new HFlexBox()
                         .add(new Label("Version"))
                         .add(new Label(Main.releaseProperties.getProperty("org.joshy.sketch.build.version"))))
