@@ -201,6 +201,7 @@
                 <include name="bundler.xml"/>
                 <include name="lib/**"/>
                 <include name="Sketch/**"/>
+                <include name="LICENSE.TXT"/>
             </zipfileset>
 <!--            <zipfileset dir="dist/mac" includes="${app.name}.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>-->
         </zip>        
