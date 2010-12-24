@@ -278,10 +278,16 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
 
     private void rebuildSymbolMenu(final Menubar menubar) {
         VectorDocContext context = this;
-        if(context.symbolMenu != null) {
-            menubar.remove(context.symbolMenu);
+
+        //create menu if needed
+        if(context.symbolMenu == null) {
+            context.symbolMenu = new Menu().setTitle(getString("menus.symbolSets"));
+            menubar.add(context.symbolMenu);
         }
-        context.symbolMenu = new Menu().setTitle(getString("menus.symbolSets"));
+        //remove all the items first
+        context.symbolMenu.removeAll();
+
+        //add the 'new symbol set' item
         context.symbolMenu.addItem(getString("menus.create.new.set"), new SAction(){
             @Override
             public void execute() {
@@ -294,7 +300,9 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 }
             }
         });
+        //separator between the 'new symbol set' action and the actual sets
         context.symbolMenu.separator();
+        //add sets
         for(final SymbolManager.SymbolSet set : getMain().symbolManager.sets.values()) {
             context.symbolMenu.addItem(set.file.getName(), new SAction(){
                 @Override
@@ -304,7 +312,6 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 }
             });
         }
-        menubar.add(context.symbolMenu);
     }
 
 
