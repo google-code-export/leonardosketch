@@ -429,7 +429,7 @@ public class Main implements Runnable {
                                 getString("dialog.dontsave").toString(),
                                 getString("dialog.cancel").toString());
                         if(result== StandardDialog.Result.Yes) {
-                            new SaveAction(context,false).execute();
+                            new SaveAction(context,false,true).execute();
                         }
                         if(result==StandardDialog.Result.No) {
                             context.getStage().hide();
@@ -456,7 +456,7 @@ public class Main implements Runnable {
                             getString("dialog.dontsave").toString(),
                             getString("dialog.cancel").toString());
                     if(result== StandardDialog.Result.Yes) {
-                        new SaveAction(context,false).execute();
+                        new SaveAction(context,false,true).execute();
                     }
                     if(result==StandardDialog.Result.No) {
                         context.getStage().hide();
@@ -474,6 +474,7 @@ public class Main implements Runnable {
     }
 
     private void closeWindow(DocContext context) {
+        context.getStage().hide();
         contexts.remove(context);
         rebuildWindowMenu();
         if(contexts.isEmpty()) {
@@ -483,7 +484,7 @@ public class Main implements Runnable {
 
     private void showDocChooser() {
         final Stage stage = Stage.createStage();
-        Panel panel = new VFlexBox();
+        VFlexBox panel = new VFlexBox();
         for(final DocModeHelper mode : modeHelpers) {
             panel.add(new Button(getString("misc.new").toString() + mode.getModeName()).onClicked(new Callback<ActionEvent>(){
                 public void call(ActionEvent event) throws Exception {
@@ -493,6 +494,16 @@ public class Main implements Runnable {
                 }
             }));
         }
+
+        panel.add(new Button("Open Existing Document").onClicked(new Callback<ActionEvent>(){
+            public void call(ActionEvent actionEvent) throws Exception {
+                new OpenAction(Main.this).execute();
+                if(!contexts.isEmpty()) {
+                    stage.hide();
+                }
+            }
+        }));
+
         panel.add(new Button("Exit").onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
                 System.exit(0);
@@ -786,7 +797,7 @@ public class Main implements Runnable {
 
     public static void saveSettings() throws IOException {
         u.p("saving settings to : " + SETTINGS_FILE.getAbsolutePath());
-        settings.store(new FileWriter(SETTINGS_FILE),"sketchy settings");
+        settings.store(new FileWriter(SETTINGS_FILE),"Leonardo settings");
     }
 
     private class ShowWindow extends SAction {

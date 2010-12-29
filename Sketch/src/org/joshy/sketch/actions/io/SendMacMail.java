@@ -2,7 +2,6 @@ package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.SAction;
-import org.joshy.sketch.actions.io.SavePNGAction;
 import org.joshy.sketch.modes.DocContext;
 
 import java.io.File;
@@ -34,7 +33,7 @@ public class SendMacMail extends SAction {
             out.println("set theAttachment to \""+file.getAbsolutePath()+"\"");
             out.println("tell application \"Mail\"");
             out.println("    set theMessage to make new outgoing message with properties {visible:true, subject:\""
-                    +"Sketchy doc:"+ context.getDocument().getTitle()+" \","
+                    +"Leonardo doc:"+ context.getDocument().getTitle()+" \","
                     +" content:\"Here's the document I've been working on.\n\n\n\n\"}");
             out.println("    tell content of theMessage");
             out.println("        make new attachment with properties {file name:theAttachment} at after last paragraph");

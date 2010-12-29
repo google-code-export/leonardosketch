@@ -67,7 +67,7 @@ public class OpenAction extends SAction {
         } else {
             FileDialog fd = new FileDialog((Frame)null);
             fd.setMode(FileDialog.LOAD);
-            fd.setTitle("Open Sketchy File");
+            fd.setTitle("Open Leonardo File");
             fd.setVisible(true);
             if(fd.getFile() != null) {
                 File file = new File(fd.getDirectory(),fd.getFile());
@@ -111,10 +111,10 @@ public class OpenAction extends SAction {
 
         Log.removeCollector(col);
         if(col.hasErrors()) {
-            LogDialog.show("There were errors while loading the application",col);
+            LogDialog.show("There were errors while loading the file",col);
         }
         if(col.hasWarnings()) {
-            LogDialog.show("There were warnings while loading the application",col);
+            LogDialog.show("There were warnings while loading the file",col);
         }
         if(col.hasInfo()) {
             //LogDialog.show("there were infos while loading the application");
