@@ -45,8 +45,8 @@ public class DrawNgonTool extends CanvasTool {
         
         panel.add(new Checkbox("Star").onClicked(new Callback<ActionEvent>(){
             public void call(ActionEvent actionEvent) throws Exception {
+                isStar = ((Button)actionEvent.getSource()).isSelected();
                 if(node != null) {
-                    isStar = ((Button)actionEvent.getSource()).isSelected();
                     node.setStar(isStar);
                 }
                 context.redraw();
@@ -106,6 +106,8 @@ public class DrawNgonTool extends CanvasTool {
         } else {
             start = cursor;
             node = new NGon(nValue);
+            node.setRadius(0);
+            node.setInnerRadius(0);
             node.setStar(isStar);
             node.setTranslateX(start.getX());
             node.setTranslateY(start.getY());
@@ -127,6 +129,7 @@ public class DrawNgonTool extends CanvasTool {
             angle = angle - Math.PI/2;
             node.setAngle(angle);
             node.setRadius(radius);
+            node.setInnerRadius(radius/2);
             context.redraw();
         }
     }
