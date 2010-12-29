@@ -24,11 +24,6 @@ public class SaveAction extends SAction {
     private boolean useZip;
 
 
-    public SaveAction(DocContext context, boolean forceSaveAs) {
-        this.context = context;
-        this.forceSaveAs = forceSaveAs;
-    }
-
     public SaveAction(DocContext context, boolean forceSaveAs, boolean useZip) {
         this.context = context;
         this.forceSaveAs = forceSaveAs;
@@ -38,7 +33,7 @@ public class SaveAction extends SAction {
     @Override
     public void execute() {
         u.p("saving a file");
-        String extension = ".sketchy";
+        String extension = ".leo";
         if(useZip) {
             extension = ".leoz";
         }
