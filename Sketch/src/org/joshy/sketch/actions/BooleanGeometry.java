@@ -96,10 +96,19 @@ public class BooleanGeometry {
             this.context = context;
             EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, new Callback<Selection.SelectionChangeEvent>() {
                 public void call(Selection.SelectionChangeEvent event) throws Exception {
-                    setEnabled(event.getSelection().size() >= 2);
+                    setEnabled(event.getSelection().size() >= 2 && isOnlyShapes(event.getSelection()));
                 }
             });
 
+        }
+
+        protected boolean isOnlyShapes(Selection selection) {
+            for(SNode n : selection.items()) {
+                if(!(n instanceof SShape)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         @Override
