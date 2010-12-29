@@ -41,7 +41,9 @@ public class SArea extends SShape implements SelfDrawable {
 
     @Override
     public Area toArea() {
-        return new Area(this.area);
+        Area a = new Area(this.area);
+        a.transform(AffineTransform.getTranslateInstance(getTranslateX(),getTranslateY()));
+        return a;
     }
 
     public void draw(GFX g) {
