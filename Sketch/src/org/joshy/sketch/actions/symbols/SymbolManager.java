@@ -8,6 +8,7 @@ import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.OpenAction;
 import org.joshy.sketch.actions.io.NativeExport;
 import org.joshy.sketch.model.SNode;
+import org.joshy.sketch.util.Util;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -92,6 +93,23 @@ public class SymbolManager {
                 }
                 throw new Exception("Error making the directory: " + basedir);
             }
+        }
+
+        try {
+            File COMMON_SYMBOLS = new File(basedir, "leo_common.xml");
+            if(!COMMON_SYMBOLS.exists()) {
+                Util.copyToFile(
+                        SymbolManager.class.getResourceAsStream("leo_common.xml")
+                        ,COMMON_SYMBOLS);
+            }
+            File MOCKUPS_SYMBOLS = new File(basedir, "leo_mockups.xml");
+            if(!MOCKUPS_SYMBOLS.exists()) {
+                Util.copyToFile(
+                        SymbolManager.class.getResourceAsStream("leo_mockups.xml")
+                        ,MOCKUPS_SYMBOLS);
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
         for(File file : basedir.listFiles()) {
             if(file.getName().endsWith(".xml") && file.exists()) {
