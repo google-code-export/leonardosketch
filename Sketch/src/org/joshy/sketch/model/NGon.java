@@ -1,7 +1,7 @@
 package org.joshy.sketch.model;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.*;
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.node.Bounds;
 
 import java.awt.*;
@@ -64,10 +64,21 @@ public class NGon extends SShape implements SelfDrawable {
 
     public void draw(GFX g) {
         double[] points = toPoints();
-        g.setPaint(getFillPaint());
-        if(getFillPaint() instanceof FlatColor) {
-            g.setPaint(((FlatColor)getFillPaint()).deriveWithAlpha(getFillOpacity()));
+        Paint paint = this.getFillPaint();
+        if(paint != null) {
+            if(paint instanceof FlatColor) {
+                g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
+            }
+            if(paint instanceof GradientFill) {
+                GradientFill gf = (GradientFill) paint;
+                gf = gf.translate(-getRadius(),-getRadius());
+                g.setPaint(gf);
+            }
+            if(paint instanceof PatternPaint) {
+                g.setPaint(paint);
+            }
         }
+
         g.fillPolygon(points);
         g.setPaint(getStrokePaint());
         g.setStrokeWidth(getStrokeWidth());

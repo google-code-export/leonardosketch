@@ -1,10 +1,8 @@
 package org.joshy.sketch.model;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -96,15 +94,21 @@ public class SPath extends SShape implements SelfDrawable {
             }
         }
 
-        Paint fp = node.getFillPaint();
         if(node.isClosed()) {
-            if(fp != null) {
-                if(fp instanceof FlatColor) {
-                    fp = ((FlatColor)fp).deriveWithAlpha(node.getFillOpacity());
+            Paint paint = node.getFillPaint();
+            if(paint != null) {
+                if(paint instanceof FlatColor) {
+                    g.setPaint(((FlatColor)paint).deriveWithAlpha(node.getFillOpacity()));
                 }
-                g.setPaint(fp);
+                if(paint instanceof GradientFill) {
+                    g.setPaint(paint);
+                }
+                if(paint instanceof PatternPaint) {
+                    g.setPaint(paint);
+                }
                 g.fillPath(pth);
             }
+
         }
 
         if(node.getStrokeWidth() > 0 && node.getStrokePaint() != null) {
@@ -198,7 +202,6 @@ public class SPath extends SShape implements SelfDrawable {
         c.cx2 = co[8]; c.cy2 = co[9];
         b.cx1 = co[10]; b.cy1 = co[11];
         b.x = co[12];   b.y = co[13];
-        u.p("added the new point: " + c.x + " " + c.y);
         points.add(location.index+1,c);
         return c;
     }

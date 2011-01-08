@@ -18,8 +18,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GradientHandle extends Handle implements SRect.SRectUpdateListener {
-    private SRect rect;
+public class GradientHandle extends Handle implements AbstractResizeableNode.SRectUpdateListener {
+    private SShape shape;
     private GradientPosition pos;
     private List<Control> controls;
     private SwatchColorPicker colorPopup;
@@ -27,11 +27,13 @@ public class GradientHandle extends Handle implements SRect.SRectUpdateListener 
     private boolean xSnapped = false;
     private boolean ySnapped = false;
 
-    public GradientHandle(SRect rect, GradientPosition pos, VectorDocContext context) {
+    public GradientHandle(SShape shape, GradientPosition pos, VectorDocContext context) {
         super();
-        this.rect = rect;
-        this.rect.addListener(this);
-        GradientFill grad = (GradientFill) rect.getFillPaint();
+        this.shape = shape;
+        if(shape instanceof AbstractResizeableNode) {
+            ((AbstractResizeableNode)this.shape).addListener(this);
+        }
+        GradientFill grad = (GradientFill) shape.getFillPaint();
         this.context = context;
         this.pos = pos;
 
@@ -40,7 +42,7 @@ public class GradientHandle extends Handle implements SRect.SRectUpdateListener 
         colorPopup.setPrefHeight(10);
         colorPopup.onColorSelected(new Callback<ChangedEvent>() {
             public void call(ChangedEvent changedEvent) throws Exception {
-                GradientFill grad = (GradientFill) GradientHandle.this.rect.getFillPaint();
+                GradientFill grad = (GradientFill) GradientHandle.this.shape.getFillPaint();
                 FlatColor val = (FlatColor) changedEvent.getValue();
                 if(val == null) {
                     val = FlatColor.WHITE_TRANSPARENT;
@@ -63,6 +65,10 @@ public class GradientHandle extends Handle implements SRect.SRectUpdateListener 
         updated();
     }
 
+    private GradientFill getFill() {
+        return (GradientFill) shape.getFillPaint();
+    }
+
     @Override
     public boolean hasControls() {
         return true;
@@ -75,22 +81,40 @@ public class GradientHandle extends Handle implements SRect.SRectUpdateListener 
 
     @Override
     public double getX() {
-        GradientFill grad = (GradientFill) rect.getFillPaint();
+        GradientFill grad = getFill();
         if(pos == GradientHandle.GradientPosition.Start) {
-            return rect.getTranslateX()+rect.getX()+grad.getStartX();
+            /*
+            double v = shape.getTranslateX()+grad.getStartX();
+            if(shape instanceof AbstractResizeableNode) {
+                v += ((AbstractResizeableNode)shape).getX();
+            } else {
+                v = shape.getBounds().getX() + grad.getStartX();
+            } */
+            return shape.getBounds().getX() + grad.getStartX();
+            //return v;
         } else {
-            return rect.getTranslateX()+rect.getX()+grad.getEndX();
+            /*
+            double v = shape.getTranslateX()+grad.getEndX();
+            if(shape instanceof AbstractResizeableNode) {
+                v += ((AbstractResizeableNode)shape).getX();
+            } else {
+                v = shape.getBounds().getX() + grad.getEndX();
+            } */
+            return shape.getBounds().getX() + grad.getEndX();
+            //return v;
         }
     }
 
     @Override
     public void setX(double x, boolean constrain) {
-        x = x - rect.getTranslateX() - rect.getX();
+        x = x - shape.getBounds().getX();
         xSnapped = true;
         x = snapX(x, 0);
-        x = snapX(x, rect.getWidth()/2);
-        x = snapX(x, rect.getWidth());
-        GradientFill grad = (GradientFill) rect.getFillPaint();
+        if(shape instanceof AbstractResizeableNode) {
+            x = snapX(x,((AbstractResizeableNode)shape).getWidth()/2);
+            x = snapX(x,((AbstractResizeableNode)shape).getWidth());
+        }
+        GradientFill grad = getFill();
         if(pos == GradientHandle.GradientPosition.Start) {
             updateGrad(x,grad.getStartY());
         } else {
@@ -101,22 +125,41 @@ public class GradientHandle extends Handle implements SRect.SRectUpdateListener 
 
     @Override
     public double getY() {
-        GradientFill grad = (GradientFill) rect.getFillPaint();
+        GradientFill grad = getFill();
         if(pos == GradientHandle.GradientPosition.Start) {
-            return rect.getTranslateY()+rect.getY()+grad.getStartY();
+            return shape.getBounds().getY() + grad.getStartY();
+            /*
+            double v = shape.getTranslateY()+grad.getStartY();
+            if(shape instanceof AbstractResizeableNode) {
+                v += ((AbstractResizeableNode)shape).getY();
+            }
+            return v;*/
+            //return shape.getTranslateY()+rect.getY()+grad.getStartY();
         } else {
-            return rect.getTranslateY()+rect.getY()+grad.getEndY();
+            //return shape.getTranslateY()+rect.getY()+grad.getEndY();
+            /*double v = shape.getTranslateY()+grad.getEndY();
+            if(shape instanceof AbstractResizeableNode) {
+                v += ((AbstractResizeableNode)shape).getY();
+            }
+            return v;*/
+            return shape.getBounds().getY() + grad.getEndY();
         }
     }
 
     @Override
     public void setY(double y, boolean constrain) {
-        y = y-rect.getTranslateY()-rect.getY();
+        y = y -shape.getBounds().getY();
+        //y = y-shape.getTranslateY();
+        //if(shape instanceof AbstractResizeableNode) {
+//            y -= ((AbstractResizeableNode)shape).getY();
+//        }
         ySnapped = false;
         y = snapY(y, 0);
-        y = snapY(y, rect.getHeight() / 2);
-        y = snapY(y, rect.getHeight());
-        GradientFill grad = (GradientFill) rect.getFillPaint();
+        if(shape instanceof AbstractResizeableNode) {
+            y = snapY(y,((AbstractResizeableNode)shape).getHeight()/2);
+            y = snapY(y,((AbstractResizeableNode)shape).getHeight());
+        }
+        GradientFill grad = getFill();
         if(pos == GradientHandle.GradientPosition.Start) {
             updateGrad(grad.getStartX(),y);
         } else {
@@ -127,7 +170,7 @@ public class GradientHandle extends Handle implements SRect.SRectUpdateListener 
 
     @Override
     public void draw(GFX g, SketchCanvas canvas) {
-        if(!(rect.getFillPaint() instanceof GradientFill)) return;
+        if(!(shape.getFillPaint() instanceof GradientFill)) return;
 
         Point2D pt = new Point2D.Double(getX(),getY());
         pt = canvas.transformToDrawing(pt);
@@ -135,10 +178,10 @@ public class GradientHandle extends Handle implements SRect.SRectUpdateListener 
         double x = pt.getX();
         double y = pt.getY();
 
-        GradientFill grad = (GradientFill) rect.getFillPaint();
+        GradientFill grad = getFill();
 
         if(this.pos == GradientPosition.Start) {
-            Bounds bounds = rect.getBounds();
+            Bounds bounds = shape.getBounds();
             Point2D start = canvas.transformToDrawing(bounds.getX()+grad.getStartX(),bounds.getY()+grad.getStartY());
             Point2D end = canvas.transformToDrawing(bounds.getX()+grad.getEndX(),bounds.getY()+grad.getEndY());
             g.setPaint(FlatColor.BLACK);
@@ -168,17 +211,17 @@ public class GradientHandle extends Handle implements SRect.SRectUpdateListener 
     }
 
     private void updateGrad(double x, double y) {
-        GradientFill grad = (GradientFill) rect.getFillPaint();
+        GradientFill grad = getFill();
         switch (pos) {
             case Start:
                 grad = grad.derive(x,y,grad.getEndX(),grad.getEndY());
                 grad.setStartSnapped(xSnapped && ySnapped);
-                rect.setFillPaint(grad);
+                shape.setFillPaint(grad);
                 break;
             case End:
                 grad = grad.derive(grad.getStartX(),grad.getStartY(),x,y);
                 grad.setEndSnapped(xSnapped && ySnapped);
-                rect.setFillPaint(grad);
+                shape.setFillPaint(grad);
                 break;
         }
     }

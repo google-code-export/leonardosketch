@@ -1,10 +1,14 @@
 package org.joshy.sketch.model;
 
+import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.node.Bounds;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractResizeableNode extends SShape implements SResizeableNode {
+    private List<SRectUpdateListener> listeners = new ArrayList<SRectUpdateListener>();
     public double width = 100;
     public double height = 100;
     private double x = 0;
@@ -27,6 +31,8 @@ public abstract class AbstractResizeableNode extends SShape implements SResizeab
 
     public void setWidth(double width) {
         this.width = width;
+        rescaleGradient();
+        fireUpdate();
     }
 
     public double getHeight() {
@@ -35,6 +41,8 @@ public abstract class AbstractResizeableNode extends SShape implements SResizeab
 
     public void setHeight(double height) {
         this.height = height;
+        rescaleGradient();
+        fireUpdate();
     }
 
     public double getY() {
@@ -47,6 +55,18 @@ public abstract class AbstractResizeableNode extends SShape implements SResizeab
 
     public void setX(double x) {
         this.x = x;
+    }
+
+    @Override
+    public void setTranslateX(double translateX) {
+        super.setTranslateX(translateX);
+        fireUpdate();
+    }
+
+    @Override
+    public void setTranslateY(double translateY) {
+        super.setTranslateY(translateY);
+        fireUpdate();
     }
 
     @Override
@@ -86,5 +106,51 @@ public abstract class AbstractResizeableNode extends SShape implements SResizeab
 
     public boolean constrainByDefault() {
         return false;
+    }
+
+    public void addListener(GradientHandle gradientHandle) {
+        listeners.add(gradientHandle);
+    }
+
+    protected void fireUpdate() {
+        if(listeners != null) {
+            for(SRectUpdateListener c : listeners) {
+                c.updated();
+            }
+        }
+    }
+
+    public static interface SRectUpdateListener {
+        public void updated();
+    }
+
+    private void rescaleGradient() {
+        if(getFillPaint() instanceof GradientFill) {
+            GradientFill grad = (GradientFill) getFillPaint();
+            if(grad.isStartSnapped() && grad.isEndSnapped()) {
+                double sx = grad.getStartX();
+                double sy = grad.getStartY();
+                double ex = grad.getEndX();
+                double ey = grad.getEndY();
+                if(grad.getStartY() == 0)  sy = 0;
+                if(grad.getStartY() > getHeight()/3 && grad.getStartY() < getHeight()/3*2) sy = getHeight()/2;
+                if(grad.getStartY() > getHeight()/3*2) sy = getHeight();
+
+                if(grad.getEndY() == 0) ey = 0;
+                if(grad.getEndY() > getHeight()/3 && grad.getEndY() < getHeight()/3*2) ey = getHeight()/2;
+                if(grad.getEndY() > getHeight()/3*2) ey = getHeight();
+
+                if(grad.getStartX() == 0) sx = 0;
+                if(grad.getStartX() > getWidth()/3 && grad.getStartY()<getWidth()/3*2) sx = getWidth()/2;
+                if(grad.getStartX() > getWidth()/3*2) sx = getWidth();
+
+                if(grad.getEndX() == 0) ex = 0;
+                if(grad.getEndX() > getWidth()/3 && grad.getEndX()<getWidth()/3*2) ex = getWidth()/2;
+                if(grad.getEndX() > getWidth()/3*2) ex = getWidth();
+
+                grad = grad.derive(sx,sy,ex,ey);
+                setFillPaint(grad);
+            }
+        }
     }
 }

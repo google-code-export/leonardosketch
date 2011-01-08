@@ -1,7 +1,6 @@
 package org.joshy.sketch.model;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.node.Bounds;
 
 import java.awt.geom.*;
@@ -111,10 +110,21 @@ public class SPoly extends SShape implements SelfDrawable {
     }
 
     public void draw(GFX g) {
-        g.setPaint(this.getFillPaint());
-        if(getFillPaint() instanceof FlatColor) {
-            g.setPaint(((FlatColor)getFillPaint()).deriveWithAlpha(getFillOpacity()));
-        }        
+        Paint paint = this.getFillPaint();
+        if(paint != null) {
+            if(paint instanceof FlatColor) {
+                g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
+            }
+            if(paint instanceof GradientFill) {
+                GradientFill gf = (GradientFill) paint;
+                gf = gf.translate(bounds.getX(),bounds.getY());
+                g.setPaint(gf);
+            }
+            if(paint instanceof PatternPaint) {
+                g.setPaint(paint);
+            }
+        }
+
         double[] points = new double[this.pointCount()*2];
         for(int i=0; i<this.pointCount(); i++) {
             points[i*2] = this.getPoint(i).getX();

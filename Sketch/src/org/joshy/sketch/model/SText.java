@@ -1,8 +1,6 @@
 package org.joshy.sketch.model;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.*;
 
 import java.awt.geom.Area;
 
@@ -105,9 +103,19 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
     }
 
     public void draw(GFX g) {
-        g.setPaint(this.getFillPaint());
-        if(getFillPaint() instanceof FlatColor) {
-            g.setPaint(((FlatColor)getFillPaint()).deriveWithAlpha(getFillOpacity()));
+        Paint paint = this.getFillPaint();
+        if(paint != null) {
+            if(paint instanceof FlatColor) {
+                g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
+            }
+            if(paint instanceof GradientFill) {
+                GradientFill gf = (GradientFill) paint;
+                gf = gf.translate(getX(),getY());
+                g.setPaint(gf);
+            }
+            if(paint instanceof PatternPaint) {
+                g.setPaint(paint);
+            }
         }
         Font font = Font.name(getFontName())
                 .size((float)this.getFontSize())
@@ -120,7 +128,6 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
             g.drawText(getText(), font,
                     this.getX() + getWidth()/2-w/2,
                     this.getY() + font.getAscender() + getHeight()/2 - h/2);
-//            g.drawRect(getX(),getY(),getWidth(),getHeight());
         } else {
             g.drawText(this.text, font, this.getX(), this.getY() + font.getAscender());
         }

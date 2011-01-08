@@ -1,10 +1,7 @@
 package org.joshy.sketch.controls;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.GradientFill;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.NodeUtils;
@@ -23,6 +20,7 @@ import org.joshy.sketch.property.PropertyManager;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
+import java.net.URL;
 
 import static org.joshy.gfx.util.localization.Localization.getString;
 
@@ -43,6 +41,8 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private VectorDocContext context;
     private FlatColor gradient1 = new FlatColor(0,0,0,0);
     private static final GradientFill GRADIENT1 =new GradientFill(FlatColor.BLACK, FlatColor.RED,0,false, 50,0,50,100);
+    private FlatColor texture1 = new FlatColor(0,0,0,0);
+    private static PatternPaint TEXTURE1;
     private PopupMenuButton<SArrow.HeadEnd> arrowHeadEnd;
     private Label rgbLabel;
     private Label fontSizeLabel;
@@ -56,9 +56,11 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
         this.context = context;
+        URL url = SShape.class.getResource("resources/button1.png");
+        TEXTURE1 = PatternPaint.create(url);
+
+
         setFill(FlatColor.RED);
-        //setPrefWidth(200);
-        //setHeight(200);
         this.manager = manager;
         selected = false;
 
@@ -81,6 +83,16 @@ public class FloatingPropertiesPanel extends VFlexBox {
                 return gradient1;
             }
         });
+        colorButton.addCustomSwatch(new SwatchColorPicker.CustomSwatch(){
+            public void draw(GFX gfx, double x, double y, double w, double h) {
+                gfx.setPaint(TEXTURE1);
+                gfx.fillRect(x,y,w,h);
+            }
+
+            public FlatColor getColor() {
+                return texture1;
+            }
+        });
         colorButton.setOutsideColorCallback(colorCallback);
 
 
@@ -92,7 +104,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
             }
         });
         strokeColorButton = new SwatchColorPicker();
-        EventBus.getSystem().addListener(ChangedEvent.ColorChanged, colorChangeCallback);//new ColorChangeCallback(manager, context));
+        EventBus.getSystem().addListener(ChangedEvent.ColorChanged, colorChangeCallback);
         shapeProperties.add(colorButton);
         shapeProperties.add(strokeColorButton);
 
@@ -422,25 +434,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
             if(event.getSource() == colorButton) {
                 FlatColor color = (FlatColor) event.getValue();
                 if(manager.propMan.isClassAvailable(SShape.class)) {
-                    if(color == gradient1) {
-                        if(manager.propMan.isClassAvailable(SRect.class)) {
-                            PropertyManager.Property prop = manager.propMan.getProperty("fillPaint");
-                            SRect rect = (SRect) context.getSelection().firstItem();
-                            if(prop.hasSingleValue() && prop.getValue() instanceof GradientFill) {
-                                //do nothing
-                            } else {
-                                prop.setValue(GRADIENT1.derive(
-                                        rect.getWidth()/2,
-                                        0,
-                                        rect.getWidth()/2,
-                                        rect.getHeight()
-                                        ));
-                            }
-                        }
-                        //don't set the color if its a gradient but this isn't a rect
-                    } else {
-                        manager.propMan.getProperty("fillPaint").setValue(color);
-                    }
+                    setFillStuff(color);
                     Selection sel = context.getSelection();
                     if(sel.size() == 1){
                         sel.regenHandles(sel.firstItem());
@@ -457,6 +451,46 @@ public class FloatingPropertiesPanel extends VFlexBox {
             }
         }
     };
+
+    private void setFillStuff(FlatColor color) {
+        if(color == gradient1) {
+            if(manager.propMan.isClassAvailable(SShape.class)) {
+                PropertyManager.Property prop = manager.propMan.getProperty("fillPaint");
+                if(prop.hasSingleValue() && prop.getValue() instanceof GradientFill) {
+                    //do nothing
+                } else {
+                    if(manager.propMan.isClassAvailable(SRect.class)) {
+                        SRect rect = (SRect) context.getSelection().firstItem();
+                        prop.setValue(GRADIENT1.derive(
+                                rect.getWidth()/2,
+                                0,
+                                rect.getWidth()/2,
+                                rect.getHeight()
+                                ));
+                    } else {
+                        //SShape shape = (SShape) context.getSelection().firstItem();
+                        prop.setValue(GRADIENT1.derive(10,10,100,100));
+                    }
+                }
+            }
+            //don't set the color if its a gradient but this isn't a shape
+            return;
+        }
+        if(color == texture1) {
+            if(manager.propMan.isClassAvailable(SShape.class)) {
+                PropertyManager.Property prop = manager.propMan.getProperty("fillPaint");
+                //SShape shape = (SShape) context.getSelection().firstItem();
+                if(prop.hasSingleValue() && prop.getValue() instanceof GradientFill) {
+                    //do nothing
+                } else {
+                    prop.setValue(TEXTURE1);
+                }
+            }
+            return;
+        }
+        //if just a normal color
+        manager.propMan.getProperty("fillPaint").setValue(color);
+    }
 
     private Callback<ChangedEvent> fillOpacityCallback = new Callback<ChangedEvent>() {
         public void call(ChangedEvent event) throws Exception {
