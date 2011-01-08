@@ -291,11 +291,14 @@ public class SelectMoveTool extends CanvasTool {
                         return;
                     }
                     if(r instanceof SArrow) {
-                        SArrow a = (SArrow) r;
+                        //SArrow a = (SArrow) r;
                         selectedHandle = h;
                         fadeInIndicator();
                         return;
                     }
+                    selectedHandle = h;
+                    fadeInIndicator();
+                    return;
                 }
             }
         }

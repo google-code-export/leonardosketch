@@ -1,6 +1,6 @@
 package org.joshy.sketch.model;
 
-import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.node.Bounds;
 
 import java.awt.geom.*;
@@ -51,8 +51,19 @@ public class SArea extends SShape implements SelfDrawable {
         Path2D.Double pth = new Path2D.Double();
         pth.append(it,false);
 
-        g.setPaint(getFillPaint());        
-        g.fillPath(pth);
+        Paint paint = getFillPaint();
+        if(paint != null) {
+            if(paint instanceof FlatColor) {
+                g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
+            }
+            if(paint instanceof GradientFill) {
+                g.setPaint(paint);
+            }
+            if(paint instanceof PatternPaint) {
+                g.setPaint(paint);
+            }
+            g.fillPath(pth);
+        }
         g.setPaint(getStrokePaint());
         g.setStrokeWidth(getStrokeWidth());
         g.drawPath(pth);

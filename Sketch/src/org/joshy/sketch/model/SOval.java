@@ -1,7 +1,6 @@
 package org.joshy.sketch.model;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.*;
 
 import java.awt.geom.Area;
 
@@ -34,10 +33,16 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
     }
 
     public void draw(GFX g) {
-        if(getFillPaint() != null) {
-            g.setPaint(this.getFillPaint());
-            if(getFillPaint() instanceof FlatColor) {
-                g.setPaint(((FlatColor)getFillPaint()).deriveWithAlpha(getFillOpacity()));
+        Paint paint = this.getFillPaint();
+        if(paint != null) {
+            if(paint instanceof FlatColor) {
+                g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
+            }
+            if(paint instanceof GradientFill) {
+                g.setPaint(paint);
+            }
+            if(paint instanceof PatternPaint) {
+                g.setPaint(paint);
             }
             g.fillOval(this.getX(), this.getY(), this.getWidth(), this.getHeight());
         }

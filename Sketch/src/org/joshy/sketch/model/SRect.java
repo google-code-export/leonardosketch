@@ -1,16 +1,11 @@
 package org.joshy.sketch.model;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.GradientFill;
-import org.joshy.gfx.draw.Paint;
+import org.joshy.gfx.draw.*;
 import org.joshy.sketch.canvas.SketchCanvas;
 import org.joshy.sketch.util.DrawUtils;
 
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,7 +16,6 @@ import java.util.List;
  */
 public class SRect extends AbstractResizeableNode implements SelfDrawable {
     private double corner = 0;
-    private List<SRectUpdateListener> listeners = new ArrayList<SRectUpdateListener>();
 
     public SRect(double x, double y, double w, double h) {
         super(x, y, w, h);
@@ -36,69 +30,6 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
         fireUpdate();
     }
 
-    @Override
-    public void setTranslateX(double translateX) {
-        super.setTranslateX(translateX);
-        fireUpdate();
-    }
-
-    @Override
-    public void setTranslateY(double translateY) {
-        super.setTranslateY(translateY);
-        fireUpdate();
-    }
-
-    @Override
-    public void setWidth(double width) {
-        super.setWidth(width);
-        rescaleGradient();
-        fireUpdate();
-    }
-
-    @Override
-    public void setHeight(double height) {
-        super.setHeight(height);
-        rescaleGradient();
-        fireUpdate();
-    }
-
-    private void rescaleGradient() {
-        if(getFillPaint() instanceof GradientFill) {
-            GradientFill grad = (GradientFill) getFillPaint();
-            if(grad.isStartSnapped() && grad.isEndSnapped()) {
-                double sx = grad.getStartX();
-                double sy = grad.getStartY();
-                double ex = grad.getEndX();
-                double ey = grad.getEndY();
-                if(grad.getStartY() == 0)  sy = 0;
-                if(grad.getStartY() > getHeight()/3 && grad.getStartY() < getHeight()/3*2) sy = getHeight()/2;
-                if(grad.getStartY() > getHeight()/3*2) sy = getHeight();
-
-                if(grad.getEndY() == 0) ey = 0;
-                if(grad.getEndY() > getHeight()/3 && grad.getEndY() < getHeight()/3*2) ey = getHeight()/2;
-                if(grad.getEndY() > getHeight()/3*2) ey = getHeight();
-
-                if(grad.getStartX() == 0) sx = 0;
-                if(grad.getStartX() > getWidth()/3 && grad.getStartY()<getWidth()/3*2) sx = getWidth()/2;
-                if(grad.getStartX() > getWidth()/3*2) sx = getWidth();
-
-                if(grad.getEndX() == 0) ex = 0;
-                if(grad.getEndX() > getWidth()/3 && grad.getEndX()<getWidth()/3*2) ex = getWidth()/2;
-                if(grad.getEndX() > getWidth()/3*2) ex = getWidth();
-
-                grad = grad.derive(sx,sy,ex,ey);
-                setFillPaint(grad);
-            }
-        }
-    }
-
-    private void fireUpdate() {
-        if(listeners != null) {
-            for(SRectUpdateListener c : listeners) {
-                c.updated();
-            }
-        }
-    }
 
     public double getCorner() {
         return corner;
@@ -133,6 +64,9 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
             if(paint instanceof GradientFill) {
                 g.setPaint(paint);
             }
+            if(paint instanceof PatternPaint) {
+                g.setPaint(paint);
+            }
             if(this.getCorner() > 0) {
                 g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),this.getCorner(),this.getCorner());
             } else {
@@ -152,10 +86,6 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
 
         g.translate(-this.getX(),-this.getY());
         g.setStrokeWidth(1);
-    }
-
-    public void addListener(GradientHandle gradientHandle) {
-        listeners.add(gradientHandle);
     }
 
 
@@ -210,7 +140,4 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
         }
     }
 
-    public static interface SRectUpdateListener {
-        public void updated();
-    }
 }

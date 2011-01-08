@@ -6,6 +6,7 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Container;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
@@ -87,17 +88,17 @@ public class Selection {
                 SRect rect = (SRect) rnode;
                 hs.add(new SRect.RoundRectMasterHandle(rect));
             }
-            if(rnode instanceof SRect) {
-                SRect rect = (SRect) rnode;
-                if(rect.getFillPaint() instanceof GradientFill) {
-                    hs.add(new GradientHandle(rect, GradientHandle.GradientPosition.Start, context));
-                    hs.add(new GradientHandle(rect, GradientHandle.GradientPosition.End, context));
-                }
-            }
             hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopLeft));
             hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopRight));
             hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomLeft));
             hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomRight));
+        }
+        if(node instanceof SShape) {
+            SShape shape = (SShape) node;
+            if(shape.getFillPaint() instanceof GradientFill) {
+                hs.add(new GradientHandle(shape, GradientHandle.GradientPosition.Start, context));
+                hs.add(new GradientHandle(shape, GradientHandle.GradientPosition.End, context));
+            }
         }
         if(node instanceof SArrow) {
             SArrow arrow = (SArrow) node;
