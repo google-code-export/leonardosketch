@@ -167,7 +167,6 @@ public class GradientHandle extends Handle implements AbstractResizeableNode.SRe
 
         DrawUtils.drawStandardHandle(g, x, y, FlatColor.GREEN);
 
-
     }
 
     private double snapX(double x, double value) {
@@ -177,6 +176,7 @@ public class GradientHandle extends Handle implements AbstractResizeableNode.SRe
         }
         return x;
     }
+
     private double snapY(double y, double value) {
         if(Math.abs(y-value)<5) {
             y = value;

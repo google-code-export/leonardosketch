@@ -1,6 +1,7 @@
 package org.joshy.sketch.canvas;
 
 import org.joshy.gfx.draw.GradientFill;
+import org.joshy.gfx.draw.PatternPaint;
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
@@ -17,11 +18,14 @@ import java.util.*;
 public class Selection {
     private Map<SNode,List<Handle>> selected;
     private VectorDocContext context;
+    private List<Control> handleControls = new ArrayList<Control>();
+
 
     public Selection(VectorDocContext context) {
         this.context = context;
         selected = new HashMap<SNode,List<Handle>>();
     }
+
 
     public void setSelectedNode(SNode node) {
         if(selected.containsKey(node)) {
@@ -38,6 +42,7 @@ public class Selection {
         fireEvents();
     }
 
+
     public void addSelectedNode(SNode node) {
         if(selected.containsKey(node)) {
             List<Handle> handles = selected.get(node);
@@ -51,9 +56,11 @@ public class Selection {
         fireEvents();
     }
 
+
     private void fireEvents() {
         EventBus.getSystem().publish(new SelectionChangeEvent(this));
     }
+
 
     public void regenHandles(SNode node) {
         List<Handle> handles = selected.get(node);
@@ -76,7 +83,7 @@ public class Selection {
         regenHandleControls(node);
     }
 
-    private List<Control> handleControls = new ArrayList<Control>();
+
     private void regenHandleControls(SNode node) {
         for(Handle h : selected.get(node)) {
             if(h.hasControls()) {
@@ -90,6 +97,8 @@ public class Selection {
             }
         }
     }
+
+
     private void clearHandleControls() {
         for(Control c : handleControls) {
             Container popupLayer = context.getSketchCanvas().getParent().getStage().getPopupLayer();
@@ -119,6 +128,10 @@ public class Selection {
                 hs.add(new GradientHandle(shape, GradientHandle.GradientPosition.Start, context));
                 hs.add(new GradientHandle(shape, GradientHandle.GradientPosition.End, context));
             }
+            if(shape.getFillPaint() instanceof PatternPaint) {
+                hs.add(new PatternHandle(shape, PatternHandle.Position.Move, context));
+                hs.add(new PatternHandle(shape, PatternHandle.Position.Resize, context));
+            }
         }
         if(node instanceof SArrow) {
             SArrow arrow = (SArrow) node;
@@ -128,13 +141,16 @@ public class Selection {
         return hs;
     }
 
+
     public boolean isEmpty() {
         return selected.isEmpty();
     }
 
+
     public Iterable<? extends SNode> items() {
         return Collections.unmodifiableSet(selected.keySet());
     }
+
 
     public void clear() {
         for(SNode n : selected.keySet()) {
@@ -155,13 +171,16 @@ public class Selection {
         return selected.containsKey(node);
     }
 
+
     public Map<SNode,List<Handle>> getHandles() {
         return selected;
     }
 
+
     public int size() {
         return selected.size();
     }
+
 
     public Bounds calculateBounds() {
         double x = Double.MAX_VALUE;
@@ -178,6 +197,7 @@ public class Selection {
         return new Bounds(x,y,x2-x,y2-y);
     }
 
+
     public Iterable<? extends SNode> sortedItems(SketchDocument doc) {
         List<SNode> sorted = new ArrayList<SNode>();
         for(SNode node : doc.getCurrentPage().model) {
@@ -188,9 +208,11 @@ public class Selection {
         return sorted;
     }
 
+
     public SNode firstItem() {
         return items().iterator().next();
     }
+
 
     public List<SNode> duplicate(SketchDocument doc) {
         final List<SNode> dupes = new ArrayList<SNode>();
@@ -201,9 +223,11 @@ public class Selection {
         return dupes;
     }
 
+
     public SketchDocument getDocument() {
         return this.context.getDocument();
     }
+
 
     public  static class SelectionChangeEvent extends Event {
         public static final EventType Changed = new EventType("Changed");
