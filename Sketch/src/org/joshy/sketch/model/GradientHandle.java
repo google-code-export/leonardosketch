@@ -65,6 +65,13 @@ public class GradientHandle extends Handle implements AbstractResizeableNode.SRe
         updated();
     }
 
+    @Override
+    public void detach() {
+        if(shape instanceof AbstractResizeableNode) {
+            ((AbstractResizeableNode)this.shape).removeListener(this);
+        }
+    }
+
     private GradientFill getFill() {
         return (GradientFill) shape.getFillPaint();
     }

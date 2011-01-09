@@ -6,7 +6,6 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Container;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
@@ -25,6 +24,13 @@ public class Selection {
     }
 
     public void setSelectedNode(SNode node) {
+        if(selected.containsKey(node)) {
+            List<Handle> handles = selected.get(node);
+            for(Handle h : handles) {
+                h.detach();
+            }
+            handles.clear();
+        }
         selected.clear();
         clearHandleControls();
         selected.put(node, genHandles(node));
@@ -33,6 +39,13 @@ public class Selection {
     }
 
     public void addSelectedNode(SNode node) {
+        if(selected.containsKey(node)) {
+            List<Handle> handles = selected.get(node);
+            for(Handle h : handles) {
+                h.detach();
+            }
+            handles.clear();
+        }
         selected.put(node, genHandles(node));
         regenHandleControls(node);
         fireEvents();
@@ -50,6 +63,13 @@ public class Selection {
                 popupLayer.remove(c);
                 handleControls.remove(c);
             }
+        }
+        if(selected.containsKey(node)) {
+            List<Handle> handles2 = selected.get(node);
+            for(Handle h : handles2) {
+                h.detach();
+            }
+            handles2.clear();
         }
         selected.remove(node);
         selected.put(node,genHandles(node));
@@ -117,6 +137,14 @@ public class Selection {
     }
 
     public void clear() {
+        for(SNode n : selected.keySet()) {
+            List<Handle> handles2 = selected.get(n);
+            for(Handle h : handles2) {
+                h.detach();
+            }
+            handles2.clear();
+        }
+
         selected.clear();
         clearHandleControls();
         fireEvents();
