@@ -10,6 +10,7 @@ import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.SwatchColorPicker;
 import org.joshy.gfx.node.layout.Container;
+import org.joshy.gfx.util.GeomUtil;
 import org.joshy.sketch.canvas.SketchCanvas;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.util.DrawUtils;
@@ -90,25 +91,9 @@ public class GradientHandle extends Handle implements AbstractResizeableNode.SRe
     public double getX() {
         GradientFill grad = getFill();
         if(pos == GradientHandle.GradientPosition.Start) {
-            /*
-            double v = shape.getTranslateX()+grad.getStartX();
-            if(shape instanceof AbstractResizeableNode) {
-                v += ((AbstractResizeableNode)shape).getX();
-            } else {
-                v = shape.getBounds().getX() + grad.getStartX();
-            } */
             return shape.getBounds().getX() + grad.getStartX();
-            //return v;
         } else {
-            /*
-            double v = shape.getTranslateX()+grad.getEndX();
-            if(shape instanceof AbstractResizeableNode) {
-                v += ((AbstractResizeableNode)shape).getX();
-            } else {
-                v = shape.getBounds().getX() + grad.getEndX();
-            } */
             return shape.getBounds().getX() + grad.getEndX();
-            //return v;
         }
     }
 
@@ -135,20 +120,7 @@ public class GradientHandle extends Handle implements AbstractResizeableNode.SRe
         GradientFill grad = getFill();
         if(pos == GradientHandle.GradientPosition.Start) {
             return shape.getBounds().getY() + grad.getStartY();
-            /*
-            double v = shape.getTranslateY()+grad.getStartY();
-            if(shape instanceof AbstractResizeableNode) {
-                v += ((AbstractResizeableNode)shape).getY();
-            }
-            return v;*/
-            //return shape.getTranslateY()+rect.getY()+grad.getStartY();
         } else {
-            //return shape.getTranslateY()+rect.getY()+grad.getEndY();
-            /*double v = shape.getTranslateY()+grad.getEndY();
-            if(shape instanceof AbstractResizeableNode) {
-                v += ((AbstractResizeableNode)shape).getY();
-            }
-            return v;*/
             return shape.getBounds().getY() + grad.getEndY();
         }
     }
@@ -156,10 +128,6 @@ public class GradientHandle extends Handle implements AbstractResizeableNode.SRe
     @Override
     public void setY(double y, boolean constrain) {
         y = y -shape.getBounds().getY();
-        //y = y-shape.getTranslateY();
-        //if(shape instanceof AbstractResizeableNode) {
-//            y -= ((AbstractResizeableNode)shape).getY();
-//        }
         ySnapped = false;
         y = snapY(y, 0);
         if(shape instanceof AbstractResizeableNode) {
@@ -235,12 +203,22 @@ public class GradientHandle extends Handle implements AbstractResizeableNode.SRe
 
 
     public void updated() {
+        Bounds bounds = shape.getBounds();
+        GradientFill grad = getFill();
+        Point2D start = context.getSketchCanvas().transformToDrawing(bounds.getX()+grad.getStartX(),bounds.getY()+grad.getStartY());
+        Point2D end = context.getSketchCanvas().transformToDrawing(bounds.getX() + grad.getEndX(), bounds.getY() + grad.getEndY());
+        double angle = GeomUtil.calcAngle(start,end);
+
         Point2D pt = context.getSketchCanvas().transformToDrawing(getX(), getY());
         Container popupLayer = context.getSketchCanvas().getParent().getStage().getPopupLayer();
-        pt = NodeUtils.convertToScene(context.getSketchCanvas(),pt);
+        pt = NodeUtils.convertToScene(context.getSketchCanvas(), pt);
         pt = NodeUtils.convertFromScene(popupLayer,pt);
-        colorPopup.setTranslateX((int)(pt.getX()+20));
-        colorPopup.setTranslateY((int)(pt.getY()-size));
+        if(pos == GradientHandle.GradientPosition.Start) {
+            angle += Math.PI;
+        }
+        pt = GeomUtil.calcPoint(pt, Math.toDegrees(angle), 20);
+        colorPopup.setTranslateX((int)(pt.getX()-5));
+        colorPopup.setTranslateY((int)(pt.getY()-5));
     }
 
     public enum GradientPosition {
