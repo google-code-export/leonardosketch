@@ -10,7 +10,6 @@ import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.sketch.Main;
-import org.joshy.sketch.model.SRect;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
@@ -117,9 +116,14 @@ public class FillPicker extends Button {
         };
 
         ListModel<GradientFill> gradientModel = ListView.createModel(gf1, gf2, gf3);
-        PatternPaint pt1 = PatternPaint.create(SRect.class.getResource("resources/button1.png"));
-        PatternPaint pt2 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-1-grey.jpg"));
-        ListModel<PatternPaint> patternModel = ListView.createModel(pt1,pt2);
+        //PatternPaint pt1 = PatternPaint.create(SRect.class.getResource("resources/button1.png"));
+        PatternPaint pt1 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-1-grey.jpg"));
+        PatternPaint pt2 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-2-grey.jpg"));
+        PatternPaint pt3 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-3-grey.jpg"));
+        PatternPaint pt4 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-4-grey.jpg"));
+        PatternPaint pt5 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-5-grey.jpg"));
+        PatternPaint pt6 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-6-grey.jpg"));
+        ListModel<PatternPaint> patternModel = ListView.createModel(pt1,pt2,pt3,pt4,pt5,pt6);
 
         final ListView<Paint> gradientList = new ListView<Paint>()
                 .setModel((ListModel)gradientModel)
