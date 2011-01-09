@@ -120,6 +120,10 @@ public abstract class AbstractResizeableNode extends SShape implements SResizeab
         }
     }
 
+    public void removeListener(GradientHandle gradientHandle) {
+        listeners.remove(gradientHandle);
+    }
+
     public static interface SRectUpdateListener {
         public void updated();
     }

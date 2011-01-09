@@ -48,4 +48,8 @@ public abstract class Handle {
     public Iterable<? extends Control> getControls() {
         return new ArrayList<Control>();
     }
+
+    public void detach() {
+
+    }
 }

@@ -20,14 +20,12 @@ import org.joshy.sketch.property.PropertyManager;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.net.URL;
 
 import static org.joshy.gfx.util.localization.Localization.getString;
 
 public class FloatingPropertiesPanel extends VFlexBox {
     private boolean selected = false;
     private Selection selection;
-    private SwatchColorPicker colorButton;
     private Slider fillOpacitySlider;
     private SwatchColorPicker strokeColorButton;
     private Slider strokeWidthSlider;
@@ -39,10 +37,6 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private Label fillOpacityLabel;
     private Label strokeWidthLabel;
     private VectorDocContext context;
-    private FlatColor gradient1 = new FlatColor(0,0,0,0);
-    private static final GradientFill GRADIENT1 =new GradientFill(FlatColor.BLACK, FlatColor.RED,0,false, 50,0,50,100);
-    private FlatColor texture1 = new FlatColor(0,0,0,0);
-    private static PatternPaint TEXTURE1;
     private PopupMenuButton<SArrow.HeadEnd> arrowHeadEnd;
     private Label rgbLabel;
     private Label fontSizeLabel;
@@ -52,13 +46,11 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private FlexBox shapeProperties;
     private FlexBox fontProperties;
     private FlexBox booleanPropsEditor;
+    private FillPicker fillButton;
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
         this.context = context;
-        URL url = SShape.class.getResource("resources/button1.png");
-        TEXTURE1 = PatternPaint.create(url);
-
 
         setFill(FlatColor.RED);
         this.manager = manager;
@@ -72,40 +64,28 @@ public class FloatingPropertiesPanel extends VFlexBox {
         add(shapeProperties);
         shapeProperties.setVisible(false);
 
-        colorButton = new SwatchColorPicker();
-        colorButton.addCustomSwatch(new SwatchColorPicker.CustomSwatch(){
-            public void draw(GFX gfx, double x, double y, double w, double h) {
-                gfx.setPaint(GRADIENT1.derive(x,y,x,y+h));
-                gfx.fillRect(x,y,w,h);
-            }
-
-            public FlatColor getColor() {
-                return gradient1;
-            }
-        });
-        colorButton.addCustomSwatch(new SwatchColorPicker.CustomSwatch(){
-            public void draw(GFX gfx, double x, double y, double w, double h) {
-                gfx.setPaint(TEXTURE1);
-                gfx.fillRect(x,y,w,h);
-            }
-
-            public FlatColor getColor() {
-                return texture1;
-            }
-        });
-        colorButton.setOutsideColorCallback(colorCallback);
-
-
-        EventBus.getSystem().addListener(colorButton,ChangedEvent.FinalChange, new Callback<ChangedEvent>() {
-            public void call(ChangedEvent changedEvent) throws Exception {
-                if(rgbLabel != null) {
-                    rgbLabel.setVisible(false);
+        fillButton = new FillPicker();
+        EventBus.getSystem().addListener(fillButton,ChangedEvent.ObjectChanged, new Callback<ChangedEvent>() {
+            public void call(ChangedEvent event) throws Exception {
+                if(locked) return;
+                if(event.getSource() == fillButton) {
+                    Paint color = (Paint) event.getValue();
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        setFillStuff(color);
+                        Selection sel = context.getSelection();
+                        if(sel.size() == 1){
+                            sel.regenHandles(sel.firstItem());
+                        }
+                    }
+                    context.redraw();
                 }
+
             }
         });
+
         strokeColorButton = new SwatchColorPicker();
         EventBus.getSystem().addListener(ChangedEvent.ColorChanged, colorChangeCallback);
-        shapeProperties.add(colorButton);
+        shapeProperties.add(fillButton);
         shapeProperties.add(strokeColorButton);
 
 
@@ -288,9 +268,10 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
         if(manager.propMan.isClassAvailable(SShape.class)) {
             shapeProperties.setVisible(true);
-            colorButton.setVisible(true);
+            fillButton.setVisible(true);
             fillOpacitySlider.setVisible(true);
             fillOpacityLabel.setVisible(true);
+            /*
             if(lastNode != null) {
                 PropertyManager.Property fillColorProp = manager.propMan.getProperty("fillPaint");
                 if(fillColorProp.hasSingleValue()) {
@@ -306,10 +287,10 @@ public class FloatingPropertiesPanel extends VFlexBox {
                 if(fillOpacityProp.hasSingleValue()) {
                     fillOpacitySlider.setValue(fillOpacityProp.getDoubleValue()*100.0);
                 }
-            }
+            }*/
         } else {
             shapeProperties.setVisible(false);
-            colorButton.setVisible(false);
+            fillButton.setVisible(false);
             fillOpacitySlider.setVisible(false);
             fillOpacityLabel.setVisible(false);
             strokeColorButton.setVisible(false);
@@ -431,17 +412,6 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private Callback<? extends Event> colorChangeCallback = new Callback<ChangedEvent>() {
         public void call(ChangedEvent event) {
             if(locked) return;
-            if(event.getSource() == colorButton) {
-                FlatColor color = (FlatColor) event.getValue();
-                if(manager.propMan.isClassAvailable(SShape.class)) {
-                    setFillStuff(color);
-                    Selection sel = context.getSelection();
-                    if(sel.size() == 1){
-                        sel.regenHandles(sel.firstItem());
-                    }
-                }
-                context.redraw();
-            }
             if(event.getSource() == strokeColorButton) {
                 if(manager.propMan.isClassAvailable(SShape.class) ||
                         manager.propMan.isClassAvailable(SImage.class)) {
@@ -452,44 +422,19 @@ public class FloatingPropertiesPanel extends VFlexBox {
         }
     };
 
-    private void setFillStuff(FlatColor color) {
-        if(color == gradient1) {
-            if(manager.propMan.isClassAvailable(SShape.class)) {
-                PropertyManager.Property prop = manager.propMan.getProperty("fillPaint");
-                if(prop.hasSingleValue() && prop.getValue() instanceof GradientFill) {
-                    //do nothing
-                } else {
-                    if(manager.propMan.isClassAvailable(SRect.class)) {
-                        SRect rect = (SRect) context.getSelection().firstItem();
-                        prop.setValue(GRADIENT1.derive(
-                                rect.getWidth()/2,
-                                0,
-                                rect.getWidth()/2,
-                                rect.getHeight()
-                                ));
-                    } else {
-                        //SShape shape = (SShape) context.getSelection().firstItem();
-                        prop.setValue(GRADIENT1.derive(10,10,100,100));
-                    }
-                }
-            }
-            //don't set the color if its a gradient but this isn't a shape
-            return;
-        }
-        if(color == texture1) {
-            if(manager.propMan.isClassAvailable(SShape.class)) {
-                PropertyManager.Property prop = manager.propMan.getProperty("fillPaint");
-                //SShape shape = (SShape) context.getSelection().firstItem();
-                if(prop.hasSingleValue() && prop.getValue() instanceof GradientFill) {
-                    //do nothing
-                } else {
-                    prop.setValue(TEXTURE1);
-                }
-            }
+    private void setFillStuff(Paint paint) {
+        //handle the new form from the fill selector
+        PropertyManager.Property prop = manager.propMan.getProperty("fillPaint");
+        if(paint instanceof GradientFill) {
+            GradientFill grad = (GradientFill) paint;
+            Bounds std = new Bounds(0,0,40,40);
+            SShape shape = (SShape) context.getSelection().firstItem();
+            prop.setValue(grad.resize(std, shape.getBounds()));
             return;
         }
         //if just a normal color
-        manager.propMan.getProperty("fillPaint").setValue(color);
+        paint = paint.duplicate();
+        prop.setValue(paint);
     }
 
     private Callback<ChangedEvent> fillOpacityCallback = new Callback<ChangedEvent>() {
