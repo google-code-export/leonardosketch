@@ -9,6 +9,7 @@ import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.sketch.Main;
 import org.joshy.sketch.model.SRect;
 
 import java.awt.geom.Point2D;
@@ -117,7 +118,8 @@ public class FillPicker extends Button {
 
         ListModel<GradientFill> gradientModel = ListView.createModel(gf1, gf2, gf3);
         PatternPaint pt1 = PatternPaint.create(SRect.class.getResource("resources/button1.png"));
-        ListModel<PatternPaint> patternModel = ListView.createModel(pt1);
+        PatternPaint pt2 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-1-grey.jpg"));
+        ListModel<PatternPaint> patternModel = ListView.createModel(pt1,pt2);
 
         final ListView<Paint> gradientList = new ListView<Paint>()
                 .setModel((ListModel)gradientModel)

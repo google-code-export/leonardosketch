@@ -153,6 +153,19 @@
 
     </target>
     
+    <target name="build-picker" depends="build-sketch">
+        <mkdir dir="dist"/>
+        <java
+            classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="--file=hsvpicker.xml"/>
+            <arg value="--target=onejar"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=${amino.core.dir}"/>
+            <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
+        </java>
+    </target>
 
     <macrodef name="unsignjar">
 
