@@ -109,7 +109,23 @@ public class SPoly extends SShape implements SelfDrawable {
         return area;
     }
 
+    @Override
+    protected void fillShape(GFX g) {
+        double[] points = new double[this.pointCount()*2];
+        for(int i=0; i<this.pointCount(); i++) {
+            points[i*2] = this.getPoint(i).getX();
+            points[i*2+1] = this.getPoint(i).getY();
+        }
+        if(this.isClosed()) {
+            g.fillPolygon(points);
+        } else {
+            g.drawPolygon(points,false);
+        }
+    }
+
     public void draw(GFX g) {
+        drawShadow(g);
+
         Paint paint = this.getFillPaint();
         if(paint != null) {
             if(paint instanceof FlatColor) {
@@ -125,15 +141,12 @@ public class SPoly extends SShape implements SelfDrawable {
             }
         }
 
+        fillShape(g);
+
         double[] points = new double[this.pointCount()*2];
         for(int i=0; i<this.pointCount(); i++) {
             points[i*2] = this.getPoint(i).getX();
             points[i*2+1] = this.getPoint(i).getY();
-        }
-        if(this.isClosed()) {
-            g.fillPolygon(points);
-        } else {
-            g.drawPolygon(points,false);
         }
         g.setPaint(this.getStrokePaint());
         g.setStrokeWidth(this.getStrokeWidth());

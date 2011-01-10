@@ -46,10 +46,16 @@ public class SArea extends SShape implements SelfDrawable {
         return a;
     }
 
-    public void draw(GFX g) {
+    @Override
+    protected void fillShape(GFX g) {
         PathIterator it = area.getPathIterator(null);
         Path2D.Double pth = new Path2D.Double();
         pth.append(it,false);
+        g.fillPath(pth);
+    }
+
+    public void draw(GFX g) {
+        drawShadow(g);
 
         Paint paint = getFillPaint();
         if(paint != null) {
@@ -62,12 +68,19 @@ public class SArea extends SShape implements SelfDrawable {
             if(paint instanceof PatternPaint) {
                 g.setPaint(paint);
             }
-            g.fillPath(pth);
+            fillShape(g);
         }
-        g.setPaint(getStrokePaint());
-        g.setStrokeWidth(getStrokeWidth());
-        g.drawPath(pth);
-        g.setStrokeWidth(1);
+
+        if(getStrokeWidth() > 0 && getStrokePaint() != null) {
+            g.setPaint(getStrokePaint());
+            g.setStrokeWidth(getStrokeWidth());
+            PathIterator it = area.getPathIterator(null);
+            Path2D.Double pth = new Path2D.Double();
+            pth.append(it,false);
+            g.drawPath(pth);
+            g.setStrokeWidth(1);
+        }
+
     }
 
     public void setArea(Area area) {

@@ -103,6 +103,7 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
     }
 
     public void draw(GFX g) {
+
         Paint paint = this.getFillPaint();
         if(paint != null) {
             if(paint instanceof FlatColor) {
@@ -117,6 +118,11 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
                 g.setPaint(paint);
             }
         }
+        drawShadow(g);
+        fillShape(g);
+    }
+
+    protected void fillShape(GFX g) {
         Font font = Font.name(getFontName())
                 .size((float)this.getFontSize())
                 .weight(this.getWeight())
