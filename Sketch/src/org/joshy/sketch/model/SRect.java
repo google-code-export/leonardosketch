@@ -53,8 +53,19 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
         ));
     }
 
+    @Override
+    protected void fillShape(GFX g) {
+        if(this.getCorner() > 0) {
+            g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),this.getCorner(),this.getCorner());
+        } else {
+            g.fillRect(0,0, this.getWidth(), this.getHeight());
+        }
+    }
+
     public void draw(GFX g) {
         g.translate(this.getX(),this.getY());
+
+        drawShadow(g);
 
         Paint paint = this.getFillPaint();
         if(paint != null) {
@@ -67,11 +78,7 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
             if(paint instanceof PatternPaint) {
                 g.setPaint(paint);
             }
-            if(this.getCorner() > 0) {
-                g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),this.getCorner(),this.getCorner());
-            } else {
-                g.fillRect(0,0, this.getWidth(), this.getHeight());
-            }
+            fillShape(g);
         }
         if(this.getStrokePaint() != null && getStrokeWidth() > 0) {
             g.setPaint(this.getStrokePaint());
@@ -84,10 +91,9 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
             }
         }
 
-        g.translate(-this.getX(),-this.getY());
         g.setStrokeWidth(1);
+        g.translate(-this.getX(),-this.getY());
     }
-
 
     public static class RoundRectMasterHandle extends Handle {
         private SRect rect;

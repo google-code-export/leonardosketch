@@ -58,21 +58,52 @@ public class SPath extends SShape implements SelfDrawable {
     }
 
     public void draw(GFX g) {
-        drawPath(g,this);
+        g.setPureStrokes(true);
+
+        drawShadow(g);
+
+        if(isClosed()) {
+            Paint paint = getFillPaint();
+            if(paint != null) {
+                if(paint instanceof FlatColor) {
+                    g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
+                }
+                if(paint instanceof GradientFill) {
+                    g.setPaint(paint);
+                }
+                if(paint instanceof PatternPaint) {
+                    g.setPaint(paint);
+                }
+                fillShape(g);
+            }
+        }
+
+
+        if(getStrokeWidth() > 0 && getStrokePaint() != null) {
+            g.setPaint(getStrokePaint());
+            Path2D.Double pth = toPath(this);
+            g.setStrokeWidth(getStrokeWidth());
+            g.drawPath(pth);
+            g.setStrokeWidth(1);
+        }
+
+        g.setPureStrokes(false);
+    }
+
+    @Override
+    protected void fillShape(GFX g) {
+        Path2D.Double path = toPath(this);
+        g.fillPath(path);
     }
 
 
-
-    public static void drawPath(GFX g, SPath node) {
-
-        g.setPureStrokes(true);
-        g.setPaint(FlatColor.BLACK);
+    public static Path2D.Double toPath(SPath node) {
         Path2D.Double pth = new Path2D.Double();
-        int last = node.points.size()-1;
+        //int last = node.points.size()-1;
 
         for(int i=0; i<node.points.size(); i++) {
             SPath.PathPoint point = node.points.get(i);
-            g.setPaint(FlatColor.BLACK);
+            //g.setPaint(FlatColor.BLACK);
             if(point.startPath || i == 0) {
                 pth.moveTo(point.x, point.y);
                 continue;
@@ -93,33 +124,11 @@ public class SPath extends SShape implements SelfDrawable {
                 }
             }
         }
-
-        if(node.isClosed()) {
-            Paint paint = node.getFillPaint();
-            if(paint != null) {
-                if(paint instanceof FlatColor) {
-                    g.setPaint(((FlatColor)paint).deriveWithAlpha(node.getFillOpacity()));
-                }
-                if(paint instanceof GradientFill) {
-                    g.setPaint(paint);
-                }
-                if(paint instanceof PatternPaint) {
-                    g.setPaint(paint);
-                }
-                g.fillPath(pth);
-            }
-
-        }
-
-        if(node.getStrokeWidth() > 0 && node.getStrokePaint() != null) {
-            g.setPaint(node.getStrokePaint());
-            g.setStrokeWidth(node.getStrokeWidth());
-            g.drawPath(pth);
-            g.setStrokeWidth(1);
-        }
-
-        g.setPureStrokes(false);
+        return pth;
     }
+
+
+
 
 
     public void close(boolean closed) {

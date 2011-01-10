@@ -32,7 +32,13 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
         ));
     }
 
+    @Override
+    protected void fillShape(GFX g) {
+        g.fillOval(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+    }
+
     public void draw(GFX g) {
+        drawShadow(g);
         Paint paint = this.getFillPaint();
         if(paint != null) {
             if(paint instanceof FlatColor) {
@@ -44,7 +50,7 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
             if(paint instanceof PatternPaint) {
                 g.setPaint(paint);
             }
-            g.fillOval(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+            fillShape(g);
         }
         if(getStrokePaint() != null) {
             g.setPaint(this.getStrokePaint());

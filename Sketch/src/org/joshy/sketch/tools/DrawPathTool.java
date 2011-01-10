@@ -520,7 +520,12 @@ public class DrawPathTool extends CanvasTool {
             g.translate(context.getSketchCanvas().getPanX(), context.getSketchCanvas().getPanY());
             g.scale(context.getSketchCanvas().getScale(), context.getSketchCanvas().getScale());
             g.translate(node.getTranslateX(),node.getTranslateY());
-            node.drawPath(g,node);
+
+            //node.drawPath(g,node);
+            g.setPureStrokes(true);
+            Path2D.Double path = SPath.toPath(node);
+            g.drawPath(path);
+            g.setPureStrokes(false);
 
             //draw the add location
             if(addLocation != null) {

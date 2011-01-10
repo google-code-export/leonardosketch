@@ -62,8 +62,15 @@ public class NGon extends SShape implements SelfDrawable {
         return radius;
     }
 
-    public void draw(GFX g) {
+    @Override
+    protected void fillShape(GFX g) {
         double[] points = toPoints();
+        g.fillPolygon(points);
+    }
+
+    public void draw(GFX g) {
+        drawShadow(g);
+
         Paint paint = this.getFillPaint();
         if(paint != null) {
             if(paint instanceof FlatColor) {
@@ -79,10 +86,12 @@ public class NGon extends SShape implements SelfDrawable {
             }
         }
 
-        g.fillPolygon(points);
+        fillShape(g);
         g.setPaint(getStrokePaint());
+
+
         g.setStrokeWidth(getStrokeWidth());
-        g.drawPolygon(points,true);
+        g.drawPolygon(toPoints(),true);
         g.setStrokeWidth(1);
     }
 

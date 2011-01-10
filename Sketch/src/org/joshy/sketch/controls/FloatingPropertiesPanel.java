@@ -44,6 +44,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private boolean locked = false;
     private FlexBox groupPropertiesEditor;
     private FlexBox shapeProperties;
+    private FlexBox shadowProperties;
     private FlexBox fontProperties;
     private FlexBox booleanPropsEditor;
     private FillPicker fillButton;
@@ -90,16 +91,106 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
 
 
-        fillOpacitySlider = new Slider(false);
-        fillOpacitySlider.setMin(0);
-        fillOpacitySlider.setMax(100);
-        fillOpacitySlider.setValue(100);
+        shadowProperties = new HFlexBox().setBoxAlign(HFlexBox.Align.Baseline);
+        add(shadowProperties);
+        shadowProperties.setVisible(false);
+        final Checkbox dropShadow = new Checkbox("shadow");
+        EventBus.getSystem().addListener(dropShadow, ActionEvent.Action, new Callback<ActionEvent>(){
+            public void call(ActionEvent actionEvent) throws Exception {
+                if(selection != null) {
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        if(dropShadow.isSelected()) {
+                            manager.propMan.getProperty("shadow").setValue(new DropShadow());
+                        } else {
+                            manager.propMan.getProperty("shadow").setValue(null);
+                        }
+                        context.redraw();
+                    }
+                }
+            }
+        });
+        shadowProperties.add(dropShadow);
+        shadowProperties.add(new Label("offset"));
+        final SpinBox<Double> xoffBox = new SpinBox<Double>();
+        xoffBox.setValue(5.0);
+        shadowProperties.add(xoffBox);
+        xoffBox.onChanged(new Callback<ChangedEvent>(){
+            public void call(ChangedEvent event) throws Exception {
+                if(selection != null) {
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        double v = (Double)event.getValue();
+                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
+                        shadow = shadow.setXOffset(v);
+                        manager.propMan.getProperty("shadow").setValue(shadow);
+                        context.redraw();
+                    }
+                }
+            }
+        });
+
+
+        final SpinBox<Double> yoffBox = new SpinBox<Double>();
+        yoffBox.setValue(5.0);
+        yoffBox.onChanged(new Callback<ChangedEvent>(){
+            public void call(ChangedEvent event) throws Exception {
+                if(selection != null) {
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        double v = (Double)event.getValue();
+                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
+                        shadow = shadow.setYOffset(v);
+                        manager.propMan.getProperty("shadow").setValue(shadow);
+                        context.redraw();
+                    }
+                }
+            }
+        });
+        shadowProperties.add(yoffBox);
+
+        shadowProperties.add(new Label("radius"));
+        final SpinBox<Integer> blurRadius = new SpinBox<Integer>();
+        blurRadius.setValue(3);
+        blurRadius.onChanged(new Callback<ChangedEvent>(){
+            public void call(ChangedEvent event) throws Exception {
+                if(selection != null) {
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        int v = (Integer)event.getValue();
+                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
+                        shadow = shadow.setBlurRadius(v);
+                        manager.propMan.getProperty("shadow").setValue(shadow);
+                        context.redraw();
+                    }
+                }
+            }
+        });
+        shadowProperties.add(blurRadius);
+        final SwatchColorPicker shadowColor = new SwatchColorPicker();
+        shadowProperties.add(shadowColor);
+        shadowProperties.add(new Label("opacity"));
+        final Slider shadowOpacity = new Slider(false).setMin(0).setMax(100).setValue(100);
+        EventBus.getSystem().addListener(shadowOpacity, ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
+            public void call(ChangedEvent event) throws Exception {
+                if(selection != null) {
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        double v = (Double)event.getValue();
+                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
+                        shadow = shadow.setOpacity(v/100);
+                        manager.propMan.getProperty("shadow").setValue(shadow);
+                        context.redraw();
+                    }
+                }
+            }
+        });
+        shadowProperties.add(shadowOpacity);
+
+
+
+
+
+        fillOpacitySlider = new Slider(false).setMin(0).setMax(100).setValue(100);
         EventBus.getSystem().addListener(fillOpacitySlider, ChangedEvent.DoubleChanged, fillOpacityCallback);
         fillOpacityLabel = new Label(getString("toolbar.opacity")+":");
         shapeProperties.add(fillOpacityLabel);
         shapeProperties.add(fillOpacitySlider);
-
-
 
         strokeWidthSlider = new Slider(false);
         strokeWidthSlider.setMin(0);
@@ -111,18 +202,20 @@ public class FloatingPropertiesPanel extends VFlexBox {
         shapeProperties.add(strokeWidthSlider);
 
 
+
+
         fontProperties = new HFlexBox().setBoxAlign(HFlexBox.Align.Baseline);
+        add(fontProperties);
+
+        fontSizeLabel = new Label(getString("toolbar.fontSize")+":");
+        fontProperties.add(fontSizeLabel);
 
         fontSizeSlider = new Slider(false);
         fontSizeSlider.setMin(8);
         fontSizeSlider.setMax(200);
         fontSizeSlider.setValue(24);
         EventBus.getSystem().addListener(fontSizeSlider, ChangedEvent.DoubleChanged, fontSizeCallback);
-        fontSizeLabel = new Label(getString("toolbar.fontSize")+":");
-        fontProperties.add(fontSizeLabel);
         fontProperties.add(fontSizeSlider);
-
-
 
         fontPicker = new PopupMenuButton<String>();
         fontPicker.setModel(new ListModel<String>() {
@@ -144,23 +237,14 @@ public class FloatingPropertiesPanel extends VFlexBox {
             }
         });
         fontProperties.add(fontPicker);
-        fontPicker.setVisible(false);
-
-
 
         fontBoldButton = new Togglebutton("B");
-        fontProperties.add(fontBoldButton);
         fontBoldButton.onClicked(fontBoldCallback);
-
-
-
+        fontProperties.add(fontBoldButton);
 
         fontItalicButton = new Togglebutton("I");
-        fontProperties.add(fontItalicButton);
         fontItalicButton.onClicked(fontItalicCallback);
-
-        fontProperties.setVisible(false);
-        add(fontProperties);
+        fontProperties.add(fontItalicButton);
 
 
 
@@ -240,24 +324,12 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
         if(manager.propMan.isClassAvailable(SText.class)) {
             fontProperties.setVisible(true);
-            fontSizeSlider.setVisible(true);
-            fontSizeLabel.setVisible(true);
             double dval = manager.propMan.getProperty("fontSize").getDoubleValue();
             if(selection.size() == 1) {
                 fontSizeSlider.setValue(dval);
             }
-            fontBoldButton.setVisible(true);
-            //fontBoldButton.setSelected(firstText.getWeight() == Font.Weight.Bold);
-            fontItalicButton.setVisible(true);
-            //fontItalicButton.setSelected(firstText.getStyle() == Font.Style.Italic);
-            fontPicker.setVisible(true);
         } else {
             fontProperties.setVisible(false);
-            fontSizeSlider.setVisible(false);
-            fontSizeLabel.setVisible(false);
-            fontBoldButton.setVisible(false);
-            fontItalicButton.setVisible(false);
-            fontPicker.setVisible(false);
         }
 
         if(manager.propMan.isClassAvailable(SArrow.class)) {
@@ -268,9 +340,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
         if(manager.propMan.isClassAvailable(SShape.class)) {
             shapeProperties.setVisible(true);
-            fillButton.setVisible(true);
-            fillOpacitySlider.setVisible(true);
-            fillOpacityLabel.setVisible(true);
+            shadowProperties.setVisible(true);
             /*
             if(lastNode != null) {
                 PropertyManager.Property fillColorProp = manager.propMan.getProperty("fillPaint");
@@ -290,12 +360,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
             }*/
         } else {
             shapeProperties.setVisible(false);
-            fillButton.setVisible(false);
-            fillOpacitySlider.setVisible(false);
-            fillOpacityLabel.setVisible(false);
-            strokeColorButton.setVisible(false);
-            strokeWidthSlider.setVisible(false);
-            strokeWidthLabel.setVisible(false);
+            shadowProperties.setVisible(false);
         }
         if(manager.propMan.isClassAvailable(SShape.class) ||
             manager.propMan.isClassAvailable(SImage.class)) {
@@ -312,6 +377,10 @@ public class FloatingPropertiesPanel extends VFlexBox {
                     strokeColorButton.setSelectedColor((FlatColor)strokeColorProp.getValue());
                 }
             }
+        } else {
+            strokeColorButton.setVisible(false);
+            strokeWidthSlider.setVisible(false);
+            strokeWidthLabel.setVisible(false);
         }
 
         groupPropertiesEditor.setVisible(selection.size()>1);
