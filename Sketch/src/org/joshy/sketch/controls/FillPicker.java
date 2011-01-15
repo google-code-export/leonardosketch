@@ -88,21 +88,26 @@ public class FillPicker extends Button {
 
         double size = 40;
 
-        GradientFill gf1 = new GradientFill()
+        Paint gf1 = new GradientFill()
                 .setStartColor(FlatColor.BLACK)
                 .setEndColor(FlatColor.WHITE)
                 .setStartX(0).setEndX(size)
                 .setStartY(size/2).setEndY(size/2);
-        GradientFill gf2 = new GradientFill()
+        Paint gf2 = new GradientFill()
                 .setStartColor(FlatColor.BLACK)
                 .setEndColor(FlatColor.WHITE)
                 .setStartX(size/2).setEndX(size/2)
                 .setStartY(0).setEndY(size);
-        GradientFill gf3 = new GradientFill()
+        Paint gf3 = new GradientFill()
                 .setStartColor(FlatColor.BLACK)
                 .setEndColor(FlatColor.WHITE)
                 .setStartX(0).setEndX(size)
                 .setStartY(0).setEndY(size);
+        Paint gf4 = new RadialGradientFill()
+                .setCenterX(size / 2).setCenterY(size / 2)
+                .setRadius(size / 2)
+                .addStop(0, FlatColor.BLACK)
+                .addStop(1, FlatColor.WHITE);
 
         ListView.ItemRenderer<Paint> paintItemRenderer = new ListView.ItemRenderer<Paint>() {
             public void draw(GFX gfx, ListView listView, Paint paint, int index, double x, double y, double w, double h) {
@@ -115,7 +120,7 @@ public class FillPicker extends Button {
             }
         };
 
-        ListModel<GradientFill> gradientModel = ListView.createModel(gf1, gf2, gf3);
+        ListModel<Paint> gradientModel = ListView.createModel(gf1, gf2, gf3, gf4);
         //PatternPaint pt1 = PatternPaint.create(SRect.class.getResource("resources/button1.png"));
         PatternPaint pt1 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-1-grey.jpg"));
         PatternPaint pt2 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-2-grey.jpg"));
@@ -126,7 +131,7 @@ public class FillPicker extends Button {
         ListModel<PatternPaint> patternModel = ListView.createModel(pt1,pt2,pt3,pt4,pt5,pt6);
 
         final ListView<Paint> gradientList = new ListView<Paint>()
-                .setModel((ListModel)gradientModel)
+                .setModel(gradientModel)
                 .setColumnWidth(size)
                 .setRowHeight(size)
                 .setOrientation(ListView.Orientation.HorizontalWrap)
