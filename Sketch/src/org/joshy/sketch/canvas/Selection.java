@@ -2,6 +2,7 @@ package org.joshy.sketch.canvas;
 
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.draw.PatternPaint;
+import org.joshy.gfx.draw.RadialGradientFill;
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
@@ -131,6 +132,10 @@ public class Selection {
             if(shape.getFillPaint() instanceof PatternPaint) {
                 hs.add(new PatternHandle(shape, PatternHandle.Position.Move, context));
                 hs.add(new PatternHandle(shape, PatternHandle.Position.Resize, context));
+            }
+            if(shape.getFillPaint() instanceof RadialGradientFill) {
+                hs.add(new RadialGradientCenterHandle(shape,context));
+                hs.add(new RadialGradientRadiusHandle(shape,context));
             }
         }
         if(node instanceof SArrow) {
