@@ -3,9 +3,8 @@ package org.joshy.sketch.actions;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
-import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.io.NativeExport;
@@ -409,10 +408,46 @@ public class OpenAction extends SAction {
             }
             GradientFill fill = new GradientFill(start,end,angle,true);
             shape.setFillPaint(fill);
-        } else {
-            FlatColor fc = new FlatColor(e.attr("fillPaint"));
-            shape.setFillPaint(fc);
+            return;
         }
+        if("linearGradient".equals(e.attr("fillPaint"))) {
+            Elem egrad = e.xpath("linearGradient").iterator().next();
+            LinearGradientFill fill = new LinearGradientFill()
+                    .setStartX(Double.parseDouble(egrad.attr("startX")))
+                    .setStartY(Double.parseDouble(egrad.attr("startY")))
+                    .setEndX(Double.parseDouble(egrad.attr("endX")))
+                    .setEndY(Double.parseDouble(egrad.attr("endY")))
+                    ;
+            for(Elem stop : egrad.xpath("stop")) {
+                fill.addStop(
+                        Double.parseDouble(stop.attr("position")),
+                        new FlatColor(stop.attr("color"))
+                        );
+            }
+            shape.setFillPaint(fill);
+            return;
+        }
+        if("radialGradient".equals(e.attr("fillPaint"))) {
+            Elem egrad = e.xpath("radialGradient").iterator().next();
+            RadialGradientFill fill = new RadialGradientFill()
+                    .setCenterX(Double.parseDouble(egrad.attr("centerX")))
+                    .setCenterY(Double.parseDouble(egrad.attr("centerY")))
+                    .setRadius(Double.parseDouble(egrad.attr("radius")))
+                    ;
+            for(Elem stop : egrad.xpath("stop")) {
+                fill.addStop(
+                        Double.parseDouble(stop.attr("position")),
+                        new FlatColor(stop.attr("color"))
+                        );
+            }
+            shape.setFillPaint(fill);
+            return;
+        }
+
+
+        FlatColor fc = new FlatColor(e.attr("fillPaint"));
+        shape.setFillPaint(fc);
+
     }
 
     private static void loadProperties(Elem e, SNode shape) throws XPathExpressionException {

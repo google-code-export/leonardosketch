@@ -3,6 +3,9 @@ package org.joshy.sketch.actions.io;
 import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.LinearGradientFill;
+import org.joshy.gfx.draw.MultiGradientFill;
+import org.joshy.gfx.draw.RadialGradientFill;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.OpenAction;
@@ -94,6 +97,55 @@ public class NativeExportTest {
         SImage img = (SImage) node;
         u.p("relative url = " + img.getRelativeURL());
         assertTrue(img.getRelativeURL().equals("redrect.png"));
+    }
+
+    @Test
+    public void exportWithGradients() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SketchDocument doc = new SketchDocument();
+
+
+        MultiGradientFill grad1 = new LinearGradientFill()
+                .setStartX(0).setEndX(100).setStartY(0).setEndY(0)
+                .addStop(0, FlatColor.RED)
+                .addStop(0.75, FlatColor.PURPLE)
+                .addStop(1.0, FlatColor.WHITE);
+        doc.getCurrentPage().model.add(new SRect(0,0,100,50).setFillPaint(grad1));
+
+        MultiGradientFill grad2 = new RadialGradientFill()
+                .setCenterX(50).setCenterY(50).setRadius(100)
+                .addStop(0, FlatColor.RED)
+                .addStop(0.75, FlatColor.YELLOW)
+                .addStop(1.0, FlatColor.WHITE);
+        doc.getCurrentPage().model.add(new NGon(6).setRadius(80).setFillPaint(grad2));
+
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing test to file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(
+                new FileOutputStream(file)
+                ,file.getName()
+                ,file.toURI()
+                ,doc
+        );
+        SketchDocument doc2 = OpenAction.loadZip(file);
+
+        assertTrue(doc2.getPages().get(0).model.get(0) instanceof SRect);
+        SRect loadedRect = (SRect) doc2.getPages().get(0).model.get(0);
+        assertTrue(loadedRect.getFillPaint() instanceof LinearGradientFill);
+        LinearGradientFill loadedLinGrad = (LinearGradientFill) loadedRect.getFillPaint();
+        assertTrue(loadedLinGrad.getEndX() == 100);
+        assertTrue(loadedLinGrad.getStops().size() == 3);
+        assertTrue(loadedLinGrad.getStops().get(1).getColor().getRed() == FlatColor.PURPLE.getRed());
+
+        assertTrue(doc2.getPages().get(0).model.get(1) instanceof NGon);
+        NGon loadedNGon = (NGon) doc2.getPages().get(0).model.get(1);
+        assertTrue(loadedNGon.getFillPaint() instanceof RadialGradientFill);
+        RadialGradientFill loadedRadGrad = (RadialGradientFill) loadedNGon.getFillPaint();
+        assertTrue(loadedRadGrad.getCenterX() == 50);
+        assertTrue(loadedRadGrad.getRadius() == 100);
+        assertTrue(loadedRadGrad.getStops().size() == 3);
+        assertTrue(loadedRadGrad.getStops().get(1).getColor().getRed() == FlatColor.YELLOW.getRed());
     }
 
     @After
