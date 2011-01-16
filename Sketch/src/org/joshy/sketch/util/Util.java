@@ -1,5 +1,6 @@
 package org.joshy.sketch.util;
 
+import java.awt.geom.Point2D;
 import java.io.*;
 
 /**
@@ -26,5 +27,18 @@ public class Util {
         if(value < min) return min;
         if(value > max) return max;
         return value;
+    }
+
+    public static boolean isBetween(double min, double value, double max) {
+        if(value < min) return false;
+        if(value > max) return false;
+        return true;
+    }
+
+    public static Point2D interpolatePoint(Point2D start, Point2D end, double position) {
+        return new Point2D.Double(
+                (end.getX()-start.getX())*position + start.getX(),
+                (end.getY()-start.getY())*position + start.getY()
+        );
     }
 }
