@@ -92,7 +92,7 @@ public abstract class SShape extends SNode {
                 GFX g2 = buf.getGFX();
                 //g2.setPaint(FlatColor.RED);
                 //g2.fillRect(0,0,buf.buf.getWidth(),buf.buf.getHeight());
-                g2.setPaint(FlatColor.BLACK.deriveWithAlpha(shadow.getOpacity()));
+                g2.setPaint(shadow.getColor().deriveWithAlpha(shadow.getOpacity()));
                 g2.translate(blurRadius,blurRadius);
                 g2.translate(dx,dy);
                 fillShape(g2);

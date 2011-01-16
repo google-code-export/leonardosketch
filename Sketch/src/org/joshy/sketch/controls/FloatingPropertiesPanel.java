@@ -48,6 +48,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private FlexBox fontProperties;
     private FlexBox booleanPropsEditor;
     private FillPicker fillButton;
+    private SwatchColorPicker shadowColorButton;
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
@@ -163,8 +164,8 @@ public class FloatingPropertiesPanel extends VFlexBox {
             }
         });
         shadowProperties.add(blurRadius);
-        final SwatchColorPicker shadowColor = new SwatchColorPicker();
-        shadowProperties.add(shadowColor);
+        shadowColorButton = new SwatchColorPicker();
+        shadowProperties.add(shadowColorButton);
         shadowProperties.add(new Label("opacity"));
         final Slider shadowOpacity = new Slider(false).setMin(0).setMax(100).setValue(100);
         EventBus.getSystem().addListener(shadowOpacity, ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
@@ -485,6 +486,14 @@ public class FloatingPropertiesPanel extends VFlexBox {
                 if(manager.propMan.isClassAvailable(SShape.class) ||
                         manager.propMan.isClassAvailable(SImage.class)) {
                     manager.propMan.getProperty("strokePaint").setValue(event.getValue());
+                    context.redraw();
+                }
+            }
+            if(event.getSource() == shadowColorButton) {
+                if(manager.propMan.isClassAvailable(SShape.class)) {
+                    DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
+                    shadow = shadow.setColor(shadowColorButton.getSelectedColor());
+                    manager.propMan.getProperty("shadow").setValue(shadow);
                     context.redraw();
                 }
             }
