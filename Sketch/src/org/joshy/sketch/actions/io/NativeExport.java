@@ -1,8 +1,7 @@
 package org.joshy.sketch.actions.io;
 
 import com.joshondesign.xml.XMLWriter;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GradientFill;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
@@ -123,9 +122,16 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
         }
         if(shape instanceof SShape) {
             SShape sh = (SShape) shape;
+            if(sh.getFillPaint() instanceof LinearGradientFill) {
+                out.attr("fillPaint","linearGradient");
+            }
+            if(sh.getFillPaint() instanceof RadialGradientFill) {
+                out.attr("fillPaint","radialGradient");
+            }
             if(sh.getFillPaint() instanceof GradientFill) {
                 out.attr("fillPaint","gradient");
-            } else {
+            }
+            if(sh.getFillPaint() instanceof FlatColor) {
                 saveAttribute(out,"fillPaint",shape);
             }
             saveAttribute(out,"fillOpacity",shape);
@@ -183,6 +189,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
 
         if(shape instanceof SShape) {
             SShape sh = (SShape) shape;
+
             if(sh.getFillPaint() instanceof GradientFill) {
                 GradientFill grad = (GradientFill) sh.getFillPaint();
                 out.start("gradient");
@@ -195,6 +202,37 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
                         ,"name","end"
                         ,"color",serialize(grad.end)
                         ).end();
+                out.end();
+            }
+            if(sh.getFillPaint() instanceof LinearGradientFill) {
+                LinearGradientFill grad = (LinearGradientFill) sh.getFillPaint();
+                out.start("linearGradient")
+                        .attr("startX", "" + grad.getStartX())
+                        .attr("startY", "" + grad.getStartY())
+                        .attr("endX", "" + grad.getEndX())
+                        .attr("endY", "" + grad.getEndY())
+                ;
+                for(MultiGradientFill.Stop stop : grad.getStops()) {
+                    out.start("stop")
+                            .attr("position",""+stop.getPosition())
+                            .attr("color",serialize(stop.getColor())).end();
+
+                }
+                out.end();
+            }
+            if(sh.getFillPaint() instanceof RadialGradientFill) {
+                RadialGradientFill grad = (RadialGradientFill) sh.getFillPaint();
+                out.start("radialGradient")
+                        .attr("centerX", "" + grad.getCenterX())
+                        .attr("centerY", "" + grad.getCenterY())
+                        .attr("radius", "" + grad.getRadius())
+                ;
+                for(MultiGradientFill.Stop stop : grad.getStops()) {
+                    out.start("stop")
+                            .attr("position",""+stop.getPosition())
+                            .attr("color",serialize(stop.getColor())).end();
+
+                }
                 out.end();
             }
         }

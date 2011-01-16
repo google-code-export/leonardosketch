@@ -46,16 +46,18 @@ public class NGon extends SShape implements SelfDrawable {
         return getBounds().contains(point.getX(),point.getY());
     }
 
-    public void setRadius(double radius) {
+    public NGon setRadius(double radius) {
         this.radius = radius;
+        return this;
     }
 
     public int getSides() {
         return sides;
     }
 
-    public void setSides(int sides) {
+    public NGon setSides(int sides) {
         this.sides = sides;
+        return this;
     }
 
     public double getRadius() {
