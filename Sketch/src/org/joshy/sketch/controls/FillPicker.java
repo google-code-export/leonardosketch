@@ -118,7 +118,7 @@ public class FillPicker extends Button {
                 .addStop(1.0, FlatColor.BLACK);
         //linears 2
         Paint gf6 = new LinearGradientFill()
-                .setStartX(0+20).setStartY(size/2)
+                .setStartX(0).setStartY(size/2)
                 .setEndX(size).setEndY(size/2)
                 .addStop(0.0, FlatColor.BLACK)
                 .addStop(0.5, FlatColor.WHITE)
