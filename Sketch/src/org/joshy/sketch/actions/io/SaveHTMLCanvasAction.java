@@ -10,7 +10,9 @@ import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 
 import java.awt.*;
+import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -99,6 +101,7 @@ public class SaveHTMLCanvasAction extends SAction {
             if(node instanceof SShape) {
                 SShape shape = (SShape) node;
 
+                out.println("\n//set the fill");
                 //do the paints
                 if(shape.getFillPaint() instanceof LinearGradientFill) {
                     LinearGradientFill grad = (LinearGradientFill) shape.getFillPaint();
@@ -164,23 +167,28 @@ public class SaveHTMLCanvasAction extends SAction {
                     if(shape instanceof SArea) out.println("\n//area");
                     if(shape instanceof SPoly) out.println("\n//polygon");
                     if(shape instanceof NGon) out.println("\n//n-gon");
-                    
+
+                    Area area = shape.toArea();
+                    Rectangle2D bounds = area.getBounds2D();
+                    double dx = bounds.getX();
+                    double dy = bounds.getY();
+                    out.println("ctx.translate("+dx+","+dy+");");
                     out.println("ctx.beginPath()");
 
-                    PathIterator it = shape.toArea().getPathIterator(null);
+                    PathIterator it = area.getPathIterator(null);
                     while(!it.isDone()) {
                         double[] coords = new double[6];
                         int n = it.currentSegment(coords);
                         if(n == PathIterator.SEG_MOVETO) {
-                            out.println("ctx.moveTo("+coords[0]+","+coords[1]+");");
+                            out.println("ctx.moveTo("+(coords[0]-dx)+","+(coords[1]-dy)+");");
                         }
                         if(n == PathIterator.SEG_LINETO) {
-                            out.println("ctx.lineTo("+coords[0]+","+coords[1]+");");
+                            out.println("ctx.lineTo("+(coords[0]-dx)+","+(coords[1]-dy)+");");
                         }
                         if(n == PathIterator.SEG_CUBICTO) {
                             out.println("ctx.bezierCurveTo("+
-                                    coords[0]+","+coords[1]+","+coords[2]+","+coords[3]+
-                                    ","+coords[4]+","+coords[5]+");"
+                                    (coords[0]-dx)+","+(coords[1]-dy)+","+(coords[2]-dx)+","+(coords[3]-dy)+
+                                    ","+(coords[4]-dx)+","+(coords[5]-dy)+");"
                             );
                         }
                         if(n == PathIterator.SEG_CLOSE) {
@@ -196,6 +204,7 @@ public class SaveHTMLCanvasAction extends SAction {
                         out.println("ctx.lineWidth = " + shape.getStrokeWidth()+";");
                         out.println("ctx.stroke();");
                     }
+                    out.println("ctx.translate("+(-dx)+","+(-dy)+");");
                 }
 
                 if(shape instanceof SText) {
