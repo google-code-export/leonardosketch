@@ -6,6 +6,8 @@ import com.joshondesign.xml.XMLParser;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GradientFill;
+import org.joshy.gfx.draw.LinearGradientFill;
+import org.joshy.gfx.draw.MultiGradientFill;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.*;
 import org.junit.Before;
@@ -15,6 +17,7 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.io.File;
 import java.io.IOException;
+import java.util.Iterator;
 
 import static org.junit.Assert.assertTrue;
 
@@ -180,6 +183,24 @@ public class SVGExportTest {
         Doc xdoc = saveAndReadback(doc);
         Elem e = xdoc.xpath("/svg/linearGradient/stop").iterator().next();
         assertTrue("0.0".equals(e.attr("offset")));
+    }
+    @Test public void testLinearGradientRect() throws Exception {
+        MultiGradientFill grad = new LinearGradientFill()
+                .setStartX(0).setEndX(100)
+                .setStartY(0).setEndY(0)
+                .addStop(0,FlatColor.GREEN)
+                .addStop(0.5,FlatColor.WHITE)
+                .addStop(1.0,FlatColor.BLACK);
+        SRect rect = new SRect(0,0,100,100);
+        rect.setFillPaint(grad);
+        rect.setStrokeWidth(0);
+        page.clear();
+        page.add(rect);
+        Doc xdoc = saveAndReadback(doc);
+        Iterator<? extends Elem> it = xdoc.xpath("/svg/linearGradient/stop").iterator();
+        it.next();
+        Elem e = it.next();
+        assertTrue("0.5".equals(e.attr("offset")));
     }
 
     private Doc saveAndReadback(SketchDocument doc) throws Exception {

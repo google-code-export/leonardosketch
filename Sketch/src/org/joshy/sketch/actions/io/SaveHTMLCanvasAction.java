@@ -1,6 +1,6 @@
 package org.joshy.sketch.actions.io;
 
-import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -98,8 +98,41 @@ public class SaveHTMLCanvasAction extends SAction {
         public void exportPre(PrintWriter out, SNode node) {
             if(node instanceof SShape) {
                 SShape shape = (SShape) node;
-                out.println("ctx.fillStyle = \"rgb("+serialize(shape.getFillPaint())+");\"");
 
+                //do the paints
+                if(shape.getFillPaint() instanceof LinearGradientFill) {
+                    LinearGradientFill grad = (LinearGradientFill) shape.getFillPaint();
+                    out.println("var lingrad = ctx.createLinearGradient("
+                            +grad.getStartX()+","
+                            +grad.getStartY()+","
+                            +grad.getEndX()+","
+                            +grad.getEndY()+");");
+                    for(MultiGradientFill.Stop stop : grad.getStops()) {
+                        out.println("lingrad.addColorStop("+stop.getPosition()+",'"+toHexString(stop.getColor())+"');");
+                    }
+                    out.println("ctx.fillStyle = lingrad;");
+                }
+                if(shape.getFillPaint() instanceof RadialGradientFill) {
+                    RadialGradientFill grad = (RadialGradientFill) shape.getFillPaint();
+                    out.println("var radgrad = ctx.createRadialGradient("
+                            +grad.getCenterX()+","
+                            +grad.getCenterY()+","
+                            +0+","
+                            +grad.getCenterX()+","
+                            +grad.getCenterY()+","
+                            +grad.getRadius()+");");
+                    for(MultiGradientFill.Stop stop : grad.getStops()) {
+                        out.println("radgrad.addColorStop("+stop.getPosition()+",'"+toHexString(stop.getColor())+"');");
+                    }
+                    out.println("ctx.fillStyle = radgrad;");
+                }
+                if(shape.getFillPaint() instanceof FlatColor) {
+                    out.println("ctx.fillStyle = \"rgb("+serialize(shape.getFillPaint())+");\"");
+                }
+
+
+
+                //do the shape fill
                 if(shape instanceof SRect) {
                     out.println("\n//rectangle");
                     out.println("ctx.translate("+shape.getTranslateX()+","+shape.getTranslateY()+");");
@@ -174,6 +207,10 @@ public class SaveHTMLCanvasAction extends SAction {
                     out.println("ctx.translate("+(-shape.getTranslateX())+","+(-shape.getTranslateY())+");");
                 }
             }
+        }
+
+        private String toHexString(FlatColor color) {
+            return "#"+String.format("%06x",color.getRGBA()&0x00FFFFFF);
         }
 
         private String serialize(Paint fillPaint) {

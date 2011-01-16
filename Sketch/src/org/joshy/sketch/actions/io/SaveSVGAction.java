@@ -1,7 +1,6 @@
 package org.joshy.sketch.actions.io;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GradientFill;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -67,6 +66,23 @@ public class SaveSVGAction extends SAction {
             out.println("    <stop offset='1.0' style='stop-color:"+toRGBString(grad.end)+"'/>");
             out.println("  </linearGradient>");
         }
+
+        if(rect.getFillPaint() instanceof LinearGradientFill) {
+            LinearGradientFill grad = (LinearGradientFill) rect.getFillPaint();
+            out.println("<g>");
+            out.println("<defs>");
+            out.println("  <linearGradient "
+                    + "id='"+id+"'"
+                    +" x1='"+grad.getStartX()
+                    +"' y1='"+grad.getStartY()
+                    +"' x2='"+grad.getEndX()
+                    +"' y2='"+grad.getEndY()+"'>");
+            for(MultiGradientFill.Stop stop : grad.getStops()) {
+                out.println("    <stop offset='"+stop.getPosition()+"' stop-color='"+toHexString(stop.getColor())+"'/>");
+            }
+            out.println("  </linearGradient>");
+            out.println("</defs>");
+        }
         out.println("<rect x='"+ rect.getX() +"' y='"+ rect.getY() +"' width='"+ rect.getWidth() +"' height='"+ rect.getHeight() +"'"+
                 " transform='translate("+rect.getTranslateX()+","+rect.getTranslateY()+")'");
 
@@ -76,10 +92,20 @@ public class SaveSVGAction extends SAction {
         if(rect.getFillPaint() instanceof GradientFill) {
             out.println(" fill='url(#"+id+")'");
         }
-        
+        if(rect.getFillPaint() instanceof LinearGradientFill) {
+            out.println(" fill='url(#"+id+")'");
+        }
+
         out.println(" stroke='"+toRGBString(rect.getStrokePaint())+"'" +
                 " stroke-width='"+rect.getStrokeWidth()+"'" +
                 "/>");
+        if(rect.getFillPaint() instanceof LinearGradientFill) {
+            out.println("</g>");
+        }
+    }
+
+    private static String toHexString(FlatColor color) {
+        return "#"+Integer.toHexString(color.getRGBA()&0x00FFFFFF);
     }
 
     private static void draw(PrintWriter out, SOval oval) {
