@@ -1,5 +1,7 @@
 package org.joshy.sketch.model;
 
+import org.joshy.gfx.draw.FlatColor;
+
 /**
  * Created by IntelliJ IDEA.
  * User: joshmarinacci
@@ -12,6 +14,7 @@ public class DropShadow {
     private double xoff = 5;
     private double yoff = 5;
     private int blurRadius = 3;
+    private FlatColor color = FlatColor.BLACK;
 
     public DropShadow() {
 
@@ -22,6 +25,7 @@ public class DropShadow {
         this.xoff = dropShadow.xoff;
         this.yoff = dropShadow.yoff;
         this.blurRadius = dropShadow.blurRadius;
+        this.color = dropShadow.color;
     }
 
     public DropShadow setOpacity(double opacity) {
@@ -62,5 +66,15 @@ public class DropShadow {
 
     public int getBlurRadius() {
         return this.blurRadius;
+    }
+
+    public DropShadow setColor(FlatColor color) {
+        DropShadow shadow = new DropShadow(this);
+        shadow.color = color;
+        return shadow;
+    }
+
+    public FlatColor getColor() {
+        return color;
     }
 }
