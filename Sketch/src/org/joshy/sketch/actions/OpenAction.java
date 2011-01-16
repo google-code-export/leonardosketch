@@ -290,13 +290,20 @@ public class OpenAction extends SAction {
     }
 
     private static SImage loadSImageFromFile(Elem e, ZipFile zipFile) throws IOException {
+        u.p("loading an image from a file");
         String path = e.attr("relativeURL");
+        String fullpath = "resources/"+path;
+        u.p("path = " + path);
+        u.p("fullpath = " + fullpath);
         String zfname = zipFile.getName();
+        u.p("name = " + zfname);
         String pth = zfname.substring(
                         zfname.lastIndexOf(File.separator)+1,
                         zfname.lastIndexOf(".")
-                    )+"/"+path;
+                    )+"/"+fullpath;
+        u.p("pth = " + pth);
         ZipEntry entry = zipFile.getEntry(pth);
+        u.p("entry = " + entry);
         BufferedImage img = ImageIO.read(zipFile.getInputStream(entry));
         return new SImage(img,path);
     }
@@ -326,7 +333,7 @@ public class OpenAction extends SAction {
             return null;
         }
         if(e.hasAttr("fillPaint")) {
-            loadFillPaint(e,shape);
+            loadFillPaint(e,shape, zipFile);
         } else {
             shape.setFillPaint(null);
         }
@@ -393,7 +400,7 @@ public class OpenAction extends SAction {
         return shape;
     }
 
-    private static void loadFillPaint(Elem e, SShape shape) throws XPathExpressionException {
+    private static void loadFillPaint(Elem e, SShape shape, ZipFile zipFile) throws XPathExpressionException {
         if("gradient".equals(e.attr("fillPaint"))) {
             FlatColor start = null;
             FlatColor end = null;
@@ -441,6 +448,42 @@ public class OpenAction extends SAction {
                         );
             }
             shape.setFillPaint(fill);
+            return;
+        }
+        if("patternPaint".equals(e.attr("fillPaint"))) {
+            Elem pp = e.xpath("patternPaint").iterator().next();
+            PatternPaint pat = null;
+            u.p("using url " + pp.attr("relativeURL"));
+
+            try {
+                u.p("loading an image from a file");
+                String path = pp.attr("relativeURL");
+                String fullpath = "resources/"+path;
+                u.p("path = " + path);
+                u.p("fullpath = " + fullpath);
+
+                String zfname = zipFile.getName();
+                u.p("name = " + zfname);
+                String pth = zfname.substring(
+                                zfname.lastIndexOf(File.separator)+1,
+                                zfname.lastIndexOf(".")
+                            )+"/"+fullpath;
+                u.p("pth = " + pth);
+                ZipEntry entry = zipFile.getEntry(pth);
+                u.p("entry = " + entry);
+                BufferedImage img = ImageIO.read(zipFile.getInputStream(entry));
+                pat = PatternPaint
+                    .create(img,path)
+                    .deriveNewStart(new Point2D.Double(
+                            Double.parseDouble(pp.attr("startX")),
+                            Double.parseDouble(pp.attr("startY"))))
+                    .deriveNewEnd(new Point2D.Double(
+                            Double.parseDouble(pp.attr("endX")),
+                            Double.parseDouble(pp.attr("endY"))));
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            shape.setFillPaint(pat);
             return;
         }
 
@@ -507,7 +550,7 @@ public class OpenAction extends SAction {
         if(node instanceof SShape) {
             SShape shape = (SShape)node;
             if(e.hasAttr("fillPaint")) {
-                loadFillPaint(e,shape);
+                loadFillPaint(e,shape,zipFile);
             } else {
                 shape.setFillPaint(null);
             }
@@ -518,6 +561,7 @@ public class OpenAction extends SAction {
                 ((SShape) node).setStrokePaint(null);
             }
             loadNumberAttribute(e,node,"strokeWidth");
+            loadShadow(e,shape);
         }
 
         if(node == null) {
@@ -543,6 +587,19 @@ public class OpenAction extends SAction {
             ((ResizableGrid9Shape)node).setNodes(nodes);
         }
         return node;
+    }
+
+    private static void loadShadow(Elem e, SShape shape) throws XPathExpressionException {
+        if(e.xpath("shadow").iterator().hasNext()) {
+            Elem shadow = e.xpath("shadow").iterator().next();
+            shape.setShadow(new DropShadow()
+                    .setColor(new FlatColor(shadow.attr("color")))
+                    .setBlurRadius(Integer.parseInt(shadow.attr("radius")))
+                    .setOpacity(Double.parseDouble(shadow.attr("opacity")))
+                    .setXOffset(Double.parseDouble(shadow.attr("xOffset")))
+                    .setYOffset(Double.parseDouble(shadow.attr("yOffset")))
+                    );
+        }
     }
 
     private static void loadPolyPoints(Elem e, SPoly sPoly) throws XPathExpressionException {
