@@ -62,8 +62,11 @@ public class SArea extends SShape implements SelfDrawable {
             if(paint instanceof FlatColor) {
                 g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
             }
-            if(paint instanceof GradientFill) {
-                g.setPaint(paint);
+            if(paint instanceof MultiGradientFill) {
+                Rectangle2D b = area.getBounds2D();
+                MultiGradientFill gf = (MultiGradientFill) paint;
+                gf = gf.translate(b.getX(),b.getY());
+                g.setPaint(gf);
             }
             if(paint instanceof PatternPaint) {
                 g.setPaint(paint);

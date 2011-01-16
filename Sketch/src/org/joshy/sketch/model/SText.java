@@ -109,8 +109,8 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
             if(paint instanceof FlatColor) {
                 g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
             }
-            if(paint instanceof GradientFill) {
-                GradientFill gf = (GradientFill) paint;
+            if(paint instanceof MultiGradientFill) {
+                MultiGradientFill gf = (MultiGradientFill) paint;
                 gf = gf.translate(getX(),getY());
                 g.setPaint(gf);
             }

@@ -44,7 +44,7 @@ public class TwitterTest {
         AccessToken toke = new AccessToken(accessToken.getToken(), accessToken.getTokenSecret());
         twitter.setOAuthAccessToken(accessToken);
         Status status = twitter.updateStatus("quick test of twitter with oauth. hope this works! :)");
-        p("updated the status to : " + status.getText());
+        p("changed the status to : " + status.getText());
     }
 
     private static void storeAccessToken(int useId, AccessToken accessToken){
