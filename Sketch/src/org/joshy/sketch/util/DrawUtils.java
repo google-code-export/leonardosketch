@@ -4,6 +4,8 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.GradientFill;
 
+import java.awt.geom.Path2D;
+
 /**
  * Created by IntelliJ IDEA.
  * User: joshmarinacci
@@ -92,5 +94,14 @@ public class DrawUtils {
             g.fillPolygon(new double[]{0.0+yoff, 0.0-s/2, 0.0+yoff, s/2,0.0+s +yoff,0});
             g.translate(0,0);
         }
+    }
+
+    public static Path2D.Double createLeftTriangle(double s) {
+        Path2D.Double pth = new Path2D.Double();
+        pth.moveTo(0,0);
+        pth.lineTo(s,-s/2);
+        pth.lineTo(s,s/2);
+        pth.closePath();
+        return pth;
     }
 }

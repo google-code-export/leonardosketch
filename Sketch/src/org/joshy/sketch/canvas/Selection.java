@@ -85,7 +85,7 @@ public class Selection {
     }
 
 
-    private void regenHandleControls(SNode node) {
+    public void regenHandleControls(SNode node) {
         for(Handle h : selected.get(node)) {
             if(h.hasControls()) {
                 Container popupLayer = context.getSketchCanvas().getParent().getStage().getPopupLayer();
@@ -134,8 +134,9 @@ public class Selection {
                 hs.add(new PatternHandle(shape, PatternHandle.Position.Resize, context));
             }
             if(shape.getFillPaint() instanceof RadialGradientFill) {
-                hs.add(new RadialGradientCenterHandle(shape,context));
-                hs.add(new RadialGradientRadiusHandle(shape,context));
+                RadialGradientCenterHandle h1 = new RadialGradientCenterHandle(shape, context);
+                hs.add(h1);
+                hs.add(new RadialGradientRadiusHandle(h1,shape,context));
             }
         }
         if(node instanceof SArrow) {

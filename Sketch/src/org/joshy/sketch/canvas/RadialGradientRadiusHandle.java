@@ -20,9 +20,11 @@ import java.awt.geom.Point2D;
 public class RadialGradientRadiusHandle extends Handle {
     private SShape shape;
     private VectorDocContext context;
+    private RadialGradientCenterHandle master;
 
-    public RadialGradientRadiusHandle(SShape shape, VectorDocContext context) {
+    public RadialGradientRadiusHandle(RadialGradientCenterHandle master, SShape shape, VectorDocContext context) {
         super();
+        this.master = master;
         this.shape = shape;
         this.context = context;
     }
@@ -51,6 +53,7 @@ public class RadialGradientRadiusHandle extends Handle {
         y -= shape.getBounds().getY();
         getFill().setRadius(y-getFill().getCenterY());
         shape.setFillPaint(getFill());
+        master.updateControls();
     }
 
     @Override

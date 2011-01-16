@@ -201,11 +201,17 @@ public class SelectMoveTool extends CanvasTool {
                 if(h.contains(cursor, context.getCanvas().getScale())) {
                     hoverHandle = h;
                     setHover = true;
+                    if(hoverHandle instanceof MouseEventHandle) {
+                        ((MouseEventHandle)hoverHandle).mouseMoved(true, event, cursor);
+                    }
                     context.redraw();
                 }
             }
         }
         if(!setHover && hoverHandle != null) {
+            if(hoverHandle instanceof MouseEventHandle) {
+                ((MouseEventHandle)hoverHandle).mouseMoved(false,event,cursor);
+            }
             hoverHandle = null;
             context.redraw();
         }
@@ -283,6 +289,9 @@ public class SelectMoveTool extends CanvasTool {
         for(SNode r : handles.keySet()) {
             for(Handle h : handles.get(r)) {
                 if(h.contains(cursor,context.getCanvas().getScale())) {
+                    if(h instanceof MouseEventHandle) {
+                        ((MouseEventHandle)h).mousePressed(event,cursor);
+                    }
                     if(r instanceof SResizeableNode) {
                         SResizeableNode sn = (SResizeableNode) r;
                         resizeStartBounds = new Bounds(sn.getX(),sn.getY(),sn.getWidth(),sn.getHeight());
@@ -420,8 +429,12 @@ public class SelectMoveTool extends CanvasTool {
                 nx = ((int)(nx/doc.getGridWidth()))*doc.getGridWidth();
                 ny = ((int)(ny/doc.getGridHeight()))*doc.getGridHeight();
             }
-            selectedHandle.setX(nx,event.isShiftPressed());
-            selectedHandle.setY(ny,event.isShiftPressed());
+            if(selectedHandle instanceof MouseEventHandle) {
+                ((MouseEventHandle)selectedHandle).mouseDragged(nx, ny, event.isShiftPressed(), cursor);
+            } else {
+                selectedHandle.setX(nx,event.isShiftPressed());
+                selectedHandle.setY(ny,event.isShiftPressed());
+            }
             context.getDocument().setDirty(true);
             context.redraw();
             return;
@@ -753,7 +766,9 @@ public class SelectMoveTool extends CanvasTool {
                 }
             });
         }
-
+        if(selectedHandle instanceof MouseEventHandle) {
+            ((MouseEventHandle)selectedHandle).mouseReleased(event,cursor);
+        }
         lastHandle = selectedHandle;
         selectedHandle = null;
         fadeOutIndicator();
