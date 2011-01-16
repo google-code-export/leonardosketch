@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public abstract class BaseGradientHandle<G extends MultiGradientFill>
         extends Handle
-        implements MouseEventHandle, AbstractResizeableNode.SRectUpdateListener {
+        implements MouseEventHandle, SShape.SShapeListener {
     protected SShape shape;
     protected VectorDocContext context;
     protected Point2D.Double hoverPoint;
@@ -48,9 +48,7 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
     public BaseGradientHandle(SShape shape, VectorDocContext context) {
         this.shape = shape;
         this.context = context;
-        if(shape instanceof AbstractResizeableNode) {
-            ((AbstractResizeableNode)this.shape).addListener(this);
-        }
+        this.shape.addListener(this);
         controls = new ArrayList<Control>();
         controlMap = new HashMap<RadialGradientFill.Stop,Control>();
         for(final MultiGradientFill.Stop stop : getFill().getStops()) {
@@ -144,7 +142,7 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         startPoint = null;
     }
 
-    public void updated() {
+    public void changed() {
         refresh();
         updateControlPositions();
     }

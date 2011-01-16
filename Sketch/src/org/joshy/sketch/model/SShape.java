@@ -8,6 +8,8 @@ import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
 
 import java.awt.geom.Area;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class SShape extends SNode {
     public Paint fillPaint = FlatColor.GRAY;
@@ -15,6 +17,7 @@ public abstract class SShape extends SNode {
     private double strokeWidth = 1;
     private double fillOpacity = 1.0;
     private DropShadow shadow = null;
+    private List<SShapeListener> listeners = new ArrayList<SShapeListener>();
 
     public Paint getFillPaint() {
         return fillPaint;
@@ -58,6 +61,19 @@ public abstract class SShape extends SNode {
         this.fillOpacity = fillOpacity;
     }
 
+
+    @Override
+    public void setTranslateX(double translateX) {
+        super.setTranslateX(translateX);
+        fireUpdate();
+    }
+
+    @Override
+    public void setTranslateY(double translateY) {
+        super.setTranslateY(translateY);
+        fireUpdate();
+    }
+
     public abstract Area toArea();
 
     protected void drawShadow(GFX g) {
@@ -96,5 +112,25 @@ public abstract class SShape extends SNode {
 
     public DropShadow getShadow() {
         return this.shadow;
+    }
+
+    public void addListener(SShapeListener gradientHandle) {
+        listeners.add(gradientHandle);
+    }
+
+    protected void fireUpdate() {
+        if(listeners != null) {
+            for(SShapeListener c : listeners) {
+                c.changed();
+            }
+        }
+    }
+
+    public void removeListener(SShapeListener gradientHandle) {
+        listeners.remove(gradientHandle);
+    }
+
+    public static interface SShapeListener {
+        public void changed();
     }
 }

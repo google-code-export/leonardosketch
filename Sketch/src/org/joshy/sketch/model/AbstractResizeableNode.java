@@ -4,11 +4,8 @@ import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.node.Bounds;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AbstractResizeableNode extends SShape implements SResizeableNode {
-    private List<SRectUpdateListener> listeners = new ArrayList<SRectUpdateListener>();
     public double width = 100;
     public double height = 100;
     private double x = 0;
@@ -106,26 +103,6 @@ public abstract class AbstractResizeableNode extends SShape implements SResizeab
 
     public boolean constrainByDefault() {
         return false;
-    }
-
-    public void addListener(SRectUpdateListener gradientHandle) {
-        listeners.add(gradientHandle);
-    }
-
-    protected void fireUpdate() {
-        if(listeners != null) {
-            for(SRectUpdateListener c : listeners) {
-                c.updated();
-            }
-        }
-    }
-
-    public void removeListener(SRectUpdateListener gradientHandle) {
-        listeners.remove(gradientHandle);
-    }
-
-    public static interface SRectUpdateListener {
-        public void updated();
     }
 
     private void rescaleGradient() {

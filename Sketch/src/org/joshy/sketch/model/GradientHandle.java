@@ -19,7 +19,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GradientHandle extends Handle implements AbstractResizeableNode.SRectUpdateListener {
+public class GradientHandle extends Handle implements SShape.SShapeListener {
     private SShape shape;
     private GradientPosition pos;
     private List<Control> controls;
@@ -63,7 +63,7 @@ public class GradientHandle extends Handle implements AbstractResizeableNode.SRe
 
         controls = new ArrayList<Control>();
         controls.add(colorPopup);
-        updated();
+        changed();
     }
 
     @Override
@@ -112,7 +112,7 @@ public class GradientHandle extends Handle implements AbstractResizeableNode.SRe
         } else {
             updateGrad(x,grad.getEndY());
         }
-        updated();
+        changed();
     }
 
     @Override
@@ -140,7 +140,7 @@ public class GradientHandle extends Handle implements AbstractResizeableNode.SRe
         } else {
             updateGrad(grad.getEndX(),y);
         }
-        updated();
+        changed();
     }
 
     @Override
@@ -202,7 +202,7 @@ public class GradientHandle extends Handle implements AbstractResizeableNode.SRe
     }
 
 
-    public void updated() {
+    public void changed() {
         Bounds bounds = shape.getBounds();
         GradientFill grad = getFill();
         Point2D start = context.getSketchCanvas().transformToDrawing(bounds.getX()+grad.getStartX(),bounds.getY()+grad.getStartY());
