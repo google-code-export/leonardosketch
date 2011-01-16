@@ -252,12 +252,14 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         @Override
         public void draw(GFX g) {
             if(!isVisible())return;
+            g.setPureStrokes(true);
             g.setPaint(FlatColor.BLACK);
             g.fillOval(0, 0, getWidth(), getHeight());
             g.setPaint(FlatColor.WHITE);
             g.fillOval(0 + 1, 0 + 1, getWidth() - 2, getHeight() - 2);
             g.setPaint(getSelectedColor());
             g.fillOval(0 + 2, 0 + 2, getWidth() - 4, getHeight() - 4);
+            g.setPureStrokes(false);
         }
     }
 }
