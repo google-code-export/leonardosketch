@@ -131,8 +131,9 @@ public class Selection {
                 hs.add(new GradientHandle(shape, GradientHandle.GradientPosition.End, context));
             }
             if(shape.getFillPaint() instanceof PatternPaint) {
-                hs.add(new PatternHandle(shape, PatternHandle.Position.Move, context));
-                hs.add(new PatternHandle(shape, PatternHandle.Position.Resize, context));
+                PatternMoveHandle h1 = new PatternMoveHandle(shape,context);
+                hs.add(h1);
+                hs.add(new PatternResizeHandle(h1, shape, context));
             }
             if(shape.getFillPaint() instanceof RadialGradientFill) {
                 RadialGradientCenterHandle h1 = new RadialGradientCenterHandle(shape, context);

@@ -1,6 +1,7 @@
 package org.joshy.sketch.controls;
 
 import org.joshy.gfx.draw.*;
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.Button;
@@ -11,6 +12,7 @@ import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.sketch.Main;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
@@ -118,8 +120,8 @@ public class FillPicker extends Button {
                 .addStop(1.0, FlatColor.BLACK);
         //linears 2
         Paint gf6 = new LinearGradientFill()
-                .setStartX(0).setStartY(size/2)
-                .setEndX(size).setEndY(size/2)
+                .setStartX(0).setStartY(size / 2)
+                .setEndX(size).setEndY(size / 2)
                 .addStop(0.0, FlatColor.BLACK)
                 .addStop(0.5, FlatColor.WHITE)
                 .addStop(1.0, FlatColor.BLACK);
@@ -138,6 +140,7 @@ public class FillPicker extends Button {
         ListModel<Paint> gradientModel = ListView.createModel(gf1, gf2, gf3, gf4, gf5, gf6);
         //PatternPaint pt1 = PatternPaint.create(SRect.class.getResource("resources/button1.png"));
         PatternPaint pt1 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-1-grey.jpg"));
+        pt1 = pt1.deriveNewStart(new Point(40,40));
         PatternPaint pt2 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-2-grey.jpg"));
         PatternPaint pt3 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-3-grey.jpg"));
         PatternPaint pt4 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-4-grey.jpg"));

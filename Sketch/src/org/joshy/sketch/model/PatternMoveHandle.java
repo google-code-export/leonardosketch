@@ -16,44 +16,42 @@ import java.awt.geom.Point2D;
  * Time: 2:05 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PatternHandle extends Handle {
-
-    public enum Position {
-        Move, Resize;
-    }
+public class PatternMoveHandle extends Handle {
 
     private VectorDocContext context;
     private SShape shape;
-    private Position position;
 
-    public PatternHandle(SShape shape, Position position, VectorDocContext context) {
+
+    public PatternMoveHandle(SShape shape, VectorDocContext context) {
         super();
         this.shape = shape;
         this.context = context;
-        this.position = position;
     }
 
+    double offset = 0;
     @Override
     public double getX() {
-        return getFill().getStart().getX() + shape.getTranslateX();
+        return getFill().getStart().getX() + shape.getTranslateX() + offset;
     }
 
     @Override
     public void setX(double x, boolean constrain) {
         x -= shape.getTranslateX();
+        x -= offset;
         double y = getFill().getStart().getY();
         shape.setFillPaint(getFill().deriveNewStart(new Point2D.Double(x,y)));
     }
 
     @Override
     public double getY() {
-        return getFill().getStart().getY() + shape.getTranslateY();
+        return getFill().getStart().getY() + shape.getTranslateY() + offset;
     }
 
     @Override
     public void setY(double y, boolean constrain) {
         double x = getFill().getStart().getX();
         y -= shape.getTranslateY();
+        y -= offset;
         shape.setFillPaint(getFill().deriveNewStart(new Point2D.Double(x,y)));
     }
 
