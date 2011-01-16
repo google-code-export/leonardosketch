@@ -1,6 +1,7 @@
 package org.joshy.sketch.actions.io;
 
 import com.joshondesign.xml.XMLWriter;
+import org.joshy.gfx.draw.PatternPaint;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.SAction;
@@ -10,6 +11,7 @@ import org.joshy.sketch.modes.DocContext;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URI;
 import java.util.List;
@@ -110,11 +112,23 @@ public class SaveAction extends SAction {
         ExportProcessor.process(export, outx, doc);
         outx.flush();
         out.closeEntry();
-        List<SImage> images = export.getDelayedImages();
-        for(SImage image : images) {
-            ZipEntry ie = new ZipEntry(dir+"/"+image.getRelativeURL());
+        List images = export.getDelayedImages();
+        for(Object image : images) {
+            BufferedImage img = null;
+            String relUrl = null;
+            if(image instanceof SImage) {
+                img = ((SImage)image).getBufferedImage();
+                relUrl = ((SImage)image).getRelativeURL();
+            }
+            if(image instanceof PatternPaint) {
+                img = ((PatternPaint)image).getImage();
+                relUrl = ((PatternPaint)image).getRelativeURL();
+            }
+            u.p("saving delayed image: " + relUrl);
+            ZipEntry ie = new ZipEntry(dir+"/resources/"+relUrl);
+            u.p("entry = " + ie.getName());
             out.putNextEntry(ie);
-            ImageIO.write(image.getBufferedImage(),"png",out);
+            ImageIO.write(img,"png",out);
             out.flush();
             out.closeEntry();
         }

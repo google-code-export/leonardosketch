@@ -2,10 +2,7 @@ package org.joshy.sketch.actions.io;
 
 import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.Core;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.LinearGradientFill;
-import org.joshy.gfx.draw.MultiGradientFill;
-import org.joshy.gfx.draw.RadialGradientFill;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.OpenAction;
@@ -14,9 +11,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.net.URL;
 
 import static org.junit.Assert.assertTrue;
 
@@ -97,6 +96,7 @@ public class NativeExportTest {
         SImage img = (SImage) node;
         u.p("relative url = " + img.getRelativeURL());
         assertTrue(img.getRelativeURL().equals("redrect.png"));
+        assertTrue(img.getBufferedImage().getWidth() == 101);
     }
 
     @Test
@@ -148,6 +148,72 @@ public class NativeExportTest {
         assertTrue(loadedRadGrad.getStops().get(1).getColor().getRed() == FlatColor.YELLOW.getRed());
     }
 
+    @Test
+    public void exportWithEffects() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SketchDocument doc = new SketchDocument();
+
+        doc.getCurrentPage().model.add(new SRect(0,0,100,50)
+                .setShadow(new DropShadow()
+                        .setBlurRadius(8)
+                        .setOpacity(0.6)
+                        .setColor(FlatColor.RED)
+                        .setXOffset(12.6)
+                        .setYOffset(-8.9)
+                ));
+
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing test to file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(
+                new FileOutputStream(file)
+                ,file.getName()
+                ,file.toURI()
+                ,doc
+        );
+        SketchDocument doc2 = OpenAction.loadZip(file);
+
+        assertTrue(doc2.getPages().get(0).model.get(0) instanceof SRect);
+        SRect loadedRect = (SRect) doc2.getPages().get(0).model.get(0);
+        DropShadow shadow = loadedRect.getShadow();
+        assertTrue(shadow != null);
+        assertTrue(shadow.getBlurRadius() == 8);
+        assertTrue(shadow.getColor().getRGBA() == FlatColor.RED.getRGBA());
+        assertTrue(shadow.getOpacity() == 0.6);
+        assertTrue(shadow.getXOffset() == 12.6);
+        assertTrue(shadow.getYOffset() == -8.9);
+    }
+
+    @Test
+    public void exportTexture() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SketchDocument doc = new SketchDocument();
+
+        URL url = NativeExportTest.class.getResource("redrect.png");
+        doc.getCurrentPage().model.add(new SRect(0, 0, 100, 50)
+                .setFillPaint(
+                        PatternPaint.create(url,"redrect.png").deriveNewEnd(new Point2D.Double(100, 100))
+                )
+        );
+
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing test to file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(
+                new FileOutputStream(file)
+                ,file.getName()
+                ,file.toURI()
+                ,doc
+        );
+        SketchDocument doc2 = OpenAction.loadZip(file);
+        assertTrue(doc2.getPages().get(0).model.get(0) instanceof SRect);
+        SRect loadedRect = (SRect) doc2.getPages().get(0).model.get(0);
+        assertTrue(loadedRect.getFillPaint() instanceof PatternPaint);
+        PatternPaint pp = (PatternPaint) loadedRect.getFillPaint();
+        assertTrue(pp.getEnd().getY() == 100);
+        assertTrue(pp.getImage().getWidth() == 101);
+
+    }
     @After
     public void tearDown() throws Exception {
     }

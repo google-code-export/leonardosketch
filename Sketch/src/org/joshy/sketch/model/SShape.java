@@ -106,8 +106,9 @@ public abstract class SShape extends SNode {
 
     protected void fillShape(GFX g) { }
 
-    public void setShadow(DropShadow shadow) {
+    public SShape setShadow(DropShadow shadow) {
         this.shadow = shadow;
+        return this;
     }
 
     public DropShadow getShadow() {

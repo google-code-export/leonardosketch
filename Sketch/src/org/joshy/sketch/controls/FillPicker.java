@@ -145,13 +145,13 @@ public class FillPicker extends Button {
 
         ListModel<Paint> gradientModel = ListView.createModel(gf1, gf2, gf3, gf6, gf4, gf5);
         //PatternPaint pt1 = PatternPaint.create(SRect.class.getResource("resources/button1.png"));
-        PatternPaint pt1 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-1-grey.jpg"));
+        PatternPaint pt1 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-1-grey.jpg"),"t1");
         pt1 = pt1.deriveNewStart(new Point(40,40));
-        PatternPaint pt2 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-2-grey.jpg"));
-        PatternPaint pt3 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-3-grey.jpg"));
-        PatternPaint pt4 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-4-grey.jpg"));
-        PatternPaint pt5 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-5-grey.jpg"));
-        PatternPaint pt6 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-6-grey.jpg"));
+        PatternPaint pt2 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-2-grey.jpg"),"t2");
+        PatternPaint pt3 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-3-grey.jpg"),"t3");
+        PatternPaint pt4 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-4-grey.jpg"),"t4");
+        PatternPaint pt5 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-5-grey.jpg"),"t4");
+        PatternPaint pt6 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-6-grey.jpg"),"t6");
         ListModel<PatternPaint> patternModel = ListView.createModel(pt1,pt2,pt3,pt4,pt5,pt6);
 
         final ListView<Paint> gradientList = new ListView<Paint>()

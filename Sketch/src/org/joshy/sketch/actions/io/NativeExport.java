@@ -24,7 +24,7 @@ import java.util.Set;
 public class NativeExport implements ShapeExporter<XMLWriter> {
     public static final int CURRENT_VERSION = 0;
     private boolean delayedImageWriting = false;
-    private List<SImage> delayedImages = new ArrayList<SImage>();
+    private List delayedImages = new ArrayList();
 
     public void docStart(XMLWriter out, SketchDocument doc) {
         out.header();
@@ -131,6 +131,9 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             if(sh.getFillPaint() instanceof GradientFill) {
                 out.attr("fillPaint","gradient");
             }
+            if(sh.getFillPaint() instanceof PatternPaint) {
+                out.attr("fillPaint","patternPaint");
+            }
             if(sh.getFillPaint() instanceof FlatColor) {
                 saveAttribute(out,"fillPaint",shape);
             }
@@ -235,6 +238,37 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
                 }
                 out.end();
             }
+            if(sh.getFillPaint() instanceof PatternPaint) {
+                PatternPaint pattern = (PatternPaint) sh.getFillPaint();
+                u.p("saving a pttern. url = " + pattern.getRelativeURL());
+                out.start("patternPaint")
+                        .attr("startX",""+pattern.getStart().getX())
+                        .attr("startY",""+pattern.getStart().getY())
+                        .attr("endX",""+pattern.getEnd().getX())
+                        .attr("endY",""+pattern.getEnd().getY())
+                        .attr("relativeURL", ""+pattern.getRelativeURL())
+                ;
+                out.end();
+                if(delayedImageWriting) {
+                    delayedImages.add(pattern);
+                } else {
+                    try {
+                        saveRelativeImage(out,pattern);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            if(sh.getShadow() != null) {
+                DropShadow shadow = sh.getShadow();
+                out.start("shadow")
+                    .attr("radius",""+shadow.getBlurRadius())
+                    .attr("color",serialize(shadow.getColor()))
+                        .attr("opacity",""+shadow.getOpacity())
+                        .attr("xOffset",""+shadow.getXOffset())
+                        .attr("yOffset",""+shadow.getYOffset())
+                    .end();
+            }
         }
 
 
@@ -288,6 +322,20 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
         }
         exportProperties(out,shape);
 
+    }
+
+    private void saveRelativeImage(XMLWriter out, PatternPaint pattern) throws IOException {
+        BufferedImage img = pattern.getImage();
+        URI baseURI = out.getBaseURI();
+        u.p("document URI = " + baseURI);
+        URI imageURI = baseURI.resolve("resources/"+pattern.getRelativeURL());
+        u.p("image URI = " + imageURI);
+        File imageFile = new File(imageURI);
+        if(!imageFile.getParentFile().exists()) {
+            imageFile.getParentFile().mkdir();
+        }
+        ImageIO.write(img,"png",imageFile);
+        u.p("wrote out image");
     }
 
     private void saveRelativeImage(XMLWriter out, SImage image) throws URISyntaxException, IOException {
@@ -381,7 +429,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
         this.delayedImageWriting = delayedImageWriting;
     }
 
-    public List<SImage> getDelayedImages() {
+    public List getDelayedImages() {
         return delayedImages;
     }
 }
