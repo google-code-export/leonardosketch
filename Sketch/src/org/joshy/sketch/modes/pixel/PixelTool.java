@@ -47,11 +47,19 @@ public abstract class PixelTool implements Callback<Event> {
             mousePressed(event, 0, 0);
             return;
         }
+        if(MouseEvent.MouseDragged == event.getType()) {
+            mouseDragged(event, 0, 0);
+            return;
+        }
+        if(MouseEvent.MouseReleased == event.getType()) {
+            mouseReleased(event, 0, 0);
+            return;
+        }
     }
     //protected abstract void mouseMoved(MouseEvent event, Point2D.Double cursor, );
     protected abstract void mousePressed(MouseEvent event, int x, int y);
-    //protected abstract void mouseDragged(MouseEvent event, Point2D.Double cursor);
-    //protected abstract void mouseReleased(MouseEvent event, Point2D.Double cursor);
+    protected abstract void mouseDragged(MouseEvent event, int x, int y);
+    protected abstract void mouseReleased(MouseEvent event, int x, int y);
 
     public void drawOverlay(GFX gfx) {
 

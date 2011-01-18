@@ -1,22 +1,62 @@
 package org.joshy.sketch.modes.pixel;
 
+import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.MouseEvent;
-import org.joshy.gfx.util.u;
+import org.joshy.sketch.pixel.model.PixelSelection;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joshmarinacci
- * Date: 1/17/11
- * Time: 10:03 PM
- * To change this template use File | Settings | File Templates.
+ * Let you create a rectangular selection which can then
+ * be operated on.
  */
 public class SelectionTool extends PixelTool {
+    private Point2D startPoint;
+    private Point2D currentPoint;
+
     public SelectionTool(PixelDocContext pixelDocContext) {
         super(pixelDocContext);
     }
 
     @Override
     protected void mousePressed(MouseEvent event, int x, int y) {
-        u.p("selection pressed");
+        startPoint = event.getPointInNodeCoords(getContext().getCanvas());
+        getContext().getCanvas().redraw();
+    }
+
+    @Override
+    protected void mouseDragged(MouseEvent event, int x, int y) {
+        currentPoint = event.getPointInNodeCoords(getContext().getCanvas());
+        getContext().getCanvas().redraw();
+    }
+
+    @Override
+    protected void mouseReleased(MouseEvent event, int x, int y) {
+        PixelSelection selection = getContext().getCanvas().getSelection();
+        selection.clear();
+        selection.add(new Rectangle(
+                (int)startPoint.getX(),
+                (int)startPoint.getY(),
+                (int)(currentPoint.getX()-startPoint.getX()),
+                (int)(currentPoint.getY()-startPoint.getY())
+                ));
+        getContext().getCanvas().redraw();
+        startPoint = null;
+        currentPoint = null;
+    }
+
+    @Override
+    public void drawOverlay(GFX gfx) {
+        if(currentPoint != null) {
+            gfx.setPaint(FlatColor.RED);
+            gfx.drawRect(
+                    startPoint.getX(),
+                    startPoint.getY(),
+                    currentPoint.getX()-startPoint.getX(),
+                    currentPoint.getY()-startPoint.getY()
+                    );
+        }
     }
 }

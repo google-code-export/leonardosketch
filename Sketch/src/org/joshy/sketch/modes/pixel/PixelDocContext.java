@@ -11,11 +11,13 @@ import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.NewPixelDocAction;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.canvas.PixelCanvas;
+import org.joshy.sketch.controls.Menu;
 import org.joshy.sketch.controls.Menubar;
 import org.joshy.sketch.controls.ToggleGroup;
 import org.joshy.sketch.controls.ToolbarButton;
 import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.pixel.model.PixelDoc;
+import org.joshy.sketch.pixel.model.PixelSelection;
 import org.joshy.sketch.tools.PixelSetTool;
 import org.joshy.sketch.util.BiList;
 
@@ -123,7 +125,9 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
 
     @Override
     public void createAfterEditMenu(Menubar menubar) {
-        
+        menubar.add(new Menu().setTitle("Pixels")
+                .addItem("Fill with color", new PixelSelection.FillWithColor(this)));
+
     }
 
     @Override
@@ -144,4 +148,5 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
     public PixelToolbar getPixelToolbar() {
         return null;
     }
+
 }

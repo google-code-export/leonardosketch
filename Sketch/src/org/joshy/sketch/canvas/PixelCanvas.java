@@ -7,6 +7,7 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.sketch.modes.pixel.PixelDocContext;
 import org.joshy.sketch.pixel.model.PixelDoc;
 import org.joshy.sketch.pixel.model.PixelLayer;
+import org.joshy.sketch.pixel.model.PixelSelection;
 import org.joshy.sketch.pixel.model.PixelTile;
 
 /**
@@ -19,9 +20,11 @@ import org.joshy.sketch.pixel.model.PixelTile;
 public class PixelCanvas extends DocumentCanvas {
     private PixelDoc document;
     private PixelDocContext context;
+    private PixelSelection selection;
 
     public PixelCanvas(PixelDocContext context) {
         this.context = context;
+        selection = new PixelSelection(500,500);
     }
     
     public boolean isFocused() {
@@ -87,7 +90,14 @@ public class PixelCanvas extends DocumentCanvas {
     */
     public void draw(GFX gfx) {
         drawLayers(gfx);
+        drawSelection(gfx);
         drawOverlays(gfx);
+    }
+
+    private void drawSelection(GFX gfx) {
+        if(!selection.isEmpty()) {
+            gfx.drawImage(Image.create(selection.buffer),0,0);
+        }
     }
 
     private void drawOverlays(GFX gfx) {
@@ -97,13 +107,11 @@ public class PixelCanvas extends DocumentCanvas {
     }
 
     public void drawLayers(GFX gfx) {
-        //u.p("------------- drawing");
         for(PixelLayer layer : document.getLayers()) {
             for(int y=0; y<600; y+=256) {
                 for(int x=0; x<600; x+=256) {
                     PixelTile tile = layer.getTile(x/256,y/256);
                     if(tile != null) {
-                        //u.p("drawing tile at : " + x + " " + y);
                         Image image = tile.getImage();
                         if(image != null) {
                             gfx.drawImage(image,x,y);
@@ -125,4 +133,7 @@ public class PixelCanvas extends DocumentCanvas {
         return document;
     }
 
+    public PixelSelection getSelection() {
+        return selection;
+    }
 }
