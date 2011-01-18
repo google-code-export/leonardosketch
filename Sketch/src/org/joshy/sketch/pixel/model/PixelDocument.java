@@ -16,4 +16,12 @@ public class PixelDocument {
     public PixelDocument() {
         layers = new ArrayList<PixelLayer>();
     }
+
+    public void add(PixelLayer layer1) {
+        this.layers.add(layer1);
+    }
+
+    public Iterable<PixelLayer> getLayers() {
+        return layers;
+    }
 }
