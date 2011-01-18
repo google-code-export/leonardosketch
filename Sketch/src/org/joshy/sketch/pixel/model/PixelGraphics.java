@@ -100,21 +100,25 @@ public class PixelGraphics {
 
     public void fillDisplacementClouds(int x, int y, int w, int h) {
         BufferedImage scratch = new BufferedImage(257,257, BufferedImage.TYPE_INT_RGB);
+        if(true) {
+            fillSinWave(scratch);
+        } else {
+            int c1, c2, c3, c4;
+            c1 = randColor();
+            c2 = randColor();
+            c3 = randColor();
+            c4 = randColor();
+            scratch.setRGB(0,0,c1);
+            scratch.setRGB(256,0,c2);
+            scratch.setRGB(0,256,c3);
+            scratch.setRGB(256,256,c4);
+            int val = (c1+c2+c3+c4)/4;
+            scratch.setRGB(128,128,val);
+
+            divide(scratch,0,0,257,257,c1,c2,c3,c4);
+        }
 
 
-        int c1, c2, c3, c4;
-        c1 = randColor();
-        c2 = randColor();
-        c3 = randColor();
-        c4 = randColor();
-        scratch.setRGB(0,0,c1);
-        scratch.setRGB(256,0,c2);
-        scratch.setRGB(0,256,c3);
-        scratch.setRGB(256,256,c4);
-        int val = (c1+c2+c3+c4)/4;
-        scratch.setRGB(128,128,val);
-
-        divide(scratch,0,0,257,257,c1,c2,c3,c4);
 
 
 
@@ -129,6 +133,32 @@ public class PixelGraphics {
                 ,null);
         g2.dispose();
 
+    }
+
+    private void fillSinWave(BufferedImage scratch) {
+        for(double x=0;x<scratch.getWidth();x++) {
+            for(double y=0; y<scratch.getHeight();y++) {
+                double distance = Math.sqrt(x*x+y*y);
+                //divide to decrease the frequency
+                //and move the waves further apart
+                distance = distance/8.0;
+
+                double val = Math.sin(distance);
+                val = Math.sin(x/37+15*Math.cos(y/74)) + Math.cos(y / 31 + 11 * Math.sin(x / 57));
+                val = clamp(val,0,1.0);
+                //64 + 63 * sin( i/(37+15*cos(j/74)) ) * cos( j/(31+11*sin(i/57))) )
+
+                int color = (int) (((val+1.0)/2.0)*255);
+                color = color << 16 | color << 8 | color;
+                scratch.setRGB((int)x,(int)y,color);
+            }
+        }
+    }
+
+    private double clamp(double val, int min, double max) {
+        if(val < min) return min;
+        if(val > max) return max;
+        return val;
     }
 
     private void divide(BufferedImage scratch, int x, int y, int w, int h, int c1, int c2, int c3, int c4) {
