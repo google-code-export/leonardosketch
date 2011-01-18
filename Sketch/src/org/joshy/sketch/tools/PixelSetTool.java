@@ -6,8 +6,8 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.util.GeomUtil;
-import org.joshy.sketch.model.PixelDocument;
 import org.joshy.sketch.modes.pixel.PixelDocContext;
+import org.joshy.sketch.pixel.model.PixelDoc;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -46,10 +46,10 @@ public class PixelSetTool implements Callback<MouseEvent> {
             pressed = true;
             hideCursor();
             start = cursor;//event.getPointInNodeCoords(context.getCanvas());
-            PixelDocument doc = (PixelDocument) context.getDocument();
+            //PixelDocument doc = (PixelDoc) context.getDocument();
             FlatColor color = context.getPixelToolbar().pixelColorPicker.getSelectedColor();
-            doc.setBrush(doc.createBrush(context.getPixelToolbar().brushWidthSlider.getValue(), color,
-                    context.getPixelToolbar().brushHardnessSlider.getValue(), true));
+            //ndoc.setBrush(doc.createBrush(context.getPixelToolbar().brushWidthSlider.getValue(), color,
+            //        context.getPixelToolbar().brushHardnessSlider.getValue(), true));
             context.getPixelToolbar().histogramColorPicker.addColor(color);
         }
         if(event.getType() == MouseEvent.MouseDragged) {
@@ -76,8 +76,8 @@ public class PixelSetTool implements Callback<MouseEvent> {
                 return;
             }
             Point2D end = cursor;
-            PixelDocument doc = context.getDocument();
-            left = doc.stampBrush(start,end,left,context.getPixelToolbar().brushOpacitySlider.getValue());
+            PixelDoc doc = context.getDocument();
+            //left = doc.stampBrush(start,end,left,context.getPixelToolbar().brushOpacitySlider.getValue());
             start = end;
             context.redraw();
         }

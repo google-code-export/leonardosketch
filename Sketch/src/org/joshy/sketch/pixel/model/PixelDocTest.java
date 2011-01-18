@@ -32,7 +32,7 @@ public class PixelDocTest implements Runnable {
                 System.exit(0);
             }
         });
-        PixelDocument doc = new PixelDocument();
+        PixelDoc doc = new PixelDoc();
         PixelGraphics g = null;
 
 
@@ -86,9 +86,9 @@ public class PixelDocTest implements Runnable {
     }
 
     private static class PixelCanvasNode extends Node {
-        private PixelDocument doc;
+        private PixelDoc doc;
 
-        private PixelCanvasNode(PixelDocument doc) {
+        private PixelCanvasNode(PixelDoc doc) {
             this.doc = doc;
         }
 
