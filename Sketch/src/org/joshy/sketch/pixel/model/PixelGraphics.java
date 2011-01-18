@@ -21,8 +21,8 @@ public class PixelGraphics {
         target = pixelLayer;
     }
 
-    public void setFill(FlatColor purple) {
-        this.fill = purple;
+    public void setFill(FlatColor fill) {
+        this.fill = fill;
     }
 
     public void fillRect(final int x, final int y, final int w, final int h) {

@@ -27,4 +27,14 @@ public class PencilTool extends PixelTool {
         getContext().getCanvas().redraw();
     }
 
+    @Override
+    protected void mouseDragged(MouseEvent event, int x, int y) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    protected void mouseReleased(MouseEvent event, int x, int y) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
 }
