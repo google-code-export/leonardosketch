@@ -1,8 +1,8 @@
 package org.joshy.sketch.actions;
 
 import org.joshy.sketch.Main;
-import org.joshy.sketch.model.PixelDocument;
 import org.joshy.sketch.modes.pixel.PixelModeHelper;
+import org.joshy.sketch.pixel.model.PixelDoc;
 
 /** Action to create a new pixel document
  */
@@ -17,7 +17,7 @@ public class NewPixelDocAction extends NewAction {
     @Override
     protected void newDocDialog() {
         //don't do the dialog. instead just create a new doc
-        PixelDocument doc = new PixelDocument(defaultWidth, defaultHeight);
+        PixelDoc doc = new PixelDoc();//(defaultWidth, defaultHeight);
         try {
             main.setupNewDoc(new PixelModeHelper(main),doc);
         } catch (Exception e) {

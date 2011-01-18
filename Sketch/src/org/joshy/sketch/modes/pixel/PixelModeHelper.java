@@ -6,8 +6,8 @@ import org.joshy.sketch.actions.NewPixelDocAction;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.controls.Menu;
 import org.joshy.sketch.model.CanvasDocument;
-import org.joshy.sketch.model.PixelDocument;
 import org.joshy.sketch.modes.DocModeHelper;
+import org.joshy.sketch.pixel.model.PixelDoc;
 import org.joshy.sketch.tools.CanvasTool;
 import org.joshy.sketch.util.BiList;
 
@@ -46,7 +46,7 @@ public class PixelModeHelper extends DocModeHelper<PixelDocContext> {
 
     @Override
     public CanvasDocument createNewDoc() {
-        return new PixelDocument(640,480);
+        return new PixelDoc();
     }
 
     @Override

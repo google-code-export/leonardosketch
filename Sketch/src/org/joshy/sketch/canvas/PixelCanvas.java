@@ -2,8 +2,12 @@ package org.joshy.sketch.canvas;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.sketch.model.PixelDocument;
+import org.joshy.gfx.draw.Image;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.sketch.modes.pixel.PixelDocContext;
+import org.joshy.sketch.pixel.model.PixelDoc;
+import org.joshy.sketch.pixel.model.PixelLayer;
+import org.joshy.sketch.pixel.model.PixelTile;
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,7 +17,7 @@ import org.joshy.sketch.modes.pixel.PixelDocContext;
  * To change this template use File | Settings | File Templates.
  */
 public class PixelCanvas extends DocumentCanvas {
-    private PixelDocument document;
+    private PixelDoc document;
     private PixelDocContext context;
 
     public PixelCanvas(PixelDocContext context) {
@@ -39,6 +43,27 @@ public class PixelCanvas extends DocumentCanvas {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    @Override
+    public Bounds getVisualBounds() {
+        return new Bounds(
+                getTranslateX()
+                ,getTranslateY()
+                ,1000*getScale()
+                ,1000*getScale()
+        );
+    }
+
+    @Override
+    public Bounds getInputBounds() {
+        return new Bounds(
+                getTranslateX()
+                ,getTranslateY()
+                ,1000*getScale()
+                ,1000*getScale()
+        );
+    }
+
+    /*
     //draw the background
     @Override
     public void draw(GFX g) {
@@ -49,7 +74,7 @@ public class PixelCanvas extends DocumentCanvas {
         g.scale(1/scale,1/scale);
     }
     //draw the document
-    private void draw(GFX g, PixelDocument pixelDocument) {
+    private void draw(GFX g, PixelDoc pixelDocument) {
         //draw the actual image
         g.drawImage(pixelDocument.getBitmap(),0,0);
         //draw the doc borders
@@ -59,12 +84,44 @@ public class PixelCanvas extends DocumentCanvas {
             context.selectedTool.drawOverlay(g);
         }
     }
+    */
+    public void draw(GFX gfx) {
+        drawLayers(gfx);
+        drawOverlays(gfx);
+    }
 
-    public void setDocument(PixelDocument doc) {
+    private void drawOverlays(GFX gfx) {
+        if(context.getSelectedTool() != null) {
+            context.getSelectedTool().drawOverlay(gfx);
+        }
+    }
+
+    public void drawLayers(GFX gfx) {
+        //u.p("------------- drawing");
+        for(PixelLayer layer : document.getLayers()) {
+            for(int y=0; y<600; y+=256) {
+                for(int x=0; x<600; x+=256) {
+                    PixelTile tile = layer.getTile(x/256,y/256);
+                    if(tile != null) {
+                        //u.p("drawing tile at : " + x + " " + y);
+                        Image image = tile.getImage();
+                        if(image != null) {
+                            gfx.drawImage(image,x,y);
+                        }
+                    }
+                    //tile grid lines
+                    gfx.setPaint(FlatColor.GRAY);
+                    gfx.drawRect(x,y,256,256);
+                }
+            }
+        }
+    }
+
+    public void setDocument(PixelDoc doc) {
         this.document = doc;
     }
 
-    public PixelDocument getDocument() {
+    public PixelDoc getDocument() {
         return document;
     }
 
