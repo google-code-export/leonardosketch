@@ -331,7 +331,7 @@
             <value language='fr-FR'>Descendre</value>
             <value language='hr-HR'>Spusti element</value>
             <value language='it-IT'>Abbassa di un livello</value>
-            <value language='ja-JP'>ノードを下げる</value>
+            <value language='ja-JP'>背面へ移動</value>
             <value language='tr-TR'>Öğeyi bir basamak aşağı indir</value>
         </key>
         <key name='lowerNodeBottom'>
@@ -340,7 +340,7 @@
             <value language='fr-FR'>Descendre à l'arrière plan</value>
             <value language='hr-HR'>Spusti na dno</value>
             <value language='it-IT'>Porta in fondo</value>
-            <value language='ja-JP'>下方に下げる</value>
+            <value language='ja-JP'>最背面へ移動</value>
             <value language='tr-TR'>En aşağı indir</value>
         </key>
         <key name='matchNodeHeight'>
@@ -420,7 +420,7 @@
             <value language='fr-FR'>Monter</value>
             <value language='hr-HR'>Podigni element</value>
             <value language='it-IT'>Alza di un livello</value>
-            <value language='ja-JP'>ノードを上昇</value>
+            <value language='ja-JP'>前面へ移動</value>
             <value language='tr-TR'>Öğeyi bir basamak yukarı çıkar</value>
         </key>
         <key name='raiseNodeTop'>
@@ -429,7 +429,7 @@
             <value language='fr-FR'>Monter au premier plan</value>
             <value language='hr-HR'>Podigni na vrh</value>
             <value language='it-IT'>Porta in cima</value>
-            <value language='ja-JP'>上方へ上げる</value>
+            <value language='ja-JP'>最前面へ移動</value>
             <value language='tr-TR'>Öne getir</value>
         </key>
         <key name='recentfiles'>
@@ -473,7 +473,7 @@
             <value language='de-DE'>90° in Uhrzeigersinn drehen</value>
             <value language='fr-FR'>Tourner de 90° vers la droite</value>
             <value language='hr-HR'>Rotiraj 90° u smjeru kazaljke</value>
-            <value language='ja-JP'>時計回りに　90°　回転</value>
+            <value language='ja-JP'>時計回りに 90° 回転</value>
             <value language='tr-TR'>90° saat yönünde dönder</value>
         </key>
         <key name='rotateNodeFree'>
