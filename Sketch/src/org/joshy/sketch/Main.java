@@ -534,7 +534,7 @@ public class Main implements Runnable {
         modeHelpers.add(new VectorModeHelper(this));
         modeHelpers.add(new PixelModeHelper(this));
         modeHelpers.add(new PresoModeHelper(this));
-        defaultModeHelper = modeHelpers.get(1);
+        defaultModeHelper = modeHelpers.get(0);
 
         propMan = new PropertyManager();
         if(!SCRIPTS_DIR.exists()) {
