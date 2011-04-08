@@ -119,10 +119,17 @@ public class Selection {
                 SRect rect = (SRect) rnode;
                 hs.add(new SRect.RoundRectMasterHandle(rect));
             }
-            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopLeft));
-            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopRight));
-            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomLeft));
-            hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomRight));
+            if(rnode instanceof SText) {
+                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.TopLeft));
+                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.TopRight));
+                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.BottomLeft));
+                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.BottomRight));
+            } else {
+                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopLeft));
+                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopRight));
+                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomLeft));
+                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomRight));
+            }
         }
         if(node instanceof SShape) {
             SShape shape = (SShape) node;

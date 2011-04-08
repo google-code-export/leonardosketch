@@ -7,19 +7,19 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.NodeUtils;
-import org.joshy.gfx.node.control.Textbox;
-import org.joshy.sketch.modes.vector.VectorDocContext;
+import org.joshy.gfx.node.control.Textarea;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
 import org.joshy.sketch.model.ResizableGrid9Shape;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SText;
 import org.joshy.sketch.model.SketchDocument;
+import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.geom.Point2D;
 
 public class DrawTextTool extends CanvasTool {
     private SText textNode;
-    private Textbox overlayTextBox;
+    private Textarea overlayTextBox;
     private boolean notInMainDocument;
 
     public DrawTextTool(VectorDocContext context) {
@@ -62,7 +62,7 @@ public class DrawTextTool extends CanvasTool {
 
         Point2D pt2 = NodeUtils.convertToScene(context.getSketchCanvas(), point.x, point.y);
 
-        overlayTextBox = new Textbox();
+        overlayTextBox = new Textarea();
         //the -9 is to account for the textbox's insets
         overlayTextBox.setTranslateX(pt2.getX()-9);
         overlayTextBox.setTranslateY(pt2.getY()-9);
@@ -72,8 +72,7 @@ public class DrawTextTool extends CanvasTool {
                 .style(textNode.getStyle())
                 .weight(textNode.getWeight())
                 .resolve());
-        overlayTextBox.setPrefWidth(300);
-        overlayTextBox.setPrefHeight(10+overlayTextBox.getFont().calculateHeight("WXYwxy"));
+        overlayTextBox.setSizeToText(true);
         context.getCanvas().getParent().getStage().getPopupLayer().add(overlayTextBox);
         overlayTextBox.selectAll();
         overlayTextBox.setVisible(true);
@@ -84,14 +83,7 @@ public class DrawTextTool extends CanvasTool {
         context.getCanvas().getParent().getStage().getPopupLayer().remove(overlayTextBox);
         overlayTextBox.setVisible(false);
         textNode.text = overlayTextBox.getText();
-        Font textFont = Font
-                .name(textNode.getFontName())
-                .size((float)textNode.getFontSize())
-                .style(textNode.getStyle())
-                .weight(textNode.getWeight())
-                .resolve();
-        textNode.setWidth(textFont.calculateWidth(overlayTextBox.getText()));
-        textNode.setHeight(textFont.calculateHeight(overlayTextBox.getText()));
+        textNode.refresh();
         overlayTextBox = null;
         if(!notInMainDocument) {
             SketchDocument doc = context.getDocument();
@@ -119,7 +111,7 @@ public class DrawTextTool extends CanvasTool {
             offsetX = grid9.getTranslateX();
             offsetY = grid9.getTranslateY();
         }
-        overlayTextBox = new Textbox();
+        overlayTextBox = new Textarea();
         overlayTextBox.setFont(Font
             .name(textNode.getFontName())
             .size((float) (textNode.getFontSize()*context.getSketchCanvas().getScale()))
@@ -135,8 +127,7 @@ public class DrawTextTool extends CanvasTool {
         Point2D pt2 = NodeUtils.convertToScene(context.getSketchCanvas(), point.getX()-9, point.getY()-9);
         overlayTextBox.setTranslateX(pt2.getX());
         overlayTextBox.setTranslateY(pt2.getY());
-        overlayTextBox.setPrefWidth(overlayTextBox.getFont().calculateWidth(textNode.text)+100);
-        overlayTextBox.setPrefHeight(10+overlayTextBox.getFont().calculateHeight(textNode.text));
+        overlayTextBox.setSizeToText(true);
         context.getCanvas().getParent().getStage().getPopupLayer().add(overlayTextBox);
         overlayTextBox.selectAll();
         overlayTextBox.setVisible(true);

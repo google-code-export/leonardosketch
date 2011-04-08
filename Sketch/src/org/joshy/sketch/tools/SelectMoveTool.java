@@ -384,6 +384,12 @@ public class SelectMoveTool extends CanvasTool {
                 contextMenu.addActions(new CreateResizableShape.Edit(context));
             }
         }
+        if(context.getSelection().size() == 1) {
+            SNode node = context.getSelection().firstItem();
+            if(node instanceof SText) {
+                contextMenu.addActions(new TextActions.ResetTextSize(context));
+            }
+        }
 
         contextMenu.setWidth(170);
         contextMenu.setHeight(200);
