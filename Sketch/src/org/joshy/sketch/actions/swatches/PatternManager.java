@@ -43,13 +43,18 @@ public class PatternManager {
 
     private void initDummyData() throws IOException {
         //PatternPaint pt1 = PatternPaint.create(SRect.class.getResource("resources/button1.png"));
-        PatternPaint pt1 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-1-grey.jpg"),"t1");
+        PatternPaint pt1 = PatternPaint.create(Main.class.getResource(
+                "resources/textures/brown_noise.png"),"brown_noise.png");
         pt1 = pt1.deriveNewStart(new Point(40,40));
-        PatternPaint pt2 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-2-grey.jpg"),"t2");
-        PatternPaint pt3 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-3-grey.jpg"),"t3");
-        PatternPaint pt4 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-4-grey.jpg"),"t4");
-        PatternPaint pt5 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-5-grey.jpg"),"t5");
-        PatternPaint pt6 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-6-grey.jpg"),"t6");
+        PatternPaint pt2 = PatternPaint.create(Main.class.getResource(
+                "resources/textures/checkerboard.png"),"checkerboard.png");
+        PatternPaint pt3 = PatternPaint.create(Main.class.getResource(
+                "resources/textures/flurdelis.png"),"flurdelis.png");
+        PatternPaint pt4 = PatternPaint.create(Main.class.getResource(
+                "resources/textures/tess01.png"),"tess01.png");
+        PatternPaint pt5 = PatternPaint.create(Main.class.getResource(
+                "resources/textures/wallpaper1.png"),"wallpaper1.png");
+        //PatternPaint pt6 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-6-grey.jpg"),"t6");
 
         patternModel = new ArrayListModel<PatternPaint>();
         patternModel.add(pt1);
@@ -57,7 +62,7 @@ public class PatternManager {
         patternModel.add(pt3);
         patternModel.add(pt4);
         patternModel.add(pt5);
-        patternModel.add(pt6);
+        //patternModel.add(pt6);
 
     }
 
