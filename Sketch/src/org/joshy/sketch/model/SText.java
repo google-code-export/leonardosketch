@@ -11,6 +11,7 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
     private Font.Style style;
     private int alignment = 0;
     private String fontName = Font.DEFAULT.getName();
+    private boolean autoSize = true;
 
 
     public SText(double x, double y, double w, double h) {
@@ -66,14 +67,29 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
         return alignment;
     }
 
+    public void refresh() {
+        if(isAutoSize()){
+            updateSize();
+        }
+    }
+
     private void updateSize() {
+        if(!isAutoSize()) return;
         Font font = Font.name("Arial")
                 .weight(getWeight())
                 .style(getStyle())
                 .size((float)fontSize)
                 .resolve();
-        setWidth(font.calculateWidth(text));
-        setHeight(font.calculateHeight(text));
+        String[] strings = getText().split("\n");
+        double maxWidth = 0;
+        double h = 0;
+        for(String s : strings) {
+            maxWidth = Math.max(maxWidth, font.calculateWidth(s));
+            h += font.getAscender();
+            h += font.getDescender();
+        }
+        setWidth(maxWidth);
+        setHeight(h);
     }
 
     @Override
@@ -130,12 +146,14 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
                 .resolve();
         double w = font.calculateWidth(getText());
         double h = font.calculateHeight(getText());
-        if(alignment == 0) {
-            g.drawText(getText(), font,
-                    this.getX() + getWidth()/2-w/2,
-                    this.getY() + font.getAscender() + getHeight()/2 - h/2);
-        } else {
-            g.drawText(this.text, font, this.getX(), this.getY() + font.getAscender());
+
+        String[] strings = getText().split("\n");
+        double x = 0;
+        double y = 0;
+        y += font.getAscender();
+        for(String s : strings) {
+            g.drawText(s,font,this.getX()+x,this.getY()+y);
+            y += (font.getAscender() + font.getDescender());
         }
     }
 
@@ -145,5 +163,13 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
 
     public void setFontName(String fontName) {
         this.fontName = fontName;
+    }
+
+    public boolean isAutoSize() {
+        return autoSize;
+    }
+
+    public void setAutoSize(boolean autoSize) {
+        this.autoSize = autoSize;
     }
 }
