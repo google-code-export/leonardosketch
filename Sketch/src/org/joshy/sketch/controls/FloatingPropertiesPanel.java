@@ -66,7 +66,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
         add(shapeProperties);
         shapeProperties.setVisible(false);
 
-        fillButton = new FillPicker();
+        fillButton = new FillPicker(this.manager);
         EventBus.getSystem().addListener(fillButton,ChangedEvent.ObjectChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) throws Exception {
                 if(locked) return;

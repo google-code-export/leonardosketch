@@ -25,6 +25,8 @@ import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrUploadAction;
 import org.joshy.sketch.actions.io.*;
 import org.joshy.sketch.actions.pages.PageListPanel;
+import org.joshy.sketch.actions.swatches.ColorSwatchManager;
+import org.joshy.sketch.actions.swatches.PatternManager;
 import org.joshy.sketch.actions.symbols.SymbolManager;
 import org.joshy.sketch.canvas.DocumentCanvas;
 import org.joshy.sketch.controls.Menu;
@@ -61,6 +63,8 @@ public class Main implements Runnable {
     public static final File SCRIPTS_DIR = new File(homedir,"scripts");
 
     public SymbolManager symbolManager = new SymbolManager(new File(homedir,"symbols"));
+    public ColorSwatchManager colorManager = new ColorSwatchManager(new File(homedir,"swatches.xml"));
+    public PatternManager patternManager = new PatternManager(new File(new File(homedir,"patterns"),"patterns.xml"));
     public PropertyManager propMan;
     private QuitAction quitAction;
     private SAction aboutAction;
@@ -554,6 +558,7 @@ public class Main implements Runnable {
                 act.execute(fileOpenEvent.getFiles());
             }
         });
+
 
     }
 

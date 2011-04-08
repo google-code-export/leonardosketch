@@ -15,7 +15,6 @@ import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 
@@ -35,6 +34,7 @@ public class FillPicker extends Button {
     Paint selectedFill;
     private TabPanel popup;
     private double inset = 2;
+    private Main manager;
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -51,8 +51,9 @@ public class FillPicker extends Button {
         });
     }
 
-    public FillPicker() {
+    public FillPicker(Main manager) {
         super("X");
+        this.manager = manager;
         setPrefWidth(25);
         setPrefHeight(25);
         selectedFill = FlatColor.RED;
@@ -143,27 +144,10 @@ public class FillPicker extends Button {
     private void setupPatternTab(TabPanel panel) throws IOException {
         double size = 40;
 
-        //PatternPaint pt1 = PatternPaint.create(SRect.class.getResource("resources/button1.png"));
-        PatternPaint pt1 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-1-grey.jpg"),"t1");
-        pt1 = pt1.deriveNewStart(new Point(40,40));
-        PatternPaint pt2 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-2-grey.jpg"),"t2");
-        PatternPaint pt3 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-3-grey.jpg"),"t3");
-        PatternPaint pt4 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-4-grey.jpg"),"t4");
-        PatternPaint pt5 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-5-grey.jpg"),"t4");
-        PatternPaint pt6 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-6-grey.jpg"),"t6");
-
-        final ArrayListModel<PatternPaint> patternModel = new ArrayListModel<PatternPaint>();
-        patternModel.add(pt1);
-        patternModel.add(pt2);
-        patternModel.add(pt3);
-        patternModel.add(pt4);
-        patternModel.add(pt5);
-        patternModel.add(pt6);
-        //ListModel<PatternPaint> patternModel = ListView.createModel(pt1,pt2,pt3,pt4,pt5,pt6);
 
 
         final ListView<Paint> patternList = new ListView<Paint>()
-                .setModel((ListModel) patternModel)
+                .setModel(manager.patternManager.getModel())
                 .setColumnWidth(size)
                 .setRowHeight(size)
                 .setOrientation(ListView.Orientation.HorizontalWrap)
@@ -188,7 +172,7 @@ public class FillPicker extends Button {
                     u.p("opening a file" + file);
                     try {
                         PatternPaint pat = PatternPaint.create(file);
-                        patternModel.add(pat);
+                        manager.patternManager.addPattern(pat);
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
@@ -267,12 +251,8 @@ public class FillPicker extends Button {
     }
 
     private void setupSwatchTab(TabPanel panel) {
-        final ArrayListModel<FlatColor> colorModel = new ArrayListModel<FlatColor>();
-        colorModel.add(FlatColor.RED);
-        colorModel.add(FlatColor.GREEN);
-        colorModel.add(FlatColor.BLUE);
         final ListView<FlatColor> colorList = new ListView<FlatColor>();
-        colorList.setModel(colorModel);
+        colorList.setModel(manager.colorManager.getSwatchModel());
         colorList.setColumnWidth(20);
         colorList.setRowHeight(20);
         colorList.setOrientation(ListView.Orientation.HorizontalWrap);
@@ -301,7 +281,7 @@ public class FillPicker extends Button {
                 Callback<ActionEvent> okay = new Callback<ActionEvent>() {
                     public void call(ActionEvent event) {
                         FlatColor color = picker.getColor();
-                        colorModel.add(color);
+                        manager.colorManager.addSwatch(color);
                         dialog.hide();
                     }
                 };
