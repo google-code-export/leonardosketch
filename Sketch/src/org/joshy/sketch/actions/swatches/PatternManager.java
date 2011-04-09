@@ -55,6 +55,7 @@ public class PatternManager {
                 "resources/textures/wallpaper1.png"),"wallpaper1.png");
         //PatternPaint pt6 = PatternPaint.create(Main.class.getResource("resources/textures/webtreats-paper-pattern-6-grey.jpg"),"t6");
 
+        u.p("created pattern paints. first rel url = " + pt1.getRelativeURL());
         patternModel = new ArrayListModel<PatternPaint>();
         patternModel.add(pt1);
         patternModel.add(pt2);

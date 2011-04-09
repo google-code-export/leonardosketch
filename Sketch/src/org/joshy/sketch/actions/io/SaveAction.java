@@ -90,13 +90,40 @@ public class SaveAction extends SAction {
         outx.flush();
         out.closeEntry();
 
-        List<SImage> images = export.getDelayedImages();
-        for(SImage image : images) {
-            ZipEntry ie = new ZipEntry(dir+"/"+image.getRelativeURL());
-            out.putNextEntry(ie);
-            ImageIO.write(image.getBufferedImage(),"png",out);
-            out.flush();
-            out.closeEntry();
+        List images = export.getDelayedImages();
+        for(Object i : images) {
+
+            if(i instanceof SImage) {
+                SImage image = (SImage) i;
+                ZipEntry ie = new ZipEntry(dir+"/"+image.getRelativeURL());
+                out.putNextEntry(ie);
+                ImageIO.write(image.getBufferedImage(),"png",out);
+                out.flush();
+                out.closeEntry();
+            }
+            if(i instanceof PatternPaint) {
+                PatternPaint paint = (PatternPaint) i;
+                u.p("saving the real pattern paint  with relative url " + paint.getRelativeURL());
+                ZipEntry ie = new ZipEntry(dir+"/resources/"+ paint.getRelativeURL());
+                out.putNextEntry(ie);
+                ImageIO.write(paint.getImage(),"png",out);
+                out.flush();
+                out.closeEntry();
+                /*
+        BufferedImage img = pattern.getImage();
+        URI baseURI = out.getBaseURI();
+        u.p("document URI = " + baseURI);
+        URI imageURI = baseURI.resolve("resources/"+pattern.getRelativeURL());
+        u.p("image URI = " + imageURI);
+        File imageFile = new File(imageURI);
+        if(!imageFile.getParentFile().exists()) {
+            imageFile.getParentFile().mkdir();
+        }
+        ImageIO.write(img,"png",imageFile);
+        u.p("wrote out image");
+
+                 */
+            }
         }
         out.close();
     }
