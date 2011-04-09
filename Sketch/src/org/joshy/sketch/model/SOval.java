@@ -33,6 +33,48 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
     }
 
     @Override
+    public SPath toPath() {
+        SPath path = new SPath();
+        double x = this.getX();
+        double w = this.getWidth();
+        double y = this.getY();
+        double h = this.getHeight();
+        SPath.PathPoint pt = path.moveTo(x,y+h/2);
+
+        double in_factor = 0.23;
+        double out_factor = 1.0-in_factor;
+        pt = path.curveTo(pt,
+                x,y+h*in_factor,
+                x+w*in_factor, y,
+                x+w/2, y
+                );
+        pt = path.curveTo(pt,
+                x+w*out_factor, y,
+                x+w,y+h*in_factor,
+                x+w,y+h/2
+        );
+        pt = path.curveTo(pt,
+                x+w,y+h*out_factor,
+                x+w*out_factor,y+h,
+                x+w/2,y+h
+                );
+        pt = path.curveTo(pt,
+                x+w*in_factor,y+h,
+                x,y+h*out_factor,
+                x,y+h/2
+                );
+
+        path.close(true);
+        path.setTranslateX(this.getTranslateX());
+        path.setTranslateY(this.getTranslateY());
+        path.setFillPaint(this.getFillPaint());
+        path.setFillOpacity(this.getFillOpacity());
+        path.setStrokeWidth(this.getStrokeWidth());
+        path.setStrokePaint(this.getStrokePaint());
+        return path;
+    }
+
+    @Override
     protected void fillShape(GFX g) {
         g.fillOval(this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }

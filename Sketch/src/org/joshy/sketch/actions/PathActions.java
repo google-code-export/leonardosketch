@@ -6,6 +6,8 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SPath;
+import org.joshy.sketch.model.SShape;
+import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.tools.IncrementalRotateTool;
 import org.joshy.sketch.tools.TransformTool;
@@ -153,6 +155,37 @@ public class PathActions {
         public void execute() {
             if(context.getSelection().size() != 1) return;
             context.setSelectedTool(new TransformTool(context));
+            context.redraw();
+        }
+    }
+
+    public static class ConvertShapeToPath extends SAction {
+        private VectorDocContext context;
+
+        public ConvertShapeToPath(VectorDocContext context) {
+            super();
+            this.context = context;
+        }
+
+        @Override
+        public CharSequence getDisplayName() {
+            return "Convert Shape to Path";
+        }
+
+        @Override
+        public void execute() throws Exception {
+            if(context.getSelection().isEmpty()) return;
+            if(context.getSelection().size() != 1) return;
+
+            SNode first = context.getSelection().firstItem();
+            if(! (first instanceof SShape)) return;
+            SShape shape = (SShape) first;
+            if(shape instanceof SPath) return;
+
+            SPath path = shape.toPath();
+            SketchDocument.SketchPage page = context.getDocument().getCurrentPage();
+            page.remove(shape);
+            page.add(path);
             context.redraw();
         }
     }

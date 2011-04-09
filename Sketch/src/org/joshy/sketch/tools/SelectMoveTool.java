@@ -389,6 +389,9 @@ public class SelectMoveTool extends CanvasTool {
             if(node instanceof SText) {
                 contextMenu.addActions(new TextActions.ResetTextSize(context));
             }
+            if(node instanceof SShape) {
+                contextMenu.addActions(new PathActions.ConvertShapeToPath(context));
+            }
             if(node instanceof SGroup) {
                 contextMenu.addActions(new NodeActions.UngroupSelection(context));
             }

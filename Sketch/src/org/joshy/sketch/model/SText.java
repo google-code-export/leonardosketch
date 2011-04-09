@@ -122,6 +122,22 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
         return new Area();
     }
 
+    @Override
+    public SPath toPath() {
+        SPath path = new SPath();
+        path.moveTo(this.getX(),this.getY());
+        path.lineTo(this.getX()+this.getWidth(),this.getY());
+        path.lineTo(this.getX()+this.getWidth(),this.getY()+this.getHeight());
+        path.lineTo(this.getX(),this.getY()+this.getHeight());
+        path.setTranslateX(this.getTranslateX());
+        path.setTranslateY(this.getTranslateY());
+        path.setFillPaint(this.getFillPaint());
+        path.setFillOpacity(this.getFillOpacity());
+        path.setStrokeWidth(this.getStrokeWidth());
+        path.setStrokePaint(this.getStrokePaint());
+        return path;
+    }
+
     public void draw(GFX g) {
 
         Paint paint = this.getFillPaint();

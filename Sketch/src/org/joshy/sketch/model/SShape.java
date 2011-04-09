@@ -139,6 +139,10 @@ public abstract class SShape extends SNode {
         listeners.remove(gradientHandle);
     }
 
+    public SPath toPath() {
+        return null;
+    }
+
     public static interface SShapeListener {
         public void changed();
     }
