@@ -172,6 +172,8 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             saveAttribute(out,"fontSize",shape);
             saveAttribute(out,"weight",shape);
             saveAttribute(out,"style",shape);
+            saveAttribute(out,"halign",shape);
+            saveBooleanAttribute(out,"autoSize",shape);
         }
 
         if(shape instanceof SPoly) {
