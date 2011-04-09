@@ -18,6 +18,10 @@ public abstract class SShape extends SNode {
     private double fillOpacity = 1.0;
     private DropShadow shadow = null;
     private List<SShapeListener> listeners = new ArrayList<SShapeListener>();
+    private ImageBuffer buf;
+    private DropShadow oldShadow;
+    private double oldWidth;
+    private double oldHeight;
 
     public Paint getFillPaint() {
         return fillPaint;
@@ -80,25 +84,29 @@ public abstract class SShape extends SNode {
         if(shadow != null) {
             int blurRadius = shadow.getBlurRadius();
             if(blurRadius <= 0) blurRadius = 0;
-            Bounds b = getBounds();
-            ImageBuffer buf = g.createBuffer(
-                    (int)b.getWidth()+blurRadius*2,
-                    (int)b.getHeight()+blurRadius*2);
-            double dx = getTranslateX()-b.getX();
-            double dy = getTranslateY()-b.getY();
             double xoff = shadow.getXOffset();
             double yoff = shadow.getYOffset();
-            if(buf != null) {
+            Bounds b = getBounds();
+            double dx = getTranslateX()-b.getX();
+            double dy = getTranslateY()-b.getY();
+
+            if(buf == null || shadow != oldShadow || b.getWidth() != oldWidth || b.getHeight() != oldHeight) {
+                oldWidth = b.getWidth();
+                oldHeight = b.getHeight();
+                buf = g.createBuffer(
+                        (int)b.getWidth()+blurRadius*2,
+                        (int)b.getHeight()+blurRadius*2);
                 GFX g2 = buf.getGFX();
                 //g2.setPaint(FlatColor.RED);
                 //g2.fillRect(0,0,buf.buf.getWidth(),buf.buf.getHeight());
                 g2.setPaint(shadow.getColor().deriveWithAlpha(shadow.getOpacity()));
                 g2.translate(blurRadius,blurRadius);
-                g2.translate(dx,dy);
+                g2.translate(dx, dy);
                 fillShape(g2);
-                g2.translate(-dx,-dy);
+                g2.translate(-dx, -dy);
                 buf.apply(new BlurEffect(blurRadius));
                 g2.translate(-blurRadius,-blurRadius);
+                oldShadow = shadow;
             }
             g.draw(buf,xoff-blurRadius-dx,yoff-blurRadius-dy);
         }
