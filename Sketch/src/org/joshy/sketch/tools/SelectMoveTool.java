@@ -372,8 +372,8 @@ public class SelectMoveTool extends CanvasTool {
             contextMenu.addActions(new NodeActions.AlignLeft(context),
                     new NodeActions.AlignRight(context),
                     new NodeActions.AlignTop(context),
-                    new NodeActions.AlignBottom(context),
-                    new NodeActions.GroupSelection(context));
+                    new NodeActions.AlignBottom(context));
+            contextMenu.addActions(new NodeActions.GroupSelection(context));
         }
 
         contextMenu.addActions(new CreateSymbol(context));
@@ -388,6 +388,9 @@ public class SelectMoveTool extends CanvasTool {
             SNode node = context.getSelection().firstItem();
             if(node instanceof SText) {
                 contextMenu.addActions(new TextActions.ResetTextSize(context));
+            }
+            if(node instanceof SGroup) {
+                contextMenu.addActions(new NodeActions.UngroupSelection(context));
             }
         }
 
