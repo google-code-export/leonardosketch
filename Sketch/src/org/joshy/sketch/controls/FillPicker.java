@@ -97,8 +97,22 @@ public class FillPicker extends Button {
     ListView.ItemRenderer<Paint> paintItemRenderer = new ListView.ItemRenderer<Paint>() {
         public void draw(GFX gfx, ListView listView, Paint paint, int index, double x, double y, double w, double h) {
             gfx.translate(x,y);
-            gfx.setPaint(paint);
-            gfx.fillRect(0,0,w,h);
+
+            if(paint instanceof PatternPaint) {
+                PatternPaint pp = (PatternPaint) paint;
+                double pw = pp.getImage().getWidth();
+                double ph = pp.getImage().getHeight();
+                double sx = w/pw;
+                double sy = h/ph;
+                gfx.scale(sx,sy);
+                gfx.setPaint(pp);
+                gfx.fillRect(0,0,pw,ph);
+                gfx.scale(1/sx,1/sy);
+            } else {
+                gfx.setPaint(paint);
+                gfx.fillRect(0,0,w,h);
+            }
+
             gfx.setPaint(FlatColor.BLACK);
             gfx.drawRect(0,0,w,h);
             gfx.translate(-x,-y);

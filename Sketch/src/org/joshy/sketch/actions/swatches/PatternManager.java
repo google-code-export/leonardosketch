@@ -11,7 +11,6 @@ import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -45,7 +44,7 @@ public class PatternManager {
         //PatternPaint pt1 = PatternPaint.create(SRect.class.getResource("resources/button1.png"));
         PatternPaint pt1 = PatternPaint.create(Main.class.getResource(
                 "resources/textures/brown_noise.png"),"brown_noise.png");
-        pt1 = pt1.deriveNewStart(new Point(40,40));
+        //pt1 = pt1.deriveNewStart(new Point(40,40));
         PatternPaint pt2 = PatternPaint.create(Main.class.getResource(
                 "resources/textures/checkerboard.png"),"checkerboard.png");
         PatternPaint pt3 = PatternPaint.create(Main.class.getResource(
