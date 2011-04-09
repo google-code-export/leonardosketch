@@ -1,10 +1,8 @@
 package org.joshy.sketch.actions.io;
 
-import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.util.u;
-import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.OpenAction;
 import org.joshy.sketch.model.*;
 import org.junit.After;
@@ -14,7 +12,6 @@ import org.junit.Test;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.PrintWriter;
 import java.net.URL;
 
 import static org.junit.Assert.assertTrue;
@@ -30,7 +27,7 @@ public class NativeExportTest {
     @Before
     public void setUp() throws Exception {
     }
-
+    /*
     @Test
     public void exportOldFormat() {
         SketchDocument doc = new SketchDocument();
@@ -49,6 +46,7 @@ public class NativeExportTest {
         ExportProcessor.process(new NativeExport(), out, doc);
         out.close();
     }
+    */
     @Test
     public void exportLeozFormat() throws Exception {
         SketchDocument doc = new SketchDocument();
@@ -146,6 +144,37 @@ public class NativeExportTest {
         assertTrue(loadedRadGrad.getRadius() == 100);
         assertTrue(loadedRadGrad.getStops().size() == 3);
         assertTrue(loadedRadGrad.getStops().get(1).getColor().getRed() == FlatColor.YELLOW.getRed());
+    }
+
+    @Test
+    public void exportText() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SketchDocument doc = new SketchDocument();
+        SText text = new SText();
+        text.setText("foo");
+        text.setHalign(SText.HAlign.Center);
+        text.setFontSize(36);
+        text.setAutoSize(false);
+        text.setWidth(300);
+        doc.getCurrentPage().model.add(text);
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing test to file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(
+                new FileOutputStream(file)
+                , file.getName()
+                , file.toURI()
+                , doc
+        );
+        SketchDocument doc2 = OpenAction.loadZip(file);
+        assertTrue(doc2.getPages().get(0).model.get(0) instanceof SText);
+        SText text2 = (SText) doc2.getPages().get(0).model.get(0);
+        assertTrue(text2.getText().equals("foo"));
+        assertTrue(text2.getHalign() == SText.HAlign.Center);
+        assertTrue(text2.getFontSize() == 36);
+        assertTrue(text2.getWidth() == 300);
+        assertTrue(text2.isAutoSize() == false);
+
     }
 
     @Test

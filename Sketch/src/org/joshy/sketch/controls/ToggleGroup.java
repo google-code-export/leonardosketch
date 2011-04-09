@@ -4,8 +4,6 @@ import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.Togglebutton;
-import org.joshy.gfx.util.u;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,13 +23,14 @@ public class ToggleGroup {
         buttons = new ArrayList<Button>();
     }
 
-    public void add(Button button) {
+    public ToggleGroup add(Button button) {
         buttons.add(button);
         EventBus.getSystem().addListener(button,ActionEvent.Action, new Callback<ActionEvent>() {
             public void call(ActionEvent event) {
                 setSelectedButton((Button)event.getSource());
             }
         });
+        return this;
     }
 
     public Button getSelectedButton() {

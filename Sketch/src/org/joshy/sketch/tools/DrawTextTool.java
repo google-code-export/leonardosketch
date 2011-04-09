@@ -82,7 +82,7 @@ public class DrawTextTool extends CanvasTool {
     private void endTextEditing() {
         context.getCanvas().getParent().getStage().getPopupLayer().remove(overlayTextBox);
         overlayTextBox.setVisible(false);
-        textNode.text = overlayTextBox.getText();
+        textNode.setText(overlayTextBox.getText());
         textNode.refresh();
         overlayTextBox = null;
         if(!notInMainDocument) {
@@ -118,7 +118,7 @@ public class DrawTextTool extends CanvasTool {
             .style(textNode.getStyle())
             .weight(textNode.getWeight())
             .resolve());
-        overlayTextBox.setText(textNode.text);
+        overlayTextBox.setText(textNode.getText());
         Point2D point = context.getSketchCanvas().transformToDrawing(offsetX+textNode.getTranslateX()+textNode.getX(),
                                                   offsetY+textNode.getTranslateY()+textNode.getY()
                 );

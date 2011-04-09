@@ -5,13 +5,25 @@ import org.joshy.gfx.draw.*;
 import java.awt.geom.Area;
 
 public class SText extends AbstractResizeableNode implements SelfDrawable {
-    public String text;
+    public enum HAlign { Left, Center, Right };
+
+    private String text;
     private double fontSize;
     private Font.Weight weight = Font.Weight.Regular;
     private Font.Style style;
-    private int alignment = 0;
     private String fontName = Font.DEFAULT.getName();
     private boolean autoSize = true;
+    private HAlign halign = HAlign.Left;
+
+    public HAlign getHalign() {
+        return halign;
+    }
+
+    public void setHalign(HAlign halign) {
+        this.halign = halign;
+    }
+
+
 
 
     public SText(double x, double y, double w, double h) {
@@ -57,14 +69,6 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
     
     public Font.Style getStyle() {
         return style;
-    }
-
-    public void setAlignment(int alignment) {
-        this.alignment = alignment;
-    }
-
-    public int getAlignment() {
-        return alignment;
     }
 
     public void refresh() {
@@ -144,14 +148,19 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
                 .weight(this.getWeight())
                 .style(this.getStyle())
                 .resolve();
-        double w = font.calculateWidth(getText());
-        double h = font.calculateHeight(getText());
-
         String[] strings = getText().split("\n");
         double x = 0;
         double y = 0;
         y += font.getAscender();
+        double fw = getWidth();
         for(String s : strings) {
+            double w = font.calculateWidth(s);
+            switch(this.getHalign()) {
+                case Left: x = 0; break;
+                case Center: x = (fw-w)/2; break;
+                case Right: x = fw-w; break;
+            }
+
             g.drawText(s,font,this.getX()+x,this.getY()+y);
             y += (font.getAscender() + font.getDescender());
         }

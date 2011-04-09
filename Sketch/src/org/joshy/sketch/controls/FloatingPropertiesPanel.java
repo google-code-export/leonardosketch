@@ -49,6 +49,10 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private FlexBox booleanPropsEditor;
     private FillPicker fillButton;
     private SwatchColorPicker shadowColorButton;
+    private Togglebutton fontAlignLeft;
+    private Togglebutton fontAlignHCenter;
+    private Togglebutton fontAlignRight;
+    private ToggleGroup fontAlignGroup;
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
@@ -247,6 +251,29 @@ public class FloatingPropertiesPanel extends VFlexBox {
         fontItalicButton.onClicked(fontItalicCallback);
         fontProperties.add(fontItalicButton);
 
+        fontAlignLeft = new Togglebutton("L");
+        fontAlignHCenter = new Togglebutton("C");
+        fontAlignRight = new Togglebutton("R");
+        fontProperties.add(fontAlignLeft,fontAlignHCenter,fontAlignRight);
+        fontAlignGroup = new ToggleGroup();
+        fontAlignGroup.add(fontAlignLeft).add(fontAlignHCenter).add(fontAlignRight);
+        fontAlignGroup.setSelectedButton(fontAlignLeft);
+        EventBus.getSystem().addListener(fontAlignGroup, ActionEvent.Action, new Callback<ActionEvent>(){
+            public void call(ActionEvent actionEvent) throws Exception {
+                if(manager.propMan.isClassAvailable(SText.class)) {
+                    if(fontAlignGroup.getSelectedButton() == fontAlignLeft) {
+                        manager.propMan.getProperty("halign").setValue(SText.HAlign.Left);
+                    }
+                    if(fontAlignGroup.getSelectedButton() == fontAlignHCenter) {
+                        manager.propMan.getProperty("halign").setValue(SText.HAlign.Center);
+                    }
+                    if(fontAlignGroup.getSelectedButton() == fontAlignRight) {
+                        manager.propMan.getProperty("halign").setValue(SText.HAlign.Right);
+                    }
+                    context.redraw();
+                }
+            }
+        });
 
 
         arrowHeadEnd = new PopupMenuButton<SArrow.HeadEnd>();

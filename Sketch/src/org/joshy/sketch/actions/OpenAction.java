@@ -527,6 +527,8 @@ public class OpenAction extends SAction {
             loadStringAttribute(e,node,"text");
             loadEnumAttribute(e,node,"weight", Font.Weight.class);
             loadEnumAttribute(e,node,"style", Font.Style.class);
+            loadEnumAttribute(e,node,"halign",SText.HAlign.class);
+            loadBooleanAttribute(e,node,"autoSize");
         }
         if(e.attrEquals("type","image")) {
             try {
