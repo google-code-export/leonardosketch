@@ -348,6 +348,11 @@ public class NodeActions {
         public GroupSelection(VectorDocContext context) {
             super();
             this.context = context;
+            EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, new Callback<Selection.SelectionChangeEvent>() {
+                public void call(Selection.SelectionChangeEvent selectionChangeEvent) throws Exception {
+                    setEnabled(selectionChangeEvent.getSelection().size() >= 2);
+                }
+            });
         }
 
         @Override
@@ -385,6 +390,17 @@ public class NodeActions {
         public UngroupSelection(VectorDocContext context) {
             super();
             this.context = context;
+            EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, new Callback<Selection.SelectionChangeEvent>() {
+                public void call(Selection.SelectionChangeEvent selectionChangeEvent) throws Exception {
+                    for(SNode node : selectionChangeEvent.getSelection().items()) {
+                        if(!(node instanceof SGroup)) {
+                            setEnabled(false);
+                            return;
+                        }
+                    }
+                    setEnabled(true);
+                }
+            });
         }
 
         @Override
