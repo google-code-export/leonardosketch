@@ -2,7 +2,6 @@ package org.joshy.sketch.property;
 
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.SNode;
 
@@ -42,6 +41,14 @@ public class PropertyManager {
 
     public Property getProperty(String propName) {
         return new Property(propName,selection);
+    }
+
+    public boolean isPropertyNotNull(String shadow) {
+        if(selection == null) return false;
+        if(selection.isEmpty()) return false;
+        Property property = getProperty(shadow);
+        if(property.getValue() == null) return false;
+        return true;
     }
 
     public static class Property {

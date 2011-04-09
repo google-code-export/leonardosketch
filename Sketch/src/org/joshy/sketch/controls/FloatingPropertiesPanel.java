@@ -7,6 +7,7 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.FlexBox;
+import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
@@ -44,11 +45,18 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private boolean locked = false;
     private FlexBox groupPropertiesEditor;
     private FlexBox shapeProperties;
-    private FlexBox shadowProperties;
+
+    private GridBox shadowProperties;
+    private Checkbox shadowSet;
+    private SwatchColorPicker shadowColorButton;
+    private SpinBox<Double> shadowXoff;
+    private SpinBox<Double> shadowYoff;
+    private SpinBox<Integer> shadowBlurRadius;
+    private Slider shadowOpacity;
+
     private FlexBox fontProperties;
     private FlexBox booleanPropsEditor;
     private FillPicker fillButton;
-    private SwatchColorPicker shadowColorButton;
     private Togglebutton fontAlignLeft;
     private Togglebutton fontAlignHCenter;
     private Togglebutton fontAlignRight;
@@ -95,107 +103,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
         shapeProperties.add(strokeColorButton);
 
 
-
-        shadowProperties = new HFlexBox().setBoxAlign(HFlexBox.Align.Baseline);
-        add(shadowProperties);
-        shadowProperties.setVisible(false);
-        final Checkbox dropShadow = new Checkbox("shadow");
-        EventBus.getSystem().addListener(dropShadow, ActionEvent.Action, new Callback<ActionEvent>(){
-            public void call(ActionEvent actionEvent) throws Exception {
-                if(selection != null) {
-                    if(manager.propMan.isClassAvailable(SShape.class)) {
-                        if(dropShadow.isSelected()) {
-                            manager.propMan.getProperty("shadow").setValue(new DropShadow());
-                        } else {
-                            manager.propMan.getProperty("shadow").setValue(null);
-                        }
-                        context.redraw();
-                    }
-                }
-            }
-        });
-        shadowProperties.add(dropShadow);
-        shadowProperties.add(new Label("offset"));
-        final SpinBox<Double> xoffBox = new SpinBox<Double>();
-        xoffBox.setValue(5.0);
-        shadowProperties.add(xoffBox);
-        xoffBox.onChanged(new Callback<ChangedEvent>(){
-            public void call(ChangedEvent event) throws Exception {
-                if(selection != null) {
-                    if(manager.propMan.isClassAvailable(SShape.class)) {
-                        double v = (Double)event.getValue();
-                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
-                        shadow = shadow.setXOffset(v);
-                        manager.propMan.getProperty("shadow").setValue(shadow);
-                        context.redraw();
-                    }
-                }
-            }
-        });
-
-
-        final SpinBox<Double> yoffBox = new SpinBox<Double>();
-        yoffBox.setValue(5.0);
-        yoffBox.onChanged(new Callback<ChangedEvent>(){
-            public void call(ChangedEvent event) throws Exception {
-                if(selection != null) {
-                    if(manager.propMan.isClassAvailable(SShape.class)) {
-                        double v = (Double)event.getValue();
-                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
-                        shadow = shadow.setYOffset(v);
-                        manager.propMan.getProperty("shadow").setValue(shadow);
-                        context.redraw();
-                    }
-                }
-            }
-        });
-        shadowProperties.add(yoffBox);
-
-        shadowProperties.add(new Label("radius"));
-        final SpinBox<Integer> blurRadius = new SpinBox<Integer>();
-        blurRadius.setValue(3);
-        blurRadius.onChanged(new Callback<ChangedEvent>(){
-            public void call(ChangedEvent event) throws Exception {
-                if(selection != null) {
-                    if(manager.propMan.isClassAvailable(SShape.class)) {
-                        int v = (Integer)event.getValue();
-                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
-                        shadow = shadow.setBlurRadius(v);
-                        manager.propMan.getProperty("shadow").setValue(shadow);
-                        context.redraw();
-                    }
-                }
-            }
-        });
-        shadowProperties.add(blurRadius);
-        shadowColorButton = new SwatchColorPicker();
-        shadowProperties.add(shadowColorButton);
-        shadowProperties.add(new Label("opacity"));
-        final Slider shadowOpacity = new Slider(false).setMin(0).setMax(100).setValue(100);
-        EventBus.getSystem().addListener(shadowOpacity, ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
-            public void call(ChangedEvent event) throws Exception {
-                if(selection != null) {
-                    if(manager.propMan.isClassAvailable(SShape.class)) {
-                        double v = (Double)event.getValue();
-                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
-                        shadow = shadow.setOpacity(v/100);
-                        manager.propMan.getProperty("shadow").setValue(shadow);
-                        context.redraw();
-                    }
-                }
-            }
-        });
-        shadowProperties.add(shadowOpacity);
-
-
-
-
-
-        fillOpacitySlider = new Slider(false).setMin(0).setMax(100).setValue(100);
-        EventBus.getSystem().addListener(fillOpacitySlider, ChangedEvent.DoubleChanged, fillOpacityCallback);
-        fillOpacityLabel = new Label(getString("toolbar.opacity")+":");
-        shapeProperties.add(fillOpacityLabel);
-        shapeProperties.add(fillOpacitySlider);
+        setupShadowProperties();
 
         strokeWidthSlider = new Slider(false);
         strokeWidthSlider.setMin(0);
@@ -205,6 +113,13 @@ public class FloatingPropertiesPanel extends VFlexBox {
         strokeWidthLabel = new Label(getString("toolbar.stroke")+":");
         shapeProperties.add(strokeWidthLabel);
         shapeProperties.add(strokeWidthSlider);
+
+        fillOpacitySlider = new Slider(false).setMin(0).setMax(100).setValue(100);
+        EventBus.getSystem().addListener(fillOpacitySlider, ChangedEvent.DoubleChanged, fillOpacityCallback);
+        fillOpacityLabel = new Label(getString("toolbar.opacity")+":");
+        shapeProperties.add(fillOpacityLabel);
+        shapeProperties.add(fillOpacitySlider);
+
 
 
 
@@ -318,6 +233,112 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
     }
 
+    private void setupShadowProperties() {
+        shadowProperties = new GridBox();
+        shadowProperties.debug(false);
+        shadowProperties.setPrefWidth(200);
+        shadowProperties.setPrefHeight(130);
+        shadowProperties.setPadding(1);
+        shadowProperties.createColumn(70,GridBox.Align.Right);
+        shadowProperties.createColumn(60,GridBox.Align.Left);
+        shadowProperties.createColumn(60,GridBox.Align.Left);
+        add(shadowProperties);
+        shadowProperties.setVisible(false);
+
+        shadowSet = new Checkbox("shadow");
+        EventBus.getSystem().addListener(shadowSet, ActionEvent.Action, new Callback<ActionEvent>(){
+            public void call(ActionEvent actionEvent) throws Exception {
+                if(selection != null) {
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        if(shadowSet.isSelected()) {
+                            manager.propMan.getProperty("shadow").setValue(new DropShadow());
+                        } else {
+                            manager.propMan.getProperty("shadow").setValue(null);
+                        }
+                        context.redraw();
+                    }
+                }
+            }
+        });
+        shadowProperties.add(shadowSet);
+        shadowProperties.nextRow();
+
+
+        shadowProperties.add(new Label("Offset:"));
+        shadowXoff = new SpinBox<Double>();
+        shadowXoff.setValue(5.0);
+        shadowProperties.add(shadowXoff);
+        shadowXoff.onChanged(new Callback<ChangedEvent>(){
+            public void call(ChangedEvent event) throws Exception {
+                if(manager.propMan.isPropertyNotNull("shadow")) {
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        double v = (Double)event.getValue();
+                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
+                        shadow = shadow.setXOffset(v);
+                        manager.propMan.getProperty("shadow").setValue(shadow);
+                        context.redraw();
+                    }
+                }
+            }
+        });
+
+
+        shadowYoff = new SpinBox<Double>();
+        shadowYoff.setValue(5.0);
+        shadowYoff.onChanged(new Callback<ChangedEvent>(){
+            public void call(ChangedEvent event) throws Exception {
+                if(manager.propMan.isPropertyNotNull("shadow")) {
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        double v = (Double)event.getValue();
+                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
+                        shadow = shadow.setYOffset(v);
+                        manager.propMan.getProperty("shadow").setValue(shadow);
+                        context.redraw();
+                    }
+                }
+            }
+        });
+        shadowProperties.add(shadowYoff);
+        shadowProperties.nextRow();
+
+        shadowProperties.add(new Label("Blur:"));
+        shadowBlurRadius = new SpinBox<Integer>();
+        shadowBlurRadius.setValue(3);
+        shadowBlurRadius.onChanged(new Callback<ChangedEvent>(){
+            public void call(ChangedEvent event) throws Exception {
+                if(manager.propMan.isPropertyNotNull("shadow")) {
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        int v = (Integer)event.getValue();
+                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
+                        shadow = shadow.setBlurRadius(v);
+                        manager.propMan.getProperty("shadow").setValue(shadow);
+                        context.redraw();
+                    }
+                }
+            }
+        });
+        shadowProperties.add(shadowBlurRadius);
+        shadowColorButton = new SwatchColorPicker();
+        shadowProperties.add(shadowColorButton);
+        shadowProperties.nextRow();
+        shadowProperties.add(new Label("opacity"));
+        shadowOpacity = new Slider(false).setMin(0).setMax(100).setValue(100);
+        EventBus.getSystem().addListener(shadowOpacity, ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
+            public void call(ChangedEvent event) throws Exception {
+                if(manager.propMan.isPropertyNotNull("shadow")) {
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        double v = (Double)event.getValue();
+                        DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
+                        shadow = shadow.setOpacity(v/100);
+                        manager.propMan.getProperty("shadow").setValue(shadow);
+                        context.redraw();
+                    }
+                }
+            }
+        });
+        shadowProperties.add(shadowOpacity);
+    }
+
     private static class IB extends ToolbarButton {
         private NodeActions.MultiNodeAction action;
 
@@ -369,23 +390,19 @@ public class FloatingPropertiesPanel extends VFlexBox {
         if(manager.propMan.isClassAvailable(SShape.class)) {
             shapeProperties.setVisible(true);
             shadowProperties.setVisible(true);
-            /*
             if(lastNode != null) {
-                PropertyManager.Property fillColorProp = manager.propMan.getProperty("fillPaint");
-                if(fillColorProp.hasSingleValue()) {
-                    Object val = fillColorProp.getValue();
-                    if(val instanceof FlatColor) {
-                        colorButton.setSelectedColor((FlatColor)val);
-                    } else {
-                        colorButton.setSelectedColor(gradient1);
-                    }
+                if(manager.propMan.isPropertyNotNull("shadow")) {
+                    shadowSet.setSelected(true);
+                    DropShadow shad = (DropShadow) manager.propMan.getProperty("shadow").getValue();
+                    shadowXoff.setValue(shad.getXOffset());
+                    shadowYoff.setValue(shad.getYOffset());
+                    shadowBlurRadius.setValue(shad.getBlurRadius());
+                    shadowColorButton.setSelectedColor(shad.getColor());
+                    shadowOpacity.setValue(shad.getOpacity()*100);
+                } else {
+                    shadowSet.setSelected(false);
                 }
-
-                PropertyManager.Property fillOpacityProp = manager.propMan.getProperty("fillOpacity");
-                if(fillOpacityProp.hasSingleValue()) {
-                    fillOpacitySlider.setValue(fillOpacityProp.getDoubleValue()*100.0);
-                }
-            }*/
+            }
         } else {
             shapeProperties.setVisible(false);
             shadowProperties.setVisible(false);
