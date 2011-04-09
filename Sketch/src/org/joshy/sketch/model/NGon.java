@@ -168,6 +168,28 @@ public class NGon extends SShape implements SelfDrawable {
     }
 
     @Override
+    public SPath toPath() {
+        SPath path = new SPath();
+        double[] points = toPoints();
+        for(int i=0; i<points.length; i+=2) {
+            if(i == 0) {
+                path.moveTo(points[i],points[i+1]);
+            } else {
+                path.lineTo(points[i],points[i+1]);
+            }
+        }
+        path.close(true);
+
+        path.setTranslateX(this.getTranslateX());
+        path.setTranslateY(this.getTranslateY());
+        path.setFillPaint(this.getFillPaint());
+        path.setFillOpacity(this.getFillOpacity());
+        path.setStrokeWidth(this.getStrokeWidth());
+        path.setStrokePaint(this.getStrokePaint());
+        return path;
+    }
+
+    @Override
     public SNode duplicate(SNode dupe) {
         if(dupe == null) {
             dupe = new NGon(getSides());

@@ -110,6 +110,29 @@ public class SPoly extends SShape implements SelfDrawable {
     }
 
     @Override
+    public SPath toPath() {
+        SPath path = new SPath();
+        for(int i=0; i<this.pointCount();i++) {
+            Point2D pt = this.getPoint(i);
+            if(i==0) {
+                path.moveTo(pt.getX(),pt.getY());
+            } else {
+                path.lineTo(pt.getX(),pt.getY());
+            }
+        }
+        if(this.isClosed()) {
+            path.close(true);
+        }
+        path.setTranslateX(this.getTranslateX());
+        path.setTranslateY(this.getTranslateY());
+        path.setFillPaint(this.getFillPaint());
+        path.setFillOpacity(this.getFillOpacity());
+        path.setStrokeWidth(this.getStrokeWidth());
+        path.setStrokePaint(this.getStrokePaint());
+        return path;
+    }
+
+    @Override
     protected void fillShape(GFX g) {
         double[] points = new double[this.pointCount()*2];
         for(int i=0; i<this.pointCount(); i++) {

@@ -244,6 +244,8 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 .addItem(getString("menus.add"), new BooleanGeometry.Union(context))
                 .addItem(getString("menus.subtract"), new BooleanGeometry.Subtract(context))
                 .addItem(getString("menus.intersection"), new BooleanGeometry.Intersection(context))
+                .separator()
+                .addItem("Convert Shape to Path", new PathActions.ConvertShapeToPath(context))
                 );
         menubar.add(new Menu().setTitle(getString("menus.document"))
                 .addItem(getString("menus.setDocumentSize"), new DocumentActions.SetDocumentSize(this))

@@ -5,10 +5,7 @@ import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.node.Bounds;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
+import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.List;
 
