@@ -112,24 +112,6 @@ public class Selection {
     //generate handles. for now only resizable shapes have handles
     private List<Handle> genHandles(SNode node) {
         ArrayList<Handle> hs = new ArrayList<Handle>();
-        if(node instanceof SResizeableNode) {
-            SResizeableNode rnode = (SResizeableNode) node;
-            if(rnode instanceof SRect) {
-                SRect rect = (SRect) rnode;
-                hs.add(new SRect.RoundRectMasterHandle(rect));
-            }
-            if(rnode instanceof SText) {
-                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.TopLeft));
-                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.TopRight));
-                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.BottomLeft));
-                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.BottomRight));
-            } else {
-                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopLeft));
-                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopRight));
-                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomLeft));
-                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomRight));
-            }
-        }
         if(node instanceof SShape) {
             SShape shape = (SShape) node;
             if(shape.getFillPaint() instanceof GradientFill) {
@@ -152,6 +134,24 @@ public class Selection {
                 LinearGradientStartHandle h1 = new LinearGradientStartHandle(shape, context);
                 hs.add(h1);
                 hs.add(new LinearGradientEndHandle(h1,shape,context));
+            }
+        }
+        if(node instanceof SResizeableNode) {
+            SResizeableNode rnode = (SResizeableNode) node;
+            if(rnode instanceof SRect) {
+                SRect rect = (SRect) rnode;
+                hs.add(new SRect.RoundRectMasterHandle(rect));
+            }
+            if(rnode instanceof SText) {
+                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.TopLeft));
+                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.TopRight));
+                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.BottomLeft));
+                hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.BottomRight));
+            } else {
+                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopLeft));
+                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopRight));
+                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomLeft));
+                hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomRight));
             }
         }
         if(node instanceof SArrow) {
