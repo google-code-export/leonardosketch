@@ -11,6 +11,7 @@ import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.ListModel;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.symbols.CreateSymbol;
 import org.joshy.sketch.canvas.ResizeHandle;
@@ -56,6 +57,7 @@ public class SelectMoveTool extends CanvasTool {
     private Handle lastHandle;
     private Thread checkThread;
     private long shownTime;
+    private boolean shouldShowFloatingPanel = true;
 
     public static class ActionItem {
         public SAction action;
@@ -708,6 +710,14 @@ public class SelectMoveTool extends CanvasTool {
     protected void mouseReleased(MouseEvent event, Point2D.Double cursor) {
         context.getCanvas().hideHSnap();
         context.getCanvas().hideVSnap();
+
+        if(pressed && !moved) {
+            shouldShowFloatingPanel = !shouldShowFloatingPanel;
+        }
+        if(moved) {
+            shouldShowFloatingPanel = true;
+        }
+
         if(moved) {
             final Map<SNode,Point2D> oldPoints = new HashMap<SNode,Point2D>();
             for(SNode r : context.getSelection().items()) {
@@ -787,7 +797,9 @@ public class SelectMoveTool extends CanvasTool {
         context.redraw();
         starts.clear();
         if (!context.getSelection().isEmpty()) {
-            fadeIn(context.getPropPanel());
+            if(shouldShowFloatingPanel) {
+                fadeIn(context.getPropPanel());
+            }
         } else {
             fadeOut(context.getPropPanel());
         }
