@@ -109,7 +109,7 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         showAddIndicator = true;
         for(MultiGradientFill.Stop stop: getFill().getStops()) {
             Point2D pt = Util.interpolatePoint(getStart(), getEnd(), stop.getPosition());
-            if(pt.distance(cursor) < 5) {
+            if(pt.distance(cursor) < 10) {
                 showAddIndicator = false;
             }
         }
@@ -173,24 +173,37 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         DrawUtils.drawStandardHandle(g, x, y, FlatColor.GREEN);
 
         drawStopHandles(g,canvas);
-        drawNewStopIndicator(g, canvas);
+        if(showAddIndicator && hovered) {
+            drawNewStopIndicator(g, canvas);
+        }
     }
 
     protected void drawNewStopIndicator(GFX g, SketchCanvas canvas) {
-        if(showAddIndicator && hovered) {
-            Point2D hp = canvas.transformToDrawing(hoverPoint.getX(),hoverPoint.getY());
-            g.translate(hp.getX(),hp.getY());
+        Point2D closest = closestPoint(getStart(),getEnd(),hoverPoint);
+        Point2D hp = canvas.transformToDrawing(closest.getX(),closest.getY());
+        g.translate(hp.getX(),hp.getY());
 
-            double angle = GeomUtil.calcAngle(getStart(),getEnd());
-            g.rotate(-Math.toDegrees(angle), Transform.Z_AXIS);
-            Path2D.Double path = createHandlePath();
-            g.setPaint(FlatColor.WHITE);
-            g.fillPath(path);
-            g.setPaint(FlatColor.BLACK);
-            g.drawPath(path);
-            g.rotate(Math.toDegrees(angle), Transform.Z_AXIS);
-            g.translate(-hp.getX(),-hp.getY());
-        }
+        double angle = GeomUtil.calcAngle(getStart(),getEnd());
+        g.rotate(-Math.toDegrees(angle), Transform.Z_AXIS);
+        Path2D.Double path = createHandlePath();
+        g.setPaint(FlatColor.WHITE);
+        g.fillPath(path);
+        g.setPaint(FlatColor.BLACK);
+        g.drawPath(path);
+        g.rotate(Math.toDegrees(angle), Transform.Z_AXIS);
+        g.translate(-hp.getX(),-hp.getY());
+    }
+
+    private static Point2D closestPoint(Point2D a, Point2D b, Point2D c) {
+        double theta1 = GeomUtil.calcAngle(a,c);
+        double theta2 = GeomUtil.calcAngle(a,b);
+        double theta = theta2-theta1;
+
+        double ac = a.distance(c);
+        double ad = Math.cos(theta)*ac;
+        theta2 = theta2+90;
+        Point2D pt = GeomUtil.calcPoint(a, Math.toDegrees(GeomUtil.calcAngle(a,b)), ad);
+        return pt;
     }
 
     protected void drawStopHandles(GFX g, SketchCanvas canvas) {
