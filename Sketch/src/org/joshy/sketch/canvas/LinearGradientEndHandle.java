@@ -3,6 +3,8 @@ package org.joshy.sketch.canvas;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.LinearGradientFill;
+import org.joshy.gfx.node.Bounds;
+import org.joshy.sketch.model.AbstractResizeableNode;
 import org.joshy.sketch.model.Handle;
 import org.joshy.sketch.model.SShape;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -37,9 +39,35 @@ public class LinearGradientEndHandle extends Handle {
     @Override
     public void setX(double x, boolean constrain) {
         x -= shape.getBounds().getX();
-        getFill().setEndX(x);
+        if(shape instanceof AbstractResizeableNode) {
+            snapX((AbstractResizeableNode) shape, x);
+        } else {
+            getFill().setEndX(x);
+        }
         master.refresh();
         master.updateControlPositions();
+    }
+
+    private void snapX(AbstractResizeableNode node, double x) {
+        LinearGradientFill f = getFill();
+        Bounds b = node.getBounds();
+        if(Math.abs(x-0)<5) {
+            f.setEndX(0);
+            f.setEndXSnapped(LinearGradientFill.Snap.Start);
+            return;
+        }
+        if(Math.abs(x-b.getWidth()/2)<5) {
+            f.setEndX(b.getWidth() / 2);
+            f.setEndXSnapped(LinearGradientFill.Snap.Middle);
+            return;
+        }
+        if(Math.abs(x-b.getWidth())<5) {
+            f.setEndX(b.getWidth());
+            f.setEndXSnapped(LinearGradientFill.Snap.End);
+            return;
+        }
+        f.setEndX(x);
+        f.setEndXSnapped(LinearGradientFill.Snap.None);
     }
 
     @Override
@@ -50,9 +78,35 @@ public class LinearGradientEndHandle extends Handle {
     @Override
     public void setY(double y, boolean constrain) {
         y -= shape.getBounds().getY();
-        getFill().setEndY(y);
+        if(shape instanceof AbstractResizeableNode) {
+            snapY((AbstractResizeableNode)shape,y);
+        } else {
+            getFill().setEndY(y);
+        }
         master.refresh();
         master.updateControlPositions();
+    }
+
+    private void snapY(AbstractResizeableNode node, double y) {
+        LinearGradientFill f = getFill();
+        Bounds b = node.getBounds();
+        if(Math.abs(y-0)<5) {
+            f.setEndY(0);
+            f.setEndYSnapped(LinearGradientFill.Snap.Start);
+            return;
+        }
+        if(Math.abs(y-b.getHeight()/2)<5) {
+            f.setEndY(b.getHeight()/2);
+            f.setEndYSnapped(LinearGradientFill.Snap.Middle);
+            return;
+        }
+        if(Math.abs(y-b.getHeight())<5) {
+            f.setEndY(b.getHeight());
+            f.setEndYSnapped(LinearGradientFill.Snap.End);
+            return;
+        }
+        f.setEndY(y);
+        f.setEndYSnapped(LinearGradientFill.Snap.None);
     }
 
     @Override

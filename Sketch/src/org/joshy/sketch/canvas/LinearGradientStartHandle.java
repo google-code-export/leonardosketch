@@ -3,12 +3,15 @@ package org.joshy.sketch.canvas;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.LinearGradientFill;
 import org.joshy.gfx.draw.MultiGradientFill;
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.util.GeomUtil;
 import org.joshy.gfx.util.u;
+import org.joshy.sketch.model.AbstractResizeableNode;
 import org.joshy.sketch.model.SShape;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.util.Util;
@@ -23,6 +26,7 @@ import java.awt.geom.Point2D;
  * To change this template use File | Settings | File Templates.
  */
 public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradientFill> {
+
     public LinearGradientStartHandle(SShape shape, VectorDocContext context) {
         super(shape,context);
     }
@@ -33,13 +37,41 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
         return shape.getBounds().getX() + getFill().getStartX();
     }
 
+
     @Override
     public void setX(double x, boolean constrain) {
         x -= shape.getBounds().getX();
-        getFill().setStartX(x);
+        if(shape instanceof AbstractResizeableNode) {
+            snapX((AbstractResizeableNode) shape, x);
+        } else {
+            getFill().setStartX(x);
+        }
         refresh();
         updateControlPositions();
     }
+
+    private void snapX(AbstractResizeableNode node, double x) {
+        LinearGradientFill f = getFill();
+        Bounds b = node.getBounds();
+        if(Math.abs(x-0)<5) {
+            f.setStartX(0);
+            f.setStartXSnapped(LinearGradientFill.Snap.Start);
+            return;
+        }
+        if(Math.abs(x-b.getWidth()/2)<5) {
+            f.setStartX(b.getWidth() / 2);
+            f.setStartXSnapped(LinearGradientFill.Snap.Middle);
+            return;
+        }
+        if(Math.abs(x-b.getWidth())<5) {
+            f.setStartX(b.getWidth());
+            f.setStartXSnapped(LinearGradientFill.Snap.End);
+            return;
+        }
+        f.setStartX(x);
+        f.setStartXSnapped(LinearGradientFill.Snap.None);
+    }
+
 
     @Override
     public double getY() {
@@ -49,9 +81,34 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
     @Override
     public void setY(double y, boolean constrain) {
         y-= shape.getBounds().getY();
-        getFill().setStartY(y);
+        if(shape instanceof AbstractResizeableNode) {
+            snapY((AbstractResizeableNode)shape,y);
+        } else {
+            getFill().setStartY(y);
+        }
         refresh();
         updateControlPositions();
+    }
+    private void snapY(AbstractResizeableNode node, double y) {
+        LinearGradientFill f = getFill();
+        Bounds b = node.getBounds();
+        if(Math.abs(y-0)<5) {
+            f.setStartY(0);
+            f.setStartYSnapped(LinearGradientFill.Snap.Start);
+            return;
+        }
+        if(Math.abs(y-b.getHeight()/2)<5) {
+            f.setStartY(b.getHeight()/2);
+            f.setStartYSnapped(LinearGradientFill.Snap.Middle);
+            return;
+        }
+        if(Math.abs(y-b.getHeight())<5) {
+            f.setStartY(b.getHeight());
+            f.setStartYSnapped(LinearGradientFill.Snap.End);
+            return;
+        }
+        f.setStartY(y);
+        f.setStartYSnapped(LinearGradientFill.Snap.None);
     }
 
     @Override
@@ -192,4 +249,35 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
         }
     }
 
+    @Override
+    public void changed() {
+        if(shape instanceof AbstractResizeableNode) {
+            AbstractResizeableNode res = (AbstractResizeableNode) shape;
+            Paint paint = shape.getFillPaint();
+            if(paint instanceof LinearGradientFill) {
+                LinearGradientFill lg = (LinearGradientFill) paint;
+                switch(lg.getStartXSnapped()) {
+                    case Start: lg.setStartX(0); break;
+                    case Middle: lg.setStartX(res.getBounds().getWidth() / 2); break;
+                    case End: lg.setStartX(res.getBounds().getWidth()); break;
+                }
+                switch(lg.getStartYSnapped()) {
+                    case Start: lg.setStartY(0); break;
+                    case Middle: lg.setStartY(res.getBounds().getHeight() / 2); break;
+                    case End: lg.setStartY(res.getBounds().getHeight()); break;
+                }
+                switch(lg.getEndXSnapped()) {
+                    case Start: lg.setEndX(0); break;
+                    case Middle: lg.setEndX(res.getBounds().getWidth()/2); break;
+                    case End: lg.setEndX(res.getBounds().getWidth()); break;
+                }
+                switch(lg.getEndYSnapped()) {
+                    case Start: lg.setEndY(0); break;
+                    case Middle: lg.setEndY(res.getBounds().getHeight() / 2); break;
+                    case End: lg.setEndY(res.getBounds().getHeight()); break;
+                }
+            }
+        }
+        super.changed();
+    }
 }

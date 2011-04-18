@@ -169,22 +169,6 @@ public class GradientHandle extends Handle implements SShape.SShapeListener {
 
     }
 
-    private double snapX(double x, double value) {
-        if(Math.abs(x-value)<5) {
-            x = value;
-            xSnapped = true;
-        }
-        return x;
-    }
-
-    private double snapY(double y, double value) {
-        if(Math.abs(y-value)<5) {
-            y = value;
-            ySnapped = true;
-        }
-        return y;
-    }
-
     private void updateGrad(double x, double y) {
         GradientFill grad = getFill();
         switch (pos) {
