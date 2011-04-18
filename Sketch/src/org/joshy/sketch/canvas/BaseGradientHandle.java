@@ -202,7 +202,7 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         double ac = a.distance(c);
         double ad = Math.cos(theta)*ac;
         theta2 = theta2+90;
-        Point2D pt = GeomUtil.calcPoint(a, Math.toDegrees(GeomUtil.calcAngle(a,b)), ad);
+        Point2D pt = GeomUtil.calcPoint(a, Math.toDegrees(GeomUtil.calcAngle(a, b)), ad);
         return pt;
     }
 

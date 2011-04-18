@@ -216,6 +216,10 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
                         .attr("startY", "" + grad.getStartY())
                         .attr("endX", "" + grad.getEndX())
                         .attr("endY", "" + grad.getEndY())
+                        .attr("startXSnapped",""+grad.getStartXSnapped())
+                        .attr("startYSnapped",""+grad.getStartYSnapped())
+                        .attr("endXSnapped",""+grad.getEndXSnapped())
+                        .attr("endYSnapped",""+grad.getEndYSnapped())
                 ;
                 for(MultiGradientFill.Stop stop : grad.getStops()) {
                     out.start("stop")

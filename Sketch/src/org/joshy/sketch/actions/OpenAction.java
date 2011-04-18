@@ -425,6 +425,10 @@ public class OpenAction extends SAction {
                     .setEndX(Double.parseDouble(egrad.attr("endX")))
                     .setEndY(Double.parseDouble(egrad.attr("endY")))
                     ;
+            if(egrad.hasAttr("startXSnapped")) fill.setStartXSnapped(LinearGradientFill.Snap.valueOf(egrad.attr("startXSnapped")));
+            if(egrad.hasAttr("startYSnapped"))fill.setStartYSnapped(LinearGradientFill.Snap.valueOf(egrad.attr("startYSnapped")));
+            if(egrad.hasAttr("endXSnapped"))fill.setEndXSnapped(LinearGradientFill.Snap.valueOf(egrad.attr("endXSnapped")));
+            if(egrad.hasAttr("endYSnapped"))fill.setEndYSnapped(LinearGradientFill.Snap.valueOf(egrad.attr("endYSnapped")));
             for(Elem stop : egrad.xpath("stop")) {
                 fill.addStop(
                         Double.parseDouble(stop.attr("position")),
