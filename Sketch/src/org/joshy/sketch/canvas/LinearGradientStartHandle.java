@@ -98,7 +98,7 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
             return;
         }
         if(Math.abs(y-b.getHeight()/2)<5) {
-            f.setStartY(b.getHeight()/2);
+            f.setStartY(b.getHeight() / 2);
             f.setStartYSnapped(LinearGradientFill.Snap.Middle);
             return;
         }
@@ -175,7 +175,6 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
         for(MultiGradientFill.Stop stop: getFill().getStops()) {
             Point2D pt = Util.interpolatePoint(start,end,stop.getPosition());
             if(pt.distance(cursor) < 5) {
-                u.p("on the stop. ready for dragging");
                 onStop = true;
                 activeStop = stop;
                 return;
@@ -212,18 +211,34 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
             }
         }
         if(onStop) {
+            Point2D stopPoint = Util.interpolatePoint(getStart(),getEnd(),activeStop.getPosition());
+            double d = stopPoint.distance(cursor);
+            u.p("stop point = " + stopPoint + " distance " + d);
+            if(d > 20) {
+                couldDelete = true;
+            } else {
+                couldDelete = false;
+            }
             double pos = fractionOf(getStart(),getEnd(),cursor);
-            //u.p("pos = " + pos);
-            //ny -= shape.getBounds().getY();
-            //ny -= getFill().getCenterY();
-
-            //double pos = ny/getFill().getRadius();
             pos = Util.clamp(0.001, pos, 0.999);
             activeStop.setPosition(pos);
             updateControlPositions();
             refresh();
         }
     }
+
+    @Override
+    public void mouseReleased(MouseEvent event, Point2D.Double cursor) {
+        if(couldDelete) {
+            getFill().removeStop(activeStop);
+            removeStopControl(activeStop);
+            context.getSelection().regenHandleControls(shape);
+            updateControlPositions();
+        }
+        couldDelete = false;
+        super.mouseReleased(event, cursor);
+    }
+
 
     @Override
     void updateControlPositions() {

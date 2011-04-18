@@ -6,6 +6,7 @@ import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.SwatchColorPicker;
+import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.util.GeomUtil;
 import org.joshy.sketch.model.AbstractResizeableNode;
 import org.joshy.sketch.model.Handle;
@@ -44,6 +45,8 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
     protected Map<RadialGradientFill.Stop,Control> controlMap;
     protected ArrayList<Control> controls;
     protected boolean showAddIndicator;
+    protected boolean couldDelete;
+    private MultiGradientFill.Stop hoverStop;
 
     public BaseGradientHandle(SShape shape, VectorDocContext context) {
         this.shape = shape;
@@ -80,6 +83,14 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         });
     }
 
+    protected void removeStopControl(MultiGradientFill.Stop activeStop) {
+        Control popup = controlMap.get(activeStop);
+        controls.remove(popup);
+        controlMap.remove(activeStop);
+        Container popupLayer = context.getSketchCanvas().getParent().getStage().getPopupLayer();
+        popupLayer.remove(popup);
+    }
+
     protected void refresh() {
         shape.setFillPaint(shape.getFillPaint());
     }
@@ -107,10 +118,12 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         this.hovered = hovered;
         hoverPoint = cursor;
         showAddIndicator = true;
+        hoverStop = null;
         for(MultiGradientFill.Stop stop: getFill().getStops()) {
             Point2D pt = Util.interpolatePoint(getStart(), getEnd(), stop.getPosition());
             if(pt.distance(cursor) < 10) {
                 showAddIndicator = false;
+                hoverStop = stop;
             }
         }
     }
@@ -172,18 +185,18 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
           */
         DrawUtils.drawStandardHandle(g, x, y, FlatColor.GREEN);
 
-        drawStopHandles(g,canvas);
+        drawStopHandles(g, canvas);
         if(showAddIndicator && hovered) {
             drawNewStopIndicator(g, canvas);
         }
     }
 
     protected void drawNewStopIndicator(GFX g, SketchCanvas canvas) {
-        Point2D closest = closestPoint(getStart(),getEnd(),hoverPoint);
-        Point2D hp = canvas.transformToDrawing(closest.getX(),closest.getY());
+        Point2D closest = closestPoint(getStart(), getEnd(), hoverPoint);
+        Point2D hp = canvas.transformToDrawing(closest.getX(), closest.getY());
         g.translate(hp.getX(),hp.getY());
 
-        double angle = GeomUtil.calcAngle(getStart(),getEnd());
+        double angle = GeomUtil.calcAngle(getStart(), getEnd());
         g.rotate(-Math.toDegrees(angle), Transform.Z_AXIS);
         Path2D.Double path = createHandlePath();
         g.setPaint(FlatColor.WHITE);
@@ -201,15 +214,13 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
 
         double ac = a.distance(c);
         double ad = Math.cos(theta)*ac;
-        theta2 = theta2+90;
-        Point2D pt = GeomUtil.calcPoint(a, Math.toDegrees(GeomUtil.calcAngle(a, b)), ad);
-        return pt;
+        return GeomUtil.calcPoint(a, Math.toDegrees(GeomUtil.calcAngle(a, b)), ad);
     }
 
     protected void drawStopHandles(GFX g, SketchCanvas canvas) {
         g.setPureStrokes(true);
         //draw the handles
-        for(RadialGradientFill.Stop stop: getFill().getStops()) {
+        for(MultiGradientFill.Stop stop: getFill().getStops()) {
             if(getFill().isFirst(stop)) continue;
             if(getFill().isLast(stop)) continue;
             Point2D pt = getDragHandlePosition(stop,canvas);
@@ -218,10 +229,28 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
             double angle = GeomUtil.calcAngle(getStart(),getEnd());
             g.rotate(-Math.toDegrees(angle), Transform.Z_AXIS);
             Path2D.Double path = createHandlePath();
+
+            //fill stop
             g.setPaint(stop.getColor());
+            if(stop == hoverStop) {
+                g.setPaint(FlatColor.WHITE);
+            }
+            if(stop == activeStop) {
+                g.setPaint(FlatColor.WHITE);
+                if(couldDelete) {
+                    g.setPaint(FlatColor.GRAY);
+                }
+            }
             g.fillPath(path);
+
+            //stroke stop
             g.setPaint(FlatColor.BLACK);
+            if(stop == activeStop && couldDelete) {
+                g.setPaint(FlatColor.GRAY);
+            }
             g.drawPath(path);
+
+
             g.rotate(Math.toDegrees(angle), Transform.Z_AXIS);
             g.translate(-pt.getX(),-pt.getY());
         }

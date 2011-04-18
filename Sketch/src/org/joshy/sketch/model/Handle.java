@@ -16,8 +16,6 @@ import java.util.ArrayList;
  */
 public abstract class Handle {
     protected double size = 5;
-    protected boolean xSnapped;
-    protected boolean ySnapped;
 
     public final boolean contains(Point2D cursor, double scale) {
         return contains(cursor.getX(),cursor.getY(), scale);
@@ -58,7 +56,6 @@ public abstract class Handle {
     protected double snapX(double x, double value) {
         if(Math.abs(x-value)<5) {
             x = value;
-            xSnapped = true;
         }
         return x;
     }
@@ -66,7 +63,6 @@ public abstract class Handle {
     protected double snapY(double y, double value) {
         if(Math.abs(y-value)<5) {
             y = value;
-            ySnapped = true;
         }
         return y;
     }
