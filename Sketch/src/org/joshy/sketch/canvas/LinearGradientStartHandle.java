@@ -178,6 +178,7 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
                 u.p("on the stop. ready for dragging");
                 onStop = true;
                 activeStop = stop;
+                return;
             }
         }
 
@@ -193,8 +194,9 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
     }
 
     private double fractionOf(Point2D start, Point2D end, Point2D.Double cursor) {
-        double dx = (cursor.getX()-start.getX())/(end.getX()-start.getX());
-        return dx;
+        double d1 = Math.abs(start.distance(end));
+        double d2 = Math.abs(start.distance(cursor));
+        return d2/d1;
     }
 
     public void mouseDragged(double nx, double ny, boolean shiftPressed, Point2D.Double cursor) {
