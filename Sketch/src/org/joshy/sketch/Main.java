@@ -56,8 +56,7 @@ import java.util.*;
 import static org.joshy.gfx.util.localization.Localization.getString;
 
 public class Main implements Runnable {
-    private static final File BASE_STORAGE_DIR = new File(OSUtil.getBaseStorageDir());
-    private static final File homedir = new File(BASE_STORAGE_DIR,"Leonardo");
+    private static final File homedir = new File(OSUtil.getBaseStorageDir("Leonardo"));
     public static final File RECENT_FILES = new File(homedir,"recentfiles.xml");
     public static final File SETTINGS_FILE = new File(homedir,"settings.txt");
     public static final File SCRIPTS_DIR = new File(homedir,"scripts");
