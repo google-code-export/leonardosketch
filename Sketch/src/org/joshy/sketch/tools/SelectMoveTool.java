@@ -7,14 +7,15 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.ListModel;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.symbols.CreateSymbol;
 import org.joshy.sketch.canvas.ResizeHandle;
+import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.controls.ContextMenu;
 import org.joshy.sketch.controls.FloatingPropertiesPanel;
 import org.joshy.sketch.model.*;
@@ -89,7 +90,16 @@ public class SelectMoveTool extends CanvasTool {
                 return menuActions.size();
             }
         };
+
+
+        EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, selectionCallback);
     }
+
+    private Callback<Selection.SelectionChangeEvent> selectionCallback = new Callback<Selection.SelectionChangeEvent>() {
+        public void call(Selection.SelectionChangeEvent selectionChangeEvent) throws Exception {
+            shouldShowFloatingPanel = false;
+        }
+    };
 
     protected void call(KeyEvent event) {
         if(event.getKeyCode() == KeyEvent.KeyCode.KEY_BACKSPACE || event.getKeyCode() == KeyEvent.KeyCode.KEY_DELETE) {
@@ -362,13 +372,15 @@ public class SelectMoveTool extends CanvasTool {
 
     private void showContextMenu(MouseEvent event) {
         contextMenu = new ContextMenu();
-        contextMenu.addActions(
-            new NodeActions.RaiseTopSelectedNodeAction(context),
-            new NodeActions.RaiseSelectedNodeAction(context),
-            new NodeActions.LowerSelectedNodeAction(context),
-            new NodeActions.LowerBottomSelectedNodeAction(context),
-            new DeleteSelectedNodeAction(context)
-        );
+        if(!context.getSelection().isEmpty()) {
+            contextMenu.addActions(
+                new NodeActions.RaiseTopSelectedNodeAction(context),
+                new NodeActions.RaiseSelectedNodeAction(context),
+                new NodeActions.LowerSelectedNodeAction(context),
+                new NodeActions.LowerBottomSelectedNodeAction(context),
+                new DeleteSelectedNodeAction(context)
+            );
+        }
 
         if(context.getSelection().size() > 1) {
             contextMenu.addActions(new NodeActions.AlignLeft(context),
@@ -378,9 +390,9 @@ public class SelectMoveTool extends CanvasTool {
             contextMenu.addActions(new NodeActions.GroupSelection(context));
         }
 
-        contextMenu.addActions(new CreateSymbol(context));
-        contextMenu.addActions(new CreateResizableShape(context));
         if(context.getSelection().size() == 1){
+            contextMenu.addActions(new CreateSymbol(context));
+            contextMenu.addActions(new CreateResizableShape(context));
             SNode node = context.getSelection().firstItem();
             if(node instanceof ResizableGrid9Shape) {
                 contextMenu.addActions(new CreateResizableShape.Edit(context));
