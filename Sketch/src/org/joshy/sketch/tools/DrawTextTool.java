@@ -55,6 +55,7 @@ public class DrawTextTool extends CanvasTool {
     private void startTextEditing(double x, double y) {
         textNode = new SText();
         textNode.setFillPaint(FlatColor.BLACK);
+        textNode.setFontName("Junction");
         textNode.setFontSize(24);
         Point2D.Double point = context.getSketchCanvas().transformToCanvas(x,y);
         textNode.setX(point.x);

@@ -79,7 +79,7 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
 
     private void updateSize() {
         if(!isAutoSize()) return;
-        Font font = Font.name("Arial")
+        Font font = Font.name(getFontName())
                 .weight(getWeight())
                 .style(getStyle())
                 .size((float)fontSize)
