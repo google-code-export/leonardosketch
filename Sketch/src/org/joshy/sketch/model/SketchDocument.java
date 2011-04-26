@@ -19,8 +19,8 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
     private boolean snapNodeBounds;
 
     public SketchDocument() {
-        setWidth(600);
-        setHeight(800);
+        setWidth(800);
+        setHeight(600);
         this.pages.add(new SketchPage(this));
         setCurrentPage(0);
     }
