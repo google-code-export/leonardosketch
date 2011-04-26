@@ -404,7 +404,7 @@ public class Main implements Runnable {
                         .setColor(new FlatColor(0x404040))
                 )
                 .setPosition(DisclosurePanel.Position.Right)
-                .setOpen(true);
+                .setOpen(false);
         context.mainPanel.add(context.sidebarContainer);
         if(context.getSidebar() != null) {
             TabPanel sb = context.getSidebar();
@@ -419,8 +419,8 @@ public class Main implements Runnable {
 
         context.getStage().setContent(context.mainPanel);
         context.setupPopupLayer();
-        context.getStage().setWidth(900);
-        context.getStage().setHeight(600);
+        context.getStage().setWidth(950);
+        context.getStage().setHeight(700);
 
         final JFrame frame = (JFrame) context.getStage().getNativeWindow();
         context.menubar = new Menubar(frame);
