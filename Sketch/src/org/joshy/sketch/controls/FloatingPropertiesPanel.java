@@ -14,6 +14,7 @@ import org.joshy.gfx.stage.Stage;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.BooleanGeometry;
 import org.joshy.sketch.actions.NodeActions;
+import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -166,9 +167,30 @@ public class FloatingPropertiesPanel extends VFlexBox {
         fontItalicButton.onClicked(fontItalicCallback);
         fontProperties.add(fontItalicButton);
 
-        fontAlignLeft = new Togglebutton("L");
-        fontAlignHCenter = new Togglebutton("C");
-        fontAlignRight = new Togglebutton("R");
+        fontAlignLeft = new TIB("cr22-action-text_left.png", new SAction(){
+            @Override
+            public void execute() throws Exception {
+                if(manager.propMan.isClassAvailable(SText.class)) {
+                    manager.propMan.getProperty("halign").setValue(SText.HAlign.Left);
+                }
+            }
+        });
+        fontAlignHCenter = new TIB("cr22-action-text_center.png", new SAction(){
+            @Override
+            public void execute() throws Exception {
+                if(manager.propMan.isClassAvailable(SText.class)) {
+                    manager.propMan.getProperty("halign").setValue(SText.HAlign.Center);
+                }
+            }
+        });
+        fontAlignRight = new TIB("cr22-action-text_right.png", new SAction(){
+            @Override
+            public void execute() throws Exception {
+                if(manager.propMan.isClassAvailable(SText.class)) {
+                    manager.propMan.getProperty("halign").setValue(SText.HAlign.Right);
+                }
+            }
+        });
         fontProperties.add(fontAlignLeft,fontAlignHCenter,fontAlignRight);
         fontAlignGroup = new ToggleGroup();
         fontAlignGroup.add(fontAlignLeft).add(fontAlignHCenter).add(fontAlignRight);
@@ -340,9 +362,9 @@ public class FloatingPropertiesPanel extends VFlexBox {
     }
 
     private static class IB extends ToolbarButton {
-        private NodeActions.MultiNodeAction action;
+        private SAction action;
 
-        private IB(String s, NodeActions.MultiNodeAction act) throws IOException {
+        private IB(String s, SAction act) throws IOException {
             super(Main.class.getResource("resources/"+s));
             this.selectable = false;
             this.action = act;
@@ -363,6 +385,36 @@ public class FloatingPropertiesPanel extends VFlexBox {
             g.drawImage(icon,0,0);
         }
     }
+
+    private static class TIB extends ToolbarButton {
+        private SAction action;
+
+        private TIB(String s, SAction act) throws IOException {
+            super(Main.class.getResource("resources/"+s));
+            this.selectable = true;
+            this.action = act;
+            onClicked(new Callback<ActionEvent>(){
+                public void call(ActionEvent actionEvent) throws Exception {
+                    action.execute();
+                }
+            });
+        }
+
+        @Override
+        public void draw(GFX g) {
+            if(this.isSelected()) {
+                g.setPaint(FlatColor.BLACK);
+            } else {
+                g.setPaint(FlatColor.WHITE);
+            }
+            g.fillRect(0,0,getWidth(),getHeight());
+            //g.setPaint(FlatColor.BLACK);
+            //g.drawRect(0,0,getWidth(),getHeight());
+
+            g.drawImage(icon,0,0);
+        }
+    }
+
 
     private void updatePanelContents() {
         locked = true;
