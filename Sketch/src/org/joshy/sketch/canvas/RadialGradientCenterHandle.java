@@ -142,13 +142,31 @@ public class RadialGradientCenterHandle extends BaseGradientHandle<RadialGradien
         if(onStop) {
             ny -= shape.getBounds().getY();
             ny -= getFill().getCenterY();
+            double dx = nx-getFill().getCenterX()-shape.getBounds().getX();
 
+            if(Math.abs(dx) > 30) {
+                couldDelete = true;
+            } else {
+                couldDelete = false;
+            }
             double pos = ny/getFill().getRadius();
             pos = Util.clamp(0.001, pos, 0.999);
             activeStop.setPosition(pos);
             updateControlPositions();
             refresh();
         }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent event, Point2D.Double cursor) {
+        if(couldDelete) {
+            getFill().removeStop(activeStop);
+            removeStopControl(activeStop);
+            context.getSelection().regenHandleControls(shape);
+            updateControlPositions();
+        }
+        couldDelete = false;
+        super.mouseReleased(event, cursor);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
     void updateControlPositions() {
