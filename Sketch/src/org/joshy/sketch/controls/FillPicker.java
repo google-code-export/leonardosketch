@@ -124,6 +124,7 @@ public class FillPicker extends Button {
         panel.setPrefWidth(300);
         panel.setPrefHeight(200);
 
+        setupColorTab(panel);
         setupSwatchTab(panel);
         setupGradientTab(panel);
         setupPatternTab(panel);
@@ -262,6 +263,19 @@ public class FillPicker extends Button {
         });
 
         return gradientList;
+    }
+
+    private void setupColorTab(TabPanel panel) {
+        FreerangeColorPickerPopup picker = new FreerangeColorPickerPopup(null,300,170,false);
+        EventBus.getSystem().addListener(picker, ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
+            public void call(ChangedEvent event) throws Exception {
+                setSelectedFill((FlatColor)event.getValue());
+                if(!event.isAdjusting()) {
+                    popup.setVisible(false);
+                }
+            }
+        });
+        panel.add("Color",picker);
     }
 
     private void setupSwatchTab(TabPanel panel) {
