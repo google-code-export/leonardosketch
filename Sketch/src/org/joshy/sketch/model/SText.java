@@ -113,7 +113,11 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
         }
         ((SText)dupe).setText(this.getText());
         ((SText)dupe).setWeight(this.getWeight());
+        ((SText)dupe).setStyle(this.getStyle());
         ((SText)dupe).setFontSize(this.getFontSize());
+        ((SText)dupe).setFontName(this.getFontName());
+        ((SText)dupe).setAutoSize(this.isAutoSize());
+        ((SText)dupe).setHalign(this.getHalign());
         return super.duplicate(dupe);
     }
 
