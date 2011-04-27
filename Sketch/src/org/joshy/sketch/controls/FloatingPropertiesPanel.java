@@ -287,8 +287,8 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
 
         shadowProperties.add(new Label("Offset:"));
-        shadowXoff = new SpinBox<Double>();
-        shadowXoff.setValue(5.0);
+        shadowXoff = new SpinBox<Double>()
+            .setValue(5.0);
         shadowProperties.add(shadowXoff);
         shadowXoff.onChanged(new Callback<ChangedEvent>(){
             public void call(ChangedEvent event) throws Exception {
@@ -305,8 +305,8 @@ public class FloatingPropertiesPanel extends VFlexBox {
         });
 
 
-        shadowYoff = new SpinBox<Double>();
-        shadowYoff.setValue(5.0);
+        shadowYoff = new SpinBox<Double>()
+            .setValue(5.0);
         shadowYoff.onChanged(new Callback<ChangedEvent>(){
             public void call(ChangedEvent event) throws Exception {
                 if(manager.propMan.isPropertyNotNull("shadow")) {
@@ -324,8 +324,10 @@ public class FloatingPropertiesPanel extends VFlexBox {
         shadowProperties.nextRow();
 
         shadowProperties.add(new Label("Blur:"));
-        shadowBlurRadius = new SpinBox<Integer>();
-        shadowBlurRadius.setValue(3);
+        shadowBlurRadius = new SpinBox<Integer>()
+            .setMinValue(0)
+            .setMaxValue(20)
+            .setValue(3);
         shadowBlurRadius.onChanged(new Callback<ChangedEvent>(){
             public void call(ChangedEvent event) throws Exception {
                 if(manager.propMan.isPropertyNotNull("shadow")) {
