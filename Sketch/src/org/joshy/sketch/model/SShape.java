@@ -50,7 +50,7 @@ public abstract class SShape extends SNode {
 
     public SNode duplicate(SNode dupe) {
         if(dupe == null) throw new IllegalArgumentException("SShape.duplicate: duplicate shape argument can't be null!");
-        ((SShape)dupe).setFillPaint(this.getFillPaint());
+        ((SShape)dupe).setFillPaint(this.getFillPaint().duplicate());
         ((SShape)dupe).setFillOpacity(this.getFillOpacity());
         ((SShape)dupe).setStrokePaint(this.getStrokePaint());
         ((SShape)dupe).setStrokeWidth(this.getStrokeWidth());
