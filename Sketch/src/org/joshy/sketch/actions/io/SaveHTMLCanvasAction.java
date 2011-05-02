@@ -245,10 +245,15 @@ public class SaveHTMLCanvasAction extends SAction {
         }
 
         public boolean isContainer(SNode n) {
-            return false;  //To change body of implemented methods use File | Settings | File Templates.
+            if(n instanceof SGroup) return true;
+            return false;
         }
 
         public Iterable<? extends SNode> getChildNodes(SNode n) {
+            if(n instanceof SGroup) {
+                SGroup sg = (SGroup) n;
+                return sg.getNodes();
+            }
             return null;  //To change body of implemented methods use File | Settings | File Templates.
         }
     }
