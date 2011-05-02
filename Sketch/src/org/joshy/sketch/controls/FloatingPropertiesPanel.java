@@ -22,6 +22,7 @@ import org.joshy.sketch.property.PropertyManager;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
+import java.text.DecimalFormat;
 
 import static org.joshy.gfx.util.localization.Localization.getString;
 
@@ -62,10 +63,20 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private Togglebutton fontAlignHCenter;
     private Togglebutton fontAlignRight;
     private ToggleGroup fontAlignGroup;
+    private DecimalFormat df;
+    private DecimalFormat intFormat;
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
         this.context = context;
+
+        df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        df.setMinimumFractionDigits(2);
+
+        intFormat = new DecimalFormat();
+        intFormat.setMinimumIntegerDigits(2);
+
 
         setFill(FlatColor.RED);
         this.manager = manager;
@@ -111,13 +122,13 @@ public class FloatingPropertiesPanel extends VFlexBox {
         strokeWidthSlider.setMax(20);
         strokeWidthSlider.setValue(3);
         EventBus.getSystem().addListener(strokeWidthSlider, ChangedEvent.DoubleChanged, strokeWidthCallback);
-        strokeWidthLabel = new Label(getString("toolbar.stroke")+":");
+        strokeWidthLabel = new Label(getString("toolbar.stroke")+": " + 3);
         shapeProperties.add(strokeWidthLabel);
         shapeProperties.add(strokeWidthSlider);
 
         fillOpacitySlider = new Slider(false).setMin(0).setMax(100).setValue(100);
         EventBus.getSystem().addListener(fillOpacitySlider, ChangedEvent.DoubleChanged, fillOpacityCallback);
-        fillOpacityLabel = new Label(getString("toolbar.opacity")+":");
+        fillOpacityLabel = new Label(getString("toolbar.opacity")+": "+df.format(0));
         shapeProperties.add(fillOpacityLabel);
         shapeProperties.add(fillOpacitySlider);
 
@@ -619,6 +630,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
                 if(manager.propMan.isClassAvailable(SShape.class)) {
                     double v = (Double)event.getValue();
                     manager.propMan.getProperty("fillOpacity").setValue(v/100.0);
+                    fillOpacityLabel.setText(getString("toolbar.opacity")+": "+df.format(v/100.0));
                     context.redraw();
                 }
             }
@@ -650,6 +662,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
                     manager.propMan.isClassAvailable(SImage.class)) {
                 int sw = (int)((Double)event.getValue()).doubleValue();
                 manager.propMan.getProperty("strokeWidth").setValue(sw);
+                strokeWidthLabel.setText(getString("toolbar.stroke")+": " + intFormat.format(sw));
                 context.redraw();
             }
         }
