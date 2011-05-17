@@ -596,7 +596,7 @@ public class Main implements Runnable {
                     .addItem(getString("menus.topng"),       new SavePNGAction(context))
                     .addItem(getString("menus.tosvg"),       new SaveSVGAction(context))
                     .addItem(getString("menus.tohtml"),      new SaveHTMLAction(context))
-                    .addItem(getString("menus.tocanvas"),    new SaveHTMLCanvasAction(context))
+                    .addItem(getString("menus.tocanvas"),    new SaveAminoCanvasAction(context))
                     .addItem(getString("menus.topdf"),       new SavePDFAction(context))
                     .addItem(getString("menus.tojava2d"),    new SaveJava2DAction(context))
                 );
