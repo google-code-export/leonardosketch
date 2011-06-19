@@ -3,8 +3,10 @@ package org.joshy.sketch.actions.io;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.util.u;
+import org.joshy.sketch.actions.BooleanGeometry;
 import org.joshy.sketch.actions.OpenAction;
 import org.joshy.sketch.model.*;
+import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -97,6 +99,39 @@ public class NativeExportTest {
         assertTrue(img.getBufferedImage().getWidth() == 101);
     }
 
+    @Test
+    public void exportArea() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SketchDocument doc = new SketchDocument();
+        VectorDocContext ctx = new VectorDocContext(null,null);
+        ctx.setDocument(doc);
+
+        SShape a = new NGon(6).setRadius(100).setFillPaint(FlatColor.RED);
+        doc.getCurrentPage().model.add(a);
+
+        SShape b = new SOval(20,20,100,100).setFillPaint(FlatColor.BLUE);
+        doc.getCurrentPage().model.add(b);
+
+        ctx.getSelection().addSelectedNode(a);
+        ctx.getSelection().addSelectedNode(b);
+        BooleanGeometry.Union union = new BooleanGeometry.Union(ctx);
+        union.execute();
+
+        //make sure we have just an sarea
+        assertTrue(doc.getPages().get(0).model.get(0) instanceof SArea);
+
+        //save
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing test to file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(file, doc);
+
+        //reopen
+        SketchDocument doc2 = OpenAction.loadZip(file);
+
+        //make sure we still have just an sarea
+        assertTrue(doc2.getPages().get(0).model.get(0) instanceof SArea);
+    }
     @Test
     public void exportWithGradients() throws Exception {
         Core.setTesting(true);
