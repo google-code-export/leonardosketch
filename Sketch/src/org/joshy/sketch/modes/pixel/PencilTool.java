@@ -2,7 +2,6 @@ package org.joshy.sketch.modes.pixel;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.MouseEvent;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.pixel.model.PixelGraphics;
 import org.joshy.sketch.pixel.model.PixelLayer;
 
@@ -11,6 +10,7 @@ import org.joshy.sketch.pixel.model.PixelLayer;
  * using the color black.
  */
 public class PencilTool extends PixelTool {
+    int radius = 9;
 
     public PencilTool(PixelDocContext context) {
         super(context);
@@ -18,18 +18,20 @@ public class PencilTool extends PixelTool {
 
     @Override
     protected void mousePressed(MouseEvent event, int x, int y) {
-        u.p("mouse pressed at: " + event);
-
         PixelLayer layer = getContext().getDocument().getCurrentLayer();
         PixelGraphics g = layer.getGraphics();
         g.setFill(FlatColor.PURPLE);
-        g.fillRect((int)event.getX(),(int)event.getY(),5,5);
+        g.fillOval((int)event.getX()-radius,(int)event.getY()-radius,radius*2,radius*2);
         getContext().getCanvas().redraw();
     }
 
     @Override
     protected void mouseDragged(MouseEvent event, int x, int y) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        PixelLayer layer = getContext().getDocument().getCurrentLayer();
+        PixelGraphics g = layer.getGraphics();
+        g.setFill(FlatColor.PURPLE);
+        g.fillOval((int)event.getX()-radius,(int)event.getY()-radius,radius*2,radius*2);
+        getContext().getCanvas().redraw();
     }
 
     @Override
