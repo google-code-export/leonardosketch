@@ -2,9 +2,11 @@ package org.joshy.sketch.modes.pixel;
 
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.node.control.SwatchColorPicker;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.sketch.Main;
@@ -60,15 +62,16 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
     @Override
     public void setupTools() throws Exception {
         toolbar = new VFlexBox();
-        //toolbar = new PixelToolbar(this);
-        //brush = new PixelSetTool(this);
-        //selectedTool = brush;
+
         pencilTool = new PencilTool(this);
-        brushTool = new BrushTool(this);
-        selectionTool = new SelectionTool(this);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_pencil.png")),pencilTool);
+
+        brushTool = new BrushTool(this);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_pencil.png")),brushTool);
+
+        selectionTool = new SelectionTool(this);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-tool_rect_selection.png")),selectionTool);
+
 
         group = new ToggleGroup();
         for(Button button : tools.keys()) {
@@ -87,6 +90,15 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
         selectedTool = pencilTool;
         pencilTool.enable();
         selectButtonForTool(pencilTool);
+
+
+        final SwatchColorPicker cp = new SwatchColorPicker();
+        cp.onColorSelected(new Callback<ChangedEvent>() {
+            public void call(ChangedEvent event) throws Exception {
+                getDocument().setForegroundColor(cp.getSelectedColor());
+            }
+        });
+        toolbar.add(cp);
 
     }
     private void selectButtonForTool(PixelTool tool) {

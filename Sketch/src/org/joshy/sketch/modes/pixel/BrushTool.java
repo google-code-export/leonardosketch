@@ -1,6 +1,5 @@
 package org.joshy.sketch.modes.pixel;
 
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.sketch.pixel.model.PixelGraphics;
 import org.joshy.sketch.pixel.model.PixelLayer;
@@ -21,7 +20,7 @@ public class BrushTool extends PixelTool {
     protected void mousePressed(MouseEvent event, int x, int y) {
         PixelLayer layer = getContext().getDocument().getCurrentLayer();
         PixelGraphics g = layer.getGraphics();
-        g.setFill(FlatColor.PURPLE);
+        g.setFill(getContext().getDocument().getForegroundColor());
         g.fillPixel(x,y);
         getContext().getCanvas().redraw();
     }
@@ -30,7 +29,7 @@ public class BrushTool extends PixelTool {
     protected void mouseDragged(MouseEvent event, int x, int y) {
         PixelLayer layer = getContext().getDocument().getCurrentLayer();
         PixelGraphics g = layer.getGraphics();
-        g.setFill(FlatColor.PURPLE);
+        g.setFill(getContext().getDocument().getForegroundColor());
         g.fillPixel(x,y);
         getContext().getCanvas().redraw();
     }

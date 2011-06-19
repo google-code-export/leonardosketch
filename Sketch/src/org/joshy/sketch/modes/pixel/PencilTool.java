@@ -1,6 +1,5 @@
 package org.joshy.sketch.modes.pixel;
 
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.sketch.pixel.model.PixelGraphics;
 import org.joshy.sketch.pixel.model.PixelLayer;
@@ -20,7 +19,7 @@ public class PencilTool extends PixelTool {
     protected void mousePressed(MouseEvent event, int x, int y) {
         PixelLayer layer = getContext().getDocument().getCurrentLayer();
         PixelGraphics g = layer.getGraphics();
-        g.setFill(FlatColor.PURPLE);
+        g.setFill(getContext().getDocument().getForegroundColor());
         g.fillOval((int)event.getX()-radius,(int)event.getY()-radius,radius*2,radius*2);
         getContext().getCanvas().redraw();
     }
@@ -29,7 +28,7 @@ public class PencilTool extends PixelTool {
     protected void mouseDragged(MouseEvent event, int x, int y) {
         PixelLayer layer = getContext().getDocument().getCurrentLayer();
         PixelGraphics g = layer.getGraphics();
-        g.setFill(FlatColor.PURPLE);
+        g.setFill(getContext().getDocument().getForegroundColor());
         g.fillOval((int)event.getX()-radius,(int)event.getY()-radius,radius*2,radius*2);
         getContext().getCanvas().redraw();
     }
