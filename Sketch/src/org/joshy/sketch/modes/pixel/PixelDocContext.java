@@ -35,6 +35,7 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
     private PixelTool pencilTool;
     private PixelTool selectionTool;
     private ToggleGroup group;
+    private BrushTool brushTool;
 
     public PixelDocContext(Main main, PixelModeHelper pixelModeHelper) {
         super(main,pixelModeHelper);
@@ -63,8 +64,10 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
         //brush = new PixelSetTool(this);
         //selectedTool = brush;
         pencilTool = new PencilTool(this);
+        brushTool = new BrushTool(this);
         selectionTool = new SelectionTool(this);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_pencil.png")),pencilTool);
+        tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_pencil.png")),brushTool);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-tool_rect_selection.png")),selectionTool);
 
         group = new ToggleGroup();
