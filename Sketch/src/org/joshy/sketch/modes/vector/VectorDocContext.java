@@ -16,6 +16,7 @@ import org.joshy.sketch.actions.flickr.ViewSidebar;
 import org.joshy.sketch.actions.symbols.CreateSymbol;
 import org.joshy.sketch.actions.symbols.SymbolManager;
 import org.joshy.sketch.actions.symbols.SymbolPanel;
+import org.joshy.sketch.actions.treeview.TreeViewPanel;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.canvas.SketchCanvas;
 import org.joshy.sketch.controls.*;
@@ -53,6 +54,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     public NodeActions.DuplicateNodesAction duplicateNodeAction;
     private DrawNgonTool drawNGonTool;
     private List<SAction> viewActions = new ArrayList<SAction>();
+    private TreeViewPanel treePanel;
 
     public VectorDocContext(Main main, VectorModeHelper helper) {
         super(main,helper);
@@ -174,8 +176,15 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         this.flickrPanel = new FlickrPanel(this);
         this.sideBar.add(getString("sidebar.flickr"), this.flickrPanel);
         this.flickrPanel.setVisible(false);
+
+        treePanel = new TreeViewPanel(getMain(),this);
+        this.sideBar.add("Tree View",treePanel);
+        treePanel.setVisible(false);
+
         this.viewActions.add(new ViewSidebar("menus.viewSymbolSidebar",this,symbolPanel));
         this.viewActions.add(new ViewSidebar("menus.viewFlickrSidebar",this,flickrPanel));
+        //this.viewActions.add(new ViewSidebar("menus.viewFlickrSidebar",this,treePanel));
+
     }
 
     @Override
@@ -275,6 +284,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
             }
         });
         frame.getRootPane().putClientProperty("Window.documentModified", getDocument().isDirty());
+        this.treePanel.setDocument(doc);
     }
 
 
