@@ -128,6 +128,9 @@ public class SaveAction extends SAction {
         out.close();
     }
 
+    public static void saveAsZip(File file, SketchDocument doc) throws IOException {
+        saveAsZip(new FileOutputStream(file),file.getName(),file.toURI(),doc);
+    }
     public static void saveAsZip(OutputStream fout, String fileName, URI fileURI, SketchDocument doc) throws IOException {
         ZipOutputStream out = new ZipOutputStream(fout);
         String dir = fileName.replace(".leoz", "");

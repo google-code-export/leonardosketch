@@ -10,6 +10,9 @@ import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 
 import java.awt.*;
+import java.awt.geom.Area;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -92,22 +95,33 @@ public class SaveAminoCanvasAction extends SAction {
             out.indent();
             if(node instanceof SShape) {
                 out.println("new Transform(");
+                out.indent();
                 if(node instanceof SOval) {
                     SOval n = (SOval) node;
-                    out.println("  new Circle().set("+(n.getX()+n.getWidth()/2)+","+(n.getY()+n.getWidth()/2)+","+n.getWidth()/2+")");
+                    out.println("new Circle().set("+(n.getX()+n.getWidth()/2)+","+(n.getY()+n.getWidth()/2)+","+n.getWidth()/2+")");
                 }
                 if(node instanceof SRect) {
                     SRect n = (SRect) node;
-                    out.println("  new Rect().set("+n.getX()+","+n.getY()+","+n.getWidth()+","+n.getHeight()+")");
+                    out.println("new Rect().set("+n.getX()+","+n.getY()+","+n.getWidth()+","+n.getHeight()+")");
                 }
-
+                if(node instanceof NGon) {
+                    NGon n = (NGon) node;
+                    toPathNode(out, n.toArea());
+                }
+                if(node instanceof SArea) {
+                    SArea n = (SArea) node;
+                    toPathNode(out, n.toArea());
+                }
                 SShape shape = (SShape) node;
                 out.indent();
                 out.println(".setStrokeWidth(" + shape.getStrokeWidth() + ")");
                 out.println(".setFill('rgb("+serialize(shape.getFillPaint())+")')");
                 out.println(")");
                 out.outdent();
-                out.println(".setTranslateX("+shape.getTranslateX()+").setTranslateY("+shape.getTranslateY()+")");
+                out.outdent();
+                if(node instanceof NGon) return;
+                if(node instanceof SArea) return;
+                out.println(".setTranslateX(" + shape.getTranslateX() + ").setTranslateY(" + shape.getTranslateY() + ")");
             }
             if(node instanceof SGroup) {
                 SGroup n = (SGroup) node;
@@ -234,6 +248,48 @@ public class SaveAminoCanvasAction extends SAction {
                     out.println("ctx.translate("+(-shape.getTranslateX())+","+(-shape.getTranslateY())+");");
                 }
             }*/
+        }
+
+        private void toPathNode(IndentWriter out, Area area) {
+            out.println("new PathNode()");
+            out.indent();
+            out.println(".setPath(");
+            out.indent();
+            out.println("new Path()");
+            out.indent();
+            Rectangle2D bounds = area.getBounds2D();
+            double dx = bounds.getX();
+            double dy = bounds.getY();
+            //don't subtract off the translation just yet
+            dx = 0;
+            dy = 0;
+            PathIterator it = area.getPathIterator(null);
+            while(!it.isDone()) {
+                double[] coords = new double[6];
+                int n = it.currentSegment(coords);
+                if(n == PathIterator.SEG_MOVETO) {
+                    out.println(".moveTo("+(coords[0]-dx)+","+(coords[1]-dy)+")");
+                }
+                if(n == PathIterator.SEG_LINETO) {
+                    out.println(".lineTo("+(coords[0]-dx)+","+(coords[1]-dy)+")");
+                }
+                if(n == PathIterator.SEG_CUBICTO) {
+                    out.println(".curveTo("+
+                            (coords[0]-dx)+","+(coords[1]-dy)+","+(coords[2]-dx)+","+(coords[3]-dy)+
+                            ","+(coords[4]-dx)+","+(coords[5]-dy)+")"
+                    );
+                }
+                if(n == PathIterator.SEG_CLOSE) {
+                    out.println(".closeTo()");
+                    break;
+                }
+                it.next();
+            }
+            out.println(".build()");
+            out.outdent();
+            out.outdent();
+            out.println(")");
+
         }
 
         private String toHexString(FlatColor color) {
