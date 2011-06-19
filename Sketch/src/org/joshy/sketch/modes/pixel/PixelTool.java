@@ -44,15 +44,15 @@ public abstract class PixelTool implements Callback<Event> {
         if(event.getSource() != context.getCanvas()) return;
         //Point2D.Double cursor = context.getSketchCanvas().transformToCanvas(event.getX(),event.getY());
         if(MouseEvent.MousePressed == event.getType()) {
-            mousePressed(event, 0, 0);
+            mousePressed(event, (int)event.getX(), (int)event.getY());
             return;
         }
         if(MouseEvent.MouseDragged == event.getType()) {
-            mouseDragged(event, 0, 0);
+            mouseDragged(event, (int)event.getX(), (int)event.getY());
             return;
         }
         if(MouseEvent.MouseReleased == event.getType()) {
-            mouseReleased(event, 0, 0);
+            mouseReleased(event, (int)event.getX(), (int)event.getY());
             return;
         }
     }

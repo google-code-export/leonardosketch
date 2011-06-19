@@ -40,10 +40,22 @@ public class PixelGraphics {
     public void fillOval(final int x, final int y, final int w, final int h) {
         fillShape(x/256,y/256,(x+w)/256, (y+h)/256,
                 new ShapeFillCallback() { public void fill(Graphics2D g2) {
-                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2.setPaint(new java.awt.Color(fill.getRGBA(),true));
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g2.setPaint(new java.awt.Color(fill.getRGBA(), true));
                     g2.fillOval(x,y,w,h);
                 }}
+        );
+    }
+
+    public void fillPixel(final int x, final int y) {
+        fillShape(x / 256, y / 256, (x) / 256, (y) / 256,
+                new ShapeFillCallback() {
+                    public void fill(Graphics2D g2) {
+                        //g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        g2.setPaint(new java.awt.Color(fill.getRGBA(), true));
+                        g2.fillRect(x, y, 1, 1);
+                    }
+                }
         );
     }
 
