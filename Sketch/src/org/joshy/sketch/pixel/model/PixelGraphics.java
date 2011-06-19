@@ -1,7 +1,6 @@
 package org.joshy.sketch.pixel.model;
 
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.util.u;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -26,13 +25,10 @@ public class PixelGraphics {
     }
 
     public void fillRect(final int x, final int y, final int w, final int h) {
-        u.p("filling a rect at " + x + " " + y);
         int tx = x/256;
         int ty = y/256;
         int tx2 = (x+w)/256;
         int ty2 = (y+h)/256;
-        u.p("tx2 = " + tx2);
-
         fillShape(tx,ty,tx2,ty2, new ShapeFillCallback(){
             public void fill(Graphics2D g2) {
                 g2.setPaint(new java.awt.Color(fill.getRGBA(),true));
@@ -42,23 +38,22 @@ public class PixelGraphics {
     }
 
     public void fillOval(final int x, final int y, final int w, final int h) {
-        u.p("filling an oval at " + x + " " + y);
         fillShape(x/256,y/256,(x+w)/256, (y+h)/256,
                 new ShapeFillCallback() { public void fill(Graphics2D g2) {
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
                     g2.setPaint(new java.awt.Color(fill.getRGBA(),true));
                     g2.fillOval(x,y,w,h);
                 }}
         );
-
     }
 
     private void fillShape(int tx, int ty, int tx2, int ty2, ShapeFillCallback callback) {
-        u.p("filling a shape in tile: " + tx + " " + ty + " -> " + tx2 + " " + ty2);
+        //u.p("filling a shape in tile: " + tx + " " + ty + " -> " + tx2 + " " + ty2);
         for(int i=tx; i<=tx2; i++) {
             for(int j=ty; j<=ty2; j++) {
                 PixelTile tile = target.getTile(i,j);
                 if(tile == null) {
-                    u.p("creating a tile at: " + (i) + " " + (j));
+                    //u.p("creating a tile at: " + (i) + " " + (j));
                     tile = target.createTile(i,j);
                 }
 
