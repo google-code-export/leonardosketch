@@ -15,6 +15,7 @@ import java.util.List;
  */
 public class PixelDoc extends CanvasDocument {
     private List<PixelLayer> layers;
+    private FlatColor foregroundColor = FlatColor.BLACK;
 
     public PixelDoc() {
         layers = new ArrayList<PixelLayer>();
@@ -36,5 +37,13 @@ public class PixelDoc extends CanvasDocument {
 
     public PixelLayer getCurrentLayer() {
         return layers.get(0);
+    }
+
+    public void setForegroundColor(FlatColor foregroundColor) {
+        this.foregroundColor = foregroundColor;
+    }
+
+    public FlatColor getForegroundColor() {
+        return foregroundColor;
     }
 }
