@@ -91,25 +91,31 @@ public abstract class SShape extends SNode {
             double dy = getTranslateY()-b.getY();
 
             if(buf == null || shadow != oldShadow || b.getWidth() != oldWidth || b.getHeight() != oldHeight) {
-                oldWidth = b.getWidth();
-                oldHeight = b.getHeight();
-                buf = g.createBuffer(
-                        (int)b.getWidth()+blurRadius*2,
-                        (int)b.getHeight()+blurRadius*2);
-                GFX g2 = buf.getGFX();
-                //g2.setPaint(FlatColor.RED);
-                //g2.fillRect(0,0,buf.buf.getWidth(),buf.buf.getHeight());
-                g2.setPaint(shadow.getColor().deriveWithAlpha(shadow.getOpacity()));
-                g2.translate(blurRadius,blurRadius);
-                g2.translate(dx, dy);
-                fillShape(g2);
-                g2.translate(-dx, -dy);
-                buf.apply(new BlurEffect(blurRadius));
-                g2.translate(-blurRadius,-blurRadius);
-                oldShadow = shadow;
+                regenShadow(g);
             }
             g.draw(buf,xoff-blurRadius-dx,yoff-blurRadius-dy);
         }
+    }
+
+    protected void regenShadow(GFX g) {
+        int blurRadius = shadow.getBlurRadius();
+        Bounds b = getBounds();
+        double dx = getTranslateX()-b.getX();
+        double dy = getTranslateY()-b.getY();
+        oldWidth = b.getWidth();
+        oldHeight = b.getHeight();
+        buf = g.createBuffer(
+                (int)b.getWidth()+blurRadius*2,
+                (int)b.getHeight()+blurRadius*2);
+        GFX g2 = buf.getGFX();
+        g2.setPaint(shadow.getColor().deriveWithAlpha(shadow.getOpacity()));
+        g2.translate(blurRadius,blurRadius);
+        g2.translate(dx, dy);
+        fillShape(g2);
+        g2.translate(-dx, -dy);
+        buf.apply(new BlurEffect(blurRadius));
+        g2.translate(-blurRadius,-blurRadius);
+        oldShadow = shadow;
     }
 
     protected void fillShape(GFX g) { }
