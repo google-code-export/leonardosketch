@@ -38,4 +38,12 @@ public class PixelLayer {
     private String genKey(int tx, int ty) {
         return "key"+tx+","+ty;
     }
+
+    public int getTileCount() {
+        return tiles.size();
+    }
+
+    public void clearAll() {
+        tiles.clear();
+    }
 }
