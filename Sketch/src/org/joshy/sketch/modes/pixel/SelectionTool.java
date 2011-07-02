@@ -21,19 +21,19 @@ public class SelectionTool extends PixelTool {
     }
 
     @Override
-    protected void mousePressed(MouseEvent event, int x, int y) {
+    protected void mousePressed(MouseEvent event, Point2D cursor) {
         startPoint = event.getPointInNodeCoords(getContext().getCanvas());
         getContext().getCanvas().redraw();
     }
 
     @Override
-    protected void mouseDragged(MouseEvent event, int x, int y) {
+    protected void mouseDragged(MouseEvent event, Point2D cursor) {
         currentPoint = event.getPointInNodeCoords(getContext().getCanvas());
         getContext().getCanvas().redraw();
     }
 
     @Override
-    protected void mouseReleased(MouseEvent event, int x, int y) {
+    protected void mouseReleased(MouseEvent event, Point2D cursor) {
         PixelSelection selection = getContext().getCanvas().getSelection();
         selection.clear();
         selection.add(new Rectangle(

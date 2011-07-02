@@ -4,6 +4,8 @@ import org.joshy.gfx.event.MouseEvent;
 import org.joshy.sketch.pixel.model.PixelGraphics;
 import org.joshy.sketch.pixel.model.PixelLayer;
 
+import java.awt.geom.Point2D;
+
 /**
  * Created by IntelliJ IDEA.
  * User: joshmarinacci
@@ -17,25 +19,25 @@ public class BrushTool extends PixelTool {
     }
 
     @Override
-    protected void mousePressed(MouseEvent event, int x, int y) {
+    protected void mousePressed(MouseEvent event,  Point2D cursor) {
         PixelLayer layer = getContext().getDocument().getCurrentLayer();
         PixelGraphics g = layer.getGraphics();
         g.setFill(getContext().getDocument().getForegroundColor());
-        g.fillPixel(x,y);
+        g.fillPixel((int)cursor.getX(),(int)cursor.getY());
         getContext().getCanvas().redraw();
     }
 
     @Override
-    protected void mouseDragged(MouseEvent event, int x, int y) {
+    protected void mouseDragged(MouseEvent event,  Point2D cursor) {
         PixelLayer layer = getContext().getDocument().getCurrentLayer();
         PixelGraphics g = layer.getGraphics();
         g.setFill(getContext().getDocument().getForegroundColor());
-        g.fillPixel(x,y);
+        g.fillPixel((int)cursor.getX(),(int)cursor.getY());
         getContext().getCanvas().redraw();
     }
 
     @Override
-    protected void mouseReleased(MouseEvent event, int x, int y) {
+    protected void mouseReleased(MouseEvent event,  Point2D cursor) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 }
