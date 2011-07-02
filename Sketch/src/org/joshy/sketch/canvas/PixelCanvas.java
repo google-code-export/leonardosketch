@@ -89,9 +89,12 @@ public class PixelCanvas extends DocumentCanvas {
     }
     */
     public void draw(GFX gfx) {
+        gfx.push();
+        gfx.scale(getScale(),getScale());
         drawLayers(gfx);
         drawSelection(gfx);
         drawOverlays(gfx);
+        gfx.pop();
     }
 
     private void drawSelection(GFX gfx) {

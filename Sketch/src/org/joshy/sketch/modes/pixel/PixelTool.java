@@ -3,6 +3,8 @@ package org.joshy.sketch.modes.pixel;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 
+import java.awt.geom.Point2D;
+
 /**
  * Created by IntelliJ IDEA.
  * User: joshmarinacci
@@ -42,24 +44,24 @@ public abstract class PixelTool implements Callback<Event> {
 
     private void call(MouseEvent event) {
         if(event.getSource() != context.getCanvas()) return;
-        //Point2D.Double cursor = context.getSketchCanvas().transformToCanvas(event.getX(),event.getY());
+        Point2D.Double cursor = context.getCanvas().transformToCanvas(event.getX(),event.getY());
         if(MouseEvent.MousePressed == event.getType()) {
-            mousePressed(event, (int)event.getX(), (int)event.getY());
+            mousePressed(event, cursor);
             return;
         }
         if(MouseEvent.MouseDragged == event.getType()) {
-            mouseDragged(event, (int)event.getX(), (int)event.getY());
+            mouseDragged(event, cursor);
             return;
         }
         if(MouseEvent.MouseReleased == event.getType()) {
-            mouseReleased(event, (int)event.getX(), (int)event.getY());
+            mouseReleased(event, cursor);
             return;
         }
     }
     //protected abstract void mouseMoved(MouseEvent event, Point2D.Double cursor, );
-    protected abstract void mousePressed(MouseEvent event, int x, int y);
-    protected abstract void mouseDragged(MouseEvent event, int x, int y);
-    protected abstract void mouseReleased(MouseEvent event, int x, int y);
+    protected abstract void mousePressed(MouseEvent event, Point2D cursor);
+    protected abstract void mouseDragged(MouseEvent event, Point2D cursor);
+    protected abstract void mouseReleased(MouseEvent event, Point2D cursor);
 
     public void drawOverlay(GFX gfx) {
 
