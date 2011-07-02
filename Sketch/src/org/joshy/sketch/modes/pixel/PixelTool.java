@@ -1,5 +1,6 @@
 package org.joshy.sketch.modes.pixel;
 
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 
@@ -37,7 +38,7 @@ public abstract class PixelTool implements Callback<Event> {
 
     public void call(Event event) throws Exception {
         if(!enabled) return;
-        //if(event instanceof KeyEvent) call((KeyEvent)event);
+        if(event instanceof KeyEvent) call((KeyEvent)event);
         if(event instanceof MouseEvent) call((MouseEvent)event);
         //if(event instanceof ScrollEvent) call((ScrollEvent)event);
     }
@@ -58,6 +59,16 @@ public abstract class PixelTool implements Callback<Event> {
             return;
         }
     }
+
+    private void call(KeyEvent event) {
+        if(event.getType() == KeyEvent.KeyReleased && event.getKeyCode() == KeyEvent.KeyCode.KEY_SPACE) {
+            FlatColor fg = context.getDocument().getForegroundColor();
+            FlatColor bg = context.getDocument().getBackgroundColor();
+            context.getDocument().setForegroundColor(bg);
+            context.getDocument().setBackgroundColor(fg);
+        }
+    }
+
     //protected abstract void mouseMoved(MouseEvent event, Point2D.Double cursor, );
     protected abstract void mousePressed(MouseEvent event, Point2D cursor);
     protected abstract void mouseDragged(MouseEvent event, Point2D cursor);

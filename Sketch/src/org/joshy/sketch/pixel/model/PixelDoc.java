@@ -1,6 +1,8 @@
 package org.joshy.sketch.pixel.model;
 
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.event.ChangedEvent;
+import org.joshy.gfx.event.EventBus;
 import org.joshy.sketch.model.CanvasDocument;
 
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.List;
 public class PixelDoc extends CanvasDocument {
     private List<PixelLayer> layers;
     private FlatColor foregroundColor = FlatColor.BLACK;
+    private FlatColor backgroundColor = FlatColor.WHITE;
 
     public PixelDoc() {
         layers = new ArrayList<PixelLayer>();
@@ -24,7 +27,6 @@ public class PixelDoc extends CanvasDocument {
         PixelGraphics g = layer1.getGraphics();
         g.setFill(FlatColor.PURPLE);
         g.fillRect(200,100,100,100); // this should span one tile to the right
-
     }
 
     public void add(PixelLayer layer1) {
@@ -41,9 +43,19 @@ public class PixelDoc extends CanvasDocument {
 
     public void setForegroundColor(FlatColor foregroundColor) {
         this.foregroundColor = foregroundColor;
+        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.ColorChanged,this.foregroundColor,this));
     }
 
     public FlatColor getForegroundColor() {
         return foregroundColor;
+    }
+
+    public FlatColor getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(FlatColor backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.ColorChanged,this.backgroundColor,this));
     }
 }
