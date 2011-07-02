@@ -1,9 +1,6 @@
 package org.joshy.sketch.modes.pixel;
 
-import org.joshy.gfx.event.ActionEvent;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.ChangedEvent;
-import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.SwatchColorPicker;
@@ -92,14 +89,30 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
         selectButtonForTool(pencilTool);
 
 
-        final SwatchColorPicker cp = new SwatchColorPicker();
-        cp.onColorSelected(new Callback<ChangedEvent>() {
+
+        final SwatchColorPicker fg = new SwatchColorPicker();
+        fg.onColorSelected(new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) throws Exception {
-                getDocument().setForegroundColor(cp.getSelectedColor());
+                getDocument().setForegroundColor(fg.getSelectedColor());
             }
         });
-        toolbar.add(cp);
+        toolbar.add(fg);
 
+        final SwatchColorPicker bg = new SwatchColorPicker();
+        bg.onColorSelected(new Callback<ChangedEvent>() {
+            public void call(ChangedEvent event) throws Exception {
+                getDocument().setBackgroundColor(bg.getSelectedColor());
+            }
+        });
+        toolbar.add(bg);
+        EventBus.getSystem().addListener(ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
+            public void call(ChangedEvent event) throws Exception {
+                if(event.getSource() == getDocument()) {
+                    fg.setSelectedColor(getDocument().getForegroundColor());
+                    bg.setSelectedColor(getDocument().getBackgroundColor());
+                }
+            }
+        });
     }
     private void selectButtonForTool(PixelTool tool) {
         group.setSelectedButton(tools.getKey(tool));
