@@ -80,29 +80,32 @@ public class PixelGraphics {
     }
 
     public void fillSelection(PixelSelection selection) {
-        //draw over the selection
-        PixelTile tile = target.getTile(0,0);
-        if(tile == null) {
-            tile = target.createTile(0,0);
+        for(int y=0; y<600; y+=256) {
+            for(int x=0; x<600; x+=256) {
+                PixelTile selectionTile = selection.layer.getTile(x/256, y/256);
+                if(selectionTile != null) {
+                    BufferedImage simage = selectionTile.getBuffer();
+                    PixelTile targetTile = target.getTile(x/256,y/256);
+
+                    BufferedImage scratch = new BufferedImage(simage.getWidth(),simage.getHeight(),BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D gs = scratch.createGraphics();
+                    //draw the selection mask first
+                    gs.drawImage(simage,0,0,null);
+                    //now fill using fg color using SrcAtop
+                    gs.setPaint(new java.awt.Color(fill.getRGBA(), true));
+                    gs.setComposite(AlphaComposite.SrcAtop);
+                    gs.fillRect(0,0,simage.getWidth(),simage.getHeight());
+                    gs.dispose();
+
+                    //now composite onto the existing layer
+
+                    BufferedImage tbuff = targetTile.getBuffer();
+                    Graphics2D gx = tbuff.createGraphics();
+                    gx.drawImage(scratch,0,0,null);
+                    gx.dispose();
+                }
+            }
         }
-
-        BufferedImage scratch = new BufferedImage(selection.buffer.getWidth(),selection.buffer.getHeight(),BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2 = scratch.createGraphics();
-        //draw the selection mask first
-        g2.drawImage(selection.buffer,0,0,null);
-
-        //now fill  using SrcAtop
-        //g2.setPaint(java.awt.Color.RED);
-        g2.setPaint(new java.awt.Color(fill.getRGBA(),true));
-        g2.setComposite(AlphaComposite.SrcAtop);
-        g2.fillRect(0,0,selection.buffer.getWidth(),selection.buffer.getHeight());
-        g2.dispose();
-
-        //now composite onto the existing layer
-        BufferedImage buff = tile.getBuffer();
-        Graphics2D gx = buff.createGraphics();
-        gx.drawImage(scratch,0,0,null);
-        gx.dispose();
     }
 
     public void fillDisplacementClouds(int x, int y, int w, int h) {
@@ -124,10 +127,6 @@ public class PixelGraphics {
 
             divide(scratch,0,0,257,257,c1,c2,c3,c4);
         }
-
-
-
-
 
         PixelTile tile = target.getTile(0,0);
         if(tile == null) {

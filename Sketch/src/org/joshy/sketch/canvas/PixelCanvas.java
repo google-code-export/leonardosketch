@@ -24,7 +24,7 @@ public class PixelCanvas extends DocumentCanvas {
 
     public PixelCanvas(PixelDocContext context) {
         this.context = context;
-        selection = new PixelSelection(500,500);
+        selection = new PixelSelection();
     }
     
     public boolean isFocused() {
@@ -96,7 +96,7 @@ public class PixelCanvas extends DocumentCanvas {
 
     private void drawSelection(GFX gfx) {
         if(!selection.isEmpty()) {
-            gfx.drawImage(Image.create(selection.buffer),0,0);
+            drawLayer(gfx, selection.layer);
         }
     }
 
@@ -108,19 +108,23 @@ public class PixelCanvas extends DocumentCanvas {
 
     public void drawLayers(GFX gfx) {
         for(PixelLayer layer : document.getLayers()) {
-            for(int y=0; y<600; y+=256) {
-                for(int x=0; x<600; x+=256) {
-                    PixelTile tile = layer.getTile(x/256,y/256);
-                    if(tile != null) {
-                        Image image = tile.getImage();
-                        if(image != null) {
-                            gfx.drawImage(image,x,y);
-                        }
+            drawLayer(gfx, layer);
+        }
+    }
+
+    private void drawLayer(GFX gfx, PixelLayer layer) {
+        for(int y=0; y<600; y+=256) {
+            for(int x=0; x<600; x+=256) {
+                PixelTile tile = layer.getTile(x/256,y/256);
+                if(tile != null) {
+                    Image image = tile.getImage();
+                    if(image != null) {
+                        gfx.drawImage(image,x,y);
                     }
-                    //tile grid lines
-                    gfx.setPaint(FlatColor.GRAY);
-                    gfx.drawRect(x,y,256,256);
                 }
+                //tile grid lines
+                gfx.setPaint(FlatColor.GRAY);
+                gfx.drawRect(x,y,256,256);
             }
         }
     }
