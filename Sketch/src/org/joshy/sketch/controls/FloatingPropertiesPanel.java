@@ -11,6 +11,7 @@ import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.BooleanGeometry;
 import org.joshy.sketch.actions.NodeActions;
@@ -50,6 +51,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
     private GridBox shadowProperties;
     private Checkbox shadowSet;
+    private Checkbox shadowInner;
     private SwatchColorPicker shadowColorButton;
     private SpinBox<Double> shadowXoff;
     private SpinBox<Double> shadowYoff;
@@ -294,6 +296,22 @@ public class FloatingPropertiesPanel extends VFlexBox {
             }
         });
         shadowProperties.add(shadowSet);
+        shadowInner = new Checkbox("inner");
+        EventBus.getSystem().addListener(shadowInner, ActionEvent.Action, new Callback<ActionEvent>(){
+            public void call(ActionEvent actionEvent) throws Exception {
+                if(selection != null) {
+                    if(manager.propMan.isClassAvailable(SShape.class)) {
+                        DropShadow shad = (DropShadow) manager.propMan.getProperty("shadow").getValue();
+                        if(shad !=  null) {
+                            shad.setInner(shadowInner.isSelected());
+                        }
+                        manager.propMan.getProperty("shadow").setValue(shad);
+                        context.redraw();
+                    }
+                }
+            }
+        });
+        shadowProperties.add(shadowInner);
         shadowProperties.nextRow();
 
 
@@ -463,6 +481,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
                     shadowYoff.setValue(shad.getYOffset());
                     shadowBlurRadius.setValue(shad.getBlurRadius());
                     shadowColorButton.setSelectedColor(shad.getColor());
+                    shadowInner.setSelected(shad.isInner());
                     shadowOpacity.setValue(shad.getOpacity()*100);
                 } else {
                     shadowSet.setSelected(false);
