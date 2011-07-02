@@ -15,6 +15,7 @@ public class DropShadow {
     private double yoff = 5;
     private int blurRadius = 3;
     private FlatColor color = FlatColor.BLACK;
+    private boolean inner;
 
     public DropShadow() {
 
@@ -26,6 +27,7 @@ public class DropShadow {
         this.yoff = dropShadow.yoff;
         this.blurRadius = dropShadow.blurRadius;
         this.color = dropShadow.color;
+        this.inner = dropShadow.inner;
     }
 
     public DropShadow setOpacity(double opacity) {
@@ -76,5 +78,13 @@ public class DropShadow {
 
     public FlatColor getColor() {
         return color;
+    }
+
+    public void setInner(boolean inner) {
+        this.inner = inner;
+    }
+
+    public boolean isInner() {
+        return inner;
     }
 }

@@ -79,11 +79,33 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
         return path;
     }
 
+    boolean SHADOW = true;
     public void draw(GFX g) {
         g.translate(this.getX(),this.getY());
 
-        drawShadow(g);
+        if(this.getShadow() == null) {
+            initPaint(g);
+            fillShape(g);
+        } else {
+            drawShadow(g);
+        }
 
+
+        if(this.getStrokePaint() != null && getStrokeWidth() > 0) {
+            g.setPaint(this.getStrokePaint());
+            g.setStrokeWidth(this.getStrokeWidth());
+            if(this.getCorner() > 0) {
+                g.drawRoundRect(0,0, this.getWidth(), this.getHeight(),this.getCorner(),this.getCorner());
+            } else {
+                g.drawRect(0,0, this.getWidth(), this.getHeight());
+            }
+        }
+        g.setStrokeWidth(1);
+
+        g.translate(-this.getX(),-this.getY());
+    }
+
+    protected void initPaint(GFX g) {
         Paint paint = this.getFillPaint();
         if(paint != null) {
             if(paint instanceof FlatColor) {
@@ -98,22 +120,9 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
             if(paint instanceof PatternPaint) {
                 g.setPaint(paint);
             }
-            fillShape(g);
         }
-        if(this.getStrokePaint() != null && getStrokeWidth() > 0) {
-            g.setPaint(this.getStrokePaint());
-            g.setStrokeWidth(this.getStrokeWidth());
-
-            if(this.getCorner() > 0) {
-                g.drawRoundRect(0,0, this.getWidth(), this.getHeight(),this.getCorner(),this.getCorner());
-            } else {
-                g.drawRect(0,0, this.getWidth(), this.getHeight());
-            }
-        }
-
-        g.setStrokeWidth(1);
-        g.translate(-this.getX(),-this.getY());
     }
+
 
     public static class RoundRectMasterHandle extends Handle {
         private SRect rect;
