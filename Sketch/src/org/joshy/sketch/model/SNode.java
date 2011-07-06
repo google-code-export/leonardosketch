@@ -17,6 +17,7 @@ public abstract class SNode {
     private double scaleX = 1.0;
     private double scaleY = 1.0;
     private double rotate = 0.0;
+    private String id = null;
 
     public abstract Bounds getBounds();
 
@@ -79,5 +80,13 @@ public abstract class SNode {
 
     public double getRotate() {
         return rotate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

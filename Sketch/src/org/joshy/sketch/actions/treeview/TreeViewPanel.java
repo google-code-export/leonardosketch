@@ -7,6 +7,7 @@ import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.model.SGroup;
+import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
@@ -37,7 +38,7 @@ public class TreeViewPanel extends VFlexBox {
         tree.setHeight(500);
         model = new TreeView.AbstractTreeTableModel<Object,String>(){
             public int getColumnCount() {
-                return 1;
+                return 2;
             }
 
             public boolean hasChildren(Object o) {
@@ -66,12 +67,21 @@ public class TreeViewPanel extends VFlexBox {
             public String getColumnHeader(int i) {
                 switch(i) {
                     case 0: return "Kind";
+                    case 1: return "Name";
                 }
                 return "???";
             }
 
             public String getColumnData(Object o, int i) {
                 if(o == null) return "null";
+                if(i == 1) {
+                    if(o instanceof SNode) {
+                        String id =  ((SNode)o).getId();
+                        if(id == null) return "";
+                        return id;
+                    }
+                    return "";
+                }
                 return o.getClass().getSimpleName();
             }
         };
