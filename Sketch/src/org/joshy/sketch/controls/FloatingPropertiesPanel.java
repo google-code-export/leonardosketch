@@ -11,7 +11,6 @@ import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.BooleanGeometry;
 import org.joshy.sketch.actions.NodeActions;
@@ -67,6 +66,8 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private ToggleGroup fontAlignGroup;
     private DecimalFormat df;
     private DecimalFormat intFormat;
+    private FlexBox defaultProperties;
+    private Textbox nameBox;
 
 
     public FloatingPropertiesPanel(final Main manager, final VectorDocContext context) throws IOException {
@@ -87,6 +88,21 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
         EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, selectionCallback);
 
+        defaultProperties = new HFlexBox().setBoxAlign(Align.Baseline);
+
+        add(defaultProperties);
+        defaultProperties.add(new Label("Name:"));
+        nameBox =  new Textbox("").setHintText("unset");
+        nameBox.setPrefWidth(100);
+        nameBox.onAction(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                if(manager.propMan.isClassAvailable(SNode.class)) {
+                    PropertyManager.Property prop = manager.propMan.getProperty("id");
+                    prop.setValue(nameBox.getText());
+                }
+            }
+        });
+        defaultProperties.add(nameBox,1);
 
         shapeProperties = new HFlexBox().setBoxAlign(HFlexBox.Align.Baseline);
         add(shapeProperties);
@@ -452,6 +468,15 @@ public class FloatingPropertiesPanel extends VFlexBox {
         SNode lastNode = null;
         for(SNode node : selection.items()) {
             lastNode = node;
+        }
+
+        if(manager.propMan.isClassAvailable(SNode.class)) {
+            String id = (String) manager.propMan.getProperty("id").getValue();
+            if(id == null){
+                nameBox.setText("");
+            } else {
+                nameBox.setText(id);
+            }
         }
 
         if(manager.propMan.isClassAvailable(SText.class)) {

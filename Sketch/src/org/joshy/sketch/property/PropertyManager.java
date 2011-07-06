@@ -96,6 +96,9 @@ public class PropertyManager {
                     }
                 }
 
+                if(method == null) {
+                    throw new Exception("Method: " + methodName + " not found on object " + node.getClass().getName());
+                }
                 for(SNode s : selection.items()) {
                     method.invoke(s,value);
                 }
@@ -104,6 +107,8 @@ public class PropertyManager {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
 
