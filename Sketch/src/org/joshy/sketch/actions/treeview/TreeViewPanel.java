@@ -1,11 +1,13 @@
 package org.joshy.sketch.actions.treeview;
 
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.control.TreeView;
 import org.joshy.gfx.node.layout.VFlexBox;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
+import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.SGroup;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SketchDocument;
@@ -93,10 +95,25 @@ public class TreeViewPanel extends VFlexBox {
         this.add(scroll,1);
         this.add(new Button("foo"),0);
 
+        EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, selectionCallback);
     }
 
+    private Callback<? extends Selection.SelectionChangeEvent> selectionCallback = new Callback<Selection.SelectionChangeEvent>() {
+        public void call(Selection.SelectionChangeEvent selectionEvent) throws Exception {
+            //u.p("selection changed");
+            Selection sel = selectionEvent.getSelection();
+            for(int i=0; i<model.getRowCount(); i++) {
+                Object row = model.get(i,0);
+                //u.p("row = " + row);
+                if(row instanceof SNode && sel.contains((SNode)row)) {
+                    tree.setSelectedRow(i);
+                    return;
+                }
+            }
+        }
+    };
+
     public void setDocument(SketchDocument doc) {
-        u.p("doc updated");
         model.setRoot(doc);
     }
 }
