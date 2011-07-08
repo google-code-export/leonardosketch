@@ -11,6 +11,7 @@ import org.joshy.sketch.modes.DocContext;
 
 import java.awt.*;
 import java.awt.geom.Area;
+import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -61,14 +62,14 @@ public class SaveAminoCanvasAction extends SAction {
             file = new File(fd.getDirectory(),fileName);
         }
 
-        ExportProcessor.process(new HTMLCanvasExport(),
+        ExportProcessor.process(new AminoExport(),
                 new IndentWriter(new PrintWriter(new FileOutputStream(file))),
                 (SketchDocument) context.getDocument());
         context.getDocument().setStringProperty(HTML_CANVAS_PATH_KEY,file.getAbsolutePath());
         OSUtil.openBrowser(file.toURI().toASCIIString());
     }
 
-    private static class HTMLCanvasExport implements ShapeExporter<IndentWriter> {
+    private static class AminoExport implements ShapeExporter<IndentWriter> {
 
         public void docStart(IndentWriter out, SketchDocument doc) {
             out.println("<html><head><title>Amino Canvas Export</title>"
@@ -77,6 +78,11 @@ public class SaveAminoCanvasAction extends SAction {
             out.println("<body onload=\"setupDrawing();\">");
             out.println("<canvas width=\"800\" height=\"600\" id=\"foo\"></canvas>");
             out.println("<script>");
+
+            //export named elements
+            exportNamedElements(out,doc);
+
+            //function definition
             out.println("function setupDrawing(){");
             out.println("var runner =  new Runner();\n"
                     +"runner.setCanvas(document.getElementById('foo'));\n"
@@ -84,6 +90,45 @@ public class SaveAminoCanvasAction extends SAction {
                     +"runner.setBackground('white');\n"
                     +"runner.setRoot(new Group()\n"
             );
+            //export unnamed elements
+        }
+
+        private void exportNamedElements(IndentWriter out, SketchDocument document) {
+            for(SketchDocument.SketchPage page : document.getPages()) {
+                for(SNode node : page.getNodes()) {
+                    exportNamedElements(out,node);
+                }
+            }
+        }
+        private void exportNamedElements(IndentWriter out, SNode node) {
+            String id = node.getId();
+            if(id != null && !id.equals("")) {
+                out.println("var " + id + " = ");
+                //do pre
+                out.mode = "named";
+                exportPre(out,node);
+                //do post
+                exportPost(out,node);
+                //finish the statement
+                out.mode = "";
+                out.println(";");
+            }
+            if(node instanceof SGroup) {
+                SGroup group = (SGroup) node;
+                for(SNode nd : group.getNodes()) {
+                    exportNamedElements(out,nd);
+                }
+            }
+        }
+
+        public void docEnd(IndentWriter out, SketchDocument document) {
+            out.println(");");
+            out.println("runner.start();");
+            out.println("}");
+            out.println("</script>");
+            out.println("</body>");
+            out.println("</html>");
+            out.close();
         }
 
         public void pageStart(IndentWriter out, SketchDocument.SketchPage page) {
@@ -91,7 +136,17 @@ public class SaveAminoCanvasAction extends SAction {
 
         public void exportPre(IndentWriter out, SNode node) {
             u.p("exporting pre: " + node);
-            out.println(".add(");
+            if("".equals(out.mode)) {
+                String id = node.getId();
+                if(id != null && !id.equals("")) {
+                    out.println(".add("+id);
+                    return;
+                } else {
+                    out.println(".add(");
+                }
+            }
+
+
             out.indent();
             if(node instanceof SShape) {
                 out.println("new Transform(");
@@ -112,9 +167,19 @@ public class SaveAminoCanvasAction extends SAction {
                     SArea n = (SArea) node;
                     toPathNode(out, n.toArea());
                 }
+                if(node instanceof SPoly) {
+                    SPoly n = (SPoly) node;
+                    toPathNode(out, n.toArea());
+                }
+                if(node instanceof SPath) {
+                    SPath n = (SPath) node;
+                    //toPathNode(out, n.toArea());
+                    serializePath(out,n);
+                }
                 SShape shape = (SShape) node;
                 out.indent();
                 out.println(".setStrokeWidth(" + shape.getStrokeWidth() + ")");
+                out.println(".setStroke('rgb("+serialize(shape.getStrokePaint()) + ")')");
                 out.println(".setFill('rgb("+serialize(shape.getFillPaint())+")')");
                 out.println(")");
                 out.outdent();
@@ -128,126 +193,44 @@ public class SaveAminoCanvasAction extends SAction {
                 out.println("new Group().setX("+n.getTranslateX()+").setY("+n.getTranslateY()+")");
                 out.indent();
             }
+        }
 
-            /*
-            if(node instanceof SShape) {
-                SShape shape = (SShape) node;
-
-                out.println("\n//set the fill");
-                //do the paints
-                if(shape.getFillPaint() instanceof LinearGradientFill) {
-                    LinearGradientFill grad = (LinearGradientFill) shape.getFillPaint();
-                    out.println("var lingrad = ctx.createLinearGradient("
-                            +grad.getStartX()+","
-                            +grad.getStartY()+","
-                            +grad.getEndX()+","
-                            +grad.getEndY()+");");
-                    for(MultiGradientFill.Stop stop : grad.getStops()) {
-                        out.println("lingrad.addColorStop("+stop.getPosition()+",'"+toHexString(stop.getColor())+"');");
-                    }
-                    out.println("ctx.fillStyle = lingrad;");
+        private void serializePath(IndentWriter out, SPath path) {
+            out.println("new PathNode()");
+            out.indent();
+            out.println(".setPath(");
+            out.indent();
+            out.println("new Path()");
+            out.indent();
+            Path2D.Double j2dpath = SPath.toPath(path);
+            PathIterator it = j2dpath.getPathIterator(null);
+            double dx = 0;
+            double dy = 0;
+            while(!it.isDone()) {
+                double[] coords = new double[6];
+                int n = it.currentSegment(coords);
+                if(n == PathIterator.SEG_MOVETO) {
+                    out.println(".moveTo("+(coords[0]-dx)+","+(coords[1]-dy)+")");
                 }
-                if(shape.getFillPaint() instanceof RadialGradientFill) {
-                    RadialGradientFill grad = (RadialGradientFill) shape.getFillPaint();
-                    out.println("var radgrad = ctx.createRadialGradient("
-                            +grad.getCenterX()+","
-                            +grad.getCenterY()+","
-                            +0+","
-                            +grad.getCenterX()+","
-                            +grad.getCenterY()+","
-                            +grad.getRadius()+");");
-                    for(MultiGradientFill.Stop stop : grad.getStops()) {
-                        out.println("radgrad.addColorStop("+stop.getPosition()+",'"+toHexString(stop.getColor())+"');");
-                    }
-                    out.println("ctx.fillStyle = radgrad;");
+                if(n == PathIterator.SEG_LINETO) {
+                    out.println(".lineTo("+(coords[0]-dx)+","+(coords[1]-dy)+")");
                 }
-                if(shape.getFillPaint() instanceof FlatColor) {
-                    out.println("ctx.fillStyle = \"rgb("+serialize(shape.getFillPaint())+");\"");
+                if(n == PathIterator.SEG_CUBICTO) {
+                    out.println(".curveTo("+
+                            (coords[0]-dx)+","+(coords[1]-dy)+","+(coords[2]-dx)+","+(coords[3]-dy)+
+                            ","+(coords[4]-dx)+","+(coords[5]-dy)+")"
+                    );
                 }
-
-
-
-                //do the shape fill
-                if(shape instanceof SRect) {
-                    out.println("\n//rectangle");
-                    out.println("ctx.translate("+shape.getTranslateX()+","+shape.getTranslateY()+");");
-                    SRect rect = (SRect) shape;
-                    out.println("ctx.fillRect ("+rect.getX()+", "+rect.getY()+","+rect.getWidth()+","+rect.getHeight()+");");
-                    if(rect.getStrokeWidth() > 0 && rect.getStrokePaint() != null) {
-                        out.println("ctx.strokeStyle = \"rgb("+serialize(shape.getStrokePaint())+");\"");
-                        out.println("ctx.lineWidth = " + shape.getStrokeWidth()+";");
-                        out.println("ctx.strokeRect ("+rect.getX()+", "+rect.getY()+","+rect.getWidth()+","+rect.getHeight()+");");
-                    }
-                    out.println("ctx.translate(-"+shape.getTranslateX()+",-"+shape.getTranslateY()+");");
+                if(n == PathIterator.SEG_CLOSE) {
+                    out.println(".closeTo()");
+                    break;
                 }
-                if(shape instanceof SOval) {
-                    SOval oval = (SOval) shape;
-                    out.println("\n//oval");
-                    out.println("ctx.translate("+shape.getTranslateX()+","+shape.getTranslateY()+");");
-                    out.println("ctx.beginPath();");
-                    out.println("ellipse(ctx,"+oval.getX()+","+oval.getY()+","+oval.getWidth()+","+oval.getHeight()+");");
-                    out.println("ctx.fill();");
-                    if(oval.getStrokeWidth() > 0 && oval.getStrokePaint() != null) {
-                        out.println("ctx.strokeStyle = \"rgb("+serialize(shape.getStrokePaint())+");\"");
-                        out.println("ctx.lineWidth = " + shape.getStrokeWidth()+";");
-                        out.println("ctx.stroke();");
-                    }
-                    out.println("ctx.translate(-"+shape.getTranslateX()+",-"+shape.getTranslateY()+");");
-                }
-                if(shape instanceof SPath || shape instanceof SArea || shape instanceof SPoly || shape instanceof NGon) {
-                    if(shape instanceof SPath) out.println("\n//path");
-                    if(shape instanceof SArea) out.println("\n//area");
-                    if(shape instanceof SPoly) out.println("\n//polygon");
-                    if(shape instanceof NGon) out.println("\n//n-gon");
-
-                    Area area = shape.toArea();
-                    Rectangle2D bounds = area.getBounds2D();
-                    double dx = bounds.getX();
-                    double dy = bounds.getY();
-                    out.println("ctx.translate("+dx+","+dy+");");
-                    out.println("ctx.beginPath()");
-
-                    PathIterator it = area.getPathIterator(null);
-                    while(!it.isDone()) {
-                        double[] coords = new double[6];
-                        int n = it.currentSegment(coords);
-                        if(n == PathIterator.SEG_MOVETO) {
-                            out.println("ctx.moveTo("+(coords[0]-dx)+","+(coords[1]-dy)+");");
-                        }
-                        if(n == PathIterator.SEG_LINETO) {
-                            out.println("ctx.lineTo("+(coords[0]-dx)+","+(coords[1]-dy)+");");
-                        }
-                        if(n == PathIterator.SEG_CUBICTO) {
-                            out.println("ctx.bezierCurveTo("+
-                                    (coords[0]-dx)+","+(coords[1]-dy)+","+(coords[2]-dx)+","+(coords[3]-dy)+
-                                    ","+(coords[4]-dx)+","+(coords[5]-dy)+");"
-                            );
-                        }
-                        if(n == PathIterator.SEG_CLOSE) {
-                            out.println("ctx.closePath();");
-                            break;
-                        }
-                        it.next();
-                    }
-
-                    out.println("ctx.fill();");
-                    if(shape.getStrokeWidth() > 0 && shape.getStrokePaint() != null) {
-                        out.println("ctx.strokeStyle = \"rgb("+serialize(shape.getStrokePaint())+");\"");
-                        out.println("ctx.lineWidth = " + shape.getStrokeWidth()+";");
-                        out.println("ctx.stroke();");
-                    }
-                    out.println("ctx.translate("+(-dx)+","+(-dy)+");");
-                }
-
-                if(shape instanceof SText) {
-                    out.println("\n//text");
-                    out.println("ctx.translate("+shape.getTranslateX()+","+shape.getTranslateY()+");");
-                    SText text = (SText) shape;
-                    out.println("ctx.font = \"" + text.getFontSize()+"pt "+text.getFontName()+"\";");
-                    out.println("ctx.fillText (\""+text.getText()+"\", "+text.getX()+","+(text.getY()+text.getHeight())+");");
-                    out.println("ctx.translate("+(-shape.getTranslateX())+","+(-shape.getTranslateY())+");");
-                }
-            }*/
+                it.next();
+            }
+            out.println(".build()");
+            out.outdent();
+            out.outdent();
+            out.println(")");
         }
 
         private void toPathNode(IndentWriter out, Area area) {
@@ -308,22 +291,15 @@ public class SaveAminoCanvasAction extends SAction {
             if(node instanceof SGroup) {
                 out.outdent();
             }
+            if("".equals(out.mode)) {
+                out.println(")");
+            }
             out.outdent();
-            out.println(")");
         }
 
         public void pageEnd(IndentWriter out, SketchDocument.SketchPage page) {
         }
 
-        public void docEnd(IndentWriter out, SketchDocument document) {
-            out.println(");");
-            out.println("runner.start();");
-            out.println("}");
-            out.println("</script>");
-            out.println("</body>");
-            out.println("</html>");
-            out.close();
-        }
 
         public boolean isContainer(SNode n) {
             if(n instanceof SGroup) return true;
@@ -343,6 +319,7 @@ public class SaveAminoCanvasAction extends SAction {
         private PrintWriter writer;
         private int tab = 0;
         private String tabString = "";
+        public String mode = "";
 
         public IndentWriter(PrintWriter printWriter) {
             this.writer = printWriter;
