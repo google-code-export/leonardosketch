@@ -636,13 +636,13 @@
             <value language='ja-JP'>シンボルセット</value>
         </key>
         <key name='tocanvas'>
-            <value language='DEFAULT'>to HTML Canvas</value>
-            <value language='de-DE'>zu HTML Canvas</value>
-            <value language='fr-FR'>en Canvas HTML</value>
-            <value language='hr-HR'>kao HTML Canvas</value>
-            <value language='it-IT'>in HTML Canvas</value>
-            <value language='ja-JP'>HTML Canvas</value>
-            <value language='tr-TR'>HTML Canvas</value>
+            <value language='DEFAULT'>to HTML Amino Canvas</value>
+            <value language='de-DE'>zu HTML Amino Canvas</value>
+            <value language='fr-FR'>en Canvas Amino HTML</value>
+            <value language='hr-HR'>kao HTML Amino Canvas</value>
+            <value language='it-IT'>in HTML Amino Canvas</value>
+            <value language='ja-JP'>HTML Amino Canvas</value>
+            <value language='tr-TR'>HTML Amino Canvas</value>
         </key>
         <key name='tohtml'>
             <value language='DEFAULT'>to HTML</value>
