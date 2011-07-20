@@ -181,6 +181,9 @@ public class SaveAminoCanvasAction extends SAction {
                 out.println(".setStrokeWidth(" + shape.getStrokeWidth() + ")");
                 out.println(".setStroke('rgb("+serialize(shape.getStrokePaint()) + ")')");
                 out.println(".setFill('rgb("+serialize(shape.getFillPaint())+")')");
+                if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
+                    out.println(".setCached(true)");
+                }
                 out.println(")");
                 out.outdent();
                 out.outdent();
@@ -191,7 +194,13 @@ public class SaveAminoCanvasAction extends SAction {
             if(node instanceof SGroup) {
                 SGroup n = (SGroup) node;
                 out.println("new Group().setX("+n.getTranslateX()+").setY("+n.getTranslateY()+")");
+                if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
+                    out.println(".setCached(true)");
+                }
                 out.indent();
+            }
+            if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
+                out.println(".setCached(true)");
             }
         }
 

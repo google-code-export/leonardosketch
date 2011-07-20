@@ -178,7 +178,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         this.flickrPanel.setVisible(false);
 
         treePanel = new TreeViewPanel(getMain(),this);
-        this.sideBar.add("Tree View",treePanel);
+        this.sideBar.add("Properties",treePanel);
         treePanel.setVisible(false);
 
         this.viewActions.add(new ViewSidebar("menus.viewSymbolSidebar",this,symbolPanel));
