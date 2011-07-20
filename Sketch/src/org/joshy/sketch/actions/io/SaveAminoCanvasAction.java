@@ -73,7 +73,7 @@ public class SaveAminoCanvasAction extends SAction {
 
         public void docStart(IndentWriter out, SketchDocument doc) {
             out.println("<html><head><title>Amino Canvas Export</title>"
-                    +"<script src='http://goamino.org/download/daily/amino-0.01.js'></script>"
+                    +"<script src='http://goamino.org/download/daily/amino-1.0b2.js'></script>"
                     +"</head>");
             out.println("<body onload=\"setupDrawing();\">");
             out.println("<canvas width=\"800\" height=\"600\" id=\"foo\"></canvas>");
