@@ -54,6 +54,17 @@ public abstract class SNode {
         props.put(key,value);
     }
 
+
+    public boolean getBooleanProperty(String key) {
+        String str =  props.get(key);
+        if( str == null) return false;
+        return Boolean.parseBoolean(str);
+    }
+
+    public void setBooleanProperty(String key, boolean value) {
+        props.put(key,Boolean.toString(value));
+    }
+
     public Map getProperties() {
         return props;
     }

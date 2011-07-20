@@ -1,10 +1,11 @@
 package org.joshy.sketch.actions.treeview;
 
+import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.Event;
 import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.ScrollPane;
-import org.joshy.gfx.node.control.TreeView;
+import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.canvas.Selection;
@@ -28,8 +29,12 @@ public class TreeViewPanel extends VFlexBox {
     private TreeView tree;
     private ScrollPane scroll;
     private TreeView.AbstractTreeTableModel<Object, String> model;
+    private VFlexBox propsPanel;
+    private Textbox all_name;
+    private Checkbox all_cache;
+    private Checkbox all_cache_image;
 
-    public TreeViewPanel(Main main, VectorDocContext ctx) {
+    public TreeViewPanel(Main main, final VectorDocContext ctx) {
         this.main = main;
         this.ctx = ctx;
 
@@ -93,15 +98,92 @@ public class TreeViewPanel extends VFlexBox {
         scroll = new ScrollPane();
         scroll.setContent(tree);
         this.add(scroll,1);
-        this.add(new Button("foo"),0);
+
+        propsPanel = new VFlexBox();
+        //propsPanel.setPrefHeight(200);
+
+
+        //all nodes
+
+        //name
+        all_name = new Textbox();
+        all_name.setPrefWidth(100);
+        all_name.setHintText("no name");
+        propsPanel.add(new HFlexBox()
+            .add(new Label("name"))
+            .add(all_name));
+        EventBus.getSystem().addListener(all_name, ActionEvent.Action, new Callback<Event>() {
+             public void call(Event event) throws Exception {
+                 Selection sel = ctx.getSelection();
+                 if (sel.size() == 1) {
+                     SNode n = sel.firstItem();
+                     n.setId(all_name.getText());
+                 }
+             }
+         });
+
+        //cache
+        //name
+        all_cache = new Checkbox("cache");
+        EventBus.getSystem().addListener(all_cache, ActionEvent.Action, new Callback<Event>() {
+            public void call(Event event) throws Exception {
+                Selection sel = ctx.getSelection();
+                if (sel.size() == 1) {
+                    SNode n = sel.firstItem();
+                    n.setBooleanProperty("com.joshondesign.amino.nodecache",all_cache.isSelected());
+                }
+            }
+        });
+        propsPanel.add(all_cache);
+        //cache as png image
+        all_cache_image = new Checkbox("cache as image");
+        EventBus.getSystem().addListener(all_cache_image, ActionEvent.Action, new Callback<Event>() {
+            public void call(Event event) throws Exception {
+                Selection sel = ctx.getSelection();
+                if (sel.size() == 1) {
+                    SNode n = sel.firstItem();
+                    n.setBooleanProperty("com.joshondesign.amino.nodecacheimage",all_cache_image.isSelected());
+                }
+            }
+        });
+        propsPanel.add(all_cache_image);
+
+        //text
+        //cache as dynamic bitmap text
+
+        this.add(propsPanel,0);
+
 
         EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, selectionCallback);
     }
 
     private Callback<? extends Selection.SelectionChangeEvent> selectionCallback = new Callback<Selection.SelectionChangeEvent>() {
         public void call(Selection.SelectionChangeEvent selectionEvent) throws Exception {
-            //u.p("selection changed");
             Selection sel = selectionEvent.getSelection();
+            //u.p("selection changed");
+
+            boolean enabled = sel.size()==1;
+
+            all_name.setEnabled(enabled);
+            all_cache.setEnabled(enabled);
+            all_cache_image.setEnabled(enabled);
+
+            if(enabled) {
+                SNode n = sel.firstItem();
+                if(n != null) {
+                    if(n.getId() != null) {
+                        all_name.setText(n.getId());
+                    } else {
+                        all_name.setText("");
+
+                    }
+                    all_cache.setSelected(n.getBooleanProperty("com.joshondesign.amino.nodecache"));
+                    all_cache_image.setSelected(n.getBooleanProperty("com.joshondesign.amino.nodecacheimage"));
+                }
+            } else {
+                all_name.setText("");
+            }
+
             for(int i=0; i<model.getRowCount(); i++) {
                 Object row = model.get(i,0);
                 //u.p("row = " + row);
@@ -110,6 +192,7 @@ public class TreeViewPanel extends VFlexBox {
                     return;
                 }
             }
+
         }
     };
 
