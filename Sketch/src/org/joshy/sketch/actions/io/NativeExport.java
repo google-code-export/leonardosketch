@@ -78,6 +78,9 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             out.start("node");
         }
 
+        if(shape.getId() != null && !"".equals(shape.getId())) {
+            out.attr("id",shape.getId());
+        }
         if(shape instanceof SImage) {
             out.attr("type","image");
         }
