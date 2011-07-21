@@ -1,6 +1,8 @@
 package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.LinearGradientFill;
+import org.joshy.gfx.draw.MultiGradientFill;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -17,6 +19,7 @@ import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.Map;
 
 /**
@@ -70,6 +73,12 @@ public class SaveAminoCanvasAction extends SAction {
     }
 
     private static class AminoExport implements ShapeExporter<IndentWriter> {
+        private DecimalFormat df;
+
+        private AminoExport() {
+            this.df = new DecimalFormat();
+            df.setMaximumFractionDigits(2);
+        }
 
         public void docStart(IndentWriter out, SketchDocument doc) {
             out.println("<html><head><title>Amino Canvas Export</title>"
@@ -179,8 +188,11 @@ public class SaveAminoCanvasAction extends SAction {
                 SShape shape = (SShape) node;
                 out.indent();
                 out.println(".setStrokeWidth(" + shape.getStrokeWidth() + ")");
-                out.println(".setStroke('rgb("+serialize(shape.getStrokePaint()) + ")')");
-                out.println(".setFill('rgb("+serialize(shape.getFillPaint())+")')");
+                out.println(".setStroke("+ serializePaint(shape.getStrokePaint()) + ")");
+                out.println(".setFill("+ serializePaint(shape.getFillPaint())+")");
+                if(shape.getFillOpacity() != 1.0) {
+                    out.println(".setOpacity("+df.format(shape.getFillOpacity())+")");
+                }
                 if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
                     out.println(".setCached(true)");
                 }
@@ -288,10 +300,33 @@ public class SaveAminoCanvasAction extends SAction {
             return "#"+String.format("%06x",color.getRGBA()&0x00FFFFFF);
         }
 
-        private String serialize(org.joshy.gfx.draw.Paint fillPaint) {
+        private String serializePaint(org.joshy.gfx.draw.Paint fillPaint) {
             if(fillPaint instanceof FlatColor) {
                 FlatColor color = (FlatColor) fillPaint;
-                return (int)(255*color.getRed())+","+(int)(255*color.getGreen())+","+(int)(255*color.getBlue());
+                return "'rgba("
+                        +(int)(255*color.getRed())
+                        +","+(int)(255*color.getGreen())
+                        +","+(int)(255*color.getBlue())
+                        +","+(int)(255*color.getAlpha())
+                        +")'"
+                        ;
+            }
+            if(fillPaint instanceof LinearGradientFill) {
+                LinearGradientFill grad = (LinearGradientFill) fillPaint;
+                StringBuffer sb = new StringBuffer();
+                sb.append("new LinearGradientFill("
+                        +grad.getStartX()
+                        +","+grad.getStartY()
+                        +","+grad.getEndX()
+                        +","+grad.getEndY()
+                        +")"
+                );
+                for(MultiGradientFill.Stop stop : grad.getStops()) {
+                    sb.append("\n.addStop("+df.format(stop.getPosition())
+                            +","+serializePaint(stop.getColor())+""
+                            +")");
+                }
+                return sb.toString();
             }
             return "";
         }
