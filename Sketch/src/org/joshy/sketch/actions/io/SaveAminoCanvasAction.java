@@ -52,56 +52,87 @@ public class SaveAminoCanvasAction extends SAction {
         if(file == null) {
             String extension = ".html";
             FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
-            fd.setMode(FileDialog.SAVE);
-            fd.setTitle("Export to Amino Canvas");
+            if(OSUtil.isMac()) {
+                //mac hack to do directory chooser
+                System.setProperty("apple.awt.fileDialogForDirectories", "true");
+            } else {
+                fd.setMode(FileDialog.SAVE);
+            }
+            fd.setTitle("Export to Amino Canvas: Choose Output Directory");
             fd.setVisible(true);
+            if(OSUtil.isMac()) {
+                System.setProperty("apple.awt.fileDialogForDirectories", "false");
+            }
             //cancel
             if(fd.getFile() == null) return;
 
             String fileName = fd.getFile();
+            /*
             if(!fileName.toLowerCase().endsWith(extension)) {
                 fileName = fileName + extension;
-            }
+            }*/
             file = new File(fd.getDirectory(),fileName);
+            if(file.exists() && !file.isDirectory()) {
+                return;
+            }
+
+            if(!file.exists()) {
+                file.mkdirs();
+            }
         }
 
+        File jsfile = new File(file,"generated.js");
         ExportProcessor.process(new AminoExport(),
-                new IndentWriter(new PrintWriter(new FileOutputStream(file))),
+                new IndentWriter(new PrintWriter(new FileOutputStream(jsfile))),
                 (SketchDocument) context.getDocument());
+
+        File htmlfile = new File(file,"index.html");
+        SaveAminoCanvasAction.outputIndexHTML(new IndentWriter(new PrintWriter(new FileOutputStream(htmlfile)))
+                , (SketchDocument) context.getDocument());
         context.getDocument().setStringProperty(HTML_CANVAS_PATH_KEY,file.getAbsolutePath());
-        OSUtil.openBrowser(file.toURI().toASCIIString());
+        OSUtil.openBrowser(htmlfile.toURI().toASCIIString());
+    }
+    private static void outputIndexHTML(IndentWriter out, SketchDocument doc) {
+        out.println("<html><head><title>Amino Canvas Export</title>\n"
+                +"<script src='http://goamino.org/download/daily/amino-1.0b2.js'></script>\n"
+                +"<script src='generated.js'></script>\n"
+                +"<style type='text/css'>\n"
+                +"  body { background-color: " + AminoExport.serializeFlatColor(doc.getBackgroundFill()) + "; }\n"
+                +"</style>\n"
+                +"</head>");
+        out.println("<body onload=\"setupDrawing();\">");
+        out.println("<canvas width=\"800\" height=\"600\" id=\"foo\"></canvas>");
+        out.println("<script>");
+        //function definition
+        out.println("function setupDrawing(){");
+        out.println("var runner =  new Runner();\n"
+                +"runner.setCanvas(document.getElementById('foo'));\n"
+                +"runner.setFPS(30);\n"
+                +"runner.setBackground("+AminoExport.serializePaint(doc.getBackgroundFill())+");\n"
+                +"runner.setRoot(sceneRoot);\n"
+        );
+        out.println("runner.start();");
+        out.println("}");
+        out.println("</script>");
+        out.println("</body>");
+        out.println("</html>");
+        out.close();
+        out.close();
     }
 
     private static class AminoExport implements ShapeExporter<IndentWriter> {
-        private DecimalFormat df;
+        private static DecimalFormat df = new DecimalFormat();
 
         private AminoExport() {
-            this.df = new DecimalFormat();
             df.setMaximumFractionDigits(2);
         }
 
         public void docStart(IndentWriter out, SketchDocument doc) {
-            out.println("<html><head><title>Amino Canvas Export</title>"
-                    +"<script src='http://goamino.org/download/daily/amino-1.0b2.js'></script>"
-                    +"<style type='text/css'>\n"
-                    +"  body { background-color: " + serializeFlatColor(doc.getBackgroundFill()) + "; }\n"
-                    +"</style>\n"
-                    +"</head>");
-            out.println("<body onload=\"setupDrawing();\">");
-            out.println("<canvas width=\"800\" height=\"600\" id=\"foo\"></canvas>");
-            out.println("<script>");
 
+            out.println("var sceneRoot = new Group()");
             //export named elements
             exportNamedElements(out,doc);
 
-            //function definition
-            out.println("function setupDrawing(){");
-            out.println("var runner =  new Runner();\n"
-                    +"runner.setCanvas(document.getElementById('foo'));\n"
-                    +"runner.setFPS(30);\n"
-                    +"runner.setBackground("+serializePaint(doc.getBackgroundFill())+");\n"
-                    +"runner.setRoot(new Group()\n"
-            );
             //export unnamed elements
         }
 
@@ -134,12 +165,6 @@ public class SaveAminoCanvasAction extends SAction {
         }
 
         public void docEnd(IndentWriter out, SketchDocument document) {
-            out.println(");");
-            out.println("runner.start();");
-            out.println("}");
-            out.println("</script>");
-            out.println("</body>");
-            out.println("</html>");
             out.close();
         }
 
@@ -313,7 +338,7 @@ public class SaveAminoCanvasAction extends SAction {
             return "#"+String.format("%06x",color.getRGBA()&0x00FFFFFF);
         }
 
-        private String serializeFlatColor(FlatColor color) {
+        private static String serializeFlatColor(FlatColor color) {
             return "rgba("
                     +(int)(255*color.getRed())
                     +","+(int)(255*color.getGreen())
@@ -322,7 +347,7 @@ public class SaveAminoCanvasAction extends SAction {
                     +")"
                     ;
         }
-        private String serializePaint(org.joshy.gfx.draw.Paint fillPaint) {
+        private static String serializePaint(org.joshy.gfx.draw.Paint fillPaint) {
             if(fillPaint instanceof FlatColor) {
                 FlatColor color = (FlatColor) fillPaint;
                 return "'"+serializeFlatColor(color) + "'";
