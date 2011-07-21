@@ -165,11 +165,21 @@ public class SaveAminoCanvasAction extends SAction {
                 out.indent();
                 if(node instanceof SOval) {
                     SOval n = (SOval) node;
-                    out.println("new Circle().set("+(n.getX()+n.getWidth()/2)+","+(n.getY()+n.getWidth()/2)+","+n.getWidth()/2+")");
+                    out.println("new Ellipse().set("
+                            +n.getX()
+                            +","+n.getY()
+                            +","+n.getWidth()
+                            +","+n.getHeight()
+                            +")");
                 }
                 if(node instanceof SRect) {
                     SRect n = (SRect) node;
-                    out.println("new Rect().set("+n.getX()+","+n.getY()+","+n.getWidth()+","+n.getHeight()+")");
+                    out.println("new Rect().set("
+                            +n.getX()
+                            +","+n.getY()
+                            +","+n.getWidth()
+                            +","+n.getHeight()
+                            +")");
                 }
                 if(node instanceof NGon) {
                     NGon n = (NGon) node;
