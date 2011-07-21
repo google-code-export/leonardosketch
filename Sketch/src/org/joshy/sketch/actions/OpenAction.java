@@ -259,6 +259,7 @@ public class OpenAction extends SAction {
         group.addAll(nodes);
         loadNumberAttribute(elem,group,"translateX");
         loadNumberAttribute(elem,group,"translateY");
+        loadStringAttribute(elem,group,"id");
         loadProperties(elem,group);
         return group;
     }
@@ -273,6 +274,7 @@ public class OpenAction extends SAction {
                     node = loadSImageFromFile(e,zipFile);
                 }
                 SImage image = (SImage) node;
+                loadStringAttribute(e,image,"id");
                 loadNumberAttribute(e,image,"translateX");
                 loadNumberAttribute(e,image,"translateY");
                 if(e.hasAttr("strokePaint")) {
@@ -332,6 +334,7 @@ public class OpenAction extends SAction {
             Log.warning("warning. shape not detected. Shape type is: ",e.attr("type"));
             return null;
         }
+        loadStringAttribute(e,shape,"id");
         if(e.hasAttr("fillPaint")) {
             loadFillPaint(e,shape, zipFile);
         } else {
@@ -580,6 +583,7 @@ public class OpenAction extends SAction {
         loadNumberAttribute(e,node,"translateY");
         loadNumberAttribute(e,node,"width");
         loadNumberAttribute(e,node,"height");
+        loadStringAttribute(e,node,"id");
 
         loadProperties(e, (SNode) node);
 
@@ -631,6 +635,7 @@ public class OpenAction extends SAction {
     }
 
     private static void loadStringAttribute(Elem e, Object node, String name) {
+        if(!e.hasAttr(name)) return;
         String value = e.attr(name);
         try {
             Method method = node.getClass().getMethod(
