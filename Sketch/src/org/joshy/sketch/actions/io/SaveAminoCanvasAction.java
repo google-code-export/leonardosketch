@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -82,9 +84,9 @@ public class SaveAminoCanvasAction extends SAction {
         }
 
         File jsfile = new File(file,"generated.js");
-        ExportProcessor.process(new AminoExport(),
-                new IndentWriter(new PrintWriter(new FileOutputStream(jsfile))),
-                (SketchDocument) context.getDocument());
+        IndentWriter js_writer = new IndentWriter(new PrintWriter(new FileOutputStream(jsfile)));
+        js_writer.basedir = file;
+        ExportProcessor.process(new AminoExport(),js_writer,(SketchDocument) context.getDocument());
 
         File htmlfile = new File(file,"index.html");
         SaveAminoCanvasAction.outputIndexHTML(new IndentWriter(new PrintWriter(new FileOutputStream(htmlfile)))
@@ -129,9 +131,9 @@ public class SaveAminoCanvasAction extends SAction {
 
         public void docStart(IndentWriter out, SketchDocument doc) {
 
-            out.println("var sceneRoot = new Group()");
             //export named elements
             exportNamedElements(out,doc);
+            out.println("var sceneRoot = new Group()");
 
             //export unnamed elements
         }
@@ -173,6 +175,8 @@ public class SaveAminoCanvasAction extends SAction {
 
         public void exportPre(IndentWriter out, SNode node) {
             u.p("exporting pre: " + node);
+            //don't recurse if this branch is already cached in an image
+            if("imagecache".equals(out.mode)) return;
             if("".equals(out.mode)) {
                 String id = node.getId();
                 if(id != null && !id.equals("")) {
@@ -186,53 +190,60 @@ public class SaveAminoCanvasAction extends SAction {
 
             out.indent();
             if(node instanceof SShape) {
+                SShape shape = (SShape) node;
                 out.println("new Transform(");
                 out.indent();
-                if(node instanceof SOval) {
-                    SOval n = (SOval) node;
-                    out.println("new Ellipse().set("
-                            +n.getX()
-                            +","+n.getY()
-                            +","+n.getWidth()
-                            +","+n.getHeight()
-                            +")");
-                }
-                if(node instanceof SRect) {
-                    SRect n = (SRect) node;
-                    out.println("new Rect().set("
-                            +n.getX()
-                            +","+n.getY()
-                            +","+n.getWidth()
-                            +","+n.getHeight()
-                            +")");
-                }
-                if(node instanceof NGon) {
-                    NGon n = (NGon) node;
-                    toPathNode(out, n.toArea());
-                }
-                if(node instanceof SArea) {
-                    SArea n = (SArea) node;
-                    toPathNode(out, n.toArea());
-                }
-                if(node instanceof SPoly) {
-                    SPoly n = (SPoly) node;
-                    toPathNode(out, n.toArea());
-                }
-                if(node instanceof SPath) {
-                    SPath n = (SPath) node;
-                    //toPathNode(out, n.toArea());
-                    serializePath(out,n);
-                }
-                SShape shape = (SShape) node;
-                out.indent();
-                out.println(".setStrokeWidth(" + shape.getStrokeWidth() + ")");
-                out.println(".setStroke("+ serializePaint(shape.getStrokePaint()) + ")");
-                out.println(".setFill("+ serializePaint(shape.getFillPaint())+")");
-                if(shape.getFillOpacity() != 1.0) {
-                    out.println(".setOpacity("+df.format(shape.getFillOpacity())+")");
-                }
-                if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
-                    out.println(".setCached(true)");
+
+                if(node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
+                    u.p("we need to render into an image instead");
+                    renderToCachedImage(out, node);
+                } else {
+
+                    if(node instanceof SOval) {
+                        SOval n = (SOval) node;
+                        out.println("new Ellipse().set("
+                                +n.getX()
+                                +","+n.getY()
+                                +","+n.getWidth()
+                                +","+n.getHeight()
+                                +")");
+                    }
+                    if(node instanceof SRect) {
+                        SRect n = (SRect) node;
+                        out.println("new Rect().set("
+                                +n.getX()
+                                +","+n.getY()
+                                +","+n.getWidth()
+                                +","+n.getHeight()
+                                +")");
+                    }
+                    if(node instanceof NGon) {
+                        NGon n = (NGon) node;
+                        toPathNode(out, n.toArea());
+                    }
+                    if(node instanceof SArea) {
+                        SArea n = (SArea) node;
+                        toPathNode(out, n.toArea());
+                    }
+                    if(node instanceof SPoly) {
+                        SPoly n = (SPoly) node;
+                        toPathNode(out, n.toArea());
+                    }
+                    if(node instanceof SPath) {
+                        SPath n = (SPath) node;
+                        //toPathNode(out, n.toArea());
+                        serializePath(out,n);
+                    }
+                    out.indent();
+                    out.println(".setStrokeWidth(" + shape.getStrokeWidth() + ")");
+                    out.println(".setStroke("+ serializePaint(shape.getStrokePaint()) + ")");
+                    out.println(".setFill("+ serializePaint(shape.getFillPaint())+")");
+                    if(shape.getFillOpacity() != 1.0) {
+                        out.println(".setOpacity("+df.format(shape.getFillOpacity())+")");
+                    }
+                    if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
+                        out.println(".setCached(true)");
+                    }
                 }
                 out.println(")");
                 out.outdent();
@@ -243,15 +254,32 @@ public class SaveAminoCanvasAction extends SAction {
             }
             if(node instanceof SGroup) {
                 SGroup n = (SGroup) node;
-                out.println("new Group().setX("+n.getTranslateX()+").setY("+n.getTranslateY()+")");
-                if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
-                    out.println(".setCached(true)");
+                if(node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
+                    renderToCachedImage(out, node);
+                    out.mode = "imagecache";
+                } else {
+                    out.println("new Group().setX("+n.getTranslateX()+").setY("+n.getTranslateY()+")");
+                    if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
+                        out.println(".setCached(true)");
+                    }
                 }
                 out.indent();
             }
             if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
                 out.println(".setCached(true)");
             }
+        }
+
+        private void renderToCachedImage(IndentWriter out, SNode node) {
+            String id = node.getId();
+            if(id == null || "".equals(id.trim())) {
+                id = "img_"+Math.round(Math.random()*10000);
+            }
+            File file = new File(out.basedir,"cache_"+id+".png");
+            List<SNode> nodes = new ArrayList<SNode>();
+            nodes.add(node);
+            SavePNGAction.export(file,nodes);
+            out.println("new ImageView('"+file.getName()+"')");
         }
 
         private void serializePath(IndentWriter out, SPath path) {
@@ -374,6 +402,9 @@ public class SaveAminoCanvasAction extends SAction {
 
         public void exportPost(IndentWriter out, SNode node) {
             if(node instanceof SGroup) {
+                if(node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
+                    out.mode = "";
+                }
                 out.outdent();
             }
             if("".equals(out.mode)) {
@@ -405,6 +436,7 @@ public class SaveAminoCanvasAction extends SAction {
         private int tab = 0;
         private String tabString = "";
         public String mode = "";
+        public File basedir;
 
         public IndentWriter(PrintWriter printWriter) {
             this.writer = printWriter;
