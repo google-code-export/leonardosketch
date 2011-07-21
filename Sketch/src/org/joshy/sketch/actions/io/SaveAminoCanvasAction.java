@@ -83,6 +83,9 @@ public class SaveAminoCanvasAction extends SAction {
         public void docStart(IndentWriter out, SketchDocument doc) {
             out.println("<html><head><title>Amino Canvas Export</title>"
                     +"<script src='http://goamino.org/download/daily/amino-1.0b2.js'></script>"
+                    +"<style type='text/css'>\n"
+                    +"  body { background-color: " + serializeFlatColor(doc.getBackgroundFill()) + "; }\n"
+                    +"</style>\n"
                     +"</head>");
             out.println("<body onload=\"setupDrawing();\">");
             out.println("<canvas width=\"800\" height=\"600\" id=\"foo\"></canvas>");
@@ -96,7 +99,7 @@ public class SaveAminoCanvasAction extends SAction {
             out.println("var runner =  new Runner();\n"
                     +"runner.setCanvas(document.getElementById('foo'));\n"
                     +"runner.setFPS(30);\n"
-                    +"runner.setBackground('white');\n"
+                    +"runner.setBackground("+serializePaint(doc.getBackgroundFill())+");\n"
                     +"runner.setRoot(new Group()\n"
             );
             //export unnamed elements
@@ -300,16 +303,19 @@ public class SaveAminoCanvasAction extends SAction {
             return "#"+String.format("%06x",color.getRGBA()&0x00FFFFFF);
         }
 
+        private String serializeFlatColor(FlatColor color) {
+            return "rgba("
+                    +(int)(255*color.getRed())
+                    +","+(int)(255*color.getGreen())
+                    +","+(int)(255*color.getBlue())
+                    +","+(int)(255*color.getAlpha())
+                    +")"
+                    ;
+        }
         private String serializePaint(org.joshy.gfx.draw.Paint fillPaint) {
             if(fillPaint instanceof FlatColor) {
                 FlatColor color = (FlatColor) fillPaint;
-                return "'rgba("
-                        +(int)(255*color.getRed())
-                        +","+(int)(255*color.getGreen())
-                        +","+(int)(255*color.getBlue())
-                        +","+(int)(255*color.getAlpha())
-                        +")'"
-                        ;
+                return "'"+serializeFlatColor(color) + "'";
             }
             if(fillPaint instanceof LinearGradientFill) {
                 LinearGradientFill grad = (LinearGradientFill) fillPaint;
@@ -323,7 +329,7 @@ public class SaveAminoCanvasAction extends SAction {
                 );
                 for(MultiGradientFill.Stop stop : grad.getStops()) {
                     sb.append("\n.addStop("+df.format(stop.getPosition())
-                            +","+serializePaint(stop.getColor())+""
+                            +",'"+serializeFlatColor(stop.getColor())+"'"
                             +")");
                 }
                 return sb.toString();
