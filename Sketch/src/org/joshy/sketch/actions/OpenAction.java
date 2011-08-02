@@ -294,16 +294,16 @@ public class OpenAction extends SAction {
     private static SImage loadSImageFromFile(Elem e, ZipFile zipFile) throws IOException {
         u.p("loading an image from a file");
         String path = e.attr("relativeURL");
-        String fullpath = "resources/"+path;
         u.p("path = " + path);
+        String fullpath = "resources/"+path;
         u.p("fullpath = " + fullpath);
         String zfname = zipFile.getName();
-        u.p("name = " + zfname);
+        u.p("zip file.getName() = " + zfname);
         String pth = zfname.substring(
                         zfname.lastIndexOf(File.separator)+1,
                         zfname.lastIndexOf(".")
                     )+"/"+fullpath;
-        u.p("pth = " + pth);
+        u.p("calculated pathh = " + pth);
         ZipEntry entry = zipFile.getEntry(pth);
         u.p("entry = " + entry);
         BufferedImage img = ImageIO.read(zipFile.getInputStream(entry));

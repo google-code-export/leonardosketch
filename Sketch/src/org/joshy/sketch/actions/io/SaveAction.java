@@ -95,7 +95,7 @@ public class SaveAction extends SAction {
 
             if(i instanceof SImage) {
                 SImage image = (SImage) i;
-                ZipEntry ie = new ZipEntry(dir+"/"+image.getRelativeURL());
+                ZipEntry ie = new ZipEntry(dir+"/resources/"+image.getRelativeURL());
                 out.putNextEntry(ie);
                 ImageIO.write(image.getBufferedImage(),"png",out);
                 out.flush();
