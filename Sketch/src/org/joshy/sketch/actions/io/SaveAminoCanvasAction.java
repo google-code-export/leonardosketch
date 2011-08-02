@@ -5,6 +5,7 @@ import org.joshy.gfx.draw.LinearGradientFill;
 import org.joshy.gfx.draw.MultiGradientFill;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
+import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ShapeExporter;
@@ -96,7 +97,7 @@ public class SaveAminoCanvasAction extends SAction {
     }
     private static void outputIndexHTML(IndentWriter out, SketchDocument doc) {
         out.println("<html><head><title>Amino Canvas Export</title>\n"
-                +"<script src='http://goamino.org/download/daily/amino-1.0b2.js'></script>\n"
+                +"<script src='"+ Main.AMINO_BINARY_URL+"'></script>\n"
                 +"<script src='generated.js'></script>\n"
                 +"<style type='text/css'>\n"
                 +"  body { background-color: " + AminoExport.serializeFlatColor(doc.getBackgroundFill()) + "; }\n"

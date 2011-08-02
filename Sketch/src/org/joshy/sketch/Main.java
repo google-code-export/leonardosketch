@@ -88,6 +88,7 @@ public class Main implements Runnable {
     private List<Menu> recentFilesMenus = new ArrayList<Menu>();
     public static MasterImageCache FlickrSearchCache = new MasterImageCache(true,10,"LeonardoFlickrSearchCache");
     public static Font[] fonts;
+    public static String AMINO_BINARY_URL = null;
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -176,6 +177,7 @@ public class Main implements Runnable {
         CURRENT_BUILD_NUMBER = Integer.parseInt(releaseProperties.getProperty("org.joshy.sketch.build.number"));
         UPDATE_URL = releaseProperties.getProperty("org.joshy.sketch.updateurl");
         DOWNLOAD_URL = releaseProperties.getProperty("org.joshy.sketch.downloadurl");
+        AMINO_BINARY_URL = System.getProperty("com.joshondesign.amino.binaryurl","http://goamino.org/download/daily/amino-1.0b2.js");
 
         settings = new Properties();
         if(SETTINGS_FILE.exists()) {
