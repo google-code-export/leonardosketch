@@ -219,6 +219,9 @@ public class SaveAminoCanvasAction extends SAction {
                                 +","+n.getWidth()
                                 +","+n.getHeight()
                                 +")");
+                        if(n.getCorner() != 0) {
+                            out.println(".setCorner("+df.format(n.getCorner()/2.0)+")");
+                        }
                     }
                     if(node instanceof NGon) {
                         NGon n = (NGon) node;
