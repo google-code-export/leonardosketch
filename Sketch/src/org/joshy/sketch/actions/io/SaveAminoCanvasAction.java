@@ -3,6 +3,7 @@ package org.joshy.sketch.actions.io;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.LinearGradientFill;
 import org.joshy.gfx.draw.MultiGradientFill;
+import org.joshy.gfx.draw.RadialGradientFill;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
@@ -264,9 +265,15 @@ public class SaveAminoCanvasAction extends SAction {
                 out.println(")");
                 out.outdent();
                 out.outdent();
+
+                if(node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
+                    out.println(".setTranslateX(" + shape.getTranslateX() + ").setTranslateY(" + shape.getTranslateY() + ")");
+                }
                 if(node instanceof NGon) return;
                 if(node instanceof SArea) return;
-                out.println(".setTranslateX(" + shape.getTranslateX() + ").setTranslateY(" + shape.getTranslateY() + ")");
+                if(!node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
+                    out.println(".setTranslateX(" + shape.getTranslateX() + ").setTranslateY(" + shape.getTranslateY() + ")");
+                }
             }
             if(node instanceof SGroup) {
                 SGroup n = (SGroup) node;
@@ -426,16 +433,33 @@ public class SaveAminoCanvasAction extends SAction {
                 FlatColor color = (FlatColor) fillPaint;
                 return "'"+serializeFlatColor(color) + "'";
             }
-            if(fillPaint instanceof LinearGradientFill) {
-                LinearGradientFill grad = (LinearGradientFill) fillPaint;
+            if(fillPaint instanceof MultiGradientFill) {
                 StringBuffer sb = new StringBuffer();
-                sb.append("new LinearGradientFill("
-                        +grad.getStartX()
-                        +","+grad.getStartY()
-                        +","+grad.getEndX()
-                        +","+grad.getEndY()
-                        +")"
-                );
+                MultiGradientFill grad = (MultiGradientFill) fillPaint;
+
+                if(grad instanceof LinearGradientFill) {
+                    LinearGradientFill lgrad = (LinearGradientFill) grad;
+                    sb.append("new LinearGradientFill("
+                            +lgrad.getStartX()
+                            +","+lgrad.getStartY()
+                            +","+lgrad.getEndX()
+                            +","+lgrad.getEndY()
+                            +")"
+                    );
+                }
+
+                if(grad instanceof RadialGradientFill) {
+                    /*
+                    RadialGradientFill rgrad = (RadialGradientFill)grad;
+                    sb.append("new RadialGradientFill("
+                            +")"
+                    );
+                    */
+                    u.p("WARNING: Amino.js does not yet support radial fills");
+                    return "'black'";
+
+                }
+
                 for(MultiGradientFill.Stop stop : grad.getStops()) {
                     sb.append("\n.addStop("+df.format(stop.getPosition())
                             +",'"+serializeFlatColor(stop.getColor())+"'"
