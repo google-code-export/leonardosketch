@@ -183,6 +183,9 @@ public class Main implements Runnable {
         if(SETTINGS_FILE.exists()) {
             settings.load(new FileReader(SETTINGS_FILE));
         }
+        if(System.getProperties().containsKey("org.joshy.gfx.sketch.tracking.allow")) {
+            settings.setProperty("org.joshy.gfx.sketch.tracking.allow",System.getProperty("org.joshy.gfx.sketch.tracking.allow"));
+        }
 
     }
 

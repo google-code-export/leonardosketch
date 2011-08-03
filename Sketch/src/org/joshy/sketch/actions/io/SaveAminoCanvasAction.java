@@ -12,6 +12,7 @@ import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
@@ -19,6 +20,7 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -133,7 +135,7 @@ public class SaveAminoCanvasAction extends SAction {
         public void docStart(IndentWriter out, SketchDocument doc) {
 
             //export named elements
-            exportNamedElements(out,doc);
+            exportNamedElements(out, doc);
             out.println("var sceneRoot = new Group()");
 
             //export unnamed elements
@@ -275,6 +277,30 @@ public class SaveAminoCanvasAction extends SAction {
                     }
                 }
                 out.indent();
+            }
+            if(node instanceof SImage) {
+                SImage n = (SImage) node;
+                u.p("exporting image with relative url = " + n.getRelativeURL());
+                out.println("new Transform(");
+                out.indent();
+                out.println("new ImageView('images/"+n.getRelativeURL()+"')");
+                out.println(".setX("+n.getX()+")");
+                out.println(".setY("+n.getY()+")");
+                u.p("saving relative image to: " + n.getRelativeURL());
+                u.p("path = " + out.basedir.getName() + " " + out.basedir.getPath());
+                File imagesDir = new File(out.basedir,"images");
+                if(!imagesDir.exists()) {
+                    imagesDir.mkdir();
+                }
+                File imageFile = new File(imagesDir,n.getRelativeURL());
+                try {
+                    ImageIO.write(n.getBufferedImage(),"PNG",imageFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                out.println(")");
+                out.outdent();
+                out.println(".setTranslateX(" + n.getTranslateX() + ").setTranslateY(" + n.getTranslateY() + ")");
             }
             if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
                 out.println(".setCached(true)");
