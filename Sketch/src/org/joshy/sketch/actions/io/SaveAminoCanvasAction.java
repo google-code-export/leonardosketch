@@ -235,9 +235,19 @@ public class SaveAminoCanvasAction extends SAction {
                         //toPathNode(out, n.toArea());
                         serializePath(out,n);
                     }
+                    if(node instanceof SText) {
+                        SText n = (SText) node;
+                        out.println("new Text()");
+                        out.println(".setText('"+escapeString(n.getText())+"')");
+                        out.println(".setX("+n.getX()+")");
+                        out.println(".setY("+n.getY()+")");
+                        out.println(".setFont('"
+                                +df.format(n.getFontSize())+"pt "
+                                +n.getFontName()+"')");
+                    }
                     out.indent();
                     out.println(".setStrokeWidth(" + shape.getStrokeWidth() + ")");
-                    out.println(".setStroke("+ serializePaint(shape.getStrokePaint()) + ")");
+                    out.println(".setStroke(" + serializePaint(shape.getStrokePaint()) + ")");
                     out.println(".setFill("+ serializePaint(shape.getFillPaint())+")");
                     if(shape.getFillOpacity() != 1.0) {
                         out.println(".setOpacity("+df.format(shape.getFillOpacity())+")");
@@ -269,6 +279,12 @@ public class SaveAminoCanvasAction extends SAction {
             if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
                 out.println(".setCached(true)");
             }
+        }
+
+        private String escapeString(String text) {
+            text = text.replaceAll("'","\\\\'");
+            text = text.replaceAll("\n","\\\\n");
+            return text;
         }
 
         private void renderToCachedImage(IndentWriter out, SNode node) {
