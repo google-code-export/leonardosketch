@@ -278,6 +278,32 @@ public class NativeExportTest {
         assertTrue(pp.getImage().getWidth() == 101);
 
     }
+
+    @Test
+    public void testRectangleOpacity() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SketchDocument doc = new SketchDocument();
+        SRect sRect = new SRect(0,0,100,50);
+        sRect.setFillPaint(FlatColor.BLUE);
+        sRect.setFillOpacity(0.5);
+        doc.getCurrentPage().model.add(sRect);
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing test to file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(
+                new FileOutputStream(file)
+                ,file.getName()
+                ,file.toURI()
+                ,doc
+        );
+        SketchDocument doc2 = OpenAction.loadZip(file);
+        assertTrue(doc2.getPages().get(0).model.get(0) instanceof SRect);
+        SRect loadedRect = (SRect) doc2.getPages().get(0).model.get(0);
+        u.p("opacity = " + loadedRect.getFillOpacity());
+        assertTrue("fill opacity wrong for loaded rect", loadedRect.getFillOpacity() == 0.5);
+
+    }
+
     @After
     public void tearDown() throws Exception {
     }

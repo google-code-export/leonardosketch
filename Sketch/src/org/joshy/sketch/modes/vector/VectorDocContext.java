@@ -284,7 +284,9 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
             }
         });
         frame.getRootPane().putClientProperty("Window.documentModified", getDocument().isDirty());
-        this.treePanel.setDocument(doc);
+        if(this.treePanel != null) {
+            this.treePanel.setDocument(doc);
+        }
     }
 
 
