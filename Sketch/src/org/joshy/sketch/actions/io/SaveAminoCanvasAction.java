@@ -1,9 +1,6 @@
 package org.joshy.sketch.actions.io;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.LinearGradientFill;
-import org.joshy.gfx.draw.MultiGradientFill;
-import org.joshy.gfx.draw.RadialGradientFill;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
@@ -114,7 +111,7 @@ public class SaveAminoCanvasAction extends SAction {
         out.println("var runner =  new Runner();\n"
                 +"runner.setCanvas(document.getElementById('foo'));\n"
                 +"runner.setFPS(30);\n"
-                +"runner.setBackground("+AminoExport.serializePaint(doc.getBackgroundFill())+");\n"
+                +"runner.setBackground("+AminoExport.serializePaint(out,doc.getBackgroundFill())+");\n"
                 +"runner.setRoot(sceneRoot);\n"
         );
         out.println("runner.start();");
@@ -253,8 +250,8 @@ public class SaveAminoCanvasAction extends SAction {
                     }
                     out.indent();
                     out.println(".setStrokeWidth(" + shape.getStrokeWidth() + ")");
-                    out.println(".setStroke(" + serializePaint(shape.getStrokePaint()) + ")");
-                    out.println(".setFill("+ serializePaint(shape.getFillPaint())+")");
+                    out.println(".setStroke(" + serializePaint(out, shape.getStrokePaint()) + ")");
+                    out.println(".setFill("   + serializePaint(out, shape.getFillPaint())   + ")");
                     if(shape.getFillOpacity() != 1.0) {
                         out.println(".setOpacity("+df.format(shape.getFillOpacity())+")");
                     }
@@ -428,7 +425,7 @@ public class SaveAminoCanvasAction extends SAction {
                     +")"
                     ;
         }
-        private static String serializePaint(org.joshy.gfx.draw.Paint fillPaint) {
+        private static String serializePaint(IndentWriter out, org.joshy.gfx.draw.Paint fillPaint) {
             if(fillPaint instanceof FlatColor) {
                 FlatColor color = (FlatColor) fillPaint;
                 return "'"+serializeFlatColor(color) + "'";
@@ -465,6 +462,25 @@ public class SaveAminoCanvasAction extends SAction {
                             +",'"+serializeFlatColor(stop.getColor())+"'"
                             +")");
                 }
+                return sb.toString();
+            }
+            if(fillPaint instanceof PatternPaint) {
+                PatternPaint pp = (PatternPaint) fillPaint;
+                File imagesDir = new File(out.basedir,"images");
+                if(!imagesDir.exists()) {
+                    imagesDir.mkdir();
+                }
+                File imageFile = new File(imagesDir,pp.getRelativeURL());
+                try {
+                    ImageIO.write(pp.getImage(),"PNG",imageFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                StringBuffer sb = new StringBuffer();
+                sb.append("new PatternFill(");
+                sb.append("'images/"+pp.getRelativeURL()+"'");
+                sb.append(",'repeat'");
+                sb.append(")");
                 return sb.toString();
             }
             return "";
