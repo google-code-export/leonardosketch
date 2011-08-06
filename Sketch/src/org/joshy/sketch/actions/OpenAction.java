@@ -570,6 +570,7 @@ public class OpenAction extends SAction {
                 ((SShape) node).setStrokePaint(null);
             }
             loadNumberAttribute(e,node,"strokeWidth");
+            loadNumberAttribute(e,shape,"fillOpacity");
             loadShadow(e,shape);
         }
 
