@@ -16,12 +16,14 @@ import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -464,15 +466,18 @@ public class SaveAminoCanvasAction extends SAction {
             }
             if(fillPaint instanceof PatternPaint) {
                 PatternPaint pp = (PatternPaint) fillPaint;
-                File imagesDir = new File(out.basedir,"images");
-                if(!imagesDir.exists()) {
-                    imagesDir.mkdir();
-                }
-                File imageFile = new File(imagesDir,pp.getRelativeURL());
-                try {
-                    ImageIO.write(pp.getImage(),"PNG",imageFile);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(!out.images.containsKey(pp.getRelativeURL())) {
+                    File imagesDir = new File(out.basedir,"images");
+                    if(!imagesDir.exists()) {
+                        imagesDir.mkdir();
+                    }
+                    File imageFile = new File(imagesDir,pp.getRelativeURL());
+                    try {
+                        ImageIO.write(pp.getImage(),"PNG",imageFile);
+                        out.images.put(pp.getRelativeURL(),pp.getImage());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 StringBuffer sb = new StringBuffer();
                 sb.append("new PatternFill(");
@@ -521,6 +526,7 @@ public class SaveAminoCanvasAction extends SAction {
         private String tabString = "";
         public String mode = "";
         public File basedir;
+        public Map<String,BufferedImage> images = new HashMap<String,BufferedImage>();
 
         public IndentWriter(PrintWriter printWriter) {
             this.writer = printWriter;
