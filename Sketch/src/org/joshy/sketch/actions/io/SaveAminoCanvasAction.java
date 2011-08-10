@@ -106,7 +106,10 @@ public class SaveAminoCanvasAction extends SAction {
                 +"</style>\n"
                 +"</head>");
         out.println("<body onload=\"setupDrawing();\">");
-        out.println("<canvas width=\"800\" height=\"600\" id=\"foo\"></canvas>");
+        out.println("<canvas"
+                +" width=\""+Math.round(doc.getWidth())+"\""
+                +" height=\""+Math.round(doc.getHeight())+"\""
+                +" id=\"foo\"></canvas>");
         out.println("<script>");
         //function definition
         out.println("function setupDrawing(){");
