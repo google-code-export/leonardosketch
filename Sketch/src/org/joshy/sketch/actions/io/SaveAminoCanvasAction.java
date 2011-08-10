@@ -446,15 +446,13 @@ public class SaveAminoCanvasAction extends SAction {
                 }
 
                 if(grad instanceof RadialGradientFill) {
-                    /*
                     RadialGradientFill rgrad = (RadialGradientFill)grad;
                     sb.append("new RadialGradientFill("
+                            + rgrad.getCenterX()
+                            + "," + rgrad.getCenterY()
+                            + "," + rgrad.getRadius()
                             +")"
                     );
-                    */
-                    u.p("WARNING: Amino.js does not yet support radial fills");
-                    return "'black'";
-
                 }
 
                 for(MultiGradientFill.Stop stop : grad.getStops()) {
