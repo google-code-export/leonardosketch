@@ -171,7 +171,6 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
         }
 
         if(shape instanceof SText) {
-            saveAttribute(out,"text",shape);
             saveAttribute(out,"fontSize",shape);
             saveAttribute(out,"weight",shape);
             saveAttribute(out,"style",shape);
@@ -373,6 +372,13 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
     }
 
     public void exportPost(XMLWriter out, SNode shape) {
+        if(shape instanceof SText) {
+            SText text = (SText) shape;
+            out.start("text");
+            out.text(text.getText());
+            out.end();
+        }
+
         out.end();
     }
 
