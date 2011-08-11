@@ -531,11 +531,14 @@ public class OpenAction extends SAction {
         if(e.attrEquals("type","text")) {
             node = new SText();
             loadNumberAttribute(e,node,"fontSize");
+            loadStringAttribute(e,node,"text");
             loadEnumAttribute(e,node,"weight", Font.Weight.class);
             loadEnumAttribute(e,node,"style", Font.Style.class);
             loadEnumAttribute(e,node,"halign",SText.HAlign.class);
             loadBooleanAttribute(e,node,"autoSize");
-            ((SText)node).setText(e.xpathString("text/text()"));
+            if(!"".equals(e.xpathString("text/text()"))) {
+                ((SText)node).setText(e.xpathString("text/text()"));
+            }
         }
         if(e.attrEquals("type","image")) {
             try {
