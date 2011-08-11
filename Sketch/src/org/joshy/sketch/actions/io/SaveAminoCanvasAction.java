@@ -249,6 +249,9 @@ public class SaveAminoCanvasAction extends SAction {
                         out.println(".setText('"+escapeString(n.getText())+"')");
                         out.println(".setX("+n.getX()+")");
                         out.println(".setY("+n.getY()+")");
+                        out.println(".setHAlign('"+n.getHalign().toString().toLowerCase()+"')");
+                        out.println(".setAutoSize("+n.isAutoSize()+")");
+                        out.println(".setWidth("+n.getWidth()+")");
                         out.println(".setFont('"
                                 +df.format(n.getFontSize())+"pt "
                                 +n.getFontName()+"')");
