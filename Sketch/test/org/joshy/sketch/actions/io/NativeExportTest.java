@@ -304,6 +304,25 @@ public class NativeExportTest {
 
     }
 
+    @Test
+    public void testText() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SketchDocument doc = new SketchDocument();
+        SText text = new SText();
+        text.setText("this is some\n long text");
+        doc.getCurrentPage().add(text);
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing to test file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(file,doc);
+        SketchDocument doc2 = OpenAction.loadZip(file);
+        assertTrue(doc2.getPages().get(0).model.get(0) instanceof SText);
+        SText text2 = (SText) doc2.getPages().get(0).model.get(0);
+        u.p("text is really: " + text2.getText());
+        assertTrue(text2.getText().equals("this is some\n long text"));
+
+    }
+
     @After
     public void tearDown() throws Exception {
     }
