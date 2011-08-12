@@ -633,7 +633,6 @@ public class Main implements Runnable {
         if(context instanceof VectorDocContext) {
                 editMenu.addItem(getString("menus.clearSelection"), "D", new NodeActions.ClearSelection((VectorDocContext) context));
         }
-        editMenu.addItem(getString("menus.setBackgroundColor"), new DocumentActions.SetBackground(context));
         /*editMenu.addItem("Enable Analytics Tracking", new ToggleAction(){
             @Override
             public boolean getToggleState() {
