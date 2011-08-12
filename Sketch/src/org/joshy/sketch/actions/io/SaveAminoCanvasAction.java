@@ -1,6 +1,7 @@
 package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.*;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
@@ -228,15 +229,21 @@ public class SaveAminoCanvasAction extends SAction {
                     }
                     if(node instanceof NGon) {
                         NGon n = (NGon) node;
-                        toPathNode(out, n.toArea());
+                        toPathNode(out, n, n.toArea(),
+                                n.getTranslateX() - n.getRadius(),
+                                n.getTranslateY() - n.getRadius()
+                        );
                     }
                     if(node instanceof SArea) {
                         SArea n = (SArea) node;
-                        toPathNode(out, n.toArea());
+                        toPathNode(out, n, n.toArea(),0,0);
                     }
                     if(node instanceof SPoly) {
                         SPoly n = (SPoly) node;
-                        toPathNode(out, n.toArea());
+                        Bounds bounds = n.getBounds();
+                        toPathNode(out, n, n.toArea()
+                                ,bounds.getX()
+                                ,bounds.getY());
                     }
                     if(node instanceof SPath) {
                         SPath n = (SPath) node;
@@ -276,10 +283,26 @@ public class SaveAminoCanvasAction extends SAction {
                 out.outdent();
                 out.outdent();
 
+                if(node instanceof NGon) {
+                    NGon n = (NGon) node;
+                    out.println(
+                         ".setTranslateX(" + (shape.getTranslateX()-n.getRadius()) + ")"
+                        +".setTranslateY(" + (shape.getTranslateY()-n.getRadius()) + ")"
+                    );
+                    return;
+                }
+                if(node instanceof SPoly) {
+                    SPoly n = (SPoly) node;
+                    Bounds bounds = n.getBounds();
+                    out.println(
+                         ".setTranslateX(" + bounds.getX() + ")"
+                        +".setTranslateY(" + bounds.getY() + ")"
+                    );
+                    return;
+                }
                 if(node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
                     out.println(".setTranslateX(" + shape.getTranslateX() + ").setTranslateY(" + shape.getTranslateY() + ")");
                 }
-                if(node instanceof NGon) return;
                 if(node instanceof SArea) return;
                 if(!node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
                     out.println(".setTranslateX(" + shape.getTranslateX() + ").setTranslateY(" + shape.getTranslateY() + ")");
@@ -383,7 +406,7 @@ public class SaveAminoCanvasAction extends SAction {
             out.println(")");
         }
 
-        private void toPathNode(IndentWriter out, Area area) {
+        private void toPathNode(IndentWriter out, SShape shape, Area area, double xoff, double yoff) {
             out.println("new PathNode()");
             out.indent();
             out.println(".setPath(");
@@ -391,11 +414,11 @@ public class SaveAminoCanvasAction extends SAction {
             out.println("new Path()");
             out.indent();
             Rectangle2D bounds = area.getBounds2D();
-            double dx = bounds.getX();
-            double dy = bounds.getY();
+            double dx = xoff;//bounds.getX();
+            double dy = yoff;//bounds.getY();
             //don't subtract off the translation just yet
-            dx = 0;
-            dy = 0;
+            //dx = xoff;
+            //dy = yoff;
             PathIterator it = area.getPathIterator(null);
             while(!it.isDone()) {
                 double[] coords = new double[6];
