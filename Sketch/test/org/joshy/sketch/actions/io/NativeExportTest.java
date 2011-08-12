@@ -310,6 +310,7 @@ public class NativeExportTest {
         Core.init();
         SketchDocument doc = new SketchDocument();
         SText text = new SText();
+        text.setFontName("Chunk Five");
         text.setText("this is some\n long text");
         doc.getCurrentPage().add(text);
         File file = File.createTempFile("nativeExportTest",".leoz");
@@ -320,7 +321,40 @@ public class NativeExportTest {
         SText text2 = (SText) doc2.getPages().get(0).model.get(0);
         u.p("text is really: " + text2.getText());
         assertTrue(text2.getText().equals("this is some\n long text"));
+        assertTrue(text2.getFontName().equals("Chunk Five"));
 
+    }
+
+    @Test
+    public void testPathSaving() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SPath path = new SPath();
+        SPath.PathPoint first = path.moveTo(0,100);
+        path.lineTo(100,0);
+        path.lineTo(130,100);
+        SPath.PathPoint last = path.closeTo(first);
+        assertTrue(path.isClosed());
+        assertTrue(last.closePath);
+
+        SketchDocument doc = SaveAndLoad(path);
+
+        assertTrue(doc.getPages().get(0).model.get(0) instanceof SPath);
+        SPath path2 = (SPath) doc.getPages().get(0).model.get(0);
+        assertTrue(path2.getPoints().size()==3);
+        SPath.PathPoint last2 = path2.getPoints().get(2);
+        assertTrue(path2.isClosed());
+        assertTrue(last2.closePath);
+    }
+
+    private SketchDocument SaveAndLoad(SPath path) throws Exception {
+        SketchDocument doc = new SketchDocument();
+        doc.getCurrentPage().add(path);
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing to test file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(file,doc);
+        SketchDocument doc2 = OpenAction.loadZip(file);
+        return doc2;
     }
 
     @After

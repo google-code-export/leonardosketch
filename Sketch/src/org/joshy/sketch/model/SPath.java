@@ -307,6 +307,7 @@ public class SPath extends SShape implements SelfDrawable {
         //u.p("closing subpath");
         prev.closePath = true;
         prev.endPath = true;
+        close(true);
         return prev;
     }
 

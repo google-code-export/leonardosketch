@@ -88,6 +88,7 @@ public class Main implements Runnable {
     private List<Menu> recentFilesMenus = new ArrayList<Menu>();
     public static MasterImageCache FlickrSearchCache = new MasterImageCache(true,10,"LeonardoFlickrSearchCache");
     public static Font[] fonts;
+    public static HashMap<String, Font> fontMap;
     public static String AMINO_BINARY_URL = null;
 
     public static void main(String ... args) throws Exception {
@@ -537,6 +538,10 @@ public class Main implements Runnable {
                 Font.fromURL(getFont("raleway_thin.ttf")).resolve(),
                 Font.fromURL(getFont("Sniglet_Regular.ttf")).resolve(),
         };
+        fontMap = new HashMap<String,Font>();
+        for(Font font : fonts) {
+            fontMap.put(font.getName(),font);
+        }
 
 
         modeHelpers.add(new VectorModeHelper(this));

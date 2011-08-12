@@ -363,6 +363,10 @@ public class OpenAction extends SAction {
                         Double.parseDouble(element.attr("cy2"))
                 ));
             }
+            if(path.isClosed()) {
+                int len = path.getPoints().size();
+                path.getPoints().get(len-1).closePath = true;
+            }
             path.recalcPath();
         }
 
@@ -535,6 +539,7 @@ public class OpenAction extends SAction {
             loadEnumAttribute(e,node,"weight", Font.Weight.class);
             loadEnumAttribute(e,node,"style", Font.Style.class);
             loadEnumAttribute(e,node,"halign",SText.HAlign.class);
+            loadStringAttribute(e,node,"fontName");
             loadBooleanAttribute(e,node,"autoSize");
             if(!"".equals(e.xpathString("text/text()"))) {
                 ((SText)node).setText(e.xpathString("text/text()"));
