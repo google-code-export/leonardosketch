@@ -175,6 +175,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             saveAttribute(out,"weight",shape);
             saveAttribute(out,"style",shape);
             saveAttribute(out,"halign",shape);
+            saveAttribute(out,"fontName",shape);
             saveBooleanAttribute(out,"autoSize",shape);
         }
 
