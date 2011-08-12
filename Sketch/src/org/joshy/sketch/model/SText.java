@@ -96,6 +96,16 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
         setHeight(h);
     }
 
+    public double getAscent() {
+        Font font = Font.name(getFontName())
+                .weight(getWeight())
+                .style(getStyle())
+                .size((float)fontSize)
+                .resolve();
+        return font.getAscender();
+    }
+
+
     @Override
     public String toString() {
         return "SText{" +
