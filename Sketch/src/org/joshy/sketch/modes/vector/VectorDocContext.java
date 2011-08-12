@@ -258,6 +258,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 );
         menubar.add(new Menu().setTitle(getString("menus.document"))
                 .addItem(getString("menus.setDocumentSize"), new DocumentActions.SetDocumentSize(this))
+                .addItem(getString("menus.setBackgroundColor"), new DocumentActions.SetBackground(context))
                 );
 
         rebuildSymbolMenu(menubar);
