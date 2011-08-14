@@ -279,6 +279,7 @@ public class SaveAminoCanvasAction extends SAction {
                         out.println(".setCached(true)");
                     }
                 }
+
                 out.println(")");
                 out.outdent();
                 out.outdent();
@@ -301,7 +302,8 @@ public class SaveAminoCanvasAction extends SAction {
                     return;
                 }
                 if(node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
-                    out.println(".setTranslateX(" + shape.getTranslateX() + ").setTranslateY(" + shape.getTranslateY() + ")");
+                    Bounds bounds = shape.getEffectBounds();
+                    out.println(".setTranslateX(" + bounds.getX() + ").setTranslateY(" + bounds.getY() + ")");
                 }
                 if(node instanceof SArea) return;
                 if(!node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
