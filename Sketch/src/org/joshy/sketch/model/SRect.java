@@ -79,17 +79,12 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
         return path;
     }
 
-    boolean SHADOW = true;
     public void draw(GFX g) {
         g.translate(this.getX(),this.getY());
 
-        if(this.getShadow() == null) {
-            initPaint(g);
-            fillShape(g);
-        } else {
-            drawShadow(g);
-        }
-
+        drawShadow(g);
+        initPaint(g);
+        fillShape(g);
 
         if(this.getStrokePaint() != null && getStrokeWidth() > 0) {
             g.setPaint(this.getStrokePaint());
