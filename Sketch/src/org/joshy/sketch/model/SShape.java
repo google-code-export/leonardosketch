@@ -93,7 +93,11 @@ public abstract class SShape extends SNode {
             double dx = getTranslateX()-b.getX();
             double dy = getTranslateY()-b.getY();
 
-            if(buf == null || shadow != oldShadow || b.getWidth() != oldWidth || b.getHeight() != oldHeight || shadow.isInner() != oldInner) {
+            if(buf == null
+                    || shadow != oldShadow
+                    || b.getWidth() != oldWidth
+                    || b.getHeight() != oldHeight
+                    || shadow.isInner() != oldInner) {
                 if(shadow.isInner()) {
                     regenInnerShadow(g);
                 } else {
@@ -185,10 +189,6 @@ public abstract class SShape extends SNode {
         g2.translate(-blurRadius,-blurRadius);
         oldShadow = shadow;
 
-        //draw real shape on top
-        GFX gx = buf.getGFX();
-        initPaint(gx);
-        fillShape(gx);
     }
 
     protected void fillShape(GFX g) { }
