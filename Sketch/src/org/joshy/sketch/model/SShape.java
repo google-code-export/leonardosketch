@@ -164,6 +164,18 @@ public abstract class SShape extends SNode {
 
     }
 
+    public Bounds getEffectBounds() {
+        if(getShadow() == null) {
+            return getBounds();
+        }
+        Bounds bounds = getBounds();
+        int rad = shadow.getBlurRadius();
+        double xoff = shadow.getXOffset();
+        double yoff = shadow.getYOffset();
+        Bounds shadowBounds = new Bounds(bounds.getX()+xoff-rad,bounds.getY()+yoff-rad,bounds.getWidth()+xoff+rad,bounds.getHeight()+yoff+rad);
+        Bounds union = bounds.union(shadowBounds);
+        return union;
+    }
     protected void regenShadow(GFX g) {
         //setup
         int blurRadius = shadow.getBlurRadius();

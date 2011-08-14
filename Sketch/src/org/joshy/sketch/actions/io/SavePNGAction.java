@@ -1,10 +1,9 @@
 package org.joshy.sketch.actions.io;
 
-import org.joshy.gfx.draw.*;
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.stage.swing.SwingGFX;
 import org.joshy.gfx.util.GraphicsUtil;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ShapeExporter;
@@ -99,16 +98,19 @@ public class SavePNGAction extends SAction {
     }
 
     public static Bounds calculateBounds(List<SNode> model) {
-        u.p("calcing bounds for nodes: " + model.size());
         double x = Double.MAX_VALUE;
         double y = Double.MAX_VALUE;
         double w = Double.MIN_VALUE;
         double h = Double.MIN_VALUE;
         for(SNode n : model) {
-            x = Math.min(x, n.getBounds().getX());
-            y = Math.min(y, n.getBounds().getY());
-            w = Math.max(w, n.getBounds().getX() + n.getBounds().getWidth());
-            h = Math.max(h, n.getBounds().getY() + n.getBounds().getHeight());
+            Bounds b = n.getBounds();
+            if(n instanceof SShape) {
+                b = ((SShape) n).getEffectBounds();
+            }
+            x = Math.min(x, b.getX());
+            y = Math.min(y, b.getY());
+            w = Math.max(w, b.getX() + b.getWidth());
+            h = Math.max(h, b.getY() + b.getHeight());
         }
         return new Bounds(x,y,w-x,h-y);
     }
