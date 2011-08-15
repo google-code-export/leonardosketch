@@ -24,9 +24,8 @@ public class PixelDoc extends CanvasDocument {
         layers = new ArrayList<PixelLayer>();
         PixelLayer layer1 = new PixelLayer();
         add(layer1);
-        PixelGraphics g = layer1.getGraphics();
-        g.setFill(FlatColor.PURPLE);
-        g.fillRect(200,100,100,100); // this should span one tile to the right
+        this.setWidth(640);
+        this.setHeight(480);
     }
 
     public void add(PixelLayer layer1) {
