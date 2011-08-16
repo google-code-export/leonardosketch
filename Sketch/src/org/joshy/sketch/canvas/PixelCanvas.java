@@ -3,12 +3,15 @@ package org.joshy.sketch.canvas;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Image;
+import org.joshy.gfx.draw.PatternPaint;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.sketch.modes.pixel.PixelDocContext;
 import org.joshy.sketch.pixel.model.PixelDoc;
 import org.joshy.sketch.pixel.model.PixelLayer;
 import org.joshy.sketch.pixel.model.PixelSelection;
 import org.joshy.sketch.pixel.model.PixelTile;
+
+import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -24,7 +27,6 @@ public class PixelCanvas extends DocumentCanvas {
 
     public PixelCanvas(PixelDocContext context) {
         this.context = context;
-        selection = new PixelSelection();
     }
     
     public boolean isFocused() {
@@ -95,6 +97,15 @@ public class PixelCanvas extends DocumentCanvas {
         drawSelection(gfx);
         drawOverlays(gfx);
         gfx.pop();
+        if(document.isRepeat()) {
+            double size = document.getRepeatSize() * getScale();
+            gfx.setPaint(FlatColor.RED);
+            for(int i = 0; i<3; i++) {
+                for(int j=0; j<3; j++) {
+                    gfx.drawRect(i*size,j*size,size,size);
+                }
+            }
+        }
     }
 
     private void drawSelection(GFX gfx) {
@@ -116,6 +127,20 @@ public class PixelCanvas extends DocumentCanvas {
     }
 
     private void drawLayer(GFX gfx, PixelLayer layer) {
+        if(document.isRepeat()) {
+            gfx.setPaint(FlatColor.RED);
+            int size = document.getRepeatSize();
+            PixelTile tile = layer.getTile(0, 0);
+            if(tile != null) {
+                try {
+                    PatternPaint pat = PatternPaint.create(tile.getBuffer().getSubimage(0,0,size,size),null);
+                    gfx.setPaint(pat);
+                    gfx.fillRect(0, 0, 600, 600);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         for(int y=0; y<600; y+=256) {
             for(int x=0; x<600; x+=256) {
                 PixelTile tile = layer.getTile(x/256,y/256);
@@ -126,14 +151,15 @@ public class PixelCanvas extends DocumentCanvas {
                     }
                 }
                 //tile grid lines
-                gfx.setPaint(FlatColor.GRAY);
-                gfx.drawRect(x,y,256,256);
+                //gfx.setPaint(FlatColor.GRAY);
+                //gfx.drawRect(x,y,256,256);
             }
         }
     }
 
     public void setDocument(PixelDoc doc) {
         this.document = doc;
+        selection = new PixelSelection(this.document);
     }
 
     public PixelDoc getDocument() {

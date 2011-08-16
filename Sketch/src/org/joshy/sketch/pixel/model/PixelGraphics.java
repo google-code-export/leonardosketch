@@ -14,7 +14,7 @@ import java.awt.image.BufferedImage;
  */
 public class PixelGraphics {
     private FlatColor fill;
-    private PixelLayer target;
+    protected PixelLayer target;
 
     public PixelGraphics(PixelLayer pixelLayer) {
         target = pixelLayer;

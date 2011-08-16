@@ -19,13 +19,22 @@ public class PixelDoc extends CanvasDocument {
     private List<PixelLayer> layers;
     private FlatColor foregroundColor = FlatColor.BLACK;
     private FlatColor backgroundColor = FlatColor.WHITE;
+    private boolean repeat = false;
+    private int repeatSize = 16;
 
     public PixelDoc() {
         layers = new ArrayList<PixelLayer>();
-        PixelLayer layer1 = new PixelLayer();
+        PixelLayer layer1 = new PixelLayer(this);
         add(layer1);
         this.setWidth(640);
         this.setHeight(480);
+    }
+
+    public void setRepeat(boolean repeat) {
+        this.repeat = repeat;
+        this.layers.clear();
+        PixelLayer layer1 = new PixelLayer(this);
+        add(layer1);
     }
 
     public void add(PixelLayer layer1) {
@@ -56,5 +65,17 @@ public class PixelDoc extends CanvasDocument {
     public void setBackgroundColor(FlatColor backgroundColor) {
         this.backgroundColor = backgroundColor;
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.ColorChanged,this.backgroundColor,this));
+    }
+
+    public int getRepeatSize() {
+        return repeatSize;
+    }
+
+    public void setRepeatSize(int repeatSize) {
+        this.repeatSize = repeatSize;
+    }
+
+    public boolean isRepeat() {
+        return repeat;
     }
 }

@@ -17,8 +17,8 @@ public class PixelSelection {
     public PixelLayer layer;
     private boolean empty;
 
-    public PixelSelection() {
-        layer = new PixelLayer();
+    public PixelSelection(PixelDoc document) {
+        layer = new PixelLayer(document);
         empty = true;
     }
 

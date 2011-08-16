@@ -13,10 +13,16 @@ import java.util.Map;
 public class PixelLayer {
     private PixelGraphics graphics;
     private Map<String,PixelTile> tiles;
+    private PixelDoc document;
 
-    public PixelLayer() {
+    public PixelLayer(PixelDoc document) {
+        this.document = document;
         tiles = new HashMap<String,PixelTile>();
-        graphics = new PixelGraphics(this);
+        if(document.isRepeat()) {
+            graphics = new RepeatPixelGraphics(this);
+        } else {
+            graphics = new PixelGraphics(this);
+        }
     }
 
     public PixelGraphics getGraphics() {
@@ -46,4 +52,17 @@ public class PixelLayer {
     public void clearAll() {
         tiles.clear();
     }
+
+    private static class RepeatPixelGraphics extends PixelGraphics {
+
+        public RepeatPixelGraphics(PixelLayer pixelLayer) {
+            super(pixelLayer);
+        }
+
+        @Override
+        public void fillPixel(int x, int y) {
+            super.fillPixel(x%target.document.getRepeatSize(), y%target.document.getRepeatSize());
+        }
+    }
 }
+
