@@ -37,6 +37,7 @@ import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.modes.DocModeHelper;
 import org.joshy.sketch.modes.pixel.PixelModeHelper;
+import org.joshy.sketch.modes.pixel.TiledPixelModeHelper;
 import org.joshy.sketch.modes.preso.PresoModeHelper;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
@@ -546,6 +547,7 @@ public class Main implements Runnable {
 
         modeHelpers.add(new VectorModeHelper(this));
         modeHelpers.add(new PixelModeHelper(this));
+        modeHelpers.add(new TiledPixelModeHelper(this));
         modeHelpers.add(new PresoModeHelper(this));
         defaultModeHelper = modeHelpers.get(0);
 

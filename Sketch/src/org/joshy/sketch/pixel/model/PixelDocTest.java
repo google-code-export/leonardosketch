@@ -37,7 +37,7 @@ public class PixelDocTest implements Runnable {
 
 
         //draw a purple rect to layer 1
-        PixelLayer layer1 = new PixelLayer();
+        PixelLayer layer1 = new PixelLayer(doc);
         doc.add(layer1);
         g = layer1.getGraphics();
         g.setFill(FlatColor.PURPLE);
@@ -45,7 +45,7 @@ public class PixelDocTest implements Runnable {
 
 
         //draw a translucent green rect to layer 2
-        PixelLayer layer2 = new PixelLayer();
+        PixelLayer layer2 = new PixelLayer(doc);
         doc.add(layer2);
         g = layer2.getGraphics();
         g.setFill(new FlatColor(0,1,0,0.5));
@@ -53,25 +53,25 @@ public class PixelDocTest implements Runnable {
 
 
         //draw an oval filled with blue
-        PixelLayer layer3 = new PixelLayer();
+        PixelLayer layer3 = new PixelLayer(doc);
         doc.add(layer3);
         g = layer3.getGraphics();
         g.setFill(FlatColor.BLUE);
         g.fillOval(40,300,100,60);
 
         //draw an oval filled with red, then make a rectangular selection and fill it with green
-        PixelLayer layer4 = new PixelLayer();
+        PixelLayer layer4 = new PixelLayer(doc);
         doc.add(layer4);
         g = layer4.getGraphics();
         g.setFill(FlatColor.RED);
         g.fillOval(100,50,100,60);
-        PixelSelection selection = new PixelSelection();
+        PixelSelection selection = new PixelSelection(doc);
         selection.addRect(100,50,30,200);
         g.setFill(FlatColor.GREEN);
         g.fillSelection(selection);
 
         //fill a rectangular selection with a difference cloud
-        PixelLayer layer5 = new PixelLayer();
+        PixelLayer layer5 = new PixelLayer(doc);
         doc.add(layer5);
         g = layer5.getGraphics();
         g.fillDisplacementClouds(20,20,100,200);
