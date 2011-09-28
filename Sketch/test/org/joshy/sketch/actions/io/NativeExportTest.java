@@ -361,6 +361,25 @@ public class NativeExportTest {
         return doc2;
     }
 
+    @Test
+    public void testDocumentBackground() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SketchDocument doc = new SketchDocument();
+        PatternPaint patternPaint = PatternPaint.create(NativeExportTest.class.getResource("redrect.png"),"foo");
+        doc.setBackgroundFill(patternPaint);
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing test to file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(
+                new FileOutputStream(file)
+                , file.getName()
+                , file.toURI()
+                , doc
+        );
+        SketchDocument doc2 = OpenAction.loadZip(file);
+    }
+
+
     @After
     public void tearDown() throws Exception {
     }

@@ -2,6 +2,7 @@ package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.event.EventBus;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
     private double gridHeight = 25;
     private boolean snapGrid;
     private boolean docBoundsActive = true;
-    private FlatColor backgroundFill = FlatColor.WHITE;
+    private Paint backgroundFill = FlatColor.WHITE;
     private boolean presentation;
     private boolean snapDocBounds;
     private boolean snapNodeBounds;
@@ -88,11 +89,11 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         return dupe;
     }
 
-    public void setBackgroundFill(FlatColor backgroundFill) {
+    public void setBackgroundFill(Paint backgroundFill) {
         this.backgroundFill = backgroundFill;
     }
 
-    public FlatColor getBackgroundFill() {
+    public Paint getBackgroundFill() {
         return backgroundFill;
     }
 

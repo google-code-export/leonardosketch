@@ -5,6 +5,7 @@ import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Font;
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.io.NativeExport;
@@ -153,9 +154,9 @@ public class OpenAction extends SAction {
 
         Elem info = doc.xpathElement("/sketchy/info");
         if(info != null) {
+            loadBooleanAttribute(info,sdoc,"gridActive");
             if(info.hasAttr("backgroundFill")) {
-                loadFlatColorAttribute(info,sdoc,"backgroundFill", FlatColor.class);
-                loadBooleanAttribute(info,sdoc,"gridActive");
+                sdoc.setBackgroundFill(loadFillPaint(info, "backgroundFill", zipFile));
             }
             for(Elem element : info.xpath("property")) {
                 sdoc.setStringProperty(
@@ -337,7 +338,7 @@ public class OpenAction extends SAction {
         }
         loadStringAttribute(e,shape,"id");
         if(e.hasAttr("fillPaint")) {
-            loadFillPaint(e,shape, zipFile);
+            shape.setFillPaint(loadFillPaint(e, "fillPaint", zipFile));
         } else {
             shape.setFillPaint(null);
         }
@@ -408,8 +409,8 @@ public class OpenAction extends SAction {
         return shape;
     }
 
-    private static void loadFillPaint(Elem e, SShape shape, ZipFile zipFile) throws XPathExpressionException {
-        if("gradient".equals(e.attr("fillPaint"))) {
+    private static Paint loadFillPaint(Elem e, String attName, ZipFile zipFile) throws XPathExpressionException {
+        if("gradient".equals(e.attr(attName))) {
             FlatColor start = null;
             FlatColor end = null;
             double angle = Double.parseDouble(e.xpathString("gradient/@angle"));
@@ -422,10 +423,9 @@ public class OpenAction extends SAction {
                 }
             }
             GradientFill fill = new GradientFill(start,end,angle,true);
-            shape.setFillPaint(fill);
-            return;
+            return fill;
         }
-        if("linearGradient".equals(e.attr("fillPaint"))) {
+        if("linearGradient".equals(e.attr(attName))) {
             Elem egrad = e.xpath("linearGradient").iterator().next();
             LinearGradientFill fill = new LinearGradientFill()
                     .setStartX(Double.parseDouble(egrad.attr("startX")))
@@ -443,10 +443,9 @@ public class OpenAction extends SAction {
                         new FlatColor(stop.attr("color"))
                         );
             }
-            shape.setFillPaint(fill);
-            return;
+            return fill;
         }
-        if("radialGradient".equals(e.attr("fillPaint"))) {
+        if("radialGradient".equals(e.attr(attName))) {
             Elem egrad = e.xpath("radialGradient").iterator().next();
             RadialGradientFill fill = new RadialGradientFill()
                     .setCenterX(Double.parseDouble(egrad.attr("centerX")))
@@ -459,10 +458,9 @@ public class OpenAction extends SAction {
                         new FlatColor(stop.attr("color"))
                         );
             }
-            shape.setFillPaint(fill);
-            return;
+            return fill;
         }
-        if("patternPaint".equals(e.attr("fillPaint"))) {
+        if("patternPaint".equals(e.attr(attName))) {
             Elem pp = e.xpath("patternPaint").iterator().next();
             PatternPaint pat = null;
             u.p("using url " + pp.attr("relativeURL"));
@@ -495,14 +493,11 @@ public class OpenAction extends SAction {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            shape.setFillPaint(pat);
-            return;
+            return pat;
         }
 
 
-        FlatColor fc = new FlatColor(e.attr("fillPaint"));
-        shape.setFillPaint(fc);
-
+        return new FlatColor(e.attr(attName));
     }
 
     private static void loadProperties(Elem e, SNode shape) throws XPathExpressionException {
@@ -569,7 +564,7 @@ public class OpenAction extends SAction {
         if(node instanceof SShape) {
             SShape shape = (SShape)node;
             if(e.hasAttr("fillPaint")) {
-                loadFillPaint(e,shape,zipFile);
+                shape.setFillPaint(loadFillPaint(e, "fillPaint", zipFile));
             } else {
                 shape.setFillPaint(null);
             }

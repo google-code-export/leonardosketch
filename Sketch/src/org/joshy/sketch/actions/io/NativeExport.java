@@ -37,7 +37,11 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
         } else {
             out.attr("type","generic-drawing");
         }
-        saveAttribute(out,"backgroundFill",doc);
+        if(doc.getBackgroundFill() instanceof FlatColor) {
+            saveAttribute(out,"backgroundFill",doc);
+        } else {
+            out.attr("backgroundFill","patternPaint");
+        }
         saveBooleanAttribute(out,"gridActive",doc);
 
         if(!doc.getProperties().isEmpty()) {
@@ -46,8 +50,32 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
                 out.end();
             }
         }
-
+        if(doc.getBackgroundFill() instanceof PatternPaint) {
+            PatternPaint pt = (PatternPaint) doc.getBackgroundFill();
+            savePatternPaint(out, pt);
+        }
         out.end();
+    }
+
+    private void savePatternPaint(XMLWriter out, PatternPaint pattern) {
+        u.p("saving a pttern. url = " + pattern.getRelativeURL());
+        out.start("patternPaint")
+                .attr("startX",""+pattern.getStart().getX())
+                .attr("startY",""+pattern.getStart().getY())
+                .attr("endX",""+pattern.getEnd().getX())
+                .attr("endY",""+pattern.getEnd().getY())
+                .attr("relativeURL", ""+pattern.getRelativeURL())
+        ;
+        out.end();
+        if(delayedImageWriting) {
+            delayedImages.add(pattern);
+        } else {
+            try {
+                saveRelativeImage(out,pattern);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void pageStart(XMLWriter out, SketchDocument.SketchPage page) {
@@ -251,24 +279,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             }
             if(sh.getFillPaint() instanceof PatternPaint) {
                 PatternPaint pattern = (PatternPaint) sh.getFillPaint();
-                u.p("saving a pttern. url = " + pattern.getRelativeURL());
-                out.start("patternPaint")
-                        .attr("startX",""+pattern.getStart().getX())
-                        .attr("startY",""+pattern.getStart().getY())
-                        .attr("endX",""+pattern.getEnd().getX())
-                        .attr("endY",""+pattern.getEnd().getY())
-                        .attr("relativeURL", ""+pattern.getRelativeURL())
-                ;
-                out.end();
-                if(delayedImageWriting) {
-                    delayedImages.add(pattern);
-                } else {
-                    try {
-                        saveRelativeImage(out,pattern);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                savePatternPaint(out,pattern);
             }
             if(sh.getShadow() != null) {
                 DropShadow shadow = sh.getShadow();

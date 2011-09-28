@@ -103,7 +103,7 @@ public class SaveAminoCanvasAction extends SAction {
                 +"<script src='"+ Main.AMINO_BINARY_URL+"'></script>\n"
                 +"<script src='generated.js'></script>\n"
                 +"<style type='text/css'>\n"
-                +"  body { background-color: " + AminoExport.serializeFlatColor(doc.getBackgroundFill()) + "; }\n"
+                //+"  body { background-color: " + AminoExport.serializeFlatColor(doc.getBackgroundFill()) + "; }\n"
                 +"</style>\n"
                 +"</head>");
         out.println("<body onload=\"setupDrawing();\">");
@@ -117,7 +117,7 @@ public class SaveAminoCanvasAction extends SAction {
         out.println("var runner =  new Runner();\n"
                 +"runner.setCanvas(document.getElementById('foo'));\n"
                 +"runner.setFPS(30);\n"
-                +"runner.setBackground("+AminoExport.serializePaint(out,doc.getBackgroundFill())+");\n"
+                //+"runner.setBackground("+AminoExport.serializePaint(out,doc.getBackgroundFill())+");\n"
                 +"runner.setRoot(sceneRoot);\n"
         );
         out.println("runner.start();");

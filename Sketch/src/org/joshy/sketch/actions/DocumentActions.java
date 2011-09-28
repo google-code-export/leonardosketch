@@ -1,16 +1,21 @@
 package org.joshy.sketch.actions;
 
-import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.Button;
+import org.joshy.gfx.node.control.Label;
+import org.joshy.gfx.node.control.PopupMenuButton;
+import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.ArrayListModel;
+import org.joshy.sketch.Main;
+import org.joshy.sketch.controls.FillPicker;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -26,10 +31,12 @@ public class DocumentActions {
 
     public static class SetBackground extends SAction {
         private DocContext context;
+        private Main manager;
 
-        public SetBackground(DocContext context) {
+        public SetBackground(DocContext context, Main main) {
             super();
             this.context = context;
+            this.manager = main;
         }
 
         @Override
@@ -45,11 +52,12 @@ public class DocumentActions {
                 }
             };
 
-            SwatchColorPicker picker = new SwatchColorPicker();
-            EventBus.getSystem().addListener(picker, ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
-                public void call(ChangedEvent event) {
+            FillPicker picker = new FillPicker(this.manager);
+            EventBus.getSystem().addListener(picker,ChangedEvent.ObjectChanged, new Callback<ChangedEvent>() {
+                public void call(ChangedEvent event) throws Exception {
+                    Paint paint = (Paint) event.getValue();
                     SketchDocument doc = (SketchDocument) context.getDocument();
-                    doc.setBackgroundFill((FlatColor)event.getValue());
+                    doc.setBackgroundFill(paint);
                     context.redraw();
                 }
             });
