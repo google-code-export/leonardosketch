@@ -91,6 +91,7 @@ public class Main implements Runnable {
     public static Font[] fonts;
     public static HashMap<String, Font> fontMap;
     public static String AMINO_BINARY_URL = null;
+    public static final String DEFAULT_FONT_NAME = "OpenSans";
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -407,7 +408,7 @@ public class Main implements Runnable {
         context.mainPanel.add(context.getToolbar());
         context.sidebarContainer = new DisclosurePanel()
                 .setTitle(new Label(getString("menus.viewSidebar"))
-                        .setFont(Font.name("Arial").size(18).resolve())
+                        .setFont(Font.name(DEFAULT_FONT_NAME).size(18).resolve())
                         .setColor(new FlatColor(0x404040))
                 )
                 .setPosition(DisclosurePanel.Position.Right)
@@ -532,12 +533,13 @@ public class Main implements Runnable {
         fonts = new Font[]{
                 Font.fromURL(getFont("belligerent.ttf")).size(30).resolve(),
                 Font.fromURL(getFont("Chunk.ttf")).resolve(),
-                Font.fromURL(getFont("Junction.ttf")).size(30).resolve(),
+                //Font.fromURL(getFont("Junction.ttf")).size(30).resolve(),
                 Font.fromURL(getFont("OFLGoudyStMTT.ttf")).size(30).resolve(),
                 Font.fromURL(getFont("orbitron-medium.ttf")).resolve(),
-                Font.fromURL(getFont("ProcionoTT.ttf")).resolve(),
+                //Font.fromURL(getFont("ProcionoTT.ttf")).resolve(),
                 Font.fromURL(getFont("raleway_thin.ttf")).resolve(),
                 Font.fromURL(getFont("Sniglet_Regular.ttf")).resolve(),
+                Font.fromURL(getFont("OpenSans-Regular.ttf")).resolve(),
         };
         fontMap = new HashMap<String,Font>();
         for(Font font : fonts) {
