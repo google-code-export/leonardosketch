@@ -1,10 +1,12 @@
 package org.joshy.sketch.actions;
 
+import org.joshy.gfx.draw.LinearGradientFill;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.control.PopupMenuButton;
@@ -57,7 +59,7 @@ public class DocumentActions {
                 public void call(ChangedEvent event) throws Exception {
                     Paint paint = (Paint) event.getValue();
                     SketchDocument doc = (SketchDocument) context.getDocument();
-                    doc.setBackgroundFill(paint);
+                    setBackgroundFill(paint, doc);
                     context.redraw();
                 }
             });
@@ -74,6 +76,18 @@ public class DocumentActions {
 
 
         }
+
+        private void setBackgroundFill(Paint paint, SketchDocument doc) {
+            if(paint instanceof LinearGradientFill) {
+                LinearGradientFill grad = (LinearGradientFill) paint;
+                grad = resizeTo(grad, new Bounds(0, 0, doc.getWidth(), doc.getHeight()));
+                doc.setBackgroundFill(grad);
+                return;
+            }
+
+            doc.setBackgroundFill(paint);
+        }
+
     }
 
     public static class SetDocumentSize extends SAction {
@@ -132,4 +146,28 @@ public class DocumentActions {
         }
     }
 
+    public static LinearGradientFill resizeTo(LinearGradientFill grad, Bounds bounds) {
+        LinearGradientFill g2 = (LinearGradientFill) grad.duplicate();
+        switch(grad.getStartXSnapped()) {
+            case Start: g2.setStartX(bounds.getX()); break;
+            case Middle: g2.setStartX(bounds.getCenterX()); break;
+            case End: g2.setStartX(bounds.getX2()); break;
+        }
+        switch(grad.getEndXSnapped()) {
+            case Start: g2.setEndX(bounds.getX()); break;
+            case Middle: g2.setEndX(bounds.getCenterX()); break;
+            case End: g2.setEndX(bounds.getX2()); break;
+        }
+        switch(grad.getStartYSnapped()) {
+            case Start: g2.setStartY(bounds.getY()); break;
+            case Middle: g2.setStartY(bounds.getCenterY()); break;
+            case End: g2.setStartY(bounds.getY2()); break;
+        }
+        switch(grad.getEndYSnapped()) {
+            case Start: g2.setEndY(bounds.getY()); break;
+            case Middle: g2.setEndY(bounds.getCenterY()); break;
+            case End: g2.setEndY(bounds.getY2()); break;
+        }
+        return g2;
+    }
 }

@@ -17,6 +17,7 @@ import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
+import org.joshy.gfx.draw.LinearGradientFill.Snap;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -206,20 +207,30 @@ public class FillPicker extends Button {
         double size = 40;
         //linears
         Paint gf1 = new LinearGradientFill()
-                .setStartX(0).setEndX(size)
-                .setStartY(size/2).setEndY(size/2)
+                .setStartX(0)
+                .setStartXSnapped(Snap.Start)
+                .setEndX(size)
+                .setEndXSnapped(Snap.End)
+                .setStartY(size/2)
+                .setStartYSnapped(Snap.Middle)
+                .setEndY(size/2)
+                .setEndYSnapped(Snap.Middle)
                 .addStop(0,FlatColor.BLACK)
                 .addStop(1,FlatColor.WHITE);
 
         Paint gf2 = new LinearGradientFill()
-                .setStartX(size/2).setEndX(size/2)
-                .setStartY(0).setEndY(size)
+                .setStartX(size/2).setStartXSnapped(Snap.Middle)
+                .setEndX(size/2).setEndXSnapped(Snap.Middle)
+                .setStartY(0).setStartYSnapped(Snap.Start)
+                .setEndY(size).setEndYSnapped(Snap.End)
                 .addStop(0,FlatColor.BLACK)
                 .addStop(1,FlatColor.WHITE);
 
         Paint gf3 = new LinearGradientFill()
-                .setStartX(0).setEndX(size)
-                .setStartY(0).setEndY(size)
+                .setStartX(0).setStartXSnapped(Snap.Start)
+                .setEndX(size).setEndXSnapped(Snap.End)
+                .setStartY(0).setStartYSnapped(Snap.Start)
+                .setEndY(size).setEndYSnapped(Snap.End)
                 .addStop(0,FlatColor.BLACK)
                 .addStop(1,FlatColor.WHITE);
 

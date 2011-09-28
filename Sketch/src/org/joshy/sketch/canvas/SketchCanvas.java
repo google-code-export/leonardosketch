@@ -138,9 +138,14 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
     public void draw(GFX g) {
         recalcMaxExtent();
         SketchDocument sdoc = document;
+
+        //fill in the visible area
         g.setPaint(sdoc.getBackgroundFill());
-        g.fillRect(0,0,getWidth(),getHeight());
-        draw(g,sdoc);
+        g.translate(panX, panY);
+        g.fillRect(-panX, -panY, scrollPane.getWidth(), scrollPane.getHeight());
+        g.translate(-panX,-panY);
+
+        draw(g, sdoc);
     }
 
     private void draw(GFX g, SketchDocument sdoc) {
