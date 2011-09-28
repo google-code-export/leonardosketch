@@ -1,11 +1,18 @@
 package org.joshy.sketch.modes.preso;
 
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.LinearGradientFill;
+import org.joshy.gfx.draw.Paint;
+import org.joshy.gfx.draw.PatternPaint;
+import org.joshy.gfx.node.Bounds;
+import org.joshy.sketch.actions.DocumentActions;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SText;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
+
+import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,7 +24,7 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 public class SwitchTheme {
 
     public abstract static class PresoThemeAction extends SAction {
-        protected FlatColor backgroundFill;
+        protected Paint backgroundFill;
         private VectorDocContext context;
         private SketchDocument doc;
 
@@ -33,7 +40,11 @@ public class SwitchTheme {
             if(this.doc != null) doc = this.doc;
             if(this.context != null) doc = context.getDocument();
 
-            doc.setBackgroundFill(this.backgroundFill);
+            Paint fill = this.backgroundFill;
+            if(this.backgroundFill instanceof LinearGradientFill) {
+                fill = DocumentActions.resizeTo((LinearGradientFill) this.backgroundFill,new Bounds(0,0,doc.getWidth(),doc.getHeight()));
+            }
+            doc.setBackgroundFill(fill);
             doc.getProperties().put("theme",this);
 
             for(SketchDocument.SketchPage page : doc.getPages()) {
@@ -57,6 +68,13 @@ public class SwitchTheme {
         public Cowboy(SketchDocument doc, VectorDocContext context) {
             super(doc, context);
             this.backgroundFill = FlatColor.hsb(47, 0.20, 1.00);
+            try {
+                this.backgroundFill = PatternPaint.create(
+                        SwitchTheme.class.getResource("resources/cowboybg.png")
+                        ,"cowboybg.png");
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
         }
 
         @Override
@@ -68,7 +86,15 @@ public class SwitchTheme {
     public static class Future extends PresoThemeAction {
         protected Future(SketchDocument doc, VectorDocContext context) {
             super(doc, context);
-            this.backgroundFill = FlatColor.hsb(191, 0.58, 0.23);
+            int size = 100;
+            this.backgroundFill = new LinearGradientFill()
+                    .setStartX(size / 2).setStartXSnapped(LinearGradientFill.Snap.Middle)
+                    .setEndX(size / 2).setEndXSnapped(LinearGradientFill.Snap.Middle)
+                    .setStartY(0).setStartYSnapped(LinearGradientFill.Snap.Start)
+                    .setEndY(size).setEndYSnapped(LinearGradientFill.Snap.End)
+                    .addStop(0, FlatColor.fromRGBInts(0, 0, 0))
+                    .addStop(0.87, new FlatColor("#ff004f57"))
+                    .addStop(1, new FlatColor("#ff000a08"));
         }
 
         @Override
@@ -92,13 +118,13 @@ public class SwitchTheme {
     public static class Standard extends PresoThemeAction {
         protected Standard(SketchDocument doc, VectorDocContext context) {
             super(doc, context);
-            this.backgroundFill = FlatColor.hsb(215, 0.07, 1.00);
+            this.backgroundFill = FlatColor.BLACK;
         }
 
         @Override
         protected void styleText(SText text) {
             text.setFontName("OpenSans");
-            text.setFillPaint(FlatColor.hsb(48, 0.53, 0.05));
+            text.setFillPaint(FlatColor.WHITE);
         }
     }
 }
