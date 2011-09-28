@@ -121,7 +121,7 @@ public class Ruler extends Container {
 
     @Override
     public void draw(GFX g) {
-        Font fnt = Font.name("Arial").size(10).resolve();
+        Font fnt = Font.name("OpenSans").size(8).resolve();
         Bounds oldBounds = g.getClipRect();
         g.setClipRect(new Bounds(0,0,getWidth(),getHeight()));
 
