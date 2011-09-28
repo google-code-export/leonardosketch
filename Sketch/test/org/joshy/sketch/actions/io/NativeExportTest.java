@@ -192,6 +192,7 @@ public class NativeExportTest {
         text.setFontSize(36);
         text.setAutoSize(false);
         text.setWidth(300);
+        text.setBulleted(true);
         doc.getCurrentPage().model.add(text);
         File file = File.createTempFile("nativeExportTest",".leoz");
         u.p("writing test to file: " + file.getAbsolutePath());
@@ -209,6 +210,7 @@ public class NativeExportTest {
         assertTrue(text2.getFontSize() == 36);
         assertTrue(text2.getWidth() == 300);
         assertTrue(text2.isAutoSize() == false);
+        assertTrue(text2.isBulleted() == true);
 
     }
 

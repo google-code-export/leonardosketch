@@ -14,6 +14,7 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
     private String fontName = Font.DEFAULT.getName();
     private boolean autoSize = true;
     private HAlign halign = HAlign.Left;
+    private boolean bulleted = false;
 
     public HAlign getHalign() {
         return halign;
@@ -191,8 +192,15 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
                 case Right: x = fw-w; break;
             }
 
-            g.drawText(s,font,this.getX()+x,this.getY()+y);
+            drawText(g, s, font, this.getX() + x, this.getY() + y);
             y += (font.getAscender() + font.getDescender());
+        }
+    }
+
+    protected void drawText(GFX g, String s, Font font, double x, double y) {
+        g.drawText(s,font, x,y);
+        if(bulleted) {
+            g.fillOval(x-20,y-15,10,10);
         }
     }
 
@@ -211,4 +219,14 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
     public void setAutoSize(boolean autoSize) {
         this.autoSize = autoSize;
     }
+
+    public void setBulleted(boolean bulleted) {
+        this.bulleted = bulleted;
+    }
+
+    public boolean isBulleted() {
+        return bulleted;
+    }
+
+
 }

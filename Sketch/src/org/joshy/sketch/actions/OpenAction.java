@@ -541,6 +541,7 @@ public class OpenAction extends SAction {
             loadEnumAttribute(e,node,"halign",SText.HAlign.class);
             loadStringAttribute(e,node,"fontName");
             loadBooleanAttribute(e,node,"autoSize");
+            loadBooleanAttribute(e,node,"bulleted");
             if(!"".equals(e.xpathString("text/text()"))) {
                 ((SText)node).setText(e.xpathString("text/text()"));
             }

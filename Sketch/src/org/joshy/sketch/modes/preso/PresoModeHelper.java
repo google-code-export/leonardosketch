@@ -144,6 +144,7 @@ public class PresoModeHelper extends VectorModeHelper {
             header.setTranslateY(40);
             header.setFontName("OpenSans");
             header.setFontSize(48);
+            header.setBulleted(false);
             theme.styleText(header);
             page.add(header);
 
@@ -154,6 +155,7 @@ public class PresoModeHelper extends VectorModeHelper {
             content.setTranslateY(140);
             content.setFontName("OpenSans");
             content.setFontSize(30);
+            content.setBulleted(true);
             theme.styleText(content);
             page.add(content);
         }
