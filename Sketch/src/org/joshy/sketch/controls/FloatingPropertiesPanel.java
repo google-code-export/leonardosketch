@@ -91,7 +91,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
         defaultProperties = new HFlexBox().setBoxAlign(Align.Baseline);
 
         add(defaultProperties);
-        defaultProperties.add(new Label("Name:"));
+        defaultProperties.add(new Label("Name:").setFont(Font.name("OpenSans").size(12).resolve()));
         nameBox =  new Textbox("").setHintText("unset");
         nameBox.setPrefWidth(100);
         nameBox.onAction(new Callback<ActionEvent>() {
@@ -552,9 +552,9 @@ public class FloatingPropertiesPanel extends VFlexBox {
     @Override
     protected void drawSelf(GFX g) {
         double h = getHeight();
-        g.setPaint(new FlatColor(0.4,0.4,0.4,0.5));
+        g.setPaint(new FlatColor(0.8,0.8,0.8,0.8));
         g.fillRoundRect(0,0,getWidth()-1,h-1,10,10);
-        g.setPaint(new FlatColor(0,0,0,0.8));
+        g.setPaint(new FlatColor(0.3,0.3,0.3,0.8));
         g.drawRoundRect(0,0,getWidth()-1,h-1,10,10);
     }
     @Override

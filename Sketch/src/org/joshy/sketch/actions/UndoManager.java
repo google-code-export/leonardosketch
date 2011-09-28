@@ -138,7 +138,7 @@ public class UndoManager {
         @Override
         public void draw(GFX g) {
             if(indicationString != null) {
-                Font font = Font.name("Arial").size(30).resolve();
+                Font font = Font.name("OpenSans").size(30).resolve();
                 g.setPaint(new FlatColor(0.5,0.5,0.5,indicatorStringOpacity/2.0));
                 double y = 30;
                 double h = font.calculateHeight(indicationString);
