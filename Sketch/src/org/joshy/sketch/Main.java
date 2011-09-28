@@ -540,6 +540,7 @@ public class Main implements Runnable {
                 Font.fromURL(getFont("raleway_thin.ttf")).resolve(),
                 Font.fromURL(getFont("Sniglet_Regular.ttf")).resolve(),
                 Font.fromURL(getFont("OpenSans-Regular.ttf")).resolve(),
+                Font.fromURL(getFont("league_gothic.ttf")).resolve(),
         };
         fontMap = new HashMap<String,Font>();
         for(Font font : fonts) {
