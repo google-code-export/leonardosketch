@@ -56,22 +56,35 @@ public class PresoModeHelper extends VectorModeHelper {
 
         public void insertContents(SketchDocument.SketchPage page) {
             SText title = new SText();
-            title.setText(" - title -");
+            title.setText("Presentation Title");
             title.setFillPaint(FlatColor.BLACK);
-            title.setTranslateX(300);
-            title.setTranslateY(150);
-            title.setFontName("Arial");
-            title.setFontSize(64);
+            title.setFontName("OpenSans");
+            title.setFontSize(70);
+
+            title.setAutoSize(false);
+            title.setWidth(600);
+            center(title,page);
+
+            title.setTranslateY(190);
+
             page.add(title);
 
             SText subtitle = new SText();
-            subtitle.setText("- subtitle -");
+            subtitle.setText("by the author");
             subtitle.setFillPaint(FlatColor.BLACK);
-            subtitle.setTranslateX(300);
-            subtitle.setTranslateY(300);
-            subtitle.setFontName("Arial");
-            subtitle.setFontSize(48);
+            subtitle.setFontName("OpenSans");
+            subtitle.setFontSize(36);
+            subtitle.setAutoSize(false);
+            subtitle.setWidth(350);
+            center(subtitle,page);
+
+            subtitle.setTranslateY(280);
             page.add(subtitle);
+        }
+
+        private void center(SText title, SketchDocument.SketchPage page) {
+            title.setHalign(SText.HAlign.Center);
+            title.setTranslateX((page.getDocument().getWidth() - title.getWidth()) / 2);
         }
     }
 
@@ -117,21 +130,21 @@ public class PresoModeHelper extends VectorModeHelper {
         }
         public void insertContents(SketchDocument.SketchPage page) {
             SText header = new SText();
-            header.setText(" - header -");
+            header.setText("A Page Header");
             header.setFillPaint(FlatColor.BLACK);
-            header.setTranslateX(100);
-            header.setTranslateY(50);
-            header.setFontName("Arial");
+            header.setTranslateX(50);
+            header.setTranslateY(40);
+            header.setFontName("OpenSans");
             header.setFontSize(48);
             page.add(header);
 
             SText content = new SText();
-            content.setText("- content -");
+            content.setText("my first point\nmy second point\nmy third point\nmy fourth point");
             content.setFillPaint(FlatColor.BLACK);
-            content.setTranslateX(100);
-            content.setTranslateY(150);
-            content.setFontName("Arial");
-            content.setFontSize(36);
+            content.setTranslateX(70);
+            content.setTranslateY(140);
+            content.setFontName("OpenSans");
+            content.setFontSize(30);
             page.add(content);
         }
     }

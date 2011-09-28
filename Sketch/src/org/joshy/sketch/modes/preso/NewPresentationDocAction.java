@@ -1,5 +1,6 @@
 package org.joshy.sketch.modes.preso;
 
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.NewAction;
 import org.joshy.sketch.model.CanvasDocument;
@@ -19,9 +20,15 @@ public class NewPresentationDocAction extends NewAction {
         //don't do the dialog. instead just create a new doc
         
         SketchDocument doc = new SketchDocument();
+        doc.setBackgroundFill(FlatColor.hsb(25,0.05,1.0));
         doc.setPresentation(true);
         doc.setDocBoundsActive(true);
         doc.setUnits(CanvasDocument.LengthUnits.Pixels);
+        doc.setGridActive(false);
+        doc.setSnapDocBounds(true);
+        doc.setSnapGrid(false);
+        doc.setSnapNodeBounds(true);
+
         doc.setWidth(800);
         doc.setHeight(500);
         //insert title page content on the first page
