@@ -35,7 +35,12 @@ public class PresoModeHelper extends VectorModeHelper {
         menu.addItem("Add Content Page", new AddContentPage(context));
         menu.addItem("Delete Selected Page", new DeletePageAction());
         menu.separator();
-        menu.addItem(getString("menus.viewPresentation"),"", new ViewSlideshowAction(context));
+        menu.addItem(getString("menus.viewPresentation"), "", new ViewSlideshowAction(context));
+        menu.separator();
+        menu.addItem("Switch to Standard Theme", new SwitchTheme.Standard(null, context));
+        menu.addItem("Switch to Cowboy Theme", new SwitchTheme.Cowboy(null, context));
+        menu.addItem("Switch to Future Theme", new SwitchTheme.Future(null,context));
+        menu.addItem("Switch to Classy Theme", new SwitchTheme.Classy(null,context));
         return menu;
     }
 
@@ -55,6 +60,7 @@ public class PresoModeHelper extends VectorModeHelper {
         }
 
         public void insertContents(SketchDocument.SketchPage page) {
+            SwitchTheme.PresoThemeAction theme = (SwitchTheme.PresoThemeAction) page.getDocument().getProperties().get("theme");
             SText title = new SText();
             title.setText("Presentation Title");
             title.setFillPaint(FlatColor.BLACK);
@@ -63,10 +69,10 @@ public class PresoModeHelper extends VectorModeHelper {
 
             title.setAutoSize(false);
             title.setWidth(600);
-            center(title,page);
-
+            center(title, page);
+            title.setStringProperty("text-class","title");
             title.setTranslateY(190);
-
+            theme.styleText(title);
             page.add(title);
 
             SText subtitle = new SText();
@@ -76,9 +82,10 @@ public class PresoModeHelper extends VectorModeHelper {
             subtitle.setFontSize(36);
             subtitle.setAutoSize(false);
             subtitle.setWidth(350);
-            center(subtitle,page);
-
+            center(subtitle, page);
+            subtitle.setStringProperty("text-class", "subtitle");
             subtitle.setTranslateY(280);
+            theme.styleText(subtitle);
             page.add(subtitle);
         }
 
@@ -129,6 +136,7 @@ public class PresoModeHelper extends VectorModeHelper {
             context.pageList.listview.setSelectedIndex(doc.getCurrentPageIndex());
         }
         public void insertContents(SketchDocument.SketchPage page) {
+            SwitchTheme.PresoThemeAction theme = (SwitchTheme.PresoThemeAction) page.getDocument().getProperties().get("theme");
             SText header = new SText();
             header.setText("A Page Header");
             header.setFillPaint(FlatColor.BLACK);
@@ -136,6 +144,7 @@ public class PresoModeHelper extends VectorModeHelper {
             header.setTranslateY(40);
             header.setFontName("OpenSans");
             header.setFontSize(48);
+            theme.styleText(header);
             page.add(header);
 
             SText content = new SText();
@@ -145,6 +154,7 @@ public class PresoModeHelper extends VectorModeHelper {
             content.setTranslateY(140);
             content.setFontName("OpenSans");
             content.setFontSize(30);
+            theme.styleText(content);
             page.add(content);
         }
     }
