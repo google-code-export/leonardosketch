@@ -155,6 +155,7 @@ public class OpenAction extends SAction {
         if(info != null) {
             if(info.hasAttr("backgroundFill")) {
                 loadFlatColorAttribute(info,sdoc,"backgroundFill", FlatColor.class);
+                loadBooleanAttribute(info,sdoc,"gridActive");
             }
             for(Elem element : info.xpath("property")) {
                 sdoc.setStringProperty(

@@ -186,6 +186,7 @@ public class NativeExportTest {
         Core.setTesting(true);
         Core.init();
         SketchDocument doc = new SketchDocument();
+        doc.setGridActive(false);
         SText text = new SText();
         text.setText("foo");
         text.setHalign(SText.HAlign.Center);
@@ -204,6 +205,7 @@ public class NativeExportTest {
         );
         SketchDocument doc2 = OpenAction.loadZip(file);
         assertTrue(doc2.getPages().get(0).model.get(0) instanceof SText);
+        assertTrue(doc2.isGridActive() == false);
         SText text2 = (SText) doc2.getPages().get(0).model.get(0);
         assertTrue(text2.getText().equals("foo"));
         assertTrue(text2.getHalign() == SText.HAlign.Center);

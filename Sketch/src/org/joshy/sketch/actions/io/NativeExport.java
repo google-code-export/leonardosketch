@@ -38,7 +38,8 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             out.attr("type","generic-drawing");
         }
         saveAttribute(out,"backgroundFill",doc);
-        
+        saveBooleanAttribute(out,"gridActive",doc);
+
         if(!doc.getProperties().isEmpty()) {
             for(Map.Entry entry : (Set<Map.Entry>)doc.getProperties().entrySet()) {
                 out.start("property","name",""+entry.getKey(),"value",""+entry.getValue());
@@ -419,7 +420,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
-    private static void saveBooleanAttribute(XMLWriter out, String name, SNode node) {
+    private static void saveBooleanAttribute(XMLWriter out, String name, Object node) {
         try {
             Method method = node.getClass().getMethod("is"+name.substring(0,1).toUpperCase()+name.substring(1));
             Object value = method.invoke(node);
