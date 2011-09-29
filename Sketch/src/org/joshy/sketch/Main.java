@@ -212,7 +212,7 @@ public class Main implements Runnable {
     }
 
     public DocContext setupNewDoc(DocModeHelper modeHelper, CanvasDocument doc) throws Exception {
-        DocContext context = modeHelper.createDocContext(this);
+        final DocContext context = modeHelper.createDocContext(this);
         contexts.add(context);
 
         context.setupActions();
@@ -253,6 +253,10 @@ public class Main implements Runnable {
                                 c.setTranslateX(30);
                                 c.setTranslateY(30);
                             }
+                            if(c == context.getNotificationIndicator()) {
+                                c.setTranslateX(40);
+                                c.setTranslateY(getHeight()-c.getHeight()-25);
+                            }
                             c.doLayout();
                         }
 
@@ -260,9 +264,9 @@ public class Main implements Runnable {
                 }
                 .add(hruler,vruler)
                 .add(scrollPane)
+                .add(context.getNotificationIndicator())
                 );
 
-        context.stackPanel.add(context.getUndoOverlay());
         if(context instanceof VectorDocContext) {
             context.pageList = new PageListPanel((VectorDocContext)context);
         }

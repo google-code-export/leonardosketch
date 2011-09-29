@@ -73,7 +73,7 @@ public class FlickrUploadAction extends SAction {
             u.p("the user said no!");
             return;
         }
-        this.context.getUndoOverlay().showIndicator("Uploading to Flickr");
+        this.context.addNotification("Uploading to Flickr");
         new Thread(new Runnable(){
             public void run() {
                 try {
@@ -106,7 +106,7 @@ public class FlickrUploadAction extends SAction {
 
                     Core.getShared().defer(new Runnable(){
                         public void run() {
-                            FlickrUploadAction.this.context.getUndoOverlay().showIndicator("Done uploading to Flickr");
+                            FlickrUploadAction.this.context.addNotification("Done uploading to Flickr");
                             OSUtil.openBrowser("http://www.flickr.com/photos/joshyx/"+str+"/");
                         }
                     });
