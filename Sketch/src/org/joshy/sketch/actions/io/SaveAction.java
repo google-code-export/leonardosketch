@@ -60,7 +60,7 @@ public class SaveAction extends SAction {
     }
 
     private void save(File file) {
-        context.getUndoOverlay().showIndicator("Saving");
+        context.addNotification("Saving");
         try {
             if(useZip) {
                 saveAsZip(file);
@@ -75,6 +75,7 @@ public class SaveAction extends SAction {
             context.getDocument().setDirty(false);
             context.main.rebuildWindowMenu();
             context.main.addRecentFile(file);
+            context.addNotification("Saved: " + file.getName());
         } catch (Exception ex) {
             u.p(ex);
         }

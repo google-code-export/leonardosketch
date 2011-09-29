@@ -73,7 +73,7 @@ public class TwitPicAction extends SAction {
 
 
             final String message = StandardDialog.showEditText("Message with image","");
-            context.getUndoOverlay().showIndicator("Uploading to TwitPic");
+            context.addNotification("Uploading to TwitPic");
 
             new Thread(new Runnable(){
                 public void run() {
@@ -86,7 +86,7 @@ public class TwitPicAction extends SAction {
                         final String tweetUrl = "http://twitter.com/"+s.getUser().getScreenName()+"/status/"+s.getId();
                         Core.getShared().defer(new Runnable(){
                             public void run() {
-                                context.getUndoOverlay().showIndicator("Done uploading to Twitter");
+                                context.addNotification("Done uploading to Twitter");
                                 OSUtil.openBrowser(tweetUrl);
                             }
                         });

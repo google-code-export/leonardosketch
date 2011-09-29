@@ -1,14 +1,5 @@
 package org.joshy.sketch.actions;
 
-import org.joshy.gfx.animation.AnimationDriver;
-import org.joshy.gfx.animation.CompoundAnimation;
-import org.joshy.gfx.animation.KeyFrameAnimator;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.modes.DocContext;
 
@@ -65,7 +56,7 @@ public class UndoManager {
         action.executeUndo();
         index--;
         //dump();
-        context.getUndoOverlay().showIndicator("Undoing: " + action.getName());
+        context.addNotification("Undoing: " + action.getName());
     }
 
     private void stepForwards() {
@@ -74,7 +65,7 @@ public class UndoManager {
         UndoableAction action = actionStack.get(index);
         action.executeRedo();
         dump();
-        context.getUndoOverlay().showIndicator("Redoing: " + action.getName());
+        context.addNotification("Redoing: " + action.getName());
     }
 
     private boolean canUndo() {
@@ -114,75 +105,6 @@ public class UndoManager {
             if(context.getUndoManager().canRedo()) {
                 context.getUndoManager().stepForwards();
             }
-        }
-    }
-
-    public static class UndoOverlay extends Control {
-        public String indicationString;
-        public double indicatorStringOpacity;
-        private CompoundAnimation indicatorStringAnim;
-
-        @Override
-        public void doLayout() {
-        }
-
-        @Override
-        public void doPrefLayout() {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void doSkins() {
-        }
-
-        @Override
-        public void draw(GFX g) {
-            if(indicationString != null) {
-                Font font = Font.name("OpenSans").size(30).resolve();
-                g.setPaint(new FlatColor(0.5,0.5,0.5,indicatorStringOpacity/2.0));
-                double y = 30;
-                double h = font.calculateHeight(indicationString);
-                g.fillRoundRect(20-10, getHeight()-y-h-100, font.calculateWidth(indicationString)+20, h+20, 10,10);
-                g.setPaint(new FlatColor(0,0,0,indicatorStringOpacity));
-                g.drawText(indicationString, font ,20, getHeight()-y-100);
-            }
-        }
-
-        public void showIndicator(String indicationString) {
-            this.indicationString = indicationString;
-            if(indicatorStringAnim != null && indicatorStringAnim.isRunning()) {
-                indicatorStringAnim.stop();
-            }
-
-            setIndicatorStringOpacity(1.0);
-            AnimationDriver.start(
-                KeyFrameAnimator.create(this,"indicatorStringOpacity")
-                    .keyFrame(0,1.0)
-                    .keyFrame(1,1.0)
-                    .keyFrame(3,0.0)
-                    .doAfter(new Callback(){
-                        public void call(Object event) {
-                            showIndicator(null);
-                        }
-                    })
-            );
-            //indicatorStringAnim = new SequentialAnimation().add(kf);
-            //indicatorStringAnim.start();
-            setDrawingDirty();
-        }
-
-        public double getIndicatorStringOpacity() {
-            return this.indicatorStringOpacity;
-        }
-
-        public void setIndicatorStringOpacity(double indicatorStringOpacity) {
-            this.indicatorStringOpacity = indicatorStringOpacity;
-            setDrawingDirty();
-        }
-
-        @Override
-        public Bounds getInputBounds() {
-            return new Bounds(0,0,-1,-1);
         }
     }
 }

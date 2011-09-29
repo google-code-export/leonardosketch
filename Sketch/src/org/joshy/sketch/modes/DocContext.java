@@ -1,5 +1,6 @@
 package org.joshy.sketch.modes;
 
+import org.joshy.gfx.node.Node;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.DisclosurePanel;
 import org.joshy.gfx.node.layout.Panel;
@@ -12,6 +13,7 @@ import org.joshy.sketch.actions.pages.PageListPanel;
 import org.joshy.sketch.canvas.DocumentCanvas;
 import org.joshy.sketch.controls.Menu;
 import org.joshy.sketch.controls.Menubar;
+import org.joshy.sketch.controls.NotificationIndicator;
 import org.joshy.sketch.model.CanvasDocument;
 
 import java.io.IOException;
@@ -25,7 +27,6 @@ import java.util.Properties;
  */
 public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocument> {
     public Main main;
-    private UndoManager.UndoOverlay undoOverlay;
     public StackPanel stackPanel;
     public PageListPanel pageList;
     private UndoManager undoManager;
@@ -37,17 +38,19 @@ public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocum
     protected DocModeHelper modeHelper;
     public Menu windowJMenu;
     public DisclosurePanel sidebarContainer;
+    private NotificationIndicator notificationIndicator;
 
     public DocContext(Main main, DocModeHelper mode) {
         this.main = main;
         this.modeHelper = mode;
         stage = Stage.createStage();
         undoManager = new UndoManager(this);
-        undoOverlay = new UndoManager.UndoOverlay();                
+        notificationIndicator = new NotificationIndicator();
     }
 
-    public UndoManager.UndoOverlay getUndoOverlay() {
-        return undoOverlay;
+
+    public void addNotification(String notification) {
+        this.notificationIndicator.addNotification(notification);
     }
 
     public Properties getSettings() {
@@ -90,4 +93,8 @@ public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocum
     }
 
     public abstract void setDocument(D doc);
+
+    public Node getNotificationIndicator() {
+        return this.notificationIndicator;
+    }
 }
