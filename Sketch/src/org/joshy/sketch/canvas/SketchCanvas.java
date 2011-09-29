@@ -318,4 +318,7 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
         }
     }
 
+    public ScrollPane getScrollPane() {
+        return this.scrollPane;
+    }
 }

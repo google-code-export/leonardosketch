@@ -562,19 +562,39 @@ public class FloatingPropertiesPanel extends VFlexBox {
         if(selected) {
             Bounds bounds = selection.calculateBounds();
             bounds = context.getSketchCanvas().transformToDrawing(bounds);
-            Point2D pt = NodeUtils.convertToScene(context.getSketchCanvas(), bounds.getX(), bounds.getY());
-            if(TRUE_PALLETTE) {
-                Stage s = getParent().getStage();
-                Stage cs = context.getStage();
-                s.setWidth(400);
-                s.setHeight(230);
-                pt = new Point2D.Double(pt.getX()+cs.getX(),pt.getY()+cs.getY());
-                s.setX(pt.getX());
-                s.setY(pt.getY()+bounds.getHeight()+40);
-            } else {
-                setTranslateX((int)pt.getX());
-                setTranslateY((int)(pt.getY() + bounds.getHeight()+20));
+            bounds = NodeUtils.convertToScene(context.getSketchCanvas(),bounds);
+            Stage stage = this.getStage();
+
+            double x = bounds.getX();
+            double y = bounds.getY() + bounds.getHeight()+20;
+            double h = stage.getContent().getVisualBounds().getHeight();
+            double w = stage.getContent().getVisualBounds().getWidth();
+            double bottom = y + this.getHeight();
+
+            //if to low then put above the item
+            if(bottom > h) {
+                y = bounds.getY()-this.getHeight()-20;
             }
+            //if off the top now, then move to the right
+            if (y < 0) {
+                y = 10;
+                x = bounds.getX2() + 20;
+            }
+
+            //if off the right then move to the left
+            if(x + this.getWidth() > w) {
+                x = bounds.getX()-this.getWidth()-20;
+            }
+
+            //if too far off the left then just shove on the left edge and accept it will overlap
+            if(x < 0) {
+                x = 20;
+            }
+
+
+            setTranslateX(x);
+            setTranslateY(y);
+
             super.doLayout();
         }
     }
