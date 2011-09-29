@@ -235,26 +235,42 @@ public class Ruler extends Container {
         g.setClipRect(oldBounds);
     }
 
+    private void regenHandles(SketchDocument sdoc) {
+        for(GuidelineHandle glh : guideHandles) {
+            this.remove(glh);
+        }
+        guideHandles.clear();
+
+        for(SketchDocument.Guideline g : sdoc.getCurrentPage().getGuidelines()) {
+            if(g.isVertical() && !vertical) {
+                GuidelineHandle gl = new GuidelineHandle(this, sdoc, g);
+                gl.setTranslateY(17);
+                gl.setTranslateX(g.getPosition()-GuidelineHandle.size/2);
+                this.add(gl);
+                guideHandles.add(gl);
+            }
+            if(!g.isVertical() && vertical) {
+                GuidelineHandle gl = new GuidelineHandle(this, sdoc, g);
+                gl.setTranslateX(17);
+                gl.setTranslateY(g.getPosition()-GuidelineHandle.size/2);
+                this.add(gl);
+                guideHandles.add(gl);
+            }
+        }
+    }
+
+
     public void setDocument(final CanvasDocument doc) {
         this.doc = doc;
         if(doc instanceof SketchDocument) {
             final SketchDocument sdoc = (SketchDocument) doc;
-            for(SketchDocument.Guideline g : sdoc.getCurrentPage().getGuidelines()) {
-                if(g.isVertical() && !vertical) {
-                    GuidelineHandle gl = new GuidelineHandle(this, sdoc, g);
-                    gl.setTranslateY(17);
-                    gl.setTranslateX(g.getPosition()-GuidelineHandle.size/2);
-                    this.add(gl);
-                    guideHandles.add(gl);
+            regenHandles(sdoc);
+
+            EventBus.getSystem().addListener(sdoc, CanvasDocument.DocumentEvent.PageChanged, new Callback<CanvasDocument.DocumentEvent>() {
+                public void call(CanvasDocument.DocumentEvent documentEvent) throws Exception {
+                    regenHandles((SketchDocument) documentEvent.getDocument());
                 }
-                if(!g.isVertical() && vertical) {
-                    GuidelineHandle gl = new GuidelineHandle(this, sdoc, g);
-                    gl.setTranslateX(17);
-                    gl.setTranslateY(g.getPosition()-GuidelineHandle.size/2);
-                    this.add(gl);
-                    guideHandles.add(gl);
-                }
-            }
+            });
 
             EventBus.getSystem().addListener(sdoc,CanvasDocument.DocumentEvent.PageGuidelineAdded, new Callback<CanvasDocument.DocumentEvent>(){
                 public void call(CanvasDocument.DocumentEvent documentEvent) throws Exception {
