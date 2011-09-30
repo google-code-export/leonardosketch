@@ -327,6 +327,12 @@ public class SelectMoveTool extends CanvasTool {
         //process nodes under the cursor
         List<SNode> underCursor = new ArrayList<SNode>();
         for(SNode node : doc.getCurrentPage().model) {
+            if(node instanceof HasTransformedBounds) {
+                if(((HasTransformedBounds)node).getTransformedBounds().contains(cursor)) {
+                    underCursor.add(node);
+                }
+                continue;
+            }
             if(node.contains(cursor)) {
                 underCursor.add(node);
             }

@@ -247,6 +247,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 .addItem(getString("menus.flipNodeVertical"),   new PathActions.Flip(context,false))
                 .addItem(getString("menus.rotateNode90Right"), new PathActions.RotateClockwise(context,Math.PI/2))
                 .addItem(getString("menus.rotateNode90Left"), new PathActions.RotateClockwise(context,-Math.PI/2))
+                .addItem("Transform", "T", new TransformAction(context))
                 //.addItem(getString("menus.rotateNodeFree"), new PathActions.Rotate(context))
                 //.addItem(getString("menus.scaleNode"), new PathActions.Scale(context))
                 .separator()
