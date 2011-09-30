@@ -19,7 +19,7 @@ import java.util.List;
  *
  *
 */
-public class SPath extends SShape implements SelfDrawable {
+public class SPath extends SShape implements SelfDrawable, HasTransformedBounds {
     public List<PathPoint> points;
     private boolean closed;
     private Path2D.Double path2d;
@@ -40,6 +40,28 @@ public class SPath extends SShape implements SelfDrawable {
                     bds.getHeight());
         }
         return new Bounds(0,0,100,100);
+    }
+
+    public Bounds getTransformedBounds() {
+        if(path2d != null) {
+            AffineTransform af = new AffineTransform();
+            af.translate(getTranslateX(),getTranslateY());
+            af.rotate(Math.toRadians(getRotate()));
+            af.scale(getScaleX(), getScaleY());
+            Shape sh = af.createTransformedShape(path2d);
+            Rectangle2D bds = sh.getBounds2D();
+            return toBounds(bds);
+
+        }
+        return new Bounds(0,0,100,100);
+    }
+
+    private Bounds toBounds(Rectangle2D bds) {
+        return new Bounds(
+                bds.getX(),
+                bds.getY(),
+                bds.getWidth(),
+                bds.getHeight());
     }
 
     @Override

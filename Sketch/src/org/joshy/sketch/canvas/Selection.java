@@ -159,6 +159,11 @@ public class Selection {
             hs.add(new ArrowHandle(arrow,ArrowHandle.Position.Start));
             hs.add(new ArrowHandle(arrow,ArrowHandle.Position.End));
         }
+        if(node instanceof STransformNode) {
+            STransformNode trans = (STransformNode) node;
+            hs.add(new STransformNode.TransformRotateHandle(trans));
+            hs.add(new STransformNode.TransformScaleHandle(trans));
+        }
         return hs;
     }
 

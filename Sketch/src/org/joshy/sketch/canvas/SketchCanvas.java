@@ -173,7 +173,9 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
                 if(node instanceof SResizeableNode) {
                     //drawSelection(g,(SResizeableNode)node);
                 } else {
-                    drawSelection(g,node);
+                    if(!(node instanceof STransformNode)) {
+                        drawSelection(g,node);
+                    }
                 }
             }
         }
@@ -252,6 +254,10 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
         if(shape == null) return;
         g.setPaint(new FlatColor(1.0,0.5,0.5,0.5));
         Bounds bounds = shape.getBounds();
+        //bounds = applyTransform(bounds,shape);
+        if(shape instanceof HasTransformedBounds) {
+            bounds = ((HasTransformedBounds)shape).getTransformedBounds();
+        }
         bounds = transformToDrawing(bounds);
         g.setStrokeWidth(3);
         g.drawRect(bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
