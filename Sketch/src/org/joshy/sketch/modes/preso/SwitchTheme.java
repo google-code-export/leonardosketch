@@ -1,5 +1,6 @@
 package org.joshy.sketch.modes.preso;
 
+import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.LinearGradientFill;
 import org.joshy.gfx.draw.Paint;
@@ -11,7 +12,9 @@ import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SText;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
+import org.joshy.sketch.util.Util;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -61,6 +64,8 @@ public class SwitchTheme {
         }
 
         protected abstract void styleText(SText text);
+
+        public abstract void exportResources(XMLWriter out, File resources);
     }
 
     public static class Cowboy extends PresoThemeAction {
@@ -82,6 +87,23 @@ public class SwitchTheme {
             text.setFontName("ChunkFive");
             text.setFillPaint(FlatColor.hsb(47, 0.77, 0.46));
         }
+
+        @Override
+        public void exportResources(XMLWriter out, File resources) {
+            out.start("link").attr("rel", "stylesheet").attr("href", "resources/common.css");
+            out.start("link").attr("rel", "stylesheet").attr("href", "resources/cowboy.css");
+            try {
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/common.css"),
+                        new File(resources, "common.css"));
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/cowboy.css"),
+                        new File(resources, "cowboy.css"));
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/cowboybg.png"),
+                        new File(resources, "cowboybg.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
     }
     public static class Future extends PresoThemeAction {
         protected Future(SketchDocument doc, VectorDocContext context) {
@@ -102,19 +124,55 @@ public class SwitchTheme {
             text.setFontName("Orbitron-Medium");
             text.setFillPaint(FlatColor.hsb(191, 0.80, 0.98));
         }
+
+        @Override
+        public void exportResources(XMLWriter out, File resources) {
+            out.start("link").attr("rel","stylesheet").attr("type","text/css")
+                    .attr("href","http://fonts.googleapis.com/css?family=Orbitron")
+                    .end();
+            out.start("link").attr("rel", "stylesheet").attr("href", "resources/common.css").end();
+            out.start("link").attr("rel", "stylesheet").attr("href", "resources/future.css").end();
+            try {
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/common.css"),
+                        new File(resources, "common.css"));
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/future.css"),
+                        new File(resources, "future.css"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
     public static class Classy extends PresoThemeAction {
         protected Classy(SketchDocument doc, VectorDocContext context) {
             super(doc, context);
-            this.backgroundFill = FlatColor.WHITE;//hsb(191, 0.00, 1.00);
+            this.backgroundFill = FlatColor.WHITE;
         }
 
         @Override
         protected void styleText(SText text) {
             text.setFontName("Raleway-Thin");
-            text.setFillPaint(FlatColor.BLACK);//hsb(191, 0.80, 0.98));
+            text.setFillPaint(FlatColor.BLACK);
+        }
+
+        @Override
+        public void exportResources(XMLWriter out, File resources) {
+            out.start("link").attr("rel","stylesheet").attr("type","text/css")
+                    .attr("href","http://fonts.googleapis.com/css?family=Raleway:100")
+                    .end();
+            out.start("link").attr("rel", "stylesheet").attr("href", "resources/common.css").end();
+            out.start("link").attr("rel", "stylesheet").attr("href", "resources/classy.css").end();
+
+            try {
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/common.css"),
+                        new File(resources, "common.css"));
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/classy.css"),
+                        new File(resources, "classy.css"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
+
     public static class Standard extends PresoThemeAction {
         protected Standard(SketchDocument doc, VectorDocContext context) {
             super(doc, context);
@@ -125,6 +183,24 @@ public class SwitchTheme {
         protected void styleText(SText text) {
             text.setFontName("OpenSans");
             text.setFillPaint(FlatColor.WHITE);
+        }
+
+        @Override
+        public void exportResources(XMLWriter out, File resources) {
+            out.start("link").attr("rel","stylesheet").attr("type","text/css")
+                    .attr("href","http://fonts.googleapis.com/css?family=Open+Sans")
+                    .end();
+            out.start("link").attr("rel", "stylesheet").attr("href", "resources/common.css").end();
+            out.start("link").attr("rel", "stylesheet").attr("href", "resources/standard.css").end();
+
+            try {
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/common.css"),
+                        new File(resources, "common.css"));
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/standard.css"),
+                        new File(resources, "standard.css"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

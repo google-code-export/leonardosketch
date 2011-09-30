@@ -1,0 +1,46 @@
+body {
+    font-family: sans-serif;
+    color: black;
+    background-color: white;
+}
+
+.page {
+    display: block;
+    height: 90%;
+    padding-left: 3em;
+    padding-bottom: 1em;
+    padding-right: 3em;
+    padding-top: 1em;
+    margin-right: auto;
+    margin-left: auto;
+    border-left-width: 0px;
+    border-bottom-width: 1px;
+    border-right-width: 0px;
+    border-top-width: 0px;
+    border-style: solid;
+}
+
+/* title page */
+h1 {
+    text-align: center;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    margin-right: 0px;
+    margin-top: 4em;
+    font-size: 400%;
+}
+h3 {
+    text-align: center;
+    margin: 0px;
+    border-style: none;
+    font-size: 200%;
+}
+
+
+/* content page */
+h2 {
+    font-size: 300%;
+}
+ul {
+    font-size: 200%;
+}

@@ -8,6 +8,7 @@ import org.joshy.sketch.controls.Menu;
 import org.joshy.sketch.controls.ToolbarButton;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.model.SketchDocument;
+import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.modes.DocModeHelper;
 import org.joshy.sketch.tools.*;
 import org.joshy.sketch.util.BiList;
@@ -61,6 +62,11 @@ public class VectorModeHelper extends DocModeHelper<VectorDocContext> {
     @Override
     public SAction getNewDocAction(Main main) {
         return new NewAction(main);
+    }
+
+    @Override
+    public void addCustomExportMenus(Menu exportMenu, DocContext context) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
 

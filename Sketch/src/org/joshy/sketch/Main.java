@@ -436,7 +436,7 @@ public class Main implements Runnable {
 
         final JFrame frame = (JFrame) context.getStage().getNativeWindow();
         context.menubar = new Menubar(frame);
-        buildCommonMenubar(context);
+        buildCommonMenubar(context,modeHelper);
         EventBus.getSystem().addListener(CanvasDocument.DocumentEvent.Closing,new Callback<CanvasDocument.DocumentEvent>() {
             public void call(CanvasDocument.DocumentEvent documentEvent) throws Exception {
                 if(documentEvent.getDocument() == context.getDocument()) {
@@ -584,7 +584,7 @@ public class Main implements Runnable {
         return Main.class.getResource("resources/fonts/"+s);
     }
 
-    private void buildCommonMenubar(DocContext context) {
+    private void buildCommonMenubar(DocContext context, DocModeHelper modeHelper) {
         DocumentCanvas canvas = context.getCanvas();
         //recent files menu
         Menu recentFilesMenu = new Menu().setTitle(getString("menus.recentfiles"));
@@ -610,15 +610,16 @@ public class Main implements Runnable {
             fileMenu.addItem(getString("menus.import"), new ImportAction(context));
         }
 
-        fileMenu
-                .addMenu(new Menu().setTitle(getString("menus.export"))
-                    .addItem(getString("menus.topng"),       new SavePNGAction(context))
-                    .addItem(getString("menus.tosvg"),       new SaveSVGAction(context))
-                    .addItem(getString("menus.tohtml"),      new SaveHTMLAction(context))
-                    .addItem(getString("menus.tocanvas"),    new SaveAminoCanvasAction(context))
-                    .addItem(getString("menus.topdf"),       new SavePDFAction(context))
-                    .addItem(getString("menus.tojava2d"),    new SaveJava2DAction(context))
-                );
+        Menu exportMenu = new Menu().setTitle(getString("menus.export"))
+                .addItem(getString("menus.topng"), new SavePNGAction(context))
+                .addItem(getString("menus.tosvg"), new SaveSVGAction(context))
+                .addItem(getString("menus.tohtml"), new SaveHTMLAction(context))
+                .addItem(getString("menus.tocanvas"), new SaveAminoCanvasAction(context))
+                .addItem(getString("menus.topdf"), new SavePDFAction(context))
+                .addItem(getString("menus.tojava2d"), new SaveJava2DAction(context));
+        modeHelper.addCustomExportMenus(exportMenu,context);
+        fileMenu.addMenu(exportMenu);
+
         quitAction = new QuitAction(this);
         aboutAction = new AboutAction(this);
         prefsAction = new PreferencesAction(this);
