@@ -7,6 +7,7 @@ import org.joshy.sketch.controls.Menu;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.model.SText;
 import org.joshy.sketch.model.SketchDocument;
+import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
 
@@ -145,6 +146,7 @@ public class PresoModeHelper extends VectorModeHelper {
             header.setFontName("OpenSans");
             header.setFontSize(48);
             header.setBulleted(false);
+            header.setStringProperty("text-class", "header");
             theme.styleText(header);
             page.add(header);
 
@@ -159,5 +161,12 @@ public class PresoModeHelper extends VectorModeHelper {
             theme.styleText(content);
             page.add(content);
         }
+    }
+
+    @Override
+    public void addCustomExportMenus(Menu exportMenu, DocContext context) {
+        super.addCustomExportMenus(exportMenu, context);
+        exportMenu.separator();
+        exportMenu.addItem("Export to HTML Presentation", new ExportHTMLPresentationAction((VectorDocContext)context));
     }
 }

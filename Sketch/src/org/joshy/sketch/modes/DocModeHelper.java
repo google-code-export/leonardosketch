@@ -32,5 +32,5 @@ public abstract class DocModeHelper<D extends DocContext> {
 
     public abstract SAction getNewDocAction(Main main);
 
-
+    public abstract void addCustomExportMenus(Menu exportMenu, DocContext context);
 }

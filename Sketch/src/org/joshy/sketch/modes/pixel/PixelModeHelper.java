@@ -6,6 +6,7 @@ import org.joshy.sketch.actions.NewPixelDocAction;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.controls.Menu;
 import org.joshy.sketch.model.CanvasDocument;
+import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.modes.DocModeHelper;
 import org.joshy.sketch.pixel.model.PixelDoc;
 import org.joshy.sketch.tools.CanvasTool;
@@ -52,5 +53,10 @@ public class PixelModeHelper extends DocModeHelper<PixelDocContext> {
     @Override
     public SAction getNewDocAction(Main main) {
         return new NewPixelDocAction(main);
+    }
+
+    @Override
+    public void addCustomExportMenus(Menu exportMenu, DocContext context) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }
