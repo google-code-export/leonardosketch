@@ -64,6 +64,7 @@ public class SPath extends SShape implements SelfDrawable, HasTransformedBounds 
                 bds.getHeight());
     }
 
+
     @Override
     public boolean contains(Point2D point) {
         if(path2d != null) {
@@ -144,6 +145,15 @@ public class SPath extends SShape implements SelfDrawable, HasTransformedBounds 
             }
         }
         return pth;
+    }
+
+    public Path2D.Double toTransformedPath() throws NoninvertibleTransformException {
+        Path2D.Double p2d = SPath.toPath(this);
+        AffineTransform af = new AffineTransform();
+        af.translate(getTranslateX(),getTranslateY());
+        af.rotate(Math.toRadians(getRotate()));
+        af.scale(getScaleX(), getScaleY());
+        return new Path2D.Double(p2d,af.createInverse());
     }
 
 

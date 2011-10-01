@@ -34,6 +34,9 @@ public class STransformNode extends SNode implements SelfDrawable {
     public STransformNode(final SNode node, final VectorDocContext context) {
         this.child = node;
         Bounds bounds = this.child.getBounds();
+        if(this.child instanceof HasTransformedBounds) {
+            bounds = ((HasTransformedBounds)this.child).getTransformedBounds();
+        }
         final double w = 0;//bounds.getWidth()/2.0;
         final double h = 0;//bounds.getHeight()/2.0;
         this.setTranslateX(this.child.getTranslateX() + w);
@@ -138,7 +141,9 @@ public class STransformNode extends SNode implements SelfDrawable {
         @Override
         public void draw(GFX g, SketchCanvas sketchCanvas) {
             g.setPaint(FlatColor.GREEN);
-            g.drawOval(getX() - 5, getY() - 5, 10, 10);
+            Point2D pt = sketchCanvas.transformToDrawing(getX(),getY());
+
+            g.drawOval(pt.getX() - 5, pt.getY() - 5, 10, 10);
         }
     }
 
@@ -181,7 +186,8 @@ public class STransformNode extends SNode implements SelfDrawable {
         @Override
         public void draw(GFX g, SketchCanvas sketchCanvas) {
             g.setPaint(FlatColor.GREEN);
-            g.drawOval(getX() - 5, getY() - 5, 10, 10);
+            Point2D pt = sketchCanvas.transformToDrawing(getX(),getY());
+            g.drawOval(pt.getX() - 5, pt.getY() - 5, 10, 10);
         }
     }
 

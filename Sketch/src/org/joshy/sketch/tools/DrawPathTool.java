@@ -3,6 +3,7 @@ package org.joshy.sketch.tools;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.sketch.Main;
@@ -14,6 +15,8 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -185,18 +188,8 @@ public class DrawPathTool extends CanvasTool {
 
     @Override
     protected void mouseMoved(MouseEvent event, Point2D.Double cursor) {
-        curr = translate(cursor,node);
+        curr = toolToModel(cursor);
         refreshStates();
-    }
-
-    private Point2D.Double translate(Point2D pt, SPath node) {
-        if(node != null) {
-            return new Point2D.Double(
-                    pt.getX()-node.getTranslateX(),
-                    pt.getY()-node.getTranslateY()
-            );
-        }
-        return new Point2D.Double(pt.getX(),pt.getY());
     }
 
     private double getPointThreshold() {
@@ -273,8 +266,8 @@ public class DrawPathTool extends CanvasTool {
 
     @Override
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
-        start = translate(cursor,node);
-        prev = translate(cursor,node);
+        start = toolToModel(cursor);
+        prev = toolToModel(cursor);
         if(node == null) {
             node = new SPath();
             currentPoint = new SPath.PathPoint(start.x,start.y);
@@ -434,7 +427,7 @@ public class DrawPathTool extends CanvasTool {
     @Override
     protected void mouseDragged(MouseEvent event, Point2D.Double cursor) {
         SPath.PathPoint point = null;
-        curr = translate(cursor,node);
+        curr = toolToModel(cursor);
 
         if(this.currentPoint != null) {
             point = this.currentPoint;
@@ -478,7 +471,7 @@ public class DrawPathTool extends CanvasTool {
             }
             context.redraw();
         }
-        prev = translate(cursor,node);
+        prev = toolToModel(cursor);
     }
 
     @Override
@@ -517,26 +510,34 @@ public class DrawPathTool extends CanvasTool {
         if(node != null) {
 
             //draw the path and handle overlays
+            g.setPureStrokes(true);
+            g.setPaint(FlatColor.PURPLE);
+            Path2D.Double path = SPath.toPath(node);
+
             g.translate(context.getSketchCanvas().getPanX(), context.getSketchCanvas().getPanY());
             g.scale(context.getSketchCanvas().getScale(), context.getSketchCanvas().getScale());
             g.translate(node.getTranslateX(),node.getTranslateY());
-
-            //node.drawPath(g,node);
-            g.setPureStrokes(true);
-            Path2D.Double path = SPath.toPath(node);
+            g.rotate(node.getRotate(), Transform.Z_AXIS);
+            g.scale(node.getScaleX(),node.getScaleY());
             g.drawPath(path);
+            g.scale(1/node.getScaleX(),1/node.getScaleY());
+            g.rotate(-node.getRotate(), Transform.Z_AXIS);
+            g.translate(-node.getTranslateX(),-node.getTranslateY());
+            g.scale(1/context.getSketchCanvas().getScale(), 1/context.getSketchCanvas().getScale());
+            g.translate(-context.getSketchCanvas().getPanX(), -context.getSketchCanvas().getPanY());
             g.setPureStrokes(false);
+
+
 
             //draw the add location
             if(addLocation != null) {
                 g.setPaint(FlatColor.RED);
+                Point2D pt = modelToScreen(addLocation.point);
                 double size = 10.0/context.getSketchCanvas().getScale();
-                g.drawOval(addLocation.point.getX()-size/2,addLocation.point.getY()-size/2,size,size);
+                g.drawOval(pt.getX()-size/2,pt.getY()-size/2,size,size);
             }
 
-            g.translate(-node.getTranslateX(),-node.getTranslateY());
-            g.scale(1/context.getSketchCanvas().getScale(), 1/context.getSketchCanvas().getScale());
-            g.translate(-context.getSketchCanvas().getPanX(), -context.getSketchCanvas().getPanY());
+
             if(adjusting) {
                 drawHandles(g,hoverPoint);
             }
@@ -548,16 +549,16 @@ public class DrawPathTool extends CanvasTool {
             //draw text notifications
             if(couldClose) {
                 SPath.PathPoint point = node.points.get(0);
-                Point2D.Double pt = context.getSketchCanvas().transformToDrawing(node.getTranslateX()+point.x,node.getTranslateY()+point.y);
+                Point2D pt = modelToScreen(point.x,point.y);
                 g.setPaint(FlatColor.RED);
-                g.drawRect(pt.x-2,pt.y-2,5,5);
+                g.drawRect(pt.getX()-2,pt.getY()-2,5,5);
 
                 g.setPaint(FlatColor.BLACK);
-                g.drawText("close", Font.DEFAULT,pt.x-3,pt.y+30);
+                g.drawText("close", Font.DEFAULT,pt.getX()-3,pt.getY()+30);
             }
             
             if(hoverPoint != null) {
-                Point2D.Double hp = context.getSketchCanvas().transformToDrawing(node.getTranslateX()+hoverPoint.x,node.getTranslateY()+hoverPoint.y);
+                Point2D.Double hp = modelToScreen(hoverPoint.x,hoverPoint.y);
                 if(couldMove && hoverPoint != null) {
                     g.setPaint(FlatColor.RED);
                     g.drawRect(hp.x-2,hp.y-2,5,5);
@@ -594,24 +595,21 @@ public class DrawPathTool extends CanvasTool {
         int last = node.points.size()-1;
         for(int i=0; i<node.points.size(); i++) {
             SPath.PathPoint point = node.points.get(i);
-            Point2D.Double xy = context.getSketchCanvas().transformToDrawing(point.x+node.getTranslateX(),point.y+node.getTranslateY());
-            Point2D.Double c1 = context.getSketchCanvas().transformToDrawing(point.cx1+node.getTranslateX(),point.cy1+node.getTranslateY());
-            Point2D.Double c2 = context.getSketchCanvas().transformToDrawing(point.cx2+node.getTranslateX(),point.cy2+node.getTranslateY());
-
+            point = modelToScreen(point);
             g.setPaint(FlatColor.BLACK);
-            g.fillRect(xy.x-size/2,xy.y-size/2,size,size);
+            g.fillRect(point.x-size/2,point.y-size/2,size,size);
             g.setPaint(FlatColor.WHITE);
-            g.fillRect(xy.x-size/2+sw,xy.y-size/2+sw,size-sw*2,size-sw*2);
+            g.fillRect(point.x-size/2+sw,point.y-size/2+sw,size-sw*2,size-sw*2);
             if(i == last) {
                 g.setPaint(FlatColor.BLACK);
-                g.fillRect(c1.x-2-1,c1.y-2-1,size+2,size+2);
-                g.fillRect(c2.x-2-1,c2.y-2-1,size+2,size+2);
+                g.fillRect(point.cx1-2-1,point.cy1-2-1,size+2,size+2);
+                g.fillRect(point.cx2-2-1,point.cy2-2-1,size+2,size+2);
                 g.setPaint(FlatColor.RED);
-                g.fillRect(c1.x-2,c1.y-2,size,size);
-                g.fillRect(c2.x-2,c2.y-2,size,size);
+                g.fillRect(point.cx1-2,point.cy1-2,size,size);
+                g.fillRect(point.cx2-2,point.cy2-2,size,size);
                 g.setPaint(FlatColor.RED);
-                g.drawLine(xy.x,xy.y,c1.x,c1.y);
-                g.drawLine(xy.x,xy.y,c2.x,c2.y);
+                g.drawLine(point.x,point.y,point.cx1,point.cy1);
+                g.drawLine(point.x,point.y,point.cx2,point.cy2);
             }
         }
         g.setPureStrokes(false);
@@ -619,7 +617,7 @@ public class DrawPathTool extends CanvasTool {
 
     private void drawHandles(GFX g, SPath.PathPoint point) {
         double size = 5.0;
-        point = convertToDrawing(point);
+        point = modelToScreen(point);
 
         //the point itself
         g.drawRect(point.x-2,point.y-2,size,size);
@@ -633,11 +631,44 @@ public class DrawPathTool extends CanvasTool {
         g.drawLine(point.x,point.y,point.cx2,point.cy2);
     }
 
-    private SPath.PathPoint convertToDrawing(SPath.PathPoint point) {
-        Point2D.Double xy = context.getSketchCanvas().transformToDrawing(point.x+node.getTranslateX(),point.y+node.getTranslateY());
-        Point2D.Double c1 = context.getSketchCanvas().transformToDrawing(point.cx1+node.getTranslateX(),point.cy1+node.getTranslateY());
-        Point2D.Double c2 = context.getSketchCanvas().transformToDrawing(point.cx2+node.getTranslateX(),point.cy2+node.getTranslateY());
+    private SPath.PathPoint modelToScreen(SPath.PathPoint point) {
+        Point2D.Double xy = modelToScreen(point.x,point.y);
+        Point2D.Double c1 = modelToScreen(point.cx1,point.cy1);
+        Point2D.Double c2 = modelToScreen(point.cx2,point.cy2);
         return new SPath.PathPoint(xy.x,xy.y,c1.x,c1.y,c2.x,c2.y);
+    }
+    private Point2D.Double modelToScreen(Point2D pt) {
+        return modelToScreen(pt.getX(),pt.getY());
+    }
+    private Point2D.Double modelToScreen(double x, double y) {
+        return context.getSketchCanvas().transformToDrawing(modelToTool(new Point2D.Double(x,y),node));
+    }
+    private Point2D.Double modelToTool(Point2D pt, SPath node) {
+        if(node != null) {
+                AffineTransform af = new AffineTransform();
+                af.translate(node.getTranslateX(),node.getTranslateY());
+                af.rotate(Math.toRadians(node.getRotate()));
+                af.scale(node.getScaleX(), node.getScaleY());
+                Point2D pt2 = af.transform(pt, null);
+                return new Point2D.Double(pt2.getX(),pt2.getY());
+        }
+        return new Point2D.Double(pt.getX(),pt.getY());
+    }
+
+    private Point2D.Double toolToModel(Point2D pt) {
+        if(node != null) {
+            try {
+                AffineTransform af = new AffineTransform();
+                af.translate(node.getTranslateX(),node.getTranslateY());
+                af.rotate(Math.toRadians(node.getRotate()));
+                af.scale(node.getScaleX(), node.getScaleY());
+                Point2D pt2 = af.inverseTransform(pt, null);
+                return new Point2D.Double(pt2.getX(),pt2.getY());
+            } catch (NoninvertibleTransformException e) {
+                e.printStackTrace();
+            }
+        }
+        return new Point2D.Double(pt.getX(),pt.getY());
     }
 
     public static Path2D toPath2D(SPath node) {
