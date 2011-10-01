@@ -215,6 +215,9 @@ public class Selection {
         double y2 = Double.NEGATIVE_INFINITY;
         for(SNode n : items()) {
             Bounds b = n.getBounds();
+            if(n instanceof HasTransformedBounds) {
+                b = ((HasTransformedBounds)n).getTransformedBounds();
+            }
             x  = Math.min(x,  b.getX());
             y  = Math.min(y,  b.getY());
             x2 = Math.max(x2, b.getX2());
