@@ -610,6 +610,9 @@ public class FloatingPropertiesPanel extends VFlexBox {
             //only pay attention to events for our own context doc
             if(event.getSelection().getDocument() != context.getDocument()) return;
             if(!manager.propMan.isClassAvailable(SNode.class)) return;
+            if(manager.propMan.isClassAvailable(STransformNode.class)) {
+                setVisible(false);
+            }
             selected = !event.getSelection().isEmpty();
             selection = event.getSelection();
             updatePanelContents();

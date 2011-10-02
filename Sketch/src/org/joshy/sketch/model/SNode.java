@@ -17,6 +17,8 @@ public abstract class SNode {
     private double scaleX = 1.0;
     private double scaleY = 1.0;
     private double rotate = 0.0;
+    private double anchorX = 0;
+    private double anchorY = 0;
     private String id = null;
 
     public abstract Bounds getBounds();
@@ -39,10 +41,31 @@ public abstract class SNode {
         this.translateY = translateY;
     }
 
+    public double getAnchorX() {
+        return anchorX;
+    }
+
+    public void setAnchorX(double anchorX) {
+        this.anchorX = anchorX;
+    }
+
+    public double getAnchorY() {
+        return anchorY;
+    }
+
+    public void setAnchorY(double anchorY) {
+        this.anchorY = anchorY;
+    }
+
     public SNode duplicate(SNode dupe) {
         if(dupe == null) throw new IllegalArgumentException("SShape.duplicate: duplicate shape argument can't be null!");
         dupe.setTranslateX(this.getTranslateX());
         dupe.setTranslateY(this.getTranslateY());
+        dupe.setRotate(this.getRotate());
+        dupe.setScaleX(this.getScaleX());
+        dupe.setScaleY(this.getScaleY());
+        dupe.setAnchorX(this.getAnchorX());
+        dupe.setAnchorY(this.getAnchorY());
         return dupe;
     }
 

@@ -735,6 +735,10 @@ public class SelectMoveTool extends CanvasTool {
         if(moved) {
             shouldShowFloatingPanel = true;
         }
+        // never show the floating panel on transform nodes
+        if(context.getSelection().size() == 1 && context.getSelection().firstItem() instanceof STransformNode) {
+            shouldShowFloatingPanel = false;
+        }
 
         if(moved) {
             final Map<SNode,Point2D> oldPoints = new HashMap<SNode,Point2D>();
