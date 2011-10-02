@@ -33,12 +33,14 @@ public class STransformNode extends SNode implements SelfDrawable {
 
     public STransformNode(final SNode node, final VectorDocContext context) {
         this.child = node;
+        this.setAnchorX(0);
+        this.setAnchorY(0);
         Bounds bounds = this.child.getBounds();
         if(this.child instanceof HasTransformedBounds) {
             bounds = ((HasTransformedBounds)this.child).getTransformedBounds();
         }
-        final double w = 0;//bounds.getWidth()/2.0;
-        final double h = 0;//bounds.getHeight()/2.0;
+        final double w = 0;
+        final double h = 0;
         this.setTranslateX(this.child.getTranslateX() + w);
         this.setTranslateY(this.child.getTranslateY() + h);
         angle = -child.getRotate();
@@ -85,29 +87,27 @@ public class STransformNode extends SNode implements SelfDrawable {
         double a = angle;
 
 
-        g.translate(0,0);
+        g.translate(child.getAnchorX(),child.getAnchorY());
         g.scale(scx, scy);
         g.rotate(-a, Transform.Z_AXIS);
-        g.translate(-0, -0);
+        g.translate(-child.getAnchorX(),-child.getAnchorY());
 
-        double x = child.getTranslateX();
-        double y = child.getTranslateY();
-        g.translate(x,y);
         ((SelfDrawable)child).draw(g);
-        g.translate(-x,-y);
 
 
-        g.translate(0,0);
+        g.translate(child.getAnchorX(),child.getAnchorY());
         g.rotate(a, Transform.Z_AXIS);
         g.scale(1.0 / scx, 1.0 / scy);
-        g.translate(-0, -0);
+        g.translate(-child.getAnchorX(),-child.getAnchorY());
 
+        g.translate(child.getAnchorX(),child.getAnchorY());
         g.setPaint(FlatColor.BLUE);
         radius = 50.0*scy;
         g.drawOval(0-radius, 0-radius, radius*2, radius*2);
         Point2D pt2 = GeomUtil.calcPoint(new Point(0, 0), angle+90, radius+20);
         g.drawLine(0,0,pt2.getX(),pt2.getY());
         g.drawLine(0,0,0,+radius);
+        g.translate(-child.getAnchorX(),-child.getAnchorY());
     }
 
     public static class TransformScaleHandle extends Handle {
@@ -119,7 +119,7 @@ public class STransformNode extends SNode implements SelfDrawable {
 
         @Override
         public double getX() {
-            return this.trans.getTranslateX();
+            return this.trans.getTranslateX() + trans.child.getAnchorX();
         }
 
         @Override
@@ -128,12 +128,12 @@ public class STransformNode extends SNode implements SelfDrawable {
 
         @Override
         public double getY() {
-            return trans.getTranslateY()+50*trans.scy;
+            return trans.getTranslateY()+50*trans.scy + trans.child.getAnchorY();
         }
 
         @Override
         public void setY(double y, boolean constrain) {
-            double ty = y-this.trans.getTranslateY();
+            double ty = y-this.trans.getTranslateY()-trans.child.getAnchorY();
             trans.scy = ((ty)/50.0);
             trans.scx = trans.scy;
         }
@@ -161,12 +161,12 @@ public class STransformNode extends SNode implements SelfDrawable {
         public double getX() {
             double radius = 50.0*trans.scy;
             Point2D pt2 = GeomUtil.calcPoint(new Point(0, 0), trans.angle+90, radius);
-            return this.trans.getTranslateX() + pt2.getX();
+            return trans.getTranslateX() + pt2.getX() + trans.child.getAnchorX();
         }
 
         @Override
         public void setX(double x, boolean constrain) {
-            this.x = x - this.trans.getTranslateX();
+            this.x = x - trans.getTranslateX() - trans.child.getAnchorX();
             double a = GeomUtil.calcAngle(new Point2D.Double(0,0),new Point2D.Double(this.x,this.y));
             trans.setAngle(Math.toDegrees(a)-90);
         }
@@ -175,12 +175,12 @@ public class STransformNode extends SNode implements SelfDrawable {
         public double getY() {
             double radius = 50.0*trans.scy;
             Point2D pt2 = GeomUtil.calcPoint(new Point(0, 0), trans.angle+90, radius);
-            return this.trans.getTranslateY() + pt2.getY();
+            return this.trans.getTranslateY() + pt2.getY() + trans.child.getAnchorY();
         }
 
         @Override
         public void setY(double y, boolean constrain) {
-            this.y = y - this.trans.getTranslateY();
+            this.y = y - this.trans.getTranslateY() - trans.child.getAnchorY();
         }
 
         @Override

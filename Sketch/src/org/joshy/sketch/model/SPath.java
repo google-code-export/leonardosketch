@@ -46,8 +46,10 @@ public class SPath extends SShape implements SelfDrawable, HasTransformedBounds 
         if(path2d != null) {
             AffineTransform af = new AffineTransform();
             af.translate(getTranslateX(),getTranslateY());
+            af.translate(getAnchorX(),getAnchorY());
             af.rotate(Math.toRadians(getRotate()));
             af.scale(getScaleX(), getScaleY());
+            af.translate(-getAnchorX(),-getAnchorY());
             Shape sh = af.createTransformedShape(path2d);
             Rectangle2D bds = sh.getBounds2D();
             return toBounds(bds);
@@ -291,9 +293,13 @@ public class SPath extends SShape implements SelfDrawable, HasTransformedBounds 
     public void normalize() {
         double minX = Double.MAX_VALUE;
         double minY = Double.MAX_VALUE;
+        double maxX = Double.MIN_VALUE;
+        double maxY = Double.MIN_VALUE;
         for(PathPoint pt : points) {
             minX = Math.min(pt.x,minX);
             minY = Math.min(pt.y,minY);
+            maxX = Math.max(pt.x,maxX);
+            maxY = Math.max(pt.y,maxY);
         }
         for(PathPoint pt : points) {
             pt.x -= minX;
@@ -308,6 +314,8 @@ public class SPath extends SShape implements SelfDrawable, HasTransformedBounds 
         setTranslateX(getTranslateX()+minX);
         setTranslateY(getTranslateY()+minY);
         recalcPath();
+        setAnchorX((int)((maxX-minX)/2.0));
+        setAnchorY((int)((maxY-minY)/2.0));
     }
 
     public PathPoint moveTo(double x, double y) {

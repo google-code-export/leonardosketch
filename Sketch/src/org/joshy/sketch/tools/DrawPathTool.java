@@ -516,12 +516,16 @@ public class DrawPathTool extends CanvasTool {
 
             g.translate(context.getSketchCanvas().getPanX(), context.getSketchCanvas().getPanY());
             g.scale(context.getSketchCanvas().getScale(), context.getSketchCanvas().getScale());
-            g.translate(node.getTranslateX(),node.getTranslateY());
+            g.translate(node.getTranslateX(), node.getTranslateY());
+            g.translate(node.getAnchorX(), node.getAnchorY());
             g.rotate(node.getRotate(), Transform.Z_AXIS);
-            g.scale(node.getScaleX(),node.getScaleY());
+            g.scale(node.getScaleX(), node.getScaleY());
+            g.translate(-node.getAnchorX(), -node.getAnchorY());
             g.drawPath(path);
-            g.scale(1/node.getScaleX(),1/node.getScaleY());
+            g.translate(node.getAnchorX(), node.getAnchorY());
+            g.scale(1 / node.getScaleX(), 1 / node.getScaleY());
             g.rotate(-node.getRotate(), Transform.Z_AXIS);
+            g.translate(-node.getAnchorX(), -node.getAnchorY());
             g.translate(-node.getTranslateX(),-node.getTranslateY());
             g.scale(1/context.getSketchCanvas().getScale(), 1/context.getSketchCanvas().getScale());
             g.translate(-context.getSketchCanvas().getPanX(), -context.getSketchCanvas().getPanY());
@@ -638,19 +642,21 @@ public class DrawPathTool extends CanvasTool {
         return new SPath.PathPoint(xy.x,xy.y,c1.x,c1.y,c2.x,c2.y);
     }
     private Point2D.Double modelToScreen(Point2D pt) {
-        return modelToScreen(pt.getX(),pt.getY());
+        return modelToScreen(pt.getX(), pt.getY());
     }
     private Point2D.Double modelToScreen(double x, double y) {
         return context.getSketchCanvas().transformToDrawing(modelToTool(new Point2D.Double(x,y),node));
     }
     private Point2D.Double modelToTool(Point2D pt, SPath node) {
         if(node != null) {
-                AffineTransform af = new AffineTransform();
-                af.translate(node.getTranslateX(),node.getTranslateY());
-                af.rotate(Math.toRadians(node.getRotate()));
-                af.scale(node.getScaleX(), node.getScaleY());
-                Point2D pt2 = af.transform(pt, null);
-                return new Point2D.Double(pt2.getX(),pt2.getY());
+            AffineTransform af = new AffineTransform();
+            af.translate(node.getTranslateX(),node.getTranslateY());
+            af.translate(node.getAnchorX(),node.getAnchorY());
+            af.rotate(Math.toRadians(node.getRotate()));
+            af.scale(node.getScaleX(), node.getScaleY());
+            af.translate(-node.getAnchorX(), -node.getAnchorY());
+            Point2D pt2 = af.transform(pt, null);
+            return new Point2D.Double(pt2.getX(),pt2.getY());
         }
         return new Point2D.Double(pt.getX(),pt.getY());
     }
@@ -660,8 +666,10 @@ public class DrawPathTool extends CanvasTool {
             try {
                 AffineTransform af = new AffineTransform();
                 af.translate(node.getTranslateX(),node.getTranslateY());
+                af.translate(node.getAnchorX(),node.getAnchorY());
                 af.rotate(Math.toRadians(node.getRotate()));
                 af.scale(node.getScaleX(), node.getScaleY());
+                af.translate(-node.getAnchorX(), -node.getAnchorY());
                 Point2D pt2 = af.inverseTransform(pt, null);
                 return new Point2D.Double(pt2.getX(),pt2.getY());
             } catch (NoninvertibleTransformException e) {

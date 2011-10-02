@@ -226,16 +226,20 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
 
     private void draw(GFX g, SNode node) {
         g.translate(node.getTranslateX(),node.getTranslateY());
+        g.translate(node.getAnchorX(),node.getAnchorY());
         g.scale(node.getScaleX(),node.getScaleY());
         g.rotate(node.getRotate(), Transform.Z_AXIS);
+        g.translate(-node.getAnchorX(),-node.getAnchorY());
         if(node instanceof SelfDrawable) {
             ((SelfDrawable)node).draw(g);
         }
         if(node instanceof Button9) {
             draw(g,(Button9)node);
         }
+        g.translate(node.getAnchorX(),node.getAnchorY());
         g.rotate(-node.getRotate(), Transform.Z_AXIS);
         g.scale(1/node.getScaleX(),1/node.getScaleY());
+        g.translate(-node.getAnchorX(),-node.getAnchorY());
         g.translate(-node.getTranslateX(),-node.getTranslateY());
     }
 
