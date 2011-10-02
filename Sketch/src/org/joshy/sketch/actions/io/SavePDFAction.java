@@ -7,8 +7,11 @@ import com.lowagie.text.pdf.DefaultFontMapper;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfTemplate;
 import com.lowagie.text.pdf.PdfWriter;
+import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.SAction;
+import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.PixelDocument;
+import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
 
@@ -57,21 +60,14 @@ public class SavePDFAction extends SAction {
 
     public static void export(File file, SketchDocument doc) {
         try {
-            Rectangle pageSize = new Rectangle(500,500);
+
+            Rectangle pageSize = new Rectangle((int)doc.getWidth(),(int)doc.getHeight());
             Document pdf = new Document(pageSize);
             PdfWriter writer = PdfWriter.getInstance(pdf, new FileOutputStream(file));
-            pdf.addCreator("Java FX Designer");
+            pdf.addCreator("Leonardo Sketch");
             pdf.open();
-            PdfContentByte cb = writer.getDirectContent();
-
-            PdfTemplate tmp = cb.createTemplate(500,500);
-            Graphics2D g = tmp.createGraphics(500,500, new DefaultFontMapper());
-            SavePNGAction.export(g,doc);
-            //canvas.paintToExport(g);
-            g.dispose();
-            cb.addTemplate(tmp, 0, 0);
+            ExportProcessor.process(new PDFExporter(pdf), writer, doc);
             pdf.close();
-            PDFContext ctx = new PDFContext(file);
         } catch (DocumentException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         } catch (FileNotFoundException e) {
@@ -79,9 +75,51 @@ public class SavePDFAction extends SAction {
         }
     }
 
-    private static class PDFContext {
-        public PDFContext(File file) {
+    private static class PDFExporter implements ShapeExporter<PdfWriter> {
+        private PdfTemplate template;
+        private PdfContentByte cb;
+        private Graphics2D g;
+        private Document pdf;
 
+        public PDFExporter(Document pdf) {
+            this.pdf = pdf;
+        }
+
+        public void docStart(PdfWriter out, SketchDocument doc) {
+        }
+
+        public void pageStart(PdfWriter out, SketchDocument.SketchPage page) {
+            cb = out.getDirectContent();
+            template = cb.createTemplate((int)page.getDocument().getWidth(), (int)page.getDocument().getHeight());
+            g = template.createGraphics((int)page.getDocument().getWidth(), (int)page.getDocument().getHeight(),
+                    new DefaultFontMapper());
+            ExportProcessor.processFragment(new SavePNGAction.PNGExporter(), g, page.getNodes());
+        }
+
+        public void exportPre(PdfWriter out, SNode shape) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public void exportPost(PdfWriter out, SNode shape) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public void pageEnd(PdfWriter out, SketchDocument.SketchPage page) {
+            g.dispose();
+            cb.addTemplate(template, 0, 0);
+            pdf.newPage();
+        }
+
+        public void docEnd(PdfWriter out, SketchDocument document) {
+            //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public boolean isContainer(SNode n) {
+            return false;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        public Iterable<? extends SNode> getChildNodes(SNode n) {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
         }
     }
 }

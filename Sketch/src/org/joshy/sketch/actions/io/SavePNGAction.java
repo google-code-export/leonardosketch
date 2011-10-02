@@ -120,7 +120,7 @@ public class SavePNGAction extends SAction {
     }
 
 
-    private static class PNGExporter implements ShapeExporter<Graphics2D> {
+    public static class PNGExporter implements ShapeExporter<Graphics2D> {
         public void docStart(Graphics2D g2, SketchDocument doc) {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
