@@ -78,23 +78,27 @@ public class STransformNode extends SNode implements SelfDrawable {
 
         double a = angle;
 
-
+        //draw the child
         g.translate(child.getAnchorX(),child.getAnchorY());
         g.scale(scx, scy);
         g.rotate(-a, Transform.Z_AXIS);
         g.translate(-child.getAnchorX(),-child.getAnchorY());
-
         ((SelfDrawable)child).draw(g);
-
-
         g.translate(child.getAnchorX(),child.getAnchorY());
         g.rotate(a, Transform.Z_AXIS);
         g.scale(1.0 / scx, 1.0 / scy);
         g.translate(-child.getAnchorX(), -child.getAnchorY());
 
+        //draw the overlay
         g.translate(child.getAnchorX(),child.getAnchorY());
-        g.setPaint(FlatColor.BLUE);
+        g.setPaint(FlatColor.BLACK);
         radius = 50.0*scy;
+        g.drawOval(0-radius, 0-radius, radius*2, radius*2);
+        radius++;
+        g.setPaint(FlatColor.WHITE);
+        g.drawOval(0-radius, 0-radius, radius*2, radius*2);
+        radius++;
+        g.setPaint(FlatColor.BLACK);
         g.drawOval(0-radius, 0-radius, radius*2, radius*2);
         Point2D pt2 = GeomUtil.calcPoint(new Point(0, 0), angle+90, radius+20);
         g.drawLine(0,0,pt2.getX(),pt2.getY());
