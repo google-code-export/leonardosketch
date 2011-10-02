@@ -7,7 +7,6 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.GeomUtil;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.canvas.SketchCanvas;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -35,30 +34,23 @@ public class STransformNode extends SNode implements SelfDrawable {
         this.child = node;
         this.setAnchorX(0);
         this.setAnchorY(0);
-        Bounds bounds = this.child.getBounds();
-        if(this.child instanceof HasTransformedBounds) {
-            bounds = ((HasTransformedBounds)this.child).getTransformedBounds();
-        }
-        final double w = 0;
-        final double h = 0;
-        this.setTranslateX(this.child.getTranslateX() + w);
-        this.setTranslateY(this.child.getTranslateY() + h);
+        this.setTranslateX(this.child.getTranslateX());
+        this.setTranslateY(this.child.getTranslateY());
         angle = -child.getRotate();
         scx = child.getScaleX();
         scy = child.getScaleY();
-        this.child.setTranslateX(0 - w);
-        this.child.setTranslateY(0 - h);
+        this.child.setTranslateX(0);
+        this.child.setTranslateY(0);
 
         EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, new Callback<Selection.SelectionChangeEvent>(){
             public void call(Selection.SelectionChangeEvent selectionChangeEvent) throws Exception {
                 if(dead) return;
                 if(selectionChangeEvent.getSelection().contains(STransformNode.this)) return;
-                u.p("selection changed. i've been unselected");
                 dead = true;
                 context.getDocument().getCurrentPage().remove(STransformNode.this);
                 context.getDocument().getCurrentPage().add(child);
-                child.setTranslateX(getTranslateX() - w);
-                child.setTranslateY(getTranslateY() - h);
+                child.setTranslateX(getTranslateX());
+                child.setTranslateY(getTranslateY());
                 child.setRotate(-angle);
                 child.setScaleX(scx);
                 child.setScaleY(scy);
@@ -98,7 +90,7 @@ public class STransformNode extends SNode implements SelfDrawable {
         g.translate(child.getAnchorX(),child.getAnchorY());
         g.rotate(a, Transform.Z_AXIS);
         g.scale(1.0 / scx, 1.0 / scy);
-        g.translate(-child.getAnchorX(),-child.getAnchorY());
+        g.translate(-child.getAnchorX(), -child.getAnchorY());
 
         g.translate(child.getAnchorX(),child.getAnchorY());
         g.setPaint(FlatColor.BLUE);
@@ -107,7 +99,7 @@ public class STransformNode extends SNode implements SelfDrawable {
         Point2D pt2 = GeomUtil.calcPoint(new Point(0, 0), angle+90, radius+20);
         g.drawLine(0,0,pt2.getX(),pt2.getY());
         g.drawLine(0,0,0,+radius);
-        g.translate(-child.getAnchorX(),-child.getAnchorY());
+        g.translate(-child.getAnchorX(), -child.getAnchorY());
     }
 
     public static class TransformScaleHandle extends Handle {

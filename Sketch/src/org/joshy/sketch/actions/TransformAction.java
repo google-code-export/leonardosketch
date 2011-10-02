@@ -1,5 +1,7 @@
 package org.joshy.sketch.actions;
 
+import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.HasTransformedBounds;
 import org.joshy.sketch.model.SNode;
@@ -18,6 +20,18 @@ public class TransformAction extends SAction {
 
     public TransformAction(VectorDocContext context) {
         this.context = context;
+        EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, new Callback<Selection.SelectionChangeEvent>() {
+            public void call(Selection.SelectionChangeEvent selectionChangeEvent) throws Exception {
+                int size = selectionChangeEvent.getSelection().size();
+                if(size != 1) {
+                    setEnabled(false);
+                    return;
+                }
+                SNode node = selectionChangeEvent.getSelection().firstItem();
+                setEnabled(node instanceof HasTransformedBounds);
+            }
+        });
+
     }
 
     @Override
