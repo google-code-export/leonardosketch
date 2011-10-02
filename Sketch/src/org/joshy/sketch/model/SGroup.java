@@ -1,6 +1,7 @@
 package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.node.Bounds;
 
 import java.awt.geom.Point2D;
@@ -107,13 +108,19 @@ public class SGroup extends SNode implements SelfDrawable {
 
     public void draw(GFX g) {
         for(SNode node : this.getNodes()) {
-            double x = node.getTranslateX();
-            double y = node.getTranslateY();
-            g.translate(x,y);
+            g.translate(node.getTranslateX(),node.getTranslateY());
+            g.translate(node.getAnchorX(),node.getAnchorY());
+            g.scale(node.getScaleX(),node.getScaleY());
+            g.rotate(node.getRotate(), Transform.Z_AXIS);
+            g.translate(-node.getAnchorX(),-node.getAnchorY());
             if(node instanceof SelfDrawable) {
                 ((SelfDrawable)node).draw(g);
             }
-            g.translate(-x,-y);
+            g.translate(node.getAnchorX(),node.getAnchorY());
+            g.rotate(-node.getRotate(), Transform.Z_AXIS);
+            g.scale(1/node.getScaleX(),1/node.getScaleY());
+            g.translate(-node.getAnchorX(),-node.getAnchorY());
+            g.translate(-node.getTranslateX(),-node.getTranslateY());
         }
     }
 
