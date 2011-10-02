@@ -3,11 +3,13 @@ package org.joshy.sketch.model;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.sketch.util.Util;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
 /**
 * Created by IntelliJ IDEA.
@@ -16,7 +18,7 @@ import java.awt.geom.Point2D;
 * Time: 10:45:00 PM
 * To change this template use File | Settings | File Templates.
 */
-public class NGon extends SShape implements SelfDrawable {
+public class NGon extends SShape implements SelfDrawable, HasTransformedBounds {
     private int sides;
     private double radius = 50;
     private double innerRadius = 40;
@@ -187,6 +189,24 @@ public class NGon extends SShape implements SelfDrawable {
         path.setStrokeWidth(this.getStrokeWidth());
         path.setStrokePaint(this.getStrokePaint());
         return path;
+    }
+
+    public Bounds getTransformedBounds() {
+        Polygon poly = new Polygon();
+        double[] points = toPoints();
+        for(int i=0; i<points.length; i+=2) {
+            poly.addPoint((int)points[i],(int)points[i+1]);
+        }
+
+        AffineTransform af = new AffineTransform();
+        af.translate(getTranslateX(),getTranslateY());
+        af.translate(getAnchorX(),getAnchorY());
+        af.rotate(Math.toRadians(getRotate()));
+        af.scale(getScaleX(), getScaleY());
+        af.translate(-getAnchorX(),-getAnchorY());
+        Shape sh = af.createTransformedShape(poly);
+        Rectangle2D bds = sh.getBounds2D();
+        return Util.toBounds(bds);
     }
 
     @Override

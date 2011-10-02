@@ -3,6 +3,7 @@ package org.joshy.sketch.model;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.sketch.util.Util;
 
 import java.awt.*;
 import java.awt.geom.*;
@@ -52,19 +53,12 @@ public class SPath extends SShape implements SelfDrawable, HasTransformedBounds 
             af.translate(-getAnchorX(),-getAnchorY());
             Shape sh = af.createTransformedShape(path2d);
             Rectangle2D bds = sh.getBounds2D();
-            return toBounds(bds);
+            return Util.toBounds(bds);
 
         }
         return new Bounds(0,0,100,100);
     }
 
-    private Bounds toBounds(Rectangle2D bds) {
-        return new Bounds(
-                bds.getX(),
-                bds.getY(),
-                bds.getWidth(),
-                bds.getHeight());
-    }
 
 
     @Override
@@ -311,11 +305,11 @@ public class SPath extends SShape implements SelfDrawable, HasTransformedBounds 
             pt.cy1 -= minY;
             pt.cy2 -= minY;
         }
-        setTranslateX(getTranslateX()+minX);
-        setTranslateY(getTranslateY()+minY);
+        setTranslateX(getTranslateX() + minX);
+        setTranslateY(getTranslateY() + minY);
         recalcPath();
-        setAnchorX((int)((maxX-minX)/2.0));
-        setAnchorY((int)((maxY-minY)/2.0));
+        setAnchorX((int) ((maxX - minX) / 2.0));
+        setAnchorY((int) ((maxY - minY) / 2.0));
     }
 
     public PathPoint moveTo(double x, double y) {
