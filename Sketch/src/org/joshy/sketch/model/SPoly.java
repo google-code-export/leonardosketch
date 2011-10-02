@@ -1,13 +1,16 @@
 package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.*;
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.sketch.util.Util;
 
+import java.awt.*;
 import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SPoly extends SShape implements SelfDrawable {
+public class SPoly extends SShape implements SelfDrawable, HasTransformedBounds {
     private List<Point2D> points;
     private boolean closed;
     private Path2D.Double path;
@@ -179,5 +182,17 @@ public class SPoly extends SShape implements SelfDrawable {
             g.drawPolygon(points,false);
         }
         g.setStrokeWidth(1);
+    }
+
+    public Bounds getTransformedBounds() {
+        AffineTransform af = new AffineTransform();
+        af.translate(getTranslateX(),getTranslateY());
+        af.translate(getAnchorX(),getAnchorY());
+        af.rotate(Math.toRadians(getRotate()));
+        af.scale(getScaleX(), getScaleY());
+        af.translate(-getAnchorX(),-getAnchorY());
+        Shape sh = af.createTransformedShape(path);
+        Rectangle2D bds = sh.getBounds2D();
+        return Util.toBounds(bds);
     }
 }

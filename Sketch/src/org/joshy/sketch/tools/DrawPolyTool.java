@@ -4,11 +4,12 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.GeomUtil;
-import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
 import org.joshy.sketch.model.SPoly;
 import org.joshy.sketch.model.SketchDocument;
+import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.geom.Point2D;
 
@@ -105,6 +106,9 @@ public class DrawPolyTool extends CanvasTool {
                 //remove the last point since it would be a duplicate
                 poly.removePoint(point);
                 context.getSelection().setSelectedNode(poly);
+                Bounds bounds = poly.getTransformedBounds();
+                poly.setAnchorX(bounds.getCenterX());
+                poly.setAnchorY(bounds.getCenterY());
                 poly = null;
                 hotspot = null;
                 point = null;
