@@ -1,6 +1,9 @@
 package org.joshy.sketch.util;
 
+import org.joshy.gfx.node.Bounds;
+
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.*;
 
 /**
@@ -41,4 +44,13 @@ public class Util {
                 (end.getY()-start.getY())*position + start.getY()
         );
     }
+
+    public static Bounds toBounds(Rectangle2D bds) {
+        return new Bounds(
+                bds.getX(),
+                bds.getY(),
+                bds.getWidth(),
+                bds.getHeight());
+    }
+
 }
