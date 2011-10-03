@@ -311,7 +311,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
                 }
             }
         });
-        shadowProperties.add(shadowSet);
+        shadowProperties.addControl(shadowSet);
         shadowInner = new Checkbox("inner");
         EventBus.getSystem().addListener(shadowInner, ActionEvent.Action, new Callback<ActionEvent>(){
             public void call(ActionEvent actionEvent) throws Exception {
@@ -327,14 +327,14 @@ public class FloatingPropertiesPanel extends VFlexBox {
                 }
             }
         });
-        shadowProperties.add(shadowInner);
+        shadowProperties.addControl(shadowInner);
         shadowProperties.nextRow();
 
 
-        shadowProperties.add(new Label("Offset:"));
+        shadowProperties.addControl(new Label("Offset:"));
         shadowXoff = new SpinBox<Double>()
             .setValue(5.0);
-        shadowProperties.add(shadowXoff);
+        shadowProperties.addControl(shadowXoff);
         shadowXoff.onChanged(new Callback<ChangedEvent>(){
             public void call(ChangedEvent event) throws Exception {
                 if(manager.propMan.isPropertyNotNull("shadow")) {
@@ -365,10 +365,10 @@ public class FloatingPropertiesPanel extends VFlexBox {
                 }
             }
         });
-        shadowProperties.add(shadowYoff);
+        shadowProperties.addControl(shadowYoff);
         shadowProperties.nextRow();
 
-        shadowProperties.add(new Label("Blur:"));
+        shadowProperties.addControl(new Label("Blur:"));
         shadowBlurRadius = new SpinBox<Integer>()
             .setMinValue(0)
             .setMaxValue(20)
@@ -386,11 +386,11 @@ public class FloatingPropertiesPanel extends VFlexBox {
                 }
             }
         });
-        shadowProperties.add(shadowBlurRadius);
+        shadowProperties.addControl(shadowBlurRadius);
         shadowColorButton = new SwatchColorPicker();
-        shadowProperties.add(shadowColorButton);
+        shadowProperties.addControl(shadowColorButton);
         shadowProperties.nextRow();
-        shadowProperties.add(new Label("opacity"));
+        shadowProperties.addControl(new Label("opacity"));
         shadowOpacity = new Slider(false).setMin(0).setMax(100).setValue(100);
         EventBus.getSystem().addListener(shadowOpacity, ChangedEvent.DoubleChanged, new Callback<ChangedEvent>(){
             public void call(ChangedEvent event) throws Exception {
@@ -405,7 +405,11 @@ public class FloatingPropertiesPanel extends VFlexBox {
                 }
             }
         });
-        shadowProperties.add(shadowOpacity);
+        shadowProperties.addControl(shadowOpacity);
+    }
+
+    public void hidePopups() {
+        fillButton.hidePopups();
     }
 
     private static class IB extends ToolbarButton {

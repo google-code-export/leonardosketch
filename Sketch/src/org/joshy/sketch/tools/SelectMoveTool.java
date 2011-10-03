@@ -830,6 +830,7 @@ public class SelectMoveTool extends CanvasTool {
 
     private void fadeOut(FloatingPropertiesPanel propPanel) {
         context.getPropPanel().setVisible(false);
+        context.getPropPanel().hidePopups();
     }
 
     private void fadeIn(FloatingPropertiesPanel propPanel) {
