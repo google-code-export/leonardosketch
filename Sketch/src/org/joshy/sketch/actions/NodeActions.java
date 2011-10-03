@@ -363,11 +363,11 @@ public class NodeActions {
         @Override
         public void execute() {
             if(context.getSelection().size() < 2) return;
-            SketchDocument doc = (SketchDocument) context.getDocument();
+            SketchDocument doc = context.getDocument();
 
-            List<SNode> model = doc.getCurrentPage().model;
+            final List<SNode> model = doc.getCurrentPage().model;
 
-            List<SNode> nodes = new ArrayList<SNode>();
+            final List<SNode> nodes = new ArrayList<SNode>();
             for(SNode node : model) {
                 if(context.getSelection().contains(node)) {
                     nodes.add(node);
@@ -375,12 +375,39 @@ public class NodeActions {
             }
 
             model.removeAll(nodes);
-            SGroup group = new SGroup();
+            final SGroup group = new SGroup();
             group.addAll(nodes);
             model.add(group);
             context.getSelection().clear();
             context.getSelection().setSelectedNode(group);
             context.redraw();
+
+
+            UndoManager.UndoableAction action = new UndoManager.UndoableAction() {
+                public void executeUndo() {
+                    model.remove(group);
+                    for (SNode node : nodes) {
+                        model.add(node);
+                        node.setTranslateX(node.getTranslateX()+group.getTranslateX());
+                        node.setTranslateY(node.getTranslateY()+group.getTranslateY());
+                    }
+                    context.getSelection().setSelectedNodes(nodes);
+                    context.redraw();
+                }
+
+                public void executeRedo() {
+                    model.removeAll(nodes);
+                    group.addAll(nodes);
+                    model.add(group);
+                    context.getSelection().setSelectedNode(group);
+                    context.redraw();
+                }
+
+                public CharSequence getName() {
+                    return "group shapes";
+                }
+            };
+            context.getUndoManager().pushAction(action);
         }
     }
 
@@ -413,10 +440,10 @@ public class NodeActions {
             if(context.getSelection().size() != 1) return;
             SNode n = context.getSelection().items().iterator().next();
             if(!(n instanceof SGroup)) return;
-            SGroup group = (SGroup) n;
+            final SGroup group = (SGroup) n;
 
-            SketchDocument doc = (SketchDocument) context.getDocument();
-            List<SNode> model = doc.getCurrentPage().model;
+            SketchDocument doc = context.getDocument();
+            final List<SNode> model = doc.getCurrentPage().model;
             model.remove(group);
             model.addAll(group.getNodes());
             context.getSelection().clear();
@@ -426,6 +453,34 @@ public class NodeActions {
                 context.getSelection().addSelectedNode(node);
             }
             context.redraw();
+            UndoManager.UndoableAction action = new UndoManager.UndoableAction() {
+                public void executeUndo() {
+                    model.removeAll(group.getNodes());
+                    for (SNode node : group.getNodes()) {
+                        node.setTranslateX(node.getTranslateX()-group.getTranslateX());
+                        node.setTranslateY(node.getTranslateY()-group.getTranslateY());
+                    }
+                    model.add(group);
+                    context.getSelection().setSelectedNode(group);
+                    context.redraw();
+                }
+
+                public void executeRedo() {
+                    model.remove(group);
+                    for (SNode node : group.getNodes()) {
+                        model.add(node);
+                        node.setTranslateX(node.getTranslateX()+group.getTranslateX());
+                        node.setTranslateY(node.getTranslateY()+group.getTranslateY());
+                    }
+                    context.getSelection().setSelectedNodes(group.getNodes());
+                    context.redraw();
+                }
+
+                public CharSequence getName() {
+                    return "ungroup shapes";
+                }
+            };
+            context.getUndoManager().pushAction(action);
         }
     }
 

@@ -43,6 +43,16 @@ public class Selection {
         fireEvents();
     }
 
+    public void setSelectedNodes(List<? extends SNode> nodes) {
+        selected.clear();
+        clearHandleControls();
+        for(SNode node : nodes) {
+            selected.put(node, genHandles(node));
+            regenHandleControls(node);
+        }
+        fireEvents();
+    }
+
 
     public void addSelectedNode(SNode node) {
         if(selected.containsKey(node)) {
