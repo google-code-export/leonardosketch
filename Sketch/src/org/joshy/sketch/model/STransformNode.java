@@ -99,11 +99,15 @@ public class STransformNode extends SNode implements SelfDrawable {
         g.setPaint(FlatColor.WHITE);
         g.drawOval(0-radius, 0-radius, radius*2, radius*2);
         radius++;
-        g.setPaint(FlatColor.BLACK);
-        g.drawOval(0-radius, 0-radius, radius*2, radius*2);
         Point2D pt2 = GeomUtil.calcPoint(new Point(0, 0), angle+90, radius+20);
+        g.setPaint(FlatColor.hsb(0,0,0.8));
         g.drawLine(0,0,pt2.getX(),pt2.getY());
         g.drawLine(0,0,0,+radius);
+        g.setPaint(FlatColor.hsb(0,0,0.3));
+        g.translate(1,1);
+        g.drawLine(0,0,pt2.getX(),pt2.getY());
+        g.drawLine(0,0,0,+radius);
+        g.translate(-1,-1);
         g.translate(-child.getAnchorX(), -child.getAnchorY());
     }
 
@@ -141,10 +145,18 @@ public class STransformNode extends SNode implements SelfDrawable {
 
         @Override
         public void draw(GFX g, SketchCanvas sketchCanvas) {
-            g.setPaint(FlatColor.GREEN);
             Point2D pt = sketchCanvas.transformToDrawing(getX(),getY());
 
-            g.drawOval(pt.getX() - 5, pt.getY() - 5, 10, 10);
+
+            double size = 15;
+            g.translate(pt.getX(),pt.getY());
+            g.rotate(90,Transform.Z_AXIS);
+            g.setPaint(FlatColor.GREEN);
+            g.fillPolygon(new double[]{0,-size/3, size,0, 0,size/3, -size,0});
+            g.setPaint(FlatColor.hsb(0,0,0.3));
+            g.drawPolygon(new double[]{0,-size/3, size,0, 0,size/3, -size,0});
+            g.rotate(-90,Transform.Z_AXIS);
+            g.translate(-pt.getX(),-pt.getY());
         }
 
         @Override
@@ -203,9 +215,17 @@ public class STransformNode extends SNode implements SelfDrawable {
 
         @Override
         public void draw(GFX g, SketchCanvas sketchCanvas) {
-            g.setPaint(FlatColor.GREEN);
             Point2D pt = sketchCanvas.transformToDrawing(getX(),getY());
-            g.drawOval(pt.getX() - 5, pt.getY() - 5, 10, 10);
+
+            double size = 15;
+            g.translate(pt.getX(),pt.getY());
+            g.rotate(90-trans.getAngle(),Transform.Z_AXIS);
+            g.setPaint(FlatColor.GREEN);
+            g.fillPolygon(new double[]{0,-size/3, size,0, 0,size/3, -size,0});
+            g.setPaint(FlatColor.hsb(0,0,0.3));
+            g.drawPolygon(new double[]{0,-size/3, size,0, 0,size/3, -size,0});
+            g.rotate(-(90-trans.getAngle()),Transform.Z_AXIS);
+            g.translate(-pt.getX(),-pt.getY());
         }
 
         @Override
