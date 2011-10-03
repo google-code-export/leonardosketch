@@ -29,10 +29,7 @@ import org.joshy.sketch.actions.swatches.ColorSwatchManager;
 import org.joshy.sketch.actions.swatches.PatternManager;
 import org.joshy.sketch.actions.symbols.SymbolManager;
 import org.joshy.sketch.canvas.DocumentCanvas;
-import org.joshy.sketch.controls.Menu;
-import org.joshy.sketch.controls.Menubar;
-import org.joshy.sketch.controls.Ruler;
-import org.joshy.sketch.controls.StandardDialog;
+import org.joshy.sketch.controls.*;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.modes.DocModeHelper;
@@ -66,7 +63,7 @@ public class Main implements Runnable {
     public ColorSwatchManager colorManager = new ColorSwatchManager(new File(homedir,"swatches.xml"));
     public PatternManager patternManager = new PatternManager(new File(new File(homedir,"patterns"),"patterns.xml"));
     public PropertyManager propMan;
-    private QuitAction quitAction;
+    private QuitAction quitAction = new QuitAction(this);
     private SAction aboutAction;
     private SAction prefsAction;
     public List<File> recentFiles;
@@ -208,7 +205,8 @@ public class Main implements Runnable {
             setupTracking();
             UpdateChecker.setup(this);
             setupGlobals();
-            setupNewDoc(defaultModeHelper,null);
+            //setupNewDoc(defaultModeHelper,null);
+            showDocChooser();
             setupMac();
             //Core.setDebugCSS(new File("test.css"));
         } catch (Exception ex) {
@@ -508,34 +506,11 @@ public class Main implements Runnable {
 
     private void showDocChooser() {
         final Stage stage = Stage.createStage();
-        VFlexBox panel = new VFlexBox();
-        for(final DocModeHelper mode : modeHelpers) {
-            panel.add(new Button(getString("misc.new").toString() + mode.getModeName()).onClicked(new Callback<ActionEvent>(){
-                public void call(ActionEvent event) throws Exception {
-                    SAction action = mode.getNewDocAction(Main.this);
-                    action.execute();
-                    stage.hide();
-                }
-            }));
-        }
-
-        panel.add(new Button("Open Existing Document").onClicked(new Callback<ActionEvent>(){
-            public void call(ActionEvent actionEvent) throws Exception {
-                new OpenAction(Main.this).execute();
-                if(!contexts.isEmpty()) {
-                    stage.hide();
-                }
-            }
-        }));
-
-        panel.add(new Button("Exit").onClicked(new Callback<ActionEvent>() {
-            public void call(ActionEvent actionEvent) throws Exception {
-                System.exit(0);
-            }
-        }));
-        stage.setContent(panel);
+        stage.setTitle("New Leo Document");
+        stage.setContent(new NewDocumentChooser(this, stage));
+        stage.setWidth(550);
+        stage.setHeight(400);
         stage.centerOnScreen();
-
     }
 
     private void setupGlobals() throws IOException {
@@ -561,9 +536,9 @@ public class Main implements Runnable {
         fontList.addAll(fontMap.keySet());
 
         modeHelpers.add(new VectorModeHelper(this));
+        modeHelpers.add(new PresoModeHelper(this));
         modeHelpers.add(new PixelModeHelper(this));
         modeHelpers.add(new TiledPixelModeHelper(this));
-        modeHelpers.add(new PresoModeHelper(this));
         defaultModeHelper = modeHelpers.get(0);
 
         propMan = new PropertyManager();
@@ -819,7 +794,7 @@ public class Main implements Runnable {
                 if(systemMenuEvent.getType() == SystemMenuEvent.Preferences) {
                     prefsAction.execute();
                 }
-                if(systemMenuEvent.getType() == SystemMenuEvent.Quit) {                    
+                if(systemMenuEvent.getType() == SystemMenuEvent.Quit) {
                     quitAction.execute();
                 }
             }
@@ -833,6 +808,14 @@ public class Main implements Runnable {
     public static void saveSettings() throws IOException {
         u.p("saving settings to : " + SETTINGS_FILE.getAbsolutePath());
         settings.store(new FileWriter(SETTINGS_FILE),"Leonardo settings");
+    }
+
+    public List<DocModeHelper> getModeHelpers() {
+        return modeHelpers;
+    }
+
+    public List<DocContext> getContexts() {
+        return contexts;
     }
 
     private class ShowWindow extends SAction {

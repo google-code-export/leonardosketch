@@ -22,6 +22,11 @@ public class PixelModeHelper extends DocModeHelper<PixelDocContext> {
     }
 
     @Override
+    public boolean isAlpha() {
+        return true;
+    }
+
+    @Override
     public void setupToolbar(BiList<Button, CanvasTool> tools, Main main, PixelDocContext ctx) throws Exception {
     }
 
