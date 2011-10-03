@@ -123,10 +123,11 @@ public class FillPicker extends Button {
     private TabPanel buildPanel() throws IOException {
         final TabPanel panel = new TabPanel();
         panel.setPrefWidth(300);
-        panel.setPrefHeight(200);
+        panel.setPrefHeight(250);
 
         setupColorTab(panel);
         setupSwatchTab(panel);
+        setupRGBTab(panel);
         setupGradientTab(panel);
         setupPatternTab(panel);
 
@@ -169,7 +170,7 @@ public class FillPicker extends Button {
                 .setOrientation(ListView.Orientation.HorizontalWrap)
                 .setRenderer(paintItemRenderer)
                 ;
-        EventBus.getSystem().addListener(patternList, SelectionEvent.Changed, new Callback<SelectionEvent>(){
+        EventBus.getSystem().addListener(patternList, SelectionEvent.Changed, new Callback<SelectionEvent>() {
             public void call(SelectionEvent e) throws Exception {
                 int n = e.getView().getSelectedIndex();
                 setSelectedFill(patternList.getModel().get(n));
@@ -179,12 +180,12 @@ public class FillPicker extends Button {
         Button addButton = new Button("+");
         addButton.onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
-                FileDialog fd = new FileDialog((Frame)null);
+                FileDialog fd = new FileDialog((Frame) null);
                 fd.setMode(FileDialog.LOAD);
                 fd.setTitle("Open Pattern Image");
                 fd.setVisible(true);
-                if(fd.getFile() != null) {
-                    File file = new File(fd.getDirectory(),fd.getFile());
+                if (fd.getFile() != null) {
+                    File file = new File(fd.getDirectory(), fd.getFile());
                     u.p("opening a file" + file);
                     try {
                         PatternPaint pat = PatternPaint.create(file);
@@ -289,6 +290,21 @@ public class FillPicker extends Button {
         panel.add("Color",picker);
     }
 
+
+    private void setupRGBTab(TabPanel panel) {
+        ColorPickerPanel picker = new ColorPickerPanel(280,250);
+        panel.add("RGB/HSV", picker);
+        EventBus.getSystem().addListener(picker, ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
+            public void call(ChangedEvent changedEvent) throws Exception {
+                setSelectedFill((FlatColor)changedEvent.getValue());
+                if(!changedEvent.isAdjusting()) {
+                    popup.setVisible(false);
+                }
+            }
+        });
+
+    }
+
     private void setupSwatchTab(TabPanel panel) {
         final ListView<FlatColor> colorList = new ListView<FlatColor>();
         colorList.setModel(manager.colorManager.getSwatchModel());
@@ -354,6 +370,12 @@ public class FillPicker extends Button {
         this.selectedFill = paint;
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.ObjectChanged, selectedFill, this));
         setDrawingDirty();
+    }
+
+    public void hidePopups() {
+        if(popup != null && popup.isVisible()) {
+            popup.setVisible(false);
+        }
     }
 }
 

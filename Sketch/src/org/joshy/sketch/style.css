@@ -6,3 +6,8 @@
     border-width: 1px;
     border-color: black;
 }
+
+.rgbbox {
+    margin: 1px;
+    padding: 1px;
+}

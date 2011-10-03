@@ -1,17 +1,22 @@
 package org.joshy.sketch.controls;
 
+import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.ImageBuffer;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.control.Radiobutton;
 import org.joshy.gfx.node.control.Textbox;
 import org.joshy.gfx.node.layout.GridBox;
+import org.joshy.gfx.stage.Stage;
 import org.joshy.sketch.util.Util;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,6 +26,33 @@ import org.joshy.sketch.util.Util;
  * To change this template use File | Settings | File Templates.
  */
 public class ColorPickerPanel extends org.joshy.gfx.node.layout.Panel {
+
+    public static void main(String ... args) throws Exception {
+        Core.init();
+        Core.getShared().defer(new Runnable() {
+            public void run() {
+
+                InputStream stream = ColorPickerPanel.class.getResourceAsStream("colorpickerpanel.css");
+                URL uri = ColorPickerPanel.class.getResource("colorpickerpanel.css");
+                try {
+                    Core.getShared().loadCSS(stream,uri);
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+
+                Stage stage = Stage.createStage();
+                stage.setContent(new ColorPickerPanel(250,200));
+                EventBus.getSystem().addListener(SystemMenuEvent.Quit, new Callback<Event>() {
+                    public void call(Event event) throws Exception {
+                        System.exit(0);
+                    }
+                });
+            }
+        });
+    }
+
     private FlatColor color = FlatColor.hsb(85,0.5,0.5);
 
     private Control area;
@@ -52,13 +84,20 @@ public class ColorPickerPanel extends org.joshy.gfx.node.layout.Panel {
         blueText.setText(""+(int)(color.getBlue()*255));
         hexText.setText(""+Integer.toHexString(color.getRGBA()&0x00FFFFFF));
         setDrawingDirty();
+        EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.ColorChanged,this.color,this,true));
+
     }
 
     ColorPickerPanel() {
-        this.setPrefWidth(300);
-        this.setPrefHeight(300);
+        this(300,300);
+    }
 
-        final int size = 255;
+    public ColorPickerPanel(int width, int height) {
+        this.setPrefWidth(width);
+        this.setPrefHeight(height);
+        setFill(FlatColor.fromRGBInts(0xf0,0xf0,0xf0));
+
+        final int size = width-100;
         area = new Control() {
             public ImageBuffer img;
 
@@ -293,7 +332,7 @@ public class ColorPickerPanel extends org.joshy.gfx.node.layout.Panel {
                 gfx.drawRect(0,0,getWidth(),getHeight());
             }
         };
-        preview.setTranslateX(290).setTranslateY(0);
+        preview.setTranslateX(width-60).setTranslateY(0);
         add(preview);
 
         select = new ToggleGroup();
@@ -318,28 +357,28 @@ public class ColorPickerPanel extends org.joshy.gfx.node.layout.Panel {
         select.add(blueSelect);
         hexText = new Textbox();
         GridBox selectors = new GridBox()
-                .setPadding(1)
-                .createColumn(35,GridBox.Align.Left)
-                .createColumn(65,GridBox.Align.Fill)
-                .addControl(hueSelect).addControl(hueText)
+                .setPadding(0)
+                .createColumn(30,GridBox.Align.Left)
+                .createColumn(35, GridBox.Align.Fill)
+                .addControl(hueSelect.addCSSClass("rgbbox")).addControl(hueText.addCSSClass("rgbbox"))
                 .nextRow()
-                .addControl(satSelect).addControl(satText)
+                .addControl(satSelect.addCSSClass("rgbbox")).addControl(satText.addCSSClass("rgbbox"))
                 .nextRow()
-                .addControl(brightSelect).addControl(brightText)
+                .addControl(brightSelect.addCSSClass("rgbbox")).addControl(brightText.addCSSClass("rgbbox"))
                 .nextRow()
-                .addControl(redSelect).addControl(redText)
+                .addControl(redSelect.addCSSClass("rgbbox")).addControl(redText.addCSSClass("rgbbox"))
                 .nextRow()
-                .addControl(greenSelect).addControl(greenText)
+                .addControl(greenSelect.addCSSClass("rgbbox")).addControl(greenText.addCSSClass("rgbbox"))
                 .nextRow()
-                .addControl(blueSelect).addControl(blueText)
+                .addControl(blueSelect.addCSSClass("rgbbox")).addControl(blueText.addCSSClass("rgbbox"))
                 .nextRow()
-                .addControl(new Label("#")).addControl(hexText)
+                .addControl(new Label("  #: ").addCSSClass("rgbbox")).addControl(hexText.addCSSClass("rgbbox"))
                 ;
         selectors.debug(false);
-        selectors.setPrefWidth(110);
-        selectors.setPrefHeight(240);
+        selectors.setPrefWidth(70);
+        selectors.setPrefHeight(140);
         add(selectors);
-        selectors.setTranslateX(275).setTranslateY(60);
+        selectors.setTranslateX(width-60).setTranslateY(60);
 
         select.setSelectedButton(hueSelect);
         setColor(FlatColor.PURPLE);
