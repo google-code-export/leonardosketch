@@ -55,7 +55,7 @@ public class NewAction extends SAction {
 
         final Textbox width = new Textbox("800");
         width.setPrefWidth(100);
-        final Textbox height = new Textbox("500");
+        final Textbox height = new Textbox("600");
         height.setPrefWidth(100);
         Callback<ActionEvent> canceled = new Callback<ActionEvent>() {
             public void call(ActionEvent event) {
