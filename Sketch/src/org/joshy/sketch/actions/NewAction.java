@@ -83,11 +83,11 @@ public class NewAction extends SAction {
 
 
         final PopupMenuButton popup = new PopupMenuButton();
-        popup.setModel(ListView.createModel(new String[]{"16x16","1024x1024"}));
+        popup.setModel(ListView.createModel(new String[]{"800x600","1024x1024"}));
         Callback<ActionEvent> clicked = new Callback<ActionEvent>() {
             public void call(ActionEvent event) {
                 switch(popup.getSelectedIndex()) {
-                    case 0: width.setText("16"); height.setText("16"); break;
+                    case 0: width.setText("800"); height.setText("600"); break;
                     case 1: width.setText("1024"); height.setText("768"); break;
                 }
             }

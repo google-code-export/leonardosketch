@@ -1,6 +1,7 @@
 package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.sketch.canvas.SketchCanvas;
 
@@ -65,5 +66,9 @@ public abstract class Handle {
             y = value;
         }
         return y;
+    }
+
+    public boolean processKey(KeyEvent event, boolean hovered) {
+        return false;
     }
 }

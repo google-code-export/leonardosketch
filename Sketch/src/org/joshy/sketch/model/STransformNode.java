@@ -5,6 +5,7 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.GeomUtil;
 import org.joshy.sketch.canvas.Selection;
@@ -106,6 +107,10 @@ public class STransformNode extends SNode implements SelfDrawable {
         g.translate(-child.getAnchorX(), -child.getAnchorY());
     }
 
+    public double getAngle() {
+        return angle;
+    }
+
     public static class TransformScaleHandle extends Handle {
         private STransformNode trans;
 
@@ -140,6 +145,23 @@ public class STransformNode extends SNode implements SelfDrawable {
             Point2D pt = sketchCanvas.transformToDrawing(getX(),getY());
 
             g.drawOval(pt.getX() - 5, pt.getY() - 5, 10, 10);
+        }
+
+        @Override
+        public boolean processKey(KeyEvent event, boolean hovered) {
+            int amount = 1;
+            if(event.isShiftPressed()) {
+                amount = 10;
+            }
+            if(event.getKeyCode() == KeyEvent.KeyCode.KEY_UP_ARROW) {
+                setY(getY()-amount,false);
+                return true;
+            }
+            if(event.getKeyCode() == KeyEvent.KeyCode.KEY_DOWN_ARROW) {
+                setY(getY()+amount,false);
+                return true;
+            }
+            return false;
         }
     }
 
@@ -184,6 +206,23 @@ public class STransformNode extends SNode implements SelfDrawable {
             g.setPaint(FlatColor.GREEN);
             Point2D pt = sketchCanvas.transformToDrawing(getX(),getY());
             g.drawOval(pt.getX() - 5, pt.getY() - 5, 10, 10);
+        }
+
+        @Override
+        public boolean processKey(KeyEvent event, boolean hovered) {
+            int amount = 1;
+            if(event.isShiftPressed()) {
+                amount = 10;
+            }
+            if(event.getKeyCode() == KeyEvent.KeyCode.KEY_LEFT_ARROW) {
+                trans.setAngle(trans.getAngle()+amount);
+                return true;
+            }
+            if(event.getKeyCode() == KeyEvent.KeyCode.KEY_RIGHT_ARROW) {
+                trans.setAngle(trans.getAngle()-amount);
+                return true;
+            }
+            return false;
         }
     }
 

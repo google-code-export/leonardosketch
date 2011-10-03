@@ -115,53 +115,71 @@ public class SelectMoveTool extends CanvasTool {
             amount = 10.0;
         }
         if(event.getType() == KeyEvent.KeyPressed) {
-        switch(event.getKeyCode()) {
-            case KEY_LEFT_ARROW:
-                if(hoverHandle != null) {
-                    hoverHandle.setX(hoverHandle.getX()-amount,false);
-                } else {
-                    for(SNode node : context.getSelection().items()) {
-                        node.setTranslateX(node.getTranslateX()-amount);
-                    }
+
+            //let the handles get a first crack at it if no particular handle is hovered
+            boolean handled = processHandleKeys(event);
+            if(!handled) {
+                switch(event.getKeyCode()) {
+                    case KEY_LEFT_ARROW:
+                        if(hoverHandle != null) {
+                            if(!hoverHandle.processKey(event,true)) hoverHandle.setX(hoverHandle.getX()-amount,false);
+                        } else {
+                            for(SNode node : context.getSelection().items()) {
+                                node.setTranslateX(node.getTranslateX()-amount);
+                            }
+                        }
+                        moveFade();
+                        break;
+                    case KEY_RIGHT_ARROW:
+                        if(hoverHandle != null) {
+                            if(!hoverHandle.processKey(event,true)) hoverHandle.setX(hoverHandle.getX()+amount,false);
+                        } else {
+                            for(SNode node : context.getSelection().items()) {
+                                node.setTranslateX(node.getTranslateX()+amount);
+                            }
+                        }
+                        moveFade();
+                        break;
+                    case KEY_UP_ARROW:
+                        if(hoverHandle != null) {
+                            if(!hoverHandle.processKey(event,true)) hoverHandle.setY(hoverHandle.getY()-amount,false);
+                        } else {
+                            for(SNode node : context.getSelection().items()) {
+                                node.setTranslateY(node.getTranslateY()-amount);
+                            }
+                        }
+                        moveFade();
+                        break;
+                    case KEY_DOWN_ARROW:
+                        if(hoverHandle != null) {
+                            if(!hoverHandle.processKey(event,true)) hoverHandle.setY(hoverHandle.getY()+amount,false);
+                        } else {
+                            for(SNode node : context.getSelection().items()) {
+                                node.setTranslateY(node.getTranslateY()+amount);
+                            }
+                        }
+                        moveFade();
+                        break;
+                    case KEY_ENTER:
+                        switchToEdit();
+                        break;
                 }
-                moveFade();
-                break;
-            case KEY_RIGHT_ARROW:
-                if(hoverHandle != null) {
-                    hoverHandle.setX(hoverHandle.getX()+amount,false);
-                } else {
-                    for(SNode node : context.getSelection().items()) {
-                        node.setTranslateX(node.getTranslateX()+amount);
-                    }
-                }
-                moveFade();
-                break;
-            case KEY_UP_ARROW:
-                if(hoverHandle != null) {
-                    hoverHandle.setY(hoverHandle.getY()-amount,false);
-                } else {
-                    for(SNode node : context.getSelection().items()) {
-                        node.setTranslateY(node.getTranslateY()-amount);
-                    }
-                }
-                moveFade();
-                break;
-            case KEY_DOWN_ARROW:
-                if(hoverHandle != null) {
-                    hoverHandle.setY(hoverHandle.getY()+amount,false);
-                } else {
-                    for(SNode node : context.getSelection().items()) {
-                        node.setTranslateY(node.getTranslateY()+amount);
-                    }
-                }
-                moveFade();
-                break;
-            case KEY_ENTER:
-                switchToEdit();
-                break;
-        }
+            }
         }
         context.redraw();
+    }
+
+    private boolean processHandleKeys(KeyEvent event) {
+        if(hoverHandle == null) {
+            Map<SNode,List<Handle>> handles = context.getSelection().getHandles();
+            for(SNode n : handles.keySet()) {
+                for(Handle h : handles.get(n)) {
+                    boolean handled = h.processKey(event,false);
+                    if(handled) return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void moveFade() {
