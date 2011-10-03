@@ -170,18 +170,18 @@ public class FloatingPropertiesPanel extends VFlexBox {
         fontPicker = new PopupMenuButton<String>();
         fontPicker.setModel(new ListModel<String>() {
             public String get(int i) {
-                return Main.fonts[i].getName();
+                return Main.fontList.get(i);
             }
 
             public int size() {
-                return Main.fonts.length;
+                return Main.fontList.size();
             }
         });
         EventBus.getSystem().addListener(fontPicker, SelectionEvent.Changed, new Callback<SelectionEvent>(){
             public void call(SelectionEvent event) {
                 if(manager.propMan.isClassAvailable(SText.class)) {
                     int index = event.getView().getSelectedIndex();
-                    manager.propMan.getProperty("fontName").setValue(Main.fonts[index].getName());
+                    manager.propMan.getProperty("fontName").setValue(Main.fontList.get(index));
                     context.redraw();
                 }
             }
