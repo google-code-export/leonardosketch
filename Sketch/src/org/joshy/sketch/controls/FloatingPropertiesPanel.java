@@ -668,9 +668,11 @@ public class FloatingPropertiesPanel extends VFlexBox {
             if(event.getSource() == shadowColorButton) {
                 if(manager.propMan.isClassAvailable(SShape.class)) {
                     DropShadow shadow = (DropShadow) manager.propMan.getProperty("shadow").getValue();
-                    shadow = shadow.setColor(shadowColorButton.getSelectedColor());
-                    manager.propMan.getProperty("shadow").setValue(shadow);
-                    context.redraw();
+                    if(shadow != null) {
+                        shadow = shadow.setColor(shadowColorButton.getSelectedColor());
+                        manager.propMan.getProperty("shadow").setValue(shadow);
+                        context.redraw();
+                    }
                 }
             }
         }
