@@ -1,6 +1,7 @@
 package org.joshy.sketch.actions.io;
 
-import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.*;
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.stage.swing.SwingGFX;
 import org.joshy.gfx.util.GraphicsUtil;
@@ -123,6 +124,12 @@ public class SavePNGAction extends SAction {
     public static class PNGExporter implements ShapeExporter<Graphics2D> {
         public void docStart(Graphics2D g2, SketchDocument doc) {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            SwingGFX gfx = new SwingGFX(g2);
+            Paint fill = doc.getBackgroundFill();
+            if(fill != null) {
+                gfx.setPaint(fill);
+                gfx.fillRect(0,0,(int)doc.getWidth(), (int) doc.getHeight());
+            }
         }
 
         public void pageStart(Graphics2D out, SketchDocument.SketchPage page) {
@@ -136,13 +143,6 @@ public class SavePNGAction extends SAction {
                 ((SelfDrawable)shape).draw(gfx);
                 return;
             }
-            if(shape instanceof SRect) draw(g2,(SRect)shape);
-            if(shape instanceof SOval) draw(g2,(SOval)shape);
-            if(shape instanceof SText) draw(g2,(SText)shape);
-            if(shape instanceof SPoly) draw(g2,(SPoly)shape);
-            if(shape instanceof SPath) draw(g2,(SPath)shape);
-            if(shape instanceof NGon) draw(g2,(NGon)shape);
-
         }
 
         public void exportPost(Graphics2D g2, SNode shape) {

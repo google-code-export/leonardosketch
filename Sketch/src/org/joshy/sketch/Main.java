@@ -199,6 +199,10 @@ public class Main implements Runnable {
         }
     }
 
+    public static Map<String,Font> getFontMap() {
+        return fontMap;
+    }
+
     public void run() {
         try {
             setupTracking();
