@@ -88,10 +88,11 @@ public class Main implements Runnable {
     public static String DOWNLOAD_URL = "";
     private List<Menu> recentFilesMenus = new ArrayList<Menu>();
     public static MasterImageCache FlickrSearchCache = new MasterImageCache(true,10,"LeonardoFlickrSearchCache");
-    public static Font[] fonts;
-    public static HashMap<String, Font> fontMap;
+    private static Font[] fonts;
+    private static HashMap<String, Font> fontMap;
     public static String AMINO_BINARY_URL = null;
     public static final String DEFAULT_FONT_NAME = "OpenSans";
+    public static List<String> fontList;
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -543,14 +544,17 @@ public class Main implements Runnable {
                 //Font.fromURL(getFont("ProcionoTT.ttf")).resolve(),
                 Font.fromURL(getFont("raleway_thin.ttf")).resolve(),
                 Font.fromURL(getFont("Sniglet_Regular.ttf")).resolve(),
-                Font.fromURL(getFont("OpenSans-Regular.ttf")).resolve(),
+                //Font.fromURL(getFont("OpenSans-Regular.ttf")).resolve(),
                 Font.fromURL(getFont("league_gothic.ttf")).resolve(),
         };
         fontMap = new HashMap<String,Font>();
         for(Font font : fonts) {
             fontMap.put(font.getName(),font);
         }
+        fontMap.put(Font.DEFAULT.getName(),Font.DEFAULT);
 
+        fontList = new ArrayList<String>();
+        fontList.addAll(fontMap.keySet());
 
         modeHelpers.add(new VectorModeHelper(this));
         modeHelpers.add(new PixelModeHelper(this));
