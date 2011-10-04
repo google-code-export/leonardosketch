@@ -6,6 +6,7 @@ import org.joshy.gfx.draw.LinearGradientFill;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.draw.PatternPaint;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.DocumentActions;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.model.SNode;
@@ -99,6 +100,8 @@ public class SwitchTheme {
                         new File(resources, "cowboy.css"));
                 Util.copyToFile(this.getClass().getResourceAsStream("resources/cowboybg.png"),
                         new File(resources, "cowboybg.png"));
+                Util.copyToFile(Main.getFontMap().get("ChunkFive").getInputStream(),
+                        new File(resources, "ChunkFive.ttf"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
