@@ -1,7 +1,10 @@
 package org.joshy.sketch.util;
 
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.OSUtil;
+import org.joshy.sketch.modes.DocContext;
 
+import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.*;
@@ -53,4 +56,35 @@ public class Util {
                 bds.getHeight());
     }
 
+
+    public static File requestDirectory(String title, DocContext context) {
+        FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
+        if(OSUtil.isMac()) {
+            //mac hack to do directory chooser
+            System.setProperty("apple.awt.fileDialogForDirectories", "true");
+        } else {
+            fd.setMode(FileDialog.SAVE);
+        }
+        fd.setTitle(title);
+        fd.setVisible(true);
+        if(OSUtil.isMac()) {
+            System.setProperty("apple.awt.fileDialogForDirectories", "false");
+        }
+        //cancel
+        if(fd.getFile() == null) return null;
+
+        String fileName = fd.getFile();
+        /*
+        if(!fileName.toLowerCase().endsWith(extension)) {
+            fileName = fileName + extension;
+        }*/
+        File file = new File(fd.getDirectory(),fileName);
+        if(file.exists() && !file.isDirectory()) {
+            return null;
+        }
+        if(!file.exists()) {
+            file.mkdirs();
+        }
+        return file;
+    }
 }

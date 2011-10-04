@@ -14,6 +14,7 @@ import org.joshy.sketch.model.SResizeableNode;
 import org.joshy.sketch.model.SText;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
+import org.joshy.sketch.util.Util;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,8 +40,9 @@ public class ExportHTMLPresentationAction extends SAction {
 
     @Override
     public void execute() throws Exception {
-        File basedir = new File("output");
-        basedir.mkdir();
+        File basedir = Util.requestDirectory("Choose Output Directory:",context);
+        if(basedir == null) return;
+
         File file = new File(basedir,"presentation.html");
         XMLWriter out = new XMLWriter(new PrintWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8")),file.toURI());
         ExportProcessor.process(new HTMLPresoExport(basedir), out, context.getDocument());
