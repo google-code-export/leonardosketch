@@ -4,3 +4,11 @@ body {
     background-color: #ffe01e;
     background-image: url(cowboybg.png);
 }
+
+
+@font-face {
+    font-family: 'ChunkFive';
+    src: url('ChunkFive.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
