@@ -3,6 +3,7 @@ package org.joshy.sketch.modes.vector;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.SystemMenuEvent;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Panel;
@@ -26,6 +27,7 @@ import org.joshy.sketch.tools.*;
 import org.joshy.sketch.util.BiList;
 
 import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +61,31 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     public VectorDocContext(Main main, VectorModeHelper helper) {
         super(main,helper);
         canvas =  new SketchCanvas(this);
+
+        EventBus.getSystem().addListener(SystemMenuEvent.FileDrop, new Callback<SystemMenuEvent>() {
+            public void call(SystemMenuEvent event) throws Exception {
+                if(event.getSource() == getStage()) {
+                    //u.p("the user dropped some files in:");
+                    //u.p("the source is: " + event.getSource());
+                    //u.p(event.getFiles());
+                    SketchDocument doc = getDocument();
+                    int count = 0;
+                    for(File file : event.getFiles()) {
+                        try {
+                            SImage image = new SImage(file);
+                            image.setTranslateX(doc.getWidth()/2+count*50);
+                            image.setTranslateY(doc.getHeight()/2+count*50);
+                            doc.getCurrentPage().model.add(image);
+                        } catch (Throwable thr) {
+                            thr.printStackTrace();
+                        }
+                        count++;
+                    }
+                    redraw();
+                }
+            }
+        });
+
     }
 
     public Selection getSelection() {
