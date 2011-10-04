@@ -10,7 +10,6 @@ import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.util.GeomUtil;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.AbstractResizeableNode;
 import org.joshy.sketch.model.SShape;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -213,7 +212,6 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
         if(onStop) {
             Point2D stopPoint = Util.interpolatePoint(getStart(),getEnd(),activeStop.getPosition());
             double d = stopPoint.distance(cursor);
-            u.p("stop point = " + stopPoint + " distance " + d);
             if(d > 20) {
                 couldDelete = true;
             } else {

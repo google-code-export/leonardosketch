@@ -47,6 +47,9 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
     protected boolean showAddIndicator;
     protected boolean couldDelete;
     private MultiGradientFill.Stop hoverStop;
+    private double currentScale;
+    private double currentPanX;
+    private double currentPanY;
 
     public BaseGradientHandle(SShape shape, VectorDocContext context) {
         this.shape = shape;
@@ -164,6 +167,14 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
     @Override
     public void draw(GFX g, SketchCanvas canvas) {
         if(!(shape.getFillPaint() instanceof MultiGradientFill)) return;
+
+        //update the position of the handles if the zoom or pan has changed
+        if(canvas.getScale() != currentScale || canvas.getPanX() != currentPanX || canvas.getPanY() != currentPanY) {
+            currentScale = canvas.getScale();
+            currentPanX = canvas.getPanX();
+            currentPanY = canvas.getPanY();
+            changed();
+        }
 
         Point2D pt = new Point2D.Double(getX(),getY());
         pt = canvas.transformToDrawing(pt);
