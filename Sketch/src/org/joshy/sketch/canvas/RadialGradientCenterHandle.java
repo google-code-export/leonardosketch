@@ -62,21 +62,22 @@ public class RadialGradientCenterHandle extends BaseGradientHandle<RadialGradien
     @Override
     Point2D getConnectingLineEnd() {
         Point2D pt = new Point2D.Double(getX(),getY());
-        pt = context.getSketchCanvas().transformToDrawing(pt);
         pt.setLocation(pt.getX(),pt.getY()+getFill().getRadius());
+        pt = context.getSketchCanvas().transformToDrawing(pt);
         return pt;
     }
 
     @Override
     protected Point2D getDragHandlePosition(MultiGradientFill.Stop stop, SketchCanvas canvas) {
         Point2D pt = new Point2D.Double(getX(),getY());
-        pt = canvas.transformToDrawing(pt);
         double x = pt.getX();
         double y = pt.getY();
-        return new Point2D.Double(
+        pt = new Point2D.Double(
                 x+2,
                 y+stop.getPosition() * getFill().getRadius()-0
         );
+        pt = canvas.transformToDrawing(pt);
+        return pt;
     }
 
     public RadialGradientFill getFill() {
