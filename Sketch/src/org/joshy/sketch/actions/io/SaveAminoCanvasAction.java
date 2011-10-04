@@ -10,6 +10,7 @@ import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
+import org.joshy.sketch.util.Util;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -56,35 +57,8 @@ public class SaveAminoCanvasAction extends SAction {
         }
 
         if(file == null) {
-            String extension = ".html";
-            FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
-            if(OSUtil.isMac()) {
-                //mac hack to do directory chooser
-                System.setProperty("apple.awt.fileDialogForDirectories", "true");
-            } else {
-                fd.setMode(FileDialog.SAVE);
-            }
-            fd.setTitle("Export to Amino Canvas: Choose Output Directory");
-            fd.setVisible(true);
-            if(OSUtil.isMac()) {
-                System.setProperty("apple.awt.fileDialogForDirectories", "false");
-            }
-            //cancel
-            if(fd.getFile() == null) return;
-
-            String fileName = fd.getFile();
-            /*
-            if(!fileName.toLowerCase().endsWith(extension)) {
-                fileName = fileName + extension;
-            }*/
-            file = new File(fd.getDirectory(),fileName);
-            if(file.exists() && !file.isDirectory()) {
-                return;
-            }
-
-            if(!file.exists()) {
-                file.mkdirs();
-            }
+            file = Util.requestDirectory("Export to Amino Canvas: Choose Output Directory",context);
+            if(file == null) return;
         }
 
         File jsfile = new File(file,"generated.js");
@@ -98,6 +72,7 @@ public class SaveAminoCanvasAction extends SAction {
         context.getDocument().setStringProperty(HTML_CANVAS_PATH_KEY,file.getAbsolutePath());
         OSUtil.openBrowser(htmlfile.toURI().toASCIIString());
     }
+
     private static void outputIndexHTML(IndentWriter out, SketchDocument doc) {
         out.println("<html><head><title>Amino Canvas Export</title>\n"
                 +"<script src='"+ Main.AMINO_BINARY_URL+"'></script>\n"
