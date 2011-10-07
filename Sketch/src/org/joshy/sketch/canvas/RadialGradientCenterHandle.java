@@ -73,7 +73,7 @@ public class RadialGradientCenterHandle extends BaseGradientHandle<RadialGradien
         double x = pt.getX();
         double y = pt.getY();
         pt = new Point2D.Double(
-                x+2,
+                x,
                 y+stop.getPosition() * getFill().getRadius()-0
         );
         pt = canvas.transformToDrawing(pt);
@@ -179,8 +179,8 @@ public class RadialGradientCenterHandle extends BaseGradientHandle<RadialGradien
             pt = NodeUtils.convertToScene(context.getSketchCanvas(), pt);
             pt = NodeUtils.convertFromScene(popupLayer, pt);
             Control control = controlMap.get(stop);
-            control.setTranslateX((int)(pt.getX()+11));
-            control.setTranslateY((int)(pt.getY()-5));
+            control.setTranslateX((pt.getX()+11));
+            control.setTranslateY((pt.getY()-5));
         }
     }
 }
