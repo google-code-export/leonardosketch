@@ -41,7 +41,7 @@ public class FreerangeColorPicker extends Button {
             popup.setVisible(true);
             EventBus.getSystem().setPressedNode(popup);
         } else {
-            popup.setVisible(false);
+            if(popup != null) popup.setVisible(false);
         }
     }
 
