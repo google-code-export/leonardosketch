@@ -66,6 +66,33 @@ public class NGon extends SShape implements SelfDrawable, HasTransformedBounds {
         return radius;
     }
 
+    public NGon setAngle(double angle) {
+        this.angle = angle;
+        return this;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public NGon setStar(boolean star) {
+        this.star = star;
+        return this;
+    }
+
+    public boolean isStar() {
+        return star;
+    }
+
+    public double getInnerRadius() {
+        return innerRadius;
+    }
+
+    public NGon setInnerRadius(double innerRadius) {
+        this.innerRadius = innerRadius;
+        return this;
+    }
+
     @Override
     protected void fillShape(GFX g) {
         double[] points = toPoints();
@@ -99,30 +126,6 @@ public class NGon extends SShape implements SelfDrawable, HasTransformedBounds {
             g.drawPolygon(toPoints(),true);
             g.setStrokeWidth(1);
         }
-    }
-
-    public void setAngle(double angle) {
-        this.angle = angle;
-    }
-
-    public double getAngle() {
-        return angle;
-    }
-
-    public void setStar(boolean star) {
-        this.star = star;
-    }
-
-    public boolean isStar() {
-        return star;
-    }
-
-    public double getInnerRadius() {
-        return innerRadius;
-    }
-
-    public void setInnerRadius(double innerRadius) {
-        this.innerRadius = innerRadius;
     }
 
     public double[] toPoints() {

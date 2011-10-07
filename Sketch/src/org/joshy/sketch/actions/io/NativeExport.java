@@ -219,8 +219,10 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
 
         if(shape instanceof NGon) {
             saveAttribute(out,"radius",shape);
+            saveAttribute(out,"innerRadius",shape);
             saveAttribute(out,"sides",shape);
             saveAttribute(out,"angle",shape);
+            saveBooleanAttribute(out, "star",shape);
         }
 
 
