@@ -9,6 +9,7 @@ import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.UndoManager;
+import org.joshy.sketch.actions.io.ExportAction;
 import org.joshy.sketch.actions.pages.PageListPanel;
 import org.joshy.sketch.canvas.DocumentCanvas;
 import org.joshy.sketch.controls.Menu;
@@ -39,6 +40,7 @@ public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocum
     public Menu windowJMenu;
     public DisclosurePanel sidebarContainer;
     private NotificationIndicator notificationIndicator;
+    private ExportAction lastExportAction;
 
     public DocContext(Main main, DocModeHelper mode) {
         this.main = main;
@@ -96,5 +98,13 @@ public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocum
 
     public Node getNotificationIndicator() {
         return this.notificationIndicator;
+    }
+
+    public void setLastExportAction(ExportAction action) {
+        this.lastExportAction = action;
+    }
+
+    public ExportAction getLastExportAction() {
+        return lastExportAction;
     }
 }

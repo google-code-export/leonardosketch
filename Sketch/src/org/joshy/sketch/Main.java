@@ -517,13 +517,10 @@ public class Main implements Runnable {
         fonts = new Font[]{
                 Font.fromURL(getFont("belligerent.ttf")).size(30).resolve(),
                 Font.fromURL(getFont("Chunk.ttf")).resolve(),
-                //Font.fromURL(getFont("Junction.ttf")).size(30).resolve(),
                 Font.fromURL(getFont("OFLGoudyStMTT.ttf")).size(30).resolve(),
                 Font.fromURL(getFont("orbitron-medium.ttf")).resolve(),
-                //Font.fromURL(getFont("ProcionoTT.ttf")).resolve(),
                 Font.fromURL(getFont("raleway_thin.ttf")).resolve(),
                 Font.fromURL(getFont("Sniglet_Regular.ttf")).resolve(),
-                //Font.fromURL(getFont("OpenSans-Regular.ttf")).resolve(),
                 Font.fromURL(getFont("league_gothic.ttf")).resolve(),
         };
         fontMap = new HashMap<String,Font>();
@@ -599,7 +596,8 @@ public class Main implements Runnable {
                 .addItem(getString("menus.tohtml"), new SaveHTMLAction(context))
                 .addItem(getString("menus.tocanvas"), new SaveAminoCanvasAction(context))
                 .addItem(getString("menus.topdf"), new SavePDFAction(context))
-                .addItem(getString("menus.tojava2d"), new SaveJava2DAction(context));
+                .addItem(getString("menus.tojava2d"), new SaveJava2DAction(context))
+                .addItem("Re-export", "shift E", new ReExportAction(context));
         modeHelper.addCustomExportMenus(exportMenu,context);
         fileMenu.addMenu(exportMenu);
 

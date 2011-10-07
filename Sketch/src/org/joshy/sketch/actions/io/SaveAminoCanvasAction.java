@@ -19,10 +19,7 @@ import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +33,7 @@ import java.util.Map;
  * Time: 5:32:30 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SaveAminoCanvasAction extends SAction {
+public class SaveAminoCanvasAction extends SAction implements ExportAction {
     private DocContext context;
 
     public SaveAminoCanvasAction(DocContext context) {
@@ -47,17 +44,10 @@ public class SaveAminoCanvasAction extends SAction {
 
     @Override
     public void execute() throws Exception {
-        File file = null;
-        Map props = context.getDocument().getProperties();
-        /*
-        if(props.containsKey(HTML_CANVAS_PATH_KEY)) {
-            File ffile = new File((String)props.get(HTML_CANVAS_PATH_KEY));
-            if(ffile.exists()) {
-                file = ffile;
-            }
-        }
-        */
+        exportToDirectory(null);
+    }
 
+    private void exportToDirectory(File file) throws FileNotFoundException {
         if(file == null) {
             file = Util.requestDirectory("Export to Amino Canvas: Choose Output Directory",context);
             if(file == null) return;
@@ -75,6 +65,20 @@ public class SaveAminoCanvasAction extends SAction {
         }
         context.getDocument().setStringProperty(HTML_CANVAS_PATH_KEY,file.getAbsolutePath());
         OSUtil.openBrowser(htmlfile.toURI().toASCIIString());
+        context.setLastExportAction(this);
+
+    }
+
+    public void exportHeadless() throws FileNotFoundException {
+        File file = null;
+        Map props = context.getDocument().getProperties();
+        if(props.containsKey(HTML_CANVAS_PATH_KEY)) {
+            File ffile = new File((String)props.get(HTML_CANVAS_PATH_KEY));
+            if(ffile.exists()) {
+                file = ffile;
+            }
+        }
+        exportToDirectory(file);
     }
 
     private static void outputIndexHTML(IndentWriter out, SketchDocument doc) {
@@ -82,7 +86,15 @@ public class SaveAminoCanvasAction extends SAction {
                 +"<script src='"+ Main.AMINO_BINARY_URL+"'></script>\n"
                 +"<script src='generated.js'></script>\n"
                 +"<style type='text/css'>\n"
-                //+"  body { background-color: " + AminoExport.serializeFlatColor(doc.getBackgroundFill()) + "; }\n"
+                +"  body {\n"
+        );
+        if(doc.getBackgroundFill() instanceof FlatColor) {
+            out.indent();
+            out.println("   background-color: " + AminoExport.serializeFlatColor((FlatColor) doc.getBackgroundFill()));
+            out.outdent();
+        }
+        out.println(
+                 "  }\n"
                 +"</style>\n"
                 +"</head>");
         out.println("<body onload=\"setupDrawing();\">");
@@ -96,7 +108,7 @@ public class SaveAminoCanvasAction extends SAction {
         out.println("var runner =  new Runner();\n"
                 +"runner.setCanvas(document.getElementById('foo'));\n"
                 +"runner.setFPS(30);\n"
-                //+"runner.setBackground("+AminoExport.serializePaint(out,doc.getBackgroundFill())+");\n"
+                +"runner.setBackground("+AminoExport.serializePaint(out,doc.getBackgroundFill())+");\n"
                 +"runner.setRoot(sceneRoot);\n"
         );
         out.println("runner.start();");
