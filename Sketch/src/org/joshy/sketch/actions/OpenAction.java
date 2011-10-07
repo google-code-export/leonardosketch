@@ -325,8 +325,10 @@ public class OpenAction extends SAction {
         if(e.attrEquals("type","ngon")) {
             shape = new NGon();
             loadNumberAttribute(e,shape,"radius");
+            loadNumberAttribute(e,shape,"innerRadius");
             loadIntegerAttribute(e,shape,"sides");
             loadNumberAttribute(e,shape,"angle");
+            loadBooleanAttribute(e,shape,"star");
         }
         if(e.attrEquals("type","area")) {
             shape = new SArea(new Area());

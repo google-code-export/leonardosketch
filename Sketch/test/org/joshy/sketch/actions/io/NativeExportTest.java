@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -97,6 +98,32 @@ public class NativeExportTest {
         u.p("relative url = " + img.getRelativeURL());
         assertTrue(img.getRelativeURL().equals("redrect.png"));
         assertTrue(img.getBufferedImage().getWidth() == 101);
+    }
+
+    @Test
+    public void exportNGon() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SketchDocument doc = new SketchDocument();
+        VectorDocContext ctx = new VectorDocContext(null,null);
+        ctx.setDocument(doc);
+
+        SShape a = new NGon(6).setRadius(100).setInnerRadius(50).setStar(true);
+        doc.getCurrentPage().model.add(a);
+        SShape b = new NGon(6).setRadius(100).setInnerRadius(50).setStar(false);
+        doc.getCurrentPage().model.add(b);
+
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing test to file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(file, doc);
+        SketchDocument doc2 = OpenAction.loadZip(file);
+        assertTrue(doc2.getPages().get(0).model.get(0) instanceof NGon);
+        assertTrue(doc2.getPages().get(0).model.get(1) instanceof NGon);
+        NGon na = (NGon) doc2.getPages().get(0).model.get(0);
+        assertTrue(na.isStar());
+        assertTrue(na.getInnerRadius() == 50);
+        NGon nb = (NGon) doc2.getPages().get(0).model.get(1);
+        assertFalse(nb.isStar());
     }
 
     @Test

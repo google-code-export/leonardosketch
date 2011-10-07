@@ -49,12 +49,14 @@ public class SaveAminoCanvasAction extends SAction {
     public void execute() throws Exception {
         File file = null;
         Map props = context.getDocument().getProperties();
+        /*
         if(props.containsKey(HTML_CANVAS_PATH_KEY)) {
             File ffile = new File((String)props.get(HTML_CANVAS_PATH_KEY));
             if(ffile.exists()) {
                 file = ffile;
             }
         }
+        */
 
         if(file == null) {
             file = Util.requestDirectory("Export to Amino Canvas: Choose Output Directory",context);
@@ -67,8 +69,10 @@ public class SaveAminoCanvasAction extends SAction {
         ExportProcessor.process(new AminoExport(),js_writer,(SketchDocument) context.getDocument());
 
         File htmlfile = new File(file,"index.html");
-        SaveAminoCanvasAction.outputIndexHTML(new IndentWriter(new PrintWriter(new FileOutputStream(htmlfile)))
-                , (SketchDocument) context.getDocument());
+        if(!htmlfile.exists()) {
+            SaveAminoCanvasAction.outputIndexHTML(new IndentWriter(new PrintWriter(new FileOutputStream(htmlfile)))
+                    , (SketchDocument) context.getDocument());
+        }
         context.getDocument().setStringProperty(HTML_CANVAS_PATH_KEY,file.getAbsolutePath());
         OSUtil.openBrowser(htmlfile.toURI().toASCIIString());
     }
