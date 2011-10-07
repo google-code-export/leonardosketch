@@ -29,10 +29,12 @@ public class STransformNode extends SNode implements SelfDrawable {
     private double scx = 1;
     private double radius = 50;
     private boolean dead = false;
+    private VectorDocContext context;
 
 
     public STransformNode(final SNode node, final VectorDocContext context) {
         this.child = node;
+        this.context = context;
         this.setAnchorX(0);
         this.setAnchorY(0);
         this.setTranslateX(this.child.getTranslateX());
@@ -47,18 +49,23 @@ public class STransformNode extends SNode implements SelfDrawable {
             public void call(Selection.SelectionChangeEvent selectionChangeEvent) throws Exception {
                 if(dead) return;
                 if(selectionChangeEvent.getSelection().contains(STransformNode.this)) return;
-                dead = true;
-                context.getDocument().getCurrentPage().remove(STransformNode.this);
-                context.getDocument().getCurrentPage().add(child);
-                child.setTranslateX(getTranslateX());
-                child.setTranslateY(getTranslateY());
-                child.setRotate(-angle);
-                child.setScaleX(scx);
-                child.setScaleY(scy);
-                context.redraw();
+                finishTransform();
             }
         });
 
+    }
+
+    private void finishTransform() {
+        dead = true;
+        context.getDocument().getCurrentPage().remove(STransformNode.this);
+        context.getDocument().getCurrentPage().add(child);
+        child.setTranslateX(getTranslateX());
+        child.setTranslateY(getTranslateY());
+        child.setRotate(-angle);
+        child.setScaleX(scx);
+        child.setScaleY(scy);
+        context.getSelection().setSelectedNode(child);
+        context.redraw();
     }
 
     @Override
@@ -171,6 +178,10 @@ public class STransformNode extends SNode implements SelfDrawable {
             }
             if(event.getKeyCode() == KeyEvent.KeyCode.KEY_DOWN_ARROW) {
                 setY(getY()+amount,false);
+                return true;
+            }
+            if(event.getKeyCode() == KeyEvent.KeyCode.KEY_ENTER) {
+                trans.finishTransform();
                 return true;
             }
             return false;
