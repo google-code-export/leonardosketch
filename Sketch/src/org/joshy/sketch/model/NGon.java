@@ -135,10 +135,10 @@ public class NGon extends SShape implements SelfDrawable, HasTransformedBounds {
             double or = getRadius();
             double ir = getInnerRadius();
             for (int i=0; i<getSides(); i++) {
-                points[i*4] =   (int)Math.round(or*Math.cos(angle))+x;
-                points[i*4+1] = (int)Math.round(or*Math.sin(angle))+y;
-                points[i*4+2] = (int)Math.round(ir*Math.cos(angle+addAngle/2))+x;
-                points[i*4+3] = (int)Math.round(ir*Math.sin(angle+addAngle/2))+y;
+                points[i*4] =   (or*Math.cos(angle))+x;
+                points[i*4+1] = (or*Math.sin(angle))+y;
+                points[i*4+2] = (ir*Math.cos(angle+addAngle/2))+x;
+                points[i*4+3] = (ir*Math.sin(angle+addAngle/2))+y;
                 angle+=addAngle;
             }
             return points;
@@ -150,8 +150,8 @@ public class NGon extends SShape implements SelfDrawable, HasTransformedBounds {
         double y = 0;
         double r = getRadius();
         for (int i=0; i<getSides(); i++) {
-            double resx = (int)Math.round(r*Math.cos(angle))+x;
-            double resy = (int)Math.round(r*Math.sin(angle))+y;
+            double resx = r*Math.cos(angle)+x;
+            double resy = r*Math.sin(angle)+y;
             angle+=addAngle;
             points[i*2] = resx;
             points[i*2+1] = resy;
