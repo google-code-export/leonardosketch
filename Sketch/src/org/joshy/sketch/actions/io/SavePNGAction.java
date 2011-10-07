@@ -21,8 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class SavePNGAction extends SAction {
+public class SavePNGAction extends SAction implements ExportAction {
     private DocContext context;
+    private File lastfile;
 
     public SavePNGAction(DocContext context) {
         this.context = context;
@@ -48,6 +49,19 @@ public class SavePNGAction extends SAction {
             }
             if(context.getDocument() instanceof PixelDocument) {
                 exportTo(file, (PixelDocument) context.getDocument());
+            }
+            context.setLastExportAction(this);
+            lastfile = file;
+        }
+    }
+
+    public void exportHeadless() {
+        if(lastfile != null) {
+            if(context.getDocument() instanceof SketchDocument) {
+                exportTo(lastfile, (SketchDocument) context.getDocument());
+            }
+            if(context.getDocument() instanceof PixelDocument) {
+                exportTo(lastfile, (PixelDocument) context.getDocument());
             }
         }
     }
