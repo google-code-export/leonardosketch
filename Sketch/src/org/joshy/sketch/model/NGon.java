@@ -215,6 +215,7 @@ public class NGon extends SShape implements SelfDrawable, HasTransformedBounds {
             dupe = new NGon(getSides());
         }
         ((NGon)dupe).setRadius(getRadius());
+        ((NGon)dupe).setInnerRadius(getInnerRadius());
         ((NGon)dupe).setAngle(getAngle());
         ((NGon)dupe).setStar(isStar());
         return super.duplicate(dupe);
