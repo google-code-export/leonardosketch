@@ -50,7 +50,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
     private GridBox shadowProperties;
     private Checkbox shadowSet;
-    private Checkbox shadowInner;
+    //private Checkbox shadowInner;
     private SwatchColorPicker shadowColorButton;
     private SpinBox<Double> shadowXoff;
     private SpinBox<Double> shadowYoff;
@@ -287,12 +287,15 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private void setupShadowProperties() {
         shadowProperties = new GridBox();
         shadowProperties.debug(false);
-        shadowProperties.setPrefWidth(200);
-        shadowProperties.setPrefHeight(130);
+        shadowProperties.setPrefWidth(350);
+        shadowProperties.setPrefHeight(100);
         shadowProperties.setPadding(1);
         shadowProperties.createColumn(70,GridBox.Align.Right);
         shadowProperties.createColumn(60,GridBox.Align.Left);
         shadowProperties.createColumn(60,GridBox.Align.Left);
+        shadowProperties.createColumn(30,GridBox.Align.Right);
+        shadowProperties.createColumn(60,GridBox.Align.Left);
+        shadowProperties.createColumn(30,GridBox.Align.Left);
         add(shadowProperties);
         shadowProperties.setVisible(false);
 
@@ -312,6 +315,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
             }
         });
         shadowProperties.addControl(shadowSet);
+        /*
         shadowInner = new Checkbox("inner");
         EventBus.getSystem().addListener(shadowInner, ActionEvent.Action, new Callback<ActionEvent>(){
             public void call(ActionEvent actionEvent) throws Exception {
@@ -327,7 +331,8 @@ public class FloatingPropertiesPanel extends VFlexBox {
                 }
             }
         });
-        shadowProperties.addControl(shadowInner);
+        */
+        //shadowProperties.addControl(shadowInner);
         shadowProperties.nextRow();
 
 
@@ -366,7 +371,6 @@ public class FloatingPropertiesPanel extends VFlexBox {
             }
         });
         shadowProperties.addControl(shadowYoff);
-        shadowProperties.nextRow();
 
         shadowProperties.addControl(new Label("Blur:"));
         shadowBlurRadius = new SpinBox<Integer>()
@@ -510,7 +514,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
                     shadowYoff.setValue(shad.getYOffset());
                     shadowBlurRadius.setValue(shad.getBlurRadius());
                     shadowColorButton.setSelectedColor(shad.getColor());
-                    shadowInner.setSelected(shad.isInner());
+                    //shadowInner.setSelected(shad.isInner());
                     shadowOpacity.setValue(shad.getOpacity()*100);
                 } else {
                     shadowSet.setSelected(false);
