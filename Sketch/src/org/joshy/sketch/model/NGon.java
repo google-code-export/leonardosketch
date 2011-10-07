@@ -91,12 +91,14 @@ public class NGon extends SShape implements SelfDrawable, HasTransformedBounds {
         }
 
         fillShape(g);
-        g.setPaint(getStrokePaint());
 
 
-        g.setStrokeWidth(getStrokeWidth());
-        g.drawPolygon(toPoints(),true);
-        g.setStrokeWidth(1);
+        if(getStrokePaint() != null && getStrokeWidth() > 0) {
+            g.setPaint(getStrokePaint());
+            g.setStrokeWidth(getStrokeWidth());
+            g.drawPolygon(toPoints(),true);
+            g.setStrokeWidth(1);
+        }
     }
 
     public void setAngle(double angle) {
