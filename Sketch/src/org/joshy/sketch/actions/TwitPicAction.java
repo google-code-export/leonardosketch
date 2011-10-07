@@ -73,6 +73,7 @@ public class TwitPicAction extends SAction {
 
 
             final String message = StandardDialog.showEditText("Message with image","");
+            if(message == null) return;
             context.addNotification("Uploading to TwitPic");
 
             new Thread(new Runnable(){
@@ -81,7 +82,7 @@ public class TwitPicAction extends SAction {
                         Configuration conf = new PropertyConfiguration(new Properties());
                         OAuthAuthorization oauth = new OAuthAuthorization(conf,consumerKey,consumerSecret,token);
                         ImageUpload upload = ImageUpload.getTwitpicUploader(TWITPIC_API,oauth);
-                        final String resultUrl = upload.upload(file,"foo bar baz");
+                        final String resultUrl = upload.upload(file,message);
                         Status s = twitter.updateStatus(message + " " + resultUrl);
                         final String tweetUrl = "http://twitter.com/"+s.getUser().getScreenName()+"/status/"+s.getId();
                         Core.getShared().defer(new Runnable(){
