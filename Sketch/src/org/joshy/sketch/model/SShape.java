@@ -25,6 +25,7 @@ public abstract class SShape extends SNode {
     private double oldWidth;
     private double oldHeight;
     private boolean oldInner;
+    private boolean contentChanged = true;
 
     public Paint getFillPaint() {
         return fillPaint;
@@ -97,13 +98,15 @@ public abstract class SShape extends SNode {
                     || shadow != oldShadow
                     || b.getWidth() != oldWidth
                     || b.getHeight() != oldHeight
-                    || shadow.isInner() != oldInner) {
+                    || shadow.isInner() != oldInner
+                    || contentChanged) {
                 if(shadow.isInner()) {
                     regenInnerShadow(g);
                 } else {
                     regenShadow(g);
                 }
                 oldInner = shadow.isInner();
+                contentChanged = false;
             }
             g.draw(buf,xoff-blurRadius-dx,yoff-blurRadius-dy);
         }
@@ -216,6 +219,10 @@ public abstract class SShape extends SNode {
 
     public void addListener(SShapeListener gradientHandle) {
         listeners.add(gradientHandle);
+    }
+
+    protected void markContentChanged() {
+        contentChanged = true;
     }
 
     protected void fireUpdate() {
