@@ -1,8 +1,14 @@
 package org.joshy.sketch.actions.io;
 
-import org.joshy.gfx.draw.*;
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Paint;
+import org.joshy.gfx.event.ActionEvent;
+import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.control.Button;
+import org.joshy.gfx.node.control.Checkbox;
+import org.joshy.gfx.node.layout.GridBox;
+import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.stage.swing.SwingGFX;
 import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -24,12 +30,48 @@ import java.util.List;
 public class SavePNGAction extends SAction implements ExportAction {
     private DocContext context;
     private File lastfile;
+    private boolean includeBackground = true;
+    private boolean includeDocumentBounds = false;
 
     public SavePNGAction(DocContext context) {
         this.context = context;
     }
 
     public void execute() {
+        final Stage stage = Stage.createStage();
+        GridBox grid = new GridBox()
+                .createColumn(20, GridBox.Align.Right)
+                .createColumn(100, GridBox.Align.Left)
+                ;
+        final Checkbox backgroundCheckbox = new Checkbox("include background");
+        grid.addControl(backgroundCheckbox);
+        backgroundCheckbox.setSelected(includeBackground);
+        grid.nextRow();
+        final Checkbox documentBounds = new Checkbox("full document bounds");
+        documentBounds.setSelected(includeDocumentBounds);
+        grid.addControl(documentBounds);
+        grid.nextRow();
+        Button cancelButton = new Button("cancel");
+        cancelButton.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                stage.hide();
+            }
+        });
+        grid.addControl(cancelButton);
+        Button continueButton = new Button("continue");
+        continueButton.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                stage.hide();
+                includeBackground = backgroundCheckbox.isSelected();
+                includeDocumentBounds = documentBounds.isSelected();
+                showFileDialog();
+            }
+        });
+        grid.addControl(continueButton);
+        stage.setContent(grid);
+    }
+
+    private void showFileDialog() {
         FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
         fd.setMode(FileDialog.SAVE);
         fd.setTitle("Export PNG Image");
@@ -45,7 +87,7 @@ public class SavePNGAction extends SAction implements ExportAction {
             }
             File file = new File(fd.getDirectory(),fileName);
             if(context.getDocument() instanceof SketchDocument) {
-                exportTo(file, (SketchDocument) context.getDocument());
+                exportTo(file, (SketchDocument) context.getDocument(), includeDocumentBounds, includeBackground);
             }
             if(context.getDocument() instanceof PixelDocument) {
                 exportTo(file, (PixelDocument) context.getDocument());
@@ -58,7 +100,7 @@ public class SavePNGAction extends SAction implements ExportAction {
     public void exportHeadless() {
         if(lastfile != null) {
             if(context.getDocument() instanceof SketchDocument) {
-                exportTo(lastfile, (SketchDocument) context.getDocument());
+                exportTo(lastfile, (SketchDocument) context.getDocument(), includeDocumentBounds, includeBackground);
             }
             if(context.getDocument() instanceof PixelDocument) {
                 exportTo(lastfile, (PixelDocument) context.getDocument());
@@ -68,7 +110,7 @@ public class SavePNGAction extends SAction implements ExportAction {
 
     public static void export(File file, CanvasDocument doc) {
         if(doc instanceof SketchDocument) {
-            exportTo(file,(SketchDocument)doc);
+            exportTo(file,(SketchDocument)doc,false,false);
         }
         if(doc instanceof PixelDocument) {
             exportTo(file,(PixelDocument)doc);
@@ -98,12 +140,19 @@ public class SavePNGAction extends SAction implements ExportAction {
         }
     }
 
-    private static void exportTo(File file, SketchDocument doc) {
-        Bounds bounds = calculateBounds(doc.getCurrentPage().model);
+    private static void exportTo(File file, SketchDocument doc, boolean useDocBounds, boolean useDocBg) {
+        Bounds bounds = null;
+        if(useDocBounds) {
+            bounds = new Bounds(0,0,doc.getWidth(),doc.getHeight());
+        } else {
+            bounds = calculateBounds(doc.getCurrentPage().model);
+        }
         BufferedImage img = new BufferedImage((int)bounds.getWidth()+1,(int)bounds.getHeight()+1,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = img.createGraphics();
         g2.translate(-bounds.getX(),-bounds.getY());
-        ExportProcessor.process(new PNGExporter(), g2, doc);
+        PNGExporter exporter = new PNGExporter();
+        exporter.setIncludeDocumentBackground(useDocBg);
+        ExportProcessor.process(exporter, g2, doc);
         g2.dispose();
         try {
             ImageIO.write(img,"png", file);
@@ -136,11 +185,13 @@ public class SavePNGAction extends SAction implements ExportAction {
 
 
     public static class PNGExporter implements ShapeExporter<Graphics2D> {
+        private boolean useDocBg = true;
+
         public void docStart(Graphics2D g2, SketchDocument doc) {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             SwingGFX gfx = new SwingGFX(g2);
             Paint fill = doc.getBackgroundFill();
-            if(fill != null) {
+            if(fill != null && useDocBg) {
                 gfx.setPaint(fill);
                 gfx.fillRect(0,0,(int)doc.getWidth(), (int) doc.getHeight());
             }
@@ -275,6 +326,10 @@ public class SavePNGAction extends SAction implements ExportAction {
             g.setTransform(at);
 
 
+        }
+
+        public void setIncludeDocumentBackground(boolean useDocBg) {
+            this.useDocBg = useDocBg;
         }
     }
 }
