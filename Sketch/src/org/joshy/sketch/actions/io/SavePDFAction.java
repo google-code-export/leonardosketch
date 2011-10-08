@@ -32,8 +32,9 @@ import java.io.IOException;
  * Time: 12:52:29 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SavePDFAction extends SAction {
+public class SavePDFAction extends SAction implements ExportAction {
     private DocContext context;
+    private File lastfile;
 
     public SavePDFAction(DocContext context) {
         this.context = context;
@@ -60,6 +61,8 @@ public class SavePDFAction extends SAction {
             if(context.getDocument() instanceof PixelDocument) {
                 //export(file, (PixelDocument) context.getDocument());
             }
+            lastfile = file;
+            context.setLastExportAction(this);
         }
     }
 
@@ -76,6 +79,12 @@ public class SavePDFAction extends SAction {
             e.printStackTrace();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void exportHeadless() throws Exception {
+        if(lastfile != null) {
+            export(lastfile, (SketchDocument) context.getDocument());
         }
     }
 
