@@ -24,7 +24,7 @@ public class DrawNgonTool extends CanvasTool {
     private Point2D start;
     private NGon node;
     private FlexBox panel;
-    private Control slider;
+    private Slider slider;
     private Label sliderLabel;
     private int nValue;
     private boolean editingExisting = false;
@@ -32,21 +32,23 @@ public class DrawNgonTool extends CanvasTool {
     private NGonSizeHandle starHandle;
     private boolean startedEditing;
     private boolean isStar;
+    private Checkbox starCheckbox;
 
     public DrawNgonTool(final VectorDocContext context) {
         super(context);
         panel = new HFlexBox().setBoxAlign(HFlexBox.Align.Baseline);
 
         panel.add(new Label(getString("drawNgonTool.sides")));
-        slider = new Slider(false).setMin(3).setMax(20).setValue(5).setWidth(200);
+        slider = new Slider(false);
+        slider.setMin(3).setMax(20).setValue(5).setWidth(200);
         panel.add(slider);
         sliderLabel = new Label("N");
         panel.add(sliderLabel);
-        
-        panel.add(new Checkbox("Star").onClicked(new Callback<ActionEvent>(){
+        starCheckbox =new Checkbox("Star");
+        panel.add(starCheckbox.onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
-                isStar = ((Button)actionEvent.getSource()).isSelected();
-                if(node != null) {
+                isStar = ((Button) actionEvent.getSource()).isSelected();
+                if (node != null) {
                     node.setStar(isStar);
                 }
                 context.redraw();
@@ -203,6 +205,8 @@ public class DrawNgonTool extends CanvasTool {
         this.node = ngon;
         sizeHandle = new NGonSizeHandle(node,true);
         starHandle = new NGonSizeHandle(node,false);
+        starCheckbox.setSelected(ngon.isStar());
+        slider.setValue(ngon.getSides());
         startedEditing = true;
     }
 
