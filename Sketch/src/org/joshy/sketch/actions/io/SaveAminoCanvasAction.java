@@ -364,6 +364,7 @@ public class SaveAminoCanvasAction extends SAction implements ExportAction {
             nodes.add(node);
             SavePNGAction.export(file,nodes);
             out.println("new ImageView('"+file.getName()+"')");
+            out.println(".setX("+node.getTranslateX()+").setY("+node.getTranslateY()+")");
         }
 
         private void serializePath(IndentWriter out, SPath path) {
