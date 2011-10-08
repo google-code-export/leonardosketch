@@ -1,7 +1,6 @@
 package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.*;
-import org.joshy.gfx.util.u;
 
 import java.awt.geom.Area;
 
@@ -23,6 +22,7 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
 
     public void setHalign(HAlign halign) {
         this.halign = halign;
+        markContentChanged();
     }
 
 
@@ -43,12 +43,14 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
 
     public void setText(String text) {
         this.text = text;
+        markContentChanged();
         updateSize();
     }
 
     public void setFontSize(double fontSize) {
         this.fontSize = fontSize;
         updateSize();
+        markContentChanged();
     }
 
     public double getFontSize() {
@@ -61,11 +63,13 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
 
     public void setWeight(Font.Weight weight) {
         this.weight = weight;
+        markContentChanged();
         updateSize();
     }
 
     public void setStyle(Font.Style style) {
         this.style = style;
+        markContentChanged();
         updateSize();
     }
     
@@ -211,6 +215,8 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
 
     public void setFontName(String fontName) {
         this.fontName = fontName;
+        markContentChanged();
+        updateSize();
     }
 
     public boolean isAutoSize() {
@@ -219,10 +225,12 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
 
     public void setAutoSize(boolean autoSize) {
         this.autoSize = autoSize;
+        markContentChanged();
     }
 
     public void setBulleted(boolean bulleted) {
         this.bulleted = bulleted;
+        markContentChanged();
     }
 
     public boolean isBulleted() {
