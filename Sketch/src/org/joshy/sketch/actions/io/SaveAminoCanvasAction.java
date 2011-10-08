@@ -350,11 +350,16 @@ public class SaveAminoCanvasAction extends SAction implements ExportAction {
         }
 
         private void renderToCachedImage(IndentWriter out, SNode node) {
+            String name = node.getStringProperty("random.cache.name");
+            if(name == null) {
             String id = node.getId();
             if(id == null || "".equals(id.trim())) {
                 id = "img_"+Math.round(Math.random()*10000);
             }
-            File file = new File(out.basedir,"cache_"+id+".png");
+                name = "cache_"+id+".png";
+                node.setStringProperty("random.cache.name",name);
+            }
+            File file = new File(out.basedir,name);
             List<SNode> nodes = new ArrayList<SNode>();
             nodes.add(node);
             SavePNGAction.export(file,nodes);
