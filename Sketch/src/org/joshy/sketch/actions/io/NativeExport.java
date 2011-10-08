@@ -43,6 +43,8 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             out.attr("backgroundFill","patternPaint");
         }
         saveBooleanAttribute(out,"gridActive",doc);
+        saveAttribute(out,"width",doc);
+        saveAttribute(out,"height",doc);
 
         if(!doc.getProperties().isEmpty()) {
             for(Map.Entry entry : (Set<Map.Entry>)doc.getProperties().entrySet()) {

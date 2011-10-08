@@ -144,6 +144,8 @@ public class OpenAction extends SAction {
         if(version < NativeExport.CURRENT_VERSION) {
             doc = upgradeDocument(doc);
         }
+        loadNumberAttribute(doc.xpathElement("/sketchy/info"),sdoc,"width");
+        loadNumberAttribute(doc.xpathElement("/sketchy/info"),sdoc,"height");
         for(Elem e : doc.xpath("/sketchy/page")) {
             loadPage(sdoc,e,zipFile);
         }
