@@ -54,7 +54,7 @@ import java.util.*;
 import static org.joshy.gfx.util.localization.Localization.getString;
 
 public class Main implements Runnable {
-    private static final File homedir = new File(OSUtil.getBaseStorageDir("Leonardo"));
+    private static final File homedir = new File(OSUtil.getBaseStorageDir(System.getProperty("org.joshy.sketch.settings.basedirname","Leonardo")));
     public static final File RECENT_FILES = new File(homedir,"recentfiles.xml");
     public static final File SETTINGS_FILE = new File(homedir,"settings.txt");
     public static final File SCRIPTS_DIR = new File(homedir,"scripts");
@@ -106,6 +106,8 @@ public class Main implements Runnable {
         }
         u.p("Using locale = " + locale);
         Localization.init(Main.class.getResource("translation.xml"),locale);
+
+        u.p("homedir = " + homedir);
 
         Core.setUseJOGL(false);
         Core.init();
