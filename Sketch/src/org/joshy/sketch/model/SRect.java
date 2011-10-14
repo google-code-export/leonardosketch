@@ -65,11 +65,32 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
     @Override
     public SPath toPath() {
         SPath path = new SPath();
-        path.moveTo(this.getX(),this.getY());
-        path.lineTo(this.getX()+this.getWidth(),this.getY());
-        path.lineTo(this.getX()+this.getWidth(),this.getY()+this.getHeight());
-        path.lineTo(this.getX(),this.getY()+this.getHeight());
-        path.close(true);
+
+        double x = this.getX();
+        double y = this.getY();
+        double w = this.getWidth();
+        double h = this.getHeight();
+        double c = this.getCorner()/2;
+        double in = corner*0.265;
+        if(getCorner() > 0) {
+            //rounded rect
+            SPath.PathPoint pt = path.moveTo(x, y + c);
+            pt = path.curveTo(pt,x,y+c-in,   x+c-in,y,   x+c,y);
+            pt = path.lineTo(x+w-c,y);
+            pt = path.curveTo(pt, x+w-c+in, y,  x+w,y+c-in, x+w,y+c);
+            pt = path.lineTo(x+w,y+h-c);
+            pt = path.curveTo(pt, x+w,y+h-c+in, x+w-c+in,y+h, x+w-c,y+h);
+            pt = path.lineTo(x+c,y+h);
+            path.curveTo(pt, x+c-in, y+h, x,y+h-c+in, x,y+h-c);
+            path.close(true);
+        } else {
+            //regular rect
+            path.moveTo(this.getX(),this.getY());
+            path.lineTo(this.getX()+this.getWidth(),this.getY());
+            path.lineTo(this.getX()+this.getWidth(),this.getY()+this.getHeight());
+            path.lineTo(this.getX(),this.getY()+this.getHeight());
+            path.close(true);
+        }
         path.setTranslateX(this.getTranslateX());
         path.setTranslateY(this.getTranslateY());
         path.setFillPaint(this.getFillPaint());
