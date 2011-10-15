@@ -41,6 +41,7 @@ public class ResizeHandle extends PositionHandle {
     }
     @Override
     public void setY(double y, boolean constrain) {
+        /*
         //flip the tense if constrain by default
         if(rect.constrainByDefault()) {
             constrain = !constrain;
@@ -71,6 +72,7 @@ public class ResizeHandle extends PositionHandle {
                 break;
         }
         //resetAnchor();
+        */
     }
 
     @Override
@@ -89,20 +91,61 @@ public class ResizeHandle extends PositionHandle {
     }
     @Override
     public void setX(double x, boolean constrain) {
+        /*
         switch (position) {
             case TopLeft:
-            case BottomLeft:
                 Point2D left = screenToModel(x,getY());
                 rect.setWidth(rect.getX() + rect.getWidth() - left.getX());
                 rect.setX(left.getX());
                 break;
+            case BottomLeft:
+                Point2D left2 = screenToModel(x,getY());
+                rect.setWidth(rect.getX() + rect.getWidth() - left2.getX());
+                rect.setX(left2.getX());
+                break;
             case TopRight:
-            case BottomRight:
                 Point2D ptright = screenToModel(x, getY());
                 rect.setWidth(ptright.getX()-rect.getX());
                 break;
+            case BottomRight:
+                Point2D ptright2 = screenToModel(x, getY());
+                rect.setWidth(ptright2.getX()-rect.getX());
+                break;
         }
         //resetAnchor();
+        */
+    }
+
+
+    @Override
+    public void setXY(double x, double y, boolean constrain) {
+        switch (position) {
+            case TopLeft:
+                Point2D tl = screenToModel(x,y);
+                rect.setWidth(rect.getX() + rect.getWidth() - tl.getX());
+                rect.setX(tl.getX());
+                rect.setHeight(rect.getY() + rect.getHeight() - tl.getY());
+                rect.setY(tl.getY());
+                break;
+            case BottomLeft:
+                Point2D bl = screenToModel(x,y);
+                rect.setWidth(rect.getX() + rect.getWidth() - bl.getX());
+                rect.setX(bl.getX());
+                rect.setHeight(bl.getY() - rect.getY());
+                break;
+            case TopRight:
+                Point2D tr = screenToModel(x, y);
+                rect.setWidth(tr.getX()-rect.getX());
+                rect.setHeight(rect.getY()+rect.getHeight() - tr.getY());
+                rect.setY(tr.getY());
+                break;
+            case BottomRight:
+                Point2D br = screenToModel(x, y);
+                rect.setWidth(br.getX()-rect.getX());
+                rect.setHeight(br.getY()-rect.getY());
+                break;
+        }
+        resetAnchor();
     }
 
     private Point2D screenToModel(double x, double y) {
