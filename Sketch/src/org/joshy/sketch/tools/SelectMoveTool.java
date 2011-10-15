@@ -930,11 +930,17 @@ public class SelectMoveTool extends CanvasTool {
         //draw the move position indicator
         if(!showIndicator) return;
         Bounds sb = context.getSketchCanvas().selection.calculateBounds();
-        String l1;
-        String l2;
+        String l1 = "";
+        String l2 = "";
         if(selectedHandle != null) {
-            l1 = "w: "+moveInfoFormatter.format(sb.getWidth());
-            l2 = "h: "+moveInfoFormatter.format(sb.getHeight());
+            String[] lines = selectedHandle.customStatusLines();
+            if(lines == null || lines.length < 1) {
+                l1 = "w: "+moveInfoFormatter.format(sb.getWidth());
+                l2 = "h: "+moveInfoFormatter.format(sb.getHeight());
+            } else {
+                if(lines.length >= 1) l1 = lines[0];
+                if(lines.length >= 2) l2 = lines[1];
+            }
         } else {
             l1 = "x: "+moveInfoFormatter.format(sb.getX());
             l2 = "y: "+moveInfoFormatter.format(sb.getY());
