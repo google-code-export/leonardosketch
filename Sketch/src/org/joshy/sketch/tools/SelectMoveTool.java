@@ -484,6 +484,7 @@ public class SelectMoveTool extends CanvasTool {
             } else {
                 selectedHandle.setX(nx,event.isShiftPressed());
                 selectedHandle.setY(ny,event.isShiftPressed());
+                selectedHandle.setXY(nx,ny,event.isShiftPressed());
             }
             context.getDocument().setDirty(true);
             context.redraw();

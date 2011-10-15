@@ -40,6 +40,10 @@ public abstract class Handle {
 
     public abstract void setY(double y, boolean constrain);
 
+    public void setXY(double x, double y, boolean constrain) {
+        //noop
+    }
+
     public abstract void draw(GFX g, SketchCanvas sketchCanvas);
 
     public boolean hasControls() {
