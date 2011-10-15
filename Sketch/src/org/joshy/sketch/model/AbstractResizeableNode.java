@@ -2,10 +2,14 @@ package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.sketch.util.Util;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 
-public abstract class AbstractResizeableNode extends SShape implements SResizeableNode {
+public abstract class AbstractResizeableNode extends SShape implements SResizeableNode, HasTransformedBounds {
     public double width = 100;
     public double height = 100;
     private double x = 0;
@@ -134,4 +138,19 @@ public abstract class AbstractResizeableNode extends SShape implements SResizeab
             }
         }
     }
+
+
+    public Bounds getTransformedBounds() {
+        java.awt.geom.Rectangle2D r = new Rectangle2D.Double(getX(),getY(),getWidth(),getHeight());
+        AffineTransform af = new AffineTransform();
+        af.translate(getTranslateX(),getTranslateY());
+        af.translate(getAnchorX(),getAnchorY());
+        af.rotate(Math.toRadians(getRotate()));
+        af.scale(getScaleX(), getScaleY());
+        af.translate(-getAnchorX(),-getAnchorY());
+        Shape sh = af.createTransformedShape(r);
+        Rectangle2D bds = sh.getBounds2D();
+        return Util.toBounds(bds);
+    }
+
 }

@@ -29,18 +29,17 @@ public class ResizeHandle extends PositionHandle {
 
     @Override
     public double getY() {
-        double y = rect.getTranslateY() + rect.getY();
+        Point2D pt = modelToScreen(rect.getX(),rect.getY());
         switch (position) {
-            case TopLeft:  return y;
-            case TopRight: return y;
-            case BottomLeft:  return y + rect.getHeight();
-            case BottomRight: return y + rect.getHeight();
+            case TopLeft:
+            case TopRight: return pt.getY();
+            case BottomLeft:
+            case BottomRight: return pt.getY() + rect.getHeight();
             default: return 0;
         }
     }
     @Override
     public void setY(double y, boolean constrain) {
-        double dy = y - rect.getTranslateY() - rect.getY();
         //flip the tense if constrain by default
         if(rect.constrainByDefault()) {
             constrain = !constrain;
@@ -48,56 +47,76 @@ public class ResizeHandle extends PositionHandle {
         switch (position) {
             case TopLeft:
             case TopRight:
+                Point2D pttop = screenToModel(getX(),y);
                 if(constrain) {
-                    double ny = y - rect.getTranslateY();
-                    double nh = rect.getHeight()-dy;
+                    double nh = rect.getY()+rect.getHeight()-pttop.getY();
                     double ratio = rect.getPreferredAspectRatio();
-                    double diff = nh-(rect.getWidth()*ratio);
-                    rect.setY(ny+diff);
-                    rect.setHeight(nh-diff);
+                    rect.setHeight(rect.getWidth()*ratio);
+                    rect.setY(pttop.getY()+nh-(rect.getWidth()*ratio));
                 } else {
-                    rect.setY(y - rect.getTranslateY());
-                    rect.setHeight(rect.getHeight() - dy);
+                    rect.setHeight(rect.getY()+rect.getHeight() - pttop.getY());
+                    rect.setY(pttop.getY());
                 }
                 break;
             case BottomLeft:
             case BottomRight:
+                Point2D ptbottom = screenToModel(getX(),y);
                 if(constrain) {
                     double ratio = rect.getPreferredAspectRatio();
                     rect.setHeight(rect.getWidth()*ratio);
                 } else {
-                    rect.setHeight(y - rect.getY() - rect.getTranslateY());
+                    rect.setHeight(ptbottom.getY() - rect.getY());
                 }
                 break;
         }
+        resetAnchor();
     }
 
     @Override
     public double getX() {
-        double x = rect.getTranslateX() + rect.getX();
+        Point2D pt = modelToScreen(rect.getX(),rect.getY());
         switch (position) {
-            case TopLeft:  return x;
-            case BottomLeft:  return x;
-            case TopRight: return x + rect.getWidth();
-            case BottomRight: return x + rect.getWidth();
+            case TopLeft:
+            case BottomLeft:
+                return pt.getX();
+            case TopRight:
+            case BottomRight:
+                return pt.getX()+rect.getWidth();
             default: return 0;
         }
     }
     @Override
     public void setX(double x, boolean constrain) {
-        double dx = x - rect.getTranslateX()-rect.getX();
         switch (position) {
             case TopLeft:
-                rect.setX(x-rect.getTranslateX());
-                rect.setWidth(rect.getWidth() - dx);
-                break;
             case BottomLeft:
-                rect.setX(x-rect.getTranslateX());
-                rect.setWidth(rect.getWidth() - dx);
+                Point2D ptleft = screenToModel(x,getY());
+                rect.setWidth(rect.getX() + rect.getWidth() - ptleft.getX());
+                rect.setX(ptleft.getX());
                 break;
-            case TopRight: rect.setWidth(x - rect.getX() - rect.getTranslateX()); break;
-            case BottomRight: rect.setWidth(x - rect.getX() - rect.getTranslateX()); break;
+            case TopRight:
+            case BottomRight:
+                Point2D ptright = screenToModel(x, getY());
+                rect.setWidth(ptright.getX()-rect.getX());
+                break;
         }
+        resetAnchor();
+    }
+
+    private Point2D screenToModel(double x, double y) {
+        double tx = x - rect.getTranslateX();
+        double ty = y - rect.getTranslateY();
+        return new Point2D.Double(tx,ty);
+    }
+    private Point2D modelToScreen(double x, double y) {
+        double tx = x + rect.getTranslateX();
+        double ty = y + rect.getTranslateY();
+        return new Point2D.Double(tx,ty);
+    }
+
+    private void resetAnchor() {
+        rect.setAnchorX(rect.getX()+rect.getWidth()/2);
+        rect.setAnchorY(rect.getY() + rect.getHeight() / 2);
     }
 
     @Override
