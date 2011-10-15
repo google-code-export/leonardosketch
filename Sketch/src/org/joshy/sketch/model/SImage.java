@@ -6,9 +6,13 @@ import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.sketch.modes.DocContext;
+import org.joshy.sketch.util.Util;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +24,7 @@ import java.net.URL;
  * It can be created from a file, a buffered image, or a url, or an input stream.
  * This lets us load images directly out of zip files, for example.
  */
-public class SImage extends SNode implements SelfDrawable, SResizeableNode {
+public class SImage extends SNode implements SelfDrawable, SResizeableNode, HasTransformedBounds {
     private File file;
     private BufferedImage img;
     private Image image;
@@ -234,5 +238,18 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
 
     public boolean constrainByDefault() {
         return true;
+    }
+
+    public Bounds getTransformedBounds() {
+        java.awt.geom.Rectangle2D r = new Rectangle2D.Double(getX(),getY(),getWidth(),getHeight());
+        AffineTransform af = new AffineTransform();
+        af.translate(getTranslateX(),getTranslateY());
+        af.translate(getAnchorX(),getAnchorY());
+        af.rotate(Math.toRadians(getRotate()));
+        af.scale(getScaleX(), getScaleY());
+        af.translate(-getAnchorX(),-getAnchorY());
+        Shape sh = af.createTransformedShape(r);
+        Rectangle2D bds = sh.getBounds2D();
+        return Util.toBounds(bds);
     }
 }

@@ -5,6 +5,8 @@ import org.joshy.gfx.draw.GFX;
 import org.joshy.sketch.model.SResizeableNode;
 import org.joshy.sketch.util.DrawUtils;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 
 /**
@@ -29,12 +31,11 @@ public class ResizeHandle extends PositionHandle {
 
     @Override
     public double getY() {
-        Point2D pt = modelToScreen(rect.getX(),rect.getY());
         switch (position) {
-            case TopLeft:
-            case TopRight: return pt.getY();
-            case BottomLeft:
-            case BottomRight: return pt.getY() + rect.getHeight();
+            case TopLeft: return modelToScreen(rect.getX(),rect.getY()).getY();
+            case TopRight: return modelToScreen(rect.getX()+rect.getWidth(),rect.getY()).getY();
+            case BottomLeft: return modelToScreen(rect.getX(),rect.getY()+ rect.getHeight()).getY();
+            case BottomRight: return modelToScreen(rect.getX()+rect.getWidth(),rect.getY()+ rect.getHeight()).getY();
             default: return 0;
         }
     }
@@ -69,19 +70,20 @@ public class ResizeHandle extends PositionHandle {
                 }
                 break;
         }
-        resetAnchor();
+        //resetAnchor();
     }
 
     @Override
     public double getX() {
-        Point2D pt = modelToScreen(rect.getX(),rect.getY());
         switch (position) {
             case TopLeft:
+                return modelToScreen(rect.getX(),rect.getY()).getX();
             case BottomLeft:
-                return pt.getX();
+                return modelToScreen(rect.getX(),rect.getY()+rect.getHeight()).getX();
             case TopRight:
+                return modelToScreen(rect.getX()+rect.getWidth(),rect.getY()).getX();
             case BottomRight:
-                return pt.getX()+rect.getWidth();
+                return modelToScreen(rect.getX()+rect.getWidth(),rect.getY()+rect.getHeight()).getX();
             default: return 0;
         }
     }
@@ -90,9 +92,9 @@ public class ResizeHandle extends PositionHandle {
         switch (position) {
             case TopLeft:
             case BottomLeft:
-                Point2D ptleft = screenToModel(x,getY());
-                rect.setWidth(rect.getX() + rect.getWidth() - ptleft.getX());
-                rect.setX(ptleft.getX());
+                Point2D left = screenToModel(x,getY());
+                rect.setWidth(rect.getX() + rect.getWidth() - left.getX());
+                rect.setX(left.getX());
                 break;
             case TopRight:
             case BottomRight:
@@ -100,23 +102,37 @@ public class ResizeHandle extends PositionHandle {
                 rect.setWidth(ptright.getX()-rect.getX());
                 break;
         }
-        resetAnchor();
+        //resetAnchor();
     }
 
     private Point2D screenToModel(double x, double y) {
-        double tx = x - rect.getTranslateX();
-        double ty = y - rect.getTranslateY();
-        return new Point2D.Double(tx,ty);
+        AffineTransform af = new AffineTransform();
+        af.translate(rect.getTranslateX(),rect.getTranslateY());
+        af.translate(rect.getAnchorX(), rect.getAnchorY());
+        af.rotate(Math.toRadians(rect.getRotate()));
+        af.scale(rect.getScaleX(), rect.getScaleY());
+        af.translate(-rect.getAnchorX(), -rect.getAnchorY());
+        try {
+            return af.inverseTransform(new Point2D.Double(x, y), null);
+        } catch (NoninvertibleTransformException e) {
+            e.printStackTrace();
+            return new Point2D.Double(x,y);
+        }
     }
+
     private Point2D modelToScreen(double x, double y) {
-        double tx = x + rect.getTranslateX();
-        double ty = y + rect.getTranslateY();
-        return new Point2D.Double(tx,ty);
+        AffineTransform af = new AffineTransform();
+        af.translate(rect.getTranslateX(),rect.getTranslateY());
+        af.translate(rect.getAnchorX(), rect.getAnchorY());
+        af.rotate(Math.toRadians(rect.getRotate()));
+        af.scale(rect.getScaleX(), rect.getScaleY());
+        af.translate(-rect.getAnchorX(), -rect.getAnchorY());
+        return af.transform(new Point2D.Double(x,y),null);
     }
 
     private void resetAnchor() {
-        rect.setAnchorX(rect.getX()+rect.getWidth()/2);
-        rect.setAnchorY(rect.getY() + rect.getHeight() / 2);
+        //rect.setAnchorX(rect.getX() + rect.getWidth() / 2);
+        //rect.setAnchorY(rect.getY() + rect.getHeight() / 2);
     }
 
     @Override
@@ -126,7 +142,7 @@ public class ResizeHandle extends PositionHandle {
 
         double x = pt.getX();
         double y = pt.getY();
-        double s = 0;
+        //double s = 0;
         DrawUtils.drawStandardHandle(g,x,y, FlatColor.BLUE);
     }
 
