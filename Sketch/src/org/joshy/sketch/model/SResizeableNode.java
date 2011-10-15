@@ -30,9 +30,12 @@ public interface SResizeableNode extends SelfDrawable {
     public void setTranslateX(double x);
     public void setTranslateY(double y);
     public void setAnchorX(double ax);
+    public double getAnchorX();
     public void setAnchorY(double ay);
+    public double getAnchorY();
     public double getScaleX();
     public double getScaleY();
+    public double getRotate();
 
     public double getPreferredAspectRatio();
 

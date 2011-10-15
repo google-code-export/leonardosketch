@@ -86,6 +86,11 @@ public class DrawTextTool extends CanvasTool {
         overlayTextBox.setVisible(false);
         textNode.setText(overlayTextBox.getText());
         textNode.refresh();
+        //shift all excess into the translate so that the anchor won't be at the edge of the screen
+        textNode.setTranslateX(textNode.getTranslateX()+textNode.getX());
+        textNode.setTranslateY(textNode.getTranslateY()+textNode.getY());
+        textNode.setX(0);
+        textNode.setY(0);
         overlayTextBox = null;
         if(!notInMainDocument) {
             SketchDocument doc = context.getDocument();
