@@ -14,6 +14,7 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.text.DecimalFormat;
 
 /**
  * Created by IntelliJ IDEA.
@@ -124,9 +125,12 @@ public class STransformNode extends SNode implements SelfDrawable {
 
     public static class TransformScaleHandle extends Handle {
         private STransformNode trans;
+        DecimalFormat fmt = new DecimalFormat();
 
         public TransformScaleHandle(STransformNode trans) {
             this.trans = trans;
+            fmt.setMinimumFractionDigits(1);
+            fmt.setMaximumFractionDigits(1);
         }
 
         @Override
@@ -146,7 +150,15 @@ public class STransformNode extends SNode implements SelfDrawable {
         @Override
         public void setY(double y, boolean constrain) {
             double ty = y-this.trans.getTranslateY()-trans.child.getAnchorY();
-            trans.scy = ((ty)/50.0);
+            ty = ty/50.0;
+            if(constrain) {
+                if(ty > 0.9 && ty < 1.1) ty = 1.0;
+                if(ty > 1.4 && ty < 1.6) ty = 1.5;
+                if(ty > 1.9 && ty < 2.1) ty = 2.0;
+                if(ty > 2.4 && ty < 2.6) ty = 2.5;
+                if(ty > 2.9 && ty < 3.1) ty = 3.0;
+            }
+            trans.scy = ty;
             trans.scx = trans.scy;
         }
 
@@ -186,6 +198,11 @@ public class STransformNode extends SNode implements SelfDrawable {
             }
             return false;
         }
+
+        @Override
+        public String[] customStatusLines() {
+            return new String[]{""+fmt.format(trans.scy*100) + '%' };
+        }
     }
 
 
@@ -193,9 +210,12 @@ public class STransformNode extends SNode implements SelfDrawable {
         private STransformNode trans;
         double x = 100;
         double y = 50;
+        DecimalFormat fmt = new DecimalFormat();
 
         public TransformRotateHandle(STransformNode trans) {
             this.trans = trans;
+            fmt.setMaximumFractionDigits(2);
+            fmt.setMinimumFractionDigits(2);
         }
 
         @Override
@@ -209,7 +229,12 @@ public class STransformNode extends SNode implements SelfDrawable {
         public void setX(double x, boolean constrain) {
             this.x = x - trans.getTranslateX() - trans.child.getAnchorX();
             double a = GeomUtil.calcAngle(new Point2D.Double(0,0),new Point2D.Double(this.x,this.y));
-            trans.setAngle(Math.toDegrees(a)-90);
+            if(constrain) {
+                a = GeomUtil.snapTo45(a);
+            } else {
+                a = Math.toDegrees(a);
+            }
+            trans.setAngle(a-90);
         }
 
         @Override
@@ -254,6 +279,11 @@ public class STransformNode extends SNode implements SelfDrawable {
                 return true;
             }
             return false;
+        }
+
+        @Override
+        public String[] customStatusLines() {
+            return new String[]{""+fmt.format(trans.getAngle()) + '\u00b0' };
         }
     }
 

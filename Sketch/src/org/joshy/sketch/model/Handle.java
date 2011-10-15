@@ -75,4 +75,8 @@ public abstract class Handle {
     public boolean processKey(KeyEvent event, boolean hovered) {
         return false;
     }
+
+    public String[] customStatusLines() {
+        return new String[0];
+    }
 }
