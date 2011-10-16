@@ -36,6 +36,10 @@ public class FillPicker extends Button {
     private TabPanel popup;
     private double inset = 2;
     private Main manager;
+    private FreerangeColorPickerPopup freerangeColorPickerPopup;
+    private boolean locked = false;
+    private boolean popupadded;
+    private ColorPickerPanel rgbhsvpicker;
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -58,19 +62,20 @@ public class FillPicker extends Button {
         setPrefWidth(25);
         setPrefHeight(25);
         selectedFill = FlatColor.RED;
+        try {
+            popup = buildPanel();
+            popup.setVisible(false);
+            popupadded = false;
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
     }
 
     @Override
     protected void setPressed(boolean pressed) {
         super.setPressed(pressed);
         if (pressed) {
-            if (popup == null) {
-                try {
-                    popup = buildPanel();
-                } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-                popup.setVisible(false);
+            if (!popupadded) {
                 Stage stage = getParent().getStage();
                 stage.getPopupLayer().add(popup);
             }
@@ -278,28 +283,32 @@ public class FillPicker extends Button {
     }
 
     private void setupColorTab(TabPanel panel) {
-        FreerangeColorPickerPopup picker = new FreerangeColorPickerPopup(null,300,170,false);
-        EventBus.getSystem().addListener(picker, ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
+        freerangeColorPickerPopup = new FreerangeColorPickerPopup(null,300,170,false);
+        EventBus.getSystem().addListener(freerangeColorPickerPopup, ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) throws Exception {
+                locked = true;
                 setSelectedFill((FlatColor)event.getValue());
+                locked = false;
                 if(!event.isAdjusting()) {
                     popup.setVisible(false);
                 }
             }
         });
-        panel.add("Color",picker);
+        panel.add("Color",freerangeColorPickerPopup);
     }
 
 
     private void setupRGBTab(TabPanel panel) {
-        ColorPickerPanel picker = new ColorPickerPanel(280,250);
-        panel.add("RGB/HSV", picker);
-        EventBus.getSystem().addListener(picker, ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
+        rgbhsvpicker = new ColorPickerPanel(280,250);
+        panel.add("RGB/HSV", rgbhsvpicker);
+        EventBus.getSystem().addListener(rgbhsvpicker, ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent changedEvent) throws Exception {
+                locked = true;
                 setSelectedFill((FlatColor)changedEvent.getValue());
                 if(!changedEvent.isAdjusting()) {
                     popup.setVisible(false);
                 }
+                locked = false;
             }
         });
 
@@ -368,6 +377,12 @@ public class FillPicker extends Button {
 
     public void setSelectedFill(Paint paint) {
         this.selectedFill = paint;
+        if(!locked) {
+            if(paint instanceof FlatColor) {
+                freerangeColorPickerPopup.setSelectedColor((FlatColor)paint);
+                rgbhsvpicker.setSelectedColor((FlatColor)paint);
+            }
+        }
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.ObjectChanged, selectedFill, this));
         setDrawingDirty();
     }

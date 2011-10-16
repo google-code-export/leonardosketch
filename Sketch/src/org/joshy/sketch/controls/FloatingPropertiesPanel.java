@@ -505,6 +505,8 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
         if(manager.propMan.isClassAvailable(SShape.class)) {
             shapeProperties.setVisible(true);
+
+            //shadow properties
             shadowProperties.setVisible(true);
             if(lastNode != null) {
                 if(manager.propMan.isPropertyNotNull("shadow")) {
@@ -524,6 +526,15 @@ public class FloatingPropertiesPanel extends VFlexBox {
             shapeProperties.setVisible(false);
             shadowProperties.setVisible(false);
         }
+        //fill property
+        if(manager.propMan.isClassAvailable(SShape.class)) {
+            if(manager.propMan.getProperty("fillPaint").hasSingleValue()) {
+                Paint fill = (Paint) manager.propMan.getProperty("fillPaint").getValue();
+                fillButton.setSelectedFill(fill);
+            }
+        }
+
+        //stroke properties
         if(manager.propMan.isClassAvailable(SShape.class) ||
             manager.propMan.isClassAvailable(SImage.class)) {
             strokeColorButton.setVisible(true);

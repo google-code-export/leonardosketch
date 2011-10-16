@@ -388,4 +388,8 @@ public class ColorPickerPanel extends org.joshy.gfx.node.layout.Panel {
     public FlatColor getColor() {
         return color;
     }
+
+    public void setSelectedColor(FlatColor color) {
+        setColor(color);
+    }
 }
