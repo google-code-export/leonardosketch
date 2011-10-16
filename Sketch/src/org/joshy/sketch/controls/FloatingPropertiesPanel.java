@@ -591,7 +591,8 @@ public class FloatingPropertiesPanel extends VFlexBox {
             double bottom = y + this.getHeight();
 
             //if to low then put above the item
-            if(bottom > h) {
+            if(bottom > h-140) {
+                //the 130 above is to account for the height of the fill picker
                 y = bounds.getY()-this.getHeight()-20;
             }
             //if off the top now, then move to the right
