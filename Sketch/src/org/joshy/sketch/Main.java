@@ -325,7 +325,7 @@ public class Main implements Runnable {
         }                                               
     }
 
-    private void setupStage(final DocContext context, DocModeHelper modeHelper) {
+    private void setupStage(final DocContext context, final DocModeHelper modeHelper) {
         final Textbox wishBox = new Textbox().setHintText(getString("misc.wish.box"));
         final Label wishStatus = new Label("");
         wishStatus.setPrefWidth(130);
@@ -374,7 +374,11 @@ public class Main implements Runnable {
                     }
                     if(c == context.stackPanel) {
                         c.setTranslateY(0);
-                        c.setHeight(getHeight()-40);
+                        if(modeHelper.isPageListVisible()) {
+                            c.setHeight(getHeight()-40-104);
+                        } else {
+                            c.setHeight(getHeight()-40-0);
+                        }
                         c.setTranslateX(30);
                         c.setWidth(getWidth()-sidebarWidth-30);
                     }
@@ -390,10 +394,10 @@ public class Main implements Runnable {
                         c.setTranslateY(0);
                     }
                     if(c == context.pageList) {
-                        c.setTranslateX(20);
-                        c.setTranslateY(getHeight()-100);
+                        c.setTranslateX(30);
+                        c.setTranslateY(getHeight()-100-statusBar.getHeight());
                         c.setHeight(100);
-                        c.setWidth(getWidth()-20-sidebarWidth);
+                        c.setWidth(getWidth()-30-sidebarWidth);
                     }
                     if(c == statusBar) {
                         c.setTranslateX(20);

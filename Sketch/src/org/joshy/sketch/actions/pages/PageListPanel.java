@@ -32,6 +32,8 @@ public class PageListPanel extends StackPanel {
     public PageListPanel(final VectorDocContext context) {
         this.context = context;
         scroll = new ScrollPane();
+        scroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);
+        scroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
         listview = new ListView<SketchDocument.SketchPage>();
         listview.setModel(new ListModel<SketchDocument.SketchPage>(){
             public SketchDocument.SketchPage get(int i) {
