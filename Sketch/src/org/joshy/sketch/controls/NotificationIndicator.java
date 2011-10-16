@@ -45,10 +45,15 @@ public class NotificationIndicator extends Control {
     @Override
     public void draw(GFX gfx) {
         if(this.string != null) {
+            Font font = Font.name("OpenSans").size(26).resolve();
+            double width = font.calculateWidth(string) + 30;
+            if(width < getWidth()) {
+                width = getWidth();
+            }
             gfx.setPaint(FlatColor.hsb(0, 0, 0.8, this.getOpacity() * 0.9));
-            gfx.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+            gfx.fillRoundRect(0, 0, width, getHeight(), 10, 10);
             gfx.setPaint(FlatColor.hsb(0,0,0.2,this.getOpacity()));
-            gfx.drawText(string, Font.name("OpenSans").size(26).resolve(),15,35);
+            gfx.drawText(string, font ,15,35);
         }
     }
 
