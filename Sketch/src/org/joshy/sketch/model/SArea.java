@@ -47,6 +47,11 @@ public class SArea extends SShape implements SelfDrawable {
     }
 
     @Override
+    public SPath toPath() {
+        return SPath.fromPathIterator(this.area.getPathIterator(null));
+    }
+
+    @Override
     protected void fillShape(GFX g) {
         PathIterator it = area.getPathIterator(null);
         Path2D.Double pth = new Path2D.Double();

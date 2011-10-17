@@ -349,6 +349,30 @@ public class SPath extends SShape implements SelfDrawable, HasTransformedBounds 
         return prev;
     }
 
+    public static SPath fromPathIterator(PathIterator it) {
+        SPath sPath = new SPath();
+        PathPoint prev = null;
+        while(!it.isDone()) {
+            double[] coords = new double[6];
+            int n = it.currentSegment(coords);
+            if(n == PathIterator.SEG_MOVETO) {
+                prev = sPath.moveTo(coords[0],coords[1]);
+            }
+            if(n == PathIterator.SEG_LINETO) {
+                prev = sPath.lineTo(coords[0],coords[1]);
+            }
+            if(n == PathIterator.SEG_CUBICTO) {
+                prev = sPath.curveTo(prev, coords[0],coords[1],coords[2],coords[3],coords[4],coords[5]);
+            }
+            if(n == PathIterator.SEG_CLOSE) {
+                sPath.close(true);
+                break;
+            }
+            it.next();
+        }
+        return sPath;
+    }
+
     public static class PathTuple {
         public double distance;
         public double t;
