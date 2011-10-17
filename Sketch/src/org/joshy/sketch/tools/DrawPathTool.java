@@ -4,8 +4,15 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Transform;
+import org.joshy.gfx.event.ActionEvent;
+import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.node.NodeUtils;
+import org.joshy.gfx.node.control.Togglebutton;
+import org.joshy.gfx.node.layout.FlexBox;
+import org.joshy.gfx.node.layout.HFlexBox;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.UndoManager;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
@@ -80,6 +87,10 @@ public class DrawPathTool extends CanvasTool {
     private Cursor addCursor;
     private SPath.PathPoint undoReference;
     private SPath.PathPoint redoReference;
+    private FlexBox panel;
+    private Togglebutton moveButton;
+    private Togglebutton deleteButton;
+    private Togglebutton reshapeButton;
 
     private enum Tool { Delete, Reshape, Move };
     private Tool defaultTool = Tool.Move;
@@ -98,6 +109,36 @@ public class DrawPathTool extends CanvasTool {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        panel = new HFlexBox().setBoxAlign(HFlexBox.Align.Baseline);
+        moveButton = new Togglebutton("move");
+        moveButton.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                defaultTool = Tool.Move;
+                updateToolButtons();
+            }
+        });
+        panel.add(moveButton);
+        deleteButton = new Togglebutton("delete");
+        deleteButton.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                defaultTool = Tool.Delete;
+                updateToolButtons();
+            }
+        });
+        panel.add(deleteButton);
+        reshapeButton = new Togglebutton("reshape");
+        reshapeButton.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                defaultTool = Tool.Reshape;
+                updateToolButtons();
+            }
+        });
+        panel.add(reshapeButton);
+        panel.setTranslateX(100);
+        panel.setTranslateY(20);
+
+        defaultTool = Tool.Move;
+        updateToolButtons();
     }
 
     @Override
@@ -146,12 +187,27 @@ public class DrawPathTool extends CanvasTool {
             case Delete: defaultTool = Tool.Reshape; break;
             case Reshape: defaultTool = Tool.Move; break;
         }
+        updateToolButtons();
         context.redraw();
+    }
+
+    private void updateToolButtons() {
+        moveButton.setSelected(defaultTool==Tool.Move);
+        deleteButton.setSelected(defaultTool == Tool.Delete);
+        reshapeButton.setSelected(defaultTool == Tool.Reshape);
     }
 
     public void enable() {
         super.enable();
         setCursor(penCursor);
+        NodeUtils.doSkins(panel);
+        panel.doPrefLayout();
+        panel.doLayout();
+        panel.setFill(FlatColor.BLACK.deriveWithAlpha(0.3));
+        context.getCanvas().getParent().getStage().getPopupLayer().add(panel);
+        Point2D pt = NodeUtils.convertToScene(context.getCanvas(), 20, 20);
+        panel.setTranslateX(pt.getX());
+        panel.setTranslateY(pt.getY());
     }
 
     public void disable() {
@@ -170,6 +226,7 @@ public class DrawPathTool extends CanvasTool {
             }
         }
         super.disable();
+        context.getCanvas().getParent().getStage().getPopupLayer().remove(panel);
     }
 
 
