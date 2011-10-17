@@ -208,8 +208,8 @@ public class Main implements Runnable {
             UpdateChecker.setup(this);
             setupGlobals();
             //setupNewDoc(defaultModeHelper,null);
-            showDocChooser();
             setupMac();
+            showDocChooser();
             //Core.setDebugCSS(new File("test.css"));
         } catch (Exception ex) {
             u.p(ex);
@@ -555,7 +555,7 @@ public class Main implements Runnable {
         }
 
         recentFiles = loadRecentDocs(RECENT_FILES);
-        
+
         EventBus.getSystem().addListener(FileOpenEvent.FileOpen, new Callback<FileOpenEvent>() {
             public void call(FileOpenEvent fileOpenEvent) throws Exception {
                 OpenAction act = new OpenAction(Main.this);
