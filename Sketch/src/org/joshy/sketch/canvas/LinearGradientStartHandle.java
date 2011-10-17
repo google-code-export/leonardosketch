@@ -287,9 +287,14 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
             pt = NodeUtils.convertToScene(context.getSketchCanvas(), pt);
             pt = NodeUtils.convertFromScene(popupLayer, pt);
             pt = GeomUtil.calcPoint(pt,Math.toDegrees(angle)+90,15);
-            Control control = controlMap.get(stop);
-            control.setTranslateX((int)(pt.getX()-5));
-            control.setTranslateY((int)(pt.getY()-5));
+            Control colorControl = colorControlMap.get(stop);
+            colorControl.setTranslateX((int) (pt.getX() - 5));
+            colorControl.setTranslateY((int) (pt.getY() - 5));
+
+            pt = GeomUtil.calcPoint(pt,Math.toDegrees(angle)+90,10);
+            Control alphaControl = alphaControlMap.get(stop);
+            alphaControl.setTranslateX((int) (pt.getX() - 5));
+            alphaControl.setTranslateY((int) (pt.getY() - 5));
 
         }
     }
