@@ -59,6 +59,7 @@ public class SArea extends SShape implements SelfDrawable {
 
         Paint paint = getFillPaint();
         if(paint != null) {
+            double opacity = -1;
             if(paint instanceof FlatColor) {
                 g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
             }
@@ -69,9 +70,12 @@ public class SArea extends SShape implements SelfDrawable {
                 g.setPaint(gf);
             }
             if(paint instanceof PatternPaint) {
+                opacity = g.getOpacity();
+                g.setOpacity(getFillOpacity());
                 g.setPaint(paint);
             }
             fillShape(g);
+            if(opacity >=0) g.setOpacity(opacity);
         }
 
         if(getStrokeWidth() > 0 && getStrokePaint() != null) {

@@ -152,6 +152,7 @@ public class SPoly extends SShape implements SelfDrawable, HasTransformedBounds 
     public void draw(GFX g) {
         drawShadow(g);
 
+        double opacity = -1;
         Paint paint = this.getFillPaint();
         if(paint != null) {
             if(paint instanceof FlatColor) {
@@ -163,11 +164,14 @@ public class SPoly extends SShape implements SelfDrawable, HasTransformedBounds 
                 g.setPaint(gf);
             }
             if(paint instanceof PatternPaint) {
+                opacity = g.getOpacity();
+                g.setOpacity(getFillOpacity());
                 g.setPaint(paint);
             }
         }
 
         fillShape(g);
+        if(opacity >=0) g.setOpacity(opacity);
 
         double[] points = new double[this.pointCount()*2];
         for(int i=0; i<this.pointCount(); i++) {

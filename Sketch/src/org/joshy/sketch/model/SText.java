@@ -160,6 +160,7 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
 
     public void draw(GFX g) {
 
+        double opacity = -1;
         Paint paint = this.getFillPaint();
         if(paint != null) {
             if(paint instanceof FlatColor) {
@@ -171,11 +172,14 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
                 g.setPaint(gf);
             }
             if(paint instanceof PatternPaint) {
+                opacity = g.getOpacity();
+                g.setOpacity(getFillOpacity());
                 g.setPaint(paint);
             }
         }
         drawShadow(g);
         fillShape(g);
+        if(opacity >=0) g.setOpacity(opacity);
     }
 
     protected void fillShape(GFX g) {

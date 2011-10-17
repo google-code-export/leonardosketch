@@ -79,6 +79,7 @@ public class SPath extends SShape implements SelfDrawable, HasTransformedBounds 
         drawShadow(g);
 
         if(isClosed()) {
+            double opacity = -1;
             Paint paint = getFillPaint();
             if(paint != null) {
                 if(paint instanceof FlatColor) {
@@ -88,10 +89,13 @@ public class SPath extends SShape implements SelfDrawable, HasTransformedBounds 
                     g.setPaint(paint);
                 }
                 if(paint instanceof PatternPaint) {
+                    opacity = g.getOpacity();
+                    g.setOpacity(getFillOpacity());
                     g.setPaint(paint);
                 }
                 fillShape(g);
             }
+            if(opacity >=0) g.setOpacity(opacity);
         }
 
 
