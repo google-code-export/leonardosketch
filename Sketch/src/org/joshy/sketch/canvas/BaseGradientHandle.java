@@ -7,6 +7,7 @@ import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.util.GeomUtil;
+import org.joshy.sketch.controls.AlphaPicker;
 import org.joshy.sketch.controls.FreerangeColorPicker;
 import org.joshy.sketch.model.AbstractResizeableNode;
 import org.joshy.sketch.model.Handle;
@@ -42,7 +43,8 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
     protected boolean onPoint;
     protected boolean draggingStop;
     protected Point2D.Double startPoint;
-    protected Map<RadialGradientFill.Stop,Control> controlMap;
+    protected Map<MultiGradientFill.Stop, Control> colorControlMap;
+    protected Map<MultiGradientFill.Stop,  Control> alphaControlMap;
     protected ArrayList<Control> controls;
     protected boolean showAddIndicator;
     protected boolean couldDelete;
@@ -56,7 +58,8 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         this.context = context;
         this.shape.addListener(this);
         controls = new ArrayList<Control>();
-        controlMap = new HashMap<RadialGradientFill.Stop,Control>();
+        colorControlMap = new HashMap<MultiGradientFill.Stop,Control>();
+        alphaControlMap = new HashMap<MultiGradientFill.Stop,Control>();
         for(final MultiGradientFill.Stop stop : getFill().getStops()) {
             addStopControl(stop);
         }
@@ -67,31 +70,51 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         return (G) shape.getFillPaint();
     }
 
-    protected void addStopControl(final RadialGradientFill.Stop stop) {
+    protected void addStopControl(final MultiGradientFill.Stop stop) {
         FreerangeColorPicker colorPopup = new FreerangeColorPicker();
+        colorPopup.setSelectedColor(stop.getColor());
+
         colorPopup.setPrefWidth(10);
         colorPopup.setPrefHeight(10);
-        colorPopup.setSelectedColor(stop.getColor());
         controls.add(colorPopup);
-        controlMap.put(stop,colorPopup);
+        colorControlMap.put(stop,colorPopup);
         colorPopup.onColorSelected(new Callback<ChangedEvent>() {
             public void call(ChangedEvent changedEvent) throws Exception {
                 FlatColor val = (FlatColor) changedEvent.getValue();
-                if(val == null) {
+                if (val == null) {
                     val = FlatColor.WHITE_TRANSPARENT;
                 }
-                stop.setColor(val);
+
+                stop.setColor(val.deriveWithAlpha(stop.getColor().getAlpha()));
                 refresh();
             }
         });
+
+        AlphaPicker c2 = new AlphaPicker();
+        c2.setAlpha(stop.getColor().getAlpha());
+        c2.onAlphaSelected(new Callback<ChangedEvent>() {
+            public void call(ChangedEvent changedEvent) throws Exception {
+                Double d = (Double) changedEvent.getValue();
+                stop.setColor(stop.getColor().deriveWithAlpha(d));
+                refresh();
+            }
+        });
+        c2.setPrefWidth(10).setPrefHeight(10);
+        controls.add(c2);
+        alphaControlMap.put(stop,c2);
     }
 
     protected void removeStopControl(MultiGradientFill.Stop activeStop) {
-        Control popup = controlMap.get(activeStop);
-        controls.remove(popup);
-        controlMap.remove(activeStop);
+        Control colorPopup = colorControlMap.get(activeStop);
+        controls.remove(colorPopup);
+        colorControlMap.remove(activeStop);
         Container popupLayer = context.getSketchCanvas().getParent().getStage().getPopupLayer();
-        popupLayer.remove(popup);
+        popupLayer.remove(colorPopup);
+
+        Control alphaPopup = alphaControlMap.get(activeStop);
+        controls.remove(alphaPopup);
+        alphaControlMap.remove(activeStop);
+        popupLayer.remove(alphaPopup);
     }
 
     protected void refresh() {
