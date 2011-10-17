@@ -83,6 +83,7 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
         drawShadow(g);
         Paint paint = this.getFillPaint();
         if(paint != null) {
+            double opacity = -1;
             if(paint instanceof FlatColor) {
                 g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
             }
@@ -93,9 +94,12 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
                 g.setPaint(paint);
             }
             if(paint instanceof PatternPaint) {
+                opacity = g.getOpacity();
+                g.setOpacity(getFillOpacity());
                 g.setPaint(paint);
             }
             fillShape(g);
+            if(opacity >=0) g.setOpacity(opacity);
         }
         if(getStrokePaint() != null) {
             g.setPaint(this.getStrokePaint());

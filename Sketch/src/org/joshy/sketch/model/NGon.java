@@ -103,6 +103,7 @@ public class NGon extends SShape implements SelfDrawable, HasTransformedBounds {
         drawShadow(g);
 
         Paint paint = this.getFillPaint();
+        double opacity = -1;
         if(paint != null) {
             if(paint instanceof FlatColor) {
                 g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
@@ -113,11 +114,14 @@ public class NGon extends SShape implements SelfDrawable, HasTransformedBounds {
                 g.setPaint(gf);
             }
             if(paint instanceof PatternPaint) {
+                opacity = g.getOpacity();
+                g.setOpacity(getFillOpacity());
                 g.setPaint(paint);
             }
         }
 
         fillShape(g);
+        if(opacity >=0) g.setOpacity(opacity);
 
 
         if(getStrokePaint() != null && getStrokeWidth() > 0) {

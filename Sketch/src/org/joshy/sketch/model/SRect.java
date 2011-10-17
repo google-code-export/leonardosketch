@@ -16,6 +16,7 @@ import java.awt.geom.Point2D;
  */
 public class SRect extends AbstractResizeableNode implements SelfDrawable {
     private double corner = 0;
+    private double opacity = -1;
 
     public SRect(double x, double y, double w, double h) {
         super(x, y, w, h);
@@ -117,8 +118,14 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
             }
         }
         g.setStrokeWidth(1);
-
+        uninitPaint(g);
         g.translate(-this.getX(),-this.getY());
+    }
+
+    private void uninitPaint(GFX g) {
+        if(opacity >= 0) {
+            g.setOpacity(opacity);
+        }
     }
 
     protected void initPaint(GFX g) {
@@ -134,6 +141,8 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
                 g.setPaint(paint);
             }
             if(paint instanceof PatternPaint) {
+                opacity = g.getOpacity();
+                g.setOpacity(getFillOpacity());
                 g.setPaint(paint);
             }
         }
