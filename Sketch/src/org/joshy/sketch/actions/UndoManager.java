@@ -23,6 +23,9 @@ public class UndoManager {
         index = -1;
     }
 
+    public UndoableAction getLastAction() {
+        return actionStack.getLast();
+    }
     public void pushAction(UndoableAction act) {
         index++;
 //        u.p("adding at index: " + index);
