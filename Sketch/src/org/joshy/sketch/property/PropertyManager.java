@@ -7,6 +7,9 @@ import org.joshy.sketch.model.SNode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -53,15 +56,18 @@ public class PropertyManager {
 
     public static class Property {
         private String name;
-        private Selection selection;
+        private ArrayList<SNode> items;
 
         public Property(String propName, Selection selection) {
             this.name = propName;
-            this.selection = selection;
+            items = new ArrayList<SNode>();
+            for(SNode item : selection.items()) {
+                items.add(item);
+            }
         }
 
         public double getDoubleValue() {
-            SNode first = selection.items().iterator().next();
+            SNode first = items.iterator().next();
 
             try {
                 Method method = getMethod();
@@ -80,13 +86,13 @@ public class PropertyManager {
         }
 
         private Method getMethod() throws NoSuchMethodException {
-            SNode first = selection.items().iterator().next();
+            SNode first = items.iterator().next();
             Method method = first.getClass().getMethod("get"+ name.substring(0,1).toUpperCase()+ name.substring(1));
             return method;
         }
 
         public void setValue(Object value) {
-            SNode node = selection.items().iterator().next();
+            SNode node = items.iterator().next();
             try {
                 String methodName = "set"+name.substring(0,1).toUpperCase()+name.substring(1);
                 Method method = null;
@@ -99,7 +105,7 @@ public class PropertyManager {
                 if(method == null) {
                     throw new Exception("Method: " + methodName + " not found on object " + node.getClass().getName());
                 }
-                for(SNode s : selection.items()) {
+                for(SNode s : items) {
                     method.invoke(s,value);
                 }
                 //method.invoke(node,value);
@@ -112,12 +118,31 @@ public class PropertyManager {
             }
         }
 
+        public void setValue(SNode node, Object o) {
+            try {
+                String methodName = "set"+name.substring(0,1).toUpperCase()+name.substring(1);
+                Method method = null;
+                for(Method m : node.getClass().getMethods()) {
+                    if(m.getName().equals(methodName)) {
+                        method = m;
+                    }
+                }
+
+                if(method == null) {
+                    throw new Exception("Method: " + methodName + " not found on object " + node.getClass().getName());
+                }
+                method.invoke(node,o);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         public boolean hasSingleValue() {
             try {
-                SNode first = selection.items().iterator().next();
+                SNode first = items.iterator().next();
                 Method meth = getMethod();
                 Object value = meth.invoke(first);
-                for(SNode item : selection.items()) {
+                for(SNode item : items) {
                     Object ival = meth.invoke(item);
                     //u.p("comparing: " + ival + " " + value);
                     if(value == null) return false;
@@ -126,19 +151,15 @@ public class PropertyManager {
                     }
                 }
 
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             return true;
         }
 
 
         public Object getValue() {
-            SNode first = selection.items().iterator().next();
+            SNode first = items.iterator().next();
             try {
                 Method method = getMethod();
                 Object value = method.invoke(first);
@@ -152,5 +173,19 @@ public class PropertyManager {
             }
             return null;
         }
+        public Map<SNode, Object> getValues() {
+            Map<SNode, Object> values = new HashMap<SNode, Object>();
+            for(SNode node : items) {
+                try {
+                    Method method = getMethod();
+                    Object value = method.invoke(node);
+                    values.put(node, value);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return values;
+        }
+
     }
 }

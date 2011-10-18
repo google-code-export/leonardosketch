@@ -11,10 +11,12 @@ import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.BooleanGeometry;
 import org.joshy.sketch.actions.NodeActions;
 import org.joshy.sketch.actions.SAction;
+import org.joshy.sketch.actions.UndoManager;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -23,6 +25,7 @@ import org.joshy.sketch.property.PropertyManager;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.Map;
 
 import static org.joshy.gfx.util.localization.Localization.getString;
 
@@ -109,23 +112,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
         shapeProperties.setVisible(false);
 
         fillButton = new FillPicker(this.manager);
-        EventBus.getSystem().addListener(fillButton,ChangedEvent.ObjectChanged, new Callback<ChangedEvent>() {
-            public void call(ChangedEvent event) throws Exception {
-                if(locked) return;
-                if(event.getSource() == fillButton) {
-                    Paint color = (Paint) event.getValue();
-                    if(manager.propMan.isClassAvailable(SShape.class)) {
-                        setFillStuff(color);
-                        Selection sel = context.getSelection();
-                        if(sel.size() == 1){
-                            sel.regenHandles(sel.firstItem());
-                        }
-                    }
-                    context.redraw();
-                }
-
-            }
-        });
+        EventBus.getSystem().addListener(fillButton,ChangedEvent.ObjectChanged, fillButtonCallback);
 
         strokeColorButton = new SwatchColorPicker();
         EventBus.getSystem().addListener(ChangedEvent.ColorChanged, colorChangeCallback);
@@ -576,6 +563,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
         g.setPaint(new FlatColor(0.3,0.3,0.3,0.8));
         g.drawRoundRect(0,0,getWidth()-1,h-1,10,10);
     }
+
     @Override
     public void doLayout() {
         if(selected) {
@@ -641,6 +629,24 @@ public class FloatingPropertiesPanel extends VFlexBox {
         }
     };
 
+    Callback<ChangedEvent> fillButtonCallback = new Callback<ChangedEvent>() {
+        public void call(ChangedEvent event) throws Exception {
+            if(locked) return;
+            if(event.getSource() == fillButton) {
+                Paint color = (Paint) event.getValue();
+                if(manager.propMan.isClassAvailable(SShape.class)) {
+                    setFillStuff(color);
+                    Selection sel = context.getSelection();
+                    if(sel.size() == 1){
+                        sel.regenHandles(sel.firstItem());
+                    }
+                }
+                context.redraw();
+            }
+
+        }
+    };
+
     SwatchColorPicker.ColorCallback colorCallback = new SwatchColorPicker.ColorCallback() {
         public FlatColor call(MouseEvent event) {
             SketchDocument doc = context.getDocument();
@@ -674,14 +680,13 @@ public class FloatingPropertiesPanel extends VFlexBox {
         }
     };
 
-
     private Callback<? extends Event> colorChangeCallback = new Callback<ChangedEvent>() {
         public void call(ChangedEvent event) {
             if(locked) return;
             if(event.getSource() == strokeColorButton) {
                 if(manager.propMan.isClassAvailable(SShape.class) ||
                         manager.propMan.isClassAvailable(SImage.class)) {
-                    manager.propMan.getProperty("strokePaint").setValue(event.getValue());
+                    setPropertyWithUndo("strokePaint", event.getValue());
                     context.redraw();
                 }
             }
@@ -700,17 +705,16 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
     private void setFillStuff(Paint paint) {
         //handle the new form from the fill selector
-        PropertyManager.Property prop = manager.propMan.getProperty("fillPaint");
         if(paint instanceof GradientFill) {
             GradientFill grad = (GradientFill) paint;
             Bounds std = new Bounds(0,0,40,40);
             SShape shape = (SShape) context.getSelection().firstItem();
-            prop.setValue(grad.resize(std, shape.getBounds()));
+            setPropertyWithUndo("fillPaint", grad.resize(std, shape.getBounds()));
             return;
         }
         //if just a normal color
         paint = paint.duplicate();
-        prop.setValue(paint);
+        setPropertyWithUndo("fillPaint", paint);
     }
 
     private Callback<ChangedEvent> fillOpacityCallback = new Callback<ChangedEvent>() {
@@ -718,6 +722,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
             if(selection != null) {
                 if(manager.propMan.isClassAvailable(SShape.class)) {
                     double v = (Double)event.getValue();
+                    setPropertyWithUndo("fillOpacity", v / 100.0);
                     manager.propMan.getProperty("fillOpacity").setValue(v/100.0);
                     fillOpacityLabel.setText(getString("toolbar.opacity")+": "+df.format(v/100.0));
                     context.redraw();
@@ -726,7 +731,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
         }
     };
 
-    private Callback<ChangedEvent>  fontSizeCallback = new Callback<ChangedEvent>() {
+    private Callback<ChangedEvent> fontSizeCallback = new Callback<ChangedEvent>() {
         public void call(ChangedEvent event) throws Exception {
             if(selection != null) {
                 for(SNode node: selection.items()) {
@@ -750,7 +755,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
             if(manager.propMan.isClassAvailable(SShape.class) ||
                     manager.propMan.isClassAvailable(SImage.class)) {
                 int sw = (int)((Double)event.getValue()).doubleValue();
-                manager.propMan.getProperty("strokeWidth").setValue(sw);
+                setPropertyWithUndo("strokeWidth", sw);
                 strokeWidthLabel.setText(getString("toolbar.stroke")+": " + intFormat.format(sw));
                 context.redraw();
             }
@@ -803,4 +808,92 @@ public class FloatingPropertiesPanel extends VFlexBox {
         }
     };
 
+    private void setPropertyWithUndo(final String propName, final Object newValue) {
+        u.p("maybe appending undo action: " + propName + " " + newValue);
+        final PropertyManager.Property prop = manager.propMan.getProperty(propName);
+        if(prop.hasSingleValue()) {
+            //u.p("prop = " + prop.getValue());
+            //u.p("new value = " + newValue);
+
+            Object curValue = prop.getValue();
+            if(curValue != null && newValue != null) {
+                //u.p("setting a new value that is the same as the old value");
+                if(curValue instanceof Number && newValue instanceof Number) {
+                    Number n1 = (Number) curValue;
+                    Number n2 = (Number) newValue;
+                    if(Math.abs(n1.doubleValue() - n2.doubleValue()) < 0.01) {
+                        u.p("close enough. not adding to the undo");
+                        return;
+                    }
+                }
+            }
+
+            //undo single value
+            UndoManager.UndoableAction previousUndo = context.getUndoManager().getLastAction();
+            if(previousUndo != null &&
+                    previousUndo instanceof SingleValuePropertyUndo &&
+                    ((SingleValuePropertyUndo)previousUndo).propName.equals(propName)) {
+                u.p("we can coallate");
+                SingleValuePropertyUndo svpu = (SingleValuePropertyUndo) previousUndo;
+                svpu.newValue = newValue;
+            } else {
+                final Object oldValue = prop.getValue();
+                SingleValuePropertyUndo undo = new SingleValuePropertyUndo(prop, oldValue, propName, newValue);
+                context.getUndoManager().pushAction(undo);
+            }
+
+        } else {
+            //undo differing values
+            u.p("appending undo for differing values");
+            final Map<SNode,Object> oldValues = prop.getValues();
+            context.getUndoManager().pushAction(new UndoManager.UndoableAction() {
+                public void executeUndo() {
+                    for(SNode node : oldValues.keySet()) {
+                        //u.p("setting " + propName + " value to : " + oldValues.get(node));
+                        prop.setValue(node, oldValues.get(node));
+                    }
+                    context.redraw();
+                }
+
+                public void executeRedo() {
+                    context.redraw();
+                }
+
+                public String getName() {
+                    return "changed " + propName;
+                }
+            });
+        }
+        prop.setValue(newValue);
+    }
+
+    private class SingleValuePropertyUndo implements UndoManager.UndoableAction {
+        private final PropertyManager.Property prop;
+        private final Object oldValue;
+        private final String propName;
+        private Object newValue;
+
+        public SingleValuePropertyUndo(PropertyManager.Property prop, Object oldValue, String propName, Object newValue) {
+            this.prop = prop;
+            this.oldValue = oldValue;
+            this.propName = propName;
+            this.newValue = newValue;
+        }
+
+        public void executeUndo() {
+            prop.setValue(oldValue);
+            u.p("undoing a single value set of : " + propName + " to " + oldValue);
+            context.redraw();
+        }
+
+        public void executeRedo() {
+            u.p("redoing a single value set of " + propName + " to " + newValue);
+            prop.setValue(newValue);
+            context.redraw();
+        }
+
+        public String getName() {
+            return "changed " + propName;
+        }
+    }
 }
