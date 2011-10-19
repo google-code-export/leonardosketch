@@ -254,7 +254,7 @@ public class SaveAminoCanvasAction extends SAction implements ExportAction {
                     toPathNode(out, ((NGon)shape).toUntransformedArea(), 0,0 );
                 }
                 if(shape instanceof SArea) {
-                    toPathNode(out, shape.toArea(),0,0);
+                    toPathNode(out, ((SArea)shape).toUntransformedArea(),0,0);
                 }
                 if(shape instanceof SPoly) {
                     toPathNode(out, shape.toArea(),0,0);
