@@ -128,6 +128,13 @@ public class BooleanGeometry {
                     count++;
                 }
                 final SArea sarea = new SArea(area);
+                if(selection.get(0) instanceof SShape) {
+                    SShape first = (SShape) selection.get(0);
+                    sarea.setFillPaint(first.getFillPaint().duplicate());
+                    sarea.setFillOpacity(first.getFillOpacity());
+                    sarea.setStrokePaint(first.getStrokePaint());
+                    sarea.setStrokeWidth(first.getStrokeWidth());
+                }
                 page.add(sarea);
 
                 context.getSelection().setSelectedNode(sarea);
