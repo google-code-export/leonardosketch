@@ -1,6 +1,5 @@
 package org.joshy.sketch.canvas;
 
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.MultiGradientFill;
 import org.joshy.gfx.draw.RadialGradientFill;
 import org.joshy.gfx.event.MouseEvent;
@@ -116,11 +115,7 @@ public class RadialGradientCenterHandle extends BaseGradientHandle<RadialGradien
                 }
             }
             if(!onStop) {
-                RadialGradientFill.Stop stop = new RadialGradientFill.Stop(ny/getFill().getRadius(),FlatColor.GREEN);
-                getFill().addStop(stop);
-                addStopControl(stop);
-                context.getSelection().regenHandleControls(shape);
-                updateControlPositions();
+                addStop(ny/getFill().getRadius());
             }
         } else {
             onPoint = true;

@@ -1,6 +1,5 @@
 package org.joshy.sketch.canvas;
 
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.LinearGradientFill;
 import org.joshy.gfx.draw.MultiGradientFill;
 import org.joshy.gfx.draw.Paint;
@@ -185,40 +184,9 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
         if(!onStop) {
             //calculation fraction position
             double dx = fractionOf(start,end,cursor);
-            //find previous and next stops
-            FlatColor prevcolor = FlatColor.GREEN;
-            FlatColor nextcolor = FlatColor.GREEN;
-            for(int i=0; i<getFill().getStops().size(); i++) {
-                MultiGradientFill.Stop stop = getFill().getStops().get(i);
-                if(stop.getPosition() < dx) {
-                    prevcolor = stop.getColor();
-                }
-                if(stop.getPosition() >= dx) {
-                    nextcolor = stop.getColor();
-                    break;
-                }
-            }
-            FlatColor newcolor = interpolateColor(prevcolor,nextcolor,0.5);
-            MultiGradientFill.Stop stop = new MultiGradientFill.Stop(dx, newcolor);
-            getFill().addStop(stop);
-            addStopControl(stop);
-            context.getSelection().regenHandleControls(shape);
-            updateControlPositions();
+            addStop(dx);
         }
 
-    }
-
-    private FlatColor interpolateColor(FlatColor prevcolor, FlatColor nextcolor, double v) {
-        return new FlatColor(
-                interpolate(prevcolor.getRed(), nextcolor.getRed(), v),
-                interpolate(prevcolor.getGreen(), nextcolor.getGreen(), v),
-                interpolate(prevcolor.getBlue(), nextcolor.getBlue(), v),
-                interpolate(prevcolor.getAlpha(), nextcolor.getAlpha(), v)
-                );
-    }
-
-    private double interpolate(double a, double b, double t) {
-        return (b-a)*t + a;
     }
 
     private double fractionOf(Point2D start, Point2D end, Point2D.Double cursor) {
