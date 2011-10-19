@@ -17,7 +17,6 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.DecimalFormat;
@@ -188,118 +187,7 @@ public class SaveAminoCanvasAction extends SAction implements ExportAction {
 
             out.indent();
             if(node instanceof SShape) {
-                SShape shape = (SShape) node;
-                out.println("new Transform(");
-                out.indent();
-
-                if(node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
-                    u.p("we need to render into an image instead");
-                    renderToCachedImage(out, node);
-                } else {
-
-                    if(node instanceof SOval) {
-                        SOval n = (SOval) node;
-                        out.println("new Ellipse().set("
-                                +n.getX()
-                                +","+n.getY()
-                                +","+n.getWidth()
-                                +","+n.getHeight()
-                                +")");
-                    }
-                    if(node instanceof SRect) {
-                        SRect n = (SRect) node;
-                        out.println("new Rect().set("
-                                +n.getX()
-                                +","+n.getY()
-                                +","+n.getWidth()
-                                +","+n.getHeight()
-                                +")");
-                        if(n.getCorner() != 0) {
-                            out.println(".setCorner("+df.format(n.getCorner()/2.0)+")");
-                        }
-                    }
-                    if(node instanceof NGon) {
-                        NGon n = (NGon) node;
-                        toPathNode(out, n, n.toArea(),
-                                n.getTranslateX() - n.getRadius(),
-                                n.getTranslateY() - n.getRadius()
-                        );
-                    }
-                    if(node instanceof SArea) {
-                        SArea n = (SArea) node;
-                        toPathNode(out, n, n.toArea(),0,0);
-                    }
-                    if(node instanceof SPoly) {
-                        SPoly n = (SPoly) node;
-                        Bounds bounds = n.getBounds();
-                        toPathNode(out, n, n.toArea()
-                                ,bounds.getX()
-                                ,bounds.getY());
-                    }
-                    if(node instanceof SPath) {
-                        SPath n = (SPath) node;
-                        //toPathNode(out, n.toArea());
-                        serializePath(out,n);
-                    }
-                    if(node instanceof SText) {
-                        SText n = (SText) node;
-                        out.println("new Text()");
-                        out.println(".setText('"+escapeString(n.getText())+"')");
-                        out.println(".setX("+n.getX()+")");
-                        out.println(".setY("+(n.getY()+n.getAscent())+")");
-                        out.println(".setHAlign('"+n.getHalign().toString().toLowerCase()+"')");
-                        out.println(".setAutoSize("+n.isAutoSize()+")");
-                        out.println(".setWidth("+n.getWidth()+")");
-                        double fontSize = n.getFontSize();
-                        if(Toolkit.getDefaultToolkit().getScreenResolution() == 72) {
-                            fontSize = fontSize / 1.33;
-                        }
-
-                        out.println(".setFont('"
-                                +df.format(fontSize)+"pt "
-                                +n.getFontName()+"')");
-                    }
-                    out.indent();
-                    out.println(".setStrokeWidth(" + shape.getStrokeWidth() + ")");
-                    out.println(".setStroke(" + serializePaint(out, shape.getStrokePaint()) + ")");
-                    out.println(".setFill("   + serializePaint(out, shape.getFillPaint())   + ")");
-                    if(shape.getFillOpacity() != 1.0) {
-                        out.println(".setOpacity("+df.format(shape.getFillOpacity())+")");
-                    }
-                    if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
-                        out.println(".setCached(true)");
-                    }
-                }
-
-                out.println(")");
-                out.outdent();
-                out.outdent();
-
-                if(node instanceof NGon) {
-                    NGon n = (NGon) node;
-                    out.println(
-                         ".setTranslateX(" + (shape.getTranslateX()-n.getRadius()) + ")"
-                        +".setTranslateY(" + (shape.getTranslateY()-n.getRadius()) + ")"
-                    );
-                    return;
-                }
-                if(node instanceof SPoly) {
-                    SPoly n = (SPoly) node;
-                    Bounds bounds = n.getBounds();
-                    out.println(
-                         ".setTranslateX(" + bounds.getX() + ")"
-                        +".setTranslateY(" + bounds.getY() + ")"
-                    );
-                    return;
-                }
-                if(node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
-                    Bounds bounds = shape.getEffectBounds();
-                    out.println(".setTranslateX(" + bounds.getX() + ").setTranslateY(" + bounds.getY() + ")");
-                }
-                if(node instanceof SArea) return;
-                if(!node.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
-                    out.println(".setTranslateX(" + shape.getTranslateX() + ").setTranslateY(" + shape.getTranslateY() + ")");
-                }
+                if (renderShape(out, (SShape)node)) return;
             }
             if(node instanceof SGroup) {
                 SGroup n = (SGroup) node;
@@ -343,6 +231,79 @@ public class SaveAminoCanvasAction extends SAction implements ExportAction {
             }
         }
 
+        private boolean renderShape(IndentWriter out, SShape shape) {
+            out.println("new Transform(");
+            out.indent();
+
+            if(shape.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
+                u.p("we need to render into an image instead");
+                renderToCachedImage(out, shape);
+            } else {
+
+                if(shape instanceof SOval) {
+                    SOval n = (SOval) shape;
+                    out.println("new Ellipse().set("+n.getX()+","+n.getY()+","+n.getWidth()+","+n.getHeight()+")");
+                }
+                if(shape instanceof SRect) {
+                    SRect n = (SRect) shape;
+                    out.println("new Rect().set("+n.getX()+","+n.getY()+","+n.getWidth()+","+n.getHeight()+")");
+                    if(n.getCorner() != 0) {
+                        out.println(".setCorner("+df.format(n.getCorner()/2.0)+")");
+                    }
+                }
+                if(shape instanceof NGon) {
+                    toPathNode(out, ((NGon)shape).toUntransformedArea(), 0,0 );
+                }
+                if(shape instanceof SArea) {
+                    toPathNode(out, shape.toArea(),0,0);
+                }
+                if(shape instanceof SPoly) {
+                    toPathNode(out, shape.toArea(),0,0);
+                }
+                if(shape instanceof SPath) {
+                    serializePath(out,(SPath)shape);
+                }
+                if(shape instanceof SText) {
+                    SText n = (SText) shape;
+                    out.println("new Text()");
+                    out.println(".setText('"+escapeString(n.getText())+"')");
+                    out.println(".setX("+n.getX()+")");
+                    out.println(".setY("+(n.getY()+n.getAscent())+")");
+                    out.println(".setHAlign('"+n.getHalign().toString().toLowerCase()+"')");
+                    out.println(".setAutoSize("+n.isAutoSize()+")");
+                    out.println(".setWidth("+n.getWidth()+")");
+                    double fontSize = n.getFontSize();
+                    if(Toolkit.getDefaultToolkit().getScreenResolution() == 72) {
+                        fontSize = fontSize / 1.33;
+                    }
+
+                    out.println(".setFont('"
+                            +df.format(fontSize)+"pt "
+                            +n.getFontName()+"')");
+                }
+                out.indent();
+                out.println(".setStrokeWidth(" + shape.getStrokeWidth() + ")");
+                out.println(".setStroke(" + serializePaint(out, shape.getStrokePaint()) + ")");
+                out.println(".setFill("   + serializePaint(out, shape.getFillPaint())   + ")");
+                if(shape.getFillOpacity() != 1.0) {
+                    out.println(".setOpacity("+df.format(shape.getFillOpacity())+")");
+                }
+                if(shape.getBooleanProperty("com.joshondesign.amino.nodecache")) {
+                    out.println(".setCached(true)");
+                }
+            }
+
+            out.println(")");
+            out.outdent();
+            out.outdent();
+
+            out.println(".setTranslateX(" + shape.getTranslateX() + ").setTranslateY(" + shape.getTranslateY() + ")");
+            out.println(".setAnchorX("+shape.getAnchorX()+").setAnchorY("+shape.getAnchorY()+")");
+            out.println(".setScaleX("+shape.getScaleX()+").setScaleY("+shape.getScaleY()+")");
+            out.println(".setRotate("+shape.getRotate()+")");
+            return false;
+        }
+
         private String escapeString(String text) {
             text = text.replaceAll("'","\\\\'");
             text = text.replaceAll("\n","\\\\n");
@@ -364,7 +325,6 @@ public class SaveAminoCanvasAction extends SAction implements ExportAction {
             nodes.add(node);
             SavePNGAction.export(file,nodes);
             out.println("new ImageView('"+file.getName()+"')");
-            out.println(".setX("+node.getTranslateX()+").setY("+node.getTranslateY()+")");
         }
 
         private void serializePath(IndentWriter out, SPath path) {
@@ -405,14 +365,13 @@ public class SaveAminoCanvasAction extends SAction implements ExportAction {
             out.println(")");
         }
 
-        private void toPathNode(IndentWriter out, SShape shape, Area area, double xoff, double yoff) {
+        private void toPathNode(IndentWriter out, Area area, double xoff, double yoff) {
             out.println("new PathNode()");
             out.indent();
             out.println(".setPath(");
             out.indent();
             out.println("new Path()");
             out.indent();
-            Rectangle2D bounds = area.getBounds2D();
             double dx = xoff;//bounds.getX();
             double dy = yoff;//bounds.getY();
             //don't subtract off the translation just yet

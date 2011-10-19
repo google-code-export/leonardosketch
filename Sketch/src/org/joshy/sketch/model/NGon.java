@@ -166,6 +166,14 @@ public class NGon extends SShape implements SelfDrawable, HasTransformedBounds {
         return points;
     }
 
+    public Area toUntransformedArea() {
+        Polygon poly = new Polygon();
+        double[] points = toPoints();
+        for(int i=0; i<points.length; i+=2) {
+            poly.addPoint((int)points[i],(int)points[i+1]);
+        }
+        return new Area(poly);
+    }
     @Override
     public Area toArea() {
         Polygon poly = new Polygon();
