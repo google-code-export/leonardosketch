@@ -58,7 +58,7 @@ class FreerangeColorPickerPopup extends Control {
     }
 
     private void processMouse(MouseEvent event) {
-        if (event.getType() == MouseEvent.MouseDragged) {
+        if (event.getType() == MouseEvent.MouseDragged || event.getType() == MouseEvent.MousePressed) {
             int x = (int) event.getX();
             int y = (int) event.getY();
             if(x < 0 || x > img.getWidth()-1 || y <0 || y > img.getHeight()-1 ) {

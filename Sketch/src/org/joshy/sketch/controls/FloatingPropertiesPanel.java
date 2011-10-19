@@ -11,7 +11,6 @@ import org.joshy.gfx.node.layout.GridBox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.BooleanGeometry;
 import org.joshy.sketch.actions.NodeActions;
@@ -809,7 +808,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
     };
 
     private void setPropertyWithUndo(final String propName, final Object newValue) {
-        u.p("maybe appending undo action: " + propName + " " + newValue);
+        //u.p("maybe appending undo action: " + propName + " " + newValue);
         final PropertyManager.Property prop = manager.propMan.getProperty(propName);
         if(prop.hasSingleValue()) {
             //u.p("prop = " + prop.getValue());
@@ -822,7 +821,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
                     Number n1 = (Number) curValue;
                     Number n2 = (Number) newValue;
                     if(Math.abs(n1.doubleValue() - n2.doubleValue()) < 0.01) {
-                        u.p("close enough. not adding to the undo");
+                        //u.p("close enough. not adding to the undo");
                         return;
                     }
                 }
@@ -833,7 +832,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
             if(previousUndo != null &&
                     previousUndo instanceof SingleValuePropertyUndo &&
                     ((SingleValuePropertyUndo)previousUndo).propName.equals(propName)) {
-                u.p("we can coallate");
+                //u.p("we can coallate");
                 SingleValuePropertyUndo svpu = (SingleValuePropertyUndo) previousUndo;
                 svpu.newValue = newValue;
             } else {
@@ -844,7 +843,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
         } else {
             //undo differing values
-            u.p("appending undo for differing values");
+            //u.p("appending undo for differing values");
             final Map<SNode,Object> oldValues = prop.getValues();
             context.getUndoManager().pushAction(new UndoManager.UndoableAction() {
                 public void executeUndo() {
@@ -882,12 +881,12 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
         public void executeUndo() {
             prop.setValue(oldValue);
-            u.p("undoing a single value set of : " + propName + " to " + oldValue);
+            //u.p("undoing a single value set of : " + propName + " to " + oldValue);
             context.redraw();
         }
 
         public void executeRedo() {
-            u.p("redoing a single value set of " + propName + " to " + newValue);
+            //u.p("redoing a single value set of " + propName + " to " + newValue);
             prop.setValue(newValue);
             context.redraw();
         }
