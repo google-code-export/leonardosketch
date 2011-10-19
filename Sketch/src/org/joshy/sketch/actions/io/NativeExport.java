@@ -16,10 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class NativeExport implements ShapeExporter<XMLWriter> {
     public static final int CURRENT_VERSION = 0;
@@ -457,8 +454,10 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
     }
 
     private static String serialize(Object value) {
+        Formatter fmt = new Formatter();
         if(value instanceof FlatColor) {
-            return "#"+Integer.toHexString(((FlatColor)value).getRGBA());
+            fmt.format("%08x",((FlatColor)value).getRGBA());
+            return "#" + fmt.toString();
         }
         return ""+value;
     }

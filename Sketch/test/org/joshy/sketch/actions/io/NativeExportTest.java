@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URL;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -175,9 +176,9 @@ public class NativeExportTest {
 
         MultiGradientFill grad2 = new RadialGradientFill()
                 .setCenterX(50).setCenterY(50).setRadius(100)
-                .addStop(0, FlatColor.RED)
+                .addStop(0, FlatColor.RED.deriveWithAlpha(0))
                 .addStop(0.75, FlatColor.YELLOW)
-                .addStop(1.0, FlatColor.WHITE);
+                .addStop(1.0, FlatColor.WHITE.deriveWithAlpha(0.5));
         doc.getCurrentPage().model.add(new NGon(6).setRadius(80).setFillPaint(grad2));
 
         File file = File.createTempFile("nativeExportTest",".leoz");
@@ -205,7 +206,11 @@ public class NativeExportTest {
         assertTrue(loadedRadGrad.getCenterX() == 50);
         assertTrue(loadedRadGrad.getRadius() == 100);
         assertTrue(loadedRadGrad.getStops().size() == 3);
+        assertEquals(0.0,loadedRadGrad.getStops().get(0).getColor().getAlpha(),0.1);
         assertTrue(loadedRadGrad.getStops().get(1).getColor().getRed() == FlatColor.YELLOW.getRed());
+        u.p("alpha = " + loadedRadGrad.getStops().get(0).getColor().getAlpha());
+        u.p("alpha = " + loadedRadGrad.getStops().get(2).getColor().getAlpha());
+        assertEquals(0.5,loadedRadGrad.getStops().get(2).getColor().getAlpha(),0.1);
     }
 
     @Test
