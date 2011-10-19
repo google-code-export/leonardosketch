@@ -101,7 +101,7 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
             fillShape(g);
             if(opacity >=0) g.setOpacity(opacity);
         }
-        if(getStrokePaint() != null) {
+        if(getStrokePaint() != null && getStrokeWidth() > 0) {
             g.setPaint(this.getStrokePaint());
             g.setStrokeWidth(this.getStrokeWidth());
             g.drawOval(this.getX(), this.getY(), this.getWidth(), this.getHeight());
