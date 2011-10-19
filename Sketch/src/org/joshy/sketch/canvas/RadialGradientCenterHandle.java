@@ -178,9 +178,14 @@ public class RadialGradientCenterHandle extends BaseGradientHandle<RadialGradien
                     getY() + getFill().getRadius()*stop.getPosition());
             pt = NodeUtils.convertToScene(context.getSketchCanvas(), pt);
             pt = NodeUtils.convertFromScene(popupLayer, pt);
-            Control control = colorControlMap.get(stop);
-            control.setTranslateX((pt.getX()+11));
-            control.setTranslateY((pt.getY()-5));
+            Control colorControl = colorControlMap.get(stop);
+            colorControl.setTranslateX((pt.getX() + 11));
+            colorControl.setTranslateY((pt.getY() - 5));
+
+            Control alphaControl = alphaControlMap.get(stop);
+            alphaControl.setTranslateX((pt.getX() + 21));
+            alphaControl.setTranslateY((pt.getY() - 5));
+
         }
     }
 }
