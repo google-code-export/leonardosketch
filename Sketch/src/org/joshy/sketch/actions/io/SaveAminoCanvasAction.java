@@ -1,7 +1,6 @@
 package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.*;
-import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
@@ -415,7 +414,7 @@ public class SaveAminoCanvasAction extends SAction implements ExportAction {
                     +(int)(255*color.getRed())
                     +","+(int)(255*color.getGreen())
                     +","+(int)(255*color.getBlue())
-                    +","+(int)(255*color.getAlpha())
+                    +","+df.format(color.getAlpha())
                     +")"
                     ;
         }
