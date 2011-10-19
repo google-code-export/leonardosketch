@@ -378,7 +378,41 @@ public class NativeExportTest {
         assertTrue(last2.closePath);
     }
 
-    private SketchDocument SaveAndLoad(SPath path) throws Exception {
+    @Test
+    public void testTransformSaving() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SOval o1 = new SOval();
+        o1.setX(10);
+        o1.setY(20);
+        o1.setWidth(100);
+        o1.setHeight(50);
+        o1.setTranslateX(1);
+        o1.setTranslateY(2);
+        o1.setAnchorX(3);
+        o1.setAnchorY(4);
+        o1.setRotate(5);
+        o1.setScaleX(6);
+        o1.setScaleY(7);
+
+        SketchDocument doc = SaveAndLoad(o1);
+        assertTrue(doc.getPages().get(0).model.get(0) instanceof SOval);
+        SOval o2 = (SOval) doc.getPages().get(0).model.get(0);
+        assertTrue(o2.getX() == o1.getX());
+        assertTrue(o2.getY() == o1.getY());
+        assertTrue(o2.getWidth() == o1.getWidth());
+        assertTrue(o2.getHeight() == o1.getHeight());
+        assertTrue(o2.getTranslateX() == o1.getTranslateX());
+        assertTrue(o2.getTranslateY() == o1.getTranslateY());
+        assertTrue(o2.getAnchorX() == o1.getAnchorX());
+        assertTrue(o2.getAnchorY() == o1.getAnchorY());
+        assertTrue(o2.getRotate() == o1.getRotate());
+        assertTrue(o2.getScaleX() == o1.getScaleX());
+        assertTrue(o2.getScaleY() == o1.getScaleY());
+
+    }
+
+    private SketchDocument SaveAndLoad(SNode path) throws Exception {
         SketchDocument doc = new SketchDocument();
         doc.getCurrentPage().add(path);
         File file = File.createTempFile("nativeExportTest",".leoz");

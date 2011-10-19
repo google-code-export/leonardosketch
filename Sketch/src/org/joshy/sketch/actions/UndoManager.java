@@ -24,6 +24,7 @@ public class UndoManager {
     }
 
     public UndoableAction getLastAction() {
+        if(actionStack.isEmpty()) return null;
         return actionStack.getLast();
     }
     public void pushAction(UndoableAction act) {
