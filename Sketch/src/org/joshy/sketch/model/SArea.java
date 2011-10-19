@@ -39,10 +39,12 @@ public class SArea extends SShape implements SelfDrawable {
         return super.duplicate(dupe);
     }
 
+    public Area toUntransformedArea() {
+        return new Area(this.area);
+    }
     @Override
     public Area toArea() {
-        Area a = new Area(this.area);
-        return a;
+        return new Area(transformShape(this.area));
     }
 
     @Override
