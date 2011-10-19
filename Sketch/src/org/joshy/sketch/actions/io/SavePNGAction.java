@@ -203,6 +203,10 @@ public class SavePNGAction extends SAction implements ExportAction {
 
         public void exportPre(Graphics2D g2, SNode shape) {
             g2.translate(shape.getTranslateX(),shape.getTranslateY());
+            g2.translate(shape.getAnchorX(),shape.getAnchorY());
+            g2.rotate(Math.toRadians(shape.getRotate()));
+            g2.scale(shape.getScaleX(), shape.getScaleY());
+            g2.translate(-shape.getAnchorX(),-shape.getAnchorY());
             if(shape instanceof SelfDrawable) {
                 SwingGFX gfx = new SwingGFX(g2);
                 ((SelfDrawable)shape).draw(gfx);
@@ -211,6 +215,10 @@ public class SavePNGAction extends SAction implements ExportAction {
         }
 
         public void exportPost(Graphics2D g2, SNode shape) {
+            g2.translate(shape.getAnchorX(),shape.getAnchorY());
+            g2.scale(1.0/shape.getScaleX(), 1.0/shape.getScaleY());
+            g2.rotate(Math.toRadians(-shape.getRotate()));
+            g2.translate(-shape.getAnchorX(),-shape.getAnchorY());
             g2.translate(-shape.getTranslateX(),-shape.getTranslateY());
         }
 

@@ -355,6 +355,11 @@ public class OpenAction extends SAction {
         loadNumberAttribute(e,shape,"strokeWidth");
         loadNumberAttribute(e,shape,"translateX");
         loadNumberAttribute(e,shape,"translateY");
+        loadNumberAttribute(e,shape,"anchorX");
+        loadNumberAttribute(e,shape,"anchorY");
+        loadNumberAttribute(e,shape,"scaleX");
+        loadNumberAttribute(e,shape,"scaleY");
+        loadNumberAttribute(e,shape,"rotate");
         if(e.attrEquals("type","path")) {
             SPath path = (SPath) shape;
             loadBooleanAttribute(e,shape,"closed");
@@ -591,6 +596,11 @@ public class OpenAction extends SAction {
         loadNumberAttribute(e,node,"y");
         loadNumberAttribute(e,node,"translateX");
         loadNumberAttribute(e,node,"translateY");
+        loadNumberAttribute(e,node,"anchorX");
+        loadNumberAttribute(e,node,"anchorY");
+        loadNumberAttribute(e,node,"scaleX");
+        loadNumberAttribute(e,node,"scaleY");
+        loadNumberAttribute(e,node,"rotate");
         loadNumberAttribute(e,node,"width");
         loadNumberAttribute(e,node,"height");
         loadStringAttribute(e,node,"id");

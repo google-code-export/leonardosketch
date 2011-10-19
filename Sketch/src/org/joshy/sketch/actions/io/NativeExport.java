@@ -178,6 +178,11 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
         
         saveAttribute(out,"translateX",shape);
         saveAttribute(out,"translateY",shape);
+        saveAttribute(out,"anchorX",shape);
+        saveAttribute(out,"anchorY",shape);
+        saveAttribute(out,"scaleX",shape);
+        saveAttribute(out,"scaleY",shape);
+        saveAttribute(out,"rotate",shape);
 
         if(shape instanceof SResizeableNode) {
             saveAttribute(out,"x",shape);
