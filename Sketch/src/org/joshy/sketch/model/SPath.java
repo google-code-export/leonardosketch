@@ -524,8 +524,6 @@ public class SPath extends SShape implements SelfDrawable, HasTransformedBounds 
 
     @Override
     public Area toArea() {
-        Area area = new Area(this.path2d);
-        area.transform(AffineTransform.getTranslateInstance(getTranslateX(),getTranslateY()));
-        return area;        
+        return new Area(transformShape(this.path2d));
     }
 }

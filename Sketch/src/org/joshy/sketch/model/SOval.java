@@ -1,7 +1,9 @@
 package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.*;
+import org.joshy.gfx.draw.Paint;
 
+import java.awt.*;
 import java.awt.geom.Area;
 
 public class SOval extends AbstractResizeableNode implements SelfDrawable {
@@ -24,12 +26,13 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
 
     @Override
     public Area toArea() {
-        return new Area(new java.awt.geom.Ellipse2D.Double(
-                getX()+getTranslateX(),
-                getY()+getTranslateY(),
+        Shape sh = new java.awt.geom.Ellipse2D.Double(
+                getX(),
+                getY(),
                 getWidth(),
                 getHeight()
-        ));
+        );
+        return new Area(transformShape(sh));
     }
 
     @Override

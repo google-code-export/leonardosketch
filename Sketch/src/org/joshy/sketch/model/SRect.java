@@ -47,11 +47,12 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
 
     @Override
     public Area toArea() {
-        return new Area(new java.awt.Rectangle.Double(
-                getX()+getTranslateX(),
-                getY()+getTranslateY(),
-                getWidth(),getHeight()
-        ));
+        return new Area(
+                transformShape(new java.awt.Rectangle.Double(
+                    getX(),
+                    getY(),
+                    getWidth(),getHeight()
+            )));
     }
 
     @Override
