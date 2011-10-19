@@ -9,6 +9,7 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.stage.swing.SwingGFX;
 
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.List;
@@ -239,6 +240,16 @@ public abstract class SShape extends SNode {
 
     public SPath toPath() {
         return null;
+    }
+
+    protected Shape transformShape(Shape sh) {
+        AffineTransform af = new AffineTransform();
+        af.translate(getTranslateX(),getTranslateY());
+        af.translate(getAnchorX(),getAnchorY());
+        af.rotate(Math.toRadians(getRotate()));
+        af.scale(getScaleX(), getScaleY());
+        af.translate(-getAnchorX(),-getAnchorY());
+        return af.createTransformedShape(sh);
     }
 
     public static interface SShapeListener {

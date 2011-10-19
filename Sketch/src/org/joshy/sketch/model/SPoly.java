@@ -107,9 +107,7 @@ public class SPoly extends SShape implements SelfDrawable, HasTransformedBounds 
 
     @Override
     public Area toArea() {
-        Area area = new Area(path);
-        area.transform(AffineTransform.getTranslateInstance(getTranslateX(),getTranslateY()));
-        return area;
+        return new Area(transformShape(path));
     }
 
     @Override
