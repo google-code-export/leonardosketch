@@ -237,6 +237,11 @@ public class SaveAminoCanvasAction extends SAction implements ExportAction {
             if(shape.getBooleanProperty("com.joshondesign.amino.nodecacheimage")) {
                 u.p("we need to render into an image instead");
                 renderToCachedImage(out, shape);
+                if(shape instanceof SResizeableNode) {
+                    SResizeableNode resize = (SResizeableNode) shape;
+                    out.println(".setX("+(resize.getX())+")");
+                    out.println(".setY("+(resize.getY())+")");
+                }
             } else {
 
                 if(shape instanceof SOval) {
@@ -322,7 +327,7 @@ public class SaveAminoCanvasAction extends SAction implements ExportAction {
             File file = new File(out.basedir,name);
             List<SNode> nodes = new ArrayList<SNode>();
             nodes.add(node);
-            SavePNGAction.export(file,nodes);
+            SavePNGAction.export(file, nodes);
             out.println("new ImageView('"+file.getName()+"')");
         }
 
