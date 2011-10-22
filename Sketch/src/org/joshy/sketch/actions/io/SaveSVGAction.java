@@ -17,10 +17,19 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.List;
 
-public class SaveSVGAction extends SAction {
+public class SaveSVGAction extends SAction implements ExportAction {
+    private static DecimalFormat df = new DecimalFormat();
+    static {
+        df.setMaximumFractionDigits(2);
+    }
+
+
+
     private DocContext context;
+    private File lastFile;
 
     public SaveSVGAction(DocContext context) {
         this.context = context;
@@ -42,6 +51,8 @@ public class SaveSVGAction extends SAction {
             }
             File file = new File(fd.getDirectory(),fileName);
             export(file,(SketchDocument)context.getDocument());
+            context.setLastExportAction(this);
+            lastFile = file;
         }
     }
 
@@ -52,6 +63,12 @@ public class SaveSVGAction extends SAction {
             out.close();
         } catch (Exception ex) {
             u.p(ex);
+        }
+    }
+
+    public void exportHeadless() throws Exception {
+        if(lastFile != null) {
+            export(lastFile,(SketchDocument)context.getDocument());
         }
     }
 
@@ -73,10 +90,11 @@ public class SaveSVGAction extends SAction {
             out.println("<defs>");
             out.println("  <linearGradient "
                     + "id='"+id+"'"
-                    +" x1='"+grad.getStartX()
-                    +"' y1='"+grad.getStartY()
-                    +"' x2='"+grad.getEndX()
-                    +"' y2='"+grad.getEndY()+"'>");
+                    +" x1='"+(grad.getStartX()/rect.getWidth()*100)+"%"
+                    +"' y1='"+(grad.getStartY()/rect.getHeight()*100)+"%"
+                    +"' x2='"+(grad.getEndX()/rect.getWidth()*100)+"%"
+                    +"' y2='"+(grad.getEndY()/rect.getHeight()*100)+"%"
+                    +"'>");
             for(MultiGradientFill.Stop stop : grad.getStops()) {
                 out.println("    <stop offset='"+stop.getPosition()+"' stop-color='"+toHexString(stop.getColor())+"'/>");
             }
@@ -94,6 +112,9 @@ public class SaveSVGAction extends SAction {
         }
         if(rect.getFillPaint() instanceof LinearGradientFill) {
             out.println(" fill='url(#"+id+")'");
+        }
+        if(rect.getFillOpacity() != 1) {
+            out.println(" fill-opacity='"+df.format(rect.getFillOpacity())+"'");
         }
 
         out.println(" stroke='"+toRGBString(rect.getStrokePaint())+"'" +
@@ -116,8 +137,9 @@ public class SaveSVGAction extends SAction {
         out.println("    ry='"+ oval.getHeight() /2+"'");
         out.println("    transform='translate("+oval.getTranslateX()+","+oval.getTranslateY()+")'");
         out.println("    fill='"+toRGBString(oval.getFillPaint())+"'");
-        out.println("    stroke='"+toRGBString(oval.getStrokePaint())+"'");
-        out.println("    stroke-width='"+oval.getStrokeWidth()+"'");
+        out.println("    fill-opacity='"+df.format(oval.getFillOpacity())+"'");
+        out.println("    stroke='" + toRGBString(oval.getStrokePaint()) + "'");
+        out.println("    stroke-width='" + oval.getStrokeWidth() + "'");
         out.println("/>");
     }
 
@@ -133,6 +155,7 @@ public class SaveSVGAction extends SAction {
         out.println("    x='"+(text.getX() + text.getTranslateX())+"'");
         out.println("    y='"+(text.getY() + text.getTranslateY() + font.getAscender())+"'");
         out.println("    fill='"+toRGBString(text.getFillPaint())+"'");
+        out.println("    fill-opacity='"+df.format(text.getFillOpacity())+"'");
         out.println("    font-family='"+font.getName()+"'");
         out.println("    font-size='"+text.getFontSize()+"'");
         out.print(">");
@@ -155,6 +178,7 @@ public class SaveSVGAction extends SAction {
 
         if(poly.isClosed()) {
             out.println("    fill='"+toRGBString(poly.getFillPaint())+"'");
+            out.println("    fill-opacity='"+df.format(poly.getFillOpacity())+"'");
         } else {
             out.println("    fill='none'");
         }
@@ -178,6 +202,7 @@ public class SaveSVGAction extends SAction {
 
 
         out.println("    fill='"+toRGBString(nGon.getFillPaint())+"'");
+        out.println("    fill-opacity='"+df.format(nGon.getFillOpacity())+"'");
         out.println("    stroke='"+toRGBString(nGon.getStrokePaint())+"'");
         out.println("    stroke-width='"+nGon.getStrokeWidth()+"'");
         out.println("/>");
@@ -208,6 +233,7 @@ public class SaveSVGAction extends SAction {
         out.println(" z'");
 
         out.println("    fill='"+toRGBString(path.getFillPaint())+"'");
+        out.println("    fill-opacity='"+df.format(path.getFillOpacity())+"'");
         out.println("    stroke='"+toRGBString(path.getStrokePaint())+"'");
         out.println("    stroke-width='"+path.getStrokeWidth()+"'");
         out.println("/>");
@@ -260,6 +286,7 @@ public class SaveSVGAction extends SAction {
         //out.println(" z'");
 
         out.println("    fill='"+toRGBString(sArea.getFillPaint())+"'");
+        out.println("    fill-opacity='"+df.format(sArea.getFillOpacity())+"'");
         out.println("    stroke='"+toRGBString(sArea.getStrokePaint())+"'");
         out.println("    stroke-width='"+ sArea.getStrokeWidth()+"'");
         out.println("/>");
@@ -268,7 +295,9 @@ public class SaveSVGAction extends SAction {
     private static String toRGBString(Paint paint) {
         if(paint instanceof FlatColor){
             FlatColor color = (FlatColor) paint;
-            return "rgb("+color.getRed()*100+"%,"+color.getGreen()*100+"%,"+color.getBlue()*100+"%)";
+            return "rgb("+df.format(color.getRed()*100)+"%,"
+                    +df.format(color.getGreen()*100)+"%,"
+                    +df.format(color.getBlue()*100)+"%)";
         } else {
             return toRGBString(FlatColor.BLACK);
         }
