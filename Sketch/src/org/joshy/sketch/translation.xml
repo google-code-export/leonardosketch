@@ -1,0 +1,1056 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<sets>
+    <set name='dialog'>
+        <key name='cancel'>
+            <value language='DEFAULT'>Cancel</value>
+            <value language='de-DE'>Abbrechen</value>
+            <value language='en-US'>Cancel</value>
+            <value language='hr-HR'>Odustani</value>
+            <value language='ja-JP'>キャンセル</value>
+            <value language='zz_ZZ'>zz_Cancel</value>
+        </key>
+        <key name='docNotSaved'>
+            <value language='DEFAULT'>This document hasn't been saved yet. Save?</value>
+            <value language='de-DE'>Dieses Dokument wurde noch nicht gespeichert! Speichern?</value>
+            <value language='hr-HR'>Ovaj dokument još nije spremljen. Spremiti ?</value>
+            <value language='ja-JP'>このファイルは保存されていません。保存しますか？</value>
+        </key>
+        <key name='dontsave'>
+            <value language='DEFAULT'>Don't Save</value>
+            <value language='de-DE'>Nicht speichern</value>
+            <value language='hr-HR'>Ne spremiti</value>
+            <value language='ja-JP'>保存しない</value>
+        </key>
+        <key name='okay'>
+            <value language='DEFAULT'>Okay</value>
+            <value language='de-DE'>OK</value>
+            <value language='hr-HR'>Uredu</value>
+            <value language='ja-JP'>OK</value>
+        </key>
+        <key name='save'>
+            <value language='DEFAULT'>Save</value>
+            <value language='de-DE'>Speichern</value>
+            <value language='hr-HR'>Spremi</value>
+            <value language='ja-JP'>保存</value>
+        </key>
+        <key name='warning'>
+            <value language='DEFAULT'>Warning</value>
+            <value language='de-DE'>Warnung</value>
+            <value language='hr-HR'>Upozorenje</value>
+            <value language='ja-JP'>警告</value>
+        </key>
+    </set>
+    <set name='drawNgonTool'>
+        <key name='sides'>
+            <value language='DEFAULT'>Sides</value>
+            <value language='de-DE'>Seiten</value>
+            <value language='hr-HR'>Strane</value>
+            <value language='ja-JP'>サイド</value>
+        </key>
+    </set>
+    <set name='menus'>
+        <key name='about'>
+            <value language='DEFAULT'>About</value>
+            <value language='de-DE'>Über</value>
+            <value language='fr-FR'>A propos</value>
+            <value language='hr-HR'>O programu</value>
+            <value language='it-IT'>Informazioni su</value>
+            <value language='ja-JP'>このプログラムについて</value>
+            <value language='tr-TR'>Program hakkında</value>
+        </key>
+        <key name='add'>
+            <value language='DEFAULT'>Add</value>
+            <value language='de-DE'>Hinzufügen</value>
+            <value language='en-US'>Add</value>
+            <value language='hr-HR'>Dodaj</value>
+            <value language='ja-JP'>追加</value>
+            <value language='zz_ZZ'>zz_Add</value>
+        </key>
+        <key name='alignNodeBottom'>
+            <value language='DEFAULT'>Align Bottom</value>
+            <value language='de-DE'>Unten ausrichten</value>
+            <value language='fr-FR'>Aligner en bas</value>
+            <value language='hr-HR'>Poravnaj dno</value>
+            <value language='it-IT'>Allinea in Basso</value>
+            <value language='ja-JP'>下端揃え</value>
+            <value language='tr-TR'>En aşağı yasla</value>
+        </key>
+        <key name='alignNodeCenterHorizontal'>
+            <value language='DEFAULT'>Align Center Horizontal</value>
+            <value language='de-DE'>Horizontal zentriert ausrichten</value>
+            <value language='fr-FR'>Centrer horizontalement</value>
+            <value language='hr-HR'>Centriraj horizontalno</value>
+            <value language='it-IT'>Centra in Orizzontale</value>
+            <value language='ja-JP'>水平方向中央揃え</value>
+            <value language='tr-TR'>Yatay ortala</value>
+        </key>
+        <key name='alignNodeCenterVertical'>
+            <value language='DEFAULT'>Align Center Vertical</value>
+            <value language='de-DE'>Vertikal zentriert ausrichten</value>
+            <value language='fr-FR'>Centrer verticalement</value>
+            <value language='hr-HR'>Centriraj vertikalno</value>
+            <value language='it-IT'>Centra in Verticale</value>
+            <value language='ja-JP'>垂直方向中央揃え</value>
+            <value language='tr-TR'>Dikey ortala</value>
+        </key>
+        <key name='alignNodeLeft'>
+            <value language='DEFAULT'>Align Left</value>
+            <value language='de-DE'>Links ausrichten</value>
+            <value language='fr-FR'>Aligner à gauche</value>
+            <value language='hr-HR'>Poravnaj lijevo</value>
+            <value language='it-IT'>Allinea a Sinistra</value>
+            <value language='ja-JP'>左端揃え</value>
+            <value language='tr-TR'>Sola yasla</value>
+        </key>
+        <key name='alignNodeRight'>
+            <value language='DEFAULT'>Align Right</value>
+            <value language='de-DE'>Rechts ausrichten</value>
+            <value language='fr-FR'>Aligner à droite</value>
+            <value language='hr-HR'>Poravnaj desno</value>
+            <value language='it-IT'>Allinea a Destra</value>
+            <value language='ja-JP'>右端揃え</value>
+            <value language='tr-TR'>Sağa yasla</value>
+        </key>
+        <key name='alignNodeTop'>
+            <value language='DEFAULT'>Align Top</value>
+            <value language='de-DE'>Oben ausrichten</value>
+            <value language='fr-FR'>Aligner en haut</value>
+            <value language='hr-HR'>Poravnaj vrh</value>
+            <value language='it-IT'>Allinea in Alto</value>
+            <value language='ja-JP'>上端揃え</value>
+            <value language='tr-TR'>En yukarı yasla</value>
+        </key>
+        <key name='changeFlickrSettings'>
+            <value language='DEFAULT'>Change Flickr Settings</value>
+            <value language='de-DE'>Flickr Einstellungen ändern</value>
+            <value language='ja-JP'>Flickr 設定を変更</value>
+        </key>
+        <key name='clearSelection'>
+            <value language='DEFAULT'>Clear Selection</value>
+            <value language='de-DE'>Auswahl löschen</value>
+            <value language='fr-FR'>Désélectionner</value>
+            <value language='hr-HR'>Počisti odabir</value>
+            <value language='it-IT'>Annulla Selezione</value>
+            <value language='ja-JP'>選択を解除</value>
+            <value language='tr-TR'>Seçileni sil</value>
+        </key>
+        <key name='close'>
+            <value language='DEFAULT'>Close</value>
+            <value language='de-DE'>Schließen</value>
+            <value language='fr-FR'>Fermer</value>
+            <value language='hr-HR'>Zatvori</value>
+            <value language='it-IT'>Chiudi</value>
+            <value language='ja-JP'>閉じる</value>
+            <value language='tr-TR'>Kapat</value>
+        </key>
+        <key name='configTwitter'>
+            <value language='DEFAULT'>Change Twitter Settings</value>
+            <value language='de-DE'>Twitter Einstellungen ändern</value>
+            <value language='fr-FR'>Changer les paramètres pour Twitter</value>
+            <value language='hr-HR'>Izmijeni postavke za Twitter</value>
+            <value language='it-IT'>Cambia Impostazioni Twitter</value>
+            <value language='ja-JP'>Twitter の設定を変更</value>
+            <value language='tr-TR'>Twitter ayarları</value>
+        </key>
+        <key name='copy'>
+            <value language='DEFAULT'>Copy</value>
+            <value language='de-DE'>Kopieren</value>
+            <value language='fr-FR'>Copier</value>
+            <value language='hr-HR'>Kopiraj</value>
+            <value language='it-IT'>Copia</value>
+            <value language='ja-JP'>コピー</value>
+            <value language='tr-TR'>Kopyala</value>
+        </key>
+        <key name='create.new.set'>
+            <value language='DEFAULT'>Create New Set</value>
+            <value language='de-DE'>Neue Sammlung</value>
+            <value language='hr-HR'>Kreiraj novi set</value>
+            <value language='ja-JP'>新規作成</value>
+        </key>
+        <key name='createResizableShape'>
+            <value language='DEFAULT'>Create Resizable Shape from Selection</value>
+            <value language='de-DE'>Veränderbare Form aus Selektion erstellen</value>
+            <value language='fr-FR'>Crééer une forme redimentionnable avec la sélection</value>
+            <value language='hr-HR'>Kreiraj rastezljivi oblik od odabira</value>
+            <value language='it-IT'>Crea Forma Ridimensionabile dalla Selezione</value>
+            <value language='ja-JP'>選択範囲から変形可能な図形を作成</value>
+            <value language='tr-TR'>Seçilenden boyutlandırılabilir şekil oluştur</value>
+        </key>
+        <key name='createSymbol'>
+            <value language='DEFAULT'>Create Symbol from Selection</value>
+            <value language='de-DE'>Symbol aus Selektion erstellen</value>
+            <value language='fr-FR'>Créér un symbole avec la sélection</value>
+            <value language='hr-HR'>Kreiraj simbol od odabranog</value>
+            <value language='it-IT'>Crea Simbolo dalla Selezione</value>
+            <value language='ja-JP'>選択範囲からシンボルを作成</value>
+            <value language='tr-TR'>Seçilenden sembol oluştur</value>
+        </key>
+        <key name='cut'>
+            <value language='DEFAULT'>Cut</value>
+            <value language='de-DE'>Ausschneiden</value>
+            <value language='fr-FR'>Couper</value>
+            <value language='hr-HR'>Izreži</value>
+            <value language='it-IT'>Taglia</value>
+            <value language='ja-JP'>カット</value>
+            <value language='tr-TR'>Kes</value>
+        </key>
+        <key name='debug'>
+            <value language='DEFAULT'>Debug</value>
+            <value language='hr-HR'>Debugiraj</value>
+            <value language='ja-JP'>デバッグ</value>
+        </key>
+        <key name='delete'>
+            <value language='DEFAULT'>Delete</value>
+            <value language='de-DE'>Löschen</value>
+            <value language='fr-FR'>Supprimer</value>
+            <value language='hr-HR'>Obriši</value>
+            <value language='it-IT'>Elimina</value>
+            <value language='ja-JP'>削除</value>
+            <value language='tr-TR'>Sil</value>
+        </key>
+        <key name='document'>
+            <value language='DEFAULT'>Document</value>
+            <value language='de-DE'>Dokument</value>
+            <value language='fr-FR'>Document</value>
+            <value language='hr-HR'>Dokument</value>
+            <value language='it-IT'>Documento</value>
+            <value language='ja-JP'>ファイル</value>
+            <value language='tr-TR'>Dosya</value>
+        </key>
+        <key name='duplicateNode'>
+            <value language='DEFAULT'>Duplicate</value>
+            <value language='de-DE'>Dublikat erstellen</value>
+            <value language='fr-FR'>Dupliquer</value>
+            <value language='hr-HR'>Dupliciraj</value>
+            <value language='it-IT'>Duplica</value>
+            <value language='ja-JP'>複製</value>
+            <value language='tr-TR'>Kopyasını çikar</value>
+        </key>
+        <key name='edit'>
+            <value language='DEFAULT'>Edit</value>
+            <value language='de-DE'>Bearbeiten</value>
+            <value language='fr-FR'>Edition</value>
+            <value language='hr-HR'>Uredi</value>
+            <value language='it-IT'>Modifica</value>
+            <value language='ja-JP'>編集</value>
+            <value language='tr-TR'>Değiştir</value>
+        </key>
+        <key name='editResizableShape'>
+            <value language='DEFAULT'>Edit Resizable Shape</value>
+            <value language='de-DE'>Veränderbaren Schnitt bearbeiten</value>
+            <value language='fr-FR'>Editer la forme redimentionnable</value>
+            <value language='hr-HR'>Izmjeni rastezljivi oblik</value>
+            <value language='it-IT'>Modifica Forma Ridimensionabile</value>
+            <value language='ja-JP'>変形可能な図形の編集</value>
+            <value language='tr-TR'>Boyutlandırılabilir şekli değiştir</value>
+        </key>
+        <key name='editTranslations'>
+            <value language='DEFAULT'>Edit Translations</value>
+            <value language='de-DE'>Übersetzungen bearbeiten</value>
+            <value language='ja-JP'>翻訳の編集</value>
+        </key>
+        <key name='exit'>
+            <value language='DEFAULT'>Exit</value>
+            <value language='de-DE'>Beenden</value>
+            <value language='fr-FR'>Quitter</value>
+            <value language='hr-HR'>Izlaz</value>
+            <value language='it-IT'>Esci</value>
+            <value language='ja-JP'>終了</value>
+            <value language='tr-TR'>Çık</value>
+        </key>
+        <key name='export'>
+            <value language='DEFAULT'>Export</value>
+            <value language='hr-HR'>Izvoz</value>
+            <value language='ja-JP'>エクスポート</value>
+        </key>
+        <key name='file'>
+            <value language='DEFAULT'>File</value>
+            <value language='de-DE'>Datei</value>
+            <value language='en-US'>File</value>
+            <value language='fr-FR'>Fichier</value>
+            <value language='hr-HR'>Datoteka</value>
+            <value language='ja-JP'>ファイル</value>
+            <value language='tr-TR'>Turkish File</value>
+        </key>
+        <key name='flipNodeHorizontal'>
+            <value language='DEFAULT'>Flip Horizontal</value>
+            <value language='de-DE'>Horizontal drehen</value>
+            <value language='fr-FR'>Retourner horizontalement</value>
+            <value language='hr-HR'>Preokreni horizontalno</value>
+            <value language='ja-JP'>水平方向に反転</value>
+            <value language='tr-TR'>Yatay dönder</value>
+        </key>
+        <key name='flipNodeVertical'>
+            <value language='DEFAULT'>Flip Vertical</value>
+            <value language='de-DE'>Vertikal drehen</value>
+            <value language='fr-FR'>Retourner verticalement</value>
+            <value language='hr-HR'>Preokreni vertikalno</value>
+            <value language='ja-JP'>垂直方向に反転</value>
+            <value language='tr-TR'>Dikey dönder</value>
+        </key>
+        <key name='fullScreen'>
+            <value language='DEFAULT'>Full Screen</value>
+            <value language='de-DE'>Vollbild</value>
+            <value language='fr-FR'>Plein écran</value>
+            <value language='hr-HR'>Preko cijelog ekrana</value>
+            <value language='it-IT'>A Tutto Schermo</value>
+            <value language='ja-JP'>フルスクリーン</value>
+            <value language='tr-TR'>Tam ekran</value>
+        </key>
+        <key name='fullScreenWithMenubar'>
+            <value language='DEFAULT'>Full Screen with Menubar</value>
+            <value language='de-DE'>Vollbild mit Menüleiste</value>
+            <value language='fr-FR'>Plein écran avec barre de menu</value>
+            <value language='hr-HR'>Preko cijelog ekrana sa menijem</value>
+            <value language='it-IT'>A Tutto Schermo con Barra dei Menu</value>
+            <value language='ja-JP'>メニューバー付フルスクリーン</value>
+        </key>
+        <key name='groupSelection'>
+            <value language='DEFAULT'>Group Selection</value>
+            <value language='de-DE'>Gruppieren</value>
+            <value language='fr-FR'>Grouper</value>
+            <value language='hr-HR'>Grupni odabir</value>
+            <value language='it-IT'>Raggruppa Selezione</value>
+            <value language='ja-JP'>選択範囲をグループ化</value>
+            <value language='tr-TR'>Grup seç</value>
+        </key>
+        <key name='import'>
+            <value language='DEFAULT'>Import</value>
+            <value language='hr-HR'>Uvoz</value>
+            <value language='ja-JP'>インポート</value>
+        </key>
+        <key name='intersection'>
+            <value language='DEFAULT'>Intersection</value>
+            <value language='de-DE'>Schnittmenge</value>
+            <value language='hr-HR'>Presijek</value>
+            <value language='ja-JP'>交差</value>
+        </key>
+        <key name='lowerNode'>
+            <value language='DEFAULT'>Lower Node</value>
+            <value language='de-DE'>Absenken</value>
+            <value language='fr-FR'>Descendre</value>
+            <value language='hr-HR'>Spusti element</value>
+            <value language='it-IT'>Abbassa di un livello</value>
+            <value language='ja-JP'>背面へ移動</value>
+            <value language='tr-TR'>Öğeyi bir basamak aşağı indir</value>
+        </key>
+        <key name='lowerNodeBottom'>
+            <value language='DEFAULT'>Lower to Bottom</value>
+            <value language='de-DE'>In den Hintergrund</value>
+            <value language='fr-FR'>Descendre à l'arrière plan</value>
+            <value language='hr-HR'>Spusti na dno</value>
+            <value language='it-IT'>Porta in fondo</value>
+            <value language='ja-JP'>最背面へ移動</value>
+            <value language='tr-TR'>En aşağı indir</value>
+        </key>
+        <key name='matchNodeHeight'>
+            <value language='DEFAULT'>Same Height</value>
+            <value language='de-DE'>Gleiche Höhe</value>
+            <value language='fr-FR'>Même hauteur</value>
+            <value language='hr-HR'>Ista visina</value>
+            <value language='it-IT'>Stessa Altezza</value>
+            <value language='ja-JP'>高さをそろえる</value>
+            <value language='tr-TR'>Aynı boya getir</value>
+        </key>
+        <key name='matchNodeWidth'>
+            <value language='DEFAULT'>Same Width</value>
+            <value language='de-DE'>Gleiche Breite</value>
+            <value language='fr-FR'>Même largeur</value>
+            <value language='hr-HR'>Ista širina</value>
+            <value language='it-IT'>Stessa Larghezza</value>
+            <value language='ja-JP'>幅をそろえる</value>
+            <value language='tr-TR'>Aynı ene getir</value>
+        </key>
+        <key name='new'>
+            <value language='DEFAULT'>New</value>
+            <value language='de-DE'>Neu</value>
+            <value language='fr-FR'>Nouveau</value>
+            <value language='hr-HR'>Novo</value>
+            <value language='it-IT'>Nuovo</value>
+            <value language='ja-JP'>新規</value>
+            <value language='tr-TR'>Yeni</value>
+        </key>
+        <key name='newView'>
+            <value language='DEFAULT'>New View</value>
+            <value language='de-DE'>Neue Ansicht</value>
+            <value language='fr-FR'>Nouvelle vue</value>
+            <value language='hr-HR'>Novi pogled</value>
+            <value language='it-IT'>Nuova Visualizzazione</value>
+            <value language='ja-JP'>新規ビュー</value>
+            <value language='tr-TR'>Yeni izleme</value>
+        </key>
+        <key name='node'>
+            <value language='DEFAULT'>Node</value>
+            <value language='de-DE'>Element</value>
+            <value language='fr-FR'>Elément</value>
+            <value language='hr-HR'>Element</value>
+            <value language='it-IT'>Nodo</value>
+            <value language='ja-JP'>ノード</value>
+            <value language='tr-TR'>Öğe</value>
+        </key>
+        <key name='open'>
+            <value language='DEFAULT'>Open</value>
+            <value language='de-DE'>Öffnen</value>
+            <value language='fr-FR'>Ouvrir</value>
+            <value language='hr-HR'>Otvori</value>
+            <value language='it-IT'>Apri</value>
+            <value language='ja-JP'>開く</value>
+            <value language='tr-TR'>Aç</value>
+        </key>
+        <key name='paste'>
+            <value language='DEFAULT'>Paste</value>
+            <value language='de-DE'>Einfügen</value>
+            <value language='fr-FR'>Coller</value>
+            <value language='hr-HR'>Zalijepi</value>
+            <value language='it-IT'>Incolla</value>
+            <value language='ja-JP'>ペースト</value>
+            <value language='tr-TR'>Yapıştır</value>
+        </key>
+        <key name='path'>
+            <value language='DEFAULT'>Path</value>
+            <value language='de-DE'>Pfad</value>
+            <value language='fr-FR'>Chemin</value>
+            <value language='hr-HR'>Krivulja</value>
+            <value language='ja-JP'>パス</value>
+            <value language='tr-TR'>Dosya adresi</value>
+        </key>
+        <key name='raiseNode'>
+            <value language='DEFAULT'>Raise Node</value>
+            <value language='de-DE'>Anheben</value>
+            <value language='fr-FR'>Monter</value>
+            <value language='hr-HR'>Podigni element</value>
+            <value language='it-IT'>Alza di un livello</value>
+            <value language='ja-JP'>前面へ移動</value>
+            <value language='tr-TR'>Öğeyi bir basamak yukarı çıkar</value>
+        </key>
+        <key name='raiseNodeTop'>
+            <value language='DEFAULT'>Raise to Top</value>
+            <value language='de-DE'>In den Vordergrund</value>
+            <value language='fr-FR'>Monter au premier plan</value>
+            <value language='hr-HR'>Podigni na vrh</value>
+            <value language='it-IT'>Porta in cima</value>
+            <value language='ja-JP'>最前面へ移動</value>
+            <value language='tr-TR'>Öne getir</value>
+        </key>
+        <key name='recentfiles'>
+            <value language='DEFAULT'>Recent Files</value>
+            <value language='de-DE'>Letzte Dateien</value>
+            <value language='fr-FR'>Fichiers récents</value>
+            <value language='hr-HR'>Zadnje otvoreni</value>
+            <value language='it-IT'>File Recenti</value>
+            <value language='ja-JP'>最近使用したファイルを開く</value>
+            <value language='tr-TR'>En son dosyalar</value>
+        </key>
+        <key name='redo'>
+            <value language='DEFAULT'>Redo</value>
+            <value language='de-DE'>Wiederholen</value>
+            <value language='fr-FR'>Rétablir</value>
+            <value language='hr-HR'>Ponovi izmjenu</value>
+            <value language='it-IT'>Ripristina</value>
+            <value language='ja-JP'>やり直し</value>
+            <value language='tr-TR'>Tekrarla</value>
+        </key>
+        <key name='resetTransforms'>
+            <value language='DEFAULT'>Reset Transforms</value>
+            <value language='de-DE'>Transformationen zurücksetzen</value>
+            <value language='fr-FR'>Réinitialiser les transformations</value>
+            <value language='hr-HR'>Resetiraj transformacije</value>
+            <value language='it-IT'>Annulla Trasformazioni</value>
+            <value language='ja-JP'>変形をリセット</value>
+            <value language='tr-TR'>Transformasyonu geri al</value>
+        </key>
+        <key name='rotateNode90Left'>
+            <value language='DEFAULT'>Rotate 90° Counter Clockwise</value>
+            <value language='de-DE'>90° gegen Uhrzeigersinn drehen</value>
+            <value language='fr-FR'>Tourner de 90° vers la gauche</value>
+            <value language='hr-HR'>Rotiraj 90° obrnuto od smjera kazaljke</value>
+            <value language='it-IT'>Ruota di 90° in Senso Antiorario</value>
+            <value language='ja-JP'>反時計回りに 90° 回転</value>
+            <value language='tr-TR'>90° sola dönder</value>
+        </key>
+        <key name='rotateNode90Right'>
+            <value language='DEFAULT'>Rotate 90° Clockwise</value>
+            <value language='de-DE'>90° in Uhrzeigersinn drehen</value>
+            <value language='fr-FR'>Tourner de 90° vers la droite</value>
+            <value language='hr-HR'>Rotiraj 90° u smjeru kazaljke</value>
+            <value language='ja-JP'>時計回りに 90° 回転</value>
+            <value language='tr-TR'>90° saat yönünde dönder</value>
+        </key>
+        <key name='rotateNodeFree'>
+            <value language='DEFAULT'>Free Rotate</value>
+            <value language='de-DE'>Freie Rotation</value>
+            <value language='fr-FR'>Rotation libre</value>
+            <value language='hr-HR'>Rotiraj proizvoljno</value>
+            <value language='it-IT'>Ruota Arbitrariamente</value>
+            <value language='ja-JP'>自由回転</value>
+            <value language='tr-TR'>Her yöne dönder</value>
+        </key>
+        <key name='save'>
+            <value language='DEFAULT'>Save</value>
+            <value language='de-DE'>Speichern</value>
+            <value language='fr-FR'>Enregistrer</value>
+            <value language='hr-HR'>Spremi</value>
+            <value language='it-IT'>Salva</value>
+            <value language='ja-JP'>保存</value>
+            <value language='tr-TR'>Kaydet</value>
+        </key>
+        <key name='saveas'>
+            <value language='DEFAULT'>Save As</value>
+            <value language='de-DE'>Speichern unter</value>
+            <value language='fr-FR'>Enregistrer sous</value>
+            <value language='hr-HR'>Spremi kao</value>
+            <value language='it-IT'>Salva come</value>
+            <value language='ja-JP'>別名で保存</value>
+            <value language='tr-TR'>Farklı kaydet</value>
+        </key>
+        <key name='scaleNode'>
+            <value language='DEFAULT'>Scale Transform</value>
+            <value language='de-DE'>Transformation skalieren</value>
+            <value language='fr-FR'>Mettre à l'échelle</value>
+            <value language='hr-HR'>Rastegni</value>
+            <value language='it-IT'>Scala</value>
+            <value language='ja-JP'>拡大・縮小</value>
+            <value language='tr-TR'>Transformasyonu ayarla</value>
+        </key>
+        <key name='scripts'>
+            <value language='DEFAULT'>Scripts</value>
+            <value language='de-DE'>Skripte</value>
+            <value language='fr-FR'>Scripts</value>
+            <value language='hr-HR'>Skripte</value>
+            <value language='it-IT'>Scripts</value>
+            <value language='ja-JP'>スクリプト</value>
+            <value language='tr-TR'>Scriptler</value>
+        </key>
+        <key name='sendEmailPNG'>
+            <value language='DEFAULT'>Email as PNG</value>
+            <value language='de-DE'>Email als PNG</value>
+            <value language='fr-FR'>Envoyer par mail en PNG</value>
+            <value language='hr-HR'>Pošalji na emial kao PNG</value>
+            <value language='it-IT'>Invia via Email in Formato PNG</value>
+            <value language='ja-JP'>PNG 形式でメールを送信</value>
+            <value language='tr-TR'>PNG Email gönder</value>
+        </key>
+        <key name='sendFlickr'>
+            <value language='DEFAULT'>Send to Flickr</value>
+            <value language='de-DE'>Zu Flickr senden</value>
+            <value language='ja-JP'>Flickr に送信</value>
+        </key>
+        <key name='sendTwitter'>
+            <value language='DEFAULT'>Send to Twitter</value>
+            <value language='de-DE'>Zu Twitter senden</value>
+            <value language='fr-FR'>Sur Twitter</value>
+            <value language='hr-HR'>Pošalji na Twitter</value>
+            <value language='it-IT'>Invia a Twitter</value>
+            <value language='ja-JP'>Twitter に送信</value>
+            <value language='tr-TR'>Twitter'a gönder</value>
+        </key>
+        <key name='setBackgroundColor'>
+            <value language='DEFAULT'>Set Background Color</value>
+            <value language='de-DE'>Hintergrundfarbe setzen</value>
+            <value language='fr-FR'>Choisir la couleur de fond</value>
+            <value language='hr-HR'>Postavi pozadinsku boju</value>
+            <value language='it-IT'>Imposta Colore di Sfondo</value>
+            <value language='ja-JP'>背景色を設定</value>
+            <value language='tr-TR'>Arka plan rengini değiştir</value>
+        </key>
+        <key name='setDocumentSize'>
+            <value language='DEFAULT'>Set Document Size</value>
+            <value language='de-DE'>Dokumentgröße</value>
+            <value language='fr-FR'>Choisir la taille du document</value>
+            <value language='hr-HR'>Podesi veličinu dokumenta</value>
+            <value language='it-IT'>Imposta Dimensioni Documento</value>
+            <value language='ja-JP'>ファイルのサイズを設定</value>
+            <value language='tr-TR'>Dosya büyüklüğü</value>
+        </key>
+        <key name='settings'>
+            <value language='DEFAULT'>Settings</value>
+            <value language='de-DE'>Einstellungen</value>
+            <value language='fr-FR'>Préférences</value>
+            <value language='hr-HR'>Postavke</value>
+            <value language='it-IT'>Impostazioni</value>
+            <value language='ja-JP'>設定</value>
+            <value language='tr-TR'>Ayarlar</value>
+        </key>
+        <key name='share'>
+            <value language='DEFAULT'>Share</value>
+            <value language='de-DE'>Veröffentlichen</value>
+            <value language='fr-FR'>Partager</value>
+            <value language='hr-HR'>Podijeli</value>
+            <value language='it-IT'>Condividi</value>
+            <value language='ja-JP'>共有</value>
+            <value language='tr-TR'>Paylaş</value>
+        </key>
+        <key name='showDocumentBounds'>
+            <value language='DEFAULT'>Show Document Edges</value>
+            <value language='de-DE'>Dokumentrahmen zeigen</value>
+            <value language='fr-FR'>Afficher les bords du document</value>
+            <value language='hr-HR'>Prikaži granice dokumenta</value>
+            <value language='it-IT'>Visualizza Bordi Documento</value>
+            <value language='ja-JP'>ファイルの端を表示</value>
+            <value language='tr-TR'>Dosya köşelerini göster</value>
+        </key>
+        <key name='showGrid'>
+            <value language='DEFAULT'>Show Grid</value>
+            <value language='de-DE'>Raster zeigen</value>
+            <value language='fr-FR'>Afficher la grille</value>
+            <value language='hr-HR'>Prikaži mrežu</value>
+            <value language='it-IT'>Visualizza Griglia</value>
+            <value language='ja-JP'>グリッドを表示</value>
+            <value language='tr-TR'>Izgarayı göster</value>
+        </key>
+        <key name='snapDocEdges'>
+            <value language='DEFAULT'>Snap to Doc Edges</value>
+            <value language='de-DE'>An Dokumentrahmen fangen</value>
+            <value language='fr-FR'>Magnétisme avec les bords du document</value>
+            <value language='hr-HR'>Lijepi za rubove dokumenta</value>
+            <value language='it-IT'>Aggancia ai Bordi del Documento</value>
+            <value language='ja-JP'>ファイルの端にスナップ</value>
+            <value language='tr-TR'>Dosya köşelerine yanaştır</value>
+        </key>
+        <key name='snapGrid'>
+            <value language='DEFAULT'>Snap to Grid</value>
+            <value language='de-DE'>Am Raster fangen</value>
+            <value language='fr-FR'>Magnétisme avec la grille</value>
+            <value language='hr-HR'>Lijepi na mrežu</value>
+            <value language='it-IT'>Aggancia alla Griglia</value>
+            <value language='ja-JP'>グリッドにスナップ</value>
+            <value language='tr-TR'>Izgaraya yanaştır</value>
+        </key>
+        <key name='snapNodeEdges'>
+            <value language='DEFAULT'>Snap to Node Edges</value>
+            <value language='de-DE'>An Elementrahmen fangen</value>
+            <value language='fr-FR'>Magnétisme avec les bords des éléments</value>
+            <value language='hr-HR'>Lijepi za rubove elementa</value>
+            <value language='it-IT'>Aggancia ai Bordi del Nodo</value>
+            <value language='ja-JP'>ノードの端にスナップ</value>
+            <value language='tr-TR'>Öğe köşelerine yanaştır</value>
+        </key>
+        <key name='subtract'>
+            <value language='DEFAULT'>Subtract</value>
+            <value language='de-DE'>Subtraktion</value>
+            <value language='hr-HR'>Oduzmi</value>
+            <value language='ja-JP'>切り抜き</value>
+        </key>
+        <key name='symbolSets'>
+            <value language='DEFAULT'>Symbol Sets</value>
+            <value language='ja-JP'>シンボルセット</value>
+        </key>
+        <key name='tocanvas'>
+            <value language='DEFAULT'>to HTML Amino Canvas</value>
+            <value language='de-DE'>zu HTML Amino Canvas</value>
+            <value language='fr-FR'>en Canvas Amino HTML</value>
+            <value language='hr-HR'>kao HTML Amino Canvas</value>
+            <value language='it-IT'>in HTML Amino Canvas</value>
+            <value language='ja-JP'>HTML Amino Canvas</value>
+            <value language='tr-TR'>HTML Amino Canvas</value>
+        </key>
+        <key name='tohtml'>
+            <value language='DEFAULT'>to HTML</value>
+            <value language='de-DE'>zu HTML</value>
+            <value language='fr-FR'>en HTML</value>
+            <value language='hr-HR'>kao HTML</value>
+            <value language='it-IT'>in HTML</value>
+            <value language='ja-JP'>HTML</value>
+            <value language='tr-TR'>HTML</value>
+        </key>
+        <key name='tojava2d'>
+            <value language='DEFAULT'>to Java2D</value>
+            <value language='de-DE'>zu Java2D</value>
+            <value language='fr-FR'>en Java2D</value>
+            <value language='hr-HR'>kao Java2D</value>
+            <value language='it-IT'>in Java2D</value>
+            <value language='ja-JP'>Java2D</value>
+            <value language='tr-TR'>Java2D</value>
+        </key>
+        <key name='topdf'>
+            <value language='DEFAULT'>to PDF</value>
+            <value language='de-DE'>zu PDF</value>
+            <value language='fr-FR'>en PDF</value>
+            <value language='hr-HR'>kao PDF</value>
+            <value language='it-IT'>in PDF</value>
+            <value language='ja-JP'>PDF</value>
+            <value language='tr-TR'>PDF</value>
+        </key>
+        <key name='topng'>
+            <value language='DEFAULT'>to PNG</value>
+            <value language='de-DE'>zu PNG</value>
+            <value language='fr-FR'>en PNG</value>
+            <value language='hr-HR'>kao PNG</value>
+            <value language='it-IT'>in PNG</value>
+            <value language='ja-JP'>PNG</value>
+            <value language='tr-TR'>PNG</value>
+        </key>
+        <key name='tosvg'>
+            <value language='DEFAULT'>to SVG</value>
+            <value language='de-DE'>zu SVG</value>
+            <value language='fr-FR'>en SVG</value>
+            <value language='hr-HR'>kao SVG</value>
+            <value language='it-IT'>in SVG</value>
+            <value language='ja-JP'>SVG</value>
+            <value language='tr-TR'>SVG</value>
+        </key>
+        <key name='undo'>
+            <value language='DEFAULT'>Undo</value>
+            <value language='de-DE'>Rückgängig</value>
+            <value language='fr-FR'>Annuler</value>
+            <value language='hr-HR'>Poništi izmjenu</value>
+            <value language='it-IT'>Annulla</value>
+            <value language='ja-JP'>元に戻す</value>
+            <value language='tr-TR'>Geri al</value>
+        </key>
+        <key name='ungroupSelection'>
+            <value language='DEFAULT'>Ungroup Selection</value>
+            <value language='de-DE'>Gruppierung aufheben</value>
+            <value language='fr-FR'>Dégrouper</value>
+            <value language='hr-HR'>Rastavi grupu</value>
+            <value language='it-IT'>Elimina Raggruppamento</value>
+            <value language='ja-JP'>グループ解除</value>
+            <value language='tr-TR'>Grup seçimini kaldır</value>
+        </key>
+        <key name='view'>
+            <value language='DEFAULT'>View</value>
+            <value language='de-DE'>Ansicht</value>
+            <value language='fr-FR'>Affichage</value>
+            <value language='hr-HR'>Pogled</value>
+            <value language='it-IT'>Visualizza</value>
+            <value language='ja-JP'>ビュー</value>
+            <value language='tr-TR'>İzle</value>
+        </key>
+        <key name='viewFlickrSidebar'>
+            <value language='DEFAULT'>Flickr Search</value>
+            <value language='de-DE'>Flickr Suche</value>
+            <value language='fr-FR'>Recherche Flickr</value>
+            <value language='hr-HR'>Flickr pretraga</value>
+            <value language='it-IT'>Ricerca su Flickr</value>
+            <value language='ja-JP'>Flickr を検索</value>
+            <value language='tr-TR'>Flickr'da ara</value>
+        </key>
+        <key name='viewPresentation'>
+            <value language='DEFAULT'>View Presentation</value>
+            <value language='de-DE'>Präsentationsansicht</value>
+            <value language='fr-FR'>Afficher présentation</value>
+            <value language='hr-HR'>Pogledaj prezentaciju</value>
+            <value language='it-IT'>Visualizza Presentazione</value>
+            <value language='ja-JP'>プレゼンテーションビュー</value>
+            <value language='tr-TR'>Sunumu göster</value>
+        </key>
+        <key name='viewSidebar'>
+            <value language='DEFAULT'>Sidebar</value>
+            <value language='hr-HR'>Rubna traka</value>
+            <value language='ja-JP'>サイドバー</value>
+        </key>
+        <key name='viewSymbolSidebar'>
+            <value language='DEFAULT'>Symbol Panel</value>
+            <value language='de-DE'>Symbol Leiste</value>
+            <value language='fr-FR'>Panneau des symboles</value>
+            <value language='hr-HR'>Ploča sa simbolima</value>
+            <value language='it-IT'>Pannello dei Simboli</value>
+            <value language='ja-JP'>シンボルパネルを表示</value>
+            <value language='tr-TR'>Sembol paneli</value>
+        </key>
+        <key name='window'>
+            <value language='DEFAULT'>Window</value>
+            <value language='de-DE'>Fenster</value>
+            <value language='en-US'>Window</value>
+            <value language='fr-FR'>Fenêtre</value>
+            <value language='hr-HR'>Prozor</value>
+            <value language='it-IT'>Finestra</value>
+            <value language='ja-JP'>ウィンドウ</value>
+            <value language='tr-TR'>Pencere</value>
+            <value language='zz_ZZ'>Zindow</value>
+        </key>
+        <key name='zoomActual'>
+            <value language='DEFAULT'>Actual Size</value>
+            <value language='de-DE'>Standard Größe</value>
+            <value language='fr-FR'>Taille d'origine</value>
+            <value language='hr-HR'>Stvarna veličina</value>
+            <value language='it-IT'>Dimensione Originale</value>
+            <value language='ja-JP'>実際のサイズ</value>
+            <value language='tr-TR'>Asıl boyuta getir</value>
+        </key>
+        <key name='zoomIn'>
+            <value language='DEFAULT'>Zoom In</value>
+            <value language='de-DE'>Hineinzoomen</value>
+            <value language='fr-FR'>Zoomer</value>
+            <value language='hr-HR'>Približi</value>
+            <value language='it-IT'>Aumenta Zoom</value>
+            <value language='ja-JP'>ズームイン</value>
+            <value language='tr-TR'>Yakınlaştır</value>
+        </key>
+        <key name='zoomOut'>
+            <value language='DEFAULT'>Zoom Out</value>
+            <value language='de-DE'>Herauszoomen</value>
+            <value language='fr-FR'>Dézoomer</value>
+            <value language='hr-HR'>Udalji</value>
+            <value language='it-IT'>Riduci Zoom</value>
+            <value language='ja-JP'>ズームアウト</value>
+            <value language='tr-TR'>Uzaklaştır</value>
+        </key>
+    </set>
+    <set name='misc'>
+        <key name='changesAppliedLater'>
+            <value language='DEFAULT'>Changes will applied after Leonardo restarts</value>
+            <value language='de-DE'>Änderungen werden nach einem Neustart aktiviert</value>
+            <value language='hr-HR'>Promjene će biti primjenjene nako restarta</value>
+            <value language='ja-JP'>変更は Leonardo 再起動後に有効になります</value>
+        </key>
+        <key name='close'>
+            <value language='DEFAULT'>Close</value>
+            <value language='de-DE'>Schließen</value>
+            <value language='hr-HR'>Zatvori</value>
+            <value language='ja-JP'>閉じる</value>
+        </key>
+        <key name='new'>
+            <value language='DEFAULT'>New</value>
+            <value language='de-DE'>Neu</value>
+            <value language='hr-HR'>Novo</value>
+            <value language='ja-JP'>新規</value>
+        </key>
+        <key name='no'>
+            <value language='DEFAULT'>No</value>
+            <value language='de-DE'>Nein</value>
+            <value language='ja-JP'>いいえ</value>
+        </key>
+        <key name='presentation'>
+            <value language='DEFAULT'>Presentation</value>
+            <value language='de-DE'>Präsentation</value>
+            <value language='hr-HR'>Prezentacija</value>
+            <value language='ja-JP'>プレゼンテーション</value>
+        </key>
+        <key name='saveFile'>
+            <value language='DEFAULT'>Save File</value>
+            <value language='de-DE'>Datei speichern</value>
+            <value language='hr-HR'>Spremi datoteku</value>
+            <value language='ja-JP'>ファイルを保存</value>
+        </key>
+        <key name='vector'>
+            <value language='DEFAULT'>Vector Document</value>
+            <value language='de-DE'>Vektorzeichnung</value>
+            <value language='hr-HR'>Vektorski dokument</value>
+            <value language='ja-JP'>ベクター形式ファイル</value>
+        </key>
+        <key name='whatsthis'>
+            <value language='DEFAULT'>What's this?</value>
+            <value language='de-DE'>Was ist gemeint?</value>
+            <value language='hr-HR'>Što je ovo ?</value>
+            <value language='ja-JP'>詳しい説明</value>
+        </key>
+        <key name='wish.box'>
+            <value language='DEFAULT'>Type your wish for a feature here</value>
+            <value language='de-DE'>Wunsch hier eingeben</value>
+            <value language='hr-HR'>Unesite ovdje želju za dodatnom funkcionalnošću</value>
+            <value language='ja-JP'>リクエスト事項を入力してださい</value>
+        </key>
+        <key name='wish.button'>
+            <value language='DEFAULT'>Make a wish!</value>
+            <value language='de-DE'>Wunsch senden</value>
+            <value language='hr-HR'>Pošalji želju</value>
+            <value language='ja-JP'>リクエスト</value>
+        </key>
+        <key name='wish.dialog'>
+            <value language='DEFAULT'>You must type in your wish for a feature before sending.</value>
+            <value language='de-DE'>Bitte einen Text vor dem Senden eingeben</value>
+            <value language='hr-HR'>Morate unijeti želju prije slanja.</value>
+            <value language='ja-JP'>リクエストエリアが空欄です</value>
+        </key>
+        <key name='yes'>
+            <value language='DEFAULT'>Yes</value>
+            <value language='de-DE'>Ja</value>
+            <value language='ja-JP'>はい</value>
+        </key>
+    </set>
+    <set name='newDocumentDialog'>
+        <key name='height'>
+            <value language='DEFAULT'>New Document</value>
+            <value language='de-DE'>Höhe</value>
+            <value language='hr-HR'>Visina</value>
+            <value language='ja-JP'>縦</value>
+        </key>
+        <key name='preset'>
+            <value language='DEFAULT'>New Document</value>
+            <value language='de-DE'>Vorlage</value>
+            <value language='hr-HR'>Predložak</value>
+            <value language='ja-JP'>プリセット</value>
+        </key>
+        <key name='title'>
+            <value language='DEFAULT'>New Document</value>
+            <value language='de-DE'>Neues Dokument</value>
+            <value language='hr-HR'>Naslov</value>
+            <value language='ja-JP'>新規ファイル</value>
+        </key>
+        <key name='width'>
+            <value language='DEFAULT'>New Document</value>
+            <value language='de-DE'>Breite</value>
+            <value language='hr-HR'>Širina</value>
+            <value language='ja-JP'>横</value>
+        </key>
+    </set>
+    <set name='preferences'>
+        <key name='advancedTab'>
+            <value language='DEFAULT'>Advanced</value>
+            <value language='de-DE'>Erweitert</value>
+            <value language='en-US'>Advanced</value>
+            <value language='ja-JP'>詳細</value>
+        </key>
+        <key name='deleteFlickrCache'>
+            <value language='DEFAULT'>Delete Cache</value>
+            <value language='de-DE'>Cache leeren</value>
+            <value language='en-US'>Delete Cache</value>
+        </key>
+        <key name='enable.analytics.tracking'>
+            <value language='DEFAULT'>Enable Analytics tracking</value>
+            <value language='de-DE'>Nutzungstatistiken senden?</value>
+            <value language='en-US'>Enable Analytics tracking</value>
+            <value language='hr-HR'>Omogići slanje statistike</value>
+            <value language='ja-JP'>分析トラッキングを有効にする</value>
+        </key>
+        <key name='enable.debug.menu'>
+            <value language='DEFAULT'>Enable Debug menu</value>
+            <value language='de-DE'>Fehlermenü aktivieren</value>
+            <value language='en-US'>Enable Debug menu</value>
+            <value language='hr-HR'>Omogući debuge meni</value>
+            <value language='ja-JP'>デバッグモードを有効にする</value>
+        </key>
+        <key name='flickrCache'>
+            <value language='DEFAULT'>Flickr Cache</value>
+            <value language='de-DE'>Flickr Cache</value>
+            <value language='en-US'>Flickr Cache</value>
+            <value language='ja-JP'>Flickr キャッシュ</value>
+        </key>
+        <key name='generalTab'>
+            <value language='DEFAULT'>General</value>
+            <value language='de-DE'>Allgemein</value>
+            <value language='en-US'>General</value>
+            <value language='ja-JP'>一般</value>
+        </key>
+        <key name='preferredLocale'>
+            <value language='DEFAULT'>Preferred Language</value>
+            <value language='de-DE'>Gewünschte Sprache</value>
+            <value language='ja-JP'>優先言語</value>
+        </key>
+        <key name='settings'>
+            <value language='DEFAULT'>Settings</value>
+            <value language='de-DE'>Einstellungen</value>
+            <value language='en-US'>Settings</value>
+            <value language='ja-JP'>設定</value>
+        </key>
+    </set>
+    <set name='rectPropsDialog'>
+        <key name='angle'>
+            <value language='DEFAULT'>Angle</value>
+            <value language='de-DE'>Winkel</value>
+            <value language='hr-HR'>Kut</value>
+            <value language='ja-JP'>角度</value>
+        </key>
+        <key name='cornerRadius'>
+            <value language='DEFAULT'>Corner Radius</value>
+            <value language='de-DE'>Eckradius</value>
+            <value language='hr-HR'>Radijs ugla</value>
+            <value language='ja-JP'>角の半径</value>
+        </key>
+        <key name='gradientFill'>
+            <value language='DEFAULT'>Gradient Fill</value>
+            <value language='de-DE'>Farbverlauf</value>
+            <value language='hr-HR'>Gradijent</value>
+            <value language='ja-JP'>グラデーションで塗りつぶす</value>
+        </key>
+    </set>
+    <set name='sidebar'>
+        <key name='flickr'>
+            <value language='DEFAULT'>Flickr Search</value>
+            <value language='de-DE'>Flickr Suche</value>
+            <value language='fr-FR'>Recherche Flickr</value>
+            <value language='hr-HR'>Pretraga na Flickr</value>
+            <value language='it-IT'>Ricerca su Flickr</value>
+            <value language='ja-JP'>flickr 検索</value>
+            <value language='tr-TR'>Flickr'da ara</value>
+        </key>
+        <key name='flickr.search.hint'>
+            <value language='DEFAULT'>Flickr Keyword Search</value>
+            <value language='de-DE'>Flickr Stichwortsuche</value>
+            <value language='fr-FR'>Recherche Flickr Keyword</value>
+            <value language='hr-HR'>Pretraga na Flickr Keyword</value>
+            <value language='it-IT'>Ricerca su Flickr Keyword</value>
+            <value language='ja-JP'>検索キーワード</value>
+            <value language='tr-TR'>Flickr'da ara Keyword</value>
+        </key>
+        <key name='search'>
+            <value language='DEFAULT'>Search</value>
+            <value language='de-DE'>Suchen</value>
+            <value language='hr-HR'>Pretraži</value>
+            <value language='ja-JP'>検索</value>
+        </key>
+        <key name='symbols'>
+            <value language='DEFAULT'>Symbols</value>
+            <value language='de-DE'>Symbole</value>
+            <value language='fr-FR'>Symboles</value>
+            <value language='hr-HR'>Simboli</value>
+            <value language='it-IT'>Simboli</value>
+            <value language='ja-JP'>シンボル</value>
+            <value language='tr-TR'>Semboller</value>
+        </key>
+        <key name="insertSymbol">
+            <value language="DEFAULT">Insert Symbol</value>
+        </key>
+    </set>
+    <set name='symbolSetDialog'>
+        <key name='newSetName'>
+            <value language='DEFAULT'>Name for new symbol set</value>
+            <value language='de-DE'>Name für neuenSymbolsatz</value>
+            <value language='ja-JP'>新規シンボルの名称</value>
+        </key>
+    </set>
+    <set name='toolbar'>
+        <key name='fontSize'>
+            <value language='DEFAULT'>Font Size</value>
+            <value language='de-DE'>Schriftgröße</value>
+            <value language='hr-HR'>Veličina slova</value>
+            <value language='ja-JP'>フォントサイズ</value>
+        </key>
+        <key name='opacity'>
+            <value language='DEFAULT'>Opacity</value>
+            <value language='de-DE'>Deckkraft</value>
+            <value language='hr-HR'>Neprozirnost</value>
+            <value language='ja-JP'>不透明度</value>
+        </key>
+        <key name='stroke'>
+            <value language='DEFAULT'>Stroke</value>
+            <value language='de-DE'>Linie</value>
+            <value language='hr-HR'>Debljina</value>
+            <value language='ja-JP'>境界線</value>
+        </key>
+    </set>
+    <set name='trackingDialog'>
+        <key name='question'>
+            <value language='DEFAULT'>Can Leonardo track how often you run it?</value>
+            <value language='de-DE'>Darf Leo die Nutzung begleiten?</value>
+            <value language='ja-JP'>使用頻度のトラッキングを許可しますか？</value>
+        </key>
+        <key name='title'>
+            <value language='DEFAULT'>Usage Tracking?</value>
+            <value language='de-DE'>Nutzungstatistiken aufzeichnen?</value>
+            <value language='hr-HR'>Praćenje korištenja</value>
+            <value language='ja-JP'>分析トラッキングしますか？</value>
+        </key>
+    </set>
+    <set name='twitterAuthDialog'>
+        <key name='authenticate'>
+            <value language='DEFAULT'>Authenticate</value>
+            <value language='de-DE'>Authentifizieren</value>
+            <value language='hr-HR'>Autorizacija</value>
+            <value language='ja-JP'>認識</value>
+        </key>
+        <key name='text1'>
+            <value language='DEFAULT'>Please login to Twitter</value>
+            <value language='de-DE'>Bitte in Twitter einloggen</value>
+            <value language='hr-HR'>Molim prijavite se na Twitter</value>
+            <value language='ja-JP'>Twitter にログインしてください</value>
+        </key>
+        <key name='text2'>
+            <value language='DEFAULT'>and enter the PIN here</value>
+            <value language='de-DE'>und PIN hier eintragen</value>
+            <value language='hr-HR'>i unesite PIN</value>
+            <value language='ja-JP'>PIN ナンバーを入力してください</value>
+        </key>
+    </set>
+</sets>

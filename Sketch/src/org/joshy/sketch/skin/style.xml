@@ -1,0 +1,146 @@
+<style>
+    <control classname="org.joshy.gfx.node.control.Button">
+        <part name="main">
+            <property name="background">
+<!--                <roundrect arcWidth="20" arcHeight="20" fill="#a0a0a0" border="#303030"/>-->
+                <grid9 src="button_normal.png" top="10" bottom="10" left="10" right="10"/>
+            </property>
+            <property name="background" state="pressed">
+                <grid9 src="button_pressed.png" top="10" bottom="10" left="10" right="10"/>
+            </property>
+            <property name="text">
+                <shadow xoffset="1" yoffset="1" blur="0" text-color="#303030" shadow-color="#a0a0a0"/>
+            </property>
+
+            <property name="jogltext.font">
+                <font name="junction regular" size="18"/>
+            </property>
+
+            <property name="text" state="pressed">
+                <shadow xoffset="1" yoffset="1" blur="0" text-color="#ffffff" shadow-color="#666666"/>
+            </property>
+            <property name="padding">
+                <insets left="20" right="20" top="12" bottom="8"/>
+            </property>
+        </part>
+        <part name="main" variant="footerControl">
+            <property name="background">
+                <roundrect arcWidth="6" arcHeight="6" fill="#dddddd" border="#303030"/>
+            </property>
+            <property name="background" state="pressed">
+                <roundrect arcWidth="6" arcHeight="6" fill="#aaaaaa" border="#303030"/>
+            </property>
+            <property name="padding">
+                <insets left="10" right="10" top="3" bottom="3"/>
+            </property>
+            <property name="jogltext.font">
+                <font name="junction regular" size="12"/>
+            </property>
+        </part>
+    </control>
+
+    <control classname="org.joshy.gfx.node.control.Togglebutton">
+        <part name="main">
+            <property name="background">
+                <grid9 src="button_normal.png" top="10" bottom="10" left="10" right="10"/>
+            </property>
+            <property name="background" state="selected">
+                <grid9 src="button_pressed.png" top="10" bottom="10" left="10" right="10"/>
+            </property>
+        </part>
+    </control>
+
+    <control classname="org.joshy.gfx.node.control.Checkbox">
+        <part name="main">
+            <property name="background">
+                <noop/>
+            </property>
+            <property name="padding">
+                <insets left="2" right="20" top="2" bottom="8"/>
+            </property>
+        </part>
+        <part name="icon">
+            <property name="icon" state="normal">
+                <image src="checkbox_normal.png"/>
+            </property>
+            <property name="icon" state="selected">
+                <image src="checkbox_selected.png"/>
+            </property>
+        </part>
+    </control>
+
+    <control classname="org.joshy.gfx.node.control.Radiobutton">
+        <part name="main">
+            <property name="background">
+                <noop/>
+            </property>
+            <property name="padding">
+                <insets left="2" right="20" top="2" bottom="8"/>
+            </property>
+        </part>
+        <part name="icon">
+            <property name="icon" state="normal">
+                <image src="radiobutton.png"/>
+            </property>
+            <property name="icon" state="selected">
+                <image src="checkbox_selected.png"/>
+            </property>
+        </part>
+    </control>
+
+    <control classname="org.joshy.gfx.node.control.Linkbutton">
+        <part name="main">
+            <property name="background">
+                <noop/>
+            </property>
+            <property name="padding">
+                <insets left="2" right="20" top="2" bottom="8"/>
+            </property>
+        </part>
+    </control>
+
+    <control classname="org.joshy.gfx.node.control.Scrollbar">
+        <part name="main">
+            <property name="background">
+                <flatcolor rgb="#aaaaaa"/>
+            </property>
+        </part>
+        <part name="startArrow">
+            <property name="background">
+                <grid9 src="scrollbar_start_arrow.png" top="0" bottom="0" left="0" right="0" />
+            </property>
+        </part>
+        <part name="endArrow">
+            <property name="background">
+                <grid9 src="scrollbar_start_arrow.png" top="0" bottom="0" left="0" right="0" flipx="true"/>
+            </property>
+        </part>
+        <part name="thumb">
+            <property name="background">
+                <grid9 src="scrollbar_thumb.png" top="0" bottom="0" left="10" right="10"/>
+            </property>
+        </part>
+    </control>
+    
+    <control classname="org.joshy.gfx.node.control.Slider">
+        <part name="main">
+            <property name="background">
+                <roundrect arcWidth="6" arcHeight="6" fill="#808080" border="#303030"/>
+            </property>
+        </part>
+        <part name="thumb">
+            <property name="background">
+                <roundrect arcWidth="6" arcHeight="6" fill="#aaaaaa" border="#303030"/>
+            </property>
+        </part>
+    </control>
+
+    <control classname="org.joshy.gfx.node.layout.Panel">
+        <part name="main">
+            <property name="background">
+                <grid9 src="panel.png" top="0" bottom="0" left="0" right="0" />
+            </property>
+        </part>
+    </control>
+</style>
+

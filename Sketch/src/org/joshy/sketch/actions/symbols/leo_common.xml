@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<sketchy version='-1'>
+    <group translateX='0.0' translateY='0.0'>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='38.5' translateY='0.5' x='0.0' y='0.0' width='71.75' height='41.75' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#fff0f0f0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.5' translateY='16.0' x='0.0' y='0.0' width='149.5' height='67.75' corner='41.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='26.5' translateY='53.0' x='0.0' y='0.0' width='96.5' height='57.75' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='33.0' translateY='59.5' x='0.0' y='0.0' width='83.75' height='1.25' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='32.75' translateY='65.0' x='0.0' y='0.0' width='83.5' height='1.75' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='33.0' translateY='70.5' x='0.0' y='0.0' width='83.75' height='1.25' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='32.75' translateY='76.0' x='0.0' y='0.0' width='83.5' height='1.75' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='33.0' translateY='81.0' x='0.0' y='0.0' width='83.75' height='1.25' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='32.75' translateY='86.5' x='0.0' y='0.0' width='83.5' height='1.75' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='33.0' translateY='91.75' x='0.0' y='0.0' width='83.75' height='1.25' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='32.75' translateY='97.25' x='0.0' y='0.0' width='83.5' height='1.75' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='33.0' translateY='103.0' x='0.0' y='0.0' width='83.75' height='1.25' corner='0.0'>        </resizeableNode>
+    </group>
+    <group translateX='0.0' translateY='0.0'>
+        <shape type='path' fillPaint='#ffa0a0a0' fillOpacity='0.0' strokePaint='#ff000000' strokeWidth='12.0' translateX='17.0' translateY='1.0' closed='false'>
+            <pathpoint x='65.0' y='30.0' cx1='65.0' cy1='30.0' cx2='65.0' cy2='30.0'>            </pathpoint>
+            <pathpoint x='63.0' y='92.0' cx1='105.0' cy1='56.0' cx2='32.0' cy2='101.0'>            </pathpoint>
+        </shape>
+        <shape type='path' fillPaint='#ffa0a0a0' fillOpacity='0.0' strokePaint='#ff000000' strokeWidth='12.0' translateX='35.0' translateY='-10.0' closed='false'>
+            <pathpoint x='65.0' y='30.0' cx1='65.0' cy1='30.0' cx2='65.0' cy2='30.0'>            </pathpoint>
+            <pathpoint x='61.0' y='112.0' cx1='110.0' cy1='82.0' cx2='30.0' cy2='121.0'>            </pathpoint>
+        </shape>
+        <shape type='path' fillPaint='#ffa0a0a0' fillOpacity='0.0' strokePaint='#ff000000' strokeWidth='12.0' translateX='7.0' translateY='-12.0' closed='false'>
+            <pathpoint x='110.0' y='12.0' cx1='110.0' cy1='12.0' cx2='110.0' cy2='12.0'>            </pathpoint>
+            <pathpoint x='102.0' y='128.0' cx1='174.0' cy1='86.0' cx2='45.0' cy2='160.0'>            </pathpoint>
+        </shape>
+        <shape type='area' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-66.0' translateY='-146.0'>
+            <move x='132.0' y='176.0'>            </move>
+            <lineto x='105.87096774193549' y='191.0'>            </lineto>
+            <lineto x='66.0' y='191.0'>            </lineto>
+            <lineto x='66.0' y='223.0'>            </lineto>
+            <lineto x='105.87096774193549' y='223.0'>            </lineto>
+            <lineto x='132.0' y='238.0'>            </lineto>
+            <lineto x='132.0' y='176.0'>            </lineto>
+            <close>            </close>
+        </shape>
+    </group>
+    <group translateX='0.0' translateY='0.0'>
+        <resizeableNode type='rect' fillPaint='#fff8f8f8' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.5' translateY='0.5' x='0.0' y='0.0' width='149.5' height='99.5' corner='0.0'>        </resizeableNode>
+        <shape type='poly' fillPaint='#fff0f0f0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-49.5' translateY='-24.5' closed='true'>
+            <point x='50.0' y='25.0'>            </point>
+            <point x='125.0' y='75.0'>            </point>
+            <point x='200.0' y='25.0'>            </point>
+        </shape>
+    </group>
+    <shape type='area' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0'>
+        <move x='212.5' y='100.0'>        </move>
+        <curveto cx1='177.98220313557542' cy1='100.0' cx2='150.0' cy2='116.78932188134524' x2='150.0' y2='137.5'>        </curveto>
+        <curveto cx1='150.0' cy1='158.21067811865476' cx2='177.98220313557542' cy2='175.0' x2='212.5' y2='175.0'>        </curveto>
+        <curveto cx1='215.9251490040804' cy1='175.0' cx2='219.28594663051257' cy2='174.83468739984943' x2='222.56143883563638' y2='174.51663462574436'>        </curveto>
+        <lineto x='222.5614388578922' y='174.51663462574436'>        </lineto>
+        <curveto cx1='227.66500454640013' cy1='180.521757580578' cx2='236.43848493600595' cy2='189.00816406494607' x2='250.99999999999991' y2='200.99999999999994'>        </curveto>
+        <lineto x='251.0' y='200.99999999999994'>        </lineto>
+        <curveto cx1='245.48344949808245' cy1='188.24297696431563' cx2='244.00869274994236' cy2='177.86347966614747' x2='244.44442187547955' y2='169.73854803548966'>        </curveto>
+        <lineto x='244.44442185103514' y='169.73854803548966'>        </lineto>
+        <curveto cx1='262.74209573088274' cy1='163.19741138736046' cx2='275.0' cy2='151.2076017771865' x2='275.0' y2='137.5'>        </curveto>
+        <curveto cx1='275.0' cy1='116.78932188134524' cx2='247.01779686442458' cy2='100.0' x2='212.5' y2='100.0'>        </curveto>
+        <close>        </close>
+    </shape>
+    <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' radius='32.0' sides='3' angle='1.5707963267948966'>    </shape>
+    <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' radius='34.0' sides='3' angle='-1.5707963267948966'>    </shape>
+    <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' radius='32.01562118716424' sides='3' angle='3.141592653589793'>    </shape>
+    <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' radius='32.0' sides='3' angle='0.0'>    </shape>
+    <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='2.0' translateX='0.0' translateY='0.0' x='190.0' y='174.0' width='52.0' height='80.4931640625' text='©' fontSize='70.41758241758242' weight='Regular'>    </resizeableNode>
+    <shape type='area' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0'>
+        <move x='175.5' y='71.0'>        </move>
+        <curveto cx1='175.5' cy1='71.0' cx2='102.5' cy2='126.0' x2='102.5' y2='126.0'>        </curveto>
+        <lineto x='125.0' y='126.0'>        </lineto>
+        <lineto x='125.0' y='200.0'>        </lineto>
+        <lineto x='163.0' y='200.0'>        </lineto>
+        <lineto x='163.0' y='162.0'>        </lineto>
+        <lineto x='187.0' y='162.0'>        </lineto>
+        <lineto x='187.0' y='200.0'>        </lineto>
+        <lineto x='225.0' y='200.0'>        </lineto>
+        <lineto x='225.0' y='126.0'>        </lineto>
+        <lineto x='252.5' y='126.0'>        </lineto>
+        <curveto cx1='252.5' cy1='126.0' cx2='175.5' cy2='71.0' x2='175.5' y2='71.0'>        </curveto>
+        <close>        </close>
+    </shape>
+</sketchy>

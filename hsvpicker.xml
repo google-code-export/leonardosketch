@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<app name="HSVPicker">
+    <jar name="Sketch.jar" main-class="org.joshy.sketch.controls.HSVColorPicker6"/>
+    <jar name="XMLLib.jar"/>
+    <jar name="amino-core.jar"/>
+    <jar name="parboiled-0.9.7.3.jar"/>
+    <jar name="MacStubs.jar" os="!mac"/>
+</app>
