@@ -75,7 +75,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                             SImage image = new SImage(file);
                             image.setTranslateX(doc.getWidth()/2+count*50);
                             image.setTranslateY(doc.getHeight()/2+count*50);
-                            doc.getCurrentPage().model.add(image);
+                            doc.getCurrentPage().add(image);
                         } catch (Throwable thr) {
                             thr.printStackTrace();
                         }

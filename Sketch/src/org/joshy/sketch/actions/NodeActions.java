@@ -558,14 +558,14 @@ public class NodeActions {
                 public void executeUndo() {
                     SketchDocument doc = (SketchDocument) context.getDocument();
                     for(SNode dupe : dupes) {
-                        doc.getCurrentPage().model.remove(dupe);
+                        doc.getCurrentPage().remove(dupe);
                     }
                     context.getSelection().clear();
                 }
                 public void executeRedo() {
                     SketchDocument doc = (SketchDocument) context.getDocument();
                     for(SNode dupe : dupes) {
-                        doc.getCurrentPage().model.add(dupe);
+                        doc.getCurrentPage().add(dupe);
                         doc.setDirty(true);
                     }
                 }
@@ -578,7 +578,7 @@ public class NodeActions {
             context.getSelection().clear();
             //add to the doc
             for(SNode dupe : dupes) {
-                doc.getCurrentPage().model.add(dupe);
+                doc.getCurrentPage().add(dupe);
                 doc.setDirty(true);
                 context.getSelection().addSelectedNode(dupe);
             }

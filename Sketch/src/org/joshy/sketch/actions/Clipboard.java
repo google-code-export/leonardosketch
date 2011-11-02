@@ -66,7 +66,7 @@ public class Clipboard {
                 SketchDocument doc = (SketchDocument) context.getDocument();
                 for(SNode node : clipboardNodes) {
                     SNode dupe = node.duplicate(null);
-                    doc.getCurrentPage().model.add(dupe);
+                    doc.getCurrentPage().add(dupe);
                     doc.setDirty(true);
                     vc.getSelection().addSelectedNode(dupe);
                 }

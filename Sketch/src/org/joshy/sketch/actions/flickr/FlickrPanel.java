@@ -95,7 +95,7 @@ public class FlickrPanel extends VFlexBox {
                             String file = photo.getFullURL().getFile();
                             file = file.substring(file.lastIndexOf("/")+1);
                             dupe = new SImage(photo.getFullURL().toURI(), file, true, photo.getImage(), context);
-                            sd.getCurrentPage().model.add(dupe);
+                            sd.getCurrentPage().add(dupe);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
