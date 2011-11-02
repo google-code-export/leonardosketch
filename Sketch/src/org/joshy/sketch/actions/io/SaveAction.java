@@ -36,7 +36,6 @@ public class SaveAction extends SAction {
 
     @Override
     public void execute() {
-        u.p("saving a file");
         String extension = ".leo";
         if(useZip) {
             extension = ".leoz";

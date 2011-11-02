@@ -2,17 +2,10 @@ package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Paint;
-import org.joshy.gfx.event.ActionEvent;
-import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.Checkbox;
-import org.joshy.gfx.node.layout.GridBox;
-import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.stage.swing.SwingGFX;
 import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.sketch.actions.ExportProcessor;
-import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
@@ -27,16 +20,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class SavePNGAction extends SAction implements ExportAction {
-    private DocContext context;
-    private File lastfile;
+public class SavePNGAction extends BaseExportAction {
     private boolean includeBackground = true;
     private boolean includeDocumentBounds = false;
 
     public SavePNGAction(DocContext context) {
-        this.context = context;
+        super(context);
     }
 
+    @Override
+    protected String getStandardFileExtension() {
+        return "png";
+    }
+
+    /*
     public void execute() {
         final Stage stage = Stage.createStage();
         GridBox grid = new GridBox()
@@ -70,7 +67,9 @@ public class SavePNGAction extends SAction implements ExportAction {
         grid.addControl(continueButton);
         stage.setContent(grid);
     }
+    */
 
+    /*
     private void showFileDialog() {
         FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
         fd.setMode(FileDialog.SAVE);
@@ -96,7 +95,9 @@ public class SavePNGAction extends SAction implements ExportAction {
             lastfile = file;
         }
     }
+    */
 
+    /*
     public void exportHeadless() {
         if(lastfile != null) {
             if(context.getDocument() instanceof SketchDocument) {
@@ -107,13 +108,18 @@ public class SavePNGAction extends SAction implements ExportAction {
             }
         }
     }
+    */
 
     public static void export(File file, CanvasDocument doc) {
         if(doc instanceof SketchDocument) {
-            exportTo(file,(SketchDocument)doc,false,false);
+            SavePNGAction save = new SavePNGAction(null);
+            save.includeBackground = false;
+            save.includeDocumentBounds = false;
+            save.export(file, (SketchDocument) doc);
         }
         if(doc instanceof PixelDocument) {
-            exportTo(file,(PixelDocument)doc);
+            SavePNGAction save = new SavePNGAction(null);
+            save.export(file, (PixelDocument) doc);
         }
     }
 
@@ -131,7 +137,8 @@ public class SavePNGAction extends SAction implements ExportAction {
         }
     }
 
-    private static void exportTo(File file, PixelDocument doc) {
+    @Override
+    protected void export(File file, PixelDocument doc) {
         BufferedImage img = GraphicsUtil.toAWT(doc.getBitmap());
         try {
             ImageIO.write(img,"png",file);
@@ -140,9 +147,10 @@ public class SavePNGAction extends SAction implements ExportAction {
         }
     }
 
-    private static void exportTo(File file, SketchDocument doc, boolean useDocBounds, boolean useDocBg) {
+    @Override
+    protected void export(File file, SketchDocument doc) {
         Bounds bounds = null;
-        if(useDocBounds) {
+        if(includeDocumentBounds) {
             bounds = new Bounds(0,0,doc.getWidth(),doc.getHeight());
         } else {
             bounds = calculateBounds(doc.getCurrentPage().model);
@@ -151,7 +159,7 @@ public class SavePNGAction extends SAction implements ExportAction {
         Graphics2D g2 = img.createGraphics();
         g2.translate(-bounds.getX(),-bounds.getY());
         PNGExporter exporter = new PNGExporter();
-        exporter.setIncludeDocumentBackground(useDocBg);
+        exporter.setIncludeDocumentBackground(includeBackground);
         ExportProcessor.process(exporter, g2, doc);
         g2.dispose();
         try {

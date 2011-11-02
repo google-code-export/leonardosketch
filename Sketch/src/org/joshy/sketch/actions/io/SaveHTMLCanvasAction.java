@@ -1,15 +1,12 @@
 package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.*;
-import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.actions.ExportProcessor;
-import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 
-import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
@@ -25,18 +22,22 @@ import java.util.Map;
  * Time: 5:32:30 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SaveHTMLCanvasAction extends SAction {
-    private DocContext context;
+public class SaveHTMLCanvasAction extends BaseExportAction {
 
     public SaveHTMLCanvasAction(DocContext context) {
-        this.context = context;
+        super(context);
     }
+
+    @Override
+    protected String getStandardFileExtension() {
+        return "HTML";
+    }
+
 
     private static String HTML_CANVAS_PATH_KEY = "export.htmlcanvas.path";
 
     @Override
-    public void execute() throws Exception {
-        File file = null;
+    protected void export(File file, SketchDocument document) throws Exception {
         Map props = context.getDocument().getProperties();
         if(props.containsKey(HTML_CANVAS_PATH_KEY)) {
             File ffile = new File((String)props.get(HTML_CANVAS_PATH_KEY));
@@ -44,7 +45,7 @@ public class SaveHTMLCanvasAction extends SAction {
                 file = ffile;
             }
         }
-
+        /*
         if(file == null) {
             String extension = ".html";
             FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
@@ -60,7 +61,7 @@ public class SaveHTMLCanvasAction extends SAction {
             }
             file = new File(fd.getDirectory(),fileName);
         }
-
+        */
         ExportProcessor.process(new HTMLCanvasExport(),
                 new PrintWriter(new FileOutputStream(file)),
                 (SketchDocument) context.getDocument());

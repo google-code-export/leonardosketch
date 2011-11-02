@@ -2,9 +2,7 @@ package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Paint;
-import org.joshy.gfx.util.OSUtil;
 import org.joshy.sketch.actions.ExportProcessor;
-import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
@@ -23,21 +21,27 @@ import java.util.List;
  * Time: 8:03:07 AM
  * To change this template use File | Settings | File Templates.
  */
-public class SaveHTMLAction extends SAction {
-    private DocContext context;
+public class SaveHTMLAction extends BaseExportAction {
 
     public SaveHTMLAction(DocContext context) {
-        this.context = context;
+        super(context);
     }
 
+    @Override
+    protected String getStandardFileExtension() {
+        return "HTML";
+    }
+
+    /*
     @Override
     public void execute() {
         File dir = new File("foo");
         ExportProcessor.process(new HTMLExport(), new MultiFileOutput(dir), ((SketchDocument) context.getDocument()));
         OSUtil.openBrowser(new File(dir,"page0.html").toURI().toASCIIString());
     }
+    */
 
-    public static void export(File file, SketchDocument doc) {
+    public void export(File file, SketchDocument doc) {
         ExportProcessor.process(new HTMLExport(), new MultiFileOutput(file), doc);
     }
 

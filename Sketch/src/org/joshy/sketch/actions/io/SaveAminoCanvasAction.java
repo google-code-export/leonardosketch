@@ -5,7 +5,6 @@ import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.ExportProcessor;
-import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
@@ -31,11 +30,10 @@ import java.util.Map;
  * Time: 5:32:30 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SaveAminoCanvasAction extends SAction implements ExportAction {
-    private DocContext context;
+public class SaveAminoCanvasAction extends BaseExportAction {
 
     public SaveAminoCanvasAction(DocContext context) {
-        this.context = context;
+        super(context);
     }
 
     private static String HTML_CANVAS_PATH_KEY = "export.htmlcanvas.path";
@@ -77,6 +75,16 @@ public class SaveAminoCanvasAction extends SAction implements ExportAction {
             }
         }
         exportToDirectory(file);
+    }
+
+    @Override
+    protected String getStandardFileExtension() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    protected void export(File file, SketchDocument document) throws Exception {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     private static void outputIndexHTML(IndentWriter out, SketchDocument doc) {
