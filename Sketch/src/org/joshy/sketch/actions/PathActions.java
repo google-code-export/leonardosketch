@@ -41,7 +41,7 @@ public class PathActions {
             SNode node = context.getSelection().firstItem();
             if(!(node instanceof SPath)) return;
             SPath path = (SPath) node;
-            Bounds bounds = path.getBounds();
+            Bounds bounds = path.getTransformedBounds();
             List<SPath.PathPoint> points = path.getPoints();
             for(SPath.PathPoint pt : points) {
                 pt.x = pt.x -bounds.getX()+path.getTranslateX();

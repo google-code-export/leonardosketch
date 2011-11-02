@@ -181,7 +181,7 @@ public class SavePNGAction extends BaseExportAction {
         double w = Double.MIN_VALUE;
         double h = Double.MIN_VALUE;
         for(SNode n : model) {
-            Bounds b = n.getBounds();
+            Bounds b = n.getTransformedBounds();
             if(n instanceof SShape) {
                 b = ((SShape) n).getEffectBounds();
             }
