@@ -81,6 +81,7 @@ public class PageListPanel extends StackPanel {
             public void call(SelectionEvent event) {
                 int n = event.getView().getSelectedIndex();
                 context.getDocument().setCurrentPage(n);
+                context.getSelection().clear();
             }
         });
         EventBus.getSystem().addListener(listview, MouseEvent.MouseAll, new Callback<MouseEvent>() {
