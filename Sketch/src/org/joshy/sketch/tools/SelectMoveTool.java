@@ -453,7 +453,7 @@ public class SelectMoveTool extends CanvasTool {
             Bounds dragRectBounds = new Bounds(dragRectStartPoint,dragRectEndPoint);
             tempSelection.clear();
             for(SNode node : context.getDocument().getCurrentPage().getNodes()) {
-                if(dragRectBounds.intersects(node.getBounds())) {
+                if(dragRectBounds.intersects(node.getTransformedBounds())) {
                     if(!tempSelection.contains(node)) {
                         tempSelection.add(node);
                     }
@@ -498,10 +498,10 @@ public class SelectMoveTool extends CanvasTool {
         if(context.getDocument().isSnapNodeBounds()) {
             for(SNode node : context.getDocument().getCurrentPage().getNodes()) {
                 if(!context.getSelection().contains(node)) {
-                    if(snapHorizontalBounds(cursor, node.getBounds())) {
+                    if(snapHorizontalBounds(cursor, node.getTransformedBounds())) {
                         hsnap = true;
                     }
-                    if(snapVerticalBounds(cursor, node.getBounds())) {
+                    if(snapVerticalBounds(cursor, node.getTransformedBounds())) {
                         vsnap = true;
                     }
                 }
@@ -730,8 +730,8 @@ public class SelectMoveTool extends CanvasTool {
             double uy = start.getY() + cursor.getY()-startY;
             x = Math.min(x, ux);
             y = Math.min(y, uy);
-            w = Math.max(w, ux + n.getBounds().getWidth());
-            h = Math.max(h, uy + n.getBounds().getHeight());
+            w = Math.max(w, ux + n.getTransformedBounds().getWidth());
+            h = Math.max(h, uy + n.getTransformedBounds().getHeight());
         }
         return new Bounds(x,y,w-x,h-y);
     }
