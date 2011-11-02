@@ -62,7 +62,7 @@ public class AddImageTool extends CanvasTool {
         SImage image = new SImage(file);
         image.setTranslateX(cursor.getX());
         image.setTranslateY(cursor.getY());
-        doc.getCurrentPage().model.add(image);
+        doc.getCurrentPage().add(image);
         context.redraw();
     }
 }

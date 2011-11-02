@@ -78,7 +78,7 @@ public class SymbolPanel extends Panel {
             if(listView.getSelectedIndex() < 0) return;
             SNode node = listView.getModel().get(listView.getSelectedIndex());
             SketchDocument sd = context.getDocument();
-            sd.getCurrentPage().model.add(node.duplicate(null));
+            sd.getCurrentPage().add(node.duplicate(null));
             context.redraw();
         }});
 
@@ -110,7 +110,7 @@ public class SymbolPanel extends Panel {
                         SNode node = listView.getModel().get(listView.getSelectedIndex());
                         SketchDocument sd = context.getDocument();
                         dupe = node.duplicate(null);
-                        sd.getCurrentPage().model.add(dupe);
+                        sd.getCurrentPage().add(dupe);
                         context.redraw();
                     }
                     prevx = event.getX();
