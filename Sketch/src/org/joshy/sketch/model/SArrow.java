@@ -29,6 +29,11 @@ public class SArrow extends SShape implements SelfDrawable {
     }
 
     @Override
+    public Bounds getTransformedBounds() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
     public boolean contains(Point2D point) {
         double x = getTranslateX();
         double y = getTranslateY();

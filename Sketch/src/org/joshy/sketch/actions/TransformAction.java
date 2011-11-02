@@ -3,7 +3,6 @@ package org.joshy.sketch.actions;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.sketch.canvas.Selection;
-import org.joshy.sketch.model.HasTransformedBounds;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.STransformNode;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -28,7 +27,7 @@ public class TransformAction extends SAction {
                     return;
                 }
                 SNode node = selectionChangeEvent.getSelection().firstItem();
-                setEnabled(node instanceof HasTransformedBounds);
+                setEnabled(true);
             }
         });
 
@@ -40,7 +39,6 @@ public class TransformAction extends SAction {
         if(sel.isEmpty()) return;
         if(sel.size() > 1) return;
         SNode node = sel.firstItem();
-        if(!(node instanceof HasTransformedBounds)) return;
 
         context.getDocument().getCurrentPage().remove(node);
         STransformNode trans = new STransformNode(node,context);

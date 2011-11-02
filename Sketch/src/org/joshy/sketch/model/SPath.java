@@ -20,7 +20,7 @@ import java.util.List;
  *
  *
 */
-public class SPath extends SShape implements SelfDrawable, HasTransformedBounds {
+public class SPath extends SShape implements SelfDrawable {
     public List<PathPoint> points;
     private boolean closed;
     private Path2D.Double path2d;

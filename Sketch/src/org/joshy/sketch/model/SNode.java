@@ -9,6 +9,11 @@ import java.util.Map;
 /**
  * The base node for all graphics. Contains standard transforms for translate, rotate, scale
  * as well as a function to clone nodes.
+ *
+ * getBounds returns the visible bounds of the node without any included transforms
+ * getTransformedBounds returns the visible bounds of the node including all transforms
+ *
+ *
  */
 public abstract class SNode {
     private double translateX = 0.0;
@@ -22,6 +27,7 @@ public abstract class SNode {
     private String id = null;
 
     public abstract Bounds getBounds();
+    public abstract Bounds getTransformedBounds();
 
     public abstract boolean contains(Point2D point);
 
