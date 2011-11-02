@@ -861,7 +861,7 @@
     </set>
     <set name='newDocumentDialog'>
         <key name='height'>
-            <value language='DEFAULT'>New Document</value>
+            <value language='DEFAULT'>Height</value>
             <value language='de-DE'>Höhe</value>
             <value language='hr-HR'>Visina</value>
             <value language='ja-JP'>縦</value>
@@ -879,7 +879,7 @@
             <value language='ja-JP'>新規ファイル</value>
         </key>
         <key name='width'>
-            <value language='DEFAULT'>New Document</value>
+            <value language='DEFAULT'>Width</value>
             <value language='de-DE'>Breite</value>
             <value language='hr-HR'>Širina</value>
             <value language='ja-JP'>横</value>
