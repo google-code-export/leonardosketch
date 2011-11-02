@@ -379,6 +379,7 @@ public class Main implements Runnable {
         context.mainPanel = new Panel() {
             @Override
             public void doLayout() {
+                context.pageList.setVisible(context.getDocument().isPagesVisible());
                 for(Control c : controlChildren()) {
                     double sidebarWidth= 75*3 + 20 + 10 + 30;
                     if(!context.sidebarContainer.isOpen()) {
@@ -386,7 +387,7 @@ public class Main implements Runnable {
                     }
                     if(c == context.stackPanel) {
                         c.setTranslateY(0);
-                        if(modeHelper.isPageListVisible()) {
+                        if(modeHelper.isPageListVisible() && context.getDocument().isPagesVisible()) {
                             c.setHeight(getHeight()-40-104);
                         } else {
                             c.setHeight(getHeight()-40-0);
@@ -667,6 +668,7 @@ public class Main implements Runnable {
                 .separator()
                 .addItem(getString("menus.newView"), new ViewActions.NewView(context))
                 .addItem("Show Rulers", new ViewActions.ShowRulers(context))
+                .addItem("Show Page List", new ViewActions.ShowPageList(context))
                 ;
         
         if(context instanceof VectorDocContext) {

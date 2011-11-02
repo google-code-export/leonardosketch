@@ -103,6 +103,25 @@ public class ViewActions {
         }
     }
 
+    public static class ShowPageList extends ToggleAction {
+        private DocContext context;
+
+        public ShowPageList(DocContext context) {
+            this.context = context;
+        }
+
+        @Override
+        public boolean getToggleState() {
+            return context.getDocument().isPagesVisible();
+        }
+
+        @Override
+        public void setToggleState(boolean toggleState) {
+            context.getDocument().setPagesVisible(toggleState);
+            context.getCanvas().setLayoutDirty();
+        }
+    }
+
     public static class SnapGridAction extends ToggleAction {
         private VectorDocContext context;
 

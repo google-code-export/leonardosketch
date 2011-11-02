@@ -20,6 +20,7 @@ public class NewPresentationDocAction extends NewAction {
         //don't do the dialog. instead just create a new doc
         
         SketchDocument doc = new SketchDocument();
+        doc.setPagesVisible(true);
         doc.setBackgroundFill(FlatColor.hsb(25,0.05,1.0));
         doc.setPresentation(true);
         doc.setDocBoundsActive(true);

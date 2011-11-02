@@ -116,6 +116,7 @@ public class PresoModeHelper extends VectorModeHelper {
     @Override
     public CanvasDocument createNewDoc() {
         SketchDocument doc = new SketchDocument();
+        doc.setPagesVisible(true);
         SketchDocument.SketchPage page = doc.getCurrentPage();
         new PresoModeHelper.AddTitlePage(null).insertContents(page);
         return doc;
