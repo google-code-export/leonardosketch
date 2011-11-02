@@ -2,7 +2,13 @@ package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Paint;
+import org.joshy.gfx.event.ActionEvent;
+import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.control.Button;
+import org.joshy.gfx.node.control.Checkbox;
+import org.joshy.gfx.node.layout.GridBox;
+import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.stage.swing.SwingGFX;
 import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -33,7 +39,7 @@ public class SavePNGAction extends BaseExportAction {
         return "png";
     }
 
-    /*
+
     public void execute() {
         final Stage stage = Stage.createStage();
         GridBox grid = new GridBox()
@@ -61,13 +67,13 @@ public class SavePNGAction extends BaseExportAction {
                 stage.hide();
                 includeBackground = backgroundCheckbox.isSelected();
                 includeDocumentBounds = documentBounds.isSelected();
-                showFileDialog();
+                SavePNGAction.super.execute();
             }
         });
         grid.addControl(continueButton);
         stage.setContent(grid);
     }
-    */
+
 
     /*
     private void showFileDialog() {
