@@ -33,7 +33,7 @@ public class NodeActions {
         @Override
         public void execute() {
             SketchDocument doc = (SketchDocument) context.getDocument();
-            List<SNode> model = doc.getCurrentPage().model;
+            List<SNode> model = doc.getCurrentPage().getModel();
             List<SNode> nodes = new ArrayList<SNode>();
             for(SNode node : context.getSelection().items()) {
                 nodes.add(node);
@@ -68,10 +68,10 @@ public class NodeActions {
             }
             int max = -1;
             for(SNode node : nodes) {
-                max = Math.max(max,doc.getCurrentPage().model.indexOf(node));
+                max = Math.max(max,doc.getCurrentPage().getModel().indexOf(node));
             }
             //if there is room to move up
-            List<SNode> model = doc.getCurrentPage().model;
+            List<SNode> model = doc.getCurrentPage().getModel();
             if(max+1 < model.size()) {
                 SNode nextNode = model.get(max+1);
                 model.removeAll(nodes);
@@ -103,7 +103,7 @@ public class NodeActions {
         public void execute() {
             if(context.getSelection().isEmpty()) return;
             SketchDocument doc = (SketchDocument) context.getDocument();
-            List<SNode> model = doc.getCurrentPage().model;
+            List<SNode> model = doc.getCurrentPage().getModel();
             List<SNode> nodes = new ArrayList<SNode>();
             for(SNode node : context.getSelection().items()) {
                 nodes.add(node);
@@ -143,7 +143,7 @@ public class NodeActions {
         public void execute() {
             if(context.getSelection().isEmpty()) return;
             SketchDocument doc = (SketchDocument) context.getDocument();
-            List<SNode> model = doc.getCurrentPage().model;
+            List<SNode> model = doc.getCurrentPage().getModel();
             List<SNode> nodes = new ArrayList<SNode>();
             for(SNode node : context.getSelection().items()) {
                 nodes.add(node);
@@ -365,7 +365,7 @@ public class NodeActions {
             if(context.getSelection().size() < 2) return;
             SketchDocument doc = context.getDocument();
 
-            final List<SNode> model = doc.getCurrentPage().model;
+            final List<SNode> model = doc.getCurrentPage().getModel();
 
             final List<SNode> nodes = new ArrayList<SNode>();
             for(SNode node : model) {
@@ -443,7 +443,7 @@ public class NodeActions {
             final SGroup group = (SGroup) n;
 
             SketchDocument doc = context.getDocument();
-            final List<SNode> model = doc.getCurrentPage().model;
+            final List<SNode> model = doc.getCurrentPage().getModel();
             model.remove(group);
             model.addAll(group.getNodes());
             context.getSelection().clear();

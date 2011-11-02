@@ -344,7 +344,7 @@ public class SelectMoveTool extends CanvasTool {
 
         //process nodes under the cursor
         List<SNode> underCursor = new ArrayList<SNode>();
-        for(SNode node : doc.getCurrentPage().model) {
+        for(SNode node : doc.getCurrentPage().getNodes()) {
             if(node instanceof HasTransformedBounds) {
                 if(((HasTransformedBounds)node).getTransformedBounds().contains(cursor)) {
                     underCursor.add(node);
@@ -458,7 +458,7 @@ public class SelectMoveTool extends CanvasTool {
             dragRectEndPoint = cursor;
             Bounds dragRectBounds = new Bounds(dragRectStartPoint,dragRectEndPoint);
             tempSelection.clear();
-            for(SNode node : context.getDocument().getCurrentPage().model) {
+            for(SNode node : context.getDocument().getCurrentPage().getNodes()) {
                 if(dragRectBounds.intersects(node.getBounds())) {
                     if(!tempSelection.contains(node)) {
                         tempSelection.add(node);

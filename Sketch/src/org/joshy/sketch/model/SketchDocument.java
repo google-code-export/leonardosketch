@@ -83,7 +83,7 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
 
     public SketchPage duplicate(SketchPage dragItem) {
         SketchPage dupe = new SketchPage(this);
-        for(SNode n : dragItem.model) {
+        for(SNode n : dragItem.getNodes()) {
             dupe.add(n.duplicate(null));
         }
         return dupe;
@@ -123,7 +123,7 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
 
     public static class SketchPage extends Page {
         private List<Guideline> guidelines = new ArrayList<Guideline>();
-        public List<SNode> model;
+        private List<SNode> model;
         private SketchDocument doc;
 
         private SketchPage(SketchDocument doc) {
@@ -139,6 +139,10 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         public void add(SNode node) {
             model.add(node);
             doc.setDirty(true);
+        }
+
+        public List<SNode> getModel() {
+            return model;
         }
 
         public Iterable<SNode> getNodes() {
