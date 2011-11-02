@@ -148,7 +148,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
         fontSizeSlider = new Slider(false);
         fontSizeSlider.setMin(8);
-        fontSizeSlider.setMax(200);
+        fontSizeSlider.setMax(500);
         fontSizeSlider.setValue(24);
         EventBus.getSystem().addListener(fontSizeSlider, ChangedEvent.DoubleChanged, fontSizeCallback);
         fontProperties.add(fontSizeSlider);
