@@ -1,5 +1,6 @@
 package org.joshy.sketch.actions.io;
 
+import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -43,250 +44,24 @@ public class SaveSVGAction extends BaseExportAction {
         }
     }
 
-    private static void draw(PrintWriter out, SRect rect) {
-        //String id = Math.random();
-        String id = "A"+Long.toHexString(Double.doubleToLongBits(Math.random()));
-        if(rect.getFillPaint() instanceof GradientFill) {
-            GradientFill grad = (GradientFill) rect.getFillPaint();
-            out.println("  <linearGradient id='"+id+"'>");
-            out.println("    <stop offset='0.0' style='stop-color:"+toRGBString(grad.start)+"'/>");
-            out.println("    <stop offset='1.0' style='stop-color:"+toRGBString(grad.end)+"'/>");
-            out.println("  </linearGradient>");
+    private  static class SVGExport implements ShapeExporter<XMLWriter> {
+        public void docStart(XMLWriter out, SketchDocument doc) {
+            out.header();
+            out.start("svg")
+                    .attr("xmlns","http://www.w3.org/2000/svg")
+                    .attr("version","1.2")
+                    .attr("baseProfile","tiny");
+            out.attr("viewBox","0 0 500 500");
         }
 
-        if(rect.getFillPaint() instanceof LinearGradientFill) {
-            LinearGradientFill grad = (LinearGradientFill) rect.getFillPaint();
-            out.println("<g>");
-            out.println("<defs>");
-            out.println("  <linearGradient "
-                    + "id='"+id+"'"
-                    +" x1='"+(grad.getStartX()/rect.getWidth()*100)+"%"
-                    +"' y1='"+(grad.getStartY()/rect.getHeight()*100)+"%"
-                    +"' x2='"+(grad.getEndX()/rect.getWidth()*100)+"%"
-                    +"' y2='"+(grad.getEndY()/rect.getHeight()*100)+"%"
-                    +"'>");
-            for(MultiGradientFill.Stop stop : grad.getStops()) {
-                out.println("    <stop offset='"+stop.getPosition()+"' stop-color='"+toHexString(stop.getColor())+"'/>");
-            }
-            out.println("  </linearGradient>");
-            out.println("</defs>");
-        }
-        out.println("<rect x='"+ rect.getX() +"' y='"+ rect.getY() +"' width='"+ rect.getWidth() +"' height='"+ rect.getHeight() +"'"+
-                " transform='translate("+rect.getTranslateX()+","+rect.getTranslateY()+")'");
-
-        if(rect.getFillPaint() instanceof FlatColor) {
-            out.println(" fill='"+toRGBString(rect.getFillPaint())+"'");
-        }
-        if(rect.getFillPaint() instanceof GradientFill) {
-            out.println(" fill='url(#"+id+")'");
-        }
-        if(rect.getFillPaint() instanceof LinearGradientFill) {
-            out.println(" fill='url(#"+id+")'");
-        }
-        if(rect.getFillOpacity() != 1) {
-            out.println(" fill-opacity='"+df.format(rect.getFillOpacity())+"'");
-        }
-
-        out.println(" stroke='"+toRGBString(rect.getStrokePaint())+"'" +
-                " stroke-width='"+rect.getStrokeWidth()+"'" +
-                "/>");
-        if(rect.getFillPaint() instanceof LinearGradientFill) {
-            out.println("</g>");
-        }
-    }
-
-    private static String toHexString(FlatColor color) {
-        return "#"+Integer.toHexString(color.getRGBA()&0x00FFFFFF);
-    }
-
-    private static void draw(PrintWriter out, SOval oval) {
-        out.println("<ellipse");
-        out.println("    cx='"+(oval.getX() + oval.getWidth() /2)+"'");
-        out.println("    cy='"+(oval.getY() + oval.getHeight() /2)+"'");
-        out.println("    rx='"+ oval.getWidth() /2+"'");
-        out.println("    ry='"+ oval.getHeight() /2+"'");
-        out.println("    transform='translate("+oval.getTranslateX()+","+oval.getTranslateY()+")'");
-        out.println("    fill='"+toRGBString(oval.getFillPaint())+"'");
-        out.println("    fill-opacity='"+df.format(oval.getFillOpacity())+"'");
-        out.println("    stroke='" + toRGBString(oval.getStrokePaint()) + "'");
-        out.println("    stroke-width='" + oval.getStrokeWidth() + "'");
-        out.println("/>");
-    }
-
-    private static void draw(PrintWriter out, SText text) {
-        org.joshy.gfx.draw.Font font = org.joshy.gfx.draw.Font.DEFAULT;
-        font = org.joshy.gfx.draw.Font.name(font.getName())
-                .size((float)text.getFontSize())
-                .weight(text.getWeight())
-                .style(text.getStyle())
-                .resolve();
-
-        out.println("<text");
-        out.println("    x='"+(text.getX() + text.getTranslateX())+"'");
-        out.println("    y='"+(text.getY() + text.getTranslateY() + font.getAscender())+"'");
-        out.println("    fill='"+toRGBString(text.getFillPaint())+"'");
-        out.println("    fill-opacity='"+df.format(text.getFillOpacity())+"'");
-        out.println("    font-family='"+font.getName()+"'");
-        out.println("    font-size='"+text.getFontSize()+"'");
-        out.print(">");
-        out.print(text.getText());
-        out.print("</text>");
-    }
-
-    private static void draw(PrintWriter out, SPoly poly) {
-        if(poly.isClosed()) {
-            out.println("<polygon ");
-        } else {
-            out.println("<polyline ");
-        }
-        out.print("    points='");
-        for(int i=0; i<poly.pointCount(); i++) {
-            out.print(""  + (poly.getPoint(i).getX() + poly.getTranslateX())
-                    + "," + (poly.getPoint(i).getY() + poly.getTranslateY()) + " ");
-        }
-        out.println("'");
-
-        if(poly.isClosed()) {
-            out.println("    fill='"+toRGBString(poly.getFillPaint())+"'");
-            out.println("    fill-opacity='"+df.format(poly.getFillOpacity())+"'");
-        } else {
-            out.println("    fill='none'");
-        }
-        out.println("    stroke='"+toRGBString(poly.getStrokePaint())+"'");
-        out.println("    stroke-width='"+poly.getStrokeWidth()+"'");
-        
-        out.println("/>");
-    }
-
-    private static void draw(PrintWriter out, NGon nGon) {
-        out.println("<polygon ");
-
-        //the vector data
-        out.print("    points='");
-        double[] points = nGon.toPoints();
-        for(int i=0; i<points.length; i+=2) {
-            out.print(""  + (points[i]+nGon.getTranslateX())
-                    + "," + (points[i+1]+nGon.getTranslateY()) + " ");
-        }
-        out.println("'");
-
-
-        out.println("    fill='"+toRGBString(nGon.getFillPaint())+"'");
-        out.println("    fill-opacity='"+df.format(nGon.getFillOpacity())+"'");
-        out.println("    stroke='"+toRGBString(nGon.getStrokePaint())+"'");
-        out.println("    stroke-width='"+nGon.getStrokeWidth()+"'");
-        out.println("/>");
-
-    }
-
-    private static void draw(PrintWriter out, SPath path) {
-        out.println("<path ");
-
-        //the translate
-        out.println("    transform='translate("+path.getTranslateX()+","+path.getTranslateY()+")' ");
-        //the vector data
-        out.print("    d='");
-        int count = 0;
-        List<SPath.PathPoint> points = path.getPoints();
-        for(int i=0; i<points.size(); i++) {
-            if(i == 0) {
-                out.print(" M "+points.get(i).x + " " + points.get(i).y);
-            } else {
-                out.print(" C "
-                        +points.get(i-1).cx2 + " " + points.get(i-1).cy2 + " "
-                        +points.get(i).cx1 + " " + points.get(i).cy1 + " "
-                        +points.get(i).x + " " + points.get(i).y + " "
-                        );
-            }
-            out.print(" ");
-        }
-        out.println(" z'");
-
-        out.println("    fill='"+toRGBString(path.getFillPaint())+"'");
-        out.println("    fill-opacity='"+df.format(path.getFillOpacity())+"'");
-        out.println("    stroke='"+toRGBString(path.getStrokePaint())+"'");
-        out.println("    stroke-width='"+path.getStrokeWidth()+"'");
-        out.println("/>");
-    }
-
-    private static void draw(PrintWriter out, SArea sArea) {
-        out.println("<path ");
-        out.println("    transform='translate("+ sArea.getTranslateX()+","+ sArea.getTranslateY()+")' ");
-        //the vector data
-        out.print("    d='");
-        int count = 0;
-        Area area = sArea.toArea();
-        PathIterator it = area.getPathIterator(new AffineTransform());
-        while(!it.isDone()) {
-            double[] coords = new double[6];
-            int n = it.currentSegment(coords);
-            if(n == PathIterator.SEG_MOVETO) {
-                out.println(" M "+coords[0]+" "+coords[1]);
-            }
-            if(n == PathIterator.SEG_LINETO) {
-                out.println(" L " + coords[0]+" " +coords[1]);
-            }
-            if(n == PathIterator.SEG_CUBICTO) {
-                out.println(" C "
-                        +coords[0]+" "+coords[1] + " "
-                        +coords[2]+" "+coords[3] + " "
-                        +coords[4]+" "+coords[5] + " "
-                        );
-            }
-            if(n == PathIterator.SEG_CLOSE) {
-                out.println(" z");
-                break;
-            }
-            it.next();
-        }
-        out.println("'");
-/*
-        for(int i=0; i<points.size(); i++) {
-            if(i == 0) {
-                out.print(" M "+points.get(i).x + " " + points.get(i).y);
-            } else {
-                out.print(" C "
-                        +points.get(i-1).cx2 + " " + points.get(i-1).cy2 + " "
-                        +points.get(i).cx1 + " " + points.get(i).cy1 + " "
-                        +points.get(i).x + " " + points.get(i).y + " "
-                        );
-            }
-            out.print(" ");
-        }*/
-        //out.println(" z'");
-
-        out.println("    fill='"+toRGBString(sArea.getFillPaint())+"'");
-        out.println("    fill-opacity='"+df.format(sArea.getFillOpacity())+"'");
-        out.println("    stroke='"+toRGBString(sArea.getStrokePaint())+"'");
-        out.println("    stroke-width='"+ sArea.getStrokeWidth()+"'");
-        out.println("/>");
-    }
-
-    private static String toRGBString(Paint paint) {
-        if(paint instanceof FlatColor){
-            FlatColor color = (FlatColor) paint;
-            return "rgb("+df.format(color.getRed()*100)+"%,"
-                    +df.format(color.getGreen()*100)+"%,"
-                    +df.format(color.getBlue()*100)+"%)";
-        } else {
-            return toRGBString(FlatColor.BLACK);
-        }
-    }
-
-    private  static class SVGExport implements ShapeExporter<PrintWriter> {
-        public void docStart(PrintWriter out, SketchDocument doc) {
-            out.println("<?xml version=\"1.0\"?>");
-            out.println("<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.2\" baseProfile=\"tiny\" ");
-            out.println(" viewBox=\"0 0 500 500\">");
-        }
-
-        public void pageStart(PrintWriter out, SketchDocument.SketchPage page) {
+        public void pageStart(XMLWriter out, SketchDocument.SketchPage page) {
             //To change body of implemented methods use File | Settings | File Templates.
         }
 
-        public void exportPre(PrintWriter out, SNode shape) {
+        public void exportPre(XMLWriter out, SNode shape) {
             if(shape instanceof SGroup) {
-                out.println("<g transform='translate("+shape.getTranslateX()+","+shape.getTranslateY()+")'>");
+                out.start("g")
+                    .attr("transform","translate("+shape.getTranslateX()+","+shape.getTranslateY()+")");
             }
             if(shape instanceof SRect) draw(out,(SRect)shape);
             if(shape instanceof SArea) draw(out,(SArea)shape);
@@ -294,19 +69,18 @@ public class SaveSVGAction extends BaseExportAction {
             if(shape instanceof SText) draw(out,(SText)shape);
             if(shape instanceof SPoly) draw(out,(SPoly)shape);
             if(shape instanceof NGon)  draw(out, (NGon)shape);
-            if(shape instanceof SPath)  draw(out, (SPath)shape);
+            if(shape instanceof SPath) draw(out, (SPath)shape);
         }
 
-        public void exportPost(PrintWriter out, SNode shape) {
-            if(shape instanceof SGroup) out.println("</g>");
+        public void exportPost(XMLWriter out, SNode shape) {
+            if(shape instanceof SGroup) out.end();
         }
 
-        public void pageEnd(PrintWriter out, SketchDocument.SketchPage page) {
-            //To change body of implemented methods use File | Settings | File Templates.
+        public void pageEnd(XMLWriter out, SketchDocument.SketchPage page) {
         }
 
-        public void docEnd(PrintWriter out, SketchDocument document) {
-            out.println("</svg>");
+        public void docEnd(XMLWriter out, SketchDocument document) {
+            out.end();
         }
 
         public boolean isContainer(SNode n) {
@@ -321,6 +95,243 @@ public class SaveSVGAction extends BaseExportAction {
             return null;
         }
 
+        private void draw(XMLWriter out, SPath shape) {
+            out.start("path");
+            out.attr("transform", "translate(" + shape.getTranslateX() + "," + shape.getTranslateY() + ")");
+            StringBuffer data = new StringBuffer();
+            int count = 0;
+            List<SPath.PathPoint> points = shape.getPoints();
+            for(int i=0; i<points.size(); i++) {
+                if(i == 0) {
+                    data.append(" M "+points.get(i).x + " " + points.get(i).y);
+                } else {
+                    data.append(" C "
+                            +points.get(i-1).cx2 + " " + points.get(i-1).cy2 + " "
+                            +points.get(i).cx1 + " " + points.get(i).cy1 + " "
+                            +points.get(i).x + " " + points.get(i).y + " "
+                            );
+                }
+                data.append(" ");
+            }
+            data.append(" z'");
+            out.attr("d", data.toString());
+
+            out.attr("fill", toRGBString(shape.getFillPaint()) + "");
+            out.attr("fill-opacity", df.format(shape.getFillOpacity()) + "");
+            out.attr("stroke", toRGBString(shape.getStrokePaint()) + "");
+            out.attr("stroke-width", shape.getStrokeWidth() + "");
+            out.end();
+        }
+
+        private void draw(XMLWriter out, SArea shape) {
+            out.start("path");
+            out.attr("transform","translate("+ shape.getTranslateX()+","+ shape.getTranslateY()+")");
+            //the vector data
+            StringBuffer data = new StringBuffer();
+            int count = 0;
+            Area area = shape.toArea();
+            PathIterator it = area.getPathIterator(new AffineTransform());
+            while(!it.isDone()) {
+                double[] coords = new double[6];
+                int n = it.currentSegment(coords);
+                if(n == PathIterator.SEG_MOVETO) {
+                    data.append(" M "+coords[0]+" "+coords[1]);
+                }
+                if(n == PathIterator.SEG_LINETO) {
+                    data.append(" L " + coords[0]+" " +coords[1]);
+                }
+                if(n == PathIterator.SEG_CUBICTO) {
+                    data.append(" C "
+                            +coords[0]+" "+coords[1] + " "
+                            +coords[2]+" "+coords[3] + " "
+                            +coords[4]+" "+coords[5] + " "
+                            );
+                }
+                if(n == PathIterator.SEG_CLOSE) {
+                    data.append(" z");
+                    break;
+                }
+                it.next();
+            }
+            out.attr("d", data.toString());
+/*
+        for(int i=0; i<points.size(); i++) {
+            if(i == 0) {
+                out.print(" M "+points.get(i).x + " " + points.get(i).y);
+            } else {
+                out.print(" C "
+                        +points.get(i-1).cx2 + " " + points.get(i-1).cy2 + " "
+                        +points.get(i).cx1 + " " + points.get(i).cy1 + " "
+                        +points.get(i).x + " " + points.get(i).y + " "
+                        );
+            }
+            out.print(" ");
+        }*/
+            //out.println(" z'");
+
+            out.attr("fill",toRGBString(shape.getFillPaint())+"");
+            out.attr("fill-opacity",df.format(shape.getFillOpacity())+"");
+            out.attr("stroke",toRGBString(shape.getStrokePaint())+"");
+            out.attr("stroke-width",shape.getStrokeWidth()+"");
+            out.end();
+        }
+
+
+        private void draw(XMLWriter out, SRect rect) {
+            //String id = Math.random();
+            String id = "A"+Long.toHexString(Double.doubleToLongBits(Math.random()));
+            if(rect.getFillPaint() instanceof GradientFill) {
+                GradientFill grad = (GradientFill) rect.getFillPaint();
+                out.start("linearGradient")
+                        .attr("id",id);
+                out.start("stop")
+                        .attr("offset","0.0")
+                        .attr("style","stop-color:"+toRGBString(grad.start))
+                        .end();
+                out.start("stop")
+                        .attr("offset","1.0")
+                        .attr("style","stop-color:"+toRGBString(grad.end))
+                        .end();
+                out.end();
+            }
+
+            if(rect.getFillPaint() instanceof LinearGradientFill) {
+                LinearGradientFill grad = (LinearGradientFill) rect.getFillPaint();
+                out.start("g");
+                out.start("defs");
+                out.start("linearGradient")
+                        .attr("id",id)
+                        .attr("x1",(grad.getStartX()/rect.getWidth()*100)+"%")
+                        .attr("y1",(grad.getStartY()/rect.getHeight()*100)+"%")
+                        .attr("x2",(grad.getEndX()/rect.getWidth()*100)+"%")
+                        .attr("y2",(grad.getEndY()/rect.getHeight()*100)+"%");
+                for(MultiGradientFill.Stop stop : grad.getStops()) {
+                    out.start("stop")
+                            .attr("offset",stop.getPosition()+"")
+                            .attr("stop-color",toHexString(stop.getColor()))
+                            .end();
+                }
+                out.end();
+                out.end();
+            }
+            out.start("rect")
+                    .attr("x",""+rect.getX())
+                    .attr("y",""+rect.getY())
+                    .attr("width=",""+rect.getWidth())
+                    .attr("height",""+rect.getHeight())
+                    .attr("transform=","translate("+rect.getTranslateX()+","+rect.getTranslateY()+")");
+
+            if(rect.getFillPaint() instanceof FlatColor) {
+                out.attr("fill",toRGBString(rect.getFillPaint()));
+            }
+            if(rect.getFillPaint() instanceof GradientFill) {
+                out.attr("fill","url(#"+id+")");
+            }
+            if(rect.getFillPaint() instanceof LinearGradientFill) {
+                out.attr("fill","url(#"+id+")");
+            }
+            if(rect.getFillOpacity() != 1) {
+                out.attr("fill-opacity",df.format(rect.getFillOpacity()));
+            }
+
+            out.attr("stroke",toRGBString(rect.getStrokePaint()));
+            out.attr("stroke-width",""+rect.getStrokeWidth());
+            if(rect.getFillPaint() instanceof LinearGradientFill) {
+                out.end();
+            }
+        }
+
+        private void draw(XMLWriter out, SOval shape) {
+            out.start("ellipse")
+                    .attr("cx",(shape.getX() + shape.getWidth() /2)+"");
+            out.attr("cy=", (shape.getY() + shape.getHeight() / 2) + "");
+            out.attr("rx", shape.getWidth() / 2 + "");
+            out.attr("ry", shape.getHeight() / 2 + "");
+            out.attr("transform", "translate(" + shape.getTranslateX() + "," + shape.getTranslateY() + ")");
+            out.attr("fill", toRGBString(shape.getFillPaint()) + "");
+            out.attr("fill-opacity", df.format(shape.getFillOpacity()));
+            out.attr("stroke", toRGBString(shape.getStrokePaint()) + "");
+            out.attr("stroke-width", shape.getStrokeWidth() + "");
+            out.end();
+        }
+
+        private void draw(XMLWriter out, SText text) {
+            org.joshy.gfx.draw.Font font = org.joshy.gfx.draw.Font.DEFAULT;
+            font = org.joshy.gfx.draw.Font.name(font.getName())
+                    .size((float)text.getFontSize())
+                    .weight(text.getWeight())
+                    .style(text.getStyle())
+                    .resolve();
+            out.start("text");
+            out.attr("x", (text.getX() + text.getTranslateX()) + "");
+            out.attr("y", (text.getY() + text.getTranslateY() + font.getAscender()) + "");
+            out.attr("fill", toRGBString(text.getFillPaint()) + "");
+            out.attr("fill-opacity", df.format(text.getFillOpacity()) + "");
+            out.attr("font-family", font.getName() + "");
+            out.attr("font-size", text.getFontSize() + "");
+            out.text(text.getText());
+            out.end();
+        }
+
+        private void draw(XMLWriter out, SPoly shape) {
+            if(shape.isClosed()) {
+                out.start("polygon");
+            } else {
+                out.start("polyline");
+            }
+            StringBuffer points = new StringBuffer();
+            for(int i=0; i<shape.pointCount(); i++) {
+                points.append("" + (shape.getPoint(i).getX() + shape.getTranslateX())
+                        + "," + (shape.getPoint(i).getY() + shape.getTranslateY()) + " ");
+            }
+            out.attr("points", points.toString());
+
+            if(shape.isClosed()) {
+                out.attr("fill=", toRGBString(shape.getFillPaint()));
+                out.attr("fill-opacity",df.format(shape.getFillOpacity()));
+            } else {
+                out.attr("fill", "none");
+            }
+            out.attr("stroke", toRGBString(shape.getStrokePaint()) + "");
+            out.attr("stroke-width", shape.getStrokeWidth() + "");
+
+            out.end();
+        }
+
+        private void draw(XMLWriter out, NGon shape) {
+            out.start("polygon");
+
+            //the vector data
+            StringBuffer data = new StringBuffer();
+            double[] points = shape.toPoints();
+            for(int i=0; i<points.length; i+=2) {
+                data.append(""  + (points[i]+shape.getTranslateX())
+                        + "," + (points[i+1]+shape.getTranslateY()) + " ");
+            }
+            out.attr("points", data.toString());
+
+
+            out.attr("fill=", toRGBString(shape.getFillPaint()));
+            out.attr("fill-opacity", df.format(shape.getFillOpacity()));
+            out.attr("stroke", toRGBString(shape.getStrokePaint()) + "");
+            out.attr("stroke-width", shape.getStrokeWidth() + "");
+            out.end();
+        }
+
+        private static String toHexString(FlatColor color) {
+            return "#"+Integer.toHexString(color.getRGBA()&0x00FFFFFF);
+        }
+
+        private static String toRGBString(Paint paint) {
+            if(paint instanceof FlatColor){
+                FlatColor color = (FlatColor) paint;
+                return "rgb("+df.format(color.getRed()*100)+"%,"
+                        +df.format(color.getGreen()*100)+"%,"
+                        +df.format(color.getBlue()*100)+"%)";
+            } else {
+                return toRGBString(FlatColor.BLACK);
+            }
+        }
     }
 
 }
