@@ -93,6 +93,7 @@ public class ViewActions {
 
         @Override
         public boolean getToggleState() {
+            if(context.getDocument() == null) return false;
             return context.getDocument().isRulersVisible();
         }
 
@@ -112,6 +113,7 @@ public class ViewActions {
 
         @Override
         public boolean getToggleState() {
+            if(context.getDocument() == null) return false;
             return context.getDocument().isPagesVisible();
         }
 

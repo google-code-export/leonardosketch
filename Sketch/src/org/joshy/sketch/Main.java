@@ -379,7 +379,9 @@ public class Main implements Runnable {
         context.mainPanel = new Panel() {
             @Override
             public void doLayout() {
-                context.pageList.setVisible(context.getDocument().isPagesVisible());
+                if(context.pageList != null) {
+                    context.pageList.setVisible(context.getDocument().isPagesVisible());
+                }
                 for(Control c : controlChildren()) {
                     double sidebarWidth= 75*3 + 20 + 10 + 30;
                     if(!context.sidebarContainer.isOpen()) {
