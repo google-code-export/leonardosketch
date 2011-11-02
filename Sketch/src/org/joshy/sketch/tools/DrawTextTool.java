@@ -62,7 +62,7 @@ public class DrawTextTool extends CanvasTool {
         textNode.setX(point.x);
         textNode.setY(point.y);
 
-        Point2D pt2 = NodeUtils.convertToScene(context.getSketchCanvas(), point.x, point.y);
+        Point2D pt2 = NodeUtils.convertToScene(context.getSketchCanvas(), x, y);
 
         overlayTextBox = new Textarea();
         //the -9 is to account for the textbox's insets
