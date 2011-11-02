@@ -41,38 +41,7 @@ public class ResizeHandle extends PositionHandle {
     }
     @Override
     public void setY(double y, boolean constrain) {
-        /*
-        //flip the tense if constrain by default
-        if(rect.constrainByDefault()) {
-            constrain = !constrain;
-        }
-        switch (position) {
-            case TopLeft:
-            case TopRight:
-                Point2D pttop = screenToModel(getX(),y);
-                if(constrain) {
-                    double nh = rect.getY()+rect.getHeight()-pttop.getY();
-                    double ratio = rect.getPreferredAspectRatio();
-                    rect.setHeight(rect.getWidth()*ratio);
-                    rect.setY(pttop.getY()+nh-(rect.getWidth()*ratio));
-                } else {
-                    rect.setHeight(rect.getY()+rect.getHeight() - pttop.getY());
-                    rect.setY(pttop.getY());
-                }
-                break;
-            case BottomLeft:
-            case BottomRight:
-                Point2D ptbottom = screenToModel(getX(),y);
-                if(constrain) {
-                    double ratio = rect.getPreferredAspectRatio();
-                    rect.setHeight(rect.getWidth()*ratio);
-                } else {
-                    rect.setHeight(ptbottom.getY() - rect.getY());
-                }
-                break;
-        }
-        //resetAnchor();
-        */
+        //noop since we use setXY instead
     }
 
     @Override
@@ -91,58 +60,63 @@ public class ResizeHandle extends PositionHandle {
     }
     @Override
     public void setX(double x, boolean constrain) {
-        /*
-        switch (position) {
-            case TopLeft:
-                Point2D left = screenToModel(x,getY());
-                rect.setWidth(rect.getX() + rect.getWidth() - left.getX());
-                rect.setX(left.getX());
-                break;
-            case BottomLeft:
-                Point2D left2 = screenToModel(x,getY());
-                rect.setWidth(rect.getX() + rect.getWidth() - left2.getX());
-                rect.setX(left2.getX());
-                break;
-            case TopRight:
-                Point2D ptright = screenToModel(x, getY());
-                rect.setWidth(ptright.getX()-rect.getX());
-                break;
-            case BottomRight:
-                Point2D ptright2 = screenToModel(x, getY());
-                rect.setWidth(ptright2.getX()-rect.getX());
-                break;
-        }
-        //resetAnchor();
-        */
+        //noop since we use setXY instead
     }
 
 
     @Override
     public void setXY(double x, double y, boolean constrain) {
+        if(rect.constrainByDefault()) {
+            constrain = !constrain;
+        }
         switch (position) {
             case TopLeft:
                 Point2D tl = screenToModel(x,y);
                 rect.setWidth(rect.getX() + rect.getWidth() - tl.getX());
                 rect.setX(tl.getX());
-                rect.setHeight(rect.getY() + rect.getHeight() - tl.getY());
-                rect.setY(tl.getY());
+                if(constrain) {
+                    double nh = rect.getY()+rect.getHeight()-tl.getY();
+                    double ratio = rect.getPreferredAspectRatio();
+                    rect.setHeight(rect.getWidth()*ratio);
+                    rect.setY(tl.getY()+nh-(rect.getWidth()*ratio));
+                } else {
+                    rect.setHeight(rect.getY()+rect.getHeight() - tl.getY());
+                    rect.setY(tl.getY());
+                }
                 break;
             case BottomLeft:
                 Point2D bl = screenToModel(x,y);
                 rect.setWidth(rect.getX() + rect.getWidth() - bl.getX());
                 rect.setX(bl.getX());
-                rect.setHeight(bl.getY() - rect.getY());
+                if(constrain) {
+                    double ratio = rect.getPreferredAspectRatio();
+                    rect.setHeight(rect.getWidth()*ratio);
+                } else {
+                    rect.setHeight(bl.getY() - rect.getY());
+                }
                 break;
             case TopRight:
                 Point2D tr = screenToModel(x, y);
                 rect.setWidth(tr.getX()-rect.getX());
-                rect.setHeight(rect.getY()+rect.getHeight() - tr.getY());
-                rect.setY(tr.getY());
+                if(constrain) {
+                    double nh = rect.getY()+rect.getHeight()-tr.getY();
+                    double ratio = rect.getPreferredAspectRatio();
+                    rect.setHeight(rect.getWidth()*ratio);
+                    rect.setY(tr.getY()+nh-(rect.getWidth()*ratio));
+                } else {
+                    rect.setHeight(rect.getY()+rect.getHeight() - tr.getY());
+                    rect.setY(tr.getY());
+                }
                 break;
             case BottomRight:
                 Point2D br = screenToModel(x, y);
                 rect.setWidth(br.getX()-rect.getX());
-                rect.setHeight(br.getY()-rect.getY());
+                if(constrain) {
+                    double ratio = rect.getPreferredAspectRatio();
+                    rect.setHeight(rect.getWidth()*ratio);
+                } else {
+                    rect.setHeight(br.getY() - rect.getY());
+                }
                 break;
         }
         resetAnchor();
