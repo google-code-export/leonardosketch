@@ -3,8 +3,13 @@ package org.joshy.sketch.model;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
+import org.joshy.sketch.util.Util;
 
+import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,10 +33,14 @@ public class SGroup extends SNode implements SelfDrawable {
         double y2 = Double.MIN_VALUE;
 
         for(SNode node : nodes) {
-            x = Math.min(x,node.getBounds().getX());
-            y = Math.min(y,node.getBounds().getY());
-            x2 = Math.max(x2,node.getBounds().getX()+node.getBounds().getWidth());
-            y2 = Math.max(y2,node.getBounds().getY()+node.getBounds().getHeight());
+            Bounds bounds = node.getTransformedBounds();
+            if(bounds == null) {
+                u.p("waring. null bounds: " + node);
+            }
+            x = Math.min(x,bounds.getX());
+            y = Math.min(y,bounds.getY());
+            x2 = Math.max(x2,bounds.getX()+bounds.getWidth());
+            y2 = Math.max(y2,bounds.getY()+bounds.getHeight());
         }
 
         this.nodes.addAll(nodes);
@@ -45,6 +54,8 @@ public class SGroup extends SNode implements SelfDrawable {
             node.setTranslateX(node.getTranslateX()-x);
             node.setTranslateY(node.getTranslateY()-y);
         }
+        setAnchorX(boundsWidth/2);
+        setAnchorY(boundsHeight/2);
     }
 
     public void normalize() {
@@ -86,6 +97,20 @@ public class SGroup extends SNode implements SelfDrawable {
     @Override
     public Bounds getBounds() {
         return new Bounds(getTranslateX(),getTranslateY(),boundsWidth,boundsHeight);
+    }
+
+    @Override
+    public Bounds getTransformedBounds() {
+        java.awt.geom.Rectangle2D r = new Rectangle2D.Double(0,0,boundsWidth,boundsHeight);
+        AffineTransform af = new AffineTransform();
+        af.translate(getTranslateX(),getTranslateY());
+        af.translate(getAnchorX(),getAnchorY());
+        af.rotate(Math.toRadians(getRotate()));
+        af.scale(getScaleX(), getScaleY());
+        af.translate(-getAnchorX(),-getAnchorY());
+        Shape sh = af.createTransformedShape(r);
+        Rectangle2D bds = sh.getBounds2D();
+        return Util.toBounds(bds);
     }
 
     @Override

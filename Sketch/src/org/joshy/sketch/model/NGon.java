@@ -18,7 +18,7 @@ import java.awt.geom.Rectangle2D;
 * Time: 10:45:00 PM
 * To change this template use File | Settings | File Templates.
 */
-public class NGon extends SShape implements SelfDrawable, HasTransformedBounds {
+public class NGon extends SShape implements SelfDrawable {
     private int sides;
     private double radius = 50;
     private double innerRadius = 40;

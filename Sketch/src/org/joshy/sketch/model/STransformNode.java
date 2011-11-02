@@ -75,6 +75,11 @@ public class STransformNode extends SNode implements SelfDrawable {
     }
 
     @Override
+    public Bounds getTransformedBounds() {
+        return getBounds();
+    }
+
+    @Override
     public boolean contains(Point2D point) {
         return getBounds().contains(point);
     }

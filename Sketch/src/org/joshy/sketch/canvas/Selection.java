@@ -8,6 +8,7 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Container;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
@@ -224,9 +225,9 @@ public class Selection {
         double x2 = Double.NEGATIVE_INFINITY;
         double y2 = Double.NEGATIVE_INFINITY;
         for(SNode n : items()) {
-            Bounds b = n.getBounds();
-            if(n instanceof HasTransformedBounds) {
-                b = ((HasTransformedBounds)n).getTransformedBounds();
+            Bounds b = n.getTransformedBounds();
+            if(b == null) {
+                u.p("warning: bounds null on" + n);
             }
             x  = Math.min(x,  b.getX());
             y  = Math.min(y,  b.getY());

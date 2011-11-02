@@ -24,7 +24,7 @@ import java.net.URL;
  * It can be created from a file, a buffered image, or a url, or an input stream.
  * This lets us load images directly out of zip files, for example.
  */
-public class SImage extends SNode implements SelfDrawable, SResizeableNode, HasTransformedBounds {
+public class SImage extends SNode implements SelfDrawable, SResizeableNode {
     private File file;
     private BufferedImage img;
     private Image image;

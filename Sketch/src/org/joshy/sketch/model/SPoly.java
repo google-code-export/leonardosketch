@@ -10,7 +10,7 @@ import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SPoly extends SShape implements SelfDrawable, HasTransformedBounds {
+public class SPoly extends SShape implements SelfDrawable {
     private List<Point2D> points;
     private boolean closed;
     private Path2D.Double path;

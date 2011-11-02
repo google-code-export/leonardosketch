@@ -257,11 +257,7 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
     public void drawSelection(GFX g, SNode shape) {
         if(shape == null) return;
         g.setPaint(new FlatColor(1.0,0.5,0.5,0.5));
-        Bounds bounds = shape.getBounds();
-        //bounds = applyTransform(bounds,shape);
-        if(shape instanceof HasTransformedBounds) {
-            bounds = ((HasTransformedBounds)shape).getTransformedBounds();
-        }
+        Bounds bounds = shape.getTransformedBounds();
         bounds = transformToDrawing(bounds);
         g.setStrokeWidth(3);
         g.drawRect(bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());

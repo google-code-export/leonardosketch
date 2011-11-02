@@ -1,8 +1,11 @@
 package org.joshy.sketch.model;
 
 import org.joshy.gfx.draw.*;
+import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.sketch.util.Util;
 
+import java.awt.*;
 import java.awt.geom.*;
 
 /**
@@ -24,6 +27,20 @@ public class SArea extends SShape implements SelfDrawable {
     public Bounds getBounds() {
         Rectangle2D b = area.getBounds2D();
         return new Bounds(getTranslateX()+b.getX(),getTranslateY()+b.getY(),b.getWidth(),b.getHeight());
+    }
+
+    @Override
+    public Bounds getTransformedBounds() {
+        Rectangle2D b = area.getBounds2D();
+        AffineTransform af = new AffineTransform();
+        af.translate(getTranslateX(),getTranslateY());
+        af.translate(getAnchorX(),getAnchorY());
+        af.rotate(Math.toRadians(getRotate()));
+        af.scale(getScaleX(), getScaleY());
+        af.translate(-getAnchorX(),-getAnchorY());
+        Shape sh = af.createTransformedShape(b);
+        Rectangle2D bds = sh.getBounds2D();
+        return Util.toBounds(bds);
     }
 
     @Override

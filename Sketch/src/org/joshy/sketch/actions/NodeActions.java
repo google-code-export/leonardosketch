@@ -2,6 +2,7 @@ package org.joshy.sketch.actions;
 
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.SGroup;
 import org.joshy.sketch.model.SNode;
@@ -188,14 +189,12 @@ public class NodeActions {
         public void execute() {
             double top = Integer.MAX_VALUE;
             for(SNode node: context.getSelection().items()) {
-                top = Math.min(top,node.getBounds().getY());
+                top = Math.min(top,node.getTransformedBounds().getY());
             }
             for(SNode node: context.getSelection().items()) {
-                double y = 0;
-                if(node instanceof SResizeableNode) {
-                    y = ((SResizeableNode)node).getY();
-                }
-                node.setTranslateY(top-y);
+                Bounds bounds = node.getTransformedBounds();
+                double diff = top - (bounds.getY());
+                node.setTranslateY(node.getTranslateY()+diff);
             }
             context.redraw();
         }
@@ -215,14 +214,13 @@ public class NodeActions {
         public void execute() {
             double bottom = Integer.MIN_VALUE;
             for(SNode node: context.getSelection().items()) {
-                bottom = Math.max(bottom, node.getBounds().getY() + node.getBounds().getHeight());
+                Bounds bounds = node.getTransformedBounds();
+                bottom = Math.max(bottom, bounds.getY() + bounds.getHeight());
             }
             for(SNode node: context.getSelection().items()) {
-                double y = 0;
-                if(node instanceof SResizeableNode) {
-                    y = ((SResizeableNode)node).getY();
-                }
-                node.setTranslateY(bottom - node.getBounds().getHeight() - y);
+                Bounds bounds = node.getTransformedBounds();
+                double diff = bottom - (bounds.getY() + bounds.getHeight());
+                node.setTranslateY(node.getTranslateY()+diff);
             }
             context.redraw();
         }
@@ -242,14 +240,12 @@ public class NodeActions {
         public void execute() {
             double left = Integer.MAX_VALUE;
             for(SNode node: context.getSelection().items()) {
-                left = Math.min(left,node.getBounds().getX());
+                left = Math.min(left, node.getTransformedBounds().getX());
             }
             for(SNode node: context.getSelection().items()) {
-                double x = 0;
-                if(node instanceof SResizeableNode) {
-                    x = ((SResizeableNode)node).getX();
-                }
-                node.setTranslateX(left - x);
+                Bounds bounds = node.getTransformedBounds();
+                double diff = left - (bounds.getX());
+                node.setTranslateX(node.getTranslateX()+diff);
             }
             context.redraw();
         }
@@ -269,14 +265,13 @@ public class NodeActions {
         public void execute() {
             double right = Integer.MIN_VALUE;
             for(SNode node: context.getSelection().items()) {
-                right = Math.max(right,node.getBounds().getX()+node.getBounds().getWidth());
+                Bounds bounds = node.getTransformedBounds();
+                right = Math.max(right,bounds.getX()+bounds.getWidth());
             }
             for(SNode node: context.getSelection().items()) {
-                double x = 0;
-                if(node instanceof SResizeableNode) {
-                    x = ((SResizeableNode)node).getX();
-                }
-                node.setTranslateX(right-node.getBounds().getWidth()-x);
+                Bounds bounds = node.getTransformedBounds();
+                double diff = right - (bounds.getX()+bounds.getWidth());
+                node.setTranslateX(node.getTranslateX()+diff);
             }
             context.redraw();
         }
@@ -297,16 +292,12 @@ public class NodeActions {
             double top = Integer.MAX_VALUE;
             double height = Integer.MIN_VALUE;
             for(SNode node: context.getSelection().items()) {
-                top = Math.min(top,node.getBounds().getY());
-                height = Math.max(top,node.getBounds().getHeight());
+                top = Math.min(top,node.getTransformedBounds().getY());
+                height = Math.max(top,node.getTransformedBounds().getHeight());
             }
             for(SNode node: context.getSelection().items()) {
-                double diff = height - node.getBounds().getHeight();
-                double y = 0;
-                if(node instanceof SResizeableNode) {
-                    y = ((SResizeableNode)node).getY();
-                }
-                node.setTranslateY(top+diff/2-y);
+                double diff = height - node.getTransformedBounds().getHeight();
+                node.setTranslateY(top+diff/2);
             }
             context.redraw();
         }
@@ -327,16 +318,13 @@ public class NodeActions {
             double left = Integer.MAX_VALUE;
             double width = Integer.MIN_VALUE;
             for(SNode node: context.getSelection().items()) {
-                left = Math.min(left,node.getBounds().getX());
-                width = Math.max(left,node.getBounds().getWidth());
+                Bounds bounds = node.getTransformedBounds();
+                left = Math.min(left,bounds.getX());
+                width = Math.max(left,bounds.getWidth());
             }
             for(SNode node: context.getSelection().items()) {
-                double diff = width - node.getBounds().getWidth();
-                double x = 0;
-                if(node instanceof SResizeableNode) {
-                    x = ((SResizeableNode)node).getX();
-                }
-                node.setTranslateX(left+diff/2-x);
+                double diff = width - node.getTransformedBounds().getWidth();
+                node.setTranslateX(left+diff/2);
             }
             context.redraw();
         }
