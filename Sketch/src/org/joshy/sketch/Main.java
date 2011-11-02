@@ -216,9 +216,15 @@ public class Main implements Runnable {
         }
     }
 
-    public DocContext setupNewDoc(DocModeHelper modeHelper, CanvasDocument doc) throws Exception {
+    public DocContext setupNewDoc(DocModeHelper modeHelper, final CanvasDocument origDoc) throws Exception {
         final DocContext context = modeHelper.createDocContext(this);
         contexts.add(context);
+
+        CanvasDocument doc = origDoc;
+        //create a new doc if one wasn't passed in
+        if(doc == null) {
+            doc = modeHelper.createNewDoc();
+        }
 
         context.setupActions();
         context.setupPalettes();
@@ -234,29 +240,39 @@ public class Main implements Runnable {
         final Ruler hruler = new Ruler(false,scrollPane,context);
         final Ruler vruler = new Ruler(true,scrollPane,context);
 
+        final CanvasDocument fdoc = doc;
         context.stackPanel.add(
                 new Panel() {
                     @Override
                     public void doLayout() {
+                        hruler.setVisible(fdoc.isRulersVisible());
+                        vruler.setVisible(fdoc.isRulersVisible());
                         super.doLayout();
                         for(Control c : controlChildren()) {
-                            if(c == hruler) {
+                            if(c == hruler && fdoc.isRulersVisible()) {
                                 c.setWidth(getWidth()-30);
                                 c.setHeight(30);
                                 c.setTranslateX(30);
                                 c.setTranslateY(0);
                             }
-                            if(c == vruler) {
+                            if(c == vruler && fdoc.isRulersVisible()) {
                                 c.setWidth(30);
                                 c.setHeight(getHeight()-30);
                                 c.setTranslateX(0);
                                 c.setTranslateY(30);
                             }
                             if(c instanceof ScrollPane) {
-                                c.setWidth(getWidth()-30);
-                                c.setHeight(getHeight()-30);
-                                c.setTranslateX(30);
-                                c.setTranslateY(30);
+                                if(fdoc.isRulersVisible()) {
+                                    c.setWidth(getWidth()-30);
+                                    c.setHeight(getHeight()-30);
+                                    c.setTranslateX(30);
+                                    c.setTranslateY(30);
+                                } else {
+                                    c.setWidth(getWidth()-0);
+                                    c.setHeight(getHeight()-0);
+                                    c.setTranslateX(0);
+                                    c.setTranslateY(0);
+                                }
                             }
                             if(c == context.getNotificationIndicator()) {
                                 c.setTranslateX(40);
@@ -280,10 +296,6 @@ public class Main implements Runnable {
         
 
         setupStage(context, modeHelper);
-        //create a new doc if one wasn't passed in
-        if(doc == null) {
-            doc = modeHelper.createNewDoc();
-        }
         context.setDocument(doc);
         hruler.setDocument(doc);
         vruler.setDocument(doc);
@@ -653,7 +665,9 @@ public class Main implements Runnable {
                 .addItem(getString("menus.fullScreen"), "F",      new ViewActions.ToggleFullScreen(context))
                 .addItem(getString("menus.fullScreenWithMenubar"), new ViewActions.ToggleFullScreenMenubar(context))
                 .separator()
-                .addItem(getString("menus.newView"), new ViewActions.NewView(context));
+                .addItem(getString("menus.newView"), new ViewActions.NewView(context))
+                .addItem("Show Rulers", new ViewActions.ShowRulers(context))
+                ;
         
         if(context instanceof VectorDocContext) {
             VectorDocContext vdc = (VectorDocContext) context;

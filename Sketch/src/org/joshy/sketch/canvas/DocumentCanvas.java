@@ -44,6 +44,11 @@ public abstract class DocumentCanvas extends Control implements Focusable {
         setDrawingDirty();
     }
 
+    @Override
+    public void setLayoutDirty() {
+        super.setLayoutDirty();
+    }
+
     public void redraw() {
         setDrawingDirty();
     }

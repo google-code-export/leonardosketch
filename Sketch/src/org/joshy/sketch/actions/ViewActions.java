@@ -84,6 +84,25 @@ public class ViewActions {
         }
     }
 
+    public static class ShowRulers extends ToggleAction {
+        private DocContext context;
+
+        public ShowRulers(DocContext context) {
+            this.context = context;
+        }
+
+        @Override
+        public boolean getToggleState() {
+            return context.getDocument().isRulersVisible();
+        }
+
+        @Override
+        public void setToggleState(boolean toggleState) {
+            context.getDocument().setRulersVisible(toggleState);
+            context.getCanvas().setLayoutDirty();
+        }
+    }
+
     public static class SnapGridAction extends ToggleAction {
         private VectorDocContext context;
 
