@@ -323,7 +323,7 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
 
     private void recalcMaxExtent() {
         maxExtent = new Bounds(0,0,0,0);
-        for(SNode n : document.getCurrentPage().model) {
+        for(SNode n : document.getCurrentPage().getNodes()) {
             maxExtent = maxExtent.union(n.getBounds());
         }
     }

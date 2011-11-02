@@ -159,7 +159,7 @@ public class SavePNGAction extends BaseExportAction {
         if(includeDocumentBounds) {
             bounds = new Bounds(0,0,doc.getWidth(),doc.getHeight());
         } else {
-            bounds = calculateBounds(doc.getCurrentPage().model);
+            bounds = calculateBounds(doc.getCurrentPage().getModel());
         }
         BufferedImage img = new BufferedImage((int)bounds.getWidth()+1,(int)bounds.getHeight()+1,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = img.createGraphics();

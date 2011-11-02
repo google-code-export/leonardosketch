@@ -1,7 +1,6 @@
 package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ImportAction;
 import org.joshy.sketch.model.SGroup;
 import org.joshy.sketch.model.SPoly;
@@ -27,9 +26,9 @@ public class ImportTests {
         URL url = ImportTests.class.getResource("test1.svg");
         SketchDocument doc = ImportAction.importSVG(url);
         //check that the first node is a group
-        assertTrue(doc.getPages().get(0).model.get(0) instanceof SGroup);
+        assertTrue(doc.getPages().get(0).getModel().get(0) instanceof SGroup);
         //go down the tree to the polygon
-        SGroup g1 = (SGroup) doc.getPages().get(0).model.get(0);
+        SGroup g1 = (SGroup) doc.getPages().get(0).getModel().get(0);
         SGroup g2 = (SGroup) g1.getNodes().get(1);
         SPoly p1 = (SPoly) g2.getNodes().get(0);
         //test the color of the polygon

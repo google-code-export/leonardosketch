@@ -665,7 +665,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
             rgbLabel.setTranslateX(dx.getX()-stage.getX()+70);
             rgbLabel.setTranslateY(dx.getY()-stage.getY());
-            for(SNode node : doc.getCurrentPage().model) {
+            for(SNode node : doc.getCurrentPage().getNodes()) {
                 if(node.contains(point) && node instanceof SShape) {
                     FlatColor color =  (FlatColor) ((SShape)node).getFillPaint();
                     int val = color.getRGBA();

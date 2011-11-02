@@ -239,7 +239,7 @@ public class Selection {
 
     public Iterable<? extends SNode> sortedItems(SketchDocument doc) {
         List<SNode> sorted = new ArrayList<SNode>();
-        for(SNode node : doc.getCurrentPage().model) {
+        for(SNode node : doc.getCurrentPage().getNodes()) {
             if(contains(node)) {
                 sorted.add(node);
             }
