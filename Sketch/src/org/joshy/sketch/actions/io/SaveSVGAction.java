@@ -1,15 +1,12 @@
 package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.*;
-import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
-import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 
-import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
@@ -20,43 +17,23 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class SaveSVGAction extends SAction implements ExportAction {
+public class SaveSVGAction extends BaseExportAction {
     private static DecimalFormat df = new DecimalFormat();
     static {
         df.setMaximumFractionDigits(2);
     }
 
 
-
-    private DocContext context;
-    private File lastFile;
-
     public SaveSVGAction(DocContext context) {
-        this.context = context;
-    }
-    
-    public void execute() {
-        FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
-        fd.setMode(FileDialog.SAVE);
-        fd.setTitle("Export SVG Image");
-        File currentFile = context.getDocument().getFile();
-        if(currentFile != null) {
-            fd.setFile(currentFile.getName().substring(0,currentFile.getName().lastIndexOf('.'))+".svg");
-        }
-        fd.setVisible(true);
-        if(fd.getFile() != null) {
-            String fileName = fd.getFile();
-            if(!fileName.toLowerCase().endsWith(".svg")) {
-                fileName = fileName + ".svg";
-            }
-            File file = new File(fd.getDirectory(),fileName);
-            export(file,(SketchDocument)context.getDocument());
-            context.setLastExportAction(this);
-            lastFile = file;
-        }
+        super(context);
     }
 
-    public static void export(File file, SketchDocument doc) {
+    @Override
+    protected String getStandardFileExtension() {
+        return "svg";
+    }
+
+    public void export(File file, SketchDocument doc) {
         try {
             PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
             ExportProcessor.process(new SVGExport(), out, doc);
@@ -65,13 +42,6 @@ public class SaveSVGAction extends SAction implements ExportAction {
             u.p(ex);
         }
     }
-
-    public void exportHeadless() throws Exception {
-        if(lastFile != null) {
-            export(lastFile,(SketchDocument)context.getDocument());
-        }
-    }
-
 
     private static void draw(PrintWriter out, SRect rect) {
         //String id = Math.random();

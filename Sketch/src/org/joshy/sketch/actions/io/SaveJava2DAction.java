@@ -3,7 +3,6 @@ package org.joshy.sketch.actions.io;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.sketch.actions.ExportProcessor;
-import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
@@ -21,38 +20,19 @@ import java.io.PrintWriter;
  * Time: 12:25:52 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SaveJava2DAction extends SAction {
-    private DocContext context;
+public class SaveJava2DAction extends BaseExportAction {
 
     public SaveJava2DAction(DocContext context) {
-        super();
-        this.context = context;
+        super(context);
     }
 
     @Override
-    public void execute() throws Exception {
-        FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
-        fd.setMode(FileDialog.SAVE);
-        fd.setTitle("Export PDF Image");
-        File currentFile = context.getDocument().getFile();
-        if(currentFile != null) {
-            fd.setFile(currentFile.getName().substring(0,currentFile.getName().lastIndexOf('.'))+".pdf");
-        }
-        fd.setVisible(true);
-        if(fd.getFile() != null) {
-            String fileName = fd.getFile();
-            if(!fileName.toLowerCase().endsWith(".java")) {
-                fileName = fileName + ".java";
-            }
-            File file = new File(fd.getDirectory(),fileName);
-            if(context.getDocument() instanceof SketchDocument) {
-                export(file, (SketchDocument) context.getDocument());
-            }
-        }
-
+    protected String getStandardFileExtension() {
+        return "java";
     }
 
-    private void export(File file, SketchDocument sketchDocument) throws FileNotFoundException {
+
+    protected void export(File file, SketchDocument sketchDocument) throws FileNotFoundException {
         ExportProcessor.process(new Java2DExport(file),
                 new PrintWriter(new FileOutputStream(file)),
                 (SketchDocument) context.getDocument());

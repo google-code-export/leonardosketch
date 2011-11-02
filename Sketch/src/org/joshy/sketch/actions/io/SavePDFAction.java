@@ -11,9 +11,7 @@ import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.stage.swing.SwingGFX;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.ExportProcessor;
-import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.ShapeExporter;
-import org.joshy.sketch.model.PixelDocument;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
@@ -32,41 +30,19 @@ import java.io.IOException;
  * Time: 12:52:29 PM
  * To change this template use File | Settings | File Templates.
  */
-public class SavePDFAction extends SAction implements ExportAction {
-    private DocContext context;
-    private File lastfile;
+public class SavePDFAction extends BaseExportAction {
 
     public SavePDFAction(DocContext context) {
-        this.context = context;
+        super(context);
     }
 
-    public void execute() {
-        FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
-        fd.setMode(FileDialog.SAVE);
-        fd.setTitle("Export PDF Image");
-        File currentFile = context.getDocument().getFile();
-        if(currentFile != null) {
-            fd.setFile(currentFile.getName().substring(0,currentFile.getName().lastIndexOf('.'))+".pdf");
-        }
-        fd.setVisible(true);
-        if(fd.getFile() != null) {
-            String fileName = fd.getFile();
-            if(!fileName.toLowerCase().endsWith(".pdf")) {
-                fileName = fileName + ".pdf";
-            }
-            File file = new File(fd.getDirectory(),fileName);
-            if(context.getDocument() instanceof SketchDocument) {
-                export(file, (SketchDocument) context.getDocument());
-            }
-            if(context.getDocument() instanceof PixelDocument) {
-                //export(file, (PixelDocument) context.getDocument());
-            }
-            lastfile = file;
-            context.setLastExportAction(this);
-        }
+    @Override
+    protected String getStandardFileExtension() {
+        return "pdf";
     }
 
-    public static void export(File file, SketchDocument doc) {
+
+    public void export(File file, SketchDocument doc) {
         try {
             Rectangle pageSize = new Rectangle((int)doc.getWidth(),(int)doc.getHeight());
             Document pdf = new Document(pageSize);
@@ -82,11 +58,6 @@ public class SavePDFAction extends SAction implements ExportAction {
         }
     }
 
-    public void exportHeadless() throws Exception {
-        if(lastfile != null) {
-            export(lastfile, (SketchDocument) context.getDocument());
-        }
-    }
 
     private static class PDFExporter implements ShapeExporter<PdfWriter> {
         private PdfTemplate template;
