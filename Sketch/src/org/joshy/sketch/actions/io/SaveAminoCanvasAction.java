@@ -202,36 +202,44 @@ public class SaveAminoCanvasAction extends BaseExportAction {
                     renderToCachedImage(out, node);
                     out.mode = "imagecache";
                 } else {
-                    out.println("new Group().setX("+n.getTranslateX()+").setY("+n.getTranslateY()+")");
+                    out.println("new Group()");
+                    out.prop("x",n.getTranslateX());
+                    out.prop("y",n.getTranslateY());
                     if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
-                        out.println(".setCached(true)");
+                        out.prop("cached",true);
                     }
                 }
                 out.indent();
             }
             if(node instanceof SImage) {
-                SImage n = (SImage) node;
-                u.p("exporting image with relative url = " + n.getRelativeURL());
+                SImage shape = (SImage) node;
+                u.p("exporting image with relative url = " + shape.getRelativeURL());
                 out.println("new Transform(");
                 out.indent();
-                out.println("new ImageView('images/"+n.getRelativeURL()+"')");
-                out.println(".setX("+n.getX()+")");
-                out.println(".setY("+n.getY()+")");
-                u.p("saving relative image to: " + n.getRelativeURL());
+                out.println("new ImageView('images/" +shape.getRelativeURL() + "')");
+                out.prop("x", shape.getX());
+                out.prop("y", shape.getY());
+                u.p("saving relative image to: " + shape.getRelativeURL());
                 u.p("path = " + out.basedir.getName() + " " + out.basedir.getPath());
                 File imagesDir = new File(out.basedir,"images");
                 if(!imagesDir.exists()) {
                     imagesDir.mkdir();
                 }
-                File imageFile = new File(imagesDir,n.getRelativeURL());
+                File imageFile = new File(imagesDir,shape.getRelativeURL());
                 try {
-                    ImageIO.write(n.getBufferedImage(),"PNG",imageFile);
+                    ImageIO.write(shape.getBufferedImage(),"PNG",imageFile);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 out.println(")");
                 out.outdent();
-                out.println(".setTranslateX(" + n.getTranslateX() + ").setTranslateY(" + n.getTranslateY() + ")");
+                out.prop("translateX",shape.getTranslateX());
+                out.prop("translateY",shape.getTranslateY());
+                out.prop("anchorX",shape.getAnchorX());
+                out.prop("anchorY",shape.getAnchorY());
+                out.prop("scaleX",shape.getScaleX());
+                out.prop("scaleY",shape.getScaleY());
+                out.prop("rotate",shape.getRotate());
             }
             if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
                 out.println(".setCached(true)");
@@ -247,8 +255,8 @@ public class SaveAminoCanvasAction extends BaseExportAction {
                 renderToCachedImage(out, shape);
                 if(shape instanceof SResizeableNode) {
                     SResizeableNode resize = (SResizeableNode) shape;
-                    out.println(".setX("+(resize.getX())+")");
-                    out.println(".setY("+(resize.getY())+")");
+                    out.prop("x", resize.getX());
+                    out.prop("y", resize.getY());
                 }
             } else {
 
@@ -260,7 +268,8 @@ public class SaveAminoCanvasAction extends BaseExportAction {
                     SRect n = (SRect) shape;
                     out.println("new Rect().set("+n.getX()+","+n.getY()+","+n.getWidth()+","+n.getHeight()+")");
                     if(n.getCorner() != 0) {
-                        out.println(".setCorner("+df.format(n.getCorner()/2.0)+")");
+                        //out.println(".setCorner("+df.format(n.getCorner()/2.0)+")");
+                        out.prop("corner",n.getCorner()/2.0);
                     }
                 }
                 if(shape instanceof NGon) {
@@ -278,30 +287,28 @@ public class SaveAminoCanvasAction extends BaseExportAction {
                 if(shape instanceof SText) {
                     SText n = (SText) shape;
                     out.println("new Text()");
-                    out.println(".setText('"+escapeString(n.getText())+"')");
-                    out.println(".setX("+n.getX()+")");
-                    out.println(".setY("+(n.getY()+n.getAscent())+")");
-                    out.println(".setHAlign('"+n.getHalign().toString().toLowerCase()+"')");
-                    out.println(".setAutoSize("+n.isAutoSize()+")");
-                    out.println(".setWidth("+n.getWidth()+")");
+                    out.prop("text",escapeString(n.getText()));
+                    out.prop("x",n.getX());
+                    out.prop("y",n.getY()+n.getAscent());
+                    out.prop("hAlign",n.getHalign().toString().toLowerCase());
+                    out.prop("autoSize",n.isAutoSize());
+                    out.prop("width",n.getWidth());
                     double fontSize = n.getFontSize();
                     if(Toolkit.getDefaultToolkit().getScreenResolution() == 72) {
                         fontSize = fontSize / 1.33;
                     }
 
-                    out.println(".setFont('"
-                            +df.format(fontSize)+"pt "
-                            +n.getFontName()+"')");
+                    out.prop("font",df.format(fontSize)+"pt "+n.getFontName());
                 }
                 out.indent();
-                out.println(".setStrokeWidth(" + shape.getStrokeWidth() + ")");
-                out.println(".setStroke(" + serializePaint(out, shape.getStrokePaint()) + ")");
-                out.println(".setFill("   + serializePaint(out, shape.getFillPaint())   + ")");
+                out.prop("strokeWidth", shape.getStrokeWidth());
+                out.prop("stroke",serializePaint(out,shape.getStrokePaint()));
+                out.prop("fill", serializePaint(out, shape.getFillPaint()));
                 if(shape.getFillOpacity() != 1.0) {
-                    out.println(".setOpacity("+df.format(shape.getFillOpacity())+")");
+                    out.prop("opacity", shape.getFillOpacity());
                 }
                 if(shape.getBooleanProperty("com.joshondesign.amino.nodecache")) {
-                    out.println(".setCached(true)");
+                    out.prop("cached", true);
                 }
             }
 
@@ -309,10 +316,13 @@ public class SaveAminoCanvasAction extends BaseExportAction {
             out.outdent();
             out.outdent();
 
-            out.println(".setTranslateX(" + shape.getTranslateX() + ").setTranslateY(" + shape.getTranslateY() + ")");
-            out.println(".setAnchorX("+shape.getAnchorX()+").setAnchorY("+shape.getAnchorY()+")");
-            out.println(".setScaleX("+shape.getScaleX()+").setScaleY("+shape.getScaleY()+")");
-            out.println(".setRotate("+shape.getRotate()+")");
+            out.prop("translateX",shape.getTranslateX());
+            out.prop("translateY", shape.getTranslateY());
+            out.prop("anchorX", shape.getAnchorX());
+            out.prop("anchorY", shape.getAnchorY());
+            out.prop("scaleX", shape.getScaleX());
+            out.prop("scaleY",shape.getScaleY());
+            out.prop("rotate",shape.getRotate());
             return false;
         }
 
@@ -560,6 +570,19 @@ public class SaveAminoCanvasAction extends BaseExportAction {
             for(int i=0; i<tab; i++) {
                 tabString += "  ";
             }
+        }
+
+        public void prop(String propName, String value) {
+            println(".set"+propName.substring(0,1).toUpperCase()+propName.substring(1));
+            println("('"+value+"')");
+        }
+        public void prop(String propName, double value) {
+            println(".set"+propName.substring(0,1).toUpperCase()+propName.substring(1));
+            println("("+value+")");
+        }
+        public void prop(String propName, boolean value) {
+            println(".set"+propName.substring(0,1).toUpperCase()+propName.substring(1));
+            println("("+value+")");
         }
     }
 }
