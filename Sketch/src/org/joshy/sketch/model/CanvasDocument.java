@@ -15,6 +15,7 @@ public class CanvasDocument<P extends Page> {
     protected int index;
     private Map<String,String> props = new HashMap<String,String>();
     private boolean rulersVisible = true;
+    private boolean pagesVisible = false;
 
     public static enum LengthUnits {
         Pixels(1.0),
@@ -101,6 +102,14 @@ public class CanvasDocument<P extends Page> {
     public void setRulersVisible(boolean visible) {
         this.rulersVisible = visible;
         fireViewDirty();
+    }
+
+    public void setPagesVisible(boolean pagesVisible) {
+        this.pagesVisible = pagesVisible;
+    }
+
+    public boolean isPagesVisible() {
+        return pagesVisible;
     }
 
     public LengthUnits getUnits() {

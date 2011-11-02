@@ -36,7 +36,7 @@ public class VectorModeHelper extends DocModeHelper<VectorDocContext> {
 
     @Override
     public boolean isPageListVisible() {
-        return false;
+        return true;
     }
 
     @Override

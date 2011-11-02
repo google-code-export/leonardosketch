@@ -146,6 +146,23 @@ public class DocumentActions {
         }
     }
 
+    public static class AddNewPage extends SAction {
+        private VectorDocContext context;
+
+        public AddNewPage(VectorDocContext context, Main main) {
+            super();
+            this.context = context;
+        }
+
+        @Override
+        public void execute() throws Exception {
+            SketchDocument doc = context.getDocument();
+            SketchDocument.SketchPage page = doc.addPage();
+            context.pageList.listview.setSelectedIndex(doc.getPages().size()-1);
+        }
+    }
+
+
     public static LinearGradientFill resizeTo(LinearGradientFill grad, Bounds bounds) {
         LinearGradientFill g2 = (LinearGradientFill) grad.duplicate();
         switch(grad.getStartXSnapped()) {
