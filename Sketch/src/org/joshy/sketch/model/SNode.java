@@ -25,6 +25,7 @@ public abstract class SNode {
     private double anchorX = 0;
     private double anchorY = 0;
     private String id = null;
+    private String linkTarget;
 
     public abstract Bounds getBounds();
     public abstract Bounds getTransformedBounds();
@@ -128,5 +129,13 @@ public abstract class SNode {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setLinkTarget(String linkTarget) {
+        this.linkTarget = linkTarget;
+    }
+
+    public boolean isLink() {
+        return linkTarget != null;
     }
 }

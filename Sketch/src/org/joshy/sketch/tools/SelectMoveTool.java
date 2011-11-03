@@ -427,6 +427,7 @@ public class SelectMoveTool extends CanvasTool {
             if(node instanceof SGroup) {
                 contextMenu.addActions(new NodeActions.UngroupSelection(context));
             }
+            contextMenu.addActions(new MakeLink(context));
         }
 
         contextMenu.setWidth(170);
@@ -880,7 +881,7 @@ public class SelectMoveTool extends CanvasTool {
         this.ido = ido;
         context.redraw();
     }
-    
+
     //draw the info on the current node we are moving
     public void drawOverlay(GFX g) {
 
@@ -919,7 +920,14 @@ public class SelectMoveTool extends CanvasTool {
             Point2D.Double pt = context.getSketchCanvas().transformToDrawing(hoverHandle.getX(),hoverHandle.getY());
             DrawUtils.drawStandardHandle(g,pt.x,pt.y,FlatColor.RED);
         }
-        
+
+        //draw an indicator for all link nodes
+        for(SNode node : context.getDocument().getCurrentPage().getNodes()) {
+            if(!node.isLink()) continue;
+            Bounds bds = node.getTransformedBounds();
+            g.setPaint(FlatColor.RED);
+            g.drawRect(bds.getX(),bds.getY2()+10,40,20);
+        }
 
         //draw the move position indicator
         if(!showIndicator) return;
