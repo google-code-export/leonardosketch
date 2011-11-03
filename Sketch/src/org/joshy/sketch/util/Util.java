@@ -87,4 +87,13 @@ public class Util {
         }
         return file;
     }
+
+    public static Shape toShape(Bounds bounds) {
+        return new Rectangle2D.Double(
+                bounds.getX(),
+                bounds.getY(),
+                bounds.getWidth(),
+                bounds.getHeight()
+        );
+    }
 }
