@@ -35,6 +35,7 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
     private PixelTool selectionTool;
     private ToggleGroup group;
     private BrushTool brushTool;
+    private LineTool lineTool;
 
     public PixelDocContext(Main main, PixelModeHelper pixelModeHelper) {
         super(main,pixelModeHelper);
@@ -69,6 +70,8 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
         selectionTool = new SelectionTool(this);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-tool_rect_selection.png")),selectionTool);
 
+        lineTool = new LineTool(this);
+        tools.add(new ToolbarButton(Main.getIcon("cr22-action-tool_rect_selection.png")),lineTool);
 
         group = new ToggleGroup();
         for(Button button : tools.keys()) {
