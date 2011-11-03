@@ -345,7 +345,7 @@ public class SaveAminoCanvasAction extends BaseExportAction {
             File file = new File(out.basedir,name);
             List<SNode> nodes = new ArrayList<SNode>();
             nodes.add(node);
-            SavePNGAction.export(file, nodes);
+            SavePNGAction.exportFragment(file, nodes);
             out.println("new ImageView('"+file.getName()+"')");
         }
 

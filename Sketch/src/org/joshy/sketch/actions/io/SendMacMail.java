@@ -24,7 +24,7 @@ public class SendMacMail extends SAction {
         try {
             File file = File.createTempFile("foo", ".png");
             file.deleteOnExit();
-            SavePNGAction.export(file, context.getDocument());
+            SavePNGAction.exportStatic(file, context.getDocument());
             u.p("wrote image to "+file.getAbsolutePath());
 
 

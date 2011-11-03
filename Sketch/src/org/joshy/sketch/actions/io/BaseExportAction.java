@@ -44,7 +44,7 @@ public abstract class BaseExportAction extends SAction {
                         export(file, (SketchDocument) context.getDocument());
                 }
                 if(context.getDocument() instanceof PixelDocument) {
-                    //export(file, (PixelDocument) context.getDocument());
+                    //exportFragment(file, (PixelDocument) context.getDocument());
                 }
                 lastfile = file;
                 context.setLastExportAction(this);

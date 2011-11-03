@@ -95,10 +95,10 @@ public class ExportTest {
         File outdir = new File("testout");
         outdir.mkdirs();
 
-        //new SavePDFAction().export(new File(outdir,"export.pdf"),doc);
-        //SavePNGAction.export(new File(outdir,"export.png"),doc);
-        //SaveSVGAction.export(new File(outdir,"export.svg"),doc);
-        //SaveHTMLAction.export(new File(outdir,"export_html"),doc);
+        //new SavePDFAction().exportFragment(new File(outdir,"exportFragment.pdf"),doc);
+        //SavePNGAction.exportFragment(new File(outdir,"exportFragment.png"),doc);
+        //SaveSVGAction.exportFragment(new File(outdir,"exportFragment.svg"),doc);
+        //SaveHTMLAction.exportFragment(new File(outdir,"export_html"),doc);
     }
 
     @After

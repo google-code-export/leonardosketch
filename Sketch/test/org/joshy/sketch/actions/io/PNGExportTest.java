@@ -170,7 +170,7 @@ public class PNGExportTest {
     private int saveAndReadbackPixel(SketchDocument doc, int x, int y) throws IOException {
         File file = File.createTempFile("amino.test", ".png");
         u.p("wrote to tempfile: " + file.getAbsolutePath());
-        SavePNGAction.export(file,(CanvasDocument)doc);
+        SavePNGAction.exportStatic(file, (CanvasDocument) doc);
 
         BufferedImage image = ImageIO.read(file);
         int rgb = image.getRGB(x,y);
