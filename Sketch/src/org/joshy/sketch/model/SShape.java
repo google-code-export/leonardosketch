@@ -109,7 +109,7 @@ public abstract class SShape extends SNode {
                 oldInner = shadow.isInner();
                 contentChanged = false;
             }
-            g.draw(buf,xoff-blurRadius-dx,yoff-blurRadius-dy);
+            g.draw(buf,xoff-blurRadius*2-dx,yoff-blurRadius*2-dy);
         }
     }
 
@@ -182,7 +182,7 @@ public abstract class SShape extends SNode {
     }
     protected void regenShadow(GFX g) {
         //setup
-        int blurRadius = shadow.getBlurRadius();
+        int blurRadius = shadow.getBlurRadius()*2;
         Bounds b = getBounds();
         double dx = getTranslateX()-b.getX();
         double dy = getTranslateY()-b.getY();
@@ -194,17 +194,20 @@ public abstract class SShape extends SNode {
 
         //draw shape with shadow color
         GFX g2 = buf.getGFX();
-        g2.setPaint(shadow.getColor().deriveWithAlpha(shadow.getOpacity()));
+
+        //fill shape with black
+        g2.setPaint(FlatColor.BLACK);
         g2.translate(blurRadius,blurRadius);
         g2.translate(dx, dy);
         fillShape(g2);
         g2.translate(-dx, -dy);
-
-        //apply blur effect
+        //blur
         buf.apply(new BlurEffect(blurRadius));
         g2.translate(-blurRadius,-blurRadius);
-        oldShadow = shadow;
+        //use blur as alpha mask to draw in the real color
+        buf.apply(new WipeColorEffect(shadow.getColor()));
 
+        oldShadow = shadow;
     }
 
     protected void fillShape(GFX g) { }
