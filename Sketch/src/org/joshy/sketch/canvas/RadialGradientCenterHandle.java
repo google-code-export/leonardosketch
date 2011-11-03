@@ -27,12 +27,12 @@ public class RadialGradientCenterHandle extends BaseGradientHandle<RadialGradien
 
     @Override
     public double getX() {
-        return shape.getBounds().getX() + getFill().getCenterX();
+        return shape.getTransformedBounds().getX() + getFill().getCenterX();
     }
 
     @Override
     public void setX(double x, boolean constrain) {
-        x -= shape.getBounds().getX();
+        x -= shape.getTransformedBounds().getX();
         getFill().setCenterX(x);
         refresh();
         updateControlPositions();
@@ -40,12 +40,12 @@ public class RadialGradientCenterHandle extends BaseGradientHandle<RadialGradien
 
     @Override
     public double getY() {
-        return shape.getBounds().getY()+getFill().getCenterY();
+        return shape.getTransformedBounds().getY()+getFill().getCenterY();
     }
 
     @Override
     public void setY(double y, boolean constrain) {
-        y-= shape.getBounds().getY();
+        y-= shape.getTransformedBounds().getY();
         getFill().setCenterY(y);
         refresh();
         updateControlPositions();
@@ -86,25 +86,25 @@ public class RadialGradientCenterHandle extends BaseGradientHandle<RadialGradien
     @Override
     protected Point2D getStart() {
         return new Point2D.Double(
-            getFill().getCenterX() + shape.getBounds().getX(),
-            getFill().getCenterY() + shape.getBounds().getY()
+            getFill().getCenterX() + shape.getTransformedBounds().getX(),
+            getFill().getCenterY() + shape.getTransformedBounds().getY()
         );
     }
 
     @Override
     protected Point2D getEnd() {
         return new Point2D.Double(
-            getFill().getCenterX() + shape.getBounds().getX(),
-            getFill().getCenterY()+getFill().getRadius() + shape.getBounds().getY()
+            getFill().getCenterX() + shape.getTransformedBounds().getX(),
+            getFill().getCenterY()+getFill().getRadius() + shape.getTransformedBounds().getY()
         );
     }
 
     public void mousePressed(MouseEvent event, Point2D.Double cursor) {
         showAddIndicator = false;
         double ny = cursor.getY();
-        ny-=shape.getBounds().getY();
+        ny-=shape.getTransformedBounds().getY();
         double nx = cursor.getX();
-        nx -= shape.getBounds().getX();
+        nx -= shape.getTransformedBounds().getX();
         if(ny - getFill().getCenterY() > 5) {
             ny -= getFill().getCenterY();
             for(RadialGradientFill.Stop stop: getFill().getStops()) {
@@ -136,9 +136,9 @@ public class RadialGradientCenterHandle extends BaseGradientHandle<RadialGradien
             }
         }
         if(onStop) {
-            ny -= shape.getBounds().getY();
+            ny -= shape.getTransformedBounds().getY();
             ny -= getFill().getCenterY();
-            double dx = nx-getFill().getCenterX()-shape.getBounds().getX();
+            double dx = nx-getFill().getCenterX()-shape.getTransformedBounds().getX();
 
             if(Math.abs(dx) > 30) {
                 couldDelete = true;
