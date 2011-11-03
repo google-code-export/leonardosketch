@@ -193,7 +193,7 @@ public class SPoly extends SShape implements SelfDrawable {
         af.rotate(Math.toRadians(getRotate()));
         af.scale(getScaleX(), getScaleY());
         af.translate(-getAnchorX(),-getAnchorY());
-        Shape sh = af.createTransformedShape(path);
+        Shape sh = af.createTransformedShape(Util.toShape(bounds));
         Rectangle2D bds = sh.getBounds2D();
         return Util.toBounds(bds);
     }
