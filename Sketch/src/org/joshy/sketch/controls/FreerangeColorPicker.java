@@ -20,14 +20,15 @@ import java.awt.geom.Point2D;
 */
 public class FreerangeColorPicker extends Button {
     FlatColor selectedColor = FlatColor.RED;
-    private FreerangeColorPickerPopup popup;
+    private HSVColorPicker popup;
 
     @Override
     protected void setPressed(boolean pressed) {
         super.setPressed(pressed);
         if (pressed) {
             if (popup == null) {
-                popup = new FreerangeColorPickerPopup(this,200,100,true);
+                //popup = new FreerangeColorPickerPopup(this,200,100,true);
+                popup = new HSVColorPicker(this,150,150);
                 popup.setVisible(false);
                 Stage stage = getParent().getStage();
                 stage.getPopupLayer().add(popup);
