@@ -35,7 +35,7 @@ public class RadialGradientRadiusHandle extends Handle {
 
     @Override
     public double getX() {
-        return shape.getBounds().getX() + getFill().getCenterX();
+        return shape.getTransformedBounds().getX() + getFill().getCenterX();
     }
 
     @Override
@@ -45,12 +45,12 @@ public class RadialGradientRadiusHandle extends Handle {
 
     @Override
     public double getY() {
-        return shape.getBounds().getY()+getFill().getCenterY()+getFill().getRadius();
+        return shape.getTransformedBounds().getY()+getFill().getCenterY()+getFill().getRadius();
     }
 
     @Override
     public void setY(double y, boolean constrain) {
-        y -= shape.getBounds().getY();
+        y -= shape.getTransformedBounds().getY();
         getFill().setRadius(y-getFill().getCenterY());
         shape.setFillPaint(getFill());
         master.updateControlPositions();
@@ -66,7 +66,6 @@ public class RadialGradientRadiusHandle extends Handle {
         double x = pt.getX();
         double y = pt.getY();
 
-        RadialGradientFill fill = getFill();
         DrawUtils.drawStandardHandle(g, x, y, FlatColor.PURPLE);
     }
 }

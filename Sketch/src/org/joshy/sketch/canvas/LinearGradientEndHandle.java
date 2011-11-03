@@ -33,12 +33,12 @@ public class LinearGradientEndHandle extends Handle {
 
     @Override
     public double getX() {
-        return getFill().getEndX() + shape.getBounds().getX();
+        return getFill().getEndX() + shape.getTransformedBounds().getX();
     }
 
     @Override
     public void setX(double x, boolean constrain) {
-        x -= shape.getBounds().getX();
+        x -= shape.getTransformedBounds().getX();
         if(shape instanceof AbstractResizeableNode) {
             snapX((AbstractResizeableNode) shape, x);
         } else {
@@ -50,7 +50,7 @@ public class LinearGradientEndHandle extends Handle {
 
     private void snapX(AbstractResizeableNode node, double x) {
         LinearGradientFill f = getFill();
-        Bounds b = node.getBounds();
+        Bounds b = node.getTransformedBounds();
         if(Math.abs(x-0)<5) {
             f.setEndX(0);
             f.setEndXSnapped(LinearGradientFill.Snap.Start);
@@ -72,12 +72,12 @@ public class LinearGradientEndHandle extends Handle {
 
     @Override
     public double getY() {
-        return getFill().getEndY() + shape.getBounds().getY();
+        return getFill().getEndY() + shape.getTransformedBounds().getY();
     }
 
     @Override
     public void setY(double y, boolean constrain) {
-        y -= shape.getBounds().getY();
+        y -= shape.getTransformedBounds().getY();
         if(shape instanceof AbstractResizeableNode) {
             snapY((AbstractResizeableNode)shape,y);
         } else {
@@ -89,7 +89,7 @@ public class LinearGradientEndHandle extends Handle {
 
     private void snapY(AbstractResizeableNode node, double y) {
         LinearGradientFill f = getFill();
-        Bounds b = node.getBounds();
+        Bounds b = node.getTransformedBounds();
         if(Math.abs(y-0)<5) {
             f.setEndY(0);
             f.setEndYSnapped(LinearGradientFill.Snap.Start);

@@ -32,13 +32,13 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
 
     @Override
     public double getX() {
-        return shape.getBounds().getX() + getFill().getStartX();
+        return shape.getTransformedBounds().getX() + getFill().getStartX();
     }
 
 
     @Override
     public void setX(double x, boolean constrain) {
-        x -= shape.getBounds().getX();
+        x -= shape.getTransformedBounds().getX();
         if(shape instanceof AbstractResizeableNode) {
             snapX((AbstractResizeableNode) shape, x);
         } else {
@@ -50,7 +50,7 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
 
     private void snapX(AbstractResizeableNode node, double x) {
         LinearGradientFill f = getFill();
-        Bounds b = node.getBounds();
+        Bounds b = node.getTransformedBounds();
         if(Math.abs(x-0)<5) {
             f.setStartX(0);
             f.setStartXSnapped(LinearGradientFill.Snap.Start);
@@ -73,12 +73,12 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
 
     @Override
     public double getY() {
-        return shape.getBounds().getY()+getFill().getStartY();
+        return shape.getTransformedBounds().getY()+getFill().getStartY();
     }
 
     @Override
     public void setY(double y, boolean constrain) {
-        y-= shape.getBounds().getY();
+        y-= shape.getTransformedBounds().getY();
         if(shape instanceof AbstractResizeableNode) {
             snapY((AbstractResizeableNode)shape,y);
         } else {
@@ -89,7 +89,7 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
     }
     private void snapY(AbstractResizeableNode node, double y) {
         LinearGradientFill f = getFill();
-        Bounds b = node.getBounds();
+        Bounds b = node.getTransformedBounds();
         if(Math.abs(y-0)<5) {
             f.setStartY(0);
             f.setStartYSnapped(LinearGradientFill.Snap.Start);
@@ -119,8 +119,8 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
     @Override
     Point2D getConnectingLineEnd() {
         Point2D pt = new Point2D.Double(
-                getFill().getEndX() + shape.getBounds().getX(),
-                getFill().getEndY()+shape.getBounds().getY());
+                getFill().getEndX() + shape.getTransformedBounds().getX(),
+                getFill().getEndY()+shape.getTransformedBounds().getY());
         pt = context.getSketchCanvas().transformToDrawing(pt);
         return pt;
     }
@@ -128,11 +128,11 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
     @Override
     protected Point2D getDragHandlePosition(MultiGradientFill.Stop stop, SketchCanvas canvas) {
         Point2D start = new Point2D.Double(
-                getFill().getStartX()+shape.getBounds().getX()
-                ,getFill().getStartY()+shape.getBounds().getY());
+                getFill().getStartX()+shape.getTransformedBounds().getX()
+                ,getFill().getStartY()+shape.getTransformedBounds().getY());
         Point2D end = new Point2D.Double(
-                getFill().getEndX() + shape.getBounds().getX(),
-                getFill().getEndY() + shape.getBounds().getY()
+                getFill().getEndX() + shape.getTransformedBounds().getX(),
+                getFill().getEndY() + shape.getTransformedBounds().getY()
         );
         start = context.getSketchCanvas().transformToDrawing(start);
         end = context.getSketchCanvas().transformToDrawing(end);
@@ -143,16 +143,16 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
     @Override
     protected Point2D getStart() {
         return new Point2D.Double(
-            getFill().getStartX() + shape.getBounds().getX(),
-            getFill().getStartY() + shape.getBounds().getY()
+            getFill().getStartX() + shape.getTransformedBounds().getX(),
+            getFill().getStartY() + shape.getTransformedBounds().getY()
         );
     }
 
     @Override
     protected Point2D getEnd() {
         return new Point2D.Double(
-            getFill().getEndX() + shape.getBounds().getX(),
-            getFill().getEndY() + shape.getBounds().getY()
+            getFill().getEndX() + shape.getTransformedBounds().getX(),
+            getFill().getEndY() + shape.getTransformedBounds().getY()
         );
     }
 
@@ -240,11 +240,11 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
     void updateControlPositions() {
         Container popupLayer = context.getSketchCanvas().getParent().getStage().getPopupLayer();
         Point2D start = new Point2D.Double(
-                getFill().getStartX()+shape.getBounds().getX()
-                ,getFill().getStartY()+shape.getBounds().getY());
+                getFill().getStartX()+shape.getTransformedBounds().getX()
+                ,getFill().getStartY()+shape.getTransformedBounds().getY());
         Point2D end = new Point2D.Double(
-                getFill().getEndX() + shape.getBounds().getX(),
-                getFill().getEndY() + shape.getBounds().getY()
+                getFill().getEndX() + shape.getTransformedBounds().getX(),
+                getFill().getEndY() + shape.getTransformedBounds().getY()
         );
         start = context.getSketchCanvas().transformToDrawing(start);
         end = context.getSketchCanvas().transformToDrawing(end);
