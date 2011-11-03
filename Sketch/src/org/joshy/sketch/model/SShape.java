@@ -43,10 +43,12 @@ public abstract class SShape extends SNode {
 
     public void setStrokePaint(FlatColor strokePaint) {
         this.strokePaint = strokePaint;
+        markContentChanged();
     }
 
     public void setStrokeWidth(double strokeWidth) {
         this.strokeWidth = strokeWidth;
+        markContentChanged();
     }
 
     public double getStrokeWidth() {
@@ -68,6 +70,7 @@ public abstract class SShape extends SNode {
 
     public void setFillOpacity(double fillOpacity) {
         this.fillOpacity = fillOpacity;
+        markContentChanged();
     }
 
 
@@ -109,7 +112,10 @@ public abstract class SShape extends SNode {
                 oldInner = shadow.isInner();
                 contentChanged = false;
             }
+            double oldOpacity = g.getOpacity();
+            g.setOpacity(shadow.getOpacity());
             g.draw(buf,xoff-blurRadius*2-dx,yoff-blurRadius*2-dy);
+            g.setOpacity(oldOpacity);
         }
     }
 
@@ -199,7 +205,9 @@ public abstract class SShape extends SNode {
         g2.setPaint(FlatColor.BLACK);
         g2.translate(blurRadius,blurRadius);
         g2.translate(dx, dy);
+        initPaint(g2);
         fillShape(g2);
+        drawShape(g2);
         g2.translate(-dx, -dy);
         //blur
         buf.apply(new BlurEffect(blurRadius));
@@ -209,6 +217,8 @@ public abstract class SShape extends SNode {
 
         oldShadow = shadow;
     }
+
+    protected void drawShape(GFX g) { }
 
     protected void fillShape(GFX g) { }
 
