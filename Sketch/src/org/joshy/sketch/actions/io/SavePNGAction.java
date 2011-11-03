@@ -1,6 +1,6 @@
 package org.joshy.sketch.actions.io;
 
-import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
@@ -19,16 +19,18 @@ import org.joshy.sketch.tools.DrawPathTool;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.Font;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class SavePNGAction extends BaseExportAction {
-    private boolean includeBackground = true;
-    private boolean includeDocumentBounds = false;
+    public boolean includeBackground = true;
+    public boolean includeDocumentBounds = false;
+    public boolean includeStamp = false;
 
     public SavePNGAction(DocContext context) {
         super(context);
@@ -75,48 +77,7 @@ public class SavePNGAction extends BaseExportAction {
     }
 
 
-    /*
-    private void showFileDialog() {
-        FileDialog fd = new FileDialog((Frame)context.getStage().getNativeWindow());
-        fd.setMode(FileDialog.SAVE);
-        fd.setTitle("Export PNG Image");
-        File currentFile = context.getDocument().getFile();
-        if(currentFile != null) {
-            fd.setFile(currentFile.getName().substring(0,currentFile.getName().lastIndexOf('.'))+".png");
-        }
-        fd.setVisible(true);
-        if(fd.getFile() != null) {
-            String fileName = fd.getFile();
-            if(!fileName.toLowerCase().endsWith(".png")) {
-                fileName = fileName + ".png";
-            }
-            File file = new File(fd.getDirectory(),fileName);
-            if(context.getDocument() instanceof SketchDocument) {
-                exportTo(file, (SketchDocument) context.getDocument(), includeDocumentBounds, includeBackground);
-            }
-            if(context.getDocument() instanceof PixelDocument) {
-                exportTo(file, (PixelDocument) context.getDocument());
-            }
-            context.setLastExportAction(this);
-            lastfile = file;
-        }
-    }
-    */
-
-    /*
-    public void exportHeadless() {
-        if(lastfile != null) {
-            if(context.getDocument() instanceof SketchDocument) {
-                exportTo(lastfile, (SketchDocument) context.getDocument(), includeDocumentBounds, includeBackground);
-            }
-            if(context.getDocument() instanceof PixelDocument) {
-                exportTo(lastfile, (PixelDocument) context.getDocument());
-            }
-        }
-    }
-    */
-
-    public static void export(File file, CanvasDocument doc) {
+    public static void exportStatic(File file, CanvasDocument doc) {
         if(doc instanceof SketchDocument) {
             SavePNGAction save = new SavePNGAction(null);
             save.includeBackground = false;
@@ -129,7 +90,7 @@ public class SavePNGAction extends BaseExportAction {
         }
     }
 
-    public static void export(File file, List<SNode> nodes) {
+    public static void exportFragment(File file, Iterable<SNode> nodes) {
         Bounds bounds = calculateBounds(nodes);
         BufferedImage img = new BufferedImage((int)bounds.getWidth()+1,(int)bounds.getHeight()+1,BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = img.createGraphics();
@@ -154,7 +115,7 @@ public class SavePNGAction extends BaseExportAction {
     }
 
     @Override
-    protected void export(File file, SketchDocument doc) {
+    public void export(File file, SketchDocument doc) {
         Bounds bounds = null;
         if(includeDocumentBounds) {
             bounds = new Bounds(0,0,doc.getWidth(),doc.getHeight());
@@ -167,6 +128,18 @@ public class SavePNGAction extends BaseExportAction {
         PNGExporter exporter = new PNGExporter();
         exporter.setIncludeDocumentBackground(includeBackground);
         ExportProcessor.process(exporter, g2, doc);
+        if(includeStamp) {
+            g2.translate(bounds.getX(),bounds.getY());
+            g2.setPaint(Color.BLACK);
+            Font font = org.joshy.gfx.draw.Font.DEFAULT.getAWTFont();
+            g2.setFont(font);
+            String stamp = "handcrafted with LeonardoSketch.org";
+            Rectangle2D sb = font.getStringBounds(stamp, g2.getFontRenderContext());
+            g2.drawString(stamp,
+                    (int)(img.getWidth()-sb.getWidth()-10),
+                    (int)(img.getHeight()-10)
+            );
+        }
         g2.dispose();
         try {
             ImageIO.write(img,"png", file);
@@ -175,16 +148,18 @@ public class SavePNGAction extends BaseExportAction {
         }
     }
 
-    public static Bounds calculateBounds(List<SNode> model) {
+    public static Bounds calculateBounds(Iterable<SNode> model) {
         double x = Double.MAX_VALUE;
         double y = Double.MAX_VALUE;
         double w = Double.MIN_VALUE;
         double h = Double.MIN_VALUE;
         for(SNode n : model) {
             Bounds b = n.getTransformedBounds();
+            /*
             if(n instanceof SShape) {
                 b = ((SShape) n).getEffectBounds();
             }
+            */
             x = Math.min(x, b.getX());
             y = Math.min(y, b.getY());
             w = Math.max(w, b.getX() + b.getWidth());
@@ -192,11 +167,6 @@ public class SavePNGAction extends BaseExportAction {
         }
         return new Bounds(x,y,w-x,h-y);
     }
-
-    public static void export(Graphics2D g, SketchDocument doc) {
-        ExportProcessor.process(new PNGExporter(), g, doc);
-    }
-
 
     public static class PNGExporter implements ShapeExporter<Graphics2D> {
         private boolean useDocBg = true;

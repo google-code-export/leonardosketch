@@ -66,7 +66,7 @@ public class FlickrUploadAction extends SAction {
         //write to a file
         final File file = File.createTempFile("foo", ".png");
         file.deleteOnExit();
-        SavePNGAction.export(file, this.context.getDocument());
+        SavePNGAction.exportStatic(file, this.context.getDocument());
 
         final String message = StandardDialog.showEditText("Message with image","");
         if(message == null || message.trim().equals("")) {

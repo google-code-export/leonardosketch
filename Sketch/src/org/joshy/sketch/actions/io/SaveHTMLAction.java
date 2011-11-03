@@ -93,7 +93,7 @@ public class SaveHTMLAction extends BaseExportAction {
             List<SNode> nodes = new ArrayList<SNode>();
             nodes.add(shape);
             File imf = out.createImageFile();
-            SavePNGAction.export(imf,nodes);
+            SavePNGAction.exportFragment(imf, nodes);
             double x = shape.getTranslateX();
             double y = shape.getTranslateY();
             if(shape instanceof SResizeableNode) {

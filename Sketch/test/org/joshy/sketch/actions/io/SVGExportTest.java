@@ -206,7 +206,7 @@ public class SVGExportTest {
     private Doc saveAndReadback(SketchDocument doc) throws Exception {
         File file = File.createTempFile("amino.test", ".svg");
         u.p("wrote to tempfile: " + file.getAbsolutePath());
-        //SaveSVGAction.export(file,doc);
+        //SaveSVGAction.exportFragment(file,doc);
         Doc xdoc = XMLParser.parse(file);
         return xdoc;
     }
