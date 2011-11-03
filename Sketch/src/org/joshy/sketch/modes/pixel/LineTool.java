@@ -3,6 +3,7 @@ package org.joshy.sketch.modes.pixel;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.util.GeomUtil;
 import org.joshy.sketch.pixel.model.PixelGraphics;
 import org.joshy.sketch.pixel.model.PixelLayer;
 
@@ -32,7 +33,20 @@ public class LineTool extends PixelTool {
     @Override
     protected void mouseDragged(MouseEvent event, Point2D cursor) {
         currentPoint = cursor;
+        if(event.isShiftPressed()) {
+            double angle = GeomUtil.calcAngle(startPoint,currentPoint);
+            angle = snapToAngle(angle);
+            double dist = startPoint.distance(currentPoint);
+            currentPoint = GeomUtil.calcPoint(startPoint,angle,dist);
+            //u.p("start point = " + startPoint + " " + currentPoint);
+        }
         getContext().getCanvas().redraw();
+    }
+    private double snapToAngle(double angle) {
+        angle = Math.toDegrees(angle); //convert to degrees
+        angle = (angle+360) % 360; //make positive
+        long iangle = Math.round(angle / 15); //round to nearest octant
+        return iangle * 15.0;
     }
 
     @Override
@@ -76,7 +90,7 @@ public class LineTool extends PixelTool {
             ((PixelGraphics)g).fillPixel((int)x0,(int)y0);
         }
         if(g instanceof GFX) {
-            ((GFX)g).drawLine(x0+0.5,y0+0.5,x0+0.5,y0+0.5);
+            ((GFX)g).drawLine(x0 + 0.5, y0 + 0.5, x0 + 0.5, y0 + 0.5);
         }
     }
 
@@ -89,10 +103,10 @@ public class LineTool extends PixelTool {
         if(currentPoint != null) {
             gfx.setPaint(FlatColor.RED);
             drawPixelLine(gfx,
-                    (int)startPoint.getX(),
-                    (int)startPoint.getY(),
-                    (int)currentPoint.getX(),
-                    (int)currentPoint.getY()
+                    (int)Math.round(startPoint.getX()),
+                    (int)Math.round(startPoint.getY()),
+                    (int)Math.round(currentPoint.getX()),
+                    (int)Math.round(currentPoint.getY())
             );
         }
     }
