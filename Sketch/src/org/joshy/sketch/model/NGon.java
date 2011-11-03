@@ -24,6 +24,7 @@ public class NGon extends SShape implements SelfDrawable {
     private double innerRadius = 40;
     private double angle;
     private boolean star;
+    private double oldOpacity;
 
     public NGon(int sides) {
         this.sides = sides;
@@ -50,6 +51,7 @@ public class NGon extends SShape implements SelfDrawable {
 
     public NGon setRadius(double radius) {
         this.radius = radius;
+        markContentChanged();
         return this;
     }
 
@@ -59,6 +61,7 @@ public class NGon extends SShape implements SelfDrawable {
 
     public NGon setSides(int sides) {
         this.sides = sides;
+        markContentChanged();
         return this;
     }
 
@@ -68,6 +71,7 @@ public class NGon extends SShape implements SelfDrawable {
 
     public NGon setAngle(double angle) {
         this.angle = angle;
+        markContentChanged();
         return this;
     }
 
@@ -77,6 +81,7 @@ public class NGon extends SShape implements SelfDrawable {
 
     public NGon setStar(boolean star) {
         this.star = star;
+        markContentChanged();
         return this;
     }
 
@@ -90,6 +95,7 @@ public class NGon extends SShape implements SelfDrawable {
 
     public NGon setInnerRadius(double innerRadius) {
         this.innerRadius = innerRadius;
+        markContentChanged();
         return this;
     }
 
@@ -99,11 +105,19 @@ public class NGon extends SShape implements SelfDrawable {
         g.fillPolygon(points);
     }
 
-    public void draw(GFX g) {
-        drawShadow(g);
+    @Override
+    protected void drawShape(GFX g) {
+        if(getStrokePaint() != null && getStrokeWidth() > 0) {
+            g.setPaint(getStrokePaint());
+            g.setStrokeWidth(getStrokeWidth());
+            g.drawPolygon(toPoints(),true);
+            g.setStrokeWidth(1);
+        }
+    }
 
+    @Override
+    protected void initPaint(GFX g) {
         Paint paint = this.getFillPaint();
-        double opacity = -1;
         if(paint != null) {
             if(paint instanceof FlatColor) {
                 g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
@@ -114,23 +128,26 @@ public class NGon extends SShape implements SelfDrawable {
                 g.setPaint(gf);
             }
             if(paint instanceof PatternPaint) {
-                opacity = g.getOpacity();
+                oldOpacity = g.getOpacity();
                 g.setOpacity(getFillOpacity());
                 g.setPaint(paint);
             }
         }
-
-        fillShape(g);
-        if(opacity >=0) g.setOpacity(opacity);
-
-
-        if(getStrokePaint() != null && getStrokeWidth() > 0) {
-            g.setPaint(getStrokePaint());
-            g.setStrokeWidth(getStrokeWidth());
-            g.drawPolygon(toPoints(),true);
-            g.setStrokeWidth(1);
-        }
     }
+
+    private void restorePaint(GFX g) {
+        //if(oldOpacity >=0) g.setOpacity(oldOpacity);
+        g.setOpacity(1);
+    }
+
+    public void draw(GFX g) {
+        drawShadow(g);
+        initPaint(g);
+        fillShape(g);
+        drawShape(g);
+        restorePaint(g);
+    }
+
 
     public double[] toPoints() {
         if(isStar()) {
