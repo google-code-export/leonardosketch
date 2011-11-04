@@ -65,8 +65,8 @@ public class SPoly extends SShape implements SelfDrawable {
     @Override
     public Bounds getBounds() {
         return new Bounds(
-                bounds.getX()+getTranslateX(),
-                bounds.getY()+getTranslateY(),
+                bounds.getX(),
+                bounds.getY(),
                 bounds.getWidth(),bounds.getHeight());
 
     }

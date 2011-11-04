@@ -95,8 +95,6 @@ public abstract class SShape extends SNode {
             double xoff = shadow.getXOffset();
             double yoff = shadow.getYOffset();
             Bounds b = getBounds();
-            double dx = getTranslateX()-b.getX();
-            double dy = getTranslateY()-b.getY();
 
             if(buf == null
                     || shadow != oldShadow
@@ -114,7 +112,7 @@ public abstract class SShape extends SNode {
             }
             double oldOpacity = g.getOpacity();
             g.setOpacity(shadow.getOpacity());
-            g.draw(buf,xoff-blurRadius*2-dx,yoff-blurRadius*2-dy);
+            g.draw(buf,b.getX()-blurRadius*2+xoff,b.getY()-blurRadius*2+yoff);
             g.setOpacity(oldOpacity);
         }
     }
@@ -190,8 +188,6 @@ public abstract class SShape extends SNode {
         //setup
         int blurRadius = shadow.getBlurRadius()*2;
         Bounds b = getBounds();
-        double dx = getTranslateX()-b.getX();
-        double dy = getTranslateY()-b.getY();
         oldWidth = b.getWidth();
         oldHeight = b.getHeight();
         buf = g.createBuffer(
@@ -204,11 +200,11 @@ public abstract class SShape extends SNode {
         //fill shape with black
         g2.setPaint(FlatColor.BLACK);
         g2.translate(blurRadius,blurRadius);
-        g2.translate(dx, dy);
+        g2.translate(-b.getX(),-b.getY());
         initPaint(g2);
         fillShape(g2);
         drawShape(g2);
-        g2.translate(-dx, -dy);
+        g2.translate(b.getX(),b.getY());
         //blur
         buf.apply(new BlurEffect(blurRadius));
         g2.translate(-blurRadius,-blurRadius);
