@@ -2,7 +2,8 @@ package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GradientFill;
+import org.joshy.gfx.draw.LinearGradientFill;
+import org.joshy.gfx.draw.MultiGradientFill;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.*;
 import org.junit.Before;
@@ -150,13 +151,10 @@ public class PNGExportTest {
     }
     
     @Test public void testGradientRect() throws IOException {
-        GradientFill grad = new GradientFill(
-                FlatColor.BLUE,
-                FlatColor.RED,
-                0,//makes no difference
-                true,//makes no difference
-                3,0,97,0
-                );
+        MultiGradientFill grad = new LinearGradientFill()
+                .setStartX(3).setStartY(0).setEndX(97).setEndY(0)
+                .addStop(0, FlatColor.BLUE)
+                .addStop(1, FlatColor.RED);
         SRect rect = new SRect(0,0,100,100);
         rect.setFillPaint(grad);
         rect.setStrokeWidth(0);

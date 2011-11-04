@@ -2,7 +2,8 @@ package org.joshy.sketch.util;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.GradientFill;
+import org.joshy.gfx.draw.LinearGradientFill;
+import org.joshy.gfx.draw.MultiGradientFill;
 
 import java.awt.geom.Path2D;
 
@@ -30,10 +31,10 @@ public class DrawUtils {
         s = 5;
         //g.setPaint(new FlatColor(0xa00000));
         double hue = color.getHue();
-        GradientFill fill = new GradientFill(
-                FlatColor.hsb(hue,0.4,1.0)
-                ,FlatColor.hsb(hue,1.0,1.0)
-                ,90,true, 0,0, 0,s*2);
+        MultiGradientFill fill = new LinearGradientFill()
+                .setStartX(0).setEndX(0).setStartY(0).setEndY(s * 2)
+                .addStop(0, FlatColor.hsb(hue, 0.4, 1.0))
+                .addStop(1, FlatColor.hsb(hue, 1.0, 1.0));
         g.setPaint(fill);
         g.translate(x-s,y-s);
         g.fillOval(0,0,s*2,s*2);
@@ -60,10 +61,11 @@ public class DrawUtils {
             s = 10;
             yoff = 1;
             double hue = color.getHue();
-            GradientFill fill = new GradientFill(
-                    FlatColor.hsb(hue,0.4,1.0)
-                    ,FlatColor.hsb(hue,1.0,1.0)
-                    ,90,true, 0,0, 0,s);
+            MultiGradientFill fill = new LinearGradientFill()
+                    .setStartX(0).setEndX(0).setStartY(0).setEndY(s)
+                    .addStop(0,FlatColor.hsb(hue,0.4,1.0))
+                    .addStop(1,FlatColor.hsb(hue,1.0,1.0))
+                    ;
             g.setPaint(fill);
             g.translate(0,0);
             g.fillPolygon(new double[]{0.0-s/2,0.0+yoff, s/2,0.0 +yoff,0,s+yoff});
@@ -85,10 +87,11 @@ public class DrawUtils {
             s = 10;
             yoff = 1;
             double hue = color.getHue();
-            GradientFill fill = new GradientFill(
-                    FlatColor.hsb(hue,0.4,1.0)
-                    ,FlatColor.hsb(hue,1.0,1.0)
-                    ,90,true, 0,0, s,0);
+            MultiGradientFill fill = new LinearGradientFill()
+                    .setStartX(0).setEndX(s).setStartY(0).setEndY(0)
+                    .addStop(0,FlatColor.hsb(hue,0.4,1.0))
+                    .addStop(1,FlatColor.hsb(hue,1.0,1.0))
+                    ;
             g.setPaint(fill);
             g.translate(0,0);
             g.fillPolygon(new double[]{0.0+yoff, 0.0-s/2, 0.0+yoff, s/2,0.0+s +yoff,0});

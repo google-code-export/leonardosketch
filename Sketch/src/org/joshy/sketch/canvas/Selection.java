@@ -1,6 +1,5 @@
 package org.joshy.sketch.canvas;
 
-import org.joshy.gfx.draw.GradientFill;
 import org.joshy.gfx.draw.LinearGradientFill;
 import org.joshy.gfx.draw.RadialGradientFill;
 import org.joshy.gfx.event.Event;
@@ -125,10 +124,6 @@ public class Selection {
         ArrayList<Handle> hs = new ArrayList<Handle>();
         if(node instanceof SShape) {
             SShape shape = (SShape) node;
-            if(shape.getFillPaint() instanceof GradientFill) {
-                hs.add(new GradientHandle(shape, GradientHandle.GradientPosition.Start, context));
-                hs.add(new GradientHandle(shape, GradientHandle.GradientPosition.End, context));
-            }
             /*
             if(shape.getFillPaint() instanceof PatternPaint) {
                 PatternMoveHandle h1 = new PatternMoveHandle(shape,context);

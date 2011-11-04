@@ -1,9 +1,6 @@
 package org.joshy.sketch.controls;
 
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.Font;
-import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.draw.GradientFill;
+import org.joshy.gfx.draw.*;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
@@ -127,9 +124,15 @@ public class Ruler extends Container {
 
         //draw the background
         if(vertical) {
-            g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.9),FlatColor.hsb(0,0,0.5),90,false,0,0,getWidth(),0));
+            g.setPaint(new LinearGradientFill().setStartX(0).setEndX(getWidth()).setStartY(0).setEndY(0)
+                    .addStop(0,FlatColor.hsb(0,0,0.9))
+                    .addStop(1,FlatColor.hsb(0,0,0.5))
+            );
         } else {
-            g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.9),FlatColor.hsb(0,0,0.5),90,false,0,0,0,getHeight()));
+            g.setPaint(new LinearGradientFill().setStartX(0).setEndX(0).setStartY(0).setEndY(getHeight())
+                    .addStop(0,FlatColor.hsb(0,0,0.9))
+                    .addStop(1,FlatColor.hsb(0,0,0.5))
+            );
         }
         g.fillRect(0,0,getWidth()-1,getHeight()-1);
         int o = (int) offset;
