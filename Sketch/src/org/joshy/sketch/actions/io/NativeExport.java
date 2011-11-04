@@ -159,9 +159,6 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             if(sh.getFillPaint() instanceof RadialGradientFill) {
                 out.attr("fillPaint","radialGradient");
             }
-            if(sh.getFillPaint() instanceof GradientFill) {
-                out.attr("fillPaint","gradient");
-            }
             if(sh.getFillPaint() instanceof PatternPaint) {
                 out.attr("fillPaint","patternPaint");
             }
@@ -233,7 +230,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
 
         if(shape instanceof SShape) {
             SShape sh = (SShape) shape;
-
+            /*
             if(sh.getFillPaint() instanceof GradientFill) {
                 GradientFill grad = (GradientFill) sh.getFillPaint();
                 out.start("gradient");
@@ -248,6 +245,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
                         ).end();
                 out.end();
             }
+            */
             if(sh.getFillPaint() instanceof LinearGradientFill) {
                 LinearGradientFill grad = (LinearGradientFill) sh.getFillPaint();
                 out.start("linearGradient")

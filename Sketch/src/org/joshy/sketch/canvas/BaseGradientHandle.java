@@ -248,7 +248,7 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
 
         double ac = a.distance(c);
         double ad = Math.cos(theta)*ac;
-        return GeomUtil.calcPoint(a, Math.toDegrees(GeomUtil.calcAngle(a, b)), ad);
+        return GeomUtil.calcPoint(a, GeomUtil.calcAngle(a, b), ad);
     }
 
     protected void drawStopHandles(GFX g, SketchCanvas canvas) {

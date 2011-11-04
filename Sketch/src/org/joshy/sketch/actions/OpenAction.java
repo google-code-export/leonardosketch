@@ -419,6 +419,7 @@ public class OpenAction extends SAction {
     }
 
     private static Paint loadFillPaint(Elem e, String attName, ZipFile zipFile) throws XPathExpressionException {
+        /*
         if("gradient".equals(e.attr(attName))) {
             FlatColor start = null;
             FlatColor end = null;
@@ -434,6 +435,7 @@ public class OpenAction extends SAction {
             GradientFill fill = new GradientFill(start,end,angle,true);
             return fill;
         }
+        */
         if("linearGradient".equals(e.attr(attName))) {
             Elem egrad = e.xpath("linearGradient").iterator().next();
             LinearGradientFill fill = new LinearGradientFill()

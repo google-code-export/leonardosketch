@@ -142,21 +142,41 @@ public class Ruler extends Container {
         if(vertical) {
             double extraAfter = o + getHeight() - context.getDocument().getHeight()* context.getCanvas().getScale();
             if(extraBefore > 0) {
-                g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,getWidth(),0));
+                g.setPaint(new LinearGradientFill()
+                        .setStartX(0).setStartY(0).setEndX(getWidth()).setEndY(0)
+                        .addStop(0,FlatColor.hsb(0,0,0.6))
+                        .addStop(1,FlatColor.hsb(0,0,0.4))
+                );
+                //g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,getWidth(),0));
                 g.fillRect(0,0,getWidth(),extraBefore);
             }
             if(extraAfter > 0) {
-                g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,getWidth(),0));
+                g.setPaint(new LinearGradientFill()
+                        .setStartX(0).setStartY(0).setEndX(getWidth()).setEndY(0)
+                        .addStop(0,FlatColor.hsb(0,0,0.6))
+                        .addStop(1,FlatColor.hsb(0,0,0.4))
+                );
+                //g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,getWidth(),0));
                 g.fillRect(0,getHeight()-extraAfter,getWidth(),extraAfter);
             }
         } else {
             double extraAfter = o + getWidth() - context.getDocument().getWidth() * context.getCanvas().getScale();
             if(extraBefore > 0) {
-                g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,0,getHeight()));
+                g.setPaint(new LinearGradientFill()
+                        .setStartX(0).setStartY(0).setEndX(0).setEndY(getHeight())
+                        .addStop(0,FlatColor.hsb(0,0,0.6))
+                        .addStop(1,FlatColor.hsb(0,0,0.4))
+                );
+                //g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,0,getHeight()));
                 g.fillRect(0,0,extraBefore, getHeight());
             }
             if(extraAfter > 0) {
-                g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,0,getHeight()));
+                g.setPaint(new LinearGradientFill()
+                        .setStartX(0).setStartY(0).setEndX(0).setEndY(getHeight())
+                        .addStop(0,FlatColor.hsb(0,0,0.6))
+                        .addStop(1,FlatColor.hsb(0,0,0.4))
+                );
+                //g.setPaint(new GradientFill(FlatColor.hsb(0,0,0.6),FlatColor.hsb(0,0,0.4),90,false,0,0,0,getHeight()));
                 g.fillRect(getWidth()-extraAfter,0, extraAfter, getHeight());
             }
         }

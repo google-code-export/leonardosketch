@@ -94,7 +94,7 @@ public class HSVColorPicker extends Control {
             //inside the ring
             if(dist < initWidth/2 && dist > initWidth/2-ringWidth) {
                 hue = GeomUtil.calcAngle(c, pt);
-                dragPoint = GeomUtil.calcPoint(c, Math.toDegrees(hue), initWidth/2-ringWidth/2);
+                dragPoint = GeomUtil.calcPoint(c, hue, initWidth/2-ringWidth/2);
                 regenSV();
             }
 
