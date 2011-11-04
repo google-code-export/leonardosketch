@@ -39,8 +39,8 @@ public class NGon extends SShape implements SelfDrawable {
     @Override
     public Bounds getBounds() {
         return new Bounds(
-                getTranslateX()-getRadius(),
-                getTranslateY()-getRadius(),
+                -getRadius(),
+                -getRadius(),
                 getRadius()*2,getRadius()*2);
     }
 

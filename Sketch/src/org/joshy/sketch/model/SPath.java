@@ -35,8 +35,8 @@ public class SPath extends SShape implements SelfDrawable {
         if(path2d != null) {
             Rectangle bds = path2d.getBounds();
             return new Bounds(
-                    getTranslateX()+bds.getX(),
-                    getTranslateY()+bds.getY(),
+                    bds.getX(),
+                    bds.getY(),
                     bds.getWidth(),
                     bds.getHeight());
         }
