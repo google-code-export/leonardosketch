@@ -704,13 +704,14 @@ public class FloatingPropertiesPanel extends VFlexBox {
 
     private void setFillStuff(Paint paint) {
         //handle the new form from the fill selector
+        /*
         if(paint instanceof GradientFill) {
             GradientFill grad = (GradientFill) paint;
             Bounds std = new Bounds(0,0,40,40);
             SShape shape = (SShape) context.getSelection().firstItem();
             setPropertyWithUndo("fillPaint", grad.resize(std, shape.getBounds()));
             return;
-        }
+        }*/
         //if just a normal color
         paint = paint.duplicate();
         setPropertyWithUndo("fillPaint", paint);

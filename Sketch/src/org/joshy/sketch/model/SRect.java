@@ -135,9 +135,6 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
             if(paint instanceof FlatColor) {
                 g.setPaint(((FlatColor)paint).deriveWithAlpha(getFillOpacity()));
             }
-            if(paint instanceof GradientFill) {
-                g.setPaint(paint);
-            }
             if(paint instanceof MultiGradientFill) {
                 g.setPaint(paint);
             }

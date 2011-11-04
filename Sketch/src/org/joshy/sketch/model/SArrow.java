@@ -42,7 +42,7 @@ public class SArrow extends SShape implements SelfDrawable {
 
     private Path2D calcBounds(double x, double y) {
         Path2D path = new Path2D.Double();
-        double angle = Math.toDegrees(GeomUtil.calcAngle(start,end));
+        double angle = GeomUtil.calcAngle(start,end);
 
         Point2D ep1 = GeomUtil.calcPoint(end,angle+90,10);
         path.moveTo(x+ep1.getX(),y+ep1.getY());

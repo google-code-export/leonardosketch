@@ -8,6 +8,7 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.GeomUtil;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.canvas.SketchCanvas;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -234,10 +235,11 @@ public class STransformNode extends SNode implements SelfDrawable {
         public void setX(double x, boolean constrain) {
             this.x = x - trans.getTranslateX() - trans.child.getAnchorX();
             double a = GeomUtil.calcAngle(new Point2D.Double(0,0),new Point2D.Double(this.x,this.y));
+            u.p("angle = " + a);
             if(constrain) {
                 a = GeomUtil.snapTo45(a);
             } else {
-                a = Math.toDegrees(a);
+                //a = Math.toDegrees(a);
             }
             trans.setAngle(a-90);
         }

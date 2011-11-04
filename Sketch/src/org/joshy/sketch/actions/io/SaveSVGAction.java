@@ -180,6 +180,7 @@ public class SaveSVGAction extends BaseExportAction {
         private void draw(XMLWriter out, SRect rect) {
             //String id = Math.random();
             String id = "A"+Long.toHexString(Double.doubleToLongBits(Math.random()));
+            /*
             if(rect.getFillPaint() instanceof GradientFill) {
                 GradientFill grad = (GradientFill) rect.getFillPaint();
                 out.start("linearGradient")
@@ -194,6 +195,7 @@ public class SaveSVGAction extends BaseExportAction {
                         .end();
                 out.end();
             }
+            */
 
             if(rect.getFillPaint() instanceof LinearGradientFill) {
                 LinearGradientFill grad = (LinearGradientFill) rect.getFillPaint();
@@ -223,9 +225,6 @@ public class SaveSVGAction extends BaseExportAction {
 
             if(rect.getFillPaint() instanceof FlatColor) {
                 out.attr("fill",toRGBString(rect.getFillPaint()));
-            }
-            if(rect.getFillPaint() instanceof GradientFill) {
-                out.attr("fill","url(#"+id+")");
             }
             if(rect.getFillPaint() instanceof LinearGradientFill) {
                 out.attr("fill","url(#"+id+")");
