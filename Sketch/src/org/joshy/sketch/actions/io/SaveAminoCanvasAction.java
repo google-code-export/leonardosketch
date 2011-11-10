@@ -302,8 +302,8 @@ public class SaveAminoCanvasAction extends BaseExportAction {
                 }
                 out.indent();
                 out.prop("strokeWidth", shape.getStrokeWidth());
-                out.prop("stroke",serializePaint(out,shape.getStrokePaint()));
-                out.prop("fill", serializePaint(out, shape.getFillPaint()));
+                out.println(".setFill(" + serializePaint(out,shape.getFillPaint()) + ")");
+                out.println(".setStroke(" + serializePaint(out,shape.getStrokePaint()) + ")");
                 if(shape.getFillOpacity() != 1.0) {
                     out.prop("opacity", shape.getFillOpacity());
                 }
