@@ -124,9 +124,12 @@ public class DrawNgonTool extends CanvasTool {
         }
         if(!editingExisting) {
             double radius = start.distance(cursor);
-            double angle = GeomUtil.calcAngle(start,cursor);
+            double dangle = GeomUtil.calcAngle(start,cursor);
+            double angle = 0;
             if(event.isShiftPressed()) {
-                angle = Math.toRadians(GeomUtil.snapTo45(angle));
+                angle = Math.toRadians(GeomUtil.snapTo45(dangle));
+            } else {
+                angle = Math.toRadians(dangle);
             }
             angle = angle - Math.PI/2;
             node.setAngle(angle);
@@ -263,9 +266,12 @@ public class DrawNgonTool extends CanvasTool {
                 node.setInnerRadius(radius);
             }
 
-            double angle = GeomUtil.calcAngle(center,new Point2D.Double(x,y));
+            double angle  = 0;
+            double dangle = GeomUtil.calcAngle(center,new Point2D.Double(x,y));
             if(constrain) {
-                angle = Math.toRadians(GeomUtil.snapTo45(angle));
+                angle = Math.toRadians(GeomUtil.snapTo45(dangle));
+            } else {
+                angle = Math.toRadians(dangle);
             }
             angle = angle - Math.PI/2;
             if(outer) {
