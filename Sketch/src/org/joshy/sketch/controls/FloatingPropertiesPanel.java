@@ -111,6 +111,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
         shapeProperties.setVisible(false);
 
         fillButton = new FillPicker(this.manager);
+        fillButton.setContext(context);
         EventBus.getSystem().addListener(fillButton,ChangedEvent.ObjectChanged, fillButtonCallback);
 
         strokeColorButton = new SwatchColorPicker();

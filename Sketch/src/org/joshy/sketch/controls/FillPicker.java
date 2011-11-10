@@ -18,11 +18,15 @@ import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.gfx.draw.LinearGradientFill.Snap;
+import org.joshy.sketch.model.SNode;
+import org.joshy.sketch.model.SShape;
+import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -40,6 +44,7 @@ public class FillPicker extends Button {
     private boolean locked = false;
     private boolean popupadded;
     private ColorPickerPanel rgbhsvpicker;
+    private VectorDocContext context;
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -284,6 +289,32 @@ public class FillPicker extends Button {
 
     private void setupColorTab(TabPanel panel) {
         freerangeColorPickerPopup = new FreerangeColorPickerPopup(null,300,170,false);
+        freerangeColorPickerPopup.setOutsideColorProvider(new FreerangeColorPickerPopup.OutsideColorProvider(){
+            @Override
+            public FlatColor getColorAt(MouseEvent event) {
+                if(context == null) return super.getColorAt(event);
+                Point2D pt = event.getPointInNodeCoords(context.getSketchCanvas());
+                pt = context.getSketchCanvas().transformToCanvas(pt.getX(), pt.getY());
+                java.util.List<SNode> underCursor = new ArrayList<SNode>();
+                for(SNode node : context.getDocument().getCurrentPage().getNodes()) {
+                    if(node.getTransformedBounds().contains(pt)) {
+                        underCursor.add(node);
+                    }
+                }
+                if(underCursor.isEmpty()) {
+                } else {
+                    SNode node = underCursor.get(underCursor.size() - 1);
+                    if(node instanceof SShape) {
+                        SShape shape = ((SShape)node);
+                        if(shape.getFillPaint() instanceof FlatColor) {
+                            return (FlatColor) shape.getFillPaint();
+                        }
+                    }
+                }
+
+                return super.getColorAt(event);    //To change body of overridden methods use File | Settings | File Templates.
+            }
+        });
         EventBus.getSystem().addListener(freerangeColorPickerPopup, ChangedEvent.ColorChanged, new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) throws Exception {
                 locked = true;
@@ -391,6 +422,10 @@ public class FillPicker extends Button {
         if(popup != null && popup.isVisible()) {
             popup.setVisible(false);
         }
+    }
+
+    public void setContext(VectorDocContext context) {
+        this.context = context;
     }
 }
 

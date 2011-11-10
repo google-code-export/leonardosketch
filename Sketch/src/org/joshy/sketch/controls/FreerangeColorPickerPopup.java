@@ -26,6 +26,7 @@ class FreerangeColorPickerPopup extends Control {
     private FlatColor selectedColor = FlatColor.GREEN;
     private FreerangeColorPicker delegate;
     private boolean hideOnSelect;
+    private OutsideColorProvider outsideColorProvider;
 
     public FreerangeColorPickerPopup(FreerangeColorPicker delegate, int width, int height, boolean hideOnSelect) {
         this.hideOnSelect = hideOnSelect;
@@ -62,8 +63,9 @@ class FreerangeColorPickerPopup extends Control {
             int x = (int) event.getX();
             int y = (int) event.getY();
             if(x < 0 || x > img.getWidth()-1 || y <0 || y > img.getHeight()-1 ) {
-                setSelectedColor(FlatColor.RED);
-                setDrawingDirty();return;
+                setSelectedColor(outsideColorProvider.getColorAt(event));
+                setDrawingDirty();
+                return;
             }
             setSelectedColor(new FlatColor(img.getRGB(x, y)));
             setDrawingDirty();
@@ -148,4 +150,13 @@ class FreerangeColorPickerPopup extends Control {
         setTranslateY(y-pt.getY()-5);
     }
 
+    public void setOutsideColorProvider(OutsideColorProvider outsideColorProvider) {
+        this.outsideColorProvider = outsideColorProvider;
+    }
+
+    public static class OutsideColorProvider {
+        public FlatColor getColorAt(MouseEvent event) {
+            return FlatColor.RED;
+        }
+    }
 }
