@@ -116,6 +116,8 @@ public class SaveAminoCanvasAction extends BaseExportAction {
                 +"runner.setFPS(30);\n"
                 +"runner.setBackground("+AminoExport.serializePaint(out,doc.getBackgroundFill())+");\n"
                 +"runner.setRoot(sceneRoot);\n"
+                +"runner.DEBUG=true;\n"
+
         );
         out.println("runner.start();");
         out.println("}");
