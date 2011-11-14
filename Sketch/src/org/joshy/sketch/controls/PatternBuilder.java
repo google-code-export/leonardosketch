@@ -36,6 +36,8 @@ public class PatternBuilder extends VFlexBox {
     private Slider stripeAngle;
     private Checkbox showPatternGrid;
     private PatternPaint pat;
+    private PatternPaint noisePat;
+    private Slider noiseAmount;
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -94,16 +96,19 @@ public class PatternBuilder extends VFlexBox {
                 .add(width2,0)
                 ,0);
 
-        //noise slider
-
-
         stripeAngle = new Slider(false);
         stripeAngle.setMin(0).setMax(90).setValue(0);
         add(new HFlexBox()
                 .add(new Label("stripe angle"), 0)
                 .add(stripeAngle, 0)
                 , 0);
-        //add(stripeAngle,0);
+
+        noiseAmount = new Slider(false);
+        noiseAmount.setMin(0).setMax(100).setValue(0);
+        add(new HFlexBox()
+                .add(new Label("noise"),0)
+                .add(noiseAmount,0)
+                ,0);
 
         showPatternGrid = new org.joshy.gfx.node.control.Checkbox("Show pattern grid");
         add(showPatternGrid,0);
@@ -112,6 +117,12 @@ public class PatternBuilder extends VFlexBox {
         this.add(preview,0);
 
 
+        BufferedImage noise = NoiseGen.render(200,200);
+        try {
+            noisePat = PatternPaint.create(noise, noise.getWidth(), noise.getHeight());
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
     }
 
@@ -150,6 +161,10 @@ public class PatternBuilder extends VFlexBox {
                 ih = sw/Math.sin(theta);
             }
 
+            g2.setPaint(noisePat);
+            g2.fillRect(0,0,getWidth(),getHeight());
+
+
             BufferedImage img = new BufferedImage(
                     (int) iw,
                     (int) ih,
@@ -182,11 +197,32 @@ public class PatternBuilder extends VFlexBox {
 
             gfx.dispose();
 
+            g2.setOpacity(1.0-(noiseAmount.getValue()/100.0));
             g2.setPaint(pat);
             g2.fillRect(0,0,getWidth(),getHeight());
 
             g2.setPaint(FlatColor.BLACK);
             g2.drawRect(0, 0, getWidth(), getHeight());
+        }
+    }
+
+    private static class NoiseGen {
+        private static BufferedImage render(int width, int height) {
+            BufferedImage img = new BufferedImage(256, 256, BufferedImage.TYPE_INT_ARGB);
+            img = graynoise(img);
+            return img;
+        }
+        private static BufferedImage graynoise(BufferedImage img) {
+            for(int x=0; x<img.getWidth(); x++) {
+                for(int y=0; y<img.getHeight(); y++) {
+                    int v = (int)(Math.random()*256);
+                    setRGB(img,x,y,v,v,v);
+                }
+            }
+            return img;
+        }
+        private static void setRGB(BufferedImage img, int x, int y, int v, int v1, int v2) {
+            img.setRGB(x,y,(0xFF<<24)|(v<<16)|(v1<<8)|v2);
         }
     }
 }
