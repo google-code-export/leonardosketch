@@ -20,15 +20,25 @@ import java.awt.geom.Point2D;
 */
 public class FreerangeColorPicker extends Button {
     FlatColor selectedColor = FlatColor.RED;
-    private HSVColorPicker popup;
+    private FreerangeColorPickerPopup popup;
+
+    public boolean isRecenterOnSelect() {
+        return recenterOnSelect;
+    }
+
+    public void setRecenterOnSelect(boolean recenterOnSelect) {
+        this.recenterOnSelect = recenterOnSelect;
+    }
+
+    private boolean recenterOnSelect = true;
 
     @Override
     protected void setPressed(boolean pressed) {
         super.setPressed(pressed);
         if (pressed) {
             if (popup == null) {
-                //popup = new FreerangeColorPickerPopup(this,200,100,true);
-                popup = new HSVColorPicker(this,150,150);
+                popup = new FreerangeColorPickerPopup(this,200,100,true);
+                //popup = new HSVColorPicker(this,150,150);
                 popup.setVisible(false);
                 Stage stage = getParent().getStage();
                 stage.getPopupLayer().add(popup);
@@ -37,8 +47,13 @@ public class FreerangeColorPicker extends Button {
 
             double x = pt.getX();
             double y = pt.getY();
-            FlatColor color = this.getSelectedColor();
-            popup.positionAt(x, y, color);
+            if(recenterOnSelect) {
+                FlatColor color = this.getSelectedColor();
+                popup.positionAt(x, y, color);
+            } else {
+                popup.setTranslateX(x);
+                popup.setTranslateY(y);
+            }
             popup.setVisible(true);
             EventBus.getSystem().setPressedNode(popup);
         } else {
