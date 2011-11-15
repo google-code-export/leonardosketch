@@ -206,11 +206,32 @@ public class FillPicker extends Button {
                 }
             }
         });
+        Button createButton = new Button("#");
+        createButton.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent event) throws Exception {
+                final PatternBuilder builder = new PatternBuilder();
+                final Stage stage = Stage.createStage();
+                Callback<ActionEvent> closeAction = new Callback<ActionEvent>() {
+                    public void call(ActionEvent event) throws Exception {
+                        PatternPaint pattern = builder.getPattern();
+                        manager.patternManager.addPattern(pattern);
+                        stage.hide();
+                    }
+                };
+                stage.setContent(new VFlexBox()
+                        .add(builder, 0)
+                        .add(new Button("cancel"), 0)
+                        .add(new Button("close").onClicked(closeAction), 0)
+                );
+                stage.setWidth(800);
+                stage.setHeight(600);
+            }
+        });
         VFlexBox vbox = new VFlexBox();
         vbox.setBoxAlign(FlexBox.Align.Stretch);
         vbox.setFill(FlatColor.GRAY);
         vbox.add(patternList, 1);
-        vbox.add(new HFlexBox().add(addButton));
+        vbox.add(new HFlexBox().add(addButton).add(createButton));
         panel.add("Patterns", vbox);
     }
 

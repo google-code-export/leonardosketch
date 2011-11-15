@@ -168,9 +168,6 @@ public class PatternBuilder extends VFlexBox {
             g2.setPaint(FlatColor.WHITE);
             g2.fillRect(0, 0, getWidth(), getHeight());
 
-            g2.setPaint(noisePat);
-            g2.fillRect(0,0,getWidth(),getHeight());
-
             if(useStripe.isSelected()) {
                 int angle = (int)((Math.floor(stripeAngle.getValue()/15))*15);
                 double sw = width1.getValue()+width2.getValue();
@@ -189,12 +186,13 @@ public class PatternBuilder extends VFlexBox {
                         (int) ih,
                         BufferedImage.TYPE_INT_ARGB);
                 try {
-                    pat = PatternPaint.create(img,img.getWidth(),img.getHeight());
+                    pat = PatternPaint.create(img,"generated"+Math.random());
                 } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
                 Graphics2D gfx = img.createGraphics();
                 gfx.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+                gfx.drawImage(noisePat.getImage(),0,0,null);
 
 
                 gfx.rotate(Math.toRadians(angle));
@@ -217,12 +215,29 @@ public class PatternBuilder extends VFlexBox {
 
                 gfx.dispose();
 
-                g2.setOpacity(1.0-(noiseAmount.getValue()/100.0));
                 g2.setPaint(pat);
                 g2.fillRect(0,0,getWidth(),getHeight());
             } else {
-                g2.setOpacity(1.0-(noiseAmount.getValue()/100.0));
-                g2.setPaint(color1.getSelectedColor());
+                BufferedImage img = new BufferedImage(
+                        (int) 100,
+                        (int) 100,
+                        BufferedImage.TYPE_INT_ARGB);
+                try {
+                    pat = PatternPaint.create(img,"generated"+Math.random());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Graphics2D gfx = img.createGraphics();
+                gfx.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+                gfx.drawImage(noisePat.getImage(),0,0,null);
+                gfx.setComposite(
+                        AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                                (float)(1.0f-(noiseAmount.getValue()/100.0))));
+                gfx.setPaint(GraphicsUtil.toAWT(color1.getSelectedColor()));
+                gfx.fillRect(0,0,(int)getWidth(),(int)getHeight());
+                gfx.dispose();
+                g2.setPaint(pat);
                 g2.fillRect(0,0,getWidth(),getHeight());
             }
 
