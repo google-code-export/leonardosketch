@@ -102,6 +102,9 @@ public class PatternManager {
         xml.start("patterns");
         for(PatternPaint c : patternModel) {
             String url = c.getRelativeURL();
+            if(url == null) {
+                url = "pat_"+Math.random();
+            }
             if(!url.toLowerCase().endsWith(".png")) {
                 url = c.getRelativeURL()+".png";
             }
