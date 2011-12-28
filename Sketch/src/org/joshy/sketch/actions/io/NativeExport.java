@@ -305,7 +305,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             SPath path = (SPath) shape;
             for(SPath.SubPath sub : path.getSubPaths()) {
                 out.start("subpath");
-                if(sub.autoClosed()) {
+                if(sub.closed()) {
                     out.attr("closed","true");
                 }
                 for(SPath.PathPoint pt : sub.getPoints()) {

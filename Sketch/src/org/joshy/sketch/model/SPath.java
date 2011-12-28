@@ -111,7 +111,7 @@ public class SPath extends SShape implements SelfDrawable {
 
     public boolean anyClosed() {
         for(SubPath sub : subPaths) {
-            if(sub.autoClosed()) return true;
+            if(sub.closed()) return true;
         }
         return false;
     }
@@ -125,35 +125,49 @@ public class SPath extends SShape implements SelfDrawable {
 
     public static Path2D.Double toPath(SubPath sub) {
         Path2D.Double path = new Path2D.Double();
+        PathPoint first = null;
         PathPoint prev = null;
         for(PathPoint point : sub.points) {
             if(prev == null) {
+                first = point;
                 path.moveTo(point.x,point.y);
             } else {
                 path.curveTo(prev.cx2,prev.cy2,point.cx1,point.cy1,point.x,point.y);
             }
             prev = point;
         }
-        if(sub.autoClosed()) {
+        if(sub.closed()) {
+            path.curveTo(prev.cx2,prev.cy2,first.cx1,first.cy1,first.x,first.y);
             path.closePath();
         }
         return path;
     }
 
+    /*
+    there are three possible states
+    completely open
+    closed using an auto-close
+    closed manually.  
+    when created in the editor it will be closed manually
+     */
     public static Path2D.Double toPath(SPath node) {
         Path2D.Double path = new Path2D.Double();
 
         for(SubPath sub : node.subPaths) {
+            PathPoint first = null;
             PathPoint prev = null;
             for(PathPoint point : sub.points) {
+                //first
                 if(prev == null) {
+                    first = point;
                     path.moveTo(point.x,point.y);
                 } else {
                     path.curveTo(prev.cx2,prev.cy2,point.cx1,point.cy1,point.x,point.y);
                 }
                 prev = point;
             }
-            if(sub.autoClosed()) {
+            if(sub.closed()) {
+                path.curveTo(prev.cx2,prev.cy2,first.cx1,first.cy1,first.x,first.y);
                 path.closePath();
             }
         }
@@ -257,7 +271,7 @@ public class SPath extends SShape implements SelfDrawable {
 
 
     public PathPoint moveTo(double x, double y) {
-        if(currentSubPath.autoClosed()) {
+        if(currentSubPath.closed()) {
             currentSubPath = new SubPath();
             subPaths.add(currentSubPath);
         }
@@ -356,6 +370,16 @@ public class SPath extends SShape implements SelfDrawable {
         this.subPaths.add(this.currentSubPath);
     }
 
+    public void dump() {
+        u.p("SPath: ");
+        for(SubPath sub : getSubPaths()) {
+            u.p("  sub: closed = " + sub.autoClosed + ", size = " + sub.size());
+            for(PathPoint pt : sub.getPoints()) {
+                u.p("    pt " + pt.x + " " + pt.y );
+            }
+        }
+    }
+
 
     public static class SubPath {
         private List<PathPoint> points = new ArrayList<PathPoint>();
@@ -369,7 +393,7 @@ public class SPath extends SShape implements SelfDrawable {
             this.points.add(point);
         }
 
-        public boolean autoClosed() {
+        public boolean closed() {
             return autoClosed;
         }
 
@@ -430,7 +454,7 @@ public class SPath extends SShape implements SelfDrawable {
                 PathPoint next = points.get(i+1);
                 segs.add(new PathSegment(curr,next,i));
             }
-            if(autoClosed()) {
+            if(closed()) {
                 int last = points.size()-1;
                 segs.add(new PathSegment(points.get(last),points.get(0),last));
             }

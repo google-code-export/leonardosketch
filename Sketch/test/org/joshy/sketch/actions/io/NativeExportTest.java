@@ -370,7 +370,7 @@ public class NativeExportTest {
         path.lineTo(100,0);
         path.lineTo(130,100);
         path.close();
-        assertTrue(path.getSubPaths().get(0).autoClosed());
+        assertTrue(path.getSubPaths().get(0).closed());
 
         SketchDocument doc = SaveAndLoad(path);
 
@@ -378,7 +378,7 @@ public class NativeExportTest {
         SPath path2 = (SPath) doc.getPages().get(0).getModel().get(0);
         SPath.SubPath sub = path2.getSubPaths().get(0);
         assertTrue(sub.size()==3);
-        assertTrue(sub.autoClosed());
+        assertTrue(sub.closed());
     }
 
     @Test
