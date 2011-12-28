@@ -1,13 +1,10 @@
 package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.Core;
-import org.joshy.gfx.draw.FlatColor;
 import org.joshy.sketch.actions.OpenAction;
 import org.joshy.sketch.model.*;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.io.FileInputStream;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -66,10 +63,10 @@ public class PathTests {
         assertEquals(path.getSubPaths().size(),2);
 
         assertEquals(path.getSubPaths().get(0).size(), 4);
-        assertTrue(path.getSubPaths().get(0).autoClosed());
+        assertTrue(path.getSubPaths().get(0).closed());
 
         assertEquals(path.getSubPaths().get(1).size(), 4);
-        assertTrue(path.getSubPaths().get(1).autoClosed());
+        assertTrue(path.getSubPaths().get(1).closed());
     }
 
     //save and load a new style path with a donut
@@ -93,7 +90,7 @@ public class PathTests {
         SPath path2 = (SPath) doc.getPages().get(0).getModel().get(0);
         assertEquals(path2.getSubPaths().size(),2);
         assertEquals(path2.getSubPaths().get(0).size(),4);
-        assertTrue(path2.getSubPaths().get(0).autoClosed());
+        assertTrue(path2.getSubPaths().get(0).closed());
 
     }
 

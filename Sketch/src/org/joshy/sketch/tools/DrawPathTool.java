@@ -235,7 +235,7 @@ public class DrawPathTool extends CanvasTool {
             for(SPath.SubPath sub : node.getSubPaths()) {
                 //hovering over close point
                 SPath.PathPoint start = sub.getPoint(0);
-                if(start.distance(curr.x,curr.y) < getPointThreshold() && !sub.autoClosed()) {
+                if(start.distance(curr.x,curr.y) < getPointThreshold() && !sub.closed()) {
                     hoverSubpath = sub;
                     couldClose = true;
                     hoverPoint = start;
@@ -434,7 +434,7 @@ public class DrawPathTool extends CanvasTool {
         final SPath.SubPath tempsub = hoverSubpath;
         context.getUndoManager().pushAction(new UndoManager.UndoableAction(){
             public void executeUndo() {
-                tempsub.unSplitPath(temp,a,b,pt);
+                tempsub.unSplitPath(temp, a, b, pt);
             }
             public void executeRedo() {
                 tempsub.splitPath(temp);
