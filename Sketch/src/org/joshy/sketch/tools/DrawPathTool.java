@@ -496,10 +496,19 @@ public class DrawPathTool extends CanvasTool {
                 }
             } else if(spacePressed || couldMove) {
                 //move a point uniformly
-                double dx = curr.x-prev.x;
-                double dy = curr.y-prev.y;
-                point.x +=dx;
-                point.y +=dy;
+                double nx = curr.x;
+                double ny = curr.y;
+                SketchDocument doc = context.getDocument();
+                if(doc.isSnapGrid()) {
+                    nx = ((int)(nx/doc.getGridWidth()))*doc.getGridWidth();
+                    ny = ((int)(ny/doc.getGridHeight()))*doc.getGridHeight();
+                }
+                double px = point.x;
+                double py = point.y;
+                point.x = nx;
+                point.y = ny;
+                double dx = point.x - px;
+                double dy = point.y - py;
                 point.cx1 +=dx;
                 point.cx2 +=dx;
                 point.cy1 +=dy;
