@@ -12,7 +12,6 @@ import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.Togglebutton;
 import org.joshy.gfx.node.layout.FlexBox;
 import org.joshy.gfx.node.layout.HFlexBox;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.UndoManager;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
@@ -503,6 +502,35 @@ public class DrawPathTool extends CanvasTool {
                     nx = ((int)(nx/doc.getGridWidth()))*doc.getGridWidth();
                     ny = ((int)(ny/doc.getGridHeight()))*doc.getGridHeight();
                 }
+
+                boolean hsnap = false;
+                boolean vsnap = false;
+                //snap with guidelines next if not already snapped
+                nx += node.getTranslateX();
+                ny += node.getTranslateY();
+                for(SketchDocument.Guideline gl : context.getDocument().getCurrentPage().getGuidelines()) {
+                    double threshold = 15;
+                    if(!gl.isVertical()) {
+                        if(!vsnap) {
+                            if(Math.abs(ny - gl.getPosition()) < threshold) {
+                                ny = gl.getPosition();
+                                context.getCanvas().showVSnap(gl.getPosition());
+                                vsnap = true;
+                            }
+                        }
+                    } else {
+                        if(!hsnap) {
+                            if(Math.abs(nx - gl.getPosition()) < threshold) {
+                                nx = gl.getPosition();
+                                context.getCanvas().showHSnap(gl.getPosition());
+                                hsnap = true;
+                            }
+                        }
+                    }
+                }
+                nx -= node.getTranslateX();
+                ny -= node.getTranslateY();
+
                 double px = point.x;
                 double py = point.y;
                 point.x = nx;
