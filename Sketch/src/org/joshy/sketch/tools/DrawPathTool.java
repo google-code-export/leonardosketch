@@ -29,39 +29,6 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-/*
-    add hover cursors
-    delete:
-        //while drawing, hover over existing point,
-        //show delete icon, press and release to delete the point
-    complete / close:
-        //while drawing, hover over start point, show complete icon,
-        //press and release to complete the path
-    convert:
-        //hold alt while hovering to show convert icon
-        //alt + press on point reset the point to straight, then drag out and release to adjust the point, now with controls bound together
-        alt + press on control handle to unbind the point and adjust handles separately
-    re-edit
-        if a single path is selected when switching to the edit path tool,
-        then let you add/delete/convert points in existing path.  you
-        can't add to the end, though, or complete it.
-    hold shift during any drag operation to constrain to 45degree angles
-    hold spacebar during drag operation to move the point
-        and it's control points instead of just moving the active control point
-
-    double clicking on a path during selection mode opens
-        it up for editing, so you can add/delete/convert/move all points
-
-    when re-editing you can click on an existing node to select it. it's control points will then be visible.
-        drag a control point to break them and move it
-        click and move an anchor point to move it
-        option click to turn an anchor point into a corner
-        option drag to reshape an anchor point, which rebinds the control points together
-
-        click the X key to cycle between select, delete, reshape as the default action when you click
-        
-    
- */
 public class DrawPathTool extends CanvasTool {
     private SPath node;
     private SPath.PathPoint currentPoint;
@@ -91,6 +58,7 @@ public class DrawPathTool extends CanvasTool {
     private Togglebutton moveButton;
     private Togglebutton deleteButton;
     private Togglebutton reshapeButton;
+    private SPath.SubPath hoverSubpath;
 
     private enum Tool { Delete, Reshape, Move };
     private Tool defaultTool = Tool.Move;
@@ -218,7 +186,7 @@ public class DrawPathTool extends CanvasTool {
                     SketchDocument doc = context.getDocument();
                     doc.getCurrentPage().add(node);
                     context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"path"));
-                    node.close(false);
+                    node.close();
                 }
                 node = null;
                 clear();
@@ -254,8 +222,9 @@ public class DrawPathTool extends CanvasTool {
     }
 
     private void refreshStates() {
-        if(node != null && !adjusting) {
+        if(node != null && !adjusting && curr != null) {
             hoverPoint = null;
+            hoverSubpath = null;
             couldClose = false;
             couldDelete = false;
             couldReshape = false;
@@ -263,50 +232,57 @@ public class DrawPathTool extends CanvasTool {
 
             setCursor(penCursor);
             
-            //main for hovering over close point
-            SPath.PathPoint start = node.points.get(0);
-            if(start.distance(curr.x,curr.y) < getPointThreshold() && !node.isClosed()) {
-                couldClose = true;
-                hoverPoint = start;
-                context.redraw();
-                return;
-            }
+            for(SPath.SubPath sub : node.getSubPaths()) {
+                //hovering over close point
+                SPath.PathPoint start = sub.getPoint(0);
+                if(start.distance(curr.x,curr.y) < getPointThreshold() && !sub.autoClosed()) {
+                    hoverSubpath = sub;
+                    couldClose = true;
+                    hoverPoint = start;
+                    context.redraw();
+                    return;
+                }
 
-            for(SPath.PathPoint pt : node.points) {
-                if(pt.distance(curr.x,curr.y)<getPointThreshold()) {
-                    if(!couldClose) {
-                        hoverPoint = pt;
-                        if(defaultTool == Tool.Move) {
-                            couldMove = true;
-                            setCursor(penCursor);
-                            addLocation = null;
-                            context.redraw();
-                            return;
-                        }
-                        if(defaultTool == Tool.Reshape) {
-                            couldReshape = true;
-                            setCursor(reshapeCursor);
-                            addLocation = null;
-                            context.redraw();
-                            return;
-                        }
-                        if(defaultTool == Tool.Delete) {
-                            couldDelete = true;
-                            setCursor(deleteCursor);
-                            addLocation = null;
-                            context.redraw();
-                            return;
+                for(SPath.PathPoint pt : sub.getPoints()) {
+                    if(pt.distance(curr.x,curr.y)<getPointThreshold()) {
+                        hoverSubpath = sub;
+                        if(!couldClose) {
+                            hoverPoint = pt;
+                            if(defaultTool == Tool.Move) {
+                                couldMove = true;
+                                setCursor(penCursor);
+                                addLocation = null;
+                                context.redraw();
+                                return;
+                            }
+                            if(defaultTool == Tool.Reshape) {
+                                couldReshape = true;
+                                setCursor(reshapeCursor);
+                                addLocation = null;
+                                context.redraw();
+                                return;
+                            }
+                            if(defaultTool == Tool.Delete) {
+                                couldDelete = true;
+                                setCursor(deleteCursor);
+                                addLocation = null;
+                                context.redraw();
+                                return;
+                            }
                         }
                     }
                 }
             }
 
             boolean foundClose = false;
-            for(SPath.PathSegment seg : node.calculateSegments()) {
-                SPath.PathTuple closest = seg.closestDistance(curr);
-                if(closest.distance < getPointThreshold()) {
-                    addLocation = closest;
-                    foundClose = true;
+            for(SPath.SubPath sub : node.getSubPaths()) {
+                for(SPath.PathSegment seg : sub.calculateSegments()) {
+                    SPath.PathTuple closest = seg.closestDistance(curr);
+                    if(closest.distance < getPointThreshold()) {
+                        addLocation = closest;
+                        hoverSubpath = sub;
+                        foundClose = true;
+                    }
                 }
             }
             if(!foundClose) {
@@ -378,10 +354,10 @@ public class DrawPathTool extends CanvasTool {
         redoReference = null;
 
         if(couldClose) {
-            SPath.PathPoint start = node.points.get(0);
+            SPath.PathPoint start = hoverSubpath.getPoint(0);
             if(start.distance(start.x,start.y) < getPointThreshold()) {
                 couldClose = false;
-                node.close(true);
+                hoverSubpath.doAutoclose();
                 SketchDocument doc = context.getDocument();
                 doc.getCurrentPage().add(node);
                 //node already added at this point
@@ -426,34 +402,42 @@ public class DrawPathTool extends CanvasTool {
     }
 
     private void addPoint(Point2D.Double start) {
+        if(start == null) return;
+        if(hoverSubpath == null) {
+            hoverSubpath = node.getSubPaths().get(0);
+        }
         currentPoint = new SPath.PathPoint(start.x,start.y);
         final SPath.PathPoint temp = currentPoint;
-        node.addPoint(currentPoint);
-        context.redraw();
+        hoverSubpath.addPoint(currentPoint);
+        final SPath.SubPath tempsub = hoverSubpath;
+        context.redraw();        
         context.getUndoManager().pushAction(new UndoManager.UndoableAction(){
             public void executeUndo() {
-                node.points.remove(temp);
+                tempsub.removePoint(temp);
             }
             public void executeRedo() {
-                node.points.add(temp);
+                tempsub.addPoint(temp);
             }
             public String getName() {
                 return "add point";
             }
-        });
+        });        
     }
 
     private void insertPoint() {
+        if(hoverSubpath == null) return;
+        if(addLocation == null) return;
         final SPath.PathTuple temp = addLocation.copy();
         final SPath.PathPoint a = addLocation.a.copy();
         final SPath.PathPoint b = addLocation.b.copy();
-        final SPath.PathPoint pt = node.splitPath(addLocation);
+        final SPath.PathPoint pt = hoverSubpath.splitPath(addLocation);
+        final SPath.SubPath tempsub = hoverSubpath;
         context.getUndoManager().pushAction(new UndoManager.UndoableAction(){
             public void executeUndo() {
-                node.unSplitPath(temp,a,b,pt);
+                tempsub.unSplitPath(temp,a,b,pt);
             }
             public void executeRedo() {
-                node.splitPath(temp);
+                tempsub.splitPath(temp);
             }
             public String getName() {
                 return "insert point";
@@ -464,15 +448,18 @@ public class DrawPathTool extends CanvasTool {
     }
 
     private void deletePoint(SPath.PathPoint hoverPoint) {
+        if(hoverPoint == null) return;
+        if(hoverSubpath == null) return;
         final SPath.PathPoint temp = hoverPoint.copy();
-        final int tempIndex = node.points.indexOf(hoverPoint);
-        node.points.remove(hoverPoint);
+        final SPath.SubPath cs = hoverSubpath;
+        final int tempIndex = hoverSubpath.getPoints().indexOf(hoverPoint);
+        hoverSubpath.removePoint(hoverPoint);
         context.getUndoManager().pushAction(new UndoManager.UndoableAction(){
             public void executeUndo() {
-                node.points.add(tempIndex,temp);
+                cs.getPoints().add(tempIndex, temp);
             }
             public void executeRedo() {
-                node.points.remove(temp);
+                cs.getPoints().remove(temp);
             }
             public String getName() {
                 return "remove point";
@@ -568,7 +555,6 @@ public class DrawPathTool extends CanvasTool {
 
             //draw the path and handle overlays
             g.setPureStrokes(true);
-            g.setPaint(FlatColor.PURPLE);
             Path2D.Double path = SPath.toPath(node);
 
             g.translate(context.getSketchCanvas().getPanX(), context.getSketchCanvas().getPanY());
@@ -578,7 +564,14 @@ public class DrawPathTool extends CanvasTool {
             g.rotate(node.getRotate(), Transform.Z_AXIS);
             g.scale(node.getScaleX(), node.getScaleY());
             g.translate(-node.getAnchorX(), -node.getAnchorY());
+            g.setPaint(FlatColor.GREEN);
             g.drawPath(path);
+            if(hoverSubpath != null) {
+                Path2D.Double subpath = SPath.toPath(hoverSubpath);
+                g.setPaint(FlatColor.RED);
+                g.drawPath(subpath);
+            }
+
             g.translate(node.getAnchorX(), node.getAnchorY());
             g.scale(1 / node.getScaleX(), 1 / node.getScaleY());
             g.rotate(-node.getRotate(), Transform.Z_AXIS);
@@ -608,8 +601,8 @@ public class DrawPathTool extends CanvasTool {
             drawHandles(g,node,5.0,1.0);
 
             //draw text notifications
-            if(couldClose) {
-                SPath.PathPoint point = node.points.get(0);
+            if(couldClose && hoverSubpath != null) {
+                SPath.PathPoint point = hoverSubpath.getPoint(0);
                 Point2D pt = modelToScreen(point.x,point.y);
                 g.setPaint(FlatColor.RED);
                 g.drawRect(pt.getX()-2,pt.getY()-2,5,5);
@@ -617,7 +610,7 @@ public class DrawPathTool extends CanvasTool {
                 g.setPaint(FlatColor.BLACK);
                 g.drawText("close", Font.DEFAULT,pt.getX()-3,pt.getY()+30);
             }
-            
+
             if(hoverPoint != null) {
                 Point2D.Double hp = modelToScreen(hoverPoint.x,hoverPoint.y);
                 if(couldMove && hoverPoint != null) {
@@ -653,25 +646,27 @@ public class DrawPathTool extends CanvasTool {
         g.setPureStrokes(true);
         g.setPaint(FlatColor.BLACK);
 
-        int last = node.points.size()-1;
-        for(int i=0; i<node.points.size(); i++) {
-            SPath.PathPoint point = node.points.get(i);
-            point = modelToScreen(point);
-            g.setPaint(FlatColor.BLACK);
-            g.fillRect(point.x-size/2,point.y-size/2,size,size);
-            g.setPaint(FlatColor.WHITE);
-            g.fillRect(point.x-size/2+sw,point.y-size/2+sw,size-sw*2,size-sw*2);
-            if(i == last) {
+        SPath.PathPoint last = null;
+        for(SPath.SubPath path : node.getSubPaths()) {
+            for(SPath.PathPoint point : path.getPoints()) {
+                last = modelToScreen(point);
                 g.setPaint(FlatColor.BLACK);
-                g.fillRect(point.cx1-2-1,point.cy1-2-1,size+2,size+2);
-                g.fillRect(point.cx2-2-1,point.cy2-2-1,size+2,size+2);
-                g.setPaint(FlatColor.RED);
-                g.fillRect(point.cx1-2,point.cy1-2,size,size);
-                g.fillRect(point.cx2-2,point.cy2-2,size,size);
-                g.setPaint(FlatColor.RED);
-                g.drawLine(point.x,point.y,point.cx1,point.cy1);
-                g.drawLine(point.x,point.y,point.cx2,point.cy2);
+                g.fillRect(last.x - size / 2,last.y - size / 2, size, size);
+                g.setPaint(FlatColor.WHITE);
+                g.fillRect(last.x-size/2+sw,last.y-size/2+sw,size-sw*2,size-sw*2);
             }
+        }
+        
+        if(last != null) {
+            g.setPaint(FlatColor.BLACK);
+            g.fillRect(last.cx1-2-1,last.cy1-2-1,size+2,size+2);
+            g.fillRect(last.cx2-2-1,last.cy2-2-1,size+2,size+2);
+            g.setPaint(FlatColor.RED);
+            g.fillRect(last.cx1-2,last.cy1-2,size,size);
+            g.fillRect(last.cx2-2,last.cy2-2,size,size);
+            g.setPaint(FlatColor.RED);
+            g.drawLine(last.x,last.y,last.cx1,last.cy1);
+            g.drawLine(last.x,last.y,last.cx2,last.cy2);
         }
         g.setPureStrokes(false);
     }
@@ -734,33 +729,6 @@ public class DrawPathTool extends CanvasTool {
             }
         }
         return new Point2D.Double(pt.getX(),pt.getY());
-    }
-
-    public static Path2D toPath2D(SPath node) {
-        Path2D.Double pt = new Path2D.Double();
-        for(int i=0; i<node.points.size(); i++) {
-            SPath.PathPoint point = node.points.get(i);
-            if(i == 0) {
-                pt.moveTo(point.x,point.y);
-                continue;
-            }
-            SPath.PathPoint prev = node.points.get(i - 1);
-            pt.curveTo(prev.cx2,prev.cy2,
-                    point.cx1,point.cy1,
-                    point.x,point.y
-                    );
-            if(i == node.points.size()-1) {
-                if(node.isClosed()) {
-                SPath.PathPoint first = node.points.get(0);
-                pt.curveTo(point.cx2,point.cy2,
-                        first.cx1,first.cy1,
-                        first.x,first.y
-                        );
-                }
-                pt.closePath();
-            }
-        }
-        return pt;
     }
 
     public void startEditing(SPath path) {

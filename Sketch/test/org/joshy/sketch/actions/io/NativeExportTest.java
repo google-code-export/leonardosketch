@@ -369,18 +369,16 @@ public class NativeExportTest {
         SPath.PathPoint first = path.moveTo(0,100);
         path.lineTo(100,0);
         path.lineTo(130,100);
-        SPath.PathPoint last = path.closeTo(first);
-        assertTrue(path.isClosed());
-        assertTrue(last.closePath);
+        path.close();
+        assertTrue(path.getSubPaths().get(0).autoClosed());
 
         SketchDocument doc = SaveAndLoad(path);
 
         assertTrue(doc.getPages().get(0).getModel().get(0) instanceof SPath);
         SPath path2 = (SPath) doc.getPages().get(0).getModel().get(0);
-        assertTrue(path2.getPoints().size()==3);
-        SPath.PathPoint last2 = path2.getPoints().get(2);
-        assertTrue(path2.isClosed());
-        assertTrue(last2.closePath);
+        SPath.SubPath sub = path2.getSubPaths().get(0);
+        assertTrue(sub.size()==3);
+        assertTrue(sub.autoClosed());
     }
 
     @Test
@@ -417,7 +415,7 @@ public class NativeExportTest {
 
     }
 
-    private SketchDocument SaveAndLoad(SNode path) throws Exception {
+    public static SketchDocument SaveAndLoad(SNode path) throws Exception {
         SketchDocument doc = new SketchDocument();
         doc.getCurrentPage().add(path);
         File file = File.createTempFile("nativeExportTest",".leoz");

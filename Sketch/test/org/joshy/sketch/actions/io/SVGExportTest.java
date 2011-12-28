@@ -93,7 +93,7 @@ public class SVGExportTest {
         path.addPoint(new SPath.PathPoint(0,0, -5,0, 5,0));
         path.addPoint(new SPath.PathPoint(10,10, 10,5, 10,15));
         path.addPoint(new SPath.PathPoint(0,20,  5,20, 0,15));
-        path.setClosed(true);
+        path.close();
         page.clear();
         page.add(path);
         Doc xdoc = saveAndReadback(doc);

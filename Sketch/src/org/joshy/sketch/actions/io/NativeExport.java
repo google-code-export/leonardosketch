@@ -214,10 +214,6 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             saveBooleanAttribute(out,"closed",shape);
         }
 
-        if(shape instanceof SPath) {
-            saveBooleanAttribute(out,"closed",shape);
-        }
-
         if(shape instanceof NGon) {
             saveAttribute(out,"radius",shape);
             saveAttribute(out,"innerRadius",shape);
@@ -307,15 +303,21 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
         }
         if(shape instanceof SPath) {
             SPath path = (SPath) shape;
-            for(SPath.PathPoint pt : path.getPoints()) {
-
-                out.start("pathpoint");
-                out.attr("x",""+pt.x);
-                out.attr("y",""+pt.y);
-                out.attr("cx1",""+pt.cx1);
-                out.attr("cy1",""+pt.cy1);
-                out.attr("cx2",""+pt.cx2);
-                out.attr("cy2",""+pt.cy2);
+            for(SPath.SubPath sub : path.getSubPaths()) {
+                out.start("subpath");
+                if(sub.autoClosed()) {
+                    out.attr("closed","true");
+                }
+                for(SPath.PathPoint pt : sub.getPoints()) {
+                    out.start("pathpoint");
+                    out.attr("x",""+pt.x);
+                    out.attr("y",""+pt.y);
+                    out.attr("cx1",""+pt.cx1);
+                    out.attr("cy1",""+pt.cy1);
+                    out.attr("cx2",""+pt.cx2);
+                    out.attr("cy2",""+pt.cy2);
+                    out.end();
+                }
                 out.end();
             }
         }

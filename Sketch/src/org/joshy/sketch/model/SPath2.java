@@ -3,7 +3,6 @@ package org.joshy.sketch.model;
 import org.joshy.gfx.draw.*;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.util.Util;
 
 import java.awt.*;
@@ -21,14 +20,14 @@ import java.util.List;
  *
  *
 */
-public class SPath extends SShape implements SelfDrawable {
+public class SPath2 extends SShape implements SelfDrawable {
+    public List<PathPoint> points;
+    private boolean closed;
     private Path2D.Double path2d;
-    private List<SPath.SubPath> subPaths = new ArrayList<SPath.SubPath>();
-    private SubPath currentSubPath;
+    private PathPoint lastMoveTo;
 
-    public SPath() {
-        currentSubPath = new SubPath();
-        subPaths.add(currentSubPath);
+    public SPath2() {
+        this.points = new ArrayList<PathPoint>();
     }
 
     @Override
@@ -70,14 +69,16 @@ public class SPath extends SShape implements SelfDrawable {
         return getBounds().contains(point.getX(),point.getY());
     }
 
+    public void addPoint(PathPoint point) {
+        this.points.add(point);
+    }
 
     public void draw(GFX g) {
         g.setPureStrokes(true);
 
         drawShadow(g);
 
-        
-        if(anyClosed()) {
+        if(isClosed()) {
             double opacity = -1;
             Paint paint = getFillPaint();
             if(paint != null) {
@@ -96,7 +97,7 @@ public class SPath extends SShape implements SelfDrawable {
             }
             if(opacity >=0) g.setOpacity(opacity);
         }
-        
+
 
         if(getStrokeWidth() > 0 && getStrokePaint() != null) {
             g.setPaint(getStrokePaint());
@@ -109,13 +110,6 @@ public class SPath extends SShape implements SelfDrawable {
         g.setPureStrokes(false);
     }
 
-    public boolean anyClosed() {
-        for(SubPath sub : subPaths) {
-            if(sub.autoClosed()) return true;
-        }
-        return false;
-    }
-
     @Override
     protected void fillShape(GFX g) {
         Path2D.Double path = toPath(this);
@@ -123,45 +117,38 @@ public class SPath extends SShape implements SelfDrawable {
     }
 
 
-    public static Path2D.Double toPath(SubPath sub) {
-        Path2D.Double path = new Path2D.Double();
-        PathPoint prev = null;
-        for(PathPoint point : sub.points) {
-            if(prev == null) {
-                path.moveTo(point.x,point.y);
-            } else {
-                path.curveTo(prev.cx2,prev.cy2,point.cx1,point.cy1,point.x,point.y);
+    public static Path2D.Double toPath(SPath2 node) {
+        Path2D.Double pth = new Path2D.Double();
+        //int last = node.points.size()-1;
+
+        for(int i=0; i<node.points.size(); i++) {
+            SPath2.PathPoint point = node.points.get(i);
+            //g.setPaint(FlatColor.BLACK);
+            if(point.startPath || i == 0) {
+                pth.moveTo(point.x, point.y);
+                continue;
             }
-            prev = point;
-        }
-        if(sub.autoClosed()) {
-            path.closePath();
-        }
-        return path;
-    }
-
-    public static Path2D.Double toPath(SPath node) {
-        Path2D.Double path = new Path2D.Double();
-
-        for(SubPath sub : node.subPaths) {
-            PathPoint prev = null;
-            for(PathPoint point : sub.points) {
-                if(prev == null) {
-                    path.moveTo(point.x,point.y);
-                } else {
-                    path.curveTo(prev.cx2,prev.cy2,point.cx1,point.cy1,point.x,point.y);
+            SPath2.PathPoint prev = node.points.get(i - 1);
+            pth.curveTo(prev.cx2, prev.cy2,
+                    point.cx1, point.cy1,
+                    point.x, point.y
+            );
+            if(point.closePath) {
+                if(node.isClosed()) {
+                    SPath2.PathPoint first = node.points.get(0);
+                    pth.curveTo(point.cx2, point.cy2,
+                            first.cx1, first.cy1,
+                            first.x, first.y
+                    );
+                    pth.closePath();
                 }
-                prev = point;
-            }
-            if(sub.autoClosed()) {
-                path.closePath();
             }
         }
-        return path;
+        return pth;
     }
 
     public Path2D.Double toTransformedPath() throws NoninvertibleTransformException {
-        Path2D.Double p2d = SPath.toPath(this);
+        Path2D.Double p2d = SPath2.toPath(this);
         AffineTransform af = new AffineTransform();
         af.translate(getTranslateX(),getTranslateY());
         af.rotate(Math.toRadians(getRotate()));
@@ -173,14 +160,96 @@ public class SPath extends SShape implements SelfDrawable {
 
 
 
+    public void close(boolean closed) {
+        setClosed(closed);
+        recalcPath();
+    }
+
     public void recalcPath() {
-        this.path2d = toPath(this);
+        path2d = new Path2D.Double();
+        int last = points.size()-1;
+        for(int i=0; i<points.size(); i++) {
+            PathPoint point = points.get(i);
+            if(i == 0) {
+                path2d.moveTo(point.x,point.y);
+                continue;
+            }
+            PathPoint prev = points.get(i - 1);
+            path2d.curveTo(prev.cx2,prev.cy2,
+                    point.cx1,point.cy1,
+                    point.x,point.y
+                    );
+            if(i == points.size()-1) {
+                path2d.closePath();
+            }
+        }
+
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+        if(points.size() > 1) {
+            points.get(points.size()-1).closePath = closed;
+        }
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public List<PathPoint> getPoints() {
+        return points;
+    }
+
+    public void setPoints(List<PathPoint> points) {
+        this.points = points;
+        recalcPath();
+    }
+
+    public Iterable<PathSegment> calculateSegments() {
+        List<PathSegment> segs = new ArrayList<PathSegment>();
+        for(int i=0; i<points.size()-1;i++) {
+            PathPoint curr = points.get(i);
+            PathPoint next = points.get(i+1);
+            segs.add(new PathSegment(curr,next,i));
+        }
+        if(isClosed()) {
+            int last = points.size()-1;
+            segs.add(new PathSegment(points.get(last),points.get(0),last));
+        }
+        return segs;
     }
 
 
+    public PathPoint splitPath(PathTuple location) {
+        PathPoint a = location.a;
+        PathPoint b = location.b;
+        PathPoint c = new PathPoint(0,0);
 
+        double co[] = new double[14];
+        co[0] = a.x; co[1] = a.y;
+        co[2] = a.cx2; co[3] = a.cy2;
+        co[4] = b.cx1; co[5] = b.cy1;
+        co[6] = b.x; co[7] = b.y;
+        split(co,0,location.t);
 
+        a.x = co[0];   a.y = co[1];
+        a.cx2 = co[2]; a.cy2 = co[3];
+        c.cx1 = co[4]; c.cy1 = co[5];
+        c.x = co[6];   c.y = co[7];
+        c.cx2 = co[8]; c.cy2 = co[9];
+        b.cx1 = co[10]; b.cy1 = co[11];
+        b.x = co[12];   b.y = co[13];
+        points.add(location.index+1,c);
+        return c;
+    }
 
+    public void unSplitPath(PathTuple temp, PathPoint a, PathPoint b, PathPoint pt) {
+        temp.a.copyFrom(a);
+        temp.b.copyFrom(b);
+        points.remove(pt);
+    }
+    
     /*
      * Split the cubic Bezier stored at coords[pos...pos+7] representing
      * the parametric range [0..1] into two subcurves representing the
@@ -224,13 +293,13 @@ public class SPath extends SShape implements SelfDrawable {
         double minY = Double.MAX_VALUE;
         double maxX = Double.MIN_VALUE;
         double maxY = Double.MIN_VALUE;
-        for(PathPoint pt : allPoints()) {
+        for(PathPoint pt : points) {
             minX = Math.min(pt.x,minX);
             minY = Math.min(pt.y,minY);
             maxX = Math.max(pt.x,maxX);
             maxY = Math.max(pt.y,maxY);
         }
-        for(PathPoint pt : allPoints()) {
+        for(PathPoint pt : points) {
             pt.x -= minX;
             pt.y -= minY;
             
@@ -247,56 +316,41 @@ public class SPath extends SShape implements SelfDrawable {
         setAnchorY((int) ((maxY - minY) / 2.0));
     }
 
-    private Iterable<PathPoint> allPoints() {
-        List<PathPoint> pts = new ArrayList<PathPoint>();
-        for(SubPath sub : getSubPaths()) {
-            pts.addAll(sub.getPoints());
-        }
-        return pts;
-    }
-
-
     public PathPoint moveTo(double x, double y) {
-        if(currentSubPath.autoClosed()) {
-            currentSubPath = new SubPath();
-            subPaths.add(currentSubPath);
-        }
+        //u.p("move to: " + x + " " + y);
         PathPoint p = new PathPoint(x, y);
         p.startPath = true;
-        currentSubPath.addPoint(p);
+        addPoint(p);
+        lastMoveTo = p;
         return p;
     }
 
     public PathPoint lineTo(double x, double y) {
         //u.p("line to: " + x + " " + y);
         PathPoint p = new PathPoint(x, y);
-        currentSubPath.addPoint(p);
+        addPoint(p);
         return p;
     }
 
-    /**
-     *
-     * @param prev the previous point
-     * @param x1 left control point x
-     * @param y1 left control point y
-     * @param x2 right control point x
-     * @param y2 right control point y
-     * @param x final x
-     * @param y final y
-     * @return
-     */
     public PathPoint curveTo(PathPoint prev, double x1, double y1, double x2, double y2, double x, double y) {
         //u.p("curve to: " + x + " " + y);
         PathPoint p = new PathPoint(x,y,x2,y2,x,y);
         prev.cx2 = x1;
         prev.cy2 = y1;
-        currentSubPath.addPoint(p);
+        addPoint(p);
         return p;
     }
 
+    public PathPoint closeTo(PathPoint prev) {
+        //u.p("closing subpath");
+        prev.closePath = true;
+        prev.endPath = true;
+        close(true);
+        return prev;
+    }
 
-    public static SPath fromPathIterator(PathIterator it) {
-        SPath sPath = new SPath();
+    public static SPath2 fromPathIterator(PathIterator it) {
+        SPath2 sPath = new SPath2();
         PathPoint prev = null;
         while(!it.isDone()) {
             double[] coords = new double[6];
@@ -311,137 +365,14 @@ public class SPath extends SShape implements SelfDrawable {
                 prev = sPath.curveTo(prev, coords[0],coords[1],coords[2],coords[3],coords[4],coords[5]);
             }
             if(n == PathIterator.SEG_CLOSE) {
-                sPath.close();
+                sPath.close(true);
+                break;
             }
             it.next();
         }
-        sPath.recalcPath();
         return sPath;
     }
 
-    private static void print(int n, double[] coords) {
-        switch(n) {
-            case PathIterator.SEG_MOVETO:
-                u.p("moveto " + coords[0] + " " + coords[1]);
-                return;
-            case PathIterator.SEG_LINETO:
-                u.p("lineto  " + coords[0] + " " + coords[1]);
-                return;
-            case PathIterator.SEG_CUBICTO:
-                u.p("cubic to  "  + coords[0] + " " + coords[1] + " - " + coords[2] + " " + coords[3] + " - " + coords[4] + " " + coords[5]);
-                return;
-            case PathIterator.SEG_CLOSE:
-                u.p("close");
-                return;
-            default:
-                u.p("unknown type: " + n);
-        }
-    }
-
-
-    public List<SubPath> getSubPaths() {
-        return subPaths;
-    }
-
-    public void close() {
-        this.currentSubPath.autoClosed = true;
-    }
-
-    public void addPoint(PathPoint currentPoint) {
-        this.currentSubPath.addPoint(currentPoint);
-    }
-
-    public void newSubPath() {
-        this.currentSubPath = new SubPath();
-        this.subPaths.add(this.currentSubPath);
-    }
-
-
-    public static class SubPath {
-        private List<PathPoint> points = new ArrayList<PathPoint>();
-        private boolean autoClosed;
-
-        public int size() {
-            return points.size();
-        }
-        
-        public void addPoint(PathPoint point) {
-            this.points.add(point);
-        }
-
-        public boolean autoClosed() {
-            return autoClosed;
-        }
-
-        public PathPoint splitPath(PathTuple location) {
-            PathPoint a = location.a;
-            PathPoint b = location.b;
-            PathPoint c = new PathPoint(0,0);
-
-            double co[] = new double[14];
-            co[0] = a.x; co[1] = a.y;
-            co[2] = a.cx2; co[3] = a.cy2;
-            co[4] = b.cx1; co[5] = b.cy1;
-            co[6] = b.x; co[7] = b.y;
-            split(co,0,location.t);
-
-            a.x = co[0];   a.y = co[1];
-            a.cx2 = co[2]; a.cy2 = co[3];
-            c.cx1 = co[4]; c.cy1 = co[5];
-            c.x = co[6];   c.y = co[7];
-            c.cx2 = co[8]; c.cy2 = co[9];
-            b.cx1 = co[10]; b.cy1 = co[11];
-            b.x = co[12];   b.y = co[13];
-            points.add(location.index+1,c);
-            return c;
-        }
-
-        public void unSplitPath(PathTuple temp, PathPoint a, PathPoint b, PathPoint pt) {
-            temp.a.copyFrom(a);
-            temp.b.copyFrom(b);
-            points.remove(pt);
-        }
-
-        public SubPath copy() {
-            SubPath dupe = new SubPath();
-            for(PathPoint point : this.points) {
-                dupe.addPoint(point.copy());
-            }
-            dupe.autoClosed = this.autoClosed;
-            return dupe;
-        }
-
-        public PathPoint getPoint(int i) {
-            return points.get(i);
-        }
-
-        public List<PathPoint> getPoints() {
-            return points;
-        }
-
-        public void removePoint(PathPoint hoverPoint) {
-            this.points.remove(hoverPoint);
-        }
-
-        public Iterable<PathSegment> calculateSegments() {
-            List<PathSegment> segs = new ArrayList<PathSegment>();
-            for(int i=0; i<points.size()-1;i++) {
-                PathPoint curr = points.get(i);
-                PathPoint next = points.get(i+1);
-                segs.add(new PathSegment(curr,next,i));
-            }
-            if(autoClosed()) {
-                int last = points.size()-1;
-                segs.add(new PathSegment(points.get(last),points.get(0),last));
-            }
-            return segs;
-        }
-
-        public void doAutoclose() {
-            this.autoClosed = true;
-        }
-    }
-    
     public static class PathTuple {
         public double distance;
         public double t;
@@ -531,6 +462,7 @@ public class SPath extends SShape implements SelfDrawable {
         public double cx2;
         public double cy2;
         public boolean startPath = false;
+        public boolean endPath = false;
         public boolean closePath = false;
 
         public PathPoint(double x, double y, double cx1, double cy1, double cx2, double cy2) {
@@ -580,17 +512,14 @@ public class SPath extends SShape implements SelfDrawable {
     @Override
     public SNode duplicate(SNode dupe) {
         if(dupe == null) {
-            dupe = new SPath();
+            dupe = new SPath2();
         }
-        for(SubPath sub : this.subPaths) {
-            ((SPath)dupe).addSubPath(sub.copy());
+        for(PathPoint point : this.getPoints()) {
+            ((SPath2)dupe).addPoint(point.copy());
         }
-        ((SPath)dupe).recalcPath();
+        ((SPath2)dupe).setClosed(this.isClosed());
+        ((SPath2)dupe).recalcPath();
         return super.duplicate(dupe);
-    }
-
-    private void addSubPath(SubPath copy) {
-        this.subPaths.add(copy);
     }
 
     @Override

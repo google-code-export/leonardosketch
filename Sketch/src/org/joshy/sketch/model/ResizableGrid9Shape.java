@@ -318,11 +318,13 @@ public class ResizableGrid9Shape extends AbstractResizeableNode implements SelfD
 
         public List<Point2D> getControlPoints(SPath node, double originalWidth, double originalHeight) {
             List<Point2D> points = new ArrayList<Point2D>();
+            /*
             for(SPath.PathPoint pt : node.getPoints()) {
                 points.add(np(node.getTranslateX()+pt.x,  node.getTranslateY()+pt.y));
                 points.add(np(node.getTranslateX()+pt.cx1,node.getTranslateY()+pt.cy1));
                 points.add(np(node.getTranslateX()+pt.cx2,node.getTranslateY()+pt.cy2));
             }
+            */
             return points;
         }
 
@@ -331,6 +333,7 @@ public class ResizableGrid9Shape extends AbstractResizeableNode implements SelfD
             int j = 0;
             node.setTranslateX(0);
             node.setTranslateY(0);
+            /*
             while(true) {
                 SPath.PathPoint pt = node.getPoints().get(i);
                 pt.x   = points.get(j).getX();
@@ -348,6 +351,7 @@ public class ResizableGrid9Shape extends AbstractResizeableNode implements SelfD
                 i++;
                 if(i > node.getPoints().size()-1) break;
             }
+            */
         }
     }
 

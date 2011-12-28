@@ -69,7 +69,7 @@ public class ExportTest {
         path.addPoint(new SPath.PathPoint(50,0,  30,0,  80,0));
         path.addPoint(new SPath.PathPoint(50,50, 80,50, 30,50));
         path.addPoint(new SPath.PathPoint(0,50));
-        path.setClosed(false);
+        path.close();
         path.recalcPath();
         path.setStrokePaint(FlatColor.BLACK);
         path.setFillPaint(FlatColor.YELLOW);
