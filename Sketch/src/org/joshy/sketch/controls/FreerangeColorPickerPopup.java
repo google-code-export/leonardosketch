@@ -63,8 +63,10 @@ class FreerangeColorPickerPopup extends Control {
             int x = (int) event.getX();
             int y = (int) event.getY();
             if(x < 0 || x > img.getWidth()-1 || y <0 || y > img.getHeight()-1 ) {
-                setSelectedColor(outsideColorProvider.getColorAt(event));
-                setDrawingDirty();
+                if(outsideColorProvider != null) {
+                    setSelectedColor(outsideColorProvider.getColorAt(event));
+                    setDrawingDirty();
+                }
                 return;
             }
             setSelectedColor(new FlatColor(img.getRGB(x, y)));

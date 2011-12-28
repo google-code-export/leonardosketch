@@ -362,8 +362,8 @@ public class OpenAction extends SAction {
         loadNumberAttribute(e,shape,"rotate");
         if(e.attrEquals("type","path")) {
             SPath path = (SPath) shape;
-            loadBooleanAttribute(e,shape,"closed");
 
+            //handle oldstyle first
             for(Elem element : e.xpath("pathpoint")) {
                 path.addPoint(new SPath.PathPoint(
                         Double.parseDouble(element.attr("x")),
@@ -374,9 +374,28 @@ public class OpenAction extends SAction {
                         Double.parseDouble(element.attr("cy2"))
                 ));
             }
-            if(path.isClosed()) {
-                int len = path.getPoints().size();
-                path.getPoints().get(len-1).closePath = true;
+
+            //now handle the newstyle
+            boolean first = true;
+            for(Elem subelement : e.xpath("subpath")) {
+                if(!first) path.newSubPath();
+                for(Elem element : subelement.xpath("pathpoint")) {
+                    path.addPoint(new SPath.PathPoint(
+                            Double.parseDouble(element.attr("x")),
+                            Double.parseDouble(element.attr("y")),
+                            Double.parseDouble(element.attr("cx1")),
+                            Double.parseDouble(element.attr("cy1")),
+                            Double.parseDouble(element.attr("cx2")),
+                            Double.parseDouble(element.attr("cy2"))
+                    ));
+                }
+                if(subelement.attrEquals("closed","true")) {
+                    path.close();
+                }
+                first = false;
+            }
+            if(e.attrEquals("closed","true")) {
+                path.close();
             }
             path.recalcPath();
         }

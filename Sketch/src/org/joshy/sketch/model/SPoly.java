@@ -122,7 +122,7 @@ public class SPoly extends SShape implements SelfDrawable {
             }
         }
         if(this.isClosed()) {
-            path.close(true);
+            path.close();
         }
         path.setTranslateX(this.getTranslateX());
         path.setTranslateY(this.getTranslateY());

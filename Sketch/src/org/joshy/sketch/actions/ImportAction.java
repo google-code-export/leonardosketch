@@ -168,7 +168,6 @@ public class ImportAction extends SAction {
         int count = 0;
         double x = 0;
         double y = 0;
-        boolean closed = false;
         SPath.PathPoint prev = null;
         boolean go = true;
         while(go) {
@@ -247,8 +246,7 @@ public class ImportAction extends SAction {
                     prev = path.curveTo(prev,x1,y1,x2,y2,x,y);
                     continue;
                case 'z':
-                    prev = path.closeTo(prev);
-                   closed = true;
+                    path.close();
                     break;
                case ' ': continue;
                case '\n': continue;
@@ -263,7 +261,6 @@ public class ImportAction extends SAction {
             }
         }
 
-        path.close(closed);
         parseFill(path,root);
         parseStroke(path,root);
         return path;

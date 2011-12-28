@@ -67,7 +67,7 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
                 x,y+h/2
                 );
 
-        path.close(true);
+        path.close();
         path.setTranslateX(this.getTranslateX());
         path.setTranslateY(this.getTranslateY());
         path.setFillPaint(this.getFillPaint());

@@ -36,7 +36,7 @@ public class SaveSVGAction extends BaseExportAction {
 
     public void export(File file, SketchDocument doc) {
         try {
-            PrintWriter out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file),"UTF-8"));
+            XMLWriter out = new XMLWriter(file);
             ExportProcessor.process(new SVGExport(), out, doc);
             out.close();
         } catch (Exception ex) {
@@ -55,7 +55,6 @@ public class SaveSVGAction extends BaseExportAction {
         }
 
         public void pageStart(XMLWriter out, SketchDocument.SketchPage page) {
-            //To change body of implemented methods use File | Settings | File Templates.
         }
 
         public void exportPre(XMLWriter out, SNode shape) {
@@ -100,25 +99,30 @@ public class SaveSVGAction extends BaseExportAction {
             out.attr("transform", "translate(" + shape.getTranslateX() + "," + shape.getTranslateY() + ")");
             StringBuffer data = new StringBuffer();
             int count = 0;
-            List<SPath.PathPoint> points = shape.getPoints();
-            for(int i=0; i<points.size(); i++) {
-                if(i == 0) {
-                    data.append(" M "+points.get(i).x + " " + points.get(i).y);
-                } else {
-                    data.append(" C "
-                            +points.get(i-1).cx2 + " " + points.get(i-1).cy2 + " "
-                            +points.get(i).cx1 + " " + points.get(i).cy1 + " "
-                            +points.get(i).x + " " + points.get(i).y + " "
-                            );
+            
+            for(SPath.SubPath sub : shape.getSubPaths()) {
+                boolean first = true;
+                SPath.PathPoint prev = null;
+                for(SPath.PathPoint point : sub.getPoints()) {
+                    if(first) {
+                        data.append(" M " + point.x + " " +  point.y);
+                    } else {
+                        data.append(" C " + prev.cx2 + " " + prev.cy2);
+                        data.append(" " + point.cx1 + " " + point.cy1);
+                        data.append(" " + point.x + " " + point.y);
+                    }
+                    data.append(" ");
+                    prev = point;
+                    first = false;
                 }
-                data.append(" ");
             }
-            data.append(" z'");
+
+            data.append(" z");
             out.attr("d", data.toString());
 
-            out.attr("fill", toRGBString(shape.getFillPaint()) + "");
-            out.attr("fill-opacity", df.format(shape.getFillOpacity()) + "");
-            out.attr("stroke", toRGBString(shape.getStrokePaint()) + "");
+            out.attr("fill", toRGBString(shape.getFillPaint()));
+            out.attr("fill-opacity", df.format(shape.getFillOpacity()));
+            out.attr("stroke", toRGBString(shape.getStrokePaint()));
             out.attr("stroke-width", shape.getStrokeWidth() + "");
             out.end();
         }
@@ -213,15 +217,15 @@ public class SaveSVGAction extends BaseExportAction {
                             .attr("stop-color",toHexString(stop.getColor()))
                             .end();
                 }
-                out.end();
-                out.end();
+                out.end(); //linearGradient
+                out.end(); //defs
             }
             out.start("rect")
                     .attr("x",""+rect.getX())
                     .attr("y",""+rect.getY())
-                    .attr("width=",""+rect.getWidth())
+                    .attr("width",""+rect.getWidth())
                     .attr("height",""+rect.getHeight())
-                    .attr("transform=","translate("+rect.getTranslateX()+","+rect.getTranslateY()+")");
+                    .attr("transform","translate("+rect.getTranslateX()+","+rect.getTranslateY()+")");
 
             if(rect.getFillPaint() instanceof FlatColor) {
                 out.attr("fill",toRGBString(rect.getFillPaint()));
@@ -235,15 +239,17 @@ public class SaveSVGAction extends BaseExportAction {
 
             out.attr("stroke",toRGBString(rect.getStrokePaint()));
             out.attr("stroke-width",""+rect.getStrokeWidth());
+
+            out.end();//rect
             if(rect.getFillPaint() instanceof LinearGradientFill) {
-                out.end();
+                out.end(); //g
             }
         }
 
         private void draw(XMLWriter out, SOval shape) {
             out.start("ellipse")
                     .attr("cx",(shape.getX() + shape.getWidth() /2)+"");
-            out.attr("cy=", (shape.getY() + shape.getHeight() / 2) + "");
+            out.attr("cy", (shape.getY() + shape.getHeight() / 2) + "");
             out.attr("rx", shape.getWidth() / 2 + "");
             out.attr("ry", shape.getHeight() / 2 + "");
             out.attr("transform", "translate(" + shape.getTranslateX() + "," + shape.getTranslateY() + ")");
@@ -286,7 +292,7 @@ public class SaveSVGAction extends BaseExportAction {
             out.attr("points", points.toString());
 
             if(shape.isClosed()) {
-                out.attr("fill=", toRGBString(shape.getFillPaint()));
+                out.attr("fill", toRGBString(shape.getFillPaint()));
                 out.attr("fill-opacity",df.format(shape.getFillOpacity()));
             } else {
                 out.attr("fill", "none");
@@ -310,7 +316,7 @@ public class SaveSVGAction extends BaseExportAction {
             out.attr("points", data.toString());
 
 
-            out.attr("fill=", toRGBString(shape.getFillPaint()));
+            out.attr("fill", toRGBString(shape.getFillPaint()));
             out.attr("fill-opacity", df.format(shape.getFillOpacity()));
             out.attr("stroke", toRGBString(shape.getStrokePaint()) + "");
             out.attr("stroke-width", shape.getStrokeWidth() + "");

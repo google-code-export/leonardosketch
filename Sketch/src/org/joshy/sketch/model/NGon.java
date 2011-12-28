@@ -212,7 +212,7 @@ public class NGon extends SShape implements SelfDrawable {
                 path.lineTo(points[i],points[i+1]);
             }
         }
-        path.close(true);
+        path.close();
 
         path.setTranslateX(this.getTranslateX());
         path.setTranslateY(this.getTranslateY());

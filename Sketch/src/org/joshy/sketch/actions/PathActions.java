@@ -42,25 +42,27 @@ public class PathActions {
             if(!(node instanceof SPath)) return;
             SPath path = (SPath) node;
             Bounds bounds = path.getTransformedBounds();
-            List<SPath.PathPoint> points = path.getPoints();
-            for(SPath.PathPoint pt : points) {
-                pt.x = pt.x -bounds.getX()+path.getTranslateX();
-                pt.y = pt.y -bounds.getY()+path.getTranslateY();
-                pt.cx1 = pt.cx1 -bounds.getX()+path.getTranslateX();
-                pt.cy1 = pt.cy1 -bounds.getY()+path.getTranslateY();
-                pt.cx2 = pt.cx2 -bounds.getX()+path.getTranslateX();
-                pt.cy2 = pt.cy2 -bounds.getY()+path.getTranslateY();
+            for(SPath.SubPath sub : path.getSubPaths()) {
+                for(SPath.PathPoint pt : sub.getPoints()) {
 
-                modifyPoint(bounds,path,pt);
-                
-                pt.x = pt.x + bounds.getX()-path.getTranslateX();
-                pt.y = pt.y + bounds.getY()-path.getTranslateY();
-                pt.cx1 = pt.cx1 + bounds.getX()-path.getTranslateX();
-                pt.cy1 = pt.cy1 + bounds.getY()-path.getTranslateY();
-                pt.cx2 = pt.cx2 + bounds.getX()-path.getTranslateX();
-                pt.cy2 = pt.cy2 + bounds.getY()-path.getTranslateY();
+                    pt.x = pt.x -bounds.getX()+path.getTranslateX();
+                    pt.y = pt.y -bounds.getY()+path.getTranslateY();
+                    pt.cx1 = pt.cx1 -bounds.getX()+path.getTranslateX();
+                    pt.cy1 = pt.cy1 -bounds.getY()+path.getTranslateY();
+                    pt.cx2 = pt.cx2 -bounds.getX()+path.getTranslateX();
+                    pt.cy2 = pt.cy2 -bounds.getY()+path.getTranslateY();
+
+                    modifyPoint(bounds,path,pt);
+
+                    pt.x = pt.x + bounds.getX()-path.getTranslateX();
+                    pt.y = pt.y + bounds.getY()-path.getTranslateY();
+                    pt.cx1 = pt.cx1 + bounds.getX()-path.getTranslateX();
+                    pt.cy1 = pt.cy1 + bounds.getY()-path.getTranslateY();
+                    pt.cx2 = pt.cx2 + bounds.getX()-path.getTranslateX();
+                    pt.cy2 = pt.cy2 + bounds.getY()-path.getTranslateY();
+                }
             }
-            path.setPoints(points);
+            path.recalcPath();
             context.redraw();
         }
         protected abstract void modifyPoint(Bounds bounds, SPath path, SPath.PathPoint pt);

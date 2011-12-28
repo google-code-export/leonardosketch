@@ -84,14 +84,14 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
             pt = path.curveTo(pt, x+w,y+h-c+in, x+w-c+in,y+h, x+w-c,y+h);
             pt = path.lineTo(x+c,y+h);
             path.curveTo(pt, x+c-in, y+h, x,y+h-c+in, x,y+h-c);
-            path.close(true);
+            path.close();
         } else {
             //regular rect
             path.moveTo(this.getX(),this.getY());
             path.lineTo(this.getX()+this.getWidth(),this.getY());
             path.lineTo(this.getX()+this.getWidth(),this.getY()+this.getHeight());
             path.lineTo(this.getX(),this.getY()+this.getHeight());
-            path.close(true);
+            path.close();
         }
         path.setTranslateX(this.getTranslateX());
         path.setTranslateY(this.getTranslateY());
