@@ -11,12 +11,21 @@ import org.joshy.sketch.util.RandomString;
  */
 public class Page {
     private String id;
+    private String name;
+    
+    private static int counter = 0;
 
     public Page() {
         this.id = new RandomString(32).nextString();
+        this.name = "Page " + counter;
+        counter++;
     }
 
     public String getId() {
         return id;
+    }
+    
+    public String getName() {
+        return this.name;
     }
 }

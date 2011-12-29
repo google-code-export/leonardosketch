@@ -138,4 +138,8 @@ public abstract class SNode {
     public boolean isLink() {
         return linkTarget != null;
     }
+
+    public String getLinkTarget() {
+        return linkTarget;
+    }
 }
