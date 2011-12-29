@@ -36,7 +36,7 @@ public class MakeLink extends SAction {
         VFlexBox box = new VFlexBox();
         for(Page page : context.getDocument().getPages()) {
             final String id = page.getId();
-            Button bt = new Button("page " + id);
+            Button bt = new Button("page " + page.getName());
             bt.onClicked(new Callback<ActionEvent>() {
                 public void call(ActionEvent event) throws Exception {
                     stage.hide();
@@ -47,6 +47,14 @@ public class MakeLink extends SAction {
             });
             box.add(bt);
         }
+        
+        Button cancel = new Button("cancel");
+        cancel.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent event) throws Exception {
+                stage.hide();
+            }
+        });
+        box.add(cancel);
         stage.setContent(box);
     }
 }

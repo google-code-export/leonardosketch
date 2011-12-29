@@ -342,6 +342,18 @@ public class SelectMoveTool extends CanvasTool {
             }
         }
 
+        //process link button
+        for(SNode node : doc.getCurrentPage().getNodes()) {
+            Bounds b1 = node.getTransformedBounds();
+            Bounds b2 = new Bounds(b1.getX2(),b1.getY2(),30,15);
+            if(b2.contains(cursor)) {
+                String target = node.getLinkTarget();
+                context.getDocument().setCurrentPageById(target);
+                context.getSelection().clear();
+                return;
+            }
+        }
+                
         //process nodes under the cursor
         List<SNode> underCursor = new ArrayList<SNode>();
         for(SNode node : doc.getCurrentPage().getNodes()) {
@@ -926,7 +938,7 @@ public class SelectMoveTool extends CanvasTool {
             if(!node.isLink()) continue;
             Bounds bds = node.getTransformedBounds();
             g.setPaint(FlatColor.RED);
-            g.drawRect(bds.getX(),bds.getY2()+10,40,20);
+            g.fillRect(bds.getX2(),bds.getY2(),30,15);
         }
 
         //draw the move position indicator

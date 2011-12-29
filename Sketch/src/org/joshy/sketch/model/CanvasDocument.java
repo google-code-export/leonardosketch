@@ -196,5 +196,16 @@ public class CanvasDocument<P extends Page> {
         index = i;
         EventBus.getSystem().publish(new DocumentEvent(this,DocumentEvent.PageChanged));
     }
+    
+    public void setCurrentPageById(String target) {
+        for(int n=0; n<pages.size(); n++) {
+            Page p = pages.get(n);
+            if(p.getId().equals(target)) {
+                setCurrentPage(n);
+                return;
+            }
+        }
+    }
+
 
 }
