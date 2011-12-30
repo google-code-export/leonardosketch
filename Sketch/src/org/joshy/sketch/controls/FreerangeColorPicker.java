@@ -2,14 +2,13 @@ package org.joshy.sketch.controls;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.ChangedEvent;
-import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.NodeUtils;
-import org.joshy.gfx.node.control.Button;
+import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.stage.Stage;
 
 import java.awt.geom.Point2D;
+import java.util.Date;
 
 /**
 * Created by IntelliJ IDEA.
@@ -18,9 +17,29 @@ import java.awt.geom.Point2D;
 * Time: 7:44 PM
 * To change this template use File | Settings | File Templates.
 */
-public class FreerangeColorPicker extends Button {
+public class FreerangeColorPicker extends Control {
     FlatColor selectedColor = FlatColor.RED;
-    private FreerangeColorPickerPopup popup;
+    private GenericColorPickerPopup popup;
+    private long lastPressTime;
+    private double startX;
+    private double startY;
+
+
+    public FreerangeColorPicker() {
+        EventBus.getSystem().addListener(this,MouseEvent.MouseAll, new Callback<MouseEvent>() {
+            public void call(MouseEvent event) throws Exception {
+                if(event.getType() == MouseEvent.MousePressed) {
+                    doPress(event);
+                }
+                if(event.getType() == MouseEvent.MouseDragged) {
+                    doDrag(event);
+                }
+                if(event.getType() == MouseEvent.MouseReleased) {
+                    doRelease();
+                }
+            }
+        });
+    }
 
     public boolean isRecenterOnSelect() {
         return recenterOnSelect;
@@ -30,34 +49,47 @@ public class FreerangeColorPicker extends Button {
         this.recenterOnSelect = recenterOnSelect;
     }
 
-    private boolean recenterOnSelect = true;
+    private boolean recenterOnSelect = false;
 
-    @Override
-    protected void setPressed(boolean pressed) {
-        super.setPressed(pressed);
-        if (pressed) {
-            if (popup == null) {
-                popup = new FreerangeColorPickerPopup(this,200,100,true);
-                //popup = new HSVColorPicker(this,150,150);
-                popup.setVisible(false);
-                Stage stage = getParent().getStage();
-                stage.getPopupLayer().add(popup);
-            }
-            Point2D pt = NodeUtils.convertToScene(this, 0, getHeight());
+    protected void doPress(MouseEvent e ) {
+        startX = e.getX();
+        startY = e.getY();
 
-            double x = pt.getX();
-            double y = pt.getY();
-            if(recenterOnSelect) {
-                FlatColor color = this.getSelectedColor();
-                popup.positionAt(x, y, color);
-            } else {
-                popup.setTranslateX(x);
-                popup.setTranslateY(y);
-            }
-            popup.setVisible(true);
+        if (popup == null) {
+            popup = new GenericColorPickerPopup(this,200,100,true);
+            popup.setVisible(false);
+            Stage stage = getParent().getStage();
+            stage.getPopupLayer().add(popup);
+        }
+        Point2D pt = NodeUtils.convertToScene(this, 0, getHeight());
+
+        double x = pt.getX();
+        double y = pt.getY();
+        if(recenterOnSelect) {
+            FlatColor color = this.getSelectedColor();
+            popup.positionAt(x, y, color);
+        } else {
+            popup.setTranslateX(x);
+            popup.setTranslateY(y);
+        }
+        popup.setVisible(true);
+        lastPressTime = new Date().getTime();
+    }
+
+
+    private void doDrag(MouseEvent event) {
+        double dx = event.getX()-startX;
+        double dy = event.getY()-startY;
+        if(Math.abs(dx) > 5 || Math.abs(dy) > 5 && (new Date().getTime() - lastPressTime) > 200) {
+            popup.takeoverDrag();
+        }
+    }
+
+
+    protected void doRelease() {
+        if(new Date().getTime() - lastPressTime < 500) {
             EventBus.getSystem().setPressedNode(popup);
         } else {
-            if(popup != null) popup.setVisible(false);
         }
     }
 
@@ -89,5 +121,19 @@ public class FreerangeColorPicker extends Button {
     }
 
     public void setFinalColor(FlatColor selectedColor) {
+    }
+
+    @Override
+    public void doLayout() {
+        this.setWidth(this.getPrefWidth());
+        setHeight(getPrefHeight());
+    }
+
+    @Override
+    public void doPrefLayout() {
+    }
+
+    @Override
+    public void doSkins() {
     }
 }

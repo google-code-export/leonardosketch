@@ -8,6 +8,7 @@ import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.control.Control;
+import org.joshy.gfx.util.u;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -20,15 +21,16 @@ import java.awt.image.BufferedImage;
 * Time: 7:45 PM
 * To change this template use File | Settings | File Templates.
 */
-class FreerangeColorPickerPopup extends Control {
+class FreerangeColorPickerPopup extends Control implements AbstractColorPickerPopup {
     private Image image;
     private BufferedImage img;
     private FlatColor selectedColor = FlatColor.GREEN;
-    private FreerangeColorPicker delegate;
+    private GenericColorPickerPopup delegate;
     private boolean hideOnSelect;
     private OutsideColorProvider outsideColorProvider;
+    boolean startedDrag;
 
-    public FreerangeColorPickerPopup(FreerangeColorPicker delegate, int width, int height, boolean hideOnSelect) {
+    public FreerangeColorPickerPopup(GenericColorPickerPopup delegate, int width, int height, boolean hideOnSelect) {
         this.hideOnSelect = hideOnSelect;
         this.delegate = delegate;
         EventBus.getSystem().addListener(this, MouseEvent.MouseAll, new Callback<MouseEvent>() {
@@ -59,6 +61,9 @@ class FreerangeColorPickerPopup extends Control {
     }
 
     private void processMouse(MouseEvent event) {
+        if(event.getType() == MouseEvent.MousePressed) {
+            startedDrag = true;
+        }
         if (event.getType() == MouseEvent.MouseDragged || event.getType() == MouseEvent.MousePressed) {
             int x = (int) event.getX();
             int y = (int) event.getY();
@@ -72,12 +77,13 @@ class FreerangeColorPickerPopup extends Control {
             setSelectedColor(new FlatColor(img.getRGB(x, y)));
             setDrawingDirty();
         }
-        if (event.getType() == MouseEvent.MouseReleased) {
+        if (event.getType() == MouseEvent.MouseReleased && event.getSource() == this && startedDrag) {
             setDrawingDirty();
-            if(hideOnSelect) {
-                setVisible(false);
+            if(hideOnSelect && delegate != null) {
+                delegate.setVisible(false);
             }
             setFinalColor(getSelectedColor());
+            startedDrag = false;
         }
 
     }
@@ -154,6 +160,10 @@ class FreerangeColorPickerPopup extends Control {
 
     public void setOutsideColorProvider(OutsideColorProvider outsideColorProvider) {
         this.outsideColorProvider = outsideColorProvider;
+    }
+
+    public void startDrag() {
+        startedDrag = true;
     }
 
     public static class OutsideColorProvider {
