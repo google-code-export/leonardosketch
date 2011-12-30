@@ -3,6 +3,7 @@ package org.joshy.sketch.model;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
@@ -366,7 +367,7 @@ public class ResizableGrid9Shape extends AbstractResizeableNode implements SelfD
 //            double w = font.calculateWidth(node.getText());
 //            double h = font.calculateHeight(node.getText());
             List<Point2D> points = new ArrayList<Point2D>();
-            points.add(new Point2D.Double(0,0));
+            points.add(new Point2D.Double(node.getTranslateX()+node.getX(),node.getTranslateY()+node.getY()));
             points.add(new Point2D.Double(originalWidth,originalHeight));
             return points;
         }
