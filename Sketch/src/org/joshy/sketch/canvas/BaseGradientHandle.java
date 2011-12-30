@@ -231,13 +231,13 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         g.translate(hp.getX(),hp.getY());
 
         double angle = GeomUtil.calcAngle(getStart(), getEnd());
-        g.rotate(-Math.toDegrees(angle), Transform.Z_AXIS);
+        g.rotate(-angle, Transform.Z_AXIS);
         Path2D.Double path = createHandlePath();
         g.setPaint(FlatColor.WHITE);
         g.fillPath(path);
         g.setPaint(FlatColor.BLACK);
         g.drawPath(path);
-        g.rotate(Math.toDegrees(angle), Transform.Z_AXIS);
+        g.rotate(angle, Transform.Z_AXIS);
         g.translate(-hp.getX(),-hp.getY());
     }
 
@@ -247,7 +247,7 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         double theta = theta2-theta1;
 
         double ac = a.distance(c);
-        double ad = Math.cos(theta)*ac;
+        double ad = Math.cos(Math.toRadians(theta))*ac;
         return GeomUtil.calcPoint(a, GeomUtil.calcAngle(a, b), ad);
     }
 
@@ -261,7 +261,7 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
             g.translate(pt.getX(),pt.getY());
 
             double angle = GeomUtil.calcAngle(getStart(),getEnd());
-            g.rotate(-Math.toDegrees(angle), Transform.Z_AXIS);
+            g.rotate(-angle, Transform.Z_AXIS);
             Path2D.Double path = createHandlePath();
 
             //fill stop
@@ -285,7 +285,7 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
             g.drawPath(path);
 
 
-            g.rotate(Math.toDegrees(angle), Transform.Z_AXIS);
+            g.rotate(angle, Transform.Z_AXIS);
             g.translate(-pt.getX(),-pt.getY());
         }
         g.setPureStrokes(false);
