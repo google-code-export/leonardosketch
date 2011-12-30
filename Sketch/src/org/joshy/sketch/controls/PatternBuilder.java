@@ -181,10 +181,7 @@ public class PatternBuilder extends VFlexBox {
 
 
 
-                BufferedImage img = new BufferedImage(
-                        (int) iw,
-                        (int) ih,
-                        BufferedImage.TYPE_INT_ARGB);
+                BufferedImage img = new BufferedImage((int) iw,(int) ih, BufferedImage.TYPE_INT_ARGB);
                 try {
                     pat = PatternPaint.create(img,"generated"+Math.random());
                 } catch (IOException e) {
@@ -194,6 +191,9 @@ public class PatternBuilder extends VFlexBox {
                 gfx.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
                 gfx.drawImage(noisePat.getImage(),0,0,null);
 
+                gfx.setComposite(
+                        AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
+                                (float)(1.0f-(noiseAmount.getValue()/100.0))));
 
                 gfx.rotate(Math.toRadians(angle));
 
@@ -218,10 +218,7 @@ public class PatternBuilder extends VFlexBox {
                 g2.setPaint(pat);
                 g2.fillRect(0,0,getWidth(),getHeight());
             } else {
-                BufferedImage img = new BufferedImage(
-                        (int) 100,
-                        (int) 100,
-                        BufferedImage.TYPE_INT_ARGB);
+                BufferedImage img = new BufferedImage(100,100,BufferedImage.TYPE_INT_ARGB);
                 try {
                     pat = PatternPaint.create(img,"generated"+Math.random());
                 } catch (IOException e) {
