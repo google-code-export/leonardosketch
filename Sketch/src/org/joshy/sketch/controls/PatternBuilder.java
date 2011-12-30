@@ -27,7 +27,7 @@ import java.io.IOException;
  * Time: 7:57 PM
  * To change this template use File | Settings | File Templates.
  */
-public class PatternBuilder extends VFlexBox {
+public class PatternBuilder extends HFlexBox {
     private FreerangeColorPicker color1;
     private FreerangeColorPicker color2;
     private PreviewControl preview;
@@ -74,17 +74,12 @@ public class PatternBuilder extends VFlexBox {
         color1.setPrefHeight(30);
         color1.setSelectedColor(FlatColor.BLUE);
         color1.setRecenterOnSelect(false);
-        add(new HFlexBox()
-                .add(new Label("Base color"),0)
-                .add(color1,0)
-                ,0);
-
         useStripe = new Checkbox("Stripe");
-        add(useStripe,0);
 
 
         stripes = new VFlexBox();
         stripes.setFill(FlatColor.hsb(0,0,0.8));
+        stripes.add(useStripe,0);
 
         color2 = new FreerangeColorPicker();
         color2.setPrefWidth(30);
@@ -119,17 +114,26 @@ public class PatternBuilder extends VFlexBox {
                 .add(stripeAngle, 0)
                 , 0);
 
-        add(stripes,0);
-
         noiseAmount = new Slider(false);
         noiseAmount.setMin(0).setMax(100).setValue(0);
-        add(new HFlexBox()
-                .add(new Label("noise"),0)
-                .add(noiseAmount,0)
-                ,0);
 
         showPatternGrid = new org.joshy.gfx.node.control.Checkbox("Show pattern grid");
-        add(showPatternGrid,0);
+
+        add(new VFlexBox()
+                .add(new HFlexBox()
+                        .add(new Label("Base color"),0)
+                        .add(color1,0)
+                        ,0)
+                .add(new HFlexBox()
+                        .add(new Label("noise"),0)
+                        .add(noiseAmount,0)
+                        ,0)
+                .add(showPatternGrid,0)
+        );
+
+        add(stripes,0);
+
+
 
         preview = new PreviewControl();
         this.add(preview,0);
