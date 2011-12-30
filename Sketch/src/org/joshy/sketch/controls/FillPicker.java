@@ -187,7 +187,7 @@ public class FillPicker extends Button {
                 popup.setVisible(false);
             }
         });
-        Button addButton = new Button("+");
+        Button addButton = new Button("add image");
         addButton.onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
                 FileDialog fd = new FileDialog((Frame) null);
@@ -206,7 +206,7 @@ public class FillPicker extends Button {
                 }
             }
         });
-        Button createButton = new Button("#");
+        Button createButton = new Button("create new");
         createButton.onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent event) throws Exception {
                 final PatternBuilder builder = new PatternBuilder();
@@ -218,13 +218,21 @@ public class FillPicker extends Button {
                         stage.hide();
                     }
                 };
+                Callback<ActionEvent> cancelAction = new Callback<ActionEvent>() {
+                    public void call(ActionEvent event) throws Exception {
+                        stage.hide();
+                    }
+                };
                 stage.setContent(new VFlexBox()
-                        .add(builder, 0)
-                        .add(new Button("cancel"), 0)
-                        .add(new Button("close").onClicked(closeAction), 0)
+                        .add(builder, 1)
+                        .add(new HFlexBox()
+                                .add(new Button("cancel").onClicked(cancelAction), 0)
+                                .add(new Button("save").onClicked(closeAction), 0)
+                                ,0)
                 );
-                stage.setWidth(800);
-                stage.setHeight(600);
+                stage.setWidth(600);
+                stage.setHeight(350);
+                stage.centerOnScreen();
             }
         });
         VFlexBox vbox = new VFlexBox();
