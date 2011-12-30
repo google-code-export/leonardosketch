@@ -422,7 +422,12 @@ public class SelectMoveTool extends CanvasTool {
 
         if(context.getSelection().size() == 1){
             contextMenu.addActions(new CreateSymbol(context));
+        }
+        
+        if(!context.getSelection().isEmpty()) {
             contextMenu.addActions(new CreateResizableShape(context));
+        }
+        if(context.getSelection().size() == 1){
             SNode node = context.getSelection().firstItem();
             if(node instanceof ResizableGrid9Shape) {
                 contextMenu.addActions(new CreateResizableShape.Edit(context));
