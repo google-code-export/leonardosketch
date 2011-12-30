@@ -11,6 +11,7 @@ import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.GeomUtil;
+import org.joshy.gfx.util.u;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -23,7 +24,7 @@ import java.awt.image.BufferedImage;
  * Time: 12:16 AM
  * To change this template use File | Settings | File Templates.
  */
-public class HSVColorPicker extends Control {
+public class HSVColorPicker extends Control implements AbstractColorPickerPopup {
     private BufferedImage img;
     private Image ring;
     private int ringWidth;
@@ -32,12 +33,13 @@ public class HSVColorPicker extends Control {
     private Point2D dragPoint;
     private double hue;
     private FlatColor selectedColor;
-    private FreerangeColorPicker delegate;
+    private GenericColorPickerPopup delegate;
     private Image svImage;
     private BufferedImage svImg;
     private double sat=1;
     private double bri=1;
     int inset = 40;
+    private boolean startedDrag;
 
     public static void main(String ... args) throws Exception {
         Core.init();
@@ -51,7 +53,7 @@ public class HSVColorPicker extends Control {
     }
 
 
-    public HSVColorPicker(FreerangeColorPicker delegate, int width, int height) {
+    public HSVColorPicker(GenericColorPickerPopup delegate, int width, int height) {
         this.delegate = delegate;
         this.initWidth = width;
         this.initHeight = height;
@@ -62,11 +64,12 @@ public class HSVColorPicker extends Control {
         for(int x=0; x<width; x++) {
             for(int y=0; y<height; y++) {
                 Point2D pt = new Point(x,y);
-                double angle = GeomUtil.calcAngle(c, pt);
-                int color = Color.HSBtoRGB((float) (angle/(Math.PI*2)),1,1);
-                g.setPaint(new Color(color));
                 if(pt.distance(c) > width/2 || pt.distance(c) < width/2-ringWidth) {
                     g.setPaint(new Color(0,0,0,0));
+                } else {
+                    double angle = GeomUtil.calcAngle(c, pt);
+                    int color = Color.HSBtoRGB((float) (angle/360f),1,1);
+                    g.setPaint(new Color(color));
                 }
                 g.drawRect(x,y,1,1);
             }
@@ -86,6 +89,9 @@ public class HSVColorPicker extends Control {
     }
 
     private void processMouse(MouseEvent event) {
+        if(event.getType() == MouseEvent.MousePressed) {
+            startedDrag = true;
+        }
         if (event.getType() == MouseEvent.MouseDragged || event.getType() == MouseEvent.MousePressed) {
             Point2D pt = new Point2D.Double(event.getX(),event.getY());
             Point2D c = new Point(initWidth/2,initHeight/2);
@@ -107,10 +113,13 @@ public class HSVColorPicker extends Control {
                 sat = 1-x/w;
                 bri = 1-y/h;
             }
-            setSelectedColor(FlatColor.hsb(Math.toDegrees(hue), sat, bri));
+            setSelectedColor(FlatColor.hsb(hue, sat, bri));
         }
-        if(event.getType() == MouseEvent.MouseReleased) {
-            setVisible(false);
+        if(event.getType() == MouseEvent.MouseReleased && startedDrag) {
+            if(delegate != null) {
+                delegate.setVisible(false);
+            }
+            startedDrag = false;
         }
     }
 
@@ -122,7 +131,7 @@ public class HSVColorPicker extends Control {
             for(int y=0; y<svImg.getHeight(); y++) {
                 float bri = ((float)y)/((float)svImg.getHeight());
                 bri = 1-bri;
-                int color = Color.HSBtoRGB((float) (hue/(Math.PI*2)),sat,bri);
+                int color = Color.HSBtoRGB((float) (hue/360),sat,bri);
                 g2.setPaint(new Color(color));
                 g2.drawRect(x, y, 1, 1);
             }
@@ -132,6 +141,8 @@ public class HSVColorPicker extends Control {
 
     @Override
     public void doLayout() {
+        setWidth(ring.getWidth());
+        setHeight(ring.getHeight());
     }
 
     @Override
@@ -177,5 +188,9 @@ public class HSVColorPicker extends Control {
         }
         EventBus.getSystem().publish(new ChangedEvent(ChangedEvent.ColorChanged,selectedColor,this,true));
         setDrawingDirty();
+    }
+
+    public void startDrag() {
+        this.startedDrag = true;
     }
 }
