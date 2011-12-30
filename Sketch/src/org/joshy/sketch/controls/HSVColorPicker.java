@@ -59,21 +59,22 @@ public class HSVColorPicker extends Control implements AbstractColorPickerPopup 
         this.initHeight = height;
         ringWidth = 25;
         img = new BufferedImage(width,height,BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = img.createGraphics();
         Point2D c = new Point(width/2,height/2);
+        u.startTimer();
+        int transparent = new Color(0,0,0,0).getRGB();
         for(int x=0; x<width; x++) {
             for(int y=0; y<height; y++) {
                 Point2D pt = new Point(x,y);
                 if(pt.distance(c) > width/2 || pt.distance(c) < width/2-ringWidth) {
-                    g.setPaint(new Color(0,0,0,0));
+                    img.setRGB(x,y,transparent);
                 } else {
                     double angle = GeomUtil.calcAngle(c, pt);
                     int color = Color.HSBtoRGB((float) (angle/360f),1,1);
-                    g.setPaint(new Color(color));
+                    img.setRGB(x,y,color);
                 }
-                g.drawRect(x,y,1,1);
             }
         }
+        u.stopTimer();
         ring = Image.create(img);
 
         svImg = new BufferedImage(initWidth-40*2,initHeight-40*2, BufferedImage.TYPE_INT_ARGB);
