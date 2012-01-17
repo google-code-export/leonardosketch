@@ -1,16 +1,15 @@
 package org.joshy.sketch.actions.io;
 
+import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Paint;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,48 +31,50 @@ public class SaveHTMLAction extends BaseExportAction {
         return "HTML";
     }
 
-    /*
-    @Override
-    public void execute() {
-        File dir = new File("foo");
-        ExportProcessor.process(new HTMLExport(), new MultiFileOutput(dir), ((SketchDocument) context.getDocument()));
-        OSUtil.openBrowser(new File(dir,"page0.html").toURI().toASCIIString());
-    }
-    */
-
     public void export(File file, SketchDocument doc) {
         ExportProcessor.process(new HTMLExport(), new MultiFileOutput(file), doc);
     }
 
     private static class HTMLExport implements ShapeExporter<MultiFileOutput> {
+        private SketchDocument doc;
+
         public void docStart(MultiFileOutput out, SketchDocument doc) {
+            this.doc = doc;
             out.dir.mkdir();
         }
 
         public void pageStart(MultiFileOutput out, SketchDocument.SketchPage page) {
             out.startPage();
-            PrintWriter w = out.getWriter();
-            w.println("<html>");
-            w.println("<head>");
-            w.println("<style type='text/css'>");
-            w.println("body { background-color: "+toText(page.getDocument().getBackgroundFill())+";}");
-            w.println("</style>");
-            w.println("</head>");
-            w.println("<head><title>slide</title></head>");
-            w.println("<body>");
+            XMLWriter xml = out.getXML();
+            xml.start("html")
+                .start("head");
+            xml.start("style")
+                .attr("type", "text/css")
+                .text("body { background-color: " + toText(page.getDocument().getBackgroundFill()) + ";}")
+                .end();
+            xml.start("title").text("slide").end();
+            xml.end();//head
+            xml.start("body");
+        }
+
+        public String getPageFilenameById(MultiFileOutput out, String linkTarget) {
+            return out.getPageFilename(doc.getPageIndexById(linkTarget));
         }
 
         public void exportPre(MultiFileOutput out, SNode shape) {
             if(shape instanceof SText) {
                 SText text = (SText) shape;
-                out.getWriter().println("<p style='position: absolute;"
+                out.getXML().start("p")
+                        .attr("style","position: absolute;"
                         + " left:" + (shape.getTranslateX()+text.getX())+"px;"
                         + " top:"  + (shape.getTranslateY()+text.getY())+"px;"
                         + " font-size:"+text.getFontSize()+"pt;"
                         //+ " border: 1px solid red;"
                         + " color:" + toText(text.getFillPaint()) + ";"
                         + " margin: 0px;"
-                        +"'>"+((SText)shape).getText()+"</p>");
+                                )
+                        .text(((SText)shape).getText())
+                        .end();
             } else {
                 renderShape(out,shape);
             }
@@ -100,12 +101,19 @@ public class SaveHTMLAction extends BaseExportAction {
                 x += ((SResizeableNode) shape).getX();
                 y += ((SResizeableNode) shape).getY();
             }
-            out.getWriter().println("<img src='"+imf.getName()+"'"
-                    +" style='position:absolute;"
-                    +" left:"+x+"px;"
-                    +" top:" +y+"px;"
-                    +"'/>");
-
+            XMLWriter xml = out.getXML();
+            if(shape.isLink()) {
+                xml.start("a", "href", getPageFilenameById(out,shape.getLinkTarget()));
+            }
+            xml.start("img")
+                    .attr("src",imf.getName())
+                    .attr("style","position:absolute;"
+                        +" left:"+x+"px;"
+                        +" top:" +y+"px;"
+                    ).end();
+            if(shape.isLink()) {
+                xml.end();//a
+            }
         }
 
         public void exportPost(MultiFileOutput out, SNode shape) {
@@ -113,19 +121,30 @@ public class SaveHTMLAction extends BaseExportAction {
         }
 
         public void pageEnd(MultiFileOutput out, SketchDocument.SketchPage page) {
-            PrintWriter w = out.getWriter();
+            XMLWriter xml = out.getXML();
             int index = out.getPageIndex();
-            w.println("<p id='nav'>");
+            xml.start("p")
+                    .attr("id", "nav")
+                    ;
             if(index > 0) {
-                w.println("<a href='"+out.getPageFilename(index-1)+"'>&lt; prev</a>");
+                xml.start("a","href",out.getPageFilename(index-1));
+                xml.text("&lt; prev");
+                xml.end();
+            } else {
+                xml.text("&lt; prev");
             }
-            w.println(" page " + (index+1));
+            xml.text(" | page " + (index+1) + " | ");
             if(index < page.getDocument().getPages().size()-1) {
-                w.println("<a href='"+out.getPageFilename(index+1)+"'>next &gt;</a>");
+                xml.start("a")
+                    .attr("href",out.getPageFilename(index+1))
+                    .text("next &gt;")
+                    .end();
+            } else {
+                xml.text("next &gt;");
             }
-            w.println("</p>");
-            w.println("</body>");
-            w.println("</html>");
+            xml.end();
+            xml.end();//body
+            xml.end();//html
             out.endPage();
         }
 
@@ -150,8 +169,8 @@ public class SaveHTMLAction extends BaseExportAction {
         private File dir;
         private int pageIndex;
         private File currentFile;
-        private PrintWriter currentWriter;
         private int imageIndex = 0;
+        private XMLWriter xml;
 
         public MultiFileOutput(File file) {
             this.dir = file;
@@ -161,18 +180,18 @@ public class SaveHTMLAction extends BaseExportAction {
         public void startPage() {
             currentFile = new File(dir,"page"+pageIndex+".html");
             try {
-                currentWriter = new PrintWriter(new FileOutputStream(currentFile));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                xml = new XMLWriter(currentFile);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 
-        public PrintWriter getWriter() {
-            return currentWriter;
+        public XMLWriter getXML() {
+            return xml;
         }
 
         public void endPage() {
-            currentWriter.close();
+            xml.close();
             pageIndex++;
         }
 
@@ -182,11 +201,12 @@ public class SaveHTMLAction extends BaseExportAction {
 
         public String getPageFilename(int index) {
             return "page"+index+".html";
-        }
+        }        
 
         public File createImageFile() {
             imageIndex++;
             return new File(dir,"image"+imageIndex+".png");
         }
+
     }
 }

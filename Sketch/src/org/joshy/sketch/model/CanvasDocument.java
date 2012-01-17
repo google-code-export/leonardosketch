@@ -206,6 +206,16 @@ public class CanvasDocument<P extends Page> {
             }
         }
     }
+    public int getPageIndexById(String target) {
+        for(int n=0; n<pages.size(); n++) {
+            Page p = pages.get(n);
+            if(p.getId().equals(target)) {
+                return n;
+            }
+        }
+        return -1;
+    }
+
 
 
 }
