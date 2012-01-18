@@ -3,11 +3,13 @@ package org.joshy.sketch.actions.io;
 import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Paint;
+import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
+import org.joshy.sketch.util.Util;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -31,8 +33,14 @@ public class SaveHTMLAction extends BaseExportAction {
         return "HTML";
     }
 
-    public void export(File file, SketchDocument doc) {
-        ExportProcessor.process(new HTMLExport(), new MultiFileOutput(file), doc);
+    @Override
+    protected boolean isDirectoryAction() {
+        return true;
+    }
+
+    public void export(File basedir, SketchDocument doc) {
+        ExportProcessor.process(new HTMLExport(), new MultiFileOutput(basedir), doc);
+        OSUtil.openBrowser(new File(basedir, "index.html").toURI().toASCIIString());
     }
 
     private static class HTMLExport implements ShapeExporter<MultiFileOutput> {
@@ -179,6 +187,9 @@ public class SaveHTMLAction extends BaseExportAction {
 
         public void startPage() {
             currentFile = new File(dir,"page"+pageIndex+".html");
+            if(pageIndex == 0) {
+                currentFile = new File(dir,"index.html");
+            }
             try {
                 xml = new XMLWriter(currentFile);
             } catch (IOException e) {
@@ -200,6 +211,9 @@ public class SaveHTMLAction extends BaseExportAction {
         }
 
         public String getPageFilename(int index) {
+            if(index == 0) {
+                return "index.html";
+            }
             return "page"+index+".html";
         }        
 
