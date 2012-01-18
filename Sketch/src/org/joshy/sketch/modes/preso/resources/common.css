@@ -4,22 +4,6 @@ body {
     background-color: white;
 }
 
-.page {
-    display: block;
-    height: 90%;
-    padding-left: 3em;
-    padding-bottom: 1em;
-    padding-right: 3em;
-    padding-top: 1em;
-    margin-right: auto;
-    margin-left: auto;
-    border-left-width: 0px;
-    border-bottom-width: 1px;
-    border-right-width: 0px;
-    border-top-width: 0px;
-    border-style: solid;
-}
-
 /* title page */
 h1 {
     text-align: center;
@@ -44,3 +28,31 @@ h2 {
 ul {
     font-size: 200%;
 }
+
+
+/* slideshow stuff */
+.page {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding:2em;
+    margin:0;
+    border: 0px solid red;
+}
+.incoming, .current, .outgoing {
+    display: block;
+    -webkit-transition: -webkit-transform 0.3s ease-in;
+}
+.current {
+    -webkit-transform: translate(0px,0);
+}
+.incoming {
+    -webkit-transform: translate(100%,0);
+}
+.outgoing {
+    -webkit-transform: translate(-100%,0);
+}
+        

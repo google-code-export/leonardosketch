@@ -55,6 +55,7 @@ public class ExportHTMLPresentationAction extends SAction {
         private DecimalFormat intFormat;
         private int imageIndex;
         private File resources;
+        private int pageCount;
 
         public HTMLPresoExport(File basedir) {
             this.basedir = basedir;
@@ -69,14 +70,18 @@ public class ExportHTMLPresentationAction extends SAction {
             out.start("html");
             out.start("head");
             out.start("title").text("a presentation crafted with Leonardo Sketch").end();
+            out.start("script","type","text/javascript","src","http://code.jquery.com/jquery-1.7.1.js").end();
             resources = new File(basedir,"resources");
             resources.mkdir();
             SwitchTheme.PresoThemeAction theme = (SwitchTheme.PresoThemeAction) doc.getProperties().get("theme");
             if(theme != null) {
                 theme.exportResources(out,resources);
             }
+            out.start("script","type","text/javascript","src","resources/common.js").end();
+
             out.end();
             out.start("body");
+            pageCount = 1;
         }
 
         private File createImageFile() {
@@ -85,7 +90,15 @@ public class ExportHTMLPresentationAction extends SAction {
         }
 
         public void pageStart(XMLWriter out, SketchDocument.SketchPage page) {
-            out.start("div","class","page","style","position:relative;");
+            out.start("div");
+            out.attr("id","t"+pageCount);
+            switch(pageCount) {
+                case 1: out.attr("class","page current"); break;
+                case 2: out.attr("class","page incoming"); break;
+                default: out.attr("class","page");
+            }
+
+
             for(SNode node : page.getNodes()) {
                 if(node instanceof SText) {
                     SText text = (SText) node;
@@ -188,6 +201,7 @@ public class ExportHTMLPresentationAction extends SAction {
 
         public void pageEnd(XMLWriter out, SketchDocument.SketchPage page) {
             out.end();
+            pageCount++;
         }
 
         public void docEnd(XMLWriter out, SketchDocument document) {
