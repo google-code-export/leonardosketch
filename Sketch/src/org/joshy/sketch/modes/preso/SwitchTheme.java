@@ -94,6 +94,7 @@ public class SwitchTheme {
             out.start("link").attr("rel", "stylesheet").attr("href", "resources/common.css");
             out.start("link").attr("rel", "stylesheet").attr("href", "resources/cowboy.css");
             try {
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/common.js"),new File(resources, "common.js"));
                 Util.copyToFile(this.getClass().getResourceAsStream("resources/common.css"),
                         new File(resources, "common.css"));
                 Util.copyToFile(this.getClass().getResourceAsStream("resources/cowboy.css"),
@@ -136,6 +137,7 @@ public class SwitchTheme {
             out.start("link").attr("rel", "stylesheet").attr("href", "resources/common.css").end();
             out.start("link").attr("rel", "stylesheet").attr("href", "resources/future.css").end();
             try {
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/common.js"),new File(resources, "common.js"));
                 Util.copyToFile(this.getClass().getResourceAsStream("resources/common.css"),
                         new File(resources, "common.css"));
                 Util.copyToFile(this.getClass().getResourceAsStream("resources/future.css"),
@@ -166,6 +168,7 @@ public class SwitchTheme {
             out.start("link").attr("rel", "stylesheet").attr("href", "resources/classy.css").end();
 
             try {
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/common.js"),new File(resources, "common.js"));
                 Util.copyToFile(this.getClass().getResourceAsStream("resources/common.css"),
                         new File(resources, "common.css"));
                 Util.copyToFile(this.getClass().getResourceAsStream("resources/classy.css"),
@@ -197,6 +200,7 @@ public class SwitchTheme {
             out.start("link").attr("rel", "stylesheet").attr("href", "resources/standard.css").end();
 
             try {
+                Util.copyToFile(this.getClass().getResourceAsStream("resources/common.js"),new File(resources, "common.js"));
                 Util.copyToFile(this.getClass().getResourceAsStream("resources/common.css"),
                         new File(resources, "common.css"));
                 Util.copyToFile(this.getClass().getResourceAsStream("resources/standard.css"),
