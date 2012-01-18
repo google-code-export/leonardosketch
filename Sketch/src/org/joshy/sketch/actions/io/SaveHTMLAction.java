@@ -161,8 +161,8 @@ public class SaveHTMLAction extends BaseExportAction {
         }
 
         public boolean isContainer(SNode n) {
-            if(n instanceof SGroup) return true;
-            if(n instanceof ResizableGrid9Shape) return true;
+            if(n instanceof SGroup) return false;
+            if(n instanceof ResizableGrid9Shape) return false;
             return false;
         }
 
