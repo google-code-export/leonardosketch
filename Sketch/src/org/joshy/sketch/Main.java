@@ -180,7 +180,7 @@ public class Main implements Runnable {
         CURRENT_BUILD_NUMBER = Integer.parseInt(releaseProperties.getProperty("org.joshy.sketch.build.number"));
         UPDATE_URL = releaseProperties.getProperty("org.joshy.sketch.updateurl");
         DOWNLOAD_URL = releaseProperties.getProperty("org.joshy.sketch.downloadurl");
-        AMINO_BINARY_URL = System.getProperty("com.joshondesign.amino.binaryurl","http://goamino.org/download/daily/amino-1.0b2.js");
+        AMINO_BINARY_URL = System.getProperty("com.joshondesign.amino.binaryurl","http://goamino.org/download/daily/amino.js");
 
         settings = new Properties();
         if(SETTINGS_FILE.exists()) {
