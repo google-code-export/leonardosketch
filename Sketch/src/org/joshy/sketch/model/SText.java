@@ -5,6 +5,7 @@ import org.joshy.gfx.draw.*;
 import java.awt.geom.Area;
 
 public class SText extends AbstractResizeableNode implements SelfDrawable {
+
     public enum HAlign { Left, Center, Right };
 
     private String text;
@@ -15,18 +16,7 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
     private boolean autoSize = true;
     private HAlign halign = HAlign.Left;
     private boolean bulleted = false;
-
-    public HAlign getHalign() {
-        return halign;
-    }
-
-    public void setHalign(HAlign halign) {
-        this.halign = halign;
-        markContentChanged();
-    }
-
-
-
+    private boolean wrapText = false;
 
     public SText(double x, double y, double w, double h) {
         super(x, y, w, h);
@@ -35,6 +25,15 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
     }
     public SText() {
         this(0,0,100,100);
+    }
+
+    public HAlign getHalign() {
+        return halign;
+    }
+
+    public void setHalign(HAlign halign) {
+        this.halign = halign;
+        markContentChanged();
     }
 
     public String getText() {
@@ -188,21 +187,40 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
                 .weight(this.getWeight())
                 .style(this.getStyle())
                 .resolve();
-        String[] strings = getText().split("\n");
         double x = 0;
         double y = 0;
-        y += font.getAscender();
-        double fw = getWidth();
-        for(String s : strings) {
-            double w = font.calculateWidth(s);
-            switch(this.getHalign()) {
-                case Left: x = 0; break;
-                case Center: x = (fw-w)/2; break;
-                case Right: x = fw-w; break;
-            }
 
-            drawText(g, s, font, this.getX() + x, this.getY() + y);
-            y += (font.getAscender() + font.getDescender());
+        if(isWrapText()) {
+            double maxWidth = getWidth();
+            String[] words = getText().split(" ");
+            double wordSpacing = 10;
+            y += font.getAscender();
+            for(String word : words) {
+                double w = font.calculateWidth(word);
+                if(x + w > maxWidth) {
+                    x = 0;
+                    y += (font.getAscender() + font.getDescender());
+                }
+                drawText(g,word,font, this.getX()+x,this.getY()+y);
+                x += (w + wordSpacing);
+            }
+            
+        } else {
+            //draw unwrapped text
+            String[] strings = getText().split("\n");
+            y += font.getAscender();
+            double fw = getWidth();
+            for(String s : strings) {
+                double w = font.calculateWidth(s);
+                switch(this.getHalign()) {
+                    case Left: x = 0; break;
+                    case Center: x = (fw-w)/2; break;
+                    case Right: x = fw-w; break;
+                }
+
+                drawText(g, s, font, this.getX() + x, this.getY() + y);
+                y += (font.getAscender() + font.getDescender());
+            }
         }
     }
 
@@ -241,5 +259,13 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
         return bulleted;
     }
 
+    public boolean isWrapText() {
+        return wrapText;
+    }
+
+    public void setWrapText(boolean wrapText) {
+        this.wrapText = wrapText;
+        markContentChanged();
+    }
 
 }

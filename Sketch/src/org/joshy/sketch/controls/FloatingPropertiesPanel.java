@@ -66,6 +66,7 @@ public class FloatingPropertiesPanel extends VFlexBox {
     private Togglebutton fontAlignHCenter;
     private Togglebutton fontAlignRight;
     private ToggleGroup fontAlignGroup;
+    private Checkbox fontWrap;
     private DecimalFormat df;
     private DecimalFormat intFormat;
     private FlexBox defaultProperties;
@@ -228,6 +229,16 @@ public class FloatingPropertiesPanel extends VFlexBox {
             }
         });
 
+        fontWrap = new Checkbox("wrap");
+        fontWrap.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent event) throws Exception {
+                if(manager.propMan.isClassAvailable(SText.class)) {
+                    manager.propMan.getProperty("wrapText").setValue(fontWrap.isSelected());
+                    context.redraw();
+                }
+            }
+        });
+        fontProperties.add(fontWrap);
 
         arrowHeadEnd = new PopupMenuButton<SArrow.HeadEnd>();
         arrowHeadEnd.setModel(ListView.createModel(SArrow.HeadEnd.values()));
@@ -479,6 +490,10 @@ public class FloatingPropertiesPanel extends VFlexBox {
             double dval = manager.propMan.getProperty("fontSize").getDoubleValue();
             if(selection.size() == 1) {
                 fontSizeSlider.setValue(dval);
+            }
+            PropertyManager.Property wrapText = manager.propMan.getProperty("wrapText");
+            if(wrapText.hasSingleValue()) {
+                fontWrap.setSelected(wrapText.getBooleanValue());
             }
         } else {
             fontProperties.setVisible(false);

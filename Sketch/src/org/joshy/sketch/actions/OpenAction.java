@@ -568,6 +568,7 @@ public class OpenAction extends SAction {
             loadStringAttribute(e,node,"fontName");
             loadBooleanAttribute(e,node,"autoSize");
             loadBooleanAttribute(e,node,"bulleted");
+            loadBooleanAttribute(e,node,"wrapText");
             if(!"".equals(e.xpathString("text/text()"))) {
                 ((SText)node).setText(e.xpathString("text/text()"));
             }

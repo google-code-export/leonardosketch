@@ -85,9 +85,38 @@ public class PropertyManager {
             return 0;
         }
 
+        public boolean getBooleanValue() {
+            SNode first = items.iterator().next();
+
+            try {
+                Method method = getBooleanMethod();
+                Object value = method.invoke(first);
+                Boolean dval = (Boolean) value;
+                boolean ddval = dval.booleanValue();
+                return ddval;
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+
         private Method getMethod() throws NoSuchMethodException {
             SNode first = items.iterator().next();
-            Method method = first.getClass().getMethod("get"+ name.substring(0,1).toUpperCase()+ name.substring(1));
+            try {
+                Method method = first.getClass().getMethod("get"+ name.substring(0,1).toUpperCase()+ name.substring(1));
+                return method;
+            } catch (NoSuchMethodException ex) {
+                Method method = first.getClass().getMethod("is"+ name.substring(0,1).toUpperCase()+ name.substring(1));
+                return method;
+            }
+        }
+        private Method getBooleanMethod() throws NoSuchMethodException {
+            SNode first = items.iterator().next();
+            Method method = first.getClass().getMethod("is"+ name.substring(0,1).toUpperCase()+ name.substring(1));
             return method;
         }
 
