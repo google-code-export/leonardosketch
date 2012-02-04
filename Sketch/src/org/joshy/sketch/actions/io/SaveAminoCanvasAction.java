@@ -1,6 +1,8 @@
 package org.joshy.sketch.actions.io;
 
 import org.joshy.gfx.draw.*;
+import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.stage.swing.SwingGFX;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
@@ -288,19 +290,26 @@ public class SaveAminoCanvasAction extends BaseExportAction {
                 }
                 if(shape instanceof SText) {
                     SText n = (SText) shape;
-                    out.println("new Text()");
-                    out.prop("text",escapeString(n.getText()));
-                    out.prop("x",n.getX());
-                    out.prop("y",n.getY()+n.getAscent());
-                    out.prop("hAlign",n.getHalign().toString().toLowerCase());
-                    out.prop("autoSize",n.isAutoSize());
-                    out.prop("width",n.getWidth());
-                    double fontSize = n.getFontSize();
-                    if(Toolkit.getDefaultToolkit().getScreenResolution() == 72) {
-                        fontSize = fontSize / 1.33;
-                    }
+                    if(shape.getBooleanProperty("com.joshondesign.amino.bitmaptext")) {
+                        renderToCachedBitmapText(out,n);
+                        out.prop("text",escapeString(n.getText()));
+                        out.prop("x",n.getX());
+                        out.prop("y", n.getY() + n.getAscent());
+                    } else {
+                        out.println("new Text()");
+                        out.prop("text",escapeString(n.getText()));
+                        out.prop("x",n.getX());
+                        out.prop("y",n.getY()+n.getAscent());
+                        out.prop("hAlign",n.getHalign().toString().toLowerCase());
+                        out.prop("autoSize",n.isAutoSize());
+                        out.prop("width",n.getWidth());
+                        double fontSize = n.getFontSize();
+                        if(Toolkit.getDefaultToolkit().getScreenResolution() == 72) {
+                            fontSize = fontSize / 1.33;
+                        }
 
-                    out.prop("font",df.format(fontSize)+"pt "+n.getFontName());
+                        out.prop("font",df.format(fontSize)+"pt "+n.getFontName());
+                    }
                 }
                 out.indent();
                 out.prop("strokeWidth", shape.getStrokeWidth());
@@ -349,6 +358,79 @@ public class SaveAminoCanvasAction extends BaseExportAction {
             nodes.add(node);
             SavePNGAction.exportFragment(file, nodes);
             out.println("new ImageView('"+file.getName()+"')");
+        }
+
+        private void renderToCachedBitmapText(IndentWriter out, SText node) {
+            String name = node.getStringProperty("random.cache.name");
+            if(name == null) {
+                String id = node.getId();
+                if(id == null || "".equals(id.trim())) {
+                    id = "img_"+Math.round(Math.random()*10000);
+                }
+                name = "cache_"+id+".png";
+                node.setStringProperty("random.cache.name",name);
+            }
+            File file = new File(out.basedir,name);
+
+            String oldtext = node.getText();
+            //String key = " ;,.'\"!@#$%^&*()-+ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+            String key = "ABCDEFGHHIJKLMNOPQRSTUVWXYZ"
+                    +"abcdefghijklmnopqrstuvwxyz"
+                    +"0123456789"
+                    +" ,./;'[]\\!@#$%^&*()_+-="
+                    ;
+            node.setText(key);
+            Bounds bounds = node.getTransformedBounds();
+            BufferedImage img = new BufferedImage((int)bounds.getWidth()+1,(int)bounds.getHeight()+1,BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = img.createGraphics();
+            g2.translate(-bounds.getX(), -bounds.getY());
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            SwingGFX gfx = new SwingGFX(g2);
+            double[] metrics = node.getExportMetrics(gfx);
+            g2.translate(node.getTranslateX(), node.getTranslateY());
+
+            double[] totals = new double[metrics.length];
+            for(int i=0; i<key.length(); i++) {
+                char ch = key.charAt(i);
+                node.setText(""+ch);
+                double w = metrics[i];
+                node.draw(gfx);
+                double spacing = 2;
+                if(i==0) {
+                    totals[i] = 0;
+                } else {
+                    totals[i] = totals[i-1]  + metrics[i-1] + spacing;
+                }
+                g2.translate(w+spacing,0);
+            }
+
+            double lineHeight = node.getExportLineHeight(gfx);
+            g2.dispose();
+            try {
+                ImageIO.write(img,"png", file);
+                u.p("wrote out to: " + file.getAbsolutePath());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            node.setText(oldtext);
+            out.println("new BitmapText('"+file.getName()+"')");
+            StringBuffer keyBuffer = new StringBuffer();
+            keyBuffer.append("[");
+            for(int i=0; i<256; i++) {
+                int v = key.indexOf(i);
+                keyBuffer.append(v+",");
+            }
+            keyBuffer.append("]");
+
+            StringBuffer metricsBuffer = new StringBuffer();
+            metricsBuffer.append("[");
+            for(int i=0; i<metrics.length; i++) {
+                metricsBuffer.append(totals[i] + "," + metrics[i] + ",");
+            }
+            metricsBuffer.append("]");
+            out.println(".setMetrics("+keyBuffer+",\n"+metricsBuffer.toString()+")");
+            out.println(".setLineHeight("+lineHeight+")");
         }
 
         private void serializePath(IndentWriter out, SPath path) {
@@ -575,16 +657,19 @@ public class SaveAminoCanvasAction extends BaseExportAction {
         }
 
         public void prop(String propName, String value) {
-            println(".set"+propName.substring(0,1).toUpperCase()+propName.substring(1));
-            println("('"+value+"')");
+            writer.print(tabString);
+            writer.print(".set"+propName.substring(0,1).toUpperCase()+propName.substring(1));
+            writer.println("('"+value+"')");
         }
         public void prop(String propName, double value) {
-            println(".set"+propName.substring(0,1).toUpperCase()+propName.substring(1));
-            println("("+value+")");
+            writer.print(tabString);
+            writer.print(".set" + propName.substring(0, 1).toUpperCase() + propName.substring(1));
+            writer.println("(" +value+")");
         }
         public void prop(String propName, boolean value) {
-            println(".set"+propName.substring(0,1).toUpperCase()+propName.substring(1));
-            println("("+value+")");
+            writer.print(tabString);
+            writer.print(".set" + propName.substring(0, 1).toUpperCase() + propName.substring(1));
+            writer.println("(" +value+")");
         }
     }
 }
