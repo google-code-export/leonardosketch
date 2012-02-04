@@ -225,6 +225,30 @@ public class SText extends AbstractResizeableNode implements SelfDrawable {
         }
     }
 
+    public double getExportLineHeight(GFX g) {
+        Font font = Font.name(getFontName())
+                .size((float)this.getFontSize())
+                .weight(this.getWeight())
+                .style(this.getStyle())
+                .resolve();
+        return font.getAscender() + font.getDescender();
+    }
+    public double[] getExportMetrics(GFX g) {
+        Font font = Font.name(getFontName())
+                .size((float)this.getFontSize())
+                .weight(this.getWeight())
+                .style(this.getStyle())
+                .resolve();
+        double[] metrics = new double[getText().length()];        
+        for(int i=0; i<getText().length(); i++) {
+            char ch = getText().charAt(i);
+            double w = font.getWidth(ch+"");
+            metrics[i] = w;
+        }
+        return metrics;
+    }
+
+
     protected void drawText(GFX g, String s, Font font, double x, double y) {
         g.drawText(s,font, x,y);
         if(bulleted) {

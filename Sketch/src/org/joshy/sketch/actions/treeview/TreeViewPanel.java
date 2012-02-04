@@ -11,6 +11,7 @@ import org.joshy.sketch.Main;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.SGroup;
 import org.joshy.sketch.model.SNode;
+import org.joshy.sketch.model.SText;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
@@ -33,6 +34,7 @@ public class TreeViewPanel extends VFlexBox {
     private Textbox all_name;
     private Checkbox all_cache;
     private Checkbox all_cache_image;
+    private Checkbox bitmap_text;
 
     public TreeViewPanel(Main main, final VectorDocContext ctx) {
         this.main = main;
@@ -135,6 +137,8 @@ public class TreeViewPanel extends VFlexBox {
             }
         });
         propsPanel.add(all_cache);
+
+
         //cache as png image
         all_cache_image = new Checkbox("cache as image");
         EventBus.getSystem().addListener(all_cache_image, ActionEvent.Action, new Callback<Event>() {
@@ -150,6 +154,17 @@ public class TreeViewPanel extends VFlexBox {
 
         //text
         //cache as dynamic bitmap text
+        bitmap_text = new Checkbox("use bitmap text");
+        EventBus.getSystem().addListener(bitmap_text, ActionEvent.Action, new Callback<Event>() {
+            public void call(Event event) throws Exception {
+                Selection sel = ctx.getSelection();
+                if (sel.size() == 1) {
+                    SNode n = sel.firstItem();
+                    n.setBooleanProperty("com.joshondesign.amino.bitmaptext",bitmap_text.isSelected());
+                }
+            }
+        });
+        propsPanel.add(bitmap_text);
 
         this.add(propsPanel,0);
 
@@ -183,7 +198,16 @@ public class TreeViewPanel extends VFlexBox {
             } else {
                 all_name.setText("");
             }
-
+            
+            SNode n = sel.firstItem();
+            if(n instanceof SText) {
+                bitmap_text.setEnabled(true);
+                bitmap_text.setSelected(n.getBooleanProperty("com.joshondesign.amino.bitmaptext"));
+            } else {
+                bitmap_text.setEnabled(false);
+                bitmap_text.setSelected(false);
+            }
+            
             for(int i=0; i<model.getRowCount(); i++) {
                 Object row = model.get(i,0);
                 //u.p("row = " + row);
