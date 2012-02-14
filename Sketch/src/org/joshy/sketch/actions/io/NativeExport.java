@@ -79,6 +79,8 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
 
     public void pageStart(XMLWriter out, SketchDocument.SketchPage page) {
         out.start("page");
+        out.attr("id",page.getId());
+        out.attr("name",page.getName());
         out.start("guidelines");
         for(SketchDocument.Guideline gl : page.getGuidelines()) {
             out.start("guideline")
@@ -95,6 +97,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             out.start("group");
             saveAttribute(out,"translateX",group);
             saveAttribute(out,"translateY",group);
+            saveAttribute(out,"linkTarget",group);
             exportProperties(out,shape);
             return;
         }
@@ -177,6 +180,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
         saveAttribute(out,"scaleX",shape);
         saveAttribute(out,"scaleY",shape);
         saveAttribute(out,"rotate",shape);
+        saveAttribute(out,"linkTarget",shape);
 
         if(shape instanceof SResizeableNode) {
             saveAttribute(out,"x",shape);

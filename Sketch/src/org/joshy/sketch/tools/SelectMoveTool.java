@@ -344,13 +344,15 @@ public class SelectMoveTool extends CanvasTool {
 
         //process link button
         for(SNode node : doc.getCurrentPage().getNodes()) {
-            Bounds b1 = node.getTransformedBounds();
-            Bounds b2 = new Bounds(b1.getX2(),b1.getY2(),30,15);
-            if(b2.contains(cursor)) {
-                String target = node.getLinkTarget();
-                context.getDocument().setCurrentPageById(target);
-                context.getSelection().clear();
-                return;
+            if(node.isLink()) {
+                Bounds b1 = node.getTransformedBounds();
+                Bounds b2 = new Bounds(b1.getX2(),b1.getY2(),30,15);
+                if(b2.contains(cursor)) {
+                    String target = node.getLinkTarget();
+                    context.getDocument().setCurrentPageById(target);
+                    context.getSelection().clear();
+                    return;
+                }
             }
         }
                 

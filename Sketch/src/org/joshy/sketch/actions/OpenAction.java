@@ -205,6 +205,12 @@ public class OpenAction extends SAction {
 
     private static void loadPage(SketchDocument sdoc, Elem epage, ZipFile zipFile) throws XPathExpressionException {
         SketchDocument.SketchPage page = sdoc.addPage();
+        if(epage.hasAttr("name")) {
+            page.setName(epage.attr("name"));
+        }
+        if(epage.hasAttr("id")) {
+            page.setId(epage.attr("id"));
+        }
         for(Elem e : epage.xpath("./guidelines/guideline")) {
             page.createGuideline(
                     Double.parseDouble(e.attr("position")),
@@ -264,6 +270,7 @@ public class OpenAction extends SAction {
         loadNumberAttribute(elem,group,"translateX");
         loadNumberAttribute(elem,group,"translateY");
         loadStringAttribute(elem,group,"id");
+        loadStringAttribute(elem,group,"linkTarget");
         loadProperties(elem,group);
         return group;
     }
@@ -279,6 +286,7 @@ public class OpenAction extends SAction {
                 }
                 SImage image = (SImage) node;
                 loadStringAttribute(e,image,"id");
+                loadStringAttribute(e,image,"linkTarget");
                 loadNumberAttribute(e,image,"translateX");
                 loadNumberAttribute(e,image,"translateY");
                 if(e.hasAttr("strokePaint")) {
@@ -341,6 +349,7 @@ public class OpenAction extends SAction {
             return null;
         }
         loadStringAttribute(e,shape,"id");
+        loadStringAttribute(e,shape,"linkTarget");
         if(e.hasAttr("fillPaint")) {
             shape.setFillPaint(loadFillPaint(e, "fillPaint", zipFile));
         } else {
@@ -626,6 +635,7 @@ public class OpenAction extends SAction {
         loadNumberAttribute(e,node,"width");
         loadNumberAttribute(e,node,"height");
         loadStringAttribute(e,node,"id");
+        loadStringAttribute(e,node,"linkTarget");
 
         loadProperties(e, (SNode) node);
 
