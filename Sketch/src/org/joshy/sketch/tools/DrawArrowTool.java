@@ -11,7 +11,6 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 import java.awt.geom.Point2D;
 
 public class DrawArrowTool extends CanvasTool {
-    private Point2D start;
     private SArrow node;
 
     public DrawArrowTool(VectorDocContext context) {
@@ -29,18 +28,30 @@ public class DrawArrowTool extends CanvasTool {
 
     @Override
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
-        start = event.getPointInNodeCoords(context.getCanvas());
-        node = new SArrow(start,start);
+        cursor = snapToGrid(cursor);
+        node = new SArrow(cursor,cursor);
         node.setStrokeWidth(3);
         node.setFillPaint(FlatColor.BLACK);
         context.getDocument().getCurrentPage().add(node);
         context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"arrow"));
+        context.redraw();
+    }
+
+
+    private Point2D.Double snapToGrid(Point2D.Double point) {
+        double nx = point.getX();
+        double ny = point.getY();
+        if(context.getDocument().isSnapGrid()) {
+            nx = ((int)(nx/context.getDocument().getGridWidth()))*context.getDocument().getGridWidth();
+            ny = ((int)(ny/context.getDocument().getGridHeight()))*context.getDocument().getGridHeight();
+        }
+        return new Point2D.Double(nx,ny);
     }
 
     @Override
     protected void mouseDragged(MouseEvent event, Point2D.Double cursor) {
-        Point2D current = event.getPointInNodeCoords(context.getCanvas());
-        node.setStart(current);
+        cursor = snapToGrid(cursor);
+        node.setStart(cursor);
         context.redraw();
     }
 
