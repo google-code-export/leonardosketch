@@ -17,7 +17,7 @@ public class Page {
 
     public Page() {
         this.id = new RandomString(32).nextString();
-        this.name = "Page " + counter;
+        this.name = "page " + counter;
         counter++;
     }
 
