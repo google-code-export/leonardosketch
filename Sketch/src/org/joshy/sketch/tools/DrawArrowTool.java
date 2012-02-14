@@ -1,5 +1,6 @@
 package org.joshy.sketch.tools;
 
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
@@ -9,8 +10,7 @@ import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.awt.geom.Point2D;
 
-public class
-        DrawArrowTool extends CanvasTool {
+public class DrawArrowTool extends CanvasTool {
     private Point2D start;
     private SArrow node;
 
@@ -31,6 +31,8 @@ public class
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
         start = event.getPointInNodeCoords(context.getCanvas());
         node = new SArrow(start,start);
+        node.setStrokeWidth(3);
+        node.setFillPaint(FlatColor.BLACK);
         context.getDocument().getCurrentPage().add(node);
         context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"arrow"));
     }
