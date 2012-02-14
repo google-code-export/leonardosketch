@@ -942,8 +942,13 @@ public class SelectMoveTool extends CanvasTool {
         for(SNode node : context.getDocument().getCurrentPage().getNodes()) {
             if(!node.isLink()) continue;
             Bounds bds = node.getTransformedBounds();
-            g.setPaint(FlatColor.RED);
-            g.fillRect(bds.getX2(),bds.getY2(),30,15);
+            g.translate(bds.getX2(), bds.getY2());
+            g.setPaint(FlatColor.WHITE);
+            g.fillRoundRect(0,0,30,15,10,10);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRoundRect(0,0,30,15,10,10);
+            g.drawText("Go!",Font.DEFAULT,3,12);
+            g.translate(-bds.getX2(), -bds.getY2());
         }
 
         //draw the move position indicator

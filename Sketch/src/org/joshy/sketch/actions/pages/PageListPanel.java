@@ -1,6 +1,7 @@
 package org.joshy.sketch.actions.pages;
 
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Transform;
 import org.joshy.gfx.event.Callback;
@@ -71,6 +72,16 @@ public class PageListPanel extends StackPanel {
                     gfx.drawRect(x,y,width,height);
                 }
                 gfx.setClipRect(oldClip);
+                gfx.translate(0,y+height-1);
+                gfx.setPaint(FlatColor.WHITE);
+                gfx.fillRect(x,-20,width-1,20);
+                gfx.setPaint(FlatColor.BLACK);
+                gfx.drawRect(x,-20,width,20);
+                gfx.setPaint(FlatColor.BLACK);
+                String text = "";
+                if(item != null) text = item.getName();
+                gfx.drawText(text, Font.DEFAULT,x+5,-5);
+                gfx.translate(0,-(y+height-1));
             }
         });
         listview.setOrientation(ListView.Orientation.Horizontal);
