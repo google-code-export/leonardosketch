@@ -30,7 +30,7 @@ public class SArrow extends SShape implements SelfDrawable {
 
     @Override
     public Bounds getTransformedBounds() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return getBounds();
     }
 
     @Override
@@ -70,7 +70,7 @@ public class SArrow extends SShape implements SelfDrawable {
     public void draw(GFX g) {
         g.setPaint(getFillPaint());
         g.setStrokeWidth(getStrokeWidth());
-        double angle = Math.toDegrees(GeomUtil.calcAngle(start,end));
+        double angle = GeomUtil.calcAngle(start,end);
         g.drawLine(start.getX(),start.getY(),end.getX(),end.getY());
 
         if(headEnd == HeadEnd.StartOnly || headEnd == HeadEnd.BothEnds) {

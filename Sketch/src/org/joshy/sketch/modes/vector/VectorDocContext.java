@@ -57,6 +57,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     private DrawNgonTool drawNGonTool;
     private List<SAction> viewActions = new ArrayList<SAction>();
     private TreeViewPanel treePanel;
+    private DrawArrowTool drawArrowTool;
 
     public VectorDocContext(Main main, VectorModeHelper helper) {
         super(main,helper);
@@ -167,11 +168,13 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         drawTextTool = new DrawTextTool(this);
         drawPathTool = new DrawPathTool(this);
         drawNGonTool = new DrawNgonTool(this);
+        drawArrowTool = new DrawArrowTool(this);
         editResizableShapeTool = new EditResizableShapeTool(this);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_select.png")),moveRectTool);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_text.png")),drawTextTool);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_insertknots.png")),drawPathTool);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_polygon.png")),drawNGonTool);
+        tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_select.png")),drawArrowTool);
 
 
         modeHelper.setupToolbar(tools, getMain(),this);

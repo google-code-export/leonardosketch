@@ -173,7 +173,7 @@ public class SketchCanvas extends DocumentCanvas implements ScrollPane.Scrolling
                 if(node instanceof SResizeableNode) {
                     //drawSelection(g,(SResizeableNode)node);
                 } else {
-                    if(!(node instanceof STransformNode)) {
+                    if(!(node instanceof STransformNode) && !(node instanceof SArrow)) {
                         drawSelection(g,node);
                     }
                 }

@@ -4,6 +4,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.sketch.model.Handle;
 import org.joshy.sketch.model.SArrow;
+import org.joshy.sketch.util.DrawUtils;
 
 import java.awt.geom.Point2D;
 
@@ -71,13 +72,7 @@ public class ArrowHandle extends Handle {
 
         double x = pt.getX();
         double y = pt.getY();
-        double s = 6;
-        g.setPaint(new FlatColor(0xd0d0d0));
-        g.fillOval(x-s,y-s,s*2,s*2);
-
-        s = 5;
-        g.setPaint(new FlatColor(0x999999));
-        g.fillOval(x-s,y-s,s*2,s*2);
+        DrawUtils.drawStandardHandle(g, x, y, FlatColor.BLUE);
     }
 
 }
