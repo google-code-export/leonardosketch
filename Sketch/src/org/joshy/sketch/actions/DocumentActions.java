@@ -18,6 +18,7 @@ import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.controls.FillPicker;
+import org.joshy.sketch.controls.StandardDialog;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -162,6 +163,21 @@ public class DocumentActions {
         }
     }
 
+    public static class SetPageName extends SAction {
+        private VectorDocContext context;
+
+        public SetPageName(VectorDocContext context, Main main) {
+            super();
+            this.context = context;
+        }
+
+        @Override
+        public void execute() throws Exception {
+            SketchDocument doc = context.getDocument();
+            String name = StandardDialog.showEditText("Set Page Name",doc.getCurrentPage().getName());
+            if(name != null) doc.getCurrentPage().setName(name);
+        }
+    }
 
     public static LinearGradientFill resizeTo(LinearGradientFill grad, Bounds bounds) {
         LinearGradientFill g2 = (LinearGradientFill) grad.duplicate();
