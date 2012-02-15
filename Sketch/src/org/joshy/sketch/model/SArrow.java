@@ -21,6 +21,10 @@ public class SArrow extends SShape implements SelfDrawable {
         this.start = start;
         this.end = end;
     }
+    public SArrow(double sx, double sy, double ex, double ey) {
+        this.start = new Point2D.Double(sx,sy);
+        this.end = new Point2D.Double(ex,ey);
+    }
 
     @Override
     public Bounds getBounds() {

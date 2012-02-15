@@ -139,6 +139,9 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
         if(shape instanceof SArea) {
             out.attr("type","area");
         }
+        if(shape instanceof SArrow) {
+            out.attr("type","arrow");
+        }
 
         if(shape instanceof SImage) {
             saveAttribute(out,"strokePaint",shape);
@@ -227,26 +230,20 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             saveBooleanAttribute(out, "star",shape);
         }
 
+        if(shape instanceof SArrow) {
+            SArrow arrow = (SArrow) shape;
+            out.attr("startX",arrow.getStart().getX()+"");
+            out.attr("startY",arrow.getStart().getY()+"");
+            out.attr("endX",arrow.getEnd().getX()+"");
+            out.attr("endY",arrow.getEnd().getY()+"");
+            out.attr("headEnd",arrow.getHeadEnd().toString());
+        }
+
+
 
 
         if(shape instanceof SShape) {
             SShape sh = (SShape) shape;
-            /*
-            if(sh.getFillPaint() instanceof GradientFill) {
-                GradientFill grad = (GradientFill) sh.getFillPaint();
-                out.start("gradient");
-                out.attr("angle",""+grad.angle);
-                out.start("stop"
-                        ,"name","start"
-                        ,"color",serialize(grad.start)
-                        ).end();
-                out.start("stop"
-                        ,"name","end"
-                        ,"color",serialize(grad.end)
-                        ).end();
-                out.end();
-            }
-            */
             if(sh.getFillPaint() instanceof LinearGradientFill) {
                 LinearGradientFill grad = (LinearGradientFill) sh.getFillPaint();
                 out.start("linearGradient")

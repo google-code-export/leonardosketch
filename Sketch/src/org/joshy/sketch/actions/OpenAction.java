@@ -267,9 +267,9 @@ public class OpenAction extends SAction {
         }
         
         group.addAll(nodes);
-        loadNumberAttribute(elem,group,"translateX");
+        loadNumberAttribute(elem, group, "translateX");
         loadNumberAttribute(elem,group,"translateY");
-        loadStringAttribute(elem,group,"id");
+        loadStringAttribute(elem, group, "id");
         loadStringAttribute(elem,group,"linkTarget");
         loadProperties(elem,group);
         return group;
@@ -342,6 +342,14 @@ public class OpenAction extends SAction {
         }
         if(e.attrEquals("type","area")) {
             shape = new SArea(new Area());
+        }
+        if(e.attrEquals("type","arrow")) {
+            shape = new SArrow(
+                    Double.parseDouble(e.attr("startX")),
+                    Double.parseDouble(e.attr("startY")),
+                    Double.parseDouble(e.attr("endX")),
+                    Double.parseDouble(e.attr("endY")));
+            ((SArrow)shape).setHeadEnd(SArrow.HeadEnd.valueOf(e.attr("headEnd")));
         }
 
         if(shape == null) {
@@ -634,7 +642,7 @@ public class OpenAction extends SAction {
         loadNumberAttribute(e,node,"rotate");
         loadNumberAttribute(e,node,"width");
         loadNumberAttribute(e,node,"height");
-        loadStringAttribute(e,node,"id");
+        loadStringAttribute(e, node, "id");
         loadStringAttribute(e,node,"linkTarget");
 
         loadProperties(e, (SNode) node);
