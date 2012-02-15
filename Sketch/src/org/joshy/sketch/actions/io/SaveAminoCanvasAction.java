@@ -26,11 +26,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by IntelliJ IDEA.
- * User: joshmarinacci
- * Date: Oct 30, 2010
- * Time: 5:32:30 PM
- * To change this template use File | Settings | File Templates.
+ * Exports code for the AminoJS library
+ * http://goamino.org/
+ *
  */
 public class SaveAminoCanvasAction extends BaseExportAction {
 
@@ -272,9 +270,23 @@ public class SaveAminoCanvasAction extends BaseExportAction {
                     SRect n = (SRect) shape;
                     out.println("new Rect().set("+n.getX()+","+n.getY()+","+n.getWidth()+","+n.getHeight()+")");
                     if(n.getCorner() != 0) {
-                        //out.println(".setCorner("+df.format(n.getCorner()/2.0)+")");
                         out.prop("corner",n.getCorner()/2.0);
                     }
+                }
+                if(shape instanceof SArrow) {
+                    SArrow arrow = (SArrow) shape;
+                    out.println("new PathNode()");
+                    out.indent();
+                    out.println(".setPath(");
+                    out.indent();
+                    out.println("new Path()");
+                    out.println(".moveTo("+arrow.getStart().getX()+","+arrow.getStart().getY()+")");
+                    out.println(".lineTo("+arrow.getEnd().getX()+","+arrow.getEnd().getY()+")");
+                    out.println(".closeTo()");
+                    out.println(".build()");
+                    out.outdent();
+                    out.outdent();
+                    out.println(")");
                 }
                 if(shape instanceof NGon) {
                     toPathNode(out, ((NGon)shape).toUntransformedArea(), 0,0 );
