@@ -289,15 +289,12 @@ public class NodeActions {
 
         @Override
         public void execute() {
-            double top = Integer.MAX_VALUE;
-            double height = Integer.MIN_VALUE;
+            SNode first = context.getSelection().firstItem();
+            double center = first.getTransformedBounds().getCenterY();
             for(SNode node: context.getSelection().items()) {
-                top = Math.min(top,node.getTransformedBounds().getY());
-                height = Math.max(top,node.getTransformedBounds().getHeight());
-            }
-            for(SNode node: context.getSelection().items()) {
-                double diff = height - node.getTransformedBounds().getHeight();
-                node.setTranslateY(top+diff/2);
+                double c2 = node.getTransformedBounds().getCenterY();
+                double cdiff = c2-center;
+                node.setTranslateY(node.getTranslateY()-cdiff);
             }
             context.redraw();
         }
@@ -315,16 +312,12 @@ public class NodeActions {
 
         @Override
         public void execute() {
-            double left = Integer.MAX_VALUE;
-            double width = Integer.MIN_VALUE;
+            SNode first = context.getSelection().firstItem();
+            double center = first.getTransformedBounds().getCenterX();
             for(SNode node: context.getSelection().items()) {
-                Bounds bounds = node.getTransformedBounds();
-                left = Math.min(left,bounds.getX());
-                width = Math.max(left,bounds.getWidth());
-            }
-            for(SNode node: context.getSelection().items()) {
-                double diff = width - node.getTransformedBounds().getWidth();
-                node.setTranslateX(left+diff/2);
+                double c2 = node.getTransformedBounds().getCenterX();
+                double cdiff = c2-center;
+                node.setTranslateX(node.getTranslateX()-cdiff);
             }
             context.redraw();
         }
