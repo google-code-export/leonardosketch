@@ -338,11 +338,13 @@ public class Main implements Runnable {
     }
 
     private void setupStage(final DocContext context, final DocModeHelper modeHelper) {
-        final Textbox wishBox = new Textbox().setHintText(getString("misc.wish.box"));
-        final Label wishStatus = new Label("");
-        wishStatus.setPrefWidth(130);
+        //final Textbox wishBox = new Textbox().setHintText(getString("misc.wish.box"));
+        //final Label wishStatus = new Label("");
+        //wishStatus.setPrefWidth(130);
         makeAWishAction = new Callback<ActionEvent>(){
             public void call(ActionEvent actionEvent) {
+                OSUtil.openBrowser("http://code.google.com/p/leonardosketch/issues/list");
+                /*
                 if(wishBox.getText().trim().length() < 2) {
                     StandardDialog.showError(getString("misc.wish.dialog").toString());
                 } else {
@@ -364,14 +366,15 @@ public class Main implements Runnable {
                         e.printStackTrace();
                     }
                 }
+                */
             }
         };
-        wishBox.onAction(makeAWishAction);
+        //wishBox.onAction(makeAWishAction);
         final HFlexBox statusBar = new HFlexBox();
         statusBar.setBoxAlign(HFlexBox.Align.Baseline)
-                .add(wishBox,1)
-                .add(new Button(getString("misc.wish.button")).onClicked(makeAWishAction))
-                .add(wishStatus)
+                //.add(wishBox,1)
+                .add(new Button("Report a Problem, Request a Feature").onClicked(makeAWishAction))
+                //.add(wishStatus)
                 ;
         statusBar.setPrefWidth(450);
 
