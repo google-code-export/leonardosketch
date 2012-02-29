@@ -251,7 +251,7 @@ public class SaveAminoCanvasAction extends BaseExportAction {
                 out.prop("rotate",shape.getRotate());
             }
             if(node.getBooleanProperty("com.joshondesign.amino.nodecache")) {
-                out.println(".setCached(true)");
+                //out.println(".setCached(true)");
             }
         }
 
