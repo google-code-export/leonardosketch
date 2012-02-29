@@ -17,6 +17,7 @@ import java.awt.*;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.DecimalFormat;
@@ -107,10 +108,16 @@ public class SaveAminoCanvasAction extends BaseExportAction {
         out.println("<canvas"
                 +" width=\""+Math.round(doc.getWidth())+"\""
                 +" height=\""+Math.round(doc.getHeight())+"\""
-                +" id=\"foo\"></canvas>");
+                +" id=\"thecanvas\"></canvas>");
         out.println("<script>");
         //function definition
         out.println("function setupDrawing(){");
+        out.println("var engine =  new Amino();\n"
+                +"var can = engine.addCanvas('thecanvas');\n"
+                +"can.add(sceneRoot);\n"
+                +"runner.setBackground("+AminoExport.serializePaint(out,doc.getBackgroundFill())+");\n"
+                +"engine.start();\n");
+        
         out.println("var runner =  new Runner();\n"
                 +"runner.setCanvas(document.getElementById('foo'));\n"
                 +"runner.setFPS(30);\n"
@@ -295,7 +302,7 @@ public class SaveAminoCanvasAction extends BaseExportAction {
                     toPathNode(out, ((SArea)shape).toUntransformedArea(),0,0);
                 }
                 if(shape instanceof SPoly) {
-                    toPathNode(out, shape.toArea(),0,0);
+                    serializePath(out, (SPoly) shape);
                 }
                 if(shape instanceof SPath) {
                     serializePath(out,(SPath)shape);
@@ -478,6 +485,32 @@ public class SaveAminoCanvasAction extends BaseExportAction {
                 it.next();
             }
             out.println(".build()");
+            out.outdent();
+            out.outdent();
+            out.println(")");
+        }
+
+        private void serializePath(IndentWriter out, SPoly path) {
+            out.println("new PathNode()");
+            out.indent();
+            out.println(".setPath(");
+            out.indent();
+            out.println("new Path()");
+            out.indent();
+            List<Point2D> points = path.getPoints();
+            for(int i=0; i<points.size(); i++) {
+                Point2D pt = points.get(i);
+                if(i == 0) {
+                    out.println(".moveTo("+pt.getX()+","+pt.getY()+")");
+                } else {
+                    out.println(".lineTo("+pt.getX()+","+pt.getY()+")");
+                }
+            }
+            if(path.isClosed()) {
+                out.println(".closeTo()");
+            }
+            out.println(".build()");
+            out.outdent();
             out.outdent();
             out.outdent();
             out.println(")");
