@@ -4,6 +4,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.event.EventBus;
+import org.joshy.sketch.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,6 +138,7 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         }
 
         public void add(SNode node) {
+            Util.assertNotNull(node);
             model.add(node);
             doc.setDirty(true);
         }
