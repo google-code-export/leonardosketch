@@ -158,6 +158,7 @@ public class DrawNgonTool extends CanvasTool {
             startedEditing = false;
             return;
         } else {
+            if(node == null) return;
             SketchDocument doc = context.getDocument();
             doc.getCurrentPage().add(node);
             context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"Ngon"));

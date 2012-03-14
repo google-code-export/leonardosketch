@@ -2,6 +2,8 @@ package org.joshy.sketch.util;
 
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.util.OSUtil;
+import org.joshy.gfx.util.u;
+import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.modes.DocContext;
 
 import java.awt.*;
@@ -95,5 +97,12 @@ public class Util {
                 bounds.getWidth(),
                 bounds.getHeight()
         );
+    }
+
+    public static void assertNotNull(SNode node) {
+        if(node == null) {
+            u.p("error: this value should not be null " + node);
+            u.dumpStack();
+        }
     }
 }
