@@ -115,18 +115,8 @@ public class SaveAminoCanvasAction extends BaseExportAction {
         out.println("var engine =  new Amino();\n"
                 +"var can = engine.addCanvas('thecanvas');\n"
                 +"can.add(sceneRoot);\n"
-                +"runner.setBackground("+AminoExport.serializePaint(out,doc.getBackgroundFill())+");\n"
+                +"can.setBackground("+AminoExport.serializePaint(out,doc.getBackgroundFill())+");\n"
                 +"engine.start();\n");
-        
-        out.println("var runner =  new Runner();\n"
-                +"runner.setCanvas(document.getElementById('foo'));\n"
-                +"runner.setFPS(30);\n"
-                +"runner.setBackground("+AminoExport.serializePaint(out,doc.getBackgroundFill())+");\n"
-                +"runner.setRoot(sceneRoot);\n"
-                +"runner.DEBUG=true;\n"
-
-        );
-        out.println("runner.start();");
         out.println("}");
         out.println("</script>");
         out.println("</body>");
