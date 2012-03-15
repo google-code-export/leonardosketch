@@ -10,6 +10,7 @@ import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.Togglebutton;
+import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.layout.FlexBox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.sketch.Main;
@@ -57,6 +58,7 @@ public class DrawPathTool extends CanvasTool {
     private Togglebutton moveButton;
     private Togglebutton deleteButton;
     private Togglebutton reshapeButton;
+    private Button endButton;
     private SPath.SubPath hoverSubpath;
 
     private enum Tool { Delete, Reshape, Move };
@@ -101,6 +103,13 @@ public class DrawPathTool extends CanvasTool {
             }
         });
         panel.add(reshapeButton);
+        endButton = new Button("end");
+        endButton.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                DrawPathTool.this.context.releaseControl();
+            }
+        });
+        panel.add(endButton);
         panel.setTranslateX(100);
         panel.setTranslateY(20);
 
@@ -185,7 +194,6 @@ public class DrawPathTool extends CanvasTool {
                     SketchDocument doc = context.getDocument();
                     doc.getCurrentPage().add(node);
                     context.getUndoManager().pushAction(new UndoableAddNodeAction(context,node,"path"));
-                    node.close();
                 }
                 node = null;
                 clear();
@@ -583,9 +591,6 @@ public class DrawPathTool extends CanvasTool {
     }
 
     public void drawOverlay(GFX g) {
-        //draw the current tool indicator
-        g.setPaint(FlatColor.BLACK);
-        g.drawText(defaultTool.toString(), Font.DEFAULT, 100,100);
 
         //draw overlays
         if(node != null) {
