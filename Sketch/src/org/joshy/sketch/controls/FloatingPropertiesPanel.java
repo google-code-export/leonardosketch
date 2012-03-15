@@ -719,15 +719,43 @@ public class FloatingPropertiesPanel extends VFlexBox {
     };
 
     private void setFillStuff(Paint paint) {
-        //handle the new form from the fill selector
-        /*
-        if(paint instanceof GradientFill) {
-            GradientFill grad = (GradientFill) paint;
-            Bounds std = new Bounds(0,0,40,40);
+        if(paint instanceof RadialGradientFill) {
+            RadialGradientFill grad = (RadialGradientFill) paint.duplicate();
             SShape shape = (SShape) context.getSelection().firstItem();
-            setPropertyWithUndo("fillPaint", grad.resize(std, shape.getBounds()));
+            Bounds bounds = shape.getTransformedBounds();
+            grad.setCenterX(bounds.getWidth()/2);
+            grad.setCenterY(bounds.getWidth()/2);
+            grad.setRadius(Math.min(bounds.getWidth()/2,bounds.getHeight()/2));
+            setPropertyWithUndo("fillPaint",grad);
             return;
-        }*/
+        }
+        if(paint instanceof LinearGradientFill) {
+            LinearGradientFill grad = (LinearGradientFill) paint.duplicate();
+            SShape shape = (SShape) context.getSelection().firstItem();
+            Bounds bounds = shape.getTransformedBounds();
+            switch(grad.getStartXSnapped()) {
+                case Start:  grad.setStartX(0); break;
+                case Middle: grad.setStartX(bounds.getWidth()/2); break;
+                case End:    grad.setStartX(bounds.getWidth()); break;
+            }
+            switch(grad.getEndXSnapped()) {
+                case Start:  grad.setEndX(0); break;
+                case Middle: grad.setEndX(bounds.getWidth()/2); break;
+                case End:    grad.setEndX(bounds.getWidth()); break;
+            }
+            switch(grad.getStartYSnapped()) {
+                case Start:  grad.setStartY(0); break;
+                case Middle: grad.setStartY(bounds.getHeight()/2); break;
+                case End:    grad.setStartY(bounds.getHeight()); break;
+            }
+            switch(grad.getEndYSnapped()) {
+                case Start:  grad.setEndY(0); break;
+                case Middle: grad.setEndY(bounds.getHeight()/2); break;
+                case End:    grad.setEndY(bounds.getHeight()); break;
+            }
+            setPropertyWithUndo("fillPaint",grad);
+            return;
+        }
         //if just a normal color
         paint = paint.duplicate();
         setPropertyWithUndo("fillPaint", paint);

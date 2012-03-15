@@ -276,8 +276,10 @@ public class FillPicker extends Button {
 
         //linears 2
         Paint gf6 = new LinearGradientFill()
-                .setStartX(0).setStartY(size / 2)
-                .setEndX(size).setEndY(size / 2)
+                .setStartX(0).setStartXSnapped(Snap.Start)
+                .setStartY(size / 2).setStartYSnapped(Snap.Middle)
+                .setEndX(size).setEndXSnapped(Snap.End)
+                .setEndY(size / 2).setEndYSnapped(Snap.Middle)
                 .addStop(0.0, FlatColor.BLACK)
                 .addStop(0.5, FlatColor.WHITE)
                 .addStop(1.0, FlatColor.BLACK);
