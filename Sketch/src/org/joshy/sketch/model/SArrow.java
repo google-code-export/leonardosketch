@@ -134,7 +134,7 @@ public class SArrow extends SShape implements SelfDrawable {
         return end;
     }
 
-    public void setEnd(Point2D.Double end) {
+    public void setEnd(Point2D end) {
         this.end = end;
     }
 

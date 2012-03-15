@@ -73,7 +73,7 @@ public class DrawPolyTool extends CanvasTool {
     private Point2D.Double snapPoint(Point2D cursor) {
         double nx = cursor.getX();
         double ny = cursor.getY();
-        SketchDocument doc = (SketchDocument) context.getDocument();
+        SketchDocument doc = context.getDocument();
         if(doc.isSnapGrid()) {
             nx = ((int)(nx/doc.getGridWidth()))*doc.getGridWidth();
             ny = ((int)(ny/doc.getGridHeight()))*doc.getGridHeight();
