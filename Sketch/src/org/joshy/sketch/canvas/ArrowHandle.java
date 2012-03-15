@@ -2,6 +2,7 @@ package org.joshy.sketch.canvas;
 
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.util.GeomUtil;
 import org.joshy.sketch.model.Handle;
 import org.joshy.sketch.model.SArrow;
 import org.joshy.sketch.util.DrawUtils;
@@ -40,10 +41,41 @@ public class ArrowHandle extends Handle {
 
     @Override
     public void setX(double x, boolean constrain) {
+        //noop;
+    }
+
+    @Override
+    public void setXY(double x, double y, boolean constrain) {
         x -= arrow.getTranslateX();
-        switch (pos) {
-            case Start: arrow.setStart(new Point2D.Double(x,arrow.getStart().getY())); return;
-            case End: arrow.setEnd(new Point2D.Double(x,arrow.getEnd().getY())); return;
+        y -= arrow.getTranslateY();
+
+        double angle = 0;
+        Point2D ptx = null;
+        if(constrain) {
+            Point2D pt = new Point2D.Double(x,y);
+            switch(pos) {
+                case Start:
+                    angle = GeomUtil.calcAngle(arrow.getEnd(),pt);
+                    angle = GeomUtil.snapTo45(angle);
+                    ptx = GeomUtil.calcPoint(arrow.getEnd(),angle,arrow.getEnd().distance(pt));
+                    arrow.setStart(ptx);
+                    return;
+                case End:
+                    angle = GeomUtil.calcAngle(arrow.getStart(),pt);
+                    angle = GeomUtil.snapTo45(angle);
+                    ptx = GeomUtil.calcPoint(arrow.getStart(),angle,arrow.getStart().distance(pt));
+                    arrow.setEnd(ptx);
+                    return;
+            }
+
+        } else {
+            switch(pos) {
+                case Start:
+                    arrow.setStart(new Point2D.Double(x,y));
+                    return;
+                case End:
+                    arrow.setEnd(new Point2D.Double(x,y));
+            }
         }
     }
 
@@ -58,11 +90,7 @@ public class ArrowHandle extends Handle {
 
     @Override
     public void setY(double y, boolean constrain) {
-        y -= arrow.getTranslateY();
-        switch (pos) {
-            case Start: arrow.setStart(new Point2D.Double(arrow.getStart().getX(),y)); return;
-            case End: arrow.setEnd(new Point2D.Double(arrow.getEnd().getX(),y)); return;
-        }
+        //noop;
     }
 
     @Override
