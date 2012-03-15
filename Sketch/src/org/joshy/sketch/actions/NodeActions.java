@@ -10,8 +10,11 @@ import org.joshy.sketch.model.SResizeableNode;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.joshy.gfx.util.localization.Localization.getString;
 
@@ -33,7 +36,7 @@ public class NodeActions {
 
         @Override
         public void execute() {
-            SketchDocument doc = (SketchDocument) context.getDocument();
+            SketchDocument doc = context.getDocument();
             List<SNode> model = doc.getCurrentPage().getModel();
             List<SNode> nodes = new ArrayList<SNode>();
             for(SNode node : context.getSelection().items()) {
@@ -61,7 +64,7 @@ public class NodeActions {
         @Override
         public void execute() {
             if(context.getSelection().isEmpty()) return;
-            SketchDocument doc = (SketchDocument) context.getDocument();
+            SketchDocument doc = context.getDocument();
 
             List<SNode> nodes = new ArrayList<SNode>();
             for(SNode node : context.getSelection().items()) {
@@ -103,7 +106,7 @@ public class NodeActions {
         @Override
         public void execute() {
             if(context.getSelection().isEmpty()) return;
-            SketchDocument doc = (SketchDocument) context.getDocument();
+            SketchDocument doc = context.getDocument();
             List<SNode> model = doc.getCurrentPage().getModel();
             List<SNode> nodes = new ArrayList<SNode>();
             for(SNode node : context.getSelection().items()) {
@@ -143,7 +146,7 @@ public class NodeActions {
         @Override
         public void execute() {
             if(context.getSelection().isEmpty()) return;
-            SketchDocument doc = (SketchDocument) context.getDocument();
+            SketchDocument doc = context.getDocument();
             List<SNode> model = doc.getCurrentPage().getModel();
             List<SNode> nodes = new ArrayList<SNode>();
             for(SNode node : context.getSelection().items()) {
@@ -174,6 +177,39 @@ public class NodeActions {
             });
         }
     }
+    
+    public static class AlignUndoAction implements UndoManager.UndoableAction {
+        private Map<SNode, Point2D.Double> diffs;
+        private VectorDocContext context;
+        private CharSequence name;
+
+        public AlignUndoAction(Map<SNode, Point2D.Double> diffs, VectorDocContext context, CharSequence name) {
+            this.diffs = diffs;
+            this.context = context;
+            this.name = name;
+        }
+
+        public void executeUndo() {
+            for(SNode node : diffs.keySet()) {
+                node.setTranslateX(node.getTranslateX()-diffs.get(node).getX());
+                node.setTranslateY(node.getTranslateY()-diffs.get(node).getY());
+            }
+            context.redraw();
+        }
+
+        public void executeRedo() {
+            for(SNode node : diffs.keySet()) {
+                node.setTranslateX(node.getTranslateX()+diffs.get(node).getX());
+                node.setTranslateY(node.getTranslateY()+diffs.get(node).getY());
+            }
+            context.redraw();
+        }
+
+        public CharSequence getName() {
+            return name;
+        }
+        
+    }
 
     public static class AlignTop extends MultiNodeAction {
         public AlignTop(VectorDocContext context) {
@@ -187,6 +223,7 @@ public class NodeActions {
 
         @Override
         public void execute() {
+            Map<SNode,Point2D.Double> diffs = new HashMap<SNode,Point2D.Double>();
             double top = Integer.MAX_VALUE;
             for(SNode node: context.getSelection().items()) {
                 top = Math.min(top,node.getTransformedBounds().getY());
@@ -195,8 +232,11 @@ public class NodeActions {
                 Bounds bounds = node.getTransformedBounds();
                 double diff = top - (bounds.getY());
                 node.setTranslateY(node.getTranslateY()+diff);
+                diffs.put(node,new Point2D.Double(0,diff));
             }
             context.redraw();
+            AlignUndoAction action = new AlignUndoAction(diffs, context, getString("menus.alignNodeTop"));
+            context.getUndoManager().pushAction(action);
         }
     }
 
@@ -212,6 +252,7 @@ public class NodeActions {
 
         @Override
         public void execute() {
+            Map<SNode,Point2D.Double> diffs = new HashMap<SNode,Point2D.Double>();
             double bottom = Integer.MIN_VALUE;
             for(SNode node: context.getSelection().items()) {
                 Bounds bounds = node.getTransformedBounds();
@@ -221,8 +262,11 @@ public class NodeActions {
                 Bounds bounds = node.getTransformedBounds();
                 double diff = bottom - (bounds.getY() + bounds.getHeight());
                 node.setTranslateY(node.getTranslateY()+diff);
+                diffs.put(node,new Point2D.Double(0,diff));
             }
             context.redraw();
+            AlignUndoAction action = new AlignUndoAction(diffs, context, getDisplayName());
+            context.getUndoManager().pushAction(action);
         }
     }
 
@@ -238,6 +282,7 @@ public class NodeActions {
 
         @Override
         public void execute() {
+            Map<SNode,Point2D.Double> diffs = new HashMap<SNode,Point2D.Double>();
             double left = Integer.MAX_VALUE;
             for(SNode node: context.getSelection().items()) {
                 left = Math.min(left, node.getTransformedBounds().getX());
@@ -246,8 +291,11 @@ public class NodeActions {
                 Bounds bounds = node.getTransformedBounds();
                 double diff = left - (bounds.getX());
                 node.setTranslateX(node.getTranslateX()+diff);
+                diffs.put(node,new Point2D.Double(diff,0));
             }
             context.redraw();
+            AlignUndoAction action = new AlignUndoAction(diffs, context, getDisplayName());
+            context.getUndoManager().pushAction(action);
         }
     }
 
@@ -263,6 +311,7 @@ public class NodeActions {
 
         @Override
         public void execute() {
+            Map<SNode,Point2D.Double> diffs = new HashMap<SNode,Point2D.Double>();
             double right = Integer.MIN_VALUE;
             for(SNode node: context.getSelection().items()) {
                 Bounds bounds = node.getTransformedBounds();
@@ -272,8 +321,11 @@ public class NodeActions {
                 Bounds bounds = node.getTransformedBounds();
                 double diff = right - (bounds.getX()+bounds.getWidth());
                 node.setTranslateX(node.getTranslateX()+diff);
+                diffs.put(node,new Point2D.Double(diff,0));
             }
             context.redraw();
+            AlignUndoAction action = new AlignUndoAction(diffs, context, getDisplayName());
+            context.getUndoManager().pushAction(action);
         }
     }
 
@@ -289,14 +341,18 @@ public class NodeActions {
 
         @Override
         public void execute() {
+            Map<SNode,Point2D.Double> diffs = new HashMap<SNode,Point2D.Double>();
             SNode first = context.getSelection().firstItem();
             double center = first.getTransformedBounds().getCenterY();
             for(SNode node: context.getSelection().items()) {
                 double c2 = node.getTransformedBounds().getCenterY();
                 double cdiff = c2-center;
                 node.setTranslateY(node.getTranslateY()-cdiff);
+                diffs.put(node,new Point2D.Double(0,-cdiff));
             }
             context.redraw();
+            AlignUndoAction action = new AlignUndoAction(diffs, context, getDisplayName());
+            context.getUndoManager().pushAction(action);
         }
     }
 
@@ -312,14 +368,18 @@ public class NodeActions {
 
         @Override
         public void execute() {
+            Map<SNode,Point2D.Double> diffs = new HashMap<SNode,Point2D.Double>();
             SNode first = context.getSelection().firstItem();
             double center = first.getTransformedBounds().getCenterX();
             for(SNode node: context.getSelection().items()) {
                 double c2 = node.getTransformedBounds().getCenterX();
                 double cdiff = c2-center;
                 node.setTranslateX(node.getTranslateX()-cdiff);
+                diffs.put(node,new Point2D.Double(-cdiff,0));
             }
             context.redraw();
+            AlignUndoAction action = new AlignUndoAction(diffs, context, getDisplayName());
+            context.getUndoManager().pushAction(action);
         }
     }
 
