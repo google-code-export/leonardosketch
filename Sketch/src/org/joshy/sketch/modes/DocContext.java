@@ -41,6 +41,7 @@ public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocum
     public DisclosurePanel sidebarContainer;
     private NotificationIndicator notificationIndicator;
     private BaseExportAction lastExportAction;
+    private Menu fileMenu;
 
     public DocContext(Main main, DocModeHelper mode) {
         this.main = main;
@@ -106,5 +107,14 @@ public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocum
 
     public BaseExportAction getLastExportAction() {
         return lastExportAction;
+    }
+
+    public void setFileMenu(Menu fileMenu) {
+        this.fileMenu = fileMenu;
+    }
+
+
+    public Menu getFileMenu() {
+        return fileMenu;
     }
 }
