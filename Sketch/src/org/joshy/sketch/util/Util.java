@@ -105,4 +105,31 @@ public class Util {
             u.dumpStack();
         }
     }
+
+    public static void streamToSTDERR(InputStream in) throws IOException {
+        byte[] buf = new byte[1024];
+        while(true) {
+            int n = in.read(buf);
+            if(n == -1) {
+                break;
+            }
+            System.err.write(buf,0,n);
+            System.err.flush();
+        }
+    }
+
+    public static void copyToFile(File srcfile, File outfile) throws IOException {
+        FileInputStream in = new FileInputStream(srcfile);
+        FileOutputStream out = new FileOutputStream(outfile);
+        byte[] buf = new byte[1024];
+        while(true) {
+            int n = in.read(buf);
+            if(n == -1) {
+                break;
+            }
+            out.write(buf,0,n);
+        }
+        in.close();
+        out.close();
+    }
 }

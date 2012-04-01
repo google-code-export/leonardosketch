@@ -35,6 +35,8 @@ import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.modes.DocModeHelper;
 import org.joshy.sketch.modes.pixel.PixelModeHelper;
 import org.joshy.sketch.modes.pixel.TiledPixelModeHelper;
+import org.joshy.sketch.modes.powerup.Powerup;
+import org.joshy.sketch.modes.powerup.PowerupManager;
 import org.joshy.sketch.modes.preso.PresoModeHelper;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
@@ -90,6 +92,8 @@ public class Main implements Runnable {
     public static String AMINO_BINARY_URL = null;
     public static final String DEFAULT_FONT_NAME = "OpenSans";
     public static List<String> fontList;
+
+    public static PowerupManager powerupManager = PowerupManager.get();
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -337,43 +341,14 @@ public class Main implements Runnable {
     }
 
     private void setupStage(final DocContext context, final DocModeHelper modeHelper) {
-        //final Textbox wishBox = new Textbox().setHintText(getString("misc.wish.box"));
-        //final Label wishStatus = new Label("");
-        //wishStatus.setPrefWidth(130);
         makeAWishAction = new Callback<ActionEvent>(){
             public void call(ActionEvent actionEvent) {
                 OSUtil.openBrowser("http://code.google.com/p/leonardosketch/issues/list");
-                /*
-                if(wishBox.getText().trim().length() < 2) {
-                    StandardDialog.showError(getString("misc.wish.dialog").toString());
-                } else {
-                    try {
-                        new XMLRequest()
-                                .setMethod(XMLRequest.METHOD.POST)
-                                .setURL("http://joshy.org:8081/AminoWebServices/MakeAWish")
-                                .setParameter("message",wishBox.getText())
-                                .onComplete(new Callback<Doc>(){
-                                    public void call(Doc doc) {
-                                        wishStatus.setText("Wish received!");
-                                    }
-                                }).start();
-                        wishBox.setText("");
-                        wishStatus.setText("Making wish...");
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                */
             }
         };
-        //wishBox.onAction(makeAWishAction);
         final HFlexBox statusBar = new HFlexBox();
         statusBar.setBoxAlign(HFlexBox.Align.Baseline)
-                //.add(wishBox,1)
                 .add(new Button("Report a Problem, Request a Feature").onClicked(makeAWishAction))
-                //.add(wishStatus)
                 ;
         statusBar.setPrefWidth(450);
 
@@ -635,6 +610,9 @@ public class Main implements Runnable {
         }
         Menubar menubar = context.menubar;
         menubar.add(fileMenu);
+        context.setFileMenu(fileMenu);
+        
+        
         Menu editMenu = new Menu().setTitle(getString("menus.edit"))
                 .addItem(getString("menus.cut"), "X", new Clipboard.CutAction(context))
                 .addItem(getString("menus.copy"), "C", new Clipboard.CopyAction(context))
@@ -647,6 +625,16 @@ public class Main implements Runnable {
         if(context instanceof VectorDocContext) {
                 editMenu.addItem(getString("menus.clearSelection"), "D", new NodeActions.ClearSelection((VectorDocContext) context));
         }
+        editMenu.separator();
+
+
+        Menu powerupsMenu = new Menu().setTitle("Powerups");
+        for(Powerup powerup : powerupManager.getPowerups()) {
+            powerupsMenu.addItem(powerup.getMenuName(), new PowerupManager.EnablePowerup(powerup, context));
+        }
+        
+        editMenu.addMenu(powerupsMenu);
+        
         /*editMenu.addItem("Enable Analytics Tracking", new ToggleAction(){
             @Override
             public boolean getToggleState() {
