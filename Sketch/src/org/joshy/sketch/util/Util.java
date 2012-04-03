@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.*;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -132,4 +133,37 @@ public class Util {
         in.close();
         out.close();
     }
+
+    public static File makeTempDir() throws IOException {
+        File file = File.createTempFile("leosketch","roku_app");
+        if(file.exists() && !file.isDirectory()) {
+            file.delete();
+        }
+        file.mkdirs();
+        return file;
+    }
+
+    public static void copyTemplate(File srcDir, File destDir, Map<String, String> keys) throws IOException {
+        u.p("copying template to temp dir: ");
+        u.p(destDir);
+        if(!destDir.exists()) {
+            destDir.mkdir();
+        }
+        for(File f : srcDir.listFiles()) {
+            copyFileToDir(f, destDir, keys);
+        }
+    }
+
+    private static void copyFileToDir(File srcfile, File destdir, Map<String, String> keys) throws IOException {
+        if(!srcfile.isDirectory()) {
+            u.p("copying file : " + srcfile.getAbsolutePath());
+            Util.copyToFile(srcfile, new File(destdir, srcfile.getName()));
+        } else {
+            u.p("isdir: " + srcfile.getAbsolutePath());
+            u.indent();
+            copyTemplate(srcfile, new File(destdir,srcfile.getName()), keys);
+            u.outdent();
+        }
+    }
+
 }

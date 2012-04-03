@@ -57,7 +57,7 @@ class RunOnRoku extends SAction {
         u.p("running on the roku");
 
         //make temp dir
-        File tempdir = makeTempDir();
+        File tempdir = Util.makeTempDir();
         //make temp subdir
         File appdir = new File(tempdir,"testapp");
         appdir.mkdirs();
@@ -65,7 +65,7 @@ class RunOnRoku extends SAction {
         //copy template to temp subdir
         File templatedir = new File("/Users/josh/projects/Roku/ShowPNGApp/");
         Map<String,String> keys = new HashMap<String, String>();
-        copyTemplate(templatedir,appdir,keys);
+        Util.copyTemplate(templatedir,appdir,keys);
 
         //generate PNG
         File png = new File(appdir,"sample.png");
@@ -76,8 +76,8 @@ class RunOnRoku extends SAction {
         save.includeDocumentBounds = true;
         save.export(png, (SketchDocument) context.getDocument());
 
-        
-        
+
+
         //execute ant script to run on the roku, passing in the IP addr on the commandline
         List<String> args = new ArrayList<String>();
         args.add("ant");
@@ -94,35 +94,4 @@ class RunOnRoku extends SAction {
         Util.streamToSTDERR(proc.getInputStream());
     }
 
-    private void copyTemplate(File srcDir, File destDir, Map<String, String> keys) throws IOException {
-        u.p("copying template to temp dir: ");
-        u.p(destDir);
-        if(!destDir.exists()) {
-            destDir.mkdir();
-        }
-        for(File f : srcDir.listFiles()) {
-            copyFileToDir(f, destDir, keys);
-        }
-    }
-
-    private void copyFileToDir(File srcfile, File destdir, Map<String, String> keys) throws IOException {
-        if(!srcfile.isDirectory()) {
-            u.p("copying file : " + srcfile.getAbsolutePath());
-            Util.copyToFile(srcfile, new File(destdir, srcfile.getName()));
-        } else {
-            u.p("isdir: " + srcfile.getAbsolutePath());
-            u.indent();
-            copyTemplate(srcfile, new File(destdir,srcfile.getName()), keys);
-            u.outdent();
-        }
-    }
-
-    private File makeTempDir() throws IOException {
-        File file = File.createTempFile("leosketch","roku_app");
-        if(file.exists() && !file.isDirectory()) {
-            file.delete();
-        }
-        file.mkdirs();
-        return file;
-    }
 }

@@ -547,9 +547,6 @@ public class SaveAminoCanvasAction extends BaseExportAction {
 
         }
 
-        private String toHexString(FlatColor color) {
-            return "#"+String.format("%06x",color.getRGBA()&0x00FFFFFF);
-        }
 
         private static String serializeFlatColor(FlatColor color) {
             return "rgba("
