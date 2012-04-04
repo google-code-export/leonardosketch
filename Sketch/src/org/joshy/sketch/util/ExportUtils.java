@@ -13,4 +13,13 @@ public class ExportUtils {
     public static String toHexString(FlatColor color) {
         return "#"+String.format("%06x",color.getRGBA()&0x00FFFFFF);
     }
+
+    public static String toRGBAHexString(FlatColor color) {
+        return "#"
+                +String.format("%02x",(int)(color.getRed()*255.0))
+                +String.format("%02x",(int)(color.getGreen()*255.0))
+                +String.format("%02x",(int)(color.getBlue()*255.0))
+                +String.format("%02x",(int)(color.getAlpha()*255.0))
+                ;
+    }
 }
