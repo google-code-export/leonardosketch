@@ -7,15 +7,14 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.canvas.Selection;
-import org.joshy.sketch.model.SGroup;
-import org.joshy.sketch.model.SNode;
-import org.joshy.sketch.model.SText;
-import org.joshy.sketch.model.SketchDocument;
+import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -35,6 +34,8 @@ public class TreeViewPanel extends VFlexBox {
     private Checkbox all_cache;
     private Checkbox all_cache_image;
     private Checkbox bitmap_text;
+    
+    private List<Control> customPropsControls = new ArrayList<Control>();
 
     public TreeViewPanel(Main main, final VectorDocContext ctx) {
         this.main = main;
@@ -198,25 +199,39 @@ public class TreeViewPanel extends VFlexBox {
             } else {
                 all_name.setText("");
             }
-            
-            SNode n = sel.firstItem();
-            if(n instanceof SText) {
-                bitmap_text.setEnabled(true);
-                bitmap_text.setSelected(n.getBooleanProperty("com.joshondesign.amino.bitmaptext"));
-            } else {
-                bitmap_text.setEnabled(false);
-                bitmap_text.setSelected(false);
+
+            //remove custom controls before adding them back
+            for(Control control : customPropsControls) {
+                TreeViewPanel.this.remove(control);
             }
-            
-            for(int i=0; i<model.getRowCount(); i++) {
-                Object row = model.get(i,0);
-                //u.p("row = " + row);
-                if(row instanceof SNode && sel.contains((SNode)row)) {
-                    tree.setSelectedRow(i);
-                    return;
+            customPropsControls.clear();
+
+            if(!sel.isEmpty()) {
+                SNode n = sel.firstItem();
+                if(n instanceof SText) {
+                    bitmap_text.setEnabled(true);
+                    bitmap_text.setSelected(n.getBooleanProperty("com.joshondesign.amino.bitmaptext"));
+                } else {
+                    bitmap_text.setEnabled(false);
+                    bitmap_text.setSelected(false);
+                }
+
+                if(n instanceof CustomProperties) {
+                    for(Control control : ((CustomProperties)n).getControls()) {
+                        customPropsControls.add(control);
+                        TreeViewPanel.this.add(control);
+                    }
+                }
+
+                for(int i=0; i<model.getRowCount(); i++) {
+                    Object row = model.get(i,0);
+                    //u.p("row = " + row);
+                    if(row instanceof SNode && sel.contains((SNode)row)) {
+                        tree.setSelectedRow(i);
+                        return;
+                    }
                 }
             }
-
         }
     };
 

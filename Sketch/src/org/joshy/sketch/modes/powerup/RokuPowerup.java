@@ -1,6 +1,7 @@
 package org.joshy.sketch.modes.powerup;
 
 import org.joshy.gfx.util.u;
+import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.actions.io.SavePNGAction;
 import org.joshy.sketch.model.SketchDocument;
@@ -8,7 +9,6 @@ import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.util.Util;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +32,7 @@ public class RokuPowerup extends Powerup {
     }
 
     @Override
-    public void enable(DocContext context) {
+    public void enable(DocContext context, Main main) {
         u.p("enabling the roku power up");
         // modify doc size to fit a TV
         context.getDocument().setWidth(1280);

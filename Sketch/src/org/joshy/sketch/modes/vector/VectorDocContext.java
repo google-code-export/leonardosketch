@@ -351,8 +351,8 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         //separator between the 'new symbol set' action and the actual sets
         context.symbolMenu.separator();
         //add sets
-        for(final SymbolManager.SymbolSet set : getMain().symbolManager.sets.values()) {
-            context.symbolMenu.addItem(set.file.getName(), new SAction(){
+        for(final SymbolManager.SymbolSet set : getMain().symbolManager.getSets()) {
+            context.symbolMenu.addItem(set.getName(), new SAction(){
                 @Override
                 public void execute() {
                     getMain().symbolManager.setCurrentSet(set);

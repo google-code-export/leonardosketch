@@ -1,5 +1,6 @@
 package org.joshy.sketch.modes.powerup;
 
+import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.modes.DocContext;
 
@@ -38,11 +39,13 @@ public class PowerupManager {
     public static class EnablePowerup extends SAction {
         private Powerup powerup;
         private DocContext context;
+        private Main main;
 
-        public EnablePowerup(Powerup powerup, DocContext context) {
+        public EnablePowerup(Powerup powerup, DocContext context, Main main) {
             super();
             this.powerup = powerup;
             this.context = context;
+            this.main = main;
         }
 
         @Override
@@ -52,7 +55,7 @@ public class PowerupManager {
 
         @Override
         public void execute() throws Exception {
-            powerup.enable(context);
+            powerup.enable(context, main);
         }
     }
 
