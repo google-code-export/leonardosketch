@@ -4,6 +4,7 @@ import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.LinearGradientFill;
 import org.joshy.gfx.draw.MultiGradientFill;
+import org.joshy.gfx.draw.RadialGradientFill;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.SAction;
@@ -13,11 +14,13 @@ import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.util.ExportUtils;
 import org.joshy.sketch.util.Util;
 
+import javax.imageio.ImageIO;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,10 +73,11 @@ class RunAsJavaFX extends SAction {
         Util.copyTemplate(templatedir, appdir, keys);
 
         File fxmlfile = new File(appdir,"src/fxmltemplate/Generated.fxml");
+        File outdir = new File(appdir,"src/fxmltemplate/");
         try {
             u.p("generating: " + fxmlfile);
             XMLWriter out = new XMLWriter(fxmlfile);
-            ExportProcessor.process(new FXMLExport(), out, (SketchDocument) context.getDocument());
+            ExportProcessor.process(new FXMLExport(outdir), out, (SketchDocument) context.getDocument());
             out.close();
         } catch (Exception ex) {
             u.p(ex);
@@ -99,6 +103,15 @@ class RunAsJavaFX extends SAction {
 
 class FXMLExport implements ShapeExporter<XMLWriter> {
     private static DecimalFormat df = new DecimalFormat();
+    private File outdir;
+    private File imagesdir;
+
+    public FXMLExport(File outdir) {
+        this.outdir = outdir;
+        imagesdir = new File(outdir,"images");
+        imagesdir.mkdirs();
+    }
+
     static {
         df.setMaximumFractionDigits(2);
     }
@@ -109,6 +122,7 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
         out.text("<?import java.lang.*?>\n");
         out.text("<?import javafx.scene.*?>\n");
         out.text("<?import javafx.scene.control.*?>\n");
+        out.text("<?import javafx.scene.image.*?>\n");
         out.text("<?import javafx.scene.layout.*?>\n");
         out.text("<?import javafx.scene.paint.*?>\n");
         out.text("<?import javafx.scene.shape.*?>\n");
@@ -131,16 +145,24 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
         if(node instanceof SPoly) out.start("Path");
         if(node instanceof SPath) out.start("Path");
         if(node instanceof SText) out.start("Text");
+        if(node instanceof SImage) out.start("ImageView");
 
 
         if(node instanceof SGroup) return;
-        if(node instanceof SImage) return;
         if(node instanceof SArrow) return;
         if(node instanceof SArea) return;
 
         //custom attributes
         if(node instanceof SResizeableNode) {
             setResizableNodeAttributes(out,node);
+        }
+        
+        if(node instanceof SRect) {
+            SRect rect = (SRect) node;
+            if(rect.getCorner() > 0) {
+                out.attr("arcWidth",df.format(rect.getCorner()));
+                out.attr("arcHeight",df.format(rect.getCorner()));
+            }
         }
 
 
@@ -156,6 +178,9 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
             }
             if(shape.getStrokeWidth() > 0) {
                 out.attr("strokeWidth",df.format(shape.getStrokeWidth()));
+            }
+            if(shape.getFillOpacity() < 1) {
+                out.attr("opacity",df.format(shape.getFillOpacity()));
             }
         }
 
@@ -190,10 +215,45 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
                 out.end(); // stops
                 out.end(); // LinearGradient
                 out.end(); // fill
+            }
+            if(shape.getFillPaint() instanceof RadialGradientFill) {
+                RadialGradientFill fill = (RadialGradientFill) shape.getFillPaint();
+                out.start("fill").start("RadialGradient")
+                        .attr("centerX",df.format(fill.getCenterX()))
+                        .attr("centerY",df.format(fill.getCenterY()))
+                        .attr("radius",df.format(fill.getRadius()))
+                        .attr("proportional","false");
+                out.start("stops");
+                for(MultiGradientFill.Stop stop: fill.getStops()) {
+                    out.start("Stop")
+                            .attr("offset",df.format(stop.getPosition()))
+                            .attr("color",ExportUtils.toRGBAHexString(stop.getColor()))
+                            .end();
 
+                }
+                out.end(); // stops
+                out.end(); // RadialGradient
+                out.end(); // fill
             }
         }
-        
+
+
+        if(node instanceof SImage) {
+            SImage image = (SImage) node;
+            out.start("image");
+            out.start("Image")
+                .attr("url", "@images/" + image.getRelativeURL());
+
+            File imageFile = new File(imagesdir,image.getRelativeURL());
+            try {
+                ImageIO.write(image.getBufferedImage(), "PNG", imageFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            out.end(); // Image
+            out.end(); // image
+        }
         if(node instanceof NGon) {
             toPathNode(out, ((NGon)node).toUntransformedArea(), 0,0 );
         }
@@ -223,6 +283,10 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
             out.attr("centerY",df.format(oval.getY()+oval.getHeight()/2));
             out.attr("radiusX",df.format(oval.getWidth()/2));
             out.attr("radiusY",df.format(oval.getHeight()/2));
+            return;
+        }
+
+        if(node instanceof SImage) {
             return;
         }
 
