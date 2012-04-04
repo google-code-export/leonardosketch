@@ -2,6 +2,8 @@ package org.joshy.sketch.modes.powerup;
 
 import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.LinearGradientFill;
+import org.joshy.gfx.draw.MultiGradientFill;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.SAction;
@@ -107,8 +109,10 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
         out.text("<?import java.lang.*?>");
         out.text("<?import javafx.scene.*?>");
         out.text("<?import javafx.scene.control.*?>");
-        out.text("<?import javafx.scene.shape.*?>");
         out.text("<?import javafx.scene.layout.*?>\n");
+        out.text("<?import javafx.scene.paint.*?>");
+        out.text("<?import javafx.scene.shape.*?>");
+        out.text("<?import javafx.scene.text.*?>");
         out.text("\n");
         out.text("\n");
 
@@ -126,24 +130,13 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
         if(node instanceof NGon)  out.start("Path");
         if(node instanceof SPoly) out.start("Path");
         if(node instanceof SPath) out.start("Path");
+        if(node instanceof SText) out.start("Text");
 
         //custom attributes
         if(node instanceof SResizeableNode) {
-            if(node instanceof SOval) {
-                SOval oval = (SOval) node;
-                out.attr("centerX",df.format(oval.getX()+oval.getWidth()/2));
-                out.attr("centerY",df.format(oval.getY()+oval.getHeight()/2));
-                out.attr("radiusX",df.format(oval.getWidth()/2));
-                out.attr("radiusY",df.format(oval.getHeight()/2));
-            } else {
-                SResizeableNode rect = (SResizeableNode) node;
-                out.attr("x",""+rect.getX())
-                        .attr("y",""+rect.getY())
-                        .attr("width",""+rect.getWidth())
-                        .attr("height",""+rect.getHeight())
-                        ;
-            }
+            setResizableNodeAttributes(out,node);
         }
+
 
 
         //general attributes
@@ -153,7 +146,7 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
                 out.attr("fill", ExportUtils.toHexString((FlatColor) shape.getFillPaint()));
             }
             if(shape.getStrokePaint() instanceof FlatColor) {
-                out.attr("stroke", ExportUtils.toHexString((FlatColor) shape.getStrokePaint()));
+                out.attr("stroke", ExportUtils.toHexString(shape.getStrokePaint()));
             }
             if(shape.getStrokeWidth() > 0) {
                 out.attr("strokeWidth",df.format(shape.getStrokeWidth()));
@@ -168,7 +161,33 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
         out.attr("scaleY",df.format(node.getScaleY()));
 
 
-        //nested children
+        //nested children and sub properties
+        
+        if(node instanceof SShape) {
+            SShape shape = (SShape) node;
+            if(shape.getFillPaint() instanceof LinearGradientFill) {
+                LinearGradientFill fill = (LinearGradientFill) shape.getFillPaint();
+                out.start("fill").start("LinearGradient")
+                        .attr("startX",df.format(fill.getStartX()))
+                        .attr("startY",df.format(fill.getStartY()))
+                        .attr("endX",df.format(fill.getEndX()))
+                        .attr("endY",df.format(fill.getEndY()))
+                        .attr("proportional","false");
+                out.start("stops");
+                for(MultiGradientFill.Stop stop: fill.getStops()) {
+                    out.start("Stop")
+                            .attr("offset",df.format(stop.getPosition()))
+                            .attr("color",ExportUtils.toRGBAHexString(stop.getColor()))
+                            .end();
+
+                }
+                out.end(); // stops
+                out.end(); // LinearGradient
+                out.end(); // fill
+
+            }
+        }
+        
         if(node instanceof NGon) {
             toPathNode(out, ((NGon)node).toUntransformedArea(), 0,0 );
         }
@@ -178,8 +197,46 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
         if(node instanceof SPath) {
             serializePath(out, (SPath) node);
         }
+        if(node instanceof SText) {
+            SText text = (SText) node;
+            out.start("font")
+                .start("Font")
+                .attr("size", df.format(text.getFontSize()))
+                .attr("name", text.getFontName())
+                .end()
+            .end();
+        }
 
         out.end();
+    }
+
+    private void setResizableNodeAttributes(XMLWriter out, SNode node) {
+        if(node instanceof SOval) {
+            SOval oval = (SOval) node;
+            out.attr("centerX", df.format(oval.getX() + oval.getWidth() / 2));
+            out.attr("centerY",df.format(oval.getY()+oval.getHeight()/2));
+            out.attr("radiusX",df.format(oval.getWidth()/2));
+            out.attr("radiusY",df.format(oval.getHeight()/2));
+            return;
+        }
+
+        if(node instanceof SText) {
+            SText text = (SText) node;
+            out.attr("text",((SText)node).getText());
+            out.attr("x",""+text.getX());
+            out.attr("y", "" + text.getY());
+            if(text.isWrapText()) {
+                out.attr("wrappingWidth",df.format(text.getWidth()));
+            }
+            return;
+        }
+        
+        SResizeableNode rect = (SResizeableNode) node;
+        out.attr("x",""+rect.getX())
+                .attr("y", "" + rect.getY())
+                .attr("width", "" + rect.getWidth())
+                .attr("height", "" + rect.getHeight())
+        ;
     }
 
 
