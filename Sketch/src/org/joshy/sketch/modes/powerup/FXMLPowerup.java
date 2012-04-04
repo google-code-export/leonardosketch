@@ -2,26 +2,17 @@ package org.joshy.sketch.modes.powerup;
 
 import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.LinearGradientFill;
-import org.joshy.gfx.draw.MultiGradientFill;
-import org.joshy.gfx.draw.RadialGradientFill;
+import org.joshy.gfx.draw.Font;
+import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.util.u;
+import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.SAction;
-import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
-import org.joshy.sketch.util.ExportUtils;
 import org.joshy.sketch.util.Util;
 
-import javax.imageio.ImageIO;
-import java.awt.geom.Area;
-import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
 import java.io.File;
-import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,19 +32,89 @@ public class FXMLPowerup extends Powerup {
     }
 
     @Override
-    public void enable(DocContext context) {
-        u.p("enabling the javafx fxml power up");
-        context.getFileMenu().addItem("Run as JavaFX", new RunAsJavaFX(context));
+    public void enable(DocContext context, Main main) {
+        context.getFileMenu().addItem("Run as JavaFX", new RunAsJavaFX(context, main));
+
+
+        //checkbox
+        GenericFXComponent.DrawDelegate checkbox_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.GRAY);
+                g.fillRoundRect(c.getX(), c.getY(), c.getHeight(), c.getHeight(), 3, 3);
+                g.setPaint(FlatColor.BLACK);
+                Font.drawCenteredVertically(g, "checkbox", Font.DEFAULT, c.getX() + c.getHeight() + 5, c.getY(), c.getWidth(), c.getHeight(), true);
+            }
+        };
+
+        Map<String,Object> checkbox_props = new HashMap<String, Object>();
+        checkbox_props.put("text", "checkbox");
+        main.symbolManager.addVirtual(new GenericFXComponent(checkbox_delegate,checkbox_props,100, 30, "CheckBox"));
+
+        //textbox
+        GenericFXComponent.DrawDelegate textbox_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.WHITE);
+                g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+                g.setPaint(FlatColor.BLACK);
+                Font.drawCenteredVertically(g, "text field", Font.DEFAULT, c.getX() + c.getHeight() + 5, c.getY(), c.getWidth(), c.getHeight(), true);
+            }
+        };
+
+        Map<String,Object> textbox_props = new HashMap<String, Object>();
+        textbox_props.put("text", "text field");
+        main.symbolManager.addVirtual(new GenericFXComponent(textbox_delegate,textbox_props, 100, 30, "TextField"));
+
+
+        //text area
+        GenericFXComponent.DrawDelegate textarea_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.WHITE);
+                g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+                g.setPaint(FlatColor.BLACK);
+                String[] lines = new String[]{"this is a text area","with multiple lines of text"};
+                Font.drawLines(g,Font.DEFAULT, lines);
+            }
+        };
+
+        Map<String,Object> textarea_props = new HashMap<String, Object>();
+        textarea_props.put("text", "this is a text area\nwith multiple lines of text"   );
+        main.symbolManager.addVirtual(new GenericFXComponent(textarea_delegate,textarea_props, 200, 120, "TextArea"));
+
+
+
+
+
+        //button
+        GenericFXComponent.DrawDelegate button_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.GRAY);
+                g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 10, 10);
+                g.setPaint(FlatColor.BLACK);
+                Font.drawCentered(g, "button", Font.DEFAULT, c.getX(), c.getY(), c.getWidth(), c.getHeight(), true);
+            }
+        };
+
+        Map<String,Object> button_props = new HashMap<String, Object>();
+        button_props.put("text", "button");
+        main.symbolManager.addVirtual(new GenericFXComponent(button_delegate,button_props, 100, 30, "Button"));
+
+
         context.redraw();
     }
-}
 
+}
 
 class RunAsJavaFX extends SAction {
     private DocContext context;
+    private Main main;
 
-    public RunAsJavaFX(DocContext context) {
+    public RunAsJavaFX(DocContext context, Main main) {
         this.context = context;
+        this.main = main;
     }
 
     @Override
@@ -101,315 +162,3 @@ class RunAsJavaFX extends SAction {
 
 }
 
-class FXMLExport implements ShapeExporter<XMLWriter> {
-    private static DecimalFormat df = new DecimalFormat();
-    private File outdir;
-    private File imagesdir;
-
-    public FXMLExport(File outdir) {
-        this.outdir = outdir;
-        imagesdir = new File(outdir,"images");
-        imagesdir.mkdirs();
-    }
-
-    static {
-        df.setMaximumFractionDigits(2);
-    }
-
-    public void docStart(XMLWriter out, SketchDocument doc) {
-        out.header();
-
-        out.text("<?import java.lang.*?>\n");
-        out.text("<?import javafx.scene.*?>\n");
-        out.text("<?import javafx.scene.control.*?>\n");
-        out.text("<?import javafx.scene.image.*?>\n");
-        out.text("<?import javafx.scene.layout.*?>\n");
-        out.text("<?import javafx.scene.paint.*?>\n");
-        out.text("<?import javafx.scene.shape.*?>\n");
-        out.text("<?import javafx.scene.text.*?>\n");
-        out.text("\n");
-        out.text("\n");
-
-    }
-
-    public void pageStart(XMLWriter out, SketchDocument.SketchPage page) {
-        out.start("Group");
-    }
-
-    public void exportPre(XMLWriter out, SNode node) {
-
-        //xml start types
-        if(node instanceof SRect) out.start("Rectangle");
-        if(node instanceof SOval) out.start("Ellipse");
-        if(node instanceof NGon)  out.start("Path");
-        if(node instanceof SPoly) out.start("Path");
-        if(node instanceof SPath) out.start("Path");
-        if(node instanceof SText) out.start("Text");
-        if(node instanceof SImage) out.start("ImageView");
-
-
-        if(node instanceof SGroup) return;
-        if(node instanceof SArrow) return;
-        if(node instanceof SArea) return;
-
-        //custom attributes
-        if(node instanceof SResizeableNode) {
-            setResizableNodeAttributes(out,node);
-        }
-        
-        if(node instanceof SRect) {
-            SRect rect = (SRect) node;
-            if(rect.getCorner() > 0) {
-                out.attr("arcWidth",df.format(rect.getCorner()));
-                out.attr("arcHeight",df.format(rect.getCorner()));
-            }
-        }
-
-
-
-        //general attributes
-        if(node instanceof SShape) {
-            SShape shape = (SShape) node;
-            if(shape.getFillPaint() instanceof FlatColor) {
-                out.attr("fill", ExportUtils.toHexString((FlatColor) shape.getFillPaint()));
-            }
-            if(shape.getStrokePaint() instanceof FlatColor) {
-                out.attr("stroke", ExportUtils.toHexString(shape.getStrokePaint()));
-            }
-            if(shape.getStrokeWidth() > 0) {
-                out.attr("strokeWidth",df.format(shape.getStrokeWidth()));
-            }
-            if(shape.getFillOpacity() < 1) {
-                out.attr("opacity",df.format(shape.getFillOpacity()));
-            }
-        }
-
-
-        out.attr("translateX",df.format(node.getTranslateX()));
-        out.attr("translateY",df.format(node.getTranslateY()));
-        out.attr("rotate",df.format(node.getRotate()));
-        out.attr("scaleX",df.format(node.getScaleX()));
-        out.attr("scaleY",df.format(node.getScaleY()));
-
-
-        //nested children and sub properties
-        
-        if(node instanceof SShape) {
-            SShape shape = (SShape) node;
-            if(shape.getFillPaint() instanceof LinearGradientFill) {
-                LinearGradientFill fill = (LinearGradientFill) shape.getFillPaint();
-                out.start("fill").start("LinearGradient")
-                        .attr("startX",df.format(fill.getStartX()))
-                        .attr("startY",df.format(fill.getStartY()))
-                        .attr("endX",df.format(fill.getEndX()))
-                        .attr("endY",df.format(fill.getEndY()))
-                        .attr("proportional","false");
-                out.start("stops");
-                for(MultiGradientFill.Stop stop: fill.getStops()) {
-                    out.start("Stop")
-                            .attr("offset",df.format(stop.getPosition()))
-                            .attr("color",ExportUtils.toRGBAHexString(stop.getColor()))
-                            .end();
-
-                }
-                out.end(); // stops
-                out.end(); // LinearGradient
-                out.end(); // fill
-            }
-            if(shape.getFillPaint() instanceof RadialGradientFill) {
-                RadialGradientFill fill = (RadialGradientFill) shape.getFillPaint();
-                out.start("fill").start("RadialGradient")
-                        .attr("centerX",df.format(fill.getCenterX()))
-                        .attr("centerY",df.format(fill.getCenterY()))
-                        .attr("radius",df.format(fill.getRadius()))
-                        .attr("proportional","false");
-                out.start("stops");
-                for(MultiGradientFill.Stop stop: fill.getStops()) {
-                    out.start("Stop")
-                            .attr("offset",df.format(stop.getPosition()))
-                            .attr("color",ExportUtils.toRGBAHexString(stop.getColor()))
-                            .end();
-
-                }
-                out.end(); // stops
-                out.end(); // RadialGradient
-                out.end(); // fill
-            }
-        }
-
-
-        if(node instanceof SImage) {
-            SImage image = (SImage) node;
-            out.start("image");
-            out.start("Image")
-                .attr("url", "@images/" + image.getRelativeURL());
-
-            File imageFile = new File(imagesdir,image.getRelativeURL());
-            try {
-                ImageIO.write(image.getBufferedImage(), "PNG", imageFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            
-            out.end(); // Image
-            out.end(); // image
-        }
-        if(node instanceof NGon) {
-            toPathNode(out, ((NGon)node).toUntransformedArea(), 0,0 );
-        }
-        if(node instanceof SPoly) {
-            serializePath(out, (SPoly) node);
-        }
-        if(node instanceof SPath) {
-            serializePath(out, (SPath) node);
-        }
-        if(node instanceof SText) {
-            SText text = (SText) node;
-            out.start("font")
-                .start("Font")
-                .attr("size", df.format(text.getFontSize()))
-                .attr("name", text.getFontName())
-                .end()
-            .end();
-        }
-
-        out.end();
-    }
-
-    private void setResizableNodeAttributes(XMLWriter out, SNode node) {
-        if(node instanceof SOval) {
-            SOval oval = (SOval) node;
-            out.attr("centerX", df.format(oval.getX() + oval.getWidth() / 2));
-            out.attr("centerY",df.format(oval.getY()+oval.getHeight()/2));
-            out.attr("radiusX",df.format(oval.getWidth()/2));
-            out.attr("radiusY",df.format(oval.getHeight()/2));
-            return;
-        }
-
-        if(node instanceof SImage) {
-            return;
-        }
-
-        if(node instanceof SText) {
-            SText text = (SText) node;
-            out.attr("text",((SText)node).getText());
-            out.attr("x",""+text.getX());
-            out.attr("y", "" + text.getY());
-            if(text.isWrapText()) {
-                out.attr("wrappingWidth",df.format(text.getWidth()));
-            }
-            return;
-        }
-        
-        SResizeableNode rect = (SResizeableNode) node;
-        out.attr("x",""+rect.getX())
-                .attr("y", "" + rect.getY())
-                .attr("width", "" + rect.getWidth())
-                .attr("height", "" + rect.getHeight())
-        ;
-    }
-
-
-    public void exportPost(XMLWriter out, SNode shape) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public void pageEnd(XMLWriter out, SketchDocument.SketchPage page) {
-        out.end();
-    }
-
-    public void docEnd(XMLWriter out, SketchDocument document) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public boolean isContainer(SNode n) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    public Iterable<? extends SNode> getChildNodes(SNode n) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-
-
-
-    private void toPathNode(XMLWriter out, Area area, double xoff, double yoff) {
-        double dx = xoff;
-        double dy = yoff;
-        PathIterator it = area.getPathIterator(null);
-        generateElements(out, it, dx, dy);
-    }
-
-    private void serializePath(XMLWriter out, SPath node) {
-        Path2D.Double j2dpath = SPath.toPath(node);
-        PathIterator it = j2dpath.getPathIterator(null);
-        generateElements(out, it, 0, 0);
-    }
-
-    private void generateElements(XMLWriter out, PathIterator it, double dx, double dy) {
-        out.start("elements");
-        while(!it.isDone()) {
-            double[] coords = new double[6];
-            int n = it.currentSegment(coords);
-            if(n == PathIterator.SEG_MOVETO) {
-                out.start("MoveTo")
-                        .attr("x",df.format(coords[0]-dx))
-                        .attr("y",df.format(coords[1]-dy))
-                        .end();
-            }
-            if(n == PathIterator.SEG_LINETO) {
-                out.start("LineTo")
-                        .attr("x",df.format(coords[0]-dx))
-                        .attr("y",df.format(coords[1]-dy))
-                        .end();
-            }
-            if(n == PathIterator.SEG_CUBICTO) {
-                out.start("CubicCurveTo")
-                        .attr("controlX1",df.format(coords[0]-dx))
-                        .attr("controlY1",df.format(coords[1]-dy))
-                        .attr("controlX2",df.format(coords[2]-dx))
-                        .attr("controlY2",df.format(coords[3]-dy))
-                        .attr("x",df.format(coords[4]-dx))
-                        .attr("y",df.format(coords[5]-dy))
-                        .end();
-                //out.println(".curveTo("+
-                //       (coords[0]-dx)+","+(coords[1]-dy)+","+(coords[2]-dx)+","+(coords[3]-dy)+
-                //       ","+(coords[4]-dx)+","+(coords[5]-dy)+")"
-                //);
-            }
-            if(n == PathIterator.SEG_CLOSE) {
-                //out.println(".closeTo()");
-                out.start("ClosePath").end();
-                break;
-            }
-            it.next();
-        }
-        out.end();
-    }
-
-
-    private void serializePath(XMLWriter out, SPoly path) {
-        out.start("elements");
-        //out.println("new Path()");
-        List<Point2D> points = path.getPoints();
-        for(int i=0; i<points.size(); i++) {
-            Point2D pt = points.get(i);
-            if(i == 0) {
-                out.start("MoveTo")
-                        .attr("x",df.format(pt.getX()))
-                        .attr("y",df.format(pt.getY()))
-                        .end();
-            } else {
-                out.start("LineTo")
-                        .attr("x",df.format(pt.getX()))
-                        .attr("y",df.format(pt.getY()))
-                        .end();
-            }
-        }
-        if(path.isClosed()) {
-            //out.println(".closeTo()");
-        }
-        out.end();
-    }
-    
-}

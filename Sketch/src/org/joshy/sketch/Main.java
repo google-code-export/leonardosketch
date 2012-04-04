@@ -630,7 +630,7 @@ public class Main implements Runnable {
 
         Menu powerupsMenu = new Menu().setTitle("Powerups");
         for(Powerup powerup : powerupManager.getPowerups()) {
-            powerupsMenu.addItem(powerup.getMenuName(), new PowerupManager.EnablePowerup(powerup, context));
+            powerupsMenu.addItem(powerup.getMenuName(), new PowerupManager.EnablePowerup(powerup, context, this));
         }
         
         editMenu.addMenu(powerupsMenu);

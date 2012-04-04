@@ -1,5 +1,6 @@
 package org.joshy.sketch.modes.powerup;
 
+import org.joshy.sketch.Main;
 import org.joshy.sketch.modes.DocContext;
 
 /**
@@ -12,5 +13,5 @@ import org.joshy.sketch.modes.DocContext;
 public abstract class Powerup {
     public abstract CharSequence getMenuName();
 
-    public abstract void enable(DocContext context);
+    public abstract void enable(DocContext context, Main main);
 }

@@ -8,13 +8,11 @@ import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.OpenAction;
 import org.joshy.sketch.actions.io.NativeExport;
 import org.joshy.sketch.model.SNode;
+import org.joshy.sketch.model.SShape;
 import org.joshy.sketch.util.Util;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * A manager for reusable symbols. 
@@ -26,6 +24,7 @@ public class SymbolManager {
     private SymbolSet currentSet;
     private File basedir;
     private List<SymbolSet> list = new ArrayList<SymbolSet>();
+    private SymbolSet virtuals = new SymbolSet();
 
     public SymbolManager(File file) {
         basedir = file;
@@ -34,6 +33,10 @@ public class SymbolManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        sets.put(new File("virtual"),virtuals);
+        list.add(virtuals);
+
         model = new ListModel<SNode>() {
             public SNode get(int i) {
                 if(i < currentSet.symbols.size()) {
@@ -72,11 +75,24 @@ public class SymbolManager {
         return list.get(i);
     }
 
+    public Iterable<? extends SymbolSet> getSets() {
+        return sets.values();
+    }
+
+
     public static class SymbolSet {
         private List<SNode> symbols = new ArrayList<SNode>();
         public File file;
         public String toString() {
-            return file.getName();
+            return ""+getName();
+        }
+
+        public CharSequence getName() {
+            if(file != null && file.getName() != null) {
+                return file.getName();
+            }
+
+            return "unknown";
         }
     }
 
@@ -140,6 +156,11 @@ public class SymbolManager {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public void addVirtual(SNode node) {
+        virtuals.symbols.add(node);
+        fireUpdate();
     }
 
     public void save() {
