@@ -106,13 +106,13 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
     public void docStart(XMLWriter out, SketchDocument doc) {
         out.header();
 
-        out.text("<?import java.lang.*?>");
-        out.text("<?import javafx.scene.*?>");
-        out.text("<?import javafx.scene.control.*?>");
+        out.text("<?import java.lang.*?>\n");
+        out.text("<?import javafx.scene.*?>\n");
+        out.text("<?import javafx.scene.control.*?>\n");
         out.text("<?import javafx.scene.layout.*?>\n");
-        out.text("<?import javafx.scene.paint.*?>");
-        out.text("<?import javafx.scene.shape.*?>");
-        out.text("<?import javafx.scene.text.*?>");
+        out.text("<?import javafx.scene.paint.*?>\n");
+        out.text("<?import javafx.scene.shape.*?>\n");
+        out.text("<?import javafx.scene.text.*?>\n");
         out.text("\n");
         out.text("\n");
 
@@ -131,6 +131,12 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
         if(node instanceof SPoly) out.start("Path");
         if(node instanceof SPath) out.start("Path");
         if(node instanceof SText) out.start("Text");
+
+
+        if(node instanceof SGroup) return;
+        if(node instanceof SImage) return;
+        if(node instanceof SArrow) return;
+        if(node instanceof SArea) return;
 
         //custom attributes
         if(node instanceof SResizeableNode) {
