@@ -2,10 +2,13 @@ package org.joshy.sketch.modes.powerup;
 
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
+import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.event.SelectionEvent;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.Togglebutton;
+import org.joshy.gfx.node.control.*;
+import org.joshy.gfx.node.control.Label;
 import org.joshy.gfx.node.layout.HFlexBox;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.model.CustomProperties;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SResizeableNode;
@@ -33,6 +36,7 @@ public abstract class FXAbstractComponent extends SNode implements CustomPropert
     protected double y;
     protected double w;
     protected double h;
+    protected String fontsize = "regular";
 
     public FXAbstractComponent() {
         this.w = 50;
@@ -130,7 +134,32 @@ public abstract class FXAbstractComponent extends SNode implements CustomPropert
 
     public Iterable<Control> getControls() {
         java.util.List<Control> l = new ArrayList<Control>();
-        HFlexBox row = new HFlexBox();
+
+        HFlexBox row  = null;
+        
+        
+        row = new HFlexBox();
+        row.add(new Label("font size"));
+        final PopupMenuButton<String> fontbutton = new PopupMenuButton<String>();
+        fontbutton.setModel(ListView.createModel(new String[]{"mini","small","regular","large","gigante"}));
+        fontbutton.setSelectedIndex(2);
+        EventBus.getSystem().addListener(fontbutton, SelectionEvent.Changed, new Callback<SelectionEvent>() {
+            public void call(SelectionEvent event) {
+                u.p("font size set to :" + fontbutton.getSelectedItem());
+                fontsize = fontbutton.getSelectedItem();
+            }
+        });
+        if("mini".equals(fontsize)) fontbutton.setSelectedIndex(0);
+        if("small".equals(fontsize)) fontbutton.setSelectedIndex(1);
+        if("regular".equals(fontsize)) fontbutton.setSelectedIndex(2);
+        if("large".equals(fontsize)) fontbutton.setSelectedIndex(3);
+        if("gigante".equals(fontsize)) fontbutton.setSelectedIndex(4);
+
+        row.add(fontbutton);
+        l.add(row);
+
+        
+        row = new HFlexBox();
 
         final Togglebutton left = new Togglebutton("<");
         left.setSelected(leftAnchored);
@@ -170,6 +199,7 @@ public abstract class FXAbstractComponent extends SNode implements CustomPropert
 
 
         l.add(row);
+
 
         return l;
     }
