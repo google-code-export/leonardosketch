@@ -5,6 +5,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.BackgroundTask;
+import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -51,6 +52,20 @@ public class FXMLPowerup extends Powerup {
         checkbox_props.put("text", "checkbox");
         main.symbolManager.addVirtual(new GenericFXComponent(checkbox_delegate,checkbox_props,100, 30, "CheckBox"));
 
+        //radio button
+        GenericFXComponent.DrawDelegate radio_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.GRAY);
+                g.fillCircle(c.getX() + c.getHeight() / 2, c.getY() + c.getHeight() / 2, c.getHeight() / 3);
+                g.setPaint(FlatColor.BLACK);
+                Font.drawCenteredVertically(g, "radiobutton", Font.DEFAULT, c.getX() + c.getHeight() + 5, c.getY(), c.getWidth(), c.getHeight(), true);
+            }
+        };
+
+        Map<String,Object> radio_props = new HashMap<String, Object>();
+        radio_props.put("text", "radiobutton");
+        main.symbolManager.addVirtual(new GenericFXComponent(radio_delegate,radio_props,100, 30, "RadioButton"));
+
         //textfield
         GenericFXComponent.DrawDelegate textfield_delegate = new GenericFXComponent.DrawDelegate() {
             public void draw(GFX g, GenericFXComponent c) {
@@ -67,6 +82,32 @@ public class FXMLPowerup extends Powerup {
         textfield_props.put("text", "text field");
         main.symbolManager.addVirtual(new GenericFXComponent(textfield_delegate,textfield_props, 100, 30, "TextField"));
 
+
+        //label
+        GenericFXComponent.DrawDelegate label_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.BLACK);
+                Font.drawCenteredVertically(g, "label", Font.DEFAULT, c.getX() + 5, c.getY(), c.getWidth(), c.getHeight(), true);
+            }
+        };
+
+        Map<String,Object> label_props = new HashMap<String, Object>();
+        label_props.put("text", "label");
+        main.symbolManager.addVirtual(new GenericFXComponent(label_delegate,label_props, 100, 30, "Label"));
+
+
+
+        //hyperlink
+        GenericFXComponent.DrawDelegate hyperlink_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.BLACK);
+                Font.drawCenteredVertically(g, "hyperlink", Font.DEFAULT, c.getX()+ 5, c.getY(), c.getWidth(), c.getHeight(), true);
+            }
+        };
+
+        Map<String,Object> hyperlink_props = new HashMap<String, Object>();
+        hyperlink_props.put("text", "hyperlink");
+        main.symbolManager.addVirtual(new GenericFXComponent(hyperlink_delegate,hyperlink_props, 100, 30, "Hyperlink"));
 
         //text area
         GenericFXComponent.DrawDelegate textarea_delegate = new GenericFXComponent.DrawDelegate() {
@@ -88,6 +129,60 @@ public class FXMLPowerup extends Powerup {
 
 
 
+        //list
+        GenericFXComponent.DrawDelegate list_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.WHITE);
+                g.fillRect(c.getX(), c.getY(), c.getWidth(), c.getHeight());
+                g.setPaint(FlatColor.BLACK);
+                g.drawRect(c.getX(), c.getY(), c.getWidth(), c.getHeight());
+                g.setPaint(FlatColor.BLACK);
+                String[] lines = new String[]{"this is a list","this is a list","this is a list","this is a list","this is a list","this is a list"};
+                Font.drawLines(g,Font.DEFAULT, lines);
+                double y = 0;
+                while(y < c.getHeight()) {
+                    g.drawLine(c.getX(),c.getY()+y,c.getX()+c.getWidth(),c.getY()+y);
+                    y+=18;
+                }
+            }
+        };
+
+        Map<String,Object> list_props = new HashMap<String, Object>();
+        main.symbolManager.addVirtual(new GenericFXComponent(list_delegate,list_props, 200, 120, "ListView"));
+
+
+
+
+
+        //table
+        GenericFXComponent.DrawDelegate table_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.WHITE);
+                g.fillRect(c.getX(), c.getY(), c.getWidth(), c.getHeight());
+                g.setPaint(FlatColor.BLACK);
+                g.drawRect(c.getX(), c.getY(), c.getWidth(), c.getHeight());
+                g.setPaint(FlatColor.BLACK);
+                String[] lines = new String[]{"this is a table","this is a table"};
+                Font.drawLines(g,Font.DEFAULT, lines);
+                double y = 0;
+                while(y < c.getHeight()) {
+                    g.drawLine(c.getX(),c.getY()+y,c.getX()+c.getWidth(),c.getY()+y);
+                    y+=18;
+                }
+                double x = 0;
+                while(x < c.getWidth()) {
+                    g.drawLine(c.getX()+x,c.getY(),c.getX()+x,c.getY()+c.getHeight());
+                    x+=40;
+                }
+            }
+        };
+
+        Map<String,Object> table_props = new HashMap<String, Object>();
+        main.symbolManager.addVirtual(new GenericFXComponent(table_delegate,table_props, 200, 120, "TableView"));
+
+
+
+
 
         //button
         GenericFXComponent.DrawDelegate button_delegate = new GenericFXComponent.DrawDelegate() {
@@ -104,8 +199,71 @@ public class FXMLPowerup extends Powerup {
         main.symbolManager.addVirtual(new GenericFXComponent(button_delegate,button_props, 100, 30, "Button"));
 
 
+        //toggle button
+        GenericFXComponent.DrawDelegate togglebutton_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.GRAY);
+                g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 10, 10);
+                g.setPaint(FlatColor.BLACK);
+                Font.drawCentered(g, "toggle button", Font.DEFAULT, c.getX(), c.getY(), c.getWidth(), c.getHeight(), true);
+            }
+        };
 
-        //textfield
+        Map<String,Object> togglebutton_props = new HashMap<String, Object>();
+        togglebutton_props.put("text", "toggle button");
+        main.symbolManager.addVirtual(new GenericFXComponent(togglebutton_delegate,togglebutton_props, 100, 30, "ToggleButton"));
+
+
+        //slider
+        GenericFXComponent.DrawDelegate slider_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.GRAY);
+                g.fillRoundRect(c.getX(), c.getY() + 3, c.getWidth(), c.getHeight()-6, 10, 10);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRoundRect(c.getX(), c.getY() + 3, c.getWidth(), c.getHeight()-6, 10, 10);
+                g.fillRoundRect(c.getX() + c.getWidth() / 2 - 10,c.getY(),20,c.getHeight(),4,4);
+            }
+        };
+
+        Map<String,Object> slider_props = new HashMap<String, Object>();
+        main.symbolManager.addVirtual(new GenericFXComponent(slider_delegate,slider_props, 100, 30, "Slider"));
+
+
+
+        //progbar
+        GenericFXComponent.DrawDelegate progbar_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.WHITE);
+                g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 10, 10);
+                g.setPaint(FlatColor.BLUE);
+                g.fillRoundRect(c.getX(), c.getY(), c.getWidth()/2, c.getHeight(), 10, 10);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 10, 10);
+            }
+        };
+
+        Map<String,Object> progbar_props = new HashMap<String, Object>();
+        main.symbolManager.addVirtual(new GenericFXComponent(progbar_delegate,progbar_props, 100, 30, "ProgressBar"));
+
+
+        //progindicator
+        GenericFXComponent.DrawDelegate progind_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.BLUE);
+                g.fillOval(c.getX(), c.getY(), c.getHeight(), c.getHeight());
+                g.setPaint(FlatColor.BLACK);
+                g.drawOval(c.getX(), c.getY(), c.getHeight(), c.getHeight());
+                g.setPaint(FlatColor.WHITE);
+                Font.drawCentered(g,"100%",Font.DEFAULT,c.getX(),c.getY(),c.getHeight(),c.getHeight(),true);
+            }
+        };
+
+        Map<String,Object> progind_props = new HashMap<String, Object>();
+        main.symbolManager.addVirtual(new GenericFXComponent(progind_delegate,progind_props, 30, 30, "ProgressIndicator"));
+
+
+
+        //password field
         GenericFXComponent.DrawDelegate password_delegate = new GenericFXComponent.DrawDelegate() {
             public void draw(GFX g, GenericFXComponent c) {
                 g.setPaint(FlatColor.WHITE);
@@ -113,13 +271,32 @@ public class FXMLPowerup extends Powerup {
                 g.setPaint(FlatColor.BLACK);
                 g.drawRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
                 g.setPaint(FlatColor.BLACK);
-                Font.drawCenteredVertically(g, "*******", Font.DEFAULT, c.getX() + c.getHeight() + 5, c.getY(), c.getWidth(), c.getHeight(), true);
+                Font.drawCenteredVertically(g, "*******", Font.DEFAULT, c.getX() + 5, c.getY(), c.getWidth(), c.getHeight(), true);
             }
         };
 
         Map<String,Object> password_props = new HashMap<String, Object>();
         password_props.put("text", "*********");
         main.symbolManager.addVirtual(new GenericFXComponent(password_delegate,password_props, 100, 30, "PasswordField"));
+
+
+
+        //choice box
+        GenericFXComponent.DrawDelegate choicebox_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.WHITE);
+                g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+                g.setPaint(FlatColor.BLACK);
+                GraphicsUtil.fillDownArrow(g,c.getX()+c.getWidth()-15-5,c.getY()+5,15);
+                Font.drawCenteredVertically(g, "choice box", Font.DEFAULT, c.getX() +  5, c.getY(), c.getWidth(), c.getHeight(), true);
+            }
+        };
+
+        Map<String,Object> choicebox_props = new HashMap<String, Object>();
+        //choicebox_props.put("text", "*********");
+        main.symbolManager.addVirtual(new GenericFXComponent(choicebox_delegate,choicebox_props, 100, 30, "ChoiceBox"));
 
 
 

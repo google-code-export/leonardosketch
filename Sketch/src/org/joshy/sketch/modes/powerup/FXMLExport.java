@@ -46,6 +46,7 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
         out.header();
 
         out.text("<?import java.lang.*?>\n");
+        out.text("<?import javafx.collections.*?>\n");
         out.text("<?import javafx.scene.*?>\n");
         out.text("<?import javafx.scene.control.*?>\n");
         out.text("<?import javafx.scene.image.*?>\n");
@@ -61,6 +62,7 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
     public void pageStart(XMLWriter out, SketchDocument.SketchPage page) {
         //out.start("Group");
         out.start("AnchorPane");
+        out.attr("xmlns:fx","http://javafx.com/fxml");
         out.attr("prefWidth", df.format(page.getDocument().getWidth()));
         out.attr("prefHeight",df.format(page.getDocument().getHeight()));
         currentPage = page;
@@ -210,6 +212,18 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
                 .attr("name", text.getFontName())
                 .end()
             .end();
+        }
+        
+        if(node instanceof FXComponent) {
+            FXComponent comp = (FXComponent) node;
+            if("ChoiceBox".equals(comp.getXMLElementName())) {
+                out.start("items")
+                        .start("FXCollections").attr("fx:factory","observableArrayList")
+                        .start("String").attr("fx:value","item1").end()
+                        .start("String").attr("fx:value","item2").end()
+                        .end()
+                    .end();
+            }
         }
 
         out.end();
