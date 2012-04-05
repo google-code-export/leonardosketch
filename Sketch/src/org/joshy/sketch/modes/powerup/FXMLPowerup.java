@@ -4,6 +4,7 @@ import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.event.BackgroundTask;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -50,8 +51,8 @@ public class FXMLPowerup extends Powerup {
         checkbox_props.put("text", "checkbox");
         main.symbolManager.addVirtual(new GenericFXComponent(checkbox_delegate,checkbox_props,100, 30, "CheckBox"));
 
-        //textbox
-        GenericFXComponent.DrawDelegate textbox_delegate = new GenericFXComponent.DrawDelegate() {
+        //textfield
+        GenericFXComponent.DrawDelegate textfield_delegate = new GenericFXComponent.DrawDelegate() {
             public void draw(GFX g, GenericFXComponent c) {
                 g.setPaint(FlatColor.WHITE);
                 g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
@@ -62,9 +63,9 @@ public class FXMLPowerup extends Powerup {
             }
         };
 
-        Map<String,Object> textbox_props = new HashMap<String, Object>();
-        textbox_props.put("text", "text field");
-        main.symbolManager.addVirtual(new GenericFXComponent(textbox_delegate,textbox_props, 100, 30, "TextField"));
+        Map<String,Object> textfield_props = new HashMap<String, Object>();
+        textfield_props.put("text", "text field");
+        main.symbolManager.addVirtual(new GenericFXComponent(textfield_delegate,textfield_props, 100, 30, "TextField"));
 
 
         //text area
@@ -103,6 +104,27 @@ public class FXMLPowerup extends Powerup {
         main.symbolManager.addVirtual(new GenericFXComponent(button_delegate,button_props, 100, 30, "Button"));
 
 
+
+        //textfield
+        GenericFXComponent.DrawDelegate password_delegate = new GenericFXComponent.DrawDelegate() {
+            public void draw(GFX g, GenericFXComponent c) {
+                g.setPaint(FlatColor.WHITE);
+                g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+                g.setPaint(FlatColor.BLACK);
+                g.drawRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+                g.setPaint(FlatColor.BLACK);
+                Font.drawCenteredVertically(g, "*******", Font.DEFAULT, c.getX() + c.getHeight() + 5, c.getY(), c.getWidth(), c.getHeight(), true);
+            }
+        };
+
+        Map<String,Object> password_props = new HashMap<String, Object>();
+        password_props.put("text", "*********");
+        main.symbolManager.addVirtual(new GenericFXComponent(password_delegate,password_props, 100, 30, "PasswordField"));
+
+
+
+
+
         context.redraw();
     }
 
@@ -111,16 +133,39 @@ public class FXMLPowerup extends Powerup {
 class RunAsJavaFX extends SAction {
     private DocContext context;
     private Main main;
+    private BackgroundTask<DocContext, String> task;
 
     public RunAsJavaFX(DocContext context, Main main) {
         this.context = context;
         this.main = main;
-    }
 
+    }
     @Override
     public void execute() throws Exception {
+        task = new BackgroundTask<DocContext, String>() {
+            @Override
+            protected void onStart(DocContext data) {
+                super.onStart(data);
+                context.addNotification("Generating JavaFX App");
+            }
+
+            @Override
+            protected String onWork(DocContext data) {
+                try {
+                    dobg();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "done";
+            }
+        };
+
+        task.setData(context);
+        task.start();
+    }
+
+    public void dobg() throws Exception {
         u.p("running as JavaFX FXML App");
-        context.addNotification("Generating JavaFX App");
 
         //make temp dir
         File tempdir = Util.makeTempDir();
@@ -157,7 +202,6 @@ class RunAsJavaFX extends SAction {
                 appdir
         );
         Util.streamToSTDERR(proc.getInputStream());
-        context.addNotification("Compiling and Launching JavaFX App");
     }
 
 }
