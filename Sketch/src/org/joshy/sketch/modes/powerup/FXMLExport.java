@@ -49,6 +49,7 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
         out.text("<?import javafx.collections.*?>\n");
         out.text("<?import javafx.scene.*?>\n");
         out.text("<?import javafx.scene.control.*?>\n");
+        out.text("<?import javafx.scene.effect.*?>\n");
         out.text("<?import javafx.scene.image.*?>\n");
         out.text("<?import javafx.scene.layout.*?>\n");
         out.text("<?import javafx.scene.paint.*?>\n");
@@ -62,7 +63,7 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
     public void pageStart(XMLWriter out, SketchDocument.SketchPage page) {
         //out.start("Group");
         out.start("AnchorPane");
-        out.attr("xmlns:fx","http://javafx.com/fxml");
+        out.attr("xmlns:fx", "http://javafx.com/fxml");
         out.attr("prefWidth", df.format(page.getDocument().getWidth()));
         out.attr("prefHeight",df.format(page.getDocument().getHeight()));
         currentPage = page;
@@ -223,6 +224,22 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
                         .start("String").attr("fx:value","item2").end()
                         .end()
                     .end();
+            }
+        }
+        
+        //effects
+        if(node instanceof SShape) {
+            SShape shape = (SShape) node;
+            if(shape.getShadow() != null) {
+                DropShadow sh = shape.getShadow();
+                out.start("effect");
+                out.start("DropShadow")
+                        .attr("offsetX", df.format(sh.getXOffset()))
+                        .attr("offsetY", df.format(sh.getYOffset()))
+                        .attr("color",ExportUtils.toHexString(sh.getColor()))
+                        .attr("radius",df.format(sh.getBlurRadius()))
+                        .end();
+                out.end();
             }
         }
 
