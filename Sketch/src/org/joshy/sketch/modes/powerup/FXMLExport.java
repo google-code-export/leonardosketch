@@ -1,10 +1,9 @@
 package org.joshy.sketch.modes.powerup;
 
 import com.joshondesign.xml.XMLWriter;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.LinearGradientFill;
-import org.joshy.gfx.draw.MultiGradientFill;
-import org.joshy.gfx.draw.RadialGradientFill;
+import org.joshy.gfx.draw.*;
+import org.joshy.gfx.util.u;
+import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.util.ExportUtils;
@@ -14,10 +13,10 @@ import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by IntelliJ IDEA.
@@ -31,11 +30,14 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
     private File outdir;
     private File imagesdir;
     private SketchDocument.SketchPage currentPage;
+    private File fontsdir;
 
     public FXMLExport(File outdir) {
         this.outdir = outdir;
         imagesdir = new File(outdir,"images");
         imagesdir.mkdirs();
+        fontsdir = new File(outdir,"fonts");
+        fontsdir.mkdirs();
     }
 
     static {
@@ -108,14 +110,17 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
             if(shape.getFillPaint() instanceof FlatColor) {
                 out.attr("fill", ExportUtils.toHexString((FlatColor) shape.getFillPaint()));
             }
-            if(shape.getStrokePaint() instanceof FlatColor) {
-                out.attr("stroke", ExportUtils.toHexString(shape.getStrokePaint()));
-            }
-            if(shape.getStrokeWidth() > 0) {
-                out.attr("strokeWidth",df.format(shape.getStrokeWidth()));
-            }
             if(shape.getFillOpacity() < 1) {
                 out.attr("opacity",df.format(shape.getFillOpacity()));
+            }
+
+            if(!(shape instanceof SText)) {
+                if(shape.getStrokePaint() instanceof FlatColor) {
+                    out.attr("stroke", ExportUtils.toHexString(shape.getStrokePaint()));
+                }
+                if(shape.getStrokeWidth() > 0) {
+                    out.attr("strokeWidth",df.format(shape.getStrokeWidth()));
+                }
             }
         }
 
@@ -210,9 +215,25 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
             out.start("font")
                 .start("Font")
                 .attr("size", df.format(text.getFontSize()))
-                .attr("name", text.getFontName())
-                .end()
-            .end();
+                .attr("name", text.getFontName());
+
+            u.p("font = " + text.getFontName());
+            Map<String, Font> fonts = Main.getFontMap();
+            if(fonts.containsKey(text.getFontName())) {
+                Font font = fonts.get(text.getFontName());
+                try {
+                    File fontfile = copyFont(font,fontsdir);
+                    out.attr("url","@fonts/"+fontfile.getName());
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
+
+                    
+                    
+            out
+                .end()  // Font
+                .end(); // font
         }
         
         if(node instanceof FXComponent) {
@@ -285,9 +306,23 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
             out.attr("text",((SText)node).getText());
             out.attr("x",""+text.getX());
             out.attr("y", "" + text.getY());
-            if(text.isWrapText()) {
-                out.attr("wrappingWidth",df.format(text.getWidth()));
+            out.attr("textOrigin","TOP");
+
+
+            switch(text.getHalign()) {
+                case Left:
+                    out.attr("textAlignment","LEFT");
+                    break;
+                case Center:
+                    out.attr("textAlignment","CENTER");
+                    out.attr("wrappingWidth",df.format(text.getWidth()));
+                    break;
+                case Right :
+                    out.attr("textAlignment","RIGHT");
+                    out.attr("wrappingWidth",df.format(text.getWidth()));
+                    break;
             }
+
             return;
         }
 
@@ -297,6 +332,17 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
                 .attr("width", "" + rect.getWidth())
                 .attr("height", "" + rect.getHeight())
         ;
+    }
+
+    private File copyFont(Font font, File fontsdir) throws IOException {
+        File fontfile = new File(fontsdir,font.getName()+".ttf");
+        if(fontfile.exists()) return fontfile;
+        u.p("copying font to: " + fontfile.getAbsolutePath());
+        FileOutputStream fout = new FileOutputStream(fontfile);
+        InputStream inp = font.getInputStream();
+        u.p("input = " + inp);
+        u.streamToFile(font.getInputStream(), fontfile);
+        return fontfile;
     }
 
 

@@ -520,12 +520,13 @@ public class Main implements Runnable {
                 Font.fromURL(getFont("raleway_thin.ttf")).resolve(),
                 Font.fromURL(getFont("Sniglet_Regular.ttf")).resolve(),
                 Font.fromURL(getFont("league_gothic.ttf")).resolve(),
+                Font.fromURL(getFont("OpenSans-Regular.ttf")).resolve(),
         };
         fontMap = new HashMap<String,Font>();
         for(Font font : fonts) {
             fontMap.put(font.getName(),font);
         }
-        fontMap.put(Font.DEFAULT.getName(),Font.DEFAULT);
+        //fontMap.put(Font.DEFAULT.getName(),Font.DEFAULT);
 
         fontList = new ArrayList<String>();
         fontList.addAll(fontMap.keySet());
