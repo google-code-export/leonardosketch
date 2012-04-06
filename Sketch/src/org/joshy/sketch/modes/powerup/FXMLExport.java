@@ -74,19 +74,19 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
     public void exportPre(XMLWriter out, SNode node) {
 
         //xml start types
-        if(node instanceof SRect) out.start("Rectangle");
-        if(node instanceof SOval) out.start("Ellipse");
-        if(node instanceof NGon)  out.start("Path");
-        if(node instanceof SPoly) out.start("Path");
-        if(node instanceof SPath) out.start("Path");
-        if(node instanceof SText) out.start("Text");
+        if(node instanceof SRect)  out.start("Rectangle");
+        if(node instanceof SOval)  out.start("Ellipse");
+        if(node instanceof NGon)   out.start("Path");
+        if(node instanceof SPoly)  out.start("Path");
+        if(node instanceof SPath)  out.start("Path");
+        if(node instanceof SArrow) out.start("Path");
+        if(node instanceof SText)  out.start("Text");
         if(node instanceof SImage) out.start("ImageView");
 
         if(node instanceof FXComponent) out.start(((FXComponent) node).getXMLElementName());
 
 
         if(node instanceof SGroup) return;
-        if(node instanceof SArrow) return;
         if(node instanceof SArea) return;
 
         //custom attributes
@@ -202,13 +202,27 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
             out.end(); // image
         }
         if(node instanceof NGon) {
-            toPathNode(out, ((NGon)node).toUntransformedArea(), 0,0 );
+            toPathNode(out, ((NGon) node).toUntransformedArea(), 0, 0);
         }
         if(node instanceof SPoly) {
             serializePath(out, (SPoly) node);
         }
         if(node instanceof SPath) {
             serializePath(out, (SPath) node);
+        }
+        if(node instanceof SArrow) {
+            SArrow arrow = (SArrow) node;
+            out.start("elements");
+            out.start("MoveTo")
+                    .attr("x",df.format(arrow.getStart().getX()))
+                    .attr("y",df.format(arrow.getStart().getY()))
+                    .end();
+            out.start("LineTo")
+                    .attr("x",df.format(arrow.getEnd().getX()))
+                    .attr("y",df.format(arrow.getEnd().getY()))
+                    .end();
+            out.start("ClosePath").end();
+            out.end();
         }
         if(node instanceof SText) {
             SText text = (SText) node;
