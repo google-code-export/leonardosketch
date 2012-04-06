@@ -56,6 +56,8 @@ public class DocumentActions {
             };
 
             FillPicker picker = new FillPicker(this.manager);
+            Paint pt = ((SketchDocument) context.getDocument()).getBackgroundFill();
+            picker.setSelectedFill(pt);
             EventBus.getSystem().addListener(picker,ChangedEvent.ObjectChanged, new Callback<ChangedEvent>() {
                 public void call(ChangedEvent event) throws Exception {
                     Paint paint = (Paint) event.getValue();
