@@ -57,13 +57,17 @@ public class AssetManagerController implements Initializable {
     @FXML private Button addAssetButton;
     @FXML private Button addNewList;
     @FXML private Button delete;
-    
+
+    @FXML private MenuItem deleteListMenuItem;
+    @FXML private MenuItem addListMenuItem;
+
     private Image miniIcons;
     private AssetDB db;
     private TreeItem<Query> root;
     
     
     private static final DataFormat ASSETS = new DataFormat("ASSETS");
+    private TreeItem<Query> staticItem;
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
@@ -77,7 +81,7 @@ public class AssetManagerController implements Initializable {
         library.setSelectable(false);
         TreeItem<Query> libraryItem = new TreeItem<Query>(library);
         libraryItem.setExpanded(true);
-        
+
         LibraryQuery all = new LibraryQuery("Everything","*",0,1);
         Query fonts = new Query("Fonts",AssetDB.FONT,6,2);
         Query symbols = new Query("Symbols","symbol",4,0);
@@ -87,7 +91,7 @@ public class AssetManagerController implements Initializable {
         Query palettes = new Query("Palettes","palette",4,5);
         final Query staticList = new Query("LISTS","----");
         staticList.setSelectable(false);
-        final TreeItem<Query> staticItem = new TreeItem<Query>(staticList);
+        staticItem = new TreeItem<Query>(staticList);
         staticItem.setExpanded(true);
 
         root = new TreeItem<Query>();
@@ -272,13 +276,8 @@ public class AssetManagerController implements Initializable {
 
         });
         
-        addNewList.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                StaticQuery custom = db.createStaticList("new list");
-                staticItem.getChildren().add(new TreeItem<Query>(custom));
-            }
-        });
+        addNewList.setOnAction(addNewListAction);
+        addListMenuItem.setOnAction(addNewListAction);
         
         
         delete.setOnAction(new EventHandler<ActionEvent>() {
@@ -297,6 +296,13 @@ public class AssetManagerController implements Initializable {
                     db.removeFromStaticList(staticQuery,item);
                 }
                 table.getSelectionModel().clearSelection();
+            }
+        });
+
+        deleteListMenuItem.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+                Query currentQuery = queryTree.getSelectionModel().getSelectedItem().getValue();
+                if(!(currentQuery instanceof StaticQuery)) return;
             }
         });
         
@@ -341,6 +347,16 @@ public class AssetManagerController implements Initializable {
         */
         
     }
+
+    private EventHandler<ActionEvent> addNewListAction = new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent e) {
+            StaticQuery custom = db.createStaticList("new list");
+            staticItem.getChildren().add(new TreeItem<Query>(custom));
+        }
+    };
+
+
 
     private ImageView getIcon(int x, int y) {
         if(x == -1 || y == -1) {
