@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MacUtils">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../MacUtils/out/production/MacUtils" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

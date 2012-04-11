@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Sketchy">
+    <output-path>$PROJECT_DIR$/out/artifacts/Sketchy</output-path>
+    <root id="archive" name="Sketchy.jar" />
+  </artifact>
+</component>
