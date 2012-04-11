@@ -73,6 +73,11 @@ public class AssetManagerController implements Initializable {
         
         // data setup
         
+        Query library = new Query("LIBRARY","*");
+        library.setSelectable(false);
+        TreeItem<Query> libraryItem = new TreeItem<Query>(library);
+        libraryItem.setExpanded(true);
+        
         LibraryQuery all = new LibraryQuery("Everything","*",0,1);
         Query fonts = new Query("Fonts",AssetDB.FONT,6,2);
         Query symbols = new Query("Symbols","symbol",4,0);
@@ -80,17 +85,24 @@ public class AssetManagerController implements Initializable {
         Query gradients = new Query("Gradients","gradient",19,1);
         Query images = new Query("Images","image",19,2);
         Query palettes = new Query("Palettes","palette",4,5);
+        final Query staticList = new Query("LISTS","----");
+        staticList.setSelectable(false);
+        final TreeItem<Query> staticItem = new TreeItem<Query>(staticList);
+        staticItem.setExpanded(true);
 
         root = new TreeItem<Query>();
         root.setExpanded(true);
-        root.getChildren().addAll(
+        
+        libraryItem.getChildren().addAll(
                 new TreeItem<Query>(all),
                 new TreeItem<Query>(fonts),
                 new TreeItem<Query>(symbols),
                 new TreeItem<Query>(textures),
                 new TreeItem<Query>(gradients),
                 new TreeItem<Query>(images),
-                new TreeItem<Query>(palettes));
+                new TreeItem<Query>(palettes)
+        );
+        root.getChildren().addAll(libraryItem,staticItem);
 
         queryTree.setRoot(root);
         queryTree.getSelectionModel().select(0);
@@ -120,6 +132,9 @@ public class AssetManagerController implements Initializable {
                         }
                         setText(query.getName());
                         setGraphic(getIcon(query.x, query.y));
+                        if (!query.isSelectable()) {
+                            getStyleClass().add("tree-header");
+                        }
                         if (query instanceof LibraryQuery) {
                             setOnDragEntered(libraryQueryEnter);
                             setOnDragOver(libraryQueryOver);
@@ -190,6 +205,7 @@ public class AssetManagerController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends TreeItem<Query>> value, TreeItem<Query> oldItem, TreeItem<Query> newItem) {
                 Query query = value.getValue().getValue();
+                if(!query.isSelectable()) return;
                 List<Asset> results = query.execute(db);
                 table.setItems(FXCollections.observableList(results));
                 
@@ -260,7 +276,7 @@ public class AssetManagerController implements Initializable {
             @Override
             public void handle(ActionEvent e) {
                 StaticQuery custom = db.createStaticList("new list");
-                root.getChildren().add(new TreeItem<Query>(custom));
+                staticItem.getChildren().add(new TreeItem<Query>(custom));
             }
         });
         
@@ -327,6 +343,9 @@ public class AssetManagerController implements Initializable {
     }
 
     private ImageView getIcon(int x, int y) {
+        if(x == -1 || y == -1) {
+            x = 0; y = 0;
+        }
         ImageView bottomAnchorImage = new ImageView(miniIcons);
         bottomAnchorImage.setViewport(new Rectangle2D(x * 24, y * 24, 15, 15));
         return bottomAnchorImage;

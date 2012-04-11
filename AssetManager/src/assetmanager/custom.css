@@ -10,3 +10,8 @@
     -fx-background-color: #aaddff;
     -fx-text-fill: white;
 }
+
+.tree-cell.tree-header {
+    -fx-background-color: #999999;
+    -fx-text-fill: white;
+}
