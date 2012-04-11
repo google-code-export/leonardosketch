@@ -7,6 +7,7 @@
         <echo>ant build-onejar       build leonardo onejar</echo>
         <echo>ant dist               build everything</echo>
         <echo>ant publish            publish to publish dir</echo>
+        <echo>ant build-coremodel    just the core model</echo>
     </target>
     
     <target name="init">
@@ -23,6 +24,8 @@
         <property  name="lib.jogl.dir" value="lib/jogl/"/>
         <property  name="update.url" value="MUST_SET_UPDATE.URL"/>
         <property  name="download.url" value="MUST_SET_DOWNLOAD.URL"/>
+        
+        <property name="javafx.dir" value="/Users/josh/projects/javafx/javafx-sdk2.1.0-beta/rt/lib"/>
 
         <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
         <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/LeonardoSketch/dist/jnlp/"/>
@@ -39,13 +42,44 @@
         <delete dir="dist"/>
     </target>
     
-    <target name="build-sketch" depends="init">
+    
+    <target name="build-coremodel" depends="init">
+        <mkdir dir="build/classes/CoreModel"/>
+        <mkdir dir="build/jars/"/>
+        <javac destdir="build/classes/CoreModel" debug="true">
+            <src path="CoreModel/src"/>
+            <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
+        </javac>
+        <jar destfile="build/jars/CoreModel.jar">
+            <fileset dir = "build/classes/CoreModel"></fileset>
+        </jar>
+    </target>
+    
+    <target name="build-assetmanager" depends="init">
+        <mkdir dir="build/classes/AssetManager"/>
+        <mkdir dir="build/jars/"/>
+        <javac destdir="build/classes/AssetManager" debug="true">
+            <src path="AssetManager/src"/>
+            <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
+            <classpath location="${javafx.dir}/jfxrt.jar"/>
+            <classpath> <fileset dir="build/jars"><include name="*.jar"/></fileset></classpath>
+        </javac>
+        <jar destfile="build/jars/AssetManager.jar">
+            <fileset dir = "build/classes/AssetManager"></fileset>
+        </jar>
+    </target>
+    
+    <target name="build-sketch" depends="init, build-coremodel, build-assetmanager">
         <mkdir dir="build/classes/Sketch"/>
         <mkdir dir="build/jars/Sketch"/>
         <javac destdir="build/classes/Sketch" debug="true">
             <src path="Sketch/src"/>
             <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
             <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="build/jars"><include name="*.jar"/></fileset></classpath>
+            <classpath location="${javafx.dir}/jfxrt.jar"/>
         </javac>
         <copy todir="build/classes/Sketch">
              <fileset dir="Sketch/src">

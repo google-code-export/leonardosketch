@@ -232,6 +232,7 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
                 .attr("name", text.getFontName());
 
             u.p("font = " + text.getFontName());
+            /*
             Map<String, Font> fonts = Main.getFontMap();
             if(fonts.containsKey(text.getFontName())) {
                 Font font = fonts.get(text.getFontName());
@@ -242,8 +243,8 @@ class FXMLExport implements ShapeExporter<XMLWriter> {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                 }
             }
+            */
 
-                    
                     
             out
                 .end()  // Font

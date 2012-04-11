@@ -72,9 +72,8 @@ public class AssetManagerController implements Initializable {
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         
-        db = new AssetDB();
+        db = AssetDB.getInstance();
 
-        
         // data setup
         
         Query library = new Query("LIBRARY","*");

@@ -1,5 +1,7 @@
 package org.joshy.sketch;
 
+import assetmanager.Asset;
+import assetmanager.AssetDB;
 import assetmanager.AssetManager;
 import com.boxysystems.jgoogleanalytics.FocusPoint;
 import com.boxysystems.jgoogleanalytics.JGoogleAnalyticsTracker;
@@ -13,6 +15,7 @@ import javafx.embed.swing.JFXPanel;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
+import org.joshy.gfx.draw.FontBuilder;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.*;
@@ -90,13 +93,14 @@ public class Main implements Runnable {
     public static String DOWNLOAD_URL = "";
     private List<Menu> recentFilesMenus = new ArrayList<Menu>();
     public static MasterImageCache FlickrSearchCache = new MasterImageCache(true,10,"LeonardoFlickrSearchCache");
-    private static Font[] fonts;
-    private static HashMap<String, Font> fontMap;
+    //private static Font[] fonts;
+    //private static HashMap<String, Font> fontMap;
     public static String AMINO_BINARY_URL = null;
     public static final String DEFAULT_FONT_NAME = "OpenSans";
-    public static List<String> fontList;
+    //public static List<String> fontList;
 
     public static PowerupManager powerupManager = PowerupManager.get();
+    private static AssetDB assetDatabase;
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -203,10 +207,11 @@ public class Main implements Runnable {
             tracker.trackAsynchronously(new FocusPoint(event,mainApp));
         }
     }
-
+    /*
     public static Map<String,Font> getFontMap() {
         return fontMap;
     }
+    */
 
     public void run() {
         try {
@@ -440,25 +445,25 @@ public class Main implements Runnable {
 
         final JFrame frame = (JFrame) context.getStage().getNativeWindow();
         context.menubar = new Menubar(frame);
-        buildCommonMenubar(context,modeHelper);
-        EventBus.getSystem().addListener(CanvasDocument.DocumentEvent.Closing,new Callback<CanvasDocument.DocumentEvent>() {
+        buildCommonMenubar(context, modeHelper);
+        EventBus.getSystem().addListener(CanvasDocument.DocumentEvent.Closing, new Callback<CanvasDocument.DocumentEvent>() {
             public void call(CanvasDocument.DocumentEvent documentEvent) throws Exception {
-                if(documentEvent.getDocument() == context.getDocument()) {
-                    if(context.getDocument().isDirty()) {
+                if (documentEvent.getDocument() == context.getDocument()) {
+                    if (context.getDocument().isDirty()) {
                         u.p("doc is still dirty!!!");
                         StandardDialog.Result result = StandardDialog.showYesNoCancel(
                                 getString("dialog.docNotSaved").toString(),
                                 getString("dialog.save").toString(),
                                 getString("dialog.dontsave").toString(),
                                 getString("dialog.cancel").toString());
-                        if(result== StandardDialog.Result.Yes) {
-                            new SaveAction(context,false,true).execute();
+                        if (result == StandardDialog.Result.Yes) {
+                            new SaveAction(context, false, true).execute();
                         }
-                        if(result==StandardDialog.Result.No) {
+                        if (result == StandardDialog.Result.No) {
                             context.getStage().hide();
                             closeWindow(context);
                         }
-                        if(result==StandardDialog.Result.Cancel) {
+                        if (result == StandardDialog.Result.Cancel) {
                             //do nothing
                         }
                     } else {
@@ -515,6 +520,20 @@ public class Main implements Runnable {
     }
 
     private void setupGlobals() throws IOException {
+        assetDatabase = AssetDB.getInstance();
+        addFontIfMissing(getFont("Chunk.ttf"), "ChunkFive");
+        addFontIfMissing(getFont("belligerent.ttf"), "BelligerentMadness");
+        addFontIfMissing(getFont("orbitron-medium.ttf"), "Orbitron-Medium");
+        /*
+        assetDatabase.copyAndAddFontIfMissing(getFont("belligerent.ttf"));
+        assetDatabase.copyAndAddFont(getFont("OFLGoudyStMTT.ttf"));
+        assetDatabase.copyAndAddFont(getFont("orbitron-medium.ttf"));
+        assetDatabase.copyAndAddFont(getFont("raleway_thin.ttf"));
+        assetDatabase.copyAndAddFont(getFont("Sniglet_Regular.ttf"));
+        assetDatabase.copyAndAddFont(getFont("league_gothic.ttf"));
+        assetDatabase.copyAndAddFont(getFont("OpenSans-Regular.ttf"));
+        */
+        /*
         fonts = new Font[]{
                 Font.fromURL(getFont("belligerent.ttf")).size(30).resolve(),
                 Font.fromURL(getFont("Chunk.ttf")).resolve(),
@@ -533,7 +552,7 @@ public class Main implements Runnable {
 
         fontList = new ArrayList<String>();
         fontList.addAll(fontMap.keySet());
-
+        */
         modeHelpers.add(new VectorModeHelper(this));
         modeHelpers.add(new PresoModeHelper(this));
         modeHelpers.add(new PixelModeHelper(this));
@@ -562,8 +581,23 @@ public class Main implements Runnable {
 
     }
 
+    private void addFontIfMissing(URL font, String fontName) throws IOException {
+        if(assetDatabase.getFontByName(fontName) == null) {
+            u.p("really copying file over");
+            Asset asset = assetDatabase.copyAndAddFont(font);
+            new FontBuilder(asset.getFile()).resolve();
+        } else {
+            u.p("the font is already instaleld: " + fontName);
+            Asset asset = assetDatabase.getFontByName(fontName);
+            new FontBuilder(asset.getFile()).resolve();
+        }
+    }
+
     private URL getFont(String s) {
-        return Main.class.getResource("resources/fonts/"+s);
+        u.p("local = " + getClass().getResource("resources/fonts/Chunk.ttf"));
+        URL res = getClass().getResource("resources/fonts/" + s);
+        u.p("resource = " + res);
+        return res;
     }
 
     private void buildCommonMenubar(DocContext context, DocModeHelper modeHelper) {
@@ -658,7 +692,7 @@ public class Main implements Runnable {
                             try {
                                 new AssetManager().start(panel);
                             } catch (IOException e) {
-                                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                                e.printStackTrace();
                             }
                         }
                     });
@@ -861,6 +895,10 @@ public class Main implements Runnable {
 
     public List<DocContext> getContexts() {
         return contexts;
+    }
+
+    public static AssetDB getDatabase() {
+        return assetDatabase;
     }
 
     private class ShowWindow extends SAction {

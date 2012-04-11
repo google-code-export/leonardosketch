@@ -5,6 +5,9 @@
 package assetmanager;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 /**
  *
@@ -23,8 +26,15 @@ public class Asset {
         this.id = id;
     }
 
-    File getFile() {
+    public String getName() {
+        return name;
+    }
+
+    public File getFile() {
         return new File(filepath);
     }
-    
+
+    public InputStream getInputStream() throws FileNotFoundException {
+        return new FileInputStream(new File(filepath));
+    }
 }
