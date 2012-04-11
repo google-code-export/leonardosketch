@@ -1,5 +1,6 @@
 package org.joshy.sketch;
 
+import assetmanager.AssetManager;
 import com.boxysystems.jgoogleanalytics.FocusPoint;
 import com.boxysystems.jgoogleanalytics.JGoogleAnalyticsTracker;
 import com.boxysystems.jgoogleanalytics.LoggingAdapter;
@@ -7,6 +8,8 @@ import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import com.joshondesign.xml.XMLWriter;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
@@ -564,7 +567,8 @@ public class Main implements Runnable {
     }
 
     private void buildCommonMenubar(DocContext context, DocModeHelper modeHelper) {
-        DocumentCanvas canvas = context.getCanvas();
+
+
         //recent files menu
         Menu recentFilesMenu = new Menu().setTitle(getString("menus.recentfiles"));
         recentFilesMenus.add(recentFilesMenu);
@@ -635,6 +639,34 @@ public class Main implements Runnable {
         }
         
         editMenu.addMenu(powerupsMenu);
+        
+        editMenu.addItem("Asset Library", new SAction() {
+            @Override
+            public void execute() throws Exception {
+                u.p("managing assets");
+
+                try {
+                    
+                    JFrame frame = new JFrame("Asset Manager");
+                    final JFXPanel panel = new JFXPanel();
+                    frame.add(panel);
+                    frame.pack();
+                    frame.setSize(800,600);
+                    frame.setVisible(true);
+                    Platform.runLater(new Runnable() {
+                        public void run() {
+                            try {
+                                new AssetManager().start(panel);
+                            } catch (IOException e) {
+                                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                            }
+                        }
+                    });
+                } catch (Throwable thr) {
+                    thr.printStackTrace();
+                }
+            }
+        });
         
         /*editMenu.addItem("Enable Analytics Tracking", new ToggleAction(){
             @Override
