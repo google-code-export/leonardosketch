@@ -304,8 +304,9 @@ public class AssetDB {
         try {
             for(Node n : kindsIndex.query(KIND,"*")) {
                 kindsIndex.remove(n);
-                Relationship rel = n.getSingleRelationship(RelTypes.OWNED, Direction.BOTH);
-                if(rel != null) rel.delete();
+                for(Relationship r : n.getRelationships()) {
+                    r.delete();
+                }
                 n.delete();
             }
             int count = kindsIndex.get(KIND,"font").size();

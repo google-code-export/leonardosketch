@@ -94,6 +94,7 @@ public class AssetManagerController implements Initializable {
 
         queryTree.setRoot(root);
         queryTree.getSelectionModel().select(0);
+        queryTree.setEditable(true);
 
 
         
@@ -118,20 +119,20 @@ public class AssetManagerController implements Initializable {
                             return;
                         }
                         setText(query.getName());
-                        setGraphic(getIcon(query.x,query.y));
-                        if(query instanceof LibraryQuery ) {
+                        setGraphic(getIcon(query.x, query.y));
+                        if (query instanceof LibraryQuery) {
                             setOnDragEntered(libraryQueryEnter);
                             setOnDragOver(libraryQueryOver);
                             setOnDragExited(libraryQueryExit);
                             setOnDragDropped(libraryQueryDrop);
                         }
-                        if(query instanceof StaticQuery) {
+                        if (query instanceof StaticQuery) {
                             setOnDragEntered(staticQueryEnter);
                             setOnDragOver(staticQueryOver);
                             setOnDragExited(staticQueryExit);
                             setOnDragDropped(staticQueryDrop);
-                        }
-                    }
+                                    }
+                                }
                 };
             }
         });
