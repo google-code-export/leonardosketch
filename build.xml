@@ -25,7 +25,7 @@
         <property  name="update.url" value="MUST_SET_UPDATE.URL"/>
         <property  name="download.url" value="MUST_SET_DOWNLOAD.URL"/>
         
-        <property name="javafx.dir" value="/Users/josh/projects/javafx/javafx-sdk2.1.0-beta/rt/lib"/>
+        <property name="javafx.dir" value="MUST_SET javafx.dir to the runtime"/>
 
         <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
         <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/LeonardoSketch/dist/jnlp/"/>
@@ -66,6 +66,12 @@
             <classpath location="${javafx.dir}/jfxrt.jar"/>
             <classpath> <fileset dir="build/jars"><include name="*.jar"/></fileset></classpath>
         </javac>
+        <copy todir="build/classes/AssetManager">
+             <fileset dir="AssetManager/src">
+                 <include name="**"/>
+                 <exclude name="**/*.java"/>
+             </fileset>
+        </copy>
         <jar destfile="build/jars/AssetManager.jar">
             <fileset dir = "build/classes/AssetManager"></fileset>
         </jar>
@@ -306,7 +312,10 @@
     <target name="run" depends="build-sketch">
         <java classname="org.joshy.sketch.Main" fork="true">
             <classpath path="build/jars/Core.jar"/>
+            <classpath path="build/jars/CoreModel.jar"/>
             <classpath path="build/jars/Sketch.jar"/>
+            <classpath path="build/jars/AssetManager.jar"/>
+            <classpath path="${javafx.dir}/jfxrt.jar"/>
             <classpath path="lib/parboiled-0.9.7.3.jar"/>
             <classpath path="lib/XMLLib.jar"/>
             <classpath path="lib/twitter4j-core-2.1.4.jar"/>
