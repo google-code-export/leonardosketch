@@ -76,6 +76,7 @@ public class SavePDFAction extends BaseExportAction {
                 File tempdir = File.createTempFile("leonardosketch_pdfexport", "_tempdir");
                 tempdir = new File(tempdir.getAbsolutePath()+"2");
                 boolean ret = tempdir.mkdirs();
+                /*
                 for(String string : Main.getFontMap().keySet()) {
                     Font font = Main.getFontMap().get(string);
                     if(font.isCustom()) {
@@ -84,6 +85,7 @@ public class SavePDFAction extends BaseExportAction {
                         Util.copyToFile(font.getInputStream(), fontfile);
                     }
                 }
+                */
                 int count = mapper.insertDirectory(tempdir.getAbsolutePath());
                 //u.p("imported fonts = " + count);
             } catch (IOException e) {

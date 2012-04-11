@@ -4,10 +4,9 @@
  */
 package assetmanager;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.*;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import org.neo4j.graphdb.*;
@@ -32,6 +31,7 @@ public class AssetDB {
     private File resourceDir;
     private final File patternDir;
     private final File fontDir;
+    private static AssetDB _db;
 
     public AssetDB() {
         resourceDir = new File("/Users/josh/Library/Preferences/Leonardo/");
@@ -81,8 +81,29 @@ public class AssetDB {
         out.close();
     }
 
+    private static void copyStreamToFile(InputStream in, File outfile) throws IOException {
+        FileOutputStream out = new FileOutputStream(outfile);
+        byte[] buf = new byte[1024];
+        while(true) {
+            int n = in.read(buf);
+            if(n == -1) {
+                break;
+            }
+            out.write(buf,0,n);
+        }
+        in.close();
+        out.close();
+    }
+
     private String randomString(String prefix) {
         return prefix+Math.random();
+    }
+
+    public static AssetDB getInstance() {
+        if(_db == null) {
+            _db = new AssetDB();
+        }
+        return _db;
     }
 
 
@@ -105,10 +126,12 @@ public class AssetDB {
     private void initInternalTypes() {
         Transaction tx = graphDb.beginTx();
         try {
+            /*
             addFont("Open Sans");
             addFont("League Gothic");
             addFont("Helvetica");
             addFont("Driftwood");
+            */
             
             
             for(File file : patternDir.listFiles()) {
@@ -141,14 +164,32 @@ public class AssetDB {
         return asset;
     }
     
-    private void addFontFast(File file) {
+    private Node addFontFast(File file) {
         p("adding font from file: " + file.getAbsolutePath());
+
+        String name = file.getName();
+        try {
+            Font fnt = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(file));
+            p("loaded up the font");
+            p("font name = " + fnt.getFontName());
+            p("name = " + fnt.getName());
+            p("family = " + fnt.getFamily());
+            name = fnt.getName();
+        } catch (FontFormatException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
         Node asset = graphDb.createNode();
         asset.setProperty(KIND, FONT);
-        asset.setProperty(NAME, file.getName());
+        asset.setProperty(NAME, name);
         asset.setProperty(FILEPATH, file.getAbsolutePath());
         kindsIndex.add(asset, KIND, FONT);
-        kindsIndex.add(asset, NAME, file.getName().toLowerCase());
+        kindsIndex.add(asset, NAME, name.toLowerCase());
+        return asset;
     }
     
     private void addPatternFast(File file) {
@@ -244,8 +285,22 @@ public class AssetDB {
             tx.finish();
         }
     }
-    
-    
+
+    public Asset copyAndAddFont(URL font) throws IOException {
+        
+        File file2 = new File(fontDir,"font-"+Math.random()+".font");
+        p("font = " + font);
+        copyStreamToFile(font.openStream(), file2);
+        Transaction tx = graphDb.beginTx();
+        try {
+            Node assetNode = addFontFast(file2);
+            tx.success();
+            return toAsset(assetNode);
+        } finally {
+            tx.finish();
+        }
+    }
+
     
     public List<Asset> getAllAssets() {
         Transaction tx = graphDb.beginTx();
@@ -270,6 +325,15 @@ public class AssetDB {
             tx.finish();
         }
         return toAssetList(ret);
+    }
+    
+    public Asset getFontByName(String fontName) {
+        for(Node n : kindsIndex.get(KIND,FONT)) {
+            if(n.getProperty(NAME).equals(fontName)) {
+                return toAsset(n);
+            }
+        }
+        return null;
     }
     
     public List<Asset> getByKind(String kind) {

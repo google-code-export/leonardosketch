@@ -1,5 +1,6 @@
 package org.joshy.sketch.modes.preso;
 
+import assetmanager.Asset;
 import com.joshondesign.xml.XMLWriter;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.LinearGradientFill;
@@ -101,8 +102,8 @@ public class SwitchTheme {
                         new File(resources, "cowboy.css"));
                 Util.copyToFile(this.getClass().getResourceAsStream("resources/cowboybg.png"),
                         new File(resources, "cowboybg.png"));
-                Util.copyToFile(Main.getFontMap().get("ChunkFive").getInputStream(),
-                        new File(resources, "ChunkFive.ttf"));
+                Asset font = Main.getDatabase().getFontByName("ChunkFive");//.getInputStream();
+                Util.copyToFile(font.getInputStream(), new File(resources, "ChunkFive.ttf"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
