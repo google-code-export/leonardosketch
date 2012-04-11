@@ -28,7 +28,7 @@
         <TextField fx:id="search" prefColumnCount="10" />
       </items>
     </ToolBar>
-    <TreeView fx:id="queryTree" editable="true" prefHeight="568.0" prefWidth="200.0" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="32.0" />
+    <TreeView fx:id="queryTree" editable="true" prefHeight="538.0000999999975" prefWidth="200.0" showRoot="false" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="32.0" />
     <StackPane alignment="TOP_LEFT" prefHeight="568.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0">
       <TableView fx:id="table" StackPane.alignment="TOP_LEFT" />
       <AnchorPane fx:id="anchorPane1" StackPane.alignment="TOP_LEFT">
@@ -65,6 +65,12 @@
         </children>
       </AnchorPane>
     </StackPane>
+    <MenuButton id="menuButton1" fx:id="queryMenu" text="MenuButton" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="79.0">
+      <items>
+        <MenuItem id="menuItem1" text="Add New List" fx:id="addListMenuItem" />
+        <MenuItem id="menuItem2" text="Delete List" fx:id="deleteListMenuItem" />
+      </items>
+    </MenuButton>
   </children>
   <stylesheets>
     <URL value="@darksheet2.css" />
