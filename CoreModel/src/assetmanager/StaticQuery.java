@@ -4,6 +4,9 @@
  */
 package assetmanager;
 
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
+
 import java.util.List;
 
 /**
@@ -11,12 +14,34 @@ import java.util.List;
  * @author josh
  */
 class StaticQuery extends Query{
-    final long listid;
-    public StaticQuery(String name, long listid) {
+    private AssetDB db;
+    private Node node;
+
+    public StaticQuery(AssetDB db, String name, Node node) {
         super(name,"nothing",0,0);
-        this.listid = listid;
+        this.db = db;
+        this.node = node;
     }
     public List<Asset> execute(AssetDB db) {
-        return db.getStaticList(listid);
+        return db.getStaticList(node.getId());
+    }
+
+    public String getName() {
+        return (String) this.node.getProperty(AssetDB.NAME);
+    }
+
+    @Override
+    public void setName(String name) {
+        Transaction tx = db.beginTx();
+        try {
+            node.setProperty(AssetDB.NAME,name);
+            tx.success();
+        } finally {
+            tx.finish();
+        }
+    }
+
+    public Node getNode() {
+        return node;
     }
 }

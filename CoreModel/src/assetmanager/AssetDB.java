@@ -9,6 +9,8 @@ import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.joshy.gfx.util.u;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
@@ -28,6 +30,7 @@ public class AssetDB {
     
     private EmbeddedGraphDatabase graphDb;
     private Index<Node> kindsIndex;
+    private Index<Node> listsIndex;
     private File resourceDir;
     private final File patternDir;
     private final File fontDir;
@@ -42,28 +45,42 @@ public class AssetDB {
         fontDir.mkdir();
         
         initDatabase();
-        deleteAll();
-        initInternalTypes();
+        //deleteAll();
+        //initInternalTypes();
     }
 
     private List<Asset> toAssetList(IndexHits<Node> ret) {
         List<Asset> assets = new ArrayList<Asset>();
         for(Node n : ret) {
-            assets.add(toAsset(n));
+            Asset asset = toAsset(n);
+            if(asset == null) continue;
+            assets.add(asset);
         }
         return assets;
     }
-    
-    private Asset toAsset(Node n) {
+
+    private List<StaticQuery> toStaticListList(IndexHits<Node> ret) {
+        List<StaticQuery> queries = new ArrayList<StaticQuery>();
+        for(Node n : ret) {
+            StaticQuery sq = toStaticList(n);
+            if(sq == null) continue;
+            queries.add(sq);
+        }
+        return queries;
+    }
+
+    private StaticQuery toStaticList(Node n) {
         String name = (String) n.getProperty(NAME);
+        StaticQuery sq = new StaticQuery(this, name, n);
+        return sq;
+    }
+
+    private Asset toAsset(Node n) {
         String kind = (String) n.getProperty(KIND);
+        if(STATIC_LIST.equals(kind)) return null;
         String filepath = (String) n.getProperty(FILEPATH);
         Asset asset = new Asset(this,n,filepath,n.getId());
         return asset;
-    }
-
-    private void p(String string) {
-        System.out.println(string);
     }
 
     private static void copyFileToFile(File srcfile, File outfile) throws IOException {
@@ -95,10 +112,6 @@ public class AssetDB {
         out.close();
     }
 
-    private String randomString(String prefix) {
-        return prefix+Math.random();
-    }
-
     public static AssetDB getInstance() {
         if(_db == null) {
             _db = new AssetDB();
@@ -128,7 +141,13 @@ public class AssetDB {
             }
         });
         kindsIndex = graphDb.index().forNodes("kinds");
-    }  
+        listsIndex = graphDb.index().forNodes("lists");
+
+
+        u.p("font count = " + kindsIndex.get(KIND,FONT).size());
+        u.p("pattern count = " + kindsIndex.get(KIND,PATTERN).size());
+        u.p("static lists = " + listsIndex.get(KIND,STATIC_LIST).size());
+    }
     
     private void initInternalTypes() {
         Transaction tx = graphDb.beginTx();
@@ -172,22 +191,13 @@ public class AssetDB {
     }
     
     private Node addFontFast(File file) {
-        p("adding font from file: " + file.getAbsolutePath());
 
         String name = file.getName();
         try {
             Font fnt = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(file));
-            p("loaded up the font");
-            p("font name = " + fnt.getFontName());
-            p("name = " + fnt.getName());
-            p("family = " + fnt.getFamily());
             name = fnt.getName();
-        } catch (FontFormatException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         Node asset = graphDb.createNode();
@@ -200,7 +210,7 @@ public class AssetDB {
     }
     
     private void addPatternFast(File file) {
-        p("adding pattern from file: " + file.getAbsolutePath());
+        u.p("adding pattern from file: " + file.getAbsolutePath());
         Node asset = graphDb.createNode();
         asset.setProperty(KIND, PATTERN);
         asset.setProperty(NAME, file.getName());
@@ -215,26 +225,19 @@ public class AssetDB {
             Node list = graphDb.createNode();
             list.setProperty(KIND, STATIC_LIST);
             list.setProperty(NAME, name);
-
-            /*
-            Node font1 = addFont("foo font");
-            Node font2 = addFont("bar font");
-            font1.createRelationshipTo(list, RelTypes.OWNED);
-            font2.createRelationshipTo(list, RelTypes.OWNED);
-            */
-
+            listsIndex.add(list,KIND,STATIC_LIST);
             tx.success();
-            return new StaticQuery(name, list.getId());
+            return new StaticQuery(this, name, list);
         } finally {
             tx.finish();
         }
     }
 
     void addToStaticList(StaticQuery staticQuery, Asset asset) {
-        p("adding asset: " + asset.getName() + " to query: " + staticQuery.getName());
+        u.p("adding asset: " + asset.getName() + " to query: " + staticQuery.getName());
         Transaction tx = graphDb.beginTx();
         try { 
-            Node list = graphDb.getNodeById(staticQuery.listid);
+            Node list = staticQuery.getNode();
             Node assetNode = graphDb.getNodeById(asset.id);
             assetNode.createRelationshipTo(list,RelTypes.OWNED);
             tx.success();
@@ -244,13 +247,16 @@ public class AssetDB {
     }
     
     void removeFromStaticList(StaticQuery staticQuery, Asset asset) {
-        p("removing asset: " + asset.getName() + " from query " + staticQuery.getName());
+        u.p("removing asset: " + asset.getName() + " from query " + staticQuery.getName());
         Transaction tx = graphDb.beginTx();
         try { 
-            Node list = graphDb.getNodeById(staticQuery.listid);
+            Node list = staticQuery.getNode();
             Node assetNode = graphDb.getNodeById(asset.id);
-            Relationship rel = assetNode.getSingleRelationship(RelTypes.OWNED, Direction.BOTH);
-            if(rel != null) rel.delete();
+            for(Relationship rel : assetNode.getRelationships(RelTypes.OWNED,Direction.BOTH)) {
+                if(rel.getEndNode().equals(list)) {
+                    rel.delete();
+                }
+            }
             tx.success();
         } finally {
             tx.finish();
@@ -296,7 +302,6 @@ public class AssetDB {
     public Asset copyAndAddFont(URL font) throws IOException {
         
         File file2 = new File(fontDir,"font-"+Math.random()+".font");
-        p("font = " + font);
         copyStreamToFile(font.openStream(), file2);
         Transaction tx = graphDb.beginTx();
         try {
@@ -314,14 +319,26 @@ public class AssetDB {
         IndexHits<Node> ret;
         try {
             ret = kindsIndex.query(KIND, "*");
-            p("got back: " + ret.size());
             tx.success();
         } finally {
             tx.finish();
         }
         return toAssetList(ret);
     }
-    
+    public List<StaticQuery> getStaticLists() {
+        Transaction tx = graphDb.beginTx();
+        IndexHits<Node> ret;
+        try {
+            ret = listsIndex.query(KIND, STATIC_LIST);
+            tx.success();
+        } finally {
+            tx.finish();
+        }
+        return toStaticListList(ret);
+    }
+
+
+    /*
     public List<Asset> getAllFonts() {
         Transaction tx = graphDb.beginTx();
         IndexHits<Node> ret;
@@ -342,6 +359,7 @@ public class AssetDB {
         }
         return null;
     }
+    */
     
     public List<Asset> getByKind(String kind) {
         if("*".equals(kind)) return getAllAssets();
@@ -356,6 +374,8 @@ public class AssetDB {
         }
         return toAssetList(ret);
     }
+
+    /*
     public List<Asset> getAllPatterns() {
         Transaction tx = graphDb.beginTx();
         IndexHits<Node> ret;
@@ -367,6 +387,7 @@ public class AssetDB {
         }
         return toAssetList(ret);
     }
+    */
     
 
     private void deleteAll() {
@@ -390,7 +411,7 @@ public class AssetDB {
     
     
     public List<Asset> searchByAnyText(String query) {
-        p("searching for " + query);
+        u.p("searching for " + query);
         if(query == null || query.length() < 3) {
             return getAllAssets();
         }

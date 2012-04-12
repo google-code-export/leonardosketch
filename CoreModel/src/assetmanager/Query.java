@@ -11,7 +11,7 @@ import java.util.List;
  * @author josh
  */
 class Query {
-    private final String name;
+    private String name;
     public  final int x;
     public  final int y;
     private final String kind;
@@ -42,5 +42,9 @@ class Query {
 
     public boolean isSelectable() {
         return selectable;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
