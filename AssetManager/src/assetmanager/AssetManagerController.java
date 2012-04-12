@@ -33,6 +33,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooserBuilder;
 import javafx.util.Callback;
+import org.joshy.gfx.util.u;
 
 /**
  *
@@ -119,36 +120,8 @@ public class AssetManagerController implements Initializable {
         // visuals
         miniIcons = new Image("AssetManager/src/assetmanager/glyphicons-black.png");
         queryTree.setCellFactory(new Callback<TreeView<Query>, TreeCell<Query>>() {
-
-            @Override
             public TreeCell<Query> call(TreeView<Query> arg0) {
-                return new TreeCell<Query>() {
-
-                    @Override
-                    protected void updateItem(Query query, boolean empty) {
-                        super.updateItem(query, empty);
-                        if (empty) {
-                            return;
-                        }
-                        setText(query.getName());
-                        setGraphic(getIcon(query.x, query.y));
-                        if (!query.isSelectable()) {
-                            getStyleClass().add("tree-header");
-                        }
-                        if (query instanceof LibraryQuery) {
-                            setOnDragEntered(libraryQueryEnter);
-                            setOnDragOver(libraryQueryOver);
-                            setOnDragExited(libraryQueryExit);
-                            setOnDragDropped(libraryQueryDrop);
-                        }
-                        if (query instanceof StaticQuery) {
-                            setOnDragEntered(staticQueryEnter);
-                            setOnDragOver(staticQueryOver);
-                            setOnDragExited(staticQueryExit);
-                            setOnDragDropped(staticQueryDrop);
-                                    }
-                                }
-                };
+                return new EditableTreeCell();
             }
         });
         
@@ -246,15 +219,12 @@ public class AssetManagerController implements Initializable {
             }
         });
         search.textProperty().addListener(new ChangeListener<String>() {
-            @Override
             public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-                p("changed: " + arg2);
                 table.setItems(FXCollections.observableList(db.searchByAnyText(arg2)));
             }
         });
         
         switchTableView.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
             public void handle(ActionEvent arg0) {
                 anchorPane1.setVisible(false);
                 table.setVisible(true);
@@ -262,7 +232,6 @@ public class AssetManagerController implements Initializable {
         });
         
         switchThumbView.setOnAction(new EventHandler<ActionEvent>(){
-            @Override
             public void handle(ActionEvent arg0) {
                 anchorPane1.setVisible(true);
                 table.setVisible(false);
@@ -271,7 +240,6 @@ public class AssetManagerController implements Initializable {
         
         
         addAssetButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
             public void handle(ActionEvent arg0) {
                 FileChooser fc = FileChooserBuilder.create().title("Add file or directory").build();
                 List<File> files = fc.showOpenMultipleDialog(null);
@@ -292,7 +260,6 @@ public class AssetManagerController implements Initializable {
         
         
         delete.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
             public void handle(ActionEvent e) {
                 Query currentQuery = queryTree.getSelectionModel().getSelectedItem().getValue();
                 if(!(currentQuery instanceof StaticQuery)) return;
@@ -553,6 +520,42 @@ public class AssetManagerController implements Initializable {
 
         private String getString() {
             return getItem() == null ? "" : getItem().toString();
+        }
+    }
+
+    private class EditableTreeCell extends TreeCell<Query> {
+        private EditableTreeCell() {
+        }
+
+        @Override
+        public void startEdit() {
+            super.startEdit();
+            u.p("starting to edit");
+        }
+
+        @Override
+        protected void updateItem(Query query, boolean empty) {
+            super.updateItem(query, empty);
+            if (empty) {
+                return;
+            }
+            setText(query.getName());
+            setGraphic(getIcon(query.x, query.y));
+            if (!query.isSelectable()) {
+                getStyleClass().add("tree-header");
+            }
+            if (query instanceof LibraryQuery) {
+                setOnDragEntered(libraryQueryEnter);
+                setOnDragOver(libraryQueryOver);
+                setOnDragExited(libraryQueryExit);
+                setOnDragDropped(libraryQueryDrop);
+            }
+            if (query instanceof StaticQuery) {
+                setOnDragEntered(staticQueryEnter);
+                setOnDragOver(staticQueryOver);
+                setOnDragExited(staticQueryExit);
+                setOnDragDropped(staticQueryDrop);
+            }
         }
     }
 }
