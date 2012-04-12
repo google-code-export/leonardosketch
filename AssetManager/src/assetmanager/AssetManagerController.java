@@ -65,7 +65,7 @@ public class AssetManagerController implements Initializable {
     
     
     private static final DataFormat ASSETS = new DataFormat("ASSETS");
-    private TreeItem<Query> staticItem;
+    private TreeItem<Query> staticLists;
 
     public void initialize(URL arg0, ResourceBundle arg1) {
         
@@ -87,8 +87,12 @@ public class AssetManagerController implements Initializable {
         Query palettes = new Query("Palettes","palette",4,5);
         final Query staticList = new Query("LISTS","----");
         staticList.setSelectable(false);
-        staticItem = new TreeItem<Query>(staticList);
-        staticItem.setExpanded(true);
+        staticLists = new TreeItem<Query>(staticList);
+        staticLists.setExpanded(true);
+
+        for(StaticQuery query : db.getStaticLists()) {
+            staticLists.getChildren().add(new TreeItem<Query>(query));
+        }
 
         root = new TreeItem<Query>();
         root.setExpanded(true);
@@ -102,7 +106,7 @@ public class AssetManagerController implements Initializable {
                 new TreeItem<Query>(images),
                 new TreeItem<Query>(palettes)
         );
-        root.getChildren().addAll(libraryItem,staticItem);
+        root.getChildren().addAll(libraryItem, staticLists);
 
         queryTree.setRoot(root);
         queryTree.getSelectionModel().select(0);
@@ -284,7 +288,7 @@ public class AssetManagerController implements Initializable {
     private EventHandler<ActionEvent> addNewListAction = new EventHandler<ActionEvent>() {
         public void handle(ActionEvent e) {
             StaticQuery custom = db.createStaticList("new list");
-            staticItem.getChildren().add(new TreeItem<Query>(custom));
+            staticLists.getChildren().add(new TreeItem<Query>(custom));
         }
     };
 
@@ -479,19 +483,59 @@ public class AssetManagerController implements Initializable {
     }
 
     private class EditableTreeCell extends TreeCell<Query> {
+        private TextField textField;
         private EditableTreeCell() {
         }
 
         @Override
         public void startEdit() {
+            if(!(getItem() instanceof StaticQuery)) return;
             super.startEdit();
             u.p("starting to edit");
+            if(textField == null) {
+                createTextField();
+            }
+            setGraphic(textField);
+            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            textField.selectAll();
+        }
+
+        private void createTextField() {
+            textField = new TextField(getString());
+            textField.setMinWidth(this.getWidth()-this.getGraphicTextGap()*2);
+            textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                public void handle(KeyEvent keyEvent) {
+                    if(keyEvent.getCode() == KeyCode.ENTER) {
+                        getItem().setName(textField.getText());
+                        commitEdit(getItem());
+                    } else if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                        cancelEdit();
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void cancelEdit() {
+            super.cancelEdit();
+            setText(getString());
+            setContentDisplay(ContentDisplay.TEXT_ONLY);
         }
 
         @Override
         protected void updateItem(Query query, boolean empty) {
             super.updateItem(query, empty);
             if (empty) {
+                setText(null);
+                setGraphic(null);
+                return;
+            }
+            if(isEditing()) {
+                if(textField != null) {
+                    textField.setText(getString());
+                }
+                setGraphic(textField);
+                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                 return;
             }
             setText(query.getName());
@@ -511,6 +555,10 @@ public class AssetManagerController implements Initializable {
                 setOnDragExited(staticQueryExit);
                 setOnDragDropped(staticQueryDrop);
             }
+        }
+
+        public String getString() {
+            return getItem() == null ? "" : getItem().getName();
         }
     }
 }
