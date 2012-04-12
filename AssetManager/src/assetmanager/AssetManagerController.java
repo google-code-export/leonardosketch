@@ -94,11 +94,11 @@ public class AssetManagerController implements Initializable {
         final LibraryQuery all = new LibraryQuery("Everything","*",0,1);
         final TreeItem<Query> allitem = new TreeItem<Query>(all);
         Query fonts = new Query("Fonts",AssetDB.FONT,6,2);
-        Query symbols = new Query("Symbols","symbol",4,0);
+        Query symbols = new Query("Symbols",AssetDB.SYMBOLSET,4,0);
         Query textures = new Query("Textures",AssetDB.PATTERN,10,0);
         Query gradients = new Query("Gradients","gradient",19,1);
         Query images = new Query("Images","image",19,2);
-        Query palettes = new Query("Palettes","PALETTE",4,5);
+        Query palettes = new Query("Palettes",AssetDB.PALETTE,4,5);
         final Query staticList = new Query("LISTS","----");
         staticList.setSelectable(false);
         staticLists = new TreeItem<Query>(staticList);

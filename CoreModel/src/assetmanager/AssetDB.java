@@ -29,7 +29,8 @@ public class AssetDB {
     public static final String FILEPATH =       "filepath";
     public static final String NAME =           "name";
     public static final String STATIC_LIST =    "STATIC_LIST";
-    
+    public static final String SYMBOLSET =      "SYMBOLSET";
+
     private EmbeddedGraphDatabase graphDb;
     private Index<Node> kindsIndex;
     private Index<Node> listsIndex;
@@ -37,6 +38,7 @@ public class AssetDB {
     private final File patternDir;
     private final File fontDir;
     private static AssetDB _db;
+    private File symbolsDir;
 
     public AssetDB() {
         resourceDir = new File("/Users/josh/Library/Preferences/Leonardo/");
@@ -45,7 +47,9 @@ public class AssetDB {
         patternDir.mkdir();
         fontDir = new File(resourceDir,"fonts");
         fontDir.mkdir();
-        
+        symbolsDir = new File(resourceDir,"symbols");
+        symbolsDir.mkdir();
+
         initDatabase();
         //deleteAll();
         //initInternalTypes();
@@ -268,6 +272,39 @@ public class AssetDB {
             tx.finish();
         }
     }
+    public List<SymbolSetAsset> getAllSymbols() {
+        Transaction tx = graphDb.beginTx();
+        try {
+            IndexHits<Node> ret;
+            ret = kindsIndex.get(KIND, SYMBOLSET);
+            List<SymbolSetAsset> list = new ArrayList<SymbolSetAsset>();
+            for(Node n : ret) {
+                SymbolSetAsset sym = new SymbolSetAsset(this,n);
+                list.add(sym);
+            }
+            tx.success();
+            return list;
+        } finally {
+            tx.finish();
+        }
+    }
+
+    public SymbolSetAsset createSymbolSet(String name) {
+        Transaction tx = graphDb.beginTx();
+        try {
+            Node node = graphDb.createNode();
+            node.setProperty(KIND, SYMBOLSET);
+            node.setProperty(NAME, name);
+            File file = new File(symbolsDir,"symbolset-"+Math.random()+".xml");
+            node.setProperty(FILEPATH, file.getAbsolutePath());
+            kindsIndex.add(node, KIND, SYMBOLSET);
+            kindsIndex.add(node, NAME, name.toLowerCase());
+            tx.success();
+            return new SymbolSetAsset(this,node);
+        } finally {
+            tx.finish();
+        }
+    }
 
     public StaticQuery createStaticList(String name) {
         Transaction tx = graphDb.beginTx();
@@ -348,6 +385,24 @@ public class AssetDB {
             asset.setProperty(FILEPATH,file.getAbsolutePath());
             kindsIndex.add(asset, KIND, PATTERN);
             kindsIndex.add(asset, NAME, name.toLowerCase());
+            tx.success();
+        } finally {
+            tx.finish();
+        }
+    }
+
+    public void copyAndAddSymbolSet(InputStream stream, String name) throws IOException {
+        File file = new File(symbolsDir,"symbolset-"+Math.random()+".xml");
+        copyStreamToFile(stream,file);
+        Transaction tx = graphDb.beginTx();
+        try {
+            u.p("adding symbol set from file: " + file.getAbsolutePath());
+            Node node = graphDb.createNode();
+            node.setProperty(KIND, SYMBOLSET);
+            node.setProperty(NAME,name);
+            node.setProperty(FILEPATH,file.getAbsolutePath());
+            kindsIndex.add(node, KIND, SYMBOLSET);
+            kindsIndex.add(node,NAME,name.toLowerCase());
             tx.success();
         } finally {
             tx.finish();

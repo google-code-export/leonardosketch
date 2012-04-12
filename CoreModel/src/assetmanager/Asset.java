@@ -4,6 +4,7 @@
  */
 package assetmanager;
 
+import org.joshy.gfx.util.u;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 
@@ -17,7 +18,7 @@ import java.io.InputStream;
  * @author josh
  */
 public class Asset {
-    private String filepath;
+    protected String filepath;
     protected AssetDB db;
     protected Node node;
 
@@ -41,6 +42,7 @@ public class Asset {
     }
 
     public File getFile() {
+        u.p("getting file for path: " + filepath);
         return new File(filepath);
     }
 

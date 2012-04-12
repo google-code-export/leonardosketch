@@ -130,11 +130,14 @@ public class SymbolPanel extends Panel {
         setSwitcher = new PopupMenuButton<SymbolManager.SymbolSet>();
         setSwitcher.setModel(new ListModel<SymbolManager.SymbolSet>(){
             public SymbolManager.SymbolSet get(int i) {
+                if(symbolManager.getSetCount() < i-1) {
+                    return null;
+                }
                 return symbolManager.getSet(i);
             }
 
             public int size() {
-                return symbolManager.sets.size();
+                return symbolManager.getSetCount();
             }
         });
         EventBus.getSystem().addListener(setSwitcher, SelectionEvent.Changed, new Callback<SelectionEvent>() {
@@ -176,7 +179,7 @@ public class SymbolPanel extends Panel {
                     String result = StandardDialog.showEditText("Rename Symbol",name);
                     if(result != null) {
                         shape.setStringProperty(SYMBOL_NAME,result);
-                        symbolManager.save();
+                        //symbolManager.save();
                     }
                 }
             }
