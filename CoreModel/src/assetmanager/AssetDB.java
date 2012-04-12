@@ -23,7 +23,7 @@ import org.neo4j.kernel.EmbeddedGraphDatabase;
 public class AssetDB {
     public static final String KIND =           "kind";
     public static final String FONT =           "font";
-    public static final String PATTERN =        "pattern";
+    public static final String PATTERN =        "PATTERN";
     public static final String FILEPATH =       "filepath";
     public static final String NAME =           "name";
     public static final String STATIC_LIST =    "STATIC_LIST";
@@ -209,7 +209,7 @@ public class AssetDB {
         return asset;
     }
     
-    private void addPatternFast(File file) {
+    private Node addPatternFast(File file) {
         u.p("adding pattern from file: " + file.getAbsolutePath());
         Node asset = graphDb.createNode();
         asset.setProperty(KIND, PATTERN);
@@ -217,6 +217,7 @@ public class AssetDB {
         asset.setProperty(FILEPATH,file.getAbsolutePath());
         kindsIndex.add(asset, KIND, PATTERN);
         kindsIndex.add(asset, NAME, file.getName().toLowerCase());
+        return asset;
     }
     
     public StaticQuery createStaticList(String name) {
@@ -304,14 +305,15 @@ public class AssetDB {
         }
     }
 
-    public void copyAndAddPattern(File file) throws IOException {
+    public Asset copyAndAddPattern(File file) throws IOException {
         
         File file2 = new File(patternDir,"pattern-"+Math.random()+".png");
         copyFileToFile(file,file2);
         Transaction tx = graphDb.beginTx();
         try {
-            addPatternFast(file2);
+            Node node = addPatternFast(file2);
             tx.success();
+            return toAsset(node);
         } finally {
             tx.finish();
         }
