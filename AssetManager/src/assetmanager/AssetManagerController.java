@@ -74,7 +74,7 @@ public class AssetManagerController implements Initializable {
 
         // data setup
         
-        Query library = new Query("LIBRARY","*");
+        Query library = new Query("LIBRARY","----");
         library.setSelectable(false);
         TreeItem<Query> libraryItem = new TreeItem<Query>(library);
         libraryItem.setExpanded(true);
