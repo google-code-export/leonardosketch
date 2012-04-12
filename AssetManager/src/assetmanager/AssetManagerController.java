@@ -4,14 +4,7 @@
  */
 package assetmanager;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -22,7 +15,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -33,7 +30,22 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooserBuilder;
 import javafx.util.Callback;
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.util.u;
+import org.joshy.sketch.actions.swatches.Palette;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -186,6 +198,42 @@ public class AssetManagerController implements Initializable {
         kindColumn.setMinWidth(100);
         kindColumn.setEditable(false);
         table.getColumns().add(kindColumn);
+
+
+        TableColumn<Asset, Asset> previewColumn = new TableColumn<Asset, Asset>("Preview");
+        previewColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Asset, Asset>, ObservableValue<Asset>>() {
+            public ObservableValue<Asset> call(TableColumn.CellDataFeatures<Asset, Asset> assetImageViewCellDataFeatures) {
+                return new ReadOnlyObjectWrapper<Asset>(assetImageViewCellDataFeatures.getValue());
+            }
+        });
+        previewColumn.setCellFactory(new Callback<TableColumn<Asset, Asset>, TableCell<Asset, Asset>>() {
+            public TableCell<Asset, Asset> call(TableColumn<Asset, Asset> assetImageViewTableColumn) {
+                return new TableCell<Asset, Asset>() {
+                    @Override
+                    protected void updateItem(Asset asset, boolean empty) {
+                        super.updateItem(asset, empty);
+                        if (!empty) {
+                            if(asset.getKind().equals(AssetDB.PATTERN)) {
+                                setGraphic(patternToImage(asset));
+                                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                                return;
+                            }
+                            if(asset.getKind().equals(AssetDB.PALETTE)) {
+                                setGraphic(new ImageView(toImage((Palette)asset)));
+                                setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                                return;
+                            }
+                            setText("---");
+                        }
+                    }
+                };
+            }
+        });
+        previewColumn.setMinWidth(110);
+        previewColumn.setPrefWidth(110);
+        previewColumn.setMaxWidth(200);
+        previewColumn.setEditable(false);
+        table.getColumns().add(previewColumn);
         
         table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         
@@ -309,6 +357,34 @@ public class AssetManagerController implements Initializable {
                 queryTree.getSelectionModel().select(allitem);
             }
         });
+    }
+
+    private ImageView patternToImage(Asset asset) {
+        File file = asset.getFile();
+        try {
+            ImageView iv = new ImageView(new Image(new FileInputStream(file)));
+            iv.setViewport(new Rectangle2D(0, 0, 100, 15));
+            return iv;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Image toImage(Palette pal) {
+        BufferedImage img = new BufferedImage(100,15,BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = img.createGraphics();
+        g2.setPaint(java.awt.Color.RED);
+        g2.fillRect(0, 0, 10, 10);
+        int x = 0;
+        for(FlatColor color : pal.getColors()) {
+            g2.setPaint(new java.awt.Color((float)color.getRed(),(float)color.getGreen(),(float)color.getBlue()));
+            g2.fillRect(x*4,0,4,10);
+            x++;
+        }
+        g2.dispose();
+        Image fximg = Image.impl_fromExternalImage(img);
+        return fximg;
     }
 
     private EventHandler<ActionEvent> addNewListAction = new EventHandler<ActionEvent>() {

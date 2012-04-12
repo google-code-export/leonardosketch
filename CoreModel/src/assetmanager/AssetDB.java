@@ -80,6 +80,13 @@ public class AssetDB {
     private Asset toAsset(Node n) {
         String kind = (String) n.getProperty(KIND);
         if(STATIC_LIST.equals(kind)) return null;
+
+        if(PALETTE.equals(kind)) {
+            Palette pal = new Palette(this,n);
+            pal.load();
+            return pal;
+        }
+
         String filepath = null;
         if(n.hasProperty(FILEPATH)) {
             filepath = (String) n.getProperty(FILEPATH);
@@ -526,7 +533,7 @@ public class AssetDB {
         Transaction tx = graphDb.beginTx();
         IndexHits<Node> ret;
         try {
-            ret = kindsIndex.query(NAME,"*"+query.toLowerCase()+"*");
+            ret = kindsIndex.query(NAME,"*"+query.toLowerCase().trim()+"*");
             tx.success();
         } finally {
             tx.finish();
