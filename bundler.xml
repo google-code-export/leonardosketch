@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<app name="Leonardo">
+    <icon name="resources/Turtle.png"/>
+    <icon name="resources/Turtle.icns"/>
+    <jar name="Sketch.jar" main-class="org.joshy.sketch.Main"/>
+    <jar name="XMLLib.jar"/>
+    <jar name="amino-core.jar"/>
+    <jar name="commons-codec-1.4.jar"/>
+    <jar name="apache-mime4j-0.6.jar"/>
+    <jar name="commons-logging-1.1.1.jar"/>
+    <jar name="httpclient-4.0.1.jar"/>
+    <jar name="httpcore-4.0.1.jar"/>
+    <jar name="httpcore-nio-4.0.1.jar"/>
+    <jar name="httpmime-4.0.1.jar"/>
+    <jar name="parboiled-0.9.7.3.jar"/>
+    <jar name="twitter4j-core-2.1.4.jar"/>
+    <jar name="flickrapi-1.2.jar"/>
+    <jar name="JGoogleAnalytics_0.2.jar"/>
+    <jar name="iText-2.1.7.jar"/>
+    <jar name="MacStubs.jar" os="!mac"/>
+    <filetype mimetype="application-x/leo"  extension="leo"  icon="resources/doc.icns"/>
+    <filetype mimetype="application-x/leoz" extension="leoz" icon="resources/doc.icns"/>
+</app>

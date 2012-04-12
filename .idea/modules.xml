@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AssetManager/AssetManager.iml" filepath="$PROJECT_DIR$/AssetManager/AssetManager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CoreModel/CoreModel.iml" filepath="$PROJECT_DIR$/CoreModel/CoreModel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sketch/Sketch.iml" filepath="$PROJECT_DIR$/Sketch/Sketch.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Sketch/Sketch.iml" filepath="$PROJECT_DIR$/Sketch/Sketch.iml" />
+    </modules>
+  </component>
+</project>
+
