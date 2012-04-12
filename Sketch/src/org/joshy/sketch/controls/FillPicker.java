@@ -6,18 +6,18 @@ import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.event.Event;
 import org.joshy.gfx.node.NodeUtils;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.Control;
-import org.joshy.gfx.node.control.ListModel;
-import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.node.layout.FlexBox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.ArrayListModel;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.gfx.draw.LinearGradientFill.Snap;
+import org.joshy.sketch.actions.swatches.Palette;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SShape;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -395,10 +395,16 @@ public class FillPicker extends Button {
                 popup.setVisible(false);
             }
         });
+        final PopupMenuButton switcher = new PopupMenuButton();
+        final ArrayListModel<Palette> palettes = manager.colorManager.getPalettes();
+        switcher.setModel(palettes);
 
         Button addButton = new Button("+");
         addButton.onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent actionEvent) throws Exception {
+                if(!palettes.get(switcher.getSelectedIndex()).isEditable()) {
+                    return;
+                }
                 final Stage dialog = Stage.createStage();
                 dialog.setTitle("Color");
 
@@ -429,10 +435,28 @@ public class FillPicker extends Button {
             }
         });
 
+        switcher.setTextRenderer(new ListView.TextRenderer() {
+            public String toString(SelectableControl selectableControl, Object palette, int i) {
+                if(palette instanceof Palette) {
+                    return ((Palette)palette).getName();
+                } else {
+                    return "foo";
+                }
+            }
+        });
+
+        EventBus.getSystem().addListener(switcher, SelectionEvent.Changed, new Callback<SelectionEvent>() {
+            public void call(SelectionEvent selectionEvent) throws Exception {
+                int n = selectionEvent.getView().getSelectedIndex();
+                manager.colorManager.setCurrentPalette(palettes.get(n));
+                colorList.setModel(manager.colorManager.getSwatchModel());
+            }
+        });
+
         VFlexBox vbox = new VFlexBox();
         vbox.setFill(FlatColor.GRAY);
         vbox.add(colorList, 1);
-        vbox.add(new HFlexBox().add(addButton));
+        vbox.add(new HFlexBox().add(addButton).add(switcher));
         vbox.setBoxAlign(FlexBox.Align.Stretch);
         panel.add("Swatches", vbox);
     }

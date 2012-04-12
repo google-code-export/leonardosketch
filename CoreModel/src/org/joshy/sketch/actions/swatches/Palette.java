@@ -3,8 +3,6 @@ package org.joshy.sketch.actions.swatches;
 import assetmanager.Asset;
 import assetmanager.AssetDB;
 import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.util.ArrayListModel;
-import org.joshy.gfx.util.u;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 
@@ -37,13 +35,11 @@ public class Palette extends Asset {
     public void save() {
         Transaction tx = this.db.beginTx();
         try {
-
             StringBuffer sb = new StringBuffer();
             for(FlatColor color : swatches) {
                 sb.append(Integer.toHexString(color.getRGBA()));
                 sb.append(",");
             }
-            u.p("writing to string: " + sb.toString());
             this.node.setProperty("colors",sb.toString());
             tx.success();
         } finally {
@@ -57,8 +53,22 @@ public class Palette extends Asset {
         swatches.clear();
         for(String c : colors) {
             FlatColor color = new FlatColor(c);
-            u.p("flat color = " + Integer.toHexString(color.getRGBA()));
             swatches.add(color);
+        }
+    }
+
+    public boolean isEditable() {
+        if(!node.hasProperty("editable")) return false;
+        return ((Boolean)node.getProperty("editable")).booleanValue();
+    }
+
+    public void setEditable(boolean editable) {
+        Transaction tx = db.beginTx();
+        try {
+            node.setProperty("editable",Boolean.valueOf(editable));
+            tx.success();
+        } finally {
+            tx.finish();
         }
     }
 }

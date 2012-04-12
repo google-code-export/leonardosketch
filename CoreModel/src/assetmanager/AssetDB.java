@@ -4,18 +4,18 @@
  */
 package assetmanager;
 
-import java.awt.*;
-import java.io.*;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.swatches.Palette;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
+
+import java.awt.*;
+import java.io.*;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -235,8 +235,10 @@ public class AssetDB {
             asset.setProperty(NAME, "new palette");
             kindsIndex.add(asset,KIND,PALETTE);
             kindsIndex.add(asset, NAME, "new palette".toLowerCase());
+            Palette pal = new Palette(this, asset);
+            pal.setEditable(true);
             tx.success();
-            return new Palette(this,asset);
+            return pal;
         } finally {
            tx.finish();
         }
