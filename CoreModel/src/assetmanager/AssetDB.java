@@ -21,12 +21,12 @@ import org.neo4j.kernel.EmbeddedGraphDatabase;
  * @author josh
  */
 public class AssetDB {
-    static final String KIND = "kind";
-    public static final String FONT = "font";
-    public static final String PATTERN = "pattern";
-    private static final String FILEPATH = "filepath";
-    static final String NAME = "name";
-    private static final String STATIC_LIST = "STATIC_LIST";
+    public static final String KIND =           "kind";
+    public static final String FONT =           "font";
+    public static final String PATTERN =        "pattern";
+    public static final String FILEPATH =       "filepath";
+    public static final String NAME =           "name";
+    public static final String STATIC_LIST =    "STATIC_LIST";
     
     private EmbeddedGraphDatabase graphDb;
     private Index<Node> kindsIndex;
