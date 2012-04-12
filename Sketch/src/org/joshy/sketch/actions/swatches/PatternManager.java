@@ -1,5 +1,7 @@
 package org.joshy.sketch.actions.swatches;
 
+import assetmanager.Asset;
+import assetmanager.AssetDB;
 import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
@@ -11,10 +13,7 @@ import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 
 import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,6 +25,7 @@ import java.io.UnsupportedEncodingException;
 public class PatternManager {
     private File file;
     private ArrayListModel<PatternPaint> patternModel = new ArrayListModel<PatternPaint>();
+    private AssetDB db;
 
     public PatternManager(File file) {
         this.file = file;
@@ -34,6 +34,29 @@ public class PatternManager {
         } else {
             try {
                 initDummyData();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public PatternManager(AssetDB db) {
+        this.db = db;
+        if(db.getAllPatterns().size() < 1) {
+            String[] pats = new String[]{"brown_noise.png","checkerboard.png","flurdelis.png","tess01.png","wallpaper1.png"};
+            for(String pat : pats) {
+                u.p("adding prefab pattern: " + pat);
+                InputStream stream = Main.class.getResourceAsStream("resources/textures/" + pat);
+                try {
+                    db.copyAndAddPattern(stream,pat);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        for(Asset pat : db.getAllPatterns()) {
+            try {
+                patternModel.add(PatternPaint.create(pat.getFile()));
             } catch (IOException e) {
                 e.printStackTrace();
             }

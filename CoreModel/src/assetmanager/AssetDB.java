@@ -128,6 +128,7 @@ public class AssetDB {
     }
 
 
+
     private static enum RelTypes implements RelationshipType {
         KNOWS, OWNED
     }
@@ -272,7 +273,25 @@ public class AssetDB {
         }
         return assets;
     }
-    
+
+    public void copyAndAddPattern(InputStream stream, String name) throws IOException {
+        File file = new File(patternDir,"pattern-"+Math.random()+".png");
+        copyStreamToFile(stream,file);
+        Transaction tx = graphDb.beginTx();
+        try {
+            u.p("adding pattern from file: " + file.getAbsolutePath());
+            Node asset = graphDb.createNode();
+            asset.setProperty(KIND, PATTERN);
+            asset.setProperty(NAME, name);
+            asset.setProperty(FILEPATH,file.getAbsolutePath());
+            kindsIndex.add(asset, KIND, PATTERN);
+            kindsIndex.add(asset, NAME, name.toLowerCase());
+            tx.success();
+        } finally {
+            tx.finish();
+        }
+    }
+
     public void copyAndAddPattern(File file) throws IOException {
         
         File file2 = new File(patternDir,"pattern-"+Math.random()+".png");
@@ -338,19 +357,26 @@ public class AssetDB {
     }
 
 
-    /*
-    public List<Asset> getAllFonts() {
+    private List<Asset> getAllByKind(String kind) {
         Transaction tx = graphDb.beginTx();
         IndexHits<Node> ret;
         try {
-            ret = kindsIndex.get(KIND,FONT);
+            ret = kindsIndex.get(KIND,kind);
             tx.success();
         } finally {
             tx.finish();
         }
         return toAssetList(ret);
     }
-    
+
+    public List<Asset> getAllFonts() {
+        return getAllByKind(FONT);
+    }
+
+    public List<Asset> getAllPatterns() {
+        return getAllByKind(PATTERN);
+    }
+
     public Asset getFontByName(String fontName) {
         for(Node n : kindsIndex.get(KIND,FONT)) {
             if(n.getProperty(NAME).equals(fontName)) {
@@ -359,8 +385,7 @@ public class AssetDB {
         }
         return null;
     }
-    */
-    
+
     public List<Asset> getByKind(String kind) {
         if("*".equals(kind)) return getAllAssets();
         
@@ -391,25 +416,51 @@ public class AssetDB {
     
 
     private void deleteAll() {
+        u.p("NUKING ENTIRE DB");
         final String KIND = "kind";
         Transaction tx = graphDb.beginTx();
         try {
             for(Node n : kindsIndex.query(KIND,"*")) {
+                u.p("nuking asset");
                 kindsIndex.remove(n);
                 for(Relationship r : n.getRelationships()) {
                     r.delete();
                 }
                 n.delete();
             }
-            int count = kindsIndex.get(KIND,"font").size();
-            System.out.println("there are " + count + " fonts now");
+            u.p("there are " + kindsIndex.get(KIND,FONT).size() + " fonts now");
+            u.p("there are " + kindsIndex.get(KIND,PATTERN).size() + " patterns now");
+
+            for(Node n : listsIndex.query(KIND,"*")) {
+                u.p("nuking static list");
+                listsIndex.remove(n);
+                for(Relationship r : n.getRelationships()) {
+                    r.delete();
+                }
+                n.delete();
+            }
             tx.success();
         } finally {
             tx.finish();
         }
     }
-    
-    
+
+    public void removeFromLibrary(Asset asset) {
+        u.p("deleting asset: " + asset.getName() + " id = " + asset.id);
+        Transaction tx = graphDb.beginTx();
+        try {
+                Node node = graphDb.getNodeById(asset.id);
+            for(Relationship r : node.getRelationships()) {
+                r.delete();
+            }
+            node.delete();
+            tx.success();
+        } finally {
+            tx.finish();
+        }
+    }
+
+
     public List<Asset> searchByAnyText(String query) {
         u.p("searching for " + query);
         if(query == null || query.length() < 3) {

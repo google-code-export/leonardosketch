@@ -69,7 +69,7 @@ public class Main implements Runnable {
 
     public SymbolManager symbolManager = new SymbolManager(new File(homedir,"symbols"));
     public ColorSwatchManager colorManager = new ColorSwatchManager(new File(homedir,"swatches.xml"));
-    public PatternManager patternManager = new PatternManager(new File(new File(homedir,"patterns"),"patterns.xml"));
+    public PatternManager patternManager;
     public PropertyManager propMan;
     private QuitAction quitAction = new QuitAction(this);
     private SAction aboutAction;
@@ -521,6 +521,11 @@ public class Main implements Runnable {
 
     private void setupGlobals() throws IOException {
         assetDatabase = AssetDB.getInstance();
+
+        patternManager = new PatternManager(assetDatabase);
+        //new File(new File(homedir,"patterns"),"patterns.xml"));
+
+
         addFontIfMissing(getFont("Chunk.ttf"), "ChunkFive");
         addFontIfMissing(getFont("belligerent.ttf"), "BelligerentMadness");
         addFontIfMissing(getFont("orbitron-medium.ttf"), "Orbitron-Medium");

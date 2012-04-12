@@ -78,7 +78,7 @@ public class AssetManagerController implements Initializable {
         TreeItem<Query> libraryItem = new TreeItem<Query>(library);
         libraryItem.setExpanded(true);
 
-        LibraryQuery all = new LibraryQuery("Everything","*",0,1);
+        final LibraryQuery all = new LibraryQuery("Everything","*",0,1);
         Query fonts = new Query("Fonts",AssetDB.FONT,6,2);
         Query symbols = new Query("Symbols","symbol",4,0);
         Query textures = new Query("Textures",AssetDB.PATTERN,10,0);
@@ -262,6 +262,16 @@ public class AssetManagerController implements Initializable {
         delete.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 Query currentQuery = queryTree.getSelectionModel().getSelectedItem().getValue();
+                if(currentQuery == all) {
+                    ObservableList<Asset> assets = table.getItems();
+                    for(TablePosition tp : table.getSelectionModel().getSelectedCells()) {
+                        Asset asset = assets.get(tp.getRow());
+                        db.removeFromLibrary(asset);
+                    }
+                    table.getSelectionModel().clearSelection();
+                    table.setItems(FXCollections.observableList(all.execute(db)));
+                    return;
+                }
                 if(!(currentQuery instanceof StaticQuery)) return;
                 StaticQuery staticQuery = (StaticQuery) currentQuery;
                 ObservableList<Asset> assets = table.getItems();
