@@ -58,6 +58,7 @@ public class AssetManagerController implements Initializable {
 
     @FXML private MenuItem deleteListMenuItem;
     @FXML private MenuItem addListMenuItem;
+    @FXML private MenuButton queryMenu;
 
     private Image miniIcons;
     private AssetDB db;
@@ -79,6 +80,7 @@ public class AssetManagerController implements Initializable {
         libraryItem.setExpanded(true);
 
         final LibraryQuery all = new LibraryQuery("Everything","*",0,1);
+        final TreeItem<Query> allitem = new TreeItem<Query>(all);
         Query fonts = new Query("Fonts",AssetDB.FONT,6,2);
         Query symbols = new Query("Symbols","symbol",4,0);
         Query textures = new Query("Textures",AssetDB.PATTERN,10,0);
@@ -98,7 +100,7 @@ public class AssetManagerController implements Initializable {
         root.setExpanded(true);
         
         libraryItem.getChildren().addAll(
-                new TreeItem<Query>(all),
+                allitem,
                 new TreeItem<Query>(fonts),
                 new TreeItem<Query>(symbols),
                 new TreeItem<Query>(textures),
@@ -137,6 +139,9 @@ public class AssetManagerController implements Initializable {
         
         switchTableView.setGraphic(getIcon(10,0));
         switchThumbView.setGraphic(getIcon(11,0));
+
+        queryMenu.setGraphic(getIcon(18,0));
+        queryMenu.setText("");
         
         
         ObservableList<Asset> assets = FXCollections.observableArrayList(db.getAllAssets());
@@ -194,6 +199,8 @@ public class AssetManagerController implements Initializable {
         queryTree.getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<TreeItem<Query>>() {
             public void changed(ObservableValue<? extends TreeItem<Query>> value, TreeItem<Query> oldItem, TreeItem<Query> newItem) {
+                if(value == null) return;
+                if(value.getValue() == null) return;
                 Query query = value.getValue().getValue();
                 if(!query.isSelectable()) return;
                 List<Asset> results = query.execute(db);
@@ -289,8 +296,17 @@ public class AssetManagerController implements Initializable {
 
         deleteListMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent actionEvent) {
+                TreeItem<Query> item = queryTree.getSelectionModel().getSelectedItem();
                 Query currentQuery = queryTree.getSelectionModel().getSelectedItem().getValue();
                 if(!(currentQuery instanceof StaticQuery)) return;
+                StaticQuery sq = (StaticQuery) currentQuery;
+                u.p("deleting the query : " + sq.getName());
+                //delete the underlying query
+                db.delete(sq);
+                //remove from the tree
+                item.getParent().getChildren().remove(item);
+                queryTree.getSelectionModel().clearSelection();
+                queryTree.getSelectionModel().select(allitem);
             }
         });
     }
