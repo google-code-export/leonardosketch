@@ -1,16 +1,9 @@
 package org.joshy.sketch.actions.swatches;
 
-import com.joshondesign.xml.Doc;
-import com.joshondesign.xml.Elem;
-import com.joshondesign.xml.XMLParser;
-import com.joshondesign.xml.XMLWriter;
+import assetmanager.Asset;
+import assetmanager.AssetDB;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.util.ArrayListModel;
-import org.joshy.gfx.util.u;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,62 +13,40 @@ import java.io.UnsupportedEncodingException;
  * To change this template use File | Settings | File Templates.
  */
 public class ColorSwatchManager {
-    final ArrayListModel<FlatColor> swatches;
-    private File file;
+    final ArrayListModel<Palette> palettes;
+    Palette current;
+    private AssetDB db;
+    private ArrayListModel<FlatColor> swatchModel;
 
-    public ColorSwatchManager(File file) {
-        this.file = file;
-        swatches = new ArrayListModel<FlatColor>();
-        u.p("loading custom swatches");
-        if(file.exists()) {
-            loadFile(file);
-        } else {
-            initDummyData();
+    public ColorSwatchManager(AssetDB db) {
+        this.db = db;
+        swatchModel = new ArrayListModel<FlatColor>();
+        palettes = new ArrayListModel<Palette>();
+        if(db.getAllPalettes().size() < 1) {
+            Palette pal = db.createPalette();
+            pal.add(FlatColor.BLACK);
+            pal.add(FlatColor.WHITE);
+            pal.add(FlatColor.RED);
+            pal.add(FlatColor.GREEN);
+            pal.add(FlatColor.BLUE);
+            pal.save();
+            pal.setName("Standard Palette");
         }
-    }
-
-    private void initDummyData() {
-        u.p("initting default color swatches");
-        swatches.add(FlatColor.RED);
-        swatches.add(FlatColor.GREEN);
-        swatches.add(FlatColor.BLUE);
-    }
-
-    private void loadFile(File file) {
-        u.p("loading color swatches from xml file");
-        try {
-            Doc doc = XMLParser.parse(file);
-            for(Elem c : doc.xpath("/swatches/color")) {
-                swatches.add(new FlatColor(c.attr("rgba")));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        palettes.addAll(db.getAllPalettes());
+        current = palettes.get(0);
+        swatchModel.clear();
+        swatchModel.addAll(current.getColors());
     }
 
     public ArrayListModel<FlatColor> getSwatchModel() {
-        return swatches;
+        return swatchModel;
     }
 
     public void addSwatch(FlatColor color) {
-        swatches.add(color);
-        try {
-            save();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        current.add(color);
+        current.save();
+        swatchModel.clear();
+        swatchModel.addAll(current.getColors());
     }
 
-    private void save() throws FileNotFoundException, UnsupportedEncodingException {
-        XMLWriter xml = new XMLWriter(file).header();
-        xml.start("swatches");
-        for(FlatColor c : swatches) {
-            xml.start("color","rgba",Integer.toHexString(c.getRGBA())).end();
-        }
-        xml.end();
-        xml.close();
-        u.p("wrote out swatches to : " + file.getAbsolutePath());
-    }
 }

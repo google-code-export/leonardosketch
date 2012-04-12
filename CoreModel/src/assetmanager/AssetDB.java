@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.joshy.gfx.util.u;
+import org.joshy.sketch.actions.swatches.Palette;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
@@ -24,6 +25,7 @@ public class AssetDB {
     public static final String KIND =           "kind";
     public static final String FONT =           "font";
     public static final String PATTERN =        "PATTERN";
+    public static final String PALETTE =        "PALETTE";
     public static final String FILEPATH =       "filepath";
     public static final String NAME =           "name";
     public static final String STATIC_LIST =    "STATIC_LIST";
@@ -78,8 +80,11 @@ public class AssetDB {
     private Asset toAsset(Node n) {
         String kind = (String) n.getProperty(KIND);
         if(STATIC_LIST.equals(kind)) return null;
-        String filepath = (String) n.getProperty(FILEPATH);
-        Asset asset = new Asset(this,n,filepath,n.getId());
+        String filepath = null;
+        if(n.hasProperty(FILEPATH)) {
+            filepath = (String) n.getProperty(FILEPATH);
+        }
+        Asset asset = new Asset(this,n,filepath);
         return asset;
     }
 
@@ -126,6 +131,7 @@ public class AssetDB {
     public Transaction beginTx() {
         return graphDb.beginTx();
     }
+
 
 
     private static enum RelTypes implements RelationshipType {
@@ -219,7 +225,41 @@ public class AssetDB {
         kindsIndex.add(asset, NAME, file.getName().toLowerCase());
         return asset;
     }
-    
+
+    public Palette createPalette() {
+        Transaction tx = graphDb.beginTx();
+        try {
+            u.p("adding new palette asset");
+            Node asset = graphDb.createNode();
+            asset.setProperty(KIND,PALETTE);
+            asset.setProperty(NAME, "new palette");
+            kindsIndex.add(asset,KIND,PALETTE);
+            kindsIndex.add(asset, NAME, "new palette".toLowerCase());
+            tx.success();
+            return new Palette(this,asset);
+        } finally {
+           tx.finish();
+        }
+    }
+
+    public List<Palette> getAllPalettes() {
+        Transaction tx = graphDb.beginTx();
+        try {
+            IndexHits<Node> ret;
+            ret = kindsIndex.get(KIND,PALETTE);
+            List<Palette> pals = new ArrayList<Palette>();
+            for(Node n : ret) {
+                Palette pal = new Palette(this,n);
+                pal.load();
+                pals.add(pal);
+            }
+            tx.success();
+            return pals;
+        } finally {
+            tx.finish();
+        }
+    }
+
     public StaticQuery createStaticList(String name) {
         Transaction tx = graphDb.beginTx();
         try {
@@ -239,8 +279,8 @@ public class AssetDB {
         Transaction tx = graphDb.beginTx();
         try { 
             Node list = staticQuery.getNode();
-            Node assetNode = graphDb.getNodeById(asset.id);
-            assetNode.createRelationshipTo(list,RelTypes.OWNED);
+            Node assetNode = asset.getNode();
+            assetNode.createRelationshipTo(list, RelTypes.OWNED);
             tx.success();
         } finally {
             tx.finish();
@@ -252,7 +292,7 @@ public class AssetDB {
         Transaction tx = graphDb.beginTx();
         try { 
             Node list = staticQuery.getNode();
-            Node assetNode = graphDb.getNodeById(asset.id);
+            Node assetNode = asset.getNode();
             for(Relationship rel : assetNode.getRelationships(RelTypes.OWNED,Direction.BOTH)) {
                 if(rel.getEndNode().equals(list)) {
                     rel.delete();
@@ -460,10 +500,11 @@ public class AssetDB {
     }
 
     public void removeFromLibrary(Asset asset) {
-        u.p("deleting asset: " + asset.getName() + " id = " + asset.id);
+        u.p("deleting asset: " + asset.getName() + " id = " + asset.getNode().getId());
         Transaction tx = graphDb.beginTx();
         try {
-                Node node = graphDb.getNodeById(asset.id);
+                Node node = asset.getNode();
+                // Node node = graphDb.getNodeById(asset.id);
             for(Relationship r : node.getRelationships()) {
                 r.delete();
             }

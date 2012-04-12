@@ -68,7 +68,7 @@ public class Main implements Runnable {
     public static final File SCRIPTS_DIR = new File(homedir,"scripts");
 
     public SymbolManager symbolManager = new SymbolManager(new File(homedir,"symbols"));
-    public ColorSwatchManager colorManager = new ColorSwatchManager(new File(homedir,"swatches.xml"));
+    public ColorSwatchManager colorManager;
     public PatternManager patternManager;
     public PropertyManager propMan;
     private QuitAction quitAction = new QuitAction(this);
@@ -93,11 +93,8 @@ public class Main implements Runnable {
     public static String DOWNLOAD_URL = "";
     private List<Menu> recentFilesMenus = new ArrayList<Menu>();
     public static MasterImageCache FlickrSearchCache = new MasterImageCache(true,10,"LeonardoFlickrSearchCache");
-    //private static Font[] fonts;
-    //private static HashMap<String, Font> fontMap;
     public static String AMINO_BINARY_URL = null;
     public static final String DEFAULT_FONT_NAME = "OpenSans";
-    //public static List<String> fontList;
 
     public static PowerupManager powerupManager = PowerupManager.get();
     private static AssetDB assetDatabase;
@@ -207,12 +204,6 @@ public class Main implements Runnable {
             tracker.trackAsynchronously(new FocusPoint(event,mainApp));
         }
     }
-    /*
-    public static Map<String,Font> getFontMap() {
-        return fontMap;
-    }
-    */
-
     public void run() {
         try {
             setupTracking();
@@ -523,6 +514,7 @@ public class Main implements Runnable {
         assetDatabase = AssetDB.getInstance();
 
         patternManager = new PatternManager(assetDatabase);
+        colorManager = new ColorSwatchManager(assetDatabase);
         //new File(new File(homedir,"patterns"),"patterns.xml"));
 
 
