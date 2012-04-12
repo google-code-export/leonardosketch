@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.ReadOnlyObjectWrapper;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,13 +23,10 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
@@ -120,7 +117,7 @@ public class AssetManagerController implements Initializable {
         
 
         // visuals
-        miniIcons = new Image("/Users/josh/projects/javafx/AssetManager/src/assetmanager/glyphicons-black.png");
+        miniIcons = new Image("AssetManager/src/assetmanager/glyphicons-black.png");
         queryTree.setCellFactory(new Callback<TreeView<Query>, TreeCell<Query>>() {
 
             @Override
@@ -171,25 +168,29 @@ public class AssetManagerController implements Initializable {
         
         //name column
         TableColumn<Asset, String> nameColumn = new TableColumn<Asset, String>("Name");
-        nameColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Asset, String>, ObservableValue<String>>(){
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Asset, String> arg0) {
-                return new ReadOnlyObjectWrapper<String>(arg0.getValue().name);
+        nameColumn.setCellValueFactory(new PropertyValueFactory<Asset, String>("name"));
+        nameColumn.setMinWidth(100);
+        nameColumn.setEditable(true);
+
+        nameColumn.setCellFactory(new Callback<TableColumn<Asset, String>, TableCell<Asset, String>>() {
+            public TableCell<Asset, String> call(TableColumn<Asset, String> assetStringTableColumn) {
+                return new EditableTableCell();
             }
         });
-        nameColumn.setMinWidth(100);
-        nameColumn.setEditable(false);
+        nameColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Asset, String>>() {
+            public void handle(TableColumn.CellEditEvent<Asset, String> e) {
+                e.getTableView().getItems()
+                        .get(e.getTablePosition().getRow())
+                        .setName(e.getNewValue());
+            }
+        });
         table.getColumns().add(nameColumn);
+        table.setEditable(true);
         
         
         //kind column
         TableColumn<Asset, String> kindColumn = new TableColumn<Asset, String>("Kind");
-        kindColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Asset, String>, ObservableValue<String>>(){
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Asset, String> arg0) {
-                return new ReadOnlyObjectWrapper<String>(arg0.getValue().kind);
-            }
-        });
+        kindColumn.setCellValueFactory(new PropertyValueFactory<Asset, String>("kind"));
         kindColumn.setMinWidth(100);
         kindColumn.setEditable(false);
         table.getColumns().add(kindColumn);
@@ -216,7 +217,7 @@ public class AssetManagerController implements Initializable {
                 
                 List<Node> images = new ArrayList<Node>();
                 for(Asset a : results) {
-                    if(AssetDB.PATTERN.equals(a.kind)) {
+                    if(AssetDB.PATTERN.equals(a.getKind())) {
                         p("loading up an image: " + a.getFile());
                         try {
                             images.add(new ImageView(a.getFile().toURI().toURL().toExternalForm()));
@@ -225,9 +226,9 @@ public class AssetManagerController implements Initializable {
                             Logger.getLogger(AssetManagerController.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                    if(AssetDB.FONT.equals(a.kind)) {
-                        p("loading up a font: " + a.name);
-                        images.add(new Label("Font: " + a.name));
+                    if(AssetDB.FONT.equals(a.getKind())) {
+                        p("loading up a font: " + a.getName());
+                        images.add(new Label("Font: " + a.getName()));
                     }
                 }
                 imageView.getChildren().addAll(images);
@@ -306,7 +307,7 @@ public class AssetManagerController implements Initializable {
         });
         
         
-        
+                             /*
         table.setOnDragDetected(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -317,7 +318,7 @@ public class AssetManagerController implements Initializable {
                 e.consume();
             }
         });
-        
+                               */
         /*
         queryTree.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
@@ -492,5 +493,67 @@ public class AssetManagerController implements Initializable {
             e.consume();
         }
     };
-    
+
+    private static class EditableTableCell extends TableCell<Asset, String> {
+        private TextField textField;
+
+        private EditableTableCell() {
+        }
+
+        @Override
+        public void startEdit() {
+            super.startEdit();    //To change body of overridden methods use File | Settings | File Templates.
+            if(textField == null) {
+                createTextField();
+            }
+            setGraphic(textField);
+            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            textField.selectAll();
+        }
+
+        @Override
+        public void cancelEdit() {
+            super.cancelEdit();    //To change body of overridden methods use File | Settings | File Templates.
+            setText(getString());
+            setContentDisplay(ContentDisplay.TEXT_ONLY);
+        }
+
+        @Override
+        protected void updateItem(String item, boolean empty) {
+            super.updateItem(item, empty);    //To change body of overridden methods use File | Settings | File Templates.
+            if(empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                if(isEditing()) {
+                    if(textField != null) {
+                        textField.setText(getString());
+                    }
+                    setGraphic(textField);
+                    setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                } else {
+                    setText(getItem());
+                    setContentDisplay(ContentDisplay.TEXT_ONLY);
+                }
+            }
+        }
+
+        private void createTextField() {
+            textField = new TextField(getString());
+            textField.setMinWidth(this.getWidth()-this.getGraphicTextGap()*2);
+            textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                public void handle(KeyEvent keyEvent) {
+                    if(keyEvent.getCode() == KeyCode.ENTER) {
+                        commitEdit(textField.getText());
+                    } else if(keyEvent.getCode() == KeyCode.ESCAPE) {
+                        cancelEdit();
+                    }
+                }
+            });
+        }
+
+        private String getString() {
+            return getItem() == null ? "" : getItem().toString();
+        }
+    }
 }

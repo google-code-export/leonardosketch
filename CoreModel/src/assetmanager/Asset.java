@@ -4,6 +4,9 @@
  */
 package assetmanager;
 
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,20 +17,24 @@ import java.io.InputStream;
  * @author josh
  */
 public class Asset {
-    final String name;
-    final String kind;
     final String filepath;
     final long id;
+    private AssetDB db;
+    private Node node;
 
-    Asset(String name, String kind, String filepath, long id) {
-        this.name = name;
-        this.kind = kind;
+    Asset(AssetDB assetDB, Node node, String filepath, long id) {
+        this.node = node;
         this.filepath = filepath;
         this.id = id;
+        this.db = assetDB;
     }
 
     public String getName() {
-        return name;
+        return (String) this.node.getProperty(AssetDB.NAME);
+    }
+
+    public String getKind() {
+        return (String) this.node.getProperty(AssetDB.KIND);
     }
 
     public File getFile() {
@@ -36,5 +43,15 @@ public class Asset {
 
     public InputStream getInputStream() throws FileNotFoundException {
         return new FileInputStream(new File(filepath));
+    }
+
+    public void setName(String name) {
+        Transaction tx = db.beginTx();
+        try {
+            node.setProperty(AssetDB.NAME,name);
+            tx.success();
+        } finally {
+            tx.finish();
+        }
     }
 }

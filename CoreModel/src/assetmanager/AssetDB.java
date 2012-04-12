@@ -19,11 +19,11 @@ import org.neo4j.kernel.EmbeddedGraphDatabase;
  * @author josh
  */
 public class AssetDB {
-    private static final String KIND = "kind";
+    static final String KIND = "kind";
     public static final String FONT = "font";
     public static final String PATTERN = "pattern";
     private static final String FILEPATH = "filepath";
-    private static final String NAME = "name";
+    static final String NAME = "name";
     private static final String STATIC_LIST = "STATIC_LIST";
     
     private EmbeddedGraphDatabase graphDb;
@@ -58,7 +58,7 @@ public class AssetDB {
         String name = (String) n.getProperty(NAME);
         String kind = (String) n.getProperty(KIND);
         String filepath = (String) n.getProperty(FILEPATH);
-        Asset asset = new Asset(name,kind,filepath,n.getId());
+        Asset asset = new Asset(this,n,filepath,n.getId());
         return asset;
     }
 
@@ -106,6 +106,13 @@ public class AssetDB {
         return _db;
     }
 
+    public Node getNodeById(long id) {
+        return this.graphDb.getNodeById(id);
+    }
+
+    public Transaction beginTx() {
+        return graphDb.beginTx();
+    }
 
 
     private static enum RelTypes implements RelationshipType {
@@ -224,7 +231,7 @@ public class AssetDB {
     }
 
     void addToStaticList(StaticQuery staticQuery, Asset asset) {
-        p("adding asset: " + asset.name + " to query: " + staticQuery.getName());
+        p("adding asset: " + asset.getName() + " to query: " + staticQuery.getName());
         Transaction tx = graphDb.beginTx();
         try { 
             Node list = graphDb.getNodeById(staticQuery.listid);
@@ -237,7 +244,7 @@ public class AssetDB {
     }
     
     void removeFromStaticList(StaticQuery staticQuery, Asset asset) {
-        p("removing asset: " + asset.name + " from query " + staticQuery.getName());
+        p("removing asset: " + asset.getName() + " from query " + staticQuery.getName());
         Transaction tx = graphDb.beginTx();
         try { 
             Node list = graphDb.getNodeById(staticQuery.listid);
