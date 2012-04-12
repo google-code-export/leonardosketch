@@ -128,7 +128,6 @@ public class AssetDB {
     }
 
 
-
     private static enum RelTypes implements RelationshipType {
         KNOWS, OWNED
     }
@@ -264,7 +263,20 @@ public class AssetDB {
         }
     }
 
-    
+    public void delete(StaticQuery sq) {
+        Transaction tx = graphDb.beginTx();
+        try {
+            for(Relationship rel : sq.getNode().getRelationships()) {
+                rel.delete();
+            }
+            sq.getNode().delete();
+            tx.success();
+        } finally {
+            tx.finish();
+        }
+    }
+
+
     List<Asset> getStaticList(long listid) {
         Node list = graphDb.getNodeById(listid);
         List<Asset> assets = new ArrayList<Asset>();
@@ -428,7 +440,7 @@ public class AssetDB {
                 }
                 n.delete();
             }
-            u.p("there are " + kindsIndex.get(KIND,FONT).size() + " fonts now");
+            u.p("there are " + kindsIndex.get(KIND, FONT).size() + " fonts now");
             u.p("there are " + kindsIndex.get(KIND,PATTERN).size() + " patterns now");
 
             for(Node n : listsIndex.query(KIND,"*")) {
