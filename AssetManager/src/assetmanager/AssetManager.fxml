@@ -18,12 +18,12 @@
         <Separator id="separatorVertical1" orientation="VERTICAL" prefWidth="40.0" visible="false" />
         <Button fx:id="delete" text="Delete" />
         <Separator id="separatorVertical2" orientation="VERTICAL" prefWidth="50.0" visible="false" />
-        <ToggleButton fx:id="switchTableView">
+        <ToggleButton fx:id="switchTableView" selected="true">
           <toggleGroup>
             <ToggleGroup fx:id="g1" />
           </toggleGroup>
         </ToggleButton>
-        <ToggleButton fx:id="switchThumbView" selected="true" toggleGroup="$g1" />
+        <ToggleButton fx:id="switchThumbView" selected="false" toggleGroup="$g1" />
         <Separator id="separatorVertical4" orientation="VERTICAL" prefWidth="100.0" visible="false" />
         <TextField fx:id="search" prefColumnCount="10" />
       </items>
