@@ -17,16 +17,19 @@ import java.io.InputStream;
  * @author josh
  */
 public class Asset {
-    final String filepath;
-    final long id;
-    private AssetDB db;
-    private Node node;
+    private String filepath;
+    protected AssetDB db;
+    protected Node node;
 
-    Asset(AssetDB assetDB, Node node, String filepath, long id) {
+    Asset(AssetDB assetDB, Node node, String filepath) {
         this.node = node;
         this.filepath = filepath;
-        this.id = id;
         this.db = assetDB;
+    }
+
+    protected Asset(AssetDB db, Node node) {
+        this.node = node;
+        this.db = db;
     }
 
     public String getName() {
@@ -53,5 +56,9 @@ public class Asset {
         } finally {
             tx.finish();
         }
+    }
+
+    public Node getNode() {
+        return node;
     }
 }
