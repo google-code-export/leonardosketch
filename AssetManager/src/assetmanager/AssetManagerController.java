@@ -67,7 +67,6 @@ public class AssetManagerController implements Initializable {
     private static final DataFormat ASSETS = new DataFormat("ASSETS");
     private TreeItem<Query> staticItem;
 
-    @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         
         db = AssetDB.getInstance();
@@ -190,7 +189,6 @@ public class AssetManagerController implements Initializable {
         //event handlers
         queryTree.getSelectionModel().selectedItemProperty()
                 .addListener(new ChangeListener<TreeItem<Query>>() {
-            @Override
             public void changed(ObservableValue<? extends TreeItem<Query>> value, TreeItem<Query> oldItem, TreeItem<Query> newItem) {
                 Query query = value.getValue().getValue();
                 if(!query.isSelectable()) return;
@@ -202,7 +200,6 @@ public class AssetManagerController implements Initializable {
                 List<Node> images = new ArrayList<Node>();
                 for(Asset a : results) {
                     if(AssetDB.PATTERN.equals(a.getKind())) {
-                        p("loading up an image: " + a.getFile());
                         try {
                             images.add(new ImageView(a.getFile().toURI().toURL().toExternalForm()));
                         } catch (MalformedURLException ex) {
@@ -211,7 +208,6 @@ public class AssetManagerController implements Initializable {
                         }
                     }
                     if(AssetDB.FONT.equals(a.getKind())) {
-                        p("loading up a font: " + a.getName());
                         images.add(new Label("Font: " + a.getName()));
                     }
                 }
@@ -283,39 +279,9 @@ public class AssetManagerController implements Initializable {
                 if(!(currentQuery instanceof StaticQuery)) return;
             }
         });
-        
-        
-        /*
-        queryTree.setOnDragOver(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent e) {
-                p("dragging over tree");
-                if(e.getGestureSource() == table) {
-                    e.acceptTransferModes(TransferMode.COPY_OR_MOVE);
-                }
-                e.consume();
-            }
-        });
-        
-        queryTree.setOnDragDropped(new EventHandler<DragEvent>() {
-            @Override
-            public void handle(DragEvent e) {
-                Dragboard db = e.getDragboard();
-                boolean success = false;
-                if(db.hasString()) {
-                    p("got text: " + db.getString());
-                    success = true;
-                }
-                e.setDropCompleted(success);
-                e.consume();
-            }
-        });
-        */
-        
     }
 
     private EventHandler<ActionEvent> addNewListAction = new EventHandler<ActionEvent>() {
-        @Override
         public void handle(ActionEvent e) {
             StaticQuery custom = db.createStaticList("new list");
             staticItem.getChildren().add(new TreeItem<Query>(custom));
@@ -362,7 +328,6 @@ public class AssetManagerController implements Initializable {
     }
 
     private EventHandler<? super DragEvent> staticQueryEnter = new EventHandler<DragEvent>() {
-        @Override
         public void handle(DragEvent e) {
             TreeCell<Query> cell = (TreeCell<Query>) e.getTarget();
             cell.getStyleClass().add("droptarget");
@@ -370,7 +335,6 @@ public class AssetManagerController implements Initializable {
         }
     };
     private EventHandler<? super DragEvent> staticQueryOver = new EventHandler<DragEvent>() {
-        @Override
         public void handle(DragEvent e) {
             if(e.getGestureSource() == table) {
                 e.acceptTransferModes(TransferMode.ANY);
@@ -380,7 +344,6 @@ public class AssetManagerController implements Initializable {
     };
     
     private EventHandler<? super DragEvent> staticQueryExit = new EventHandler<DragEvent>() {
-        @Override
         public void handle(DragEvent e) {
             TreeCell<Query> cell = (TreeCell<Query>) e.getTarget();
             cell.getStyleClass().remove("droptarget");
@@ -389,7 +352,6 @@ public class AssetManagerController implements Initializable {
     };
     
     private EventHandler<? super DragEvent> staticQueryDrop = new EventHandler<DragEvent>() {
-        @Override
         public void handle(DragEvent e) {
             boolean success = false;
             TreeCell<Query> cell = (TreeCell<Query>) e.getGestureTarget();
@@ -411,7 +373,6 @@ public class AssetManagerController implements Initializable {
     
     
     private EventHandler<? super DragEvent> libraryQueryEnter = new EventHandler<DragEvent>() {
-        @Override
         public void handle(DragEvent e) {
             if(e.getDragboard().hasFiles()) {
                 TreeCell<Query> cell = (TreeCell<Query>) e.getTarget();
@@ -422,8 +383,6 @@ public class AssetManagerController implements Initializable {
     };
     
     private EventHandler<? super DragEvent> libraryQueryOver = new EventHandler<DragEvent>() {
-
-        @Override
         public void handle(DragEvent e) {
             if(e.getDragboard().hasFiles()) {
                 e.acceptTransferModes(TransferMode.ANY);
@@ -432,18 +391,14 @@ public class AssetManagerController implements Initializable {
     };
     
     private EventHandler<? super DragEvent> libraryQueryExit = new EventHandler<DragEvent>() {
-        @Override
         public void handle(DragEvent arg0) {
         }
     };
     
     private EventHandler<? super DragEvent> libraryQueryDrop = new EventHandler<DragEvent>() {
-        @Override
         public void handle(DragEvent e) {
-            p("doing the drop");
             boolean success = false;
             if(e.getDragboard().hasFiles()) {
-                p("got files. doing the end");
                 for(File file : e.getDragboard().getFiles()) {
                     if(file.getName().endsWith(".png")) {
                         try {
@@ -468,7 +423,7 @@ public class AssetManagerController implements Initializable {
 
         @Override
         public void startEdit() {
-            super.startEdit();    //To change body of overridden methods use File | Settings | File Templates.
+            super.startEdit();
             if(textField == null) {
                 createTextField();
             }
@@ -479,7 +434,7 @@ public class AssetManagerController implements Initializable {
 
         @Override
         public void cancelEdit() {
-            super.cancelEdit();    //To change body of overridden methods use File | Settings | File Templates.
+            super.cancelEdit();
             setText(getString());
             setContentDisplay(ContentDisplay.TEXT_ONLY);
         }
