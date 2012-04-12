@@ -26,7 +26,6 @@ import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.image.MasterImageCache;
 import org.joshy.gfx.util.localization.Localization;
 import org.joshy.gfx.util.u;
-import org.joshy.gfx.util.xml.XMLRequest;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrUploadAction;
 import org.joshy.sketch.actions.io.*;
@@ -34,7 +33,6 @@ import org.joshy.sketch.actions.pages.PageListPanel;
 import org.joshy.sketch.actions.swatches.ColorSwatchManager;
 import org.joshy.sketch.actions.swatches.PatternManager;
 import org.joshy.sketch.actions.symbols.SymbolManager;
-import org.joshy.sketch.canvas.DocumentCanvas;
 import org.joshy.sketch.controls.*;
 import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.modes.DocContext;
@@ -55,7 +53,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -67,7 +64,7 @@ public class Main implements Runnable {
     public static final File SETTINGS_FILE = new File(homedir,"settings.txt");
     public static final File SCRIPTS_DIR = new File(homedir,"scripts");
 
-    public SymbolManager symbolManager = new SymbolManager(new File(homedir,"symbols"));
+    public SymbolManager symbolManager;
     public ColorSwatchManager colorManager;
     public PatternManager patternManager;
     public PropertyManager propMan;
@@ -515,7 +512,8 @@ public class Main implements Runnable {
 
         patternManager = new PatternManager(assetDatabase);
         colorManager = new ColorSwatchManager(assetDatabase);
-        //new File(new File(homedir,"patterns"),"patterns.xml"));
+        symbolManager = new SymbolManager(assetDatabase);
+
 
 
         addFontIfMissing(getFont("Chunk.ttf"), "ChunkFive");

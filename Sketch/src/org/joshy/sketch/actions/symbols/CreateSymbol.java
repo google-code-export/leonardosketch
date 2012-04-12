@@ -30,6 +30,6 @@ public class CreateSymbol extends SAction {
         dupe.setTranslateY(0);
 
         context.getSymbolManager().add(dupe);
-        context.getSymbolManager().save();
+        //context.getSymbolManager().save();
     }
 }
