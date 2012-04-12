@@ -174,7 +174,17 @@ public class AssetManagerController implements Initializable {
 
         nameColumn.setCellFactory(new Callback<TableColumn<Asset, String>, TableCell<Asset, String>>() {
             public TableCell<Asset, String> call(TableColumn<Asset, String> assetStringTableColumn) {
-                return new EditableTableCell();
+                EditableTableCell cell = new EditableTableCell();
+                cell.setOnDragDetected(new EventHandler<MouseEvent>() {
+                    public void handle(MouseEvent e) {
+                        Dragboard db = table.startDragAndDrop(TransferMode.ANY);
+                        Map<DataFormat,Object> map = new HashMap<DataFormat, Object>();
+                        map.put(DataFormat.PLAIN_TEXT,"foo");
+                        db.setContent(map);
+                        e.consume();
+                    }
+                });
+                return cell;
             }
         });
         nameColumn.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Asset, String>>() {
@@ -184,6 +194,7 @@ public class AssetManagerController implements Initializable {
                         .setName(e.getNewValue());
             }
         });
+
         table.getColumns().add(nameColumn);
         table.setEditable(true);
         
@@ -307,18 +318,6 @@ public class AssetManagerController implements Initializable {
         });
         
         
-                             /*
-        table.setOnDragDetected(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                Dragboard db = table.startDragAndDrop(TransferMode.ANY);
-                Map<DataFormat,Object> map = new HashMap<DataFormat, Object>();
-                map.put(DataFormat.PLAIN_TEXT,"foo");
-                db.setContent(map);
-                e.consume();
-            }
-        });
-                               */
         /*
         queryTree.setOnDragOver(new EventHandler<DragEvent>() {
             @Override
