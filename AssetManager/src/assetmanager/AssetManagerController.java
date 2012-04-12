@@ -278,7 +278,11 @@ public class AssetManagerController implements Initializable {
                 table.setItems(FXCollections.observableList(db.searchByAnyText(arg2)));
             }
         });
-        
+
+
+        anchorPane1.setVisible(false);
+        table.setVisible(true);
+
         switchTableView.setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent arg0) {
                 anchorPane1.setVisible(false);
