@@ -23,6 +23,7 @@
       <entry name="?*.js" />
       <entry name="?*.svg" />
       <entry name="?*.fxml" />
+      <entry name="?*.txt" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>
