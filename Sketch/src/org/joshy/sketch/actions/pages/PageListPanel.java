@@ -12,7 +12,6 @@ import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.DocumentActions;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
@@ -130,13 +129,11 @@ public class PageListPanel extends HFlexBox {
                         dragIndex = (int)(dragX/100);
                         listview.setDropIndicatorVisible(true);
                         listview.setDropIndicatorIndex(dragIndex);
-                        u.p("drag index = " + dragIndex);
                         setDrawingDirty();
                         return;
                     }
                     double diff = event.getX()-start;
                     if(Math.abs(diff) > 10){
-                        u.p("drag threshold!");
                         dragItem = listview.getModel().get(listview.getSelectedIndex());
                         setDrawingDirty();
                         return;
