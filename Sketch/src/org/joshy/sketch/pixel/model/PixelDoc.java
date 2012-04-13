@@ -21,6 +21,8 @@ public class PixelDoc extends CanvasDocument {
     private FlatColor backgroundColor = FlatColor.WHITE;
     private boolean repeat = false;
     private int repeatSize = 16;
+    private int maxTileX = 1;
+    private int maxTileY = 1;
 
     public PixelDoc() {
         layers = new ArrayList<PixelLayer>();
@@ -78,4 +80,18 @@ public class PixelDoc extends CanvasDocument {
     public boolean isRepeat() {
         return repeat;
     }
+
+    public int getMaxTileX() {
+        return maxTileX;
+    }
+
+    public int getMaxTileY() {
+        return maxTileY;
+    }
+
+    public void addedTile(int tx, int ty) {
+        maxTileX = Math.max(maxTileX,tx);
+        maxTileY = Math.max(maxTileY,ty);
+    }
+
 }

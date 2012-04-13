@@ -1,5 +1,6 @@
 package org.joshy.sketch.pixel.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,8 +37,9 @@ public class PixelLayer {
 
     //tile space
     public PixelTile createTile(int tx, int ty) {
-        PixelTile pt = new PixelTile();
+        PixelTile pt = new PixelTile(tx,ty);
         tiles.put(genKey(tx,ty),pt);
+        document.addedTile(tx,ty);
         return pt;
     }
 
@@ -51,6 +53,10 @@ public class PixelLayer {
 
     public void clearAll() {
         tiles.clear();
+    }
+
+    public Collection<PixelTile> getTiles() {
+        return tiles.values();
     }
 
     private static class RepeatPixelGraphics extends PixelGraphics {

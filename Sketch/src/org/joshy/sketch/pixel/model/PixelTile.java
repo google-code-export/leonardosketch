@@ -14,8 +14,12 @@ import java.awt.image.BufferedImage;
 public class PixelTile {
     private Image image;
     BufferedImage buffer;
+    private int x;
+    private int y;
 
-    public PixelTile() {
+    public PixelTile(int tx, int ty) {
+        this.x = tx;
+        this.y = ty;
         buffer = new BufferedImage(256,256, BufferedImage.TYPE_INT_ARGB);
         image = Image.create(buffer);
     }
@@ -26,5 +30,13 @@ public class PixelTile {
 
     public BufferedImage getBuffer() {
         return buffer;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

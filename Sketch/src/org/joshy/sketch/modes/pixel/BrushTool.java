@@ -86,6 +86,7 @@ public class BrushTool extends PixelTool {
 
     @Override
     protected void mouseReleased(MouseEvent event,  Point2D cursor) {
+        getContext().getCanvas().getScrollPane().doLayout();
     }
 
 }
