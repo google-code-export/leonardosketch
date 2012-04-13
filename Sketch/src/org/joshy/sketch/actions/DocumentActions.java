@@ -7,10 +7,7 @@ import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.ChangedEvent;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.Label;
-import org.joshy.gfx.node.control.PopupMenuButton;
-import org.joshy.gfx.node.control.Textbox;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.VFlexBox;
@@ -204,5 +201,41 @@ public class DocumentActions {
             case End: g2.setEndY(bounds.getY2()); break;
         }
         return g2;
+    }
+
+    public static class GotoPreviousPage extends SAction {
+        private VectorDocContext context;
+
+        public GotoPreviousPage(VectorDocContext context) {
+            super();
+            this.context = context;
+        }
+
+        @Override
+        public void execute() throws Exception {
+            int n = context.getDocument().getCurrentPageIndex();
+            if(n > 0) {
+                context.getDocument().setCurrentPage(n-1);
+                context.getSelection().clear();
+            }
+        }
+    }
+
+    public static class GotoNextPage extends SAction {
+        private VectorDocContext context;
+
+        public GotoNextPage(VectorDocContext context) {
+            super();
+            this.context = context;
+        }
+
+        @Override
+        public void execute() throws Exception {
+            int n = context.getDocument().getCurrentPageIndex();
+            if(n < context.getDocument().getPages().size()-1) {
+                context.getDocument().setCurrentPage(n+1);
+                context.getSelection().clear();
+            }
+        }
     }
 }
