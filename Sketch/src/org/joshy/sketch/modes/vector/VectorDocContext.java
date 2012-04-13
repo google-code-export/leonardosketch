@@ -292,7 +292,10 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
                 .addItem(getString("menus.setBackgroundColor"), new DocumentActions.SetBackground(context,main))
                 .addItem("New Page", new DocumentActions.AddNewPage(context,main))
                 .addItem("Set Page Name", new DocumentActions.SetPageName(context,main))
-                );
+                .addItem("Goto Previous Page", "LEFT", new DocumentActions.GotoPreviousPage(context))
+                .addItem("Goto Next Page", "RIGHT", new DocumentActions.GotoNextPage(context))
+
+        );
 
         rebuildSymbolMenu(menubar);
 
