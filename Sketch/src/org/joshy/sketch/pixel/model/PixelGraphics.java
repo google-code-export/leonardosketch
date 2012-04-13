@@ -1,6 +1,7 @@
 package org.joshy.sketch.pixel.model;
 
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.util.u;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -67,7 +68,7 @@ public class PixelGraphics {
             for(int j=ty; j<=ty2; j++) {
                 PixelTile tile = target.getTile(i,j);
                 if(tile == null) {
-                    //u.p("creating a tile at: " + (i) + " " + (j));
+                    u.p("creating a tile at: " + (i) + " " + (j));
                     tile = target.createTile(i,j);
                 }
 
