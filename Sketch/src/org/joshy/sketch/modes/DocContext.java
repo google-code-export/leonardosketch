@@ -46,7 +46,7 @@ public abstract class DocContext<C extends DocumentCanvas, D extends CanvasDocum
     public DocContext(Main main, DocModeHelper mode) {
         this.main = main;
         this.modeHelper = mode;
-        stage = Stage.createStage();
+        stage = Stage.createFullscreenEnabledStage();
         undoManager = new UndoManager(this);
         notificationIndicator = new NotificationIndicator();
     }

@@ -881,7 +881,7 @@ public class Main implements Runnable {
 
     public static void saveSettings() throws IOException {
         u.p("saving settings to : " + SETTINGS_FILE.getAbsolutePath());
-        settings.store(new FileWriter(SETTINGS_FILE),"Leonardo settings");
+        settings.store(new FileWriter(SETTINGS_FILE), "Leonardo settings");
     }
 
     public List<DocModeHelper> getModeHelpers() {
