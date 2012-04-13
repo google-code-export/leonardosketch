@@ -314,6 +314,14 @@ public class ViewActions {
                 double s2 = getHeight()/h;
                 double s = Math.min(s1,s2);
                 gfx.scale(s,s);
+
+                if(context.getDocument() instanceof SketchDocument) {
+                    SketchDocument d = (SketchDocument) context.getDocument();
+                    gfx.setPaint(d.getBackgroundFill());
+                    gfx.fillRect(0,0,w,h);
+                }
+
+
                 //draw all nodes
                 SketchDocument doc = (SketchDocument) context.getDocument();
                 for(SNode node : doc.getCurrentPage().getNodes()) {
