@@ -61,7 +61,6 @@ public class UpdateChecker {
     }
 
     private static void verifyUpdate(Doc doc) throws XPathExpressionException {
-        u.p("callback: " + doc);
         u.p("current build number = " + Main.CURRENT_BUILD_NUMBER);
         List<Elem> newReleases = new ArrayList<Elem>();
         for(Elem release : doc.xpath("/updates/release")) {
