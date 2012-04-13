@@ -4,23 +4,23 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Transform;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.MouseEvent;
-import org.joshy.gfx.event.SelectionEvent;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.ListModel;
 import org.joshy.gfx.node.control.ListView;
 import org.joshy.gfx.node.control.ScrollPane;
-import org.joshy.gfx.node.layout.StackPanel;
+import org.joshy.gfx.node.layout.HFlexBox;
+import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.util.u;
+import org.joshy.sketch.actions.DocumentActions;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
 /** A scrolling list of mini-views of the pages in the doc.
  * Lets you jump from page to page.
  */
-public class PageListPanel extends StackPanel {
+public class PageListPanel extends HFlexBox {
     private ScrollPane scroll;
     public ListView<SketchDocument.SketchPage> listview;
     private SketchDocument.SketchPage dragItem;
@@ -44,49 +44,68 @@ public class PageListPanel extends StackPanel {
                 return context.getDocument().getPages().size();
             }
         });
-        listview.setRenderer(new ListView.ItemRenderer<SketchDocument.SketchPage>(){
+        listview.setRenderer(new ListView.ItemRenderer<SketchDocument.SketchPage>() {
             public void draw(GFX gfx, ListView listView, SketchDocument.SketchPage item, int index, double x, double y, double width, double height) {
                 gfx.setPaint(context.getDocument().getBackgroundFill());
                 gfx.fillRect(x, y, width, height);
                 Bounds oldClip = gfx.getClipRect();
-                gfx.setClipRect(new Bounds(x,y,width, height));
-                if(item != null) {
-                    gfx.translate(x,y);
+                gfx.setClipRect(new Bounds(x, y, width, height));
+                if (item != null) {
+                    gfx.translate(x, y);
                     double w = context.getDocument().getWidth();
                     double h = context.getDocument().getHeight();
-                    double s = 100.0/w;
-                    for(SNode node : item.getNodes()) {
-                        gfx.scale(s,s);
-                        PageListPanel.this.draw(gfx,node);
-                        gfx.scale(1/s,1/s);
+                    double s = 100.0 / w;
+                    for (SNode node : item.getNodes()) {
+                        gfx.scale(s, s);
+                        PageListPanel.this.draw(gfx, node);
+                        gfx.scale(1 / s, 1 / s);
                     }
-                    gfx.translate(-x,-y);
+                    gfx.translate(-x, -y);
                 }
-                if(context.getDocument().getCurrentPage() == item) {
-                    gfx.setPaint(new FlatColor(0,0,0,0.1));
-                    gfx.fillRect(x,y,width,height);
+                if (context.getDocument().getCurrentPage() == item) {
+                    gfx.setPaint(new FlatColor(0, 0, 0, 0.1));
+                    gfx.fillRect(x, y, width, height);
                     gfx.setPaint(FlatColor.GRAY);
-                    gfx.drawRect(x,y,width-1,height-1);
+                    gfx.drawRect(x, y, width - 1, height - 1);
                 } else {
                     gfx.setPaint(FlatColor.BLACK);
-                    gfx.drawRect(x,y,width,height);
+                    gfx.drawRect(x, y, width, height);
                 }
                 gfx.setClipRect(oldClip);
-                gfx.translate(0,y+height-1);
+                gfx.translate(0, y + height - 1);
                 gfx.setPaint(FlatColor.WHITE);
-                gfx.fillRect(x,-20,width-1,20);
+                gfx.fillRect(x, -20, width - 1, 20);
                 gfx.setPaint(FlatColor.BLACK);
-                gfx.drawRect(x,-20,width,20);
+                gfx.drawRect(x, -20, width, 20);
                 gfx.setPaint(FlatColor.BLACK);
                 String text = "";
-                if(item != null) text = item.getName();
-                gfx.drawText(text, Font.DEFAULT,x+5,-5);
-                gfx.translate(0,-(y+height-1));
+                if (item != null) text = item.getName();
+                gfx.drawText(text, Font.DEFAULT, x + 5, -5);
+                gfx.translate(0, -(y + height - 1));
             }
         });
         listview.setOrientation(ListView.Orientation.Horizontal);
         scroll.setContent(listview);
-        this.add(scroll);
+
+        VFlexBox toolbar = new VFlexBox();
+        Button bt = new Button("+");
+
+        final DocumentActions.AddNewPage act = new DocumentActions.AddNewPage(context,context.getMain());
+        bt.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                try {
+                    act.execute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        toolbar.add(bt);
+        this.add(toolbar, 0);
+
+        this.add(scroll,1);
+
+        this.setBoxAlign(Align.Stretch);
 
         EventBus.getSystem().addListener(listview, SelectionEvent.Changed, new Callback<SelectionEvent>() {
             public void call(SelectionEvent event) {
