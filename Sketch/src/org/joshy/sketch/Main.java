@@ -519,11 +519,11 @@ public class Main implements Runnable {
         addFontIfMissing(getFont("Chunk.ttf"), "ChunkFive");
         addFontIfMissing(getFont("belligerent.ttf"), "BelligerentMadness");
         addFontIfMissing(getFont("orbitron-medium.ttf"), "Orbitron-Medium");
-        addFontIfMissing(getFont("OFLGoudyStMTT.ttf"), "OFL Sorts Mill Goudy TT");
-        addFontIfMissing(getFont("raleway_thin.ttf"), "Raleway");
-        addFontIfMissing(getFont("Sniglet_Regular.ttf"), "Sniglet");
-        addFontIfMissing(getFont("league_gothic.ttf"), "League Gothic");
-        addFontIfMissing(getFont("OpenSans-Regular.ttf"), "Open Sans");
+        addFontIfMissing(getFont("OFLGoudyStMTT.ttf"), "OFLGoudyStMTT");
+        addFontIfMissing(getFont("raleway_thin.ttf"), "Raleway-Thin");
+        addFontIfMissing(getFont("Sniglet_Regular.ttf"), "Sniglet-Regular");
+        addFontIfMissing(getFont("league_gothic.ttf"), "LeagueGothic");
+        addFontIfMissing(getFont("OpenSans-Regular.ttf"), "OpenSans");
 
         //resolve all fonts to make sure they are usable
         for(Asset asset : assetDatabase.getAllFonts()) {
