@@ -79,6 +79,7 @@ public class AssetManagerController implements Initializable {
     
     private static final DataFormat ASSETS = new DataFormat("ASSETS");
     private TreeItem<Query> staticLists;
+    private LibraryQuery all;
 
     public void initialize(URL arg0, ResourceBundle arg1) {
         
@@ -91,7 +92,7 @@ public class AssetManagerController implements Initializable {
         TreeItem<Query> libraryItem = new TreeItem<Query>(library);
         libraryItem.setExpanded(true);
 
-        final LibraryQuery all = new LibraryQuery("Everything","*",0,1);
+        all = new LibraryQuery("Everything","*",0,1);
         final TreeItem<Query> allitem = new TreeItem<Query>(all);
         Query fonts = new Query("Fonts",AssetDB.FONT,6,2);
         Query symbols = new Query("Symbols",AssetDB.SYMBOLSET,4,0);
@@ -127,12 +128,30 @@ public class AssetManagerController implements Initializable {
         queryTree.setEditable(true);
 
 
-        
-        
-        
-        
-        
-        
+
+
+
+        //declare context menu
+        final ContextMenu assetContextMenu = new ContextMenu();
+
+
+        MenuItem reveal = new MenuItem("Show on desktop");
+        reveal.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+            }
+        });
+
+        MenuItem deleteItem = new MenuItem("Delete");
+        deleteItem.setOnAction(new DeleteAction());
+
+        MenuItem info = new MenuItem("Info");
+        info.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent actionEvent) {
+            }
+        });
+
+        assetContextMenu.getItems().addAll(info, reveal, deleteItem);
+
 
         // visuals
         miniIcons = new Image("AssetManager/src/assetmanager/glyphicons-black.png");
@@ -177,6 +196,7 @@ public class AssetManagerController implements Initializable {
                         e.consume();
                     }
                 });
+                cell.setContextMenu(assetContextMenu);
                 return cell;
             }
         });
@@ -240,7 +260,11 @@ public class AssetManagerController implements Initializable {
         
         
         search.promptTextProperty().set("search");
-        
+
+
+
+
+
         
         
         //event handlers
@@ -318,33 +342,7 @@ public class AssetManagerController implements Initializable {
         addListMenuItem.setOnAction(addNewListAction);
         
         
-        delete.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e) {
-                Query currentQuery = queryTree.getSelectionModel().getSelectedItem().getValue();
-                if(currentQuery == all) {
-                    ObservableList<Asset> assets = table.getItems();
-                    for(TablePosition tp : table.getSelectionModel().getSelectedCells()) {
-                        Asset asset = assets.get(tp.getRow());
-                        db.removeFromLibrary(asset);
-                    }
-                    table.getSelectionModel().clearSelection();
-                    table.setItems(FXCollections.observableList(all.execute(db)));
-                    return;
-                }
-                if(!(currentQuery instanceof StaticQuery)) return;
-                StaticQuery staticQuery = (StaticQuery) currentQuery;
-                ObservableList<Asset> assets = table.getItems();
-                List<Asset> toDelete = new ArrayList<Asset>();
-                for(TablePosition tp : table.getSelectionModel().getSelectedCells()) {
-                    toDelete.add(assets.get(tp.getRow()));
-                }
-                for(Asset item : toDelete) {
-                    assets.remove(item);
-                    db.removeFromStaticList(staticQuery,item);
-                }
-                table.getSelectionModel().clearSelection();
-            }
-        });
+        delete.setOnAction(new DeleteAction());
 
         deleteListMenuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent actionEvent) {
@@ -665,6 +663,38 @@ public class AssetManagerController implements Initializable {
 
         public String getString() {
             return getItem() == null ? "" : getItem().getName();
+        }
+    }
+
+    private class DeleteAction implements EventHandler<ActionEvent> {
+
+        public DeleteAction() {
+        }
+
+        public void handle(ActionEvent e) {
+            Query currentQuery = queryTree.getSelectionModel().getSelectedItem().getValue();
+            if(currentQuery == all) {
+                ObservableList<Asset> assets = table.getItems();
+                for(TablePosition tp : table.getSelectionModel().getSelectedCells()) {
+                    Asset asset = assets.get(tp.getRow());
+                    db.removeFromLibrary(asset);
+                }
+                table.getSelectionModel().clearSelection();
+                table.setItems(FXCollections.observableList(all.execute(db)));
+                return;
+            }
+            if(!(currentQuery instanceof StaticQuery)) return;
+            StaticQuery staticQuery = (StaticQuery) currentQuery;
+            ObservableList<Asset> assets = table.getItems();
+            List<Asset> toDelete = new ArrayList<Asset>();
+            for(TablePosition tp : table.getSelectionModel().getSelectedCells()) {
+                toDelete.add(assets.get(tp.getRow()));
+            }
+            for(Asset item : toDelete) {
+                assets.remove(item);
+                db.removeFromStaticList(staticQuery,item);
+            }
+            table.getSelectionModel().clearSelection();
         }
     }
 }
