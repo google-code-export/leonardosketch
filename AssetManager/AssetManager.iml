@@ -38,7 +38,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../javafx/javafx-sdk2.1.0-beta/rt/lib/jfxrt.jar!/" />
+          <root url="jar://$USER_HOME$/javafx/javafx-sdk2.1.0-beta/rt/lib/jfxrt.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

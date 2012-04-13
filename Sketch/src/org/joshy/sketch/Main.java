@@ -519,35 +519,17 @@ public class Main implements Runnable {
         addFontIfMissing(getFont("Chunk.ttf"), "ChunkFive");
         addFontIfMissing(getFont("belligerent.ttf"), "BelligerentMadness");
         addFontIfMissing(getFont("orbitron-medium.ttf"), "Orbitron-Medium");
-        /*
-        assetDatabase.copyAndAddFontIfMissing(getFont("belligerent.ttf"));
-        assetDatabase.copyAndAddFont(getFont("OFLGoudyStMTT.ttf"));
-        assetDatabase.copyAndAddFont(getFont("orbitron-medium.ttf"));
-        assetDatabase.copyAndAddFont(getFont("raleway_thin.ttf"));
-        assetDatabase.copyAndAddFont(getFont("Sniglet_Regular.ttf"));
-        assetDatabase.copyAndAddFont(getFont("league_gothic.ttf"));
-        assetDatabase.copyAndAddFont(getFont("OpenSans-Regular.ttf"));
-        */
-        /*
-        fonts = new Font[]{
-                Font.fromURL(getFont("belligerent.ttf")).size(30).resolve(),
-                Font.fromURL(getFont("Chunk.ttf")).resolve(),
-                Font.fromURL(getFont("OFLGoudyStMTT.ttf")).size(30).resolve(),
-                Font.fromURL(getFont("orbitron-medium.ttf")).resolve(),
-                Font.fromURL(getFont("raleway_thin.ttf")).resolve(),
-                Font.fromURL(getFont("Sniglet_Regular.ttf")).resolve(),
-                Font.fromURL(getFont("league_gothic.ttf")).resolve(),
-                Font.fromURL(getFont("OpenSans-Regular.ttf")).resolve(),
-        };
-        fontMap = new HashMap<String,Font>();
-        for(Font font : fonts) {
-            fontMap.put(font.getName(),font);
-        }
-        //fontMap.put(Font.DEFAULT.getName(),Font.DEFAULT);
+        addFontIfMissing(getFont("OFLGoudyStMTT.ttf"), "OFL Sorts Mill Goudy TT");
+        addFontIfMissing(getFont("raleway_thin.ttf"), "Raleway");
+        addFontIfMissing(getFont("Sniglet_Regular.ttf"), "Sniglet");
+        addFontIfMissing(getFont("league_gothic.ttf"), "League Gothic");
+        addFontIfMissing(getFont("OpenSans-Regular.ttf"), "Open Sans");
 
-        fontList = new ArrayList<String>();
-        fontList.addAll(fontMap.keySet());
-        */
+        //resolve all fonts to make sure they are usable
+        for(Asset asset : assetDatabase.getAllFonts()) {
+            new FontBuilder(asset.getFile()).resolve();
+        }
+
         modeHelpers.add(new VectorModeHelper(this));
         modeHelpers.add(new PresoModeHelper(this));
         modeHelpers.add(new PixelModeHelper(this));
@@ -578,20 +560,20 @@ public class Main implements Runnable {
 
     private void addFontIfMissing(URL font, String fontName) throws IOException {
         if(assetDatabase.getFontByName(fontName) == null) {
-            u.p("really copying file over");
+            u.p("installing default font: " + font);
             Asset asset = assetDatabase.copyAndAddFont(font);
             new FontBuilder(asset.getFile()).resolve();
         } else {
-            u.p("the font is already instaleld: " + fontName);
+            //u.p("the font is already instaleld: " + fontName);
             Asset asset = assetDatabase.getFontByName(fontName);
             new FontBuilder(asset.getFile()).resolve();
         }
     }
 
     private URL getFont(String s) {
-        u.p("local = " + getClass().getResource("resources/fonts/Chunk.ttf"));
+        //u.p("local = " + getClass().getResource("resources/fonts/Chunk.ttf"));
         URL res = getClass().getResource("resources/fonts/" + s);
-        u.p("resource = " + res);
+        //u.p("resource = " + res);
         return res;
     }
 
