@@ -68,8 +68,8 @@
         <javac destdir="build/classes/AssetManager" debug="true">
             <src path="AssetManager/src"/>
             <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="lib/javafx/native/mac"><include name="*.jar"/></fileset></classpath>
             <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
-            <classpath location="${javafx.dir}/jfxrt.jar"/>
             <classpath> <fileset dir="build/jars"><include name="*.jar"/></fileset></classpath>
         </javac>
         <copy todir="build/classes/AssetManager">
@@ -91,7 +91,7 @@
             <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
             <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
             <classpath> <fileset dir="build/jars"><include name="*.jar"/></fileset></classpath>
-            <classpath location="${javafx.dir}/jfxrt.jar"/>
+            <classpath> <fileset dir="lib/javafx/native/mac"><include name="*.jar"/></fileset></classpath>
         </javac>
         <copy todir="build/classes/Sketch">
              <fileset dir="Sketch/src">
