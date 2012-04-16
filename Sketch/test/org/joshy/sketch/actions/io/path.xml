@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<sketchy version='0'>
+    <info type='generic-drawing' backgroundFill='#ffffffff'>
+    </info>
+    <page>
+        <guidelines>        </guidelines>
+        <shape type='path' fillPaint='#ffff9166' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='1.0' translateY='24.0' closed='true'>
+            <pathpoint x='31.0' y='81.0' cx1='48.0' cy1='82.0' cx2='14.0' cy2='80.0'>                </pathpoint>
+            <pathpoint x='0.0' y='62.0' cx1='1.0' cy1='65.0' cx2='-1.0' cy2='59.0'>                </pathpoint>
+            <pathpoint x='29.0' y='36.0' cx1='6.0' cy1='25.0' cx2='52.0' cy2='47.0'>                </pathpoint>
+            <pathpoint x='46.0' y='11.0' cx1='52.0' cy1='16.0' cx2='40.0' cy2='6.0'>                </pathpoint>
+            <pathpoint x='78.0' y='4.0' cx1='68.0' cy1='-24.0' cx2='88.0' cy2='32.0'>                </pathpoint>
+            <pathpoint x='165.0' y='134.0' cx1='165.0' cy1='134.0' cx2='165.0' cy2='134.0'>                </pathpoint>
+        </shape>
+    </page>
+</sketchy>

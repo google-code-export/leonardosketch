@@ -1,0 +1,17 @@
+/* 
+    Document   : custom
+    Created on : Apr 10, 2012, 3:02:07 PM
+    Author     : josh
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.tree-cell.droptarget {
+    -fx-background-color: #aaddff;
+    -fx-text-fill: white;
+}
+
+.tree-cell.tree-header {
+    -fx-background-color: #999999;
+    -fx-text-fill: white;
+}

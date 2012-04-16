@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" xmlns:fx="http://javafx.com/fxml" fx:controller="assetmanager.AssetManagerController">
+  <children>
+    <ToolBar id="toolBar1" focusTraversable="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <items>
+        <Button id="button1" fx:id="addAssetButton" text="Add" />
+        <Button id="button4" fx:id="addNewList" text="New List" />
+        <Separator id="separatorVertical1" orientation="VERTICAL" prefWidth="40.0" visible="false" />
+        <Button fx:id="delete" text="Delete" />
+        <Separator id="separatorVertical2" orientation="VERTICAL" prefWidth="50.0" visible="false" />
+        <ToggleButton fx:id="switchTableView" selected="true">
+          <toggleGroup>
+            <ToggleGroup fx:id="g1" />
+          </toggleGroup>
+        </ToggleButton>
+        <ToggleButton fx:id="switchThumbView" selected="false" toggleGroup="$g1" />
+        <Separator id="separatorVertical4" orientation="VERTICAL" prefWidth="100.0" visible="false" />
+        <TextField fx:id="search" prefColumnCount="10" />
+      </items>
+    </ToolBar>
+    <TreeView fx:id="queryTree" editable="true" prefHeight="538.0000999999975" prefWidth="200.0" showRoot="false" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="32.0" />
+    <StackPane alignment="TOP_LEFT" prefHeight="568.0" prefWidth="700.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="32.0">
+      <TableView fx:id="table" StackPane.alignment="TOP_LEFT" />
+      <AnchorPane fx:id="anchorPane1" StackPane.alignment="TOP_LEFT">
+        <children>
+          <ScrollPane id="scrollPane1" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <content>
+              <FlowPane fx:id="imageView" hgap="10.0" prefHeight="200.0" styleClass="flow-pane" vgap="10.0">
+                <children>
+                  <Circle id="circle2" fill="DODGERBLUE" radius="55.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Circle id="circle3" fill="DODGERBLUE" radius="55.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Circle id="circle1" fill="DODGERBLUE" radius="40.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Circle id="circle4" fill="DODGERBLUE" radius="70.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Circle id="circle5" fill="DODGERBLUE" radius="70.5" stroke="BLACK" strokeType="INSIDE" />
+                  <Rectangle id="rectangle1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="111.0" stroke="BLACK" strokeType="INSIDE" width="207.0" />
+                  <Rectangle id="rectangle2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="181.0" stroke="BLACK" strokeType="INSIDE" width="207.0" />
+                  <Ellipse id="ellipse1" fill="DODGERBLUE" radiusX="100.0" radiusY="80.0" stroke="BLACK" strokeType="INSIDE" />
+                </children>
+                <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                </padding>
+              </FlowPane>
+            </content>
+          </ScrollPane>
+          <HBox id="hBox1" alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <children>
+              <Button fx:id="zoomOut" />
+              <Slider id="sliderHorizontal1" value="30.0" HBox.hgrow="NEVER" />
+              <Button fx:id="zoomIn" />
+            </children>
+            <padding>
+              <Insets right="2.0" />
+            </padding>
+          </HBox>
+        </children>
+      </AnchorPane>
+    </StackPane>
+    <MenuButton id="menuButton1" fx:id="queryMenu" text="MenuButton" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="79.0">
+      <items>
+        <MenuItem id="menuItem1" text="Add New List" fx:id="addListMenuItem" />
+        <MenuItem id="menuItem2" text="Delete List" fx:id="deleteListMenuItem" />
+      </items>
+    </MenuButton>
+  </children>
+  <stylesheets>
+    <URL value="@darksheet2.css" />
+  </stylesheets>
+</AnchorPane>

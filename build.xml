@@ -1,0 +1,364 @@
+<?xml version="1.0" ?>
+            
+<project default="help">
+
+    <target name="help">
+        <echo>ant build-sketch       just build leonardo</echo>
+        <echo>ant build-onejar       build leonardo onejar</echo>
+        <echo>ant dist               build everything</echo>
+        <echo>ant publish            publish to publish dir</echo>
+        <echo>ant build-coremodel    just the core model</echo>
+    </target>
+    
+    <target name="init">
+	<echo message="this is from the translation branch!"/>
+        <echo message="in init"/>
+        <buildnumber file="../leobuild.number"/>
+        <tstamp>
+            <format property="TIMESTAMP" pattern="yyyy-MM-dd_kk-mm"/>
+        </tstamp>
+        <echo message="timestamp = ${TIMESTAMP}"/>
+
+        <property  name="build.version" value="0.01"/>
+        <property  name="publish.dir" value="dist/foo"/>
+        <property  name="lib.jogl.dir" value="lib/jogl/"/>
+        <property  name="update.url" value="MUST_SET_UPDATE.URL"/>
+        <property  name="download.url" value="MUST_SET_DOWNLOAD.URL"/>
+        
+        <property name="javafx.dir" value="MUST_SET javafx.dir to the runtime"/>
+
+        <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
+        <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/LeonardoSketch/dist/jnlp/"/>
+        
+        <property name="amino.core.dir" value="../amino/build/jars"/>
+
+        <property name="app.name" value="Leonardo"/>
+        <echo message="amino core dir = ${amino.core.dir}"/>
+
+    </target>
+
+    <target name="clean">
+        <delete dir="build"/>
+        <delete dir="dist"/>
+    </target>
+    
+    
+    <target name="build-coremodel" depends="init">
+        <mkdir dir="build/classes/CoreModel"/>
+        <mkdir dir="build/jars/"/>
+        <javac destdir="build/classes/CoreModel" debug="true">
+            <src path="CoreModel/src"/>
+            <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
+        </javac>
+        <copy todir="build/classes/CoreModel">
+             <fileset dir="CoreModel/src">
+                 <include name="**"/>
+                 <exclude name="**/*.java"/>
+             </fileset>
+        </copy>
+        <jar destfile="build/jars/CoreModel.jar">
+            <fileset dir = "build/classes/CoreModel"></fileset>
+        </jar>
+    </target>
+    
+    <target name="build-assetmanager" depends="init">
+        <mkdir dir="build/classes/AssetManager"/>
+        <mkdir dir="build/jars/"/>
+        <javac destdir="build/classes/AssetManager" debug="true">
+            <src path="AssetManager/src"/>
+            <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
+            <classpath location="${javafx.dir}/jfxrt.jar"/>
+            <classpath> <fileset dir="build/jars"><include name="*.jar"/></fileset></classpath>
+        </javac>
+        <copy todir="build/classes/AssetManager">
+             <fileset dir="AssetManager/src">
+                 <include name="**"/>
+                 <exclude name="**/*.java"/>
+             </fileset>
+        </copy>
+        <jar destfile="build/jars/AssetManager.jar">
+            <fileset dir = "build/classes/AssetManager"></fileset>
+        </jar>
+    </target>
+    
+    <target name="build-sketch" depends="init, build-coremodel, build-assetmanager">
+        <mkdir dir="build/classes/Sketch"/>
+        <mkdir dir="build/jars/Sketch"/>
+        <javac destdir="build/classes/Sketch" debug="true">
+            <src path="Sketch/src"/>
+            <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="build/jars"><include name="*.jar"/></fileset></classpath>
+            <classpath location="${javafx.dir}/jfxrt.jar"/>
+        </javac>
+        <copy todir="build/classes/Sketch">
+             <fileset dir="Sketch/src">
+                 <include name="**"/>
+                 <exclude name="**/*.java"/>
+             </fileset>
+        </copy>
+
+        <echoproperties />
+        <propertyfile
+                file="build/classes/Sketch/org/joshy/sketch/release.properties">
+            <entry key="org.joshy.sketch.build.date" value="now" type="date"/>
+            <entry key="org.joshy.sketch.build.number" value="${build.number}"/>
+            <entry key="org.joshy.sketch.build.version" value="${build.version}"/>
+            <entry key="org.joshy.sketch.updateurl" value="${update.url}"/>
+            <entry key="org.joshy.sketch.downloadurl" value="${download.url}"/>
+        </propertyfile>
+
+        <jar destfile="build/jars/Sketch.jar">
+            <fileset dir = "build/classes/Sketch"></fileset>
+        </jar>
+        
+    </target>
+
+    <target name="build-mac" depends="build-sketch">
+        <!-- build the mac bundle -->
+        <java
+            classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
+
+            <arg value="--file=bundler.xml"/>
+            <arg value="--target=mac"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=${amino.core.dir}"/>
+            <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
+        </java>
+
+        <zip destfile="dist/${app.name}.app.zip">
+            <zipfileset dir="dist/mac">
+                <include name="${app.name}.app"/>
+                <include name="${app.name}.app/**"/>
+                <exclude name="${app.name}.app/Contents/MacOS/JavaApplicationStub"/>
+            </zipfileset>
+            <zipfileset dir="dist/mac" includes="${app.name}.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>
+        </zip>        
+    </target>
+    
+    <target name="build-win" depends="build-sketch">
+        <!-- build the mac bundle -->
+        <java
+            classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
+
+            <arg value="--file=bundler.xml"/>
+            <arg value="--target=win"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=${amino.core.dir}"/>
+            <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
+        </java>
+
+    </target>
+    <target name="build-onejar" depends="build-sketch">
+        <mkdir dir="dist"/>
+        <java
+            classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="--file=bundler.xml"/>
+            <arg value="--target=onejar"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=${amino.core.dir}"/>
+            <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
+        </java>
+    </target>
+    <target  name="build-jnlp" depends="build-sketch">
+        <echo message="doing jnlp version"/>
+        <java classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar" classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="--file=bundler.xml"/>
+            <arg value="--target=jnlp"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=${amino.core.dir}"/>
+            <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
+            <arg value="--codebase=${jnlp.codebase}"/>
+        </java>
+
+        <!-- copy over the icon -->
+        <copy todir="dist/jnlp/" file="resources/Turtle.png"/>
+
+        <!-- resign all of the jars -->
+
+        <unsignjar jar="dist/jnlp/lib/Sketch.jar"/>
+        <unsignjar jar="dist/jnlp/lib/amino-core.jar"/>
+        <unsignjar jar="dist/jnlp/lib/parboiled-0.9.7.3.jar"/>
+        <property name="keystore" value="bin/testkeystore"/>
+        <property name="alias" value="joshy2"/>
+
+        <signjar alias="${alias}" storepass="password" keystore="${keystore}">
+            <fileset dir="dist/jnlp/lib/">
+                <include name="*.jar"/>
+            </fileset>
+        </signjar>
+
+    </target>
+    
+    <target name="build-picker" depends="build-sketch">
+        <mkdir dir="dist"/>
+        <java
+            classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar"
+            classname="com.joshondesign.appbundler.Bundler" fork="true">
+            <arg value="--file=hsvpicker.xml"/>
+            <arg value="--target=onejar"/>
+            <arg value="--outdir=dist/"/>
+            <arg value="--jardir=${amino.core.dir}"/>
+            <arg value="--jardir=build/jars/"/>
+            <arg value="--jardir=lib/"/>
+        </java>
+    </target>
+
+    <macrodef name="unsignjar">
+
+        <attribute name="jar"/>
+
+        <sequential>
+        <!-- Remove any existing signatures from a JAR file. -->
+        <tempfile prefix="usignjar-" destdir="${java.io.tmpdir}" property="temp.file"/>
+            <echo message="Removing signatures from JAR: @{jar}"/>
+            <mkdir dir="${temp.file}"/>
+
+            <unjar src="@{jar}" dest="${temp.file}">
+                <patternset>
+                    <include name="**"/>
+                    <exclude name="META-INF/*.SF"/>
+                    <exclude name="META-INF/*.DSA"/>
+                    <exclude name="META-INF/*.RSA"/>
+                </patternset>
+            </unjar>
+
+            <delete file="@{jar}" failonerror="true"/>
+
+            <!-- Touch it in case the file didn't have a manifest.
+                 Otherwise the JAR task below will fail if the manifest
+             file doesn't exist. -->
+            <mkdir dir="${temp.file}/META-INF"/>
+            <touch file="${temp.file}/META-INF/MANIFEST.MF"/>
+
+            <jar destfile="@{jar}"
+                basedir="${temp.file}"
+                includes="**"
+                manifest="${temp.file}/META-INF/MANIFEST.MF"/>
+
+            <delete dir="${temp.file}" failonerror="true"/>
+        </sequential>
+    </macrodef>
+
+    
+    <target name="dist" depends="build-sketch, build-mac, build-jnlp, build-onejar, build-src, windows-exe">
+    </target>
+    
+    <target name="build-src" depends="init">
+        <zip destfile="dist/${app.name}.src.zip">
+            <zipfileset dir=".">
+                <include name="build.xml"/>
+                <include name="bundler.xml"/>
+                <include name="lib/**"/>
+                <include name="Sketch/**"/>
+                <include name="LICENSE.TXT"/>
+            </zipfileset>
+<!--            <zipfileset dir="dist/mac" includes="${app.name}.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>-->
+        </zip>        
+    </target>
+    
+    <target name="publish" depends="dist">
+        <copy todir="${publish.dir}">
+            <fileset dir="dist/">
+            </fileset>
+        </copy>
+        <echo file="${publish.dir}/index.html"><![CDATA[
+            <html>
+                <head>
+                    <title>Leonardo Daily Build ${build.number} ${TIMESTAMP}</title>
+                    <link rel="stylesheet" type="text/css" href="index.css"></link>
+                </head>
+                <body>
+                    <h1>Leonardo Daily Build</h1>
+                    <h2>Build number: ${build.number}</h2>
+                    <h2>Build date: ${TIMESTAMP}</h2>
+                    <h3>Builds</h3>
+                    
+                    <ul>
+                        <li><a href="Leonardo.app.zip">Leonardo</a> for Mac OS X </li>
+                        <li><a href="LeonardoSketch-windows.zip">Leonardo</a> for Windows</li>
+                        <li><a href="Leonardo.onejar.jar">Leonardo</a> double-clickable jar version for all platforms</li>
+                        <li><a href="jnlp/Leonardo.jnlp">Leonardo</a> JNLP version for all platforms</li>
+                        <li><a href="Leonardo.src.zip">source</a> zip</li>
+                        <li><a href="lib/">all jars</a></li>
+                    </ul>
+
+
+
+                    
+                </body>
+                    <script type="text/javascript">
+                    
+                      var _gaq = _gaq || [];
+                      _gaq.push(['_setAccount', 'UA-17798312-1']);
+                      _gaq.push(['_trackPageview']);
+                    
+                      (function() {
+                        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                      })();
+                    
+                    </script>    
+            </html>
+            ]]>
+        </echo>
+        <copy todir="${publish.dir}" file="bin/index.css"/>
+    </target>
+
+    <target name="run" depends="build-sketch">
+        <java classname="org.joshy.sketch.Main" fork="true">
+            <classpath path="build/jars/Core.jar"/>
+            <classpath path="build/jars/CoreModel.jar"/>
+            <classpath path="build/jars/Sketch.jar"/>
+            <classpath path="build/jars/AssetManager.jar"/>
+            <classpath path="${javafx.dir}/jfxrt.jar"/>
+            <classpath path="lib/parboiled-0.9.7.3.jar"/>
+            <classpath path="lib/XMLLib.jar"/>
+            <classpath path="lib/twitter4j-core-2.1.4.jar"/>
+            <classpath path="lib/JGoogleAnalytics_0.2.jar"/>
+            <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
+            <sysproperty key="apple.laf.useScreenMenuBar" value="true"/>
+            <jvmarg value="-Xdock:name=Leonardo"/>
+        </java>
+    </target>
+    
+    
+    <target name="parboiled">
+        <mkdir dir="build/classes/parboiled"/>
+        <javac destdir="build/classes/parboiled" debug="true">
+            <src path="t/"/>
+
+        </javac>
+    </target>
+    
+    <target name="windows-exe">
+        <taskdef name="jsmoothgen"
+             classname="net.charabia.jsmoothgen.ant.JSmoothGen"
+             classpath="bin/jsmooth/lib/jsmoothgen-ant.jar"/>        
+        <jsmoothgen project="bin/LeonardoSketch.jsmooth" 
+            skeletonroot="bin/jsmooth/skeletons"/>        
+            
+        <copy todir="dist" file="bin/LeonardoSketch.exe"/>
+        <zip destfile="dist/LeonardoSketch-windows.zip">
+            <zipfileset dir="dist" prefix="LeonardoSketch">
+                <include name="*.exe"/>
+                <include name="jnlp/**"/>
+            </zipfileset>
+        </zip>
+
+
+
+
+    </target>
+</project>
