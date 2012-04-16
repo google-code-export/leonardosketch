@@ -149,9 +149,9 @@
             <arg value="--file=bundler.xml"/>
             <arg value="--target=win"/>
             <arg value="--outdir=dist/"/>
+            <arg value="--jardir=lib/"/>
             <arg value="--jardir=${amino.core.dir}"/>
             <arg value="--jardir=build/jars/"/>
-            <arg value="--jardir=lib/"/>
         </java>
 
     </target>

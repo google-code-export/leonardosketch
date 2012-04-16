@@ -4,6 +4,7 @@
  */
 package assetmanager;
 
+import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.swatches.Palette;
 import org.neo4j.graphdb.*;
@@ -41,7 +42,7 @@ public class AssetDB {
     private File symbolsDir;
 
     public AssetDB() {
-        resourceDir = new File("/Users/josh/Library/Preferences/Leonardo/");
+        resourceDir = new File(OSUtil.getBaseStorageDir(System.getProperty("org.joshy.sketch.settings.basedirname","Leonardo")));
         resourceDir.mkdir();
         patternDir = new File(resourceDir,"patterns");
         patternDir.mkdir();
