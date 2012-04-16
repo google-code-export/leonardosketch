@@ -51,6 +51,12 @@
             <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
             <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
         </javac>
+        <copy todir="build/classes/CoreModel">
+             <fileset dir="CoreModel/src">
+                 <include name="**"/>
+                 <exclude name="**/*.java"/>
+             </fileset>
+        </copy>
         <jar destfile="build/jars/CoreModel.jar">
             <fileset dir = "build/classes/CoreModel"></fileset>
         </jar>
