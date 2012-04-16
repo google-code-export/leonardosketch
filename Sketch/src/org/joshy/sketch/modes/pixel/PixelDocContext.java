@@ -1,5 +1,6 @@
 package org.joshy.sketch.modes.pixel;
 
+import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.control.Button;
 import org.joshy.gfx.node.control.Control;
@@ -31,11 +32,12 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
     private PixelCanvas canvas;
     public PixelTool selectedTool;
     protected BiList<Button, PixelTool> tools = new BiList<Button, PixelTool>();
-    private PixelTool pencilTool;
     private PixelTool selectionTool;
     private ToggleGroup group;
-    private BrushTool brushTool;
+    private PencilTool pencilTool;
     private LineTool lineTool;
+    private BrushTool brushTool;
+    private SwatchColorPicker fg;
 
     public PixelDocContext(Main main, PixelModeHelper pixelModeHelper) {
         super(main,pixelModeHelper);
@@ -61,17 +63,17 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
     public void setupTools() throws Exception {
         toolbar = new VFlexBox();
 
-        pencilTool = new PencilTool(this);
-        tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_pencil.png")),pencilTool);
-
         brushTool = new BrushTool(this);
-        tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_pencil.png")),brushTool);
+        tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_ellipse.png")), brushTool);
+
+        pencilTool = new PencilTool(this);
+        tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_pencil.png")), pencilTool);
 
         selectionTool = new SelectionTool(this);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-tool_rect_selection.png")),selectionTool);
 
         lineTool = new LineTool(this);
-        tools.add(new ToolbarButton(Main.getIcon("cr22-action-tool_rect_selection.png")),lineTool);
+        tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_polyline.png")),lineTool);
 
         group = new ToggleGroup();
         for(Button button : tools.keys()) {
@@ -88,12 +90,12 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
             }
         });
         selectedTool = pencilTool;
-        pencilTool.enable();
+        //pencilTool.enable();
         selectButtonForTool(pencilTool);
 
 
 
-        final SwatchColorPicker fg = new SwatchColorPicker();
+        fg = new SwatchColorPicker();
         fg.onColorSelected(new Callback<ChangedEvent>() {
             public void call(ChangedEvent event) throws Exception {
                 getDocument().setForegroundColor(fg.getSelectedColor());
@@ -116,6 +118,20 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
                 }
             }
         });
+
+
+        //swap fg and bg
+        EventBus.getSystem().addListener(getCanvas(), KeyEvent.KeyTyped, new Callback<KeyEvent>() {
+            public void call(KeyEvent keyEvent) throws Exception {
+                if('x' == keyEvent.getKeyChar()) {
+                    FlatColor c1 = fg.getSelectedColor();
+                    FlatColor c2 = bg.getSelectedColor();
+                    fg.setSelectedColor(c2);
+                    bg.setSelectedColor(c1);
+                }
+            }
+        });
+
     }
     private void selectButtonForTool(PixelTool tool) {
         group.setSelectedButton(tools.getKey(tool));
@@ -124,6 +140,7 @@ public class PixelDocContext extends DocContext<PixelCanvas, PixelDoc> {
         selectedTool.disable();
         selectedTool = tool;
         selectedTool.enable();
+        getDocument().setForegroundColor(fg.getSelectedColor());
     }
 
     public PixelTool getSelectedTool() {
