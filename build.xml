@@ -250,7 +250,7 @@
     </macrodef>
 
     
-    <target name="dist" depends="build-sketch, build-mac, build-jnlp, build-onejar, build-src, windows-exe">
+    <target name="dist" depends="build-sketch, build-mac, build-jnlp, build-onejar, build-win, build-src">
     </target>
     
     <target name="build-src" depends="init">
