@@ -140,8 +140,10 @@
         </zip>        
     </target>
     
+    
+    
     <target name="build-win" depends="build-sketch">
-        <!-- build the mac bundle -->
+        <!-- build the win bundle -->
         <java
             classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar"
             classname="com.joshondesign.appbundler.Bundler" fork="true">
@@ -154,7 +156,16 @@
             <arg value="--jardir=build/jars/"/>
         </java>
 
+        <!-- zip it up -->
+        <zip destfile="dist/${app.name}.win.zip">
+            <zipfileset dir="dist/win">
+                <include name="**"/>
+            </zipfileset>
+        </zip>        
     </target>
+    
+    
+    
     <target name="build-onejar" depends="build-sketch">
         <mkdir dir="dist"/>
         <java
@@ -285,7 +296,7 @@
                     
                     <ul>
                         <li><a href="Leonardo.app.zip">Leonardo</a> for Mac OS X </li>
-                        <li><a href="LeonardoSketch-windows.zip">Leonardo</a> for Windows</li>
+                        <li><a href="LeonardoSketch.win.zip">Leonardo</a> for Windows</li>
                         <li><a href="Leonardo.onejar.jar">Leonardo</a> double-clickable jar version for all platforms</li>
                         <li><a href="jnlp/Leonardo.jnlp">Leonardo</a> JNLP version for all platforms</li>
                         <li><a href="Leonardo.src.zip">source</a> zip</li>
