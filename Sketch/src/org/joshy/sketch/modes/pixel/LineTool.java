@@ -38,12 +38,10 @@ public class LineTool extends PixelTool {
             angle = snapToAngle(angle);
             double dist = startPoint.distance(currentPoint);
             currentPoint = GeomUtil.calcPoint(startPoint,angle,dist);
-            //u.p("start point = " + startPoint + " " + currentPoint);
         }
         getContext().getCanvas().redraw();
     }
     private double snapToAngle(double angle) {
-        angle = Math.toDegrees(angle); //convert to degrees
         angle = (angle+360) % 360; //make positive
         long iangle = Math.round(angle / 15); //round to nearest octant
         return iangle * 15.0;
@@ -60,7 +58,6 @@ public class LineTool extends PixelTool {
                 ,(int)currentPoint.getX()
                 ,(int)currentPoint.getY()
         );
-        //g.fillOval((int)startPoint.getX(),(int)startPoint.getY(),10,10);
         getContext().getCanvas().redraw();
         currentPoint = null;
     }

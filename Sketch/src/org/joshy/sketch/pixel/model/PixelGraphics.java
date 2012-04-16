@@ -1,6 +1,7 @@
 package org.joshy.sketch.pixel.model;
 
 import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.util.u;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -37,10 +38,12 @@ public class PixelGraphics {
         });
     }
 
-    public void fillOval(final int x, final int y, final int w, final int h) {
+    public void fillOval(final int x, final int y, final int w, final int h, final boolean smooth) {
         fillShape(x/256,y/256,(x+w)/256, (y+h)/256,
                 new ShapeFillCallback() { public void fill(Graphics2D g2) {
-                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    if(smooth) {
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    }
                     g2.setPaint(new java.awt.Color(fill.getRGBA(), true));
                     g2.fillOval(x,y,w,h);
                 }}
@@ -65,7 +68,7 @@ public class PixelGraphics {
             for(int j=ty; j<=ty2; j++) {
                 PixelTile tile = target.getTile(i,j);
                 if(tile == null) {
-                    //u.p("creating a tile at: " + (i) + " " + (j));
+                    u.p("creating a tile at: " + (i) + " " + (j));
                     tile = target.createTile(i,j);
                 }
 

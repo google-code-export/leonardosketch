@@ -57,14 +57,14 @@ public class PixelDocTest implements Runnable {
         doc.add(layer3);
         g = layer3.getGraphics();
         g.setFill(FlatColor.BLUE);
-        g.fillOval(40,300,100,60);
+        g.fillOval(40,300,100,60,true);
 
         //draw an oval filled with red, then make a rectangular selection and fill it with green
         PixelLayer layer4 = new PixelLayer(doc);
         doc.add(layer4);
         g = layer4.getGraphics();
         g.setFill(FlatColor.RED);
-        g.fillOval(100,50,100,60);
+        g.fillOval(100,50,100,60,true);
         PixelSelection selection = new PixelSelection(doc);
         selection.addRect(100,50,30,200);
         g.setFill(FlatColor.GREEN);
