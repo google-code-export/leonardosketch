@@ -40,6 +40,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             out.attr("backgroundFill","patternPaint");
         }
         saveBooleanAttribute(out,"gridActive",doc);
+        saveBooleanAttribute(out,"pagesVisible",doc);
         saveAttribute(out,"width",doc);
         saveAttribute(out,"height",doc);
 
@@ -53,7 +54,7 @@ public class NativeExport implements ShapeExporter<XMLWriter> {
             PatternPaint pt = (PatternPaint) doc.getBackgroundFill();
             savePatternPaint(out, pt);
         }
-        out.end();
+        out.end();//info
     }
 
     private void savePatternPaint(XMLWriter out, PatternPaint pattern) {

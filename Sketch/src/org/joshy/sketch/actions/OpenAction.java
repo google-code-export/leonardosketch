@@ -157,6 +157,7 @@ public class OpenAction extends SAction {
         Elem info = doc.xpathElement("/sketchy/info");
         if(info != null) {
             loadBooleanAttribute(info,sdoc,"gridActive");
+            loadBooleanAttribute(info,sdoc,"pagesVisible");
             if(info.hasAttr("backgroundFill")) {
                 sdoc.setBackgroundFill(loadFillPaint(info, "backgroundFill", zipFile));
             }

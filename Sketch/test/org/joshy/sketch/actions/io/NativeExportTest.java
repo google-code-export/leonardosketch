@@ -425,6 +425,14 @@ public class NativeExportTest {
         return doc2;
     }
 
+    public static SketchDocument SaveAndLoad(SketchDocument doc) throws Exception {
+        File file = File.createTempFile("nativeExportTest",".leoz");
+        u.p("writing to test file: " + file.getAbsolutePath());
+        SaveAction.saveAsZip(file,doc);
+        SketchDocument doc2 = OpenAction.loadZip(file);
+        return doc2;
+    }
+
     @Test
     public void testDocumentBackground() throws Exception {
         Core.setTesting(true);
@@ -441,6 +449,16 @@ public class NativeExportTest {
                 , doc
         );
         SketchDocument doc2 = OpenAction.loadZip(file);
+    }
+    
+    @Test
+    public void testPageView() throws Exception {
+        Core.setTesting(true);
+        Core.init();
+        SketchDocument doc = new SketchDocument();
+        doc.setPagesVisible(true);
+        SketchDocument doc2 = SaveAndLoad(doc);
+        assertTrue(doc2.isPagesVisible());
     }
 
 
