@@ -1,5 +1,6 @@
 package org.joshy.sketch.actions.io;
 
+import assetmanager.Asset;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Rectangle;
@@ -7,8 +8,11 @@ import com.lowagie.text.pdf.DefaultFontMapper;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfTemplate;
 import com.lowagie.text.pdf.PdfWriter;
+import java.util.*;
+import java.util.List;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.stage.swing.SwingGFX;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.ShapeExporter;
@@ -76,18 +80,12 @@ public class SavePDFAction extends BaseExportAction {
                 File tempdir = File.createTempFile("leonardosketch_pdfexport", "_tempdir");
                 tempdir = new File(tempdir.getAbsolutePath()+"2");
                 boolean ret = tempdir.mkdirs();
-                /*
-                for(String string : Main.getFontMap().keySet()) {
-                    Font font = Main.getFontMap().get(string);
-                    if(font.isCustom()) {
-                        File fontfile = new File(tempdir, string +".ttf");
-                        //u.p("exporting to font file = " + fontfile.getAbsolutePath());
-                        Util.copyToFile(font.getInputStream(), fontfile);
-                    }
+                List<Asset> fonts = Main.getDatabase().getAllFonts();
+                for(Asset f : fonts) {
+                    File fontfile = new File(tempdir, f.getName() +".ttf");
+                    Util.copyToFile(f.getFile(),fontfile);
                 }
-                */
                 int count = mapper.insertDirectory(tempdir.getAbsolutePath());
-                //u.p("imported fonts = " + count);
             } catch (IOException e) {
                 e.printStackTrace();
             }
