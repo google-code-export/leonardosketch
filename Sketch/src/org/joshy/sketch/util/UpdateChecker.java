@@ -20,6 +20,7 @@ import javax.xml.xpath.XPathExpressionException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
+import org.joshy.sketch.Settings;
 
 /**
  * Created by IntelliJ IDEA.
@@ -37,9 +38,9 @@ public class UpdateChecker {
         //ignore errors
         //if verify update
         try {
-            u.p("checking for updates at: " + Main.UPDATE_URL);
+            u.p("checking for updates at: " + Settings.UPDATE_URL);
             new XMLRequest()
-                    .setURL(Main.UPDATE_URL)
+                    .setURL(Settings.UPDATE_URL)
                     .setMethod(XMLRequest.METHOD.GET)
                     .onComplete(new Callback<Doc>(){
                         public void call(Doc doc) throws Exception {
@@ -87,7 +88,7 @@ public class UpdateChecker {
             Callback<ActionEvent> getUpdate = new Callback<ActionEvent>() {
                 public void call(ActionEvent actionEvent) throws Exception {
                     stage.hide();
-                    OSUtil.openBrowser(Main.DOWNLOAD_URL);
+                    OSUtil.openBrowser(Settings.DOWNLOAD_URL);
                 }
             };
             FlexBox box = new VFlexBox().setBoxAlign(VFlexBox.Align.Stretch);

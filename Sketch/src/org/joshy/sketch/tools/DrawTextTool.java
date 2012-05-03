@@ -9,6 +9,7 @@ import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.Textarea;
 import org.joshy.sketch.Main;
+import org.joshy.sketch.Settings;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
 import org.joshy.sketch.model.ResizableGrid9Shape;
 import org.joshy.sketch.model.SNode;
@@ -56,7 +57,7 @@ public class DrawTextTool extends CanvasTool {
     private void startTextEditing(double x, double y) {
         textNode = new SText();
         textNode.setFillPaint(FlatColor.BLACK);
-        textNode.setFontName(Main.DEFAULT_FONT_NAME);
+        textNode.setFontName(Settings.DEFAULT_FONT_NAME);
         textNode.setFontSize(24);
         Point2D.Double point = context.getSketchCanvas().transformToCanvas(x,y);
         textNode.setX(point.x);

@@ -26,6 +26,7 @@ import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.image.MasterImageCache;
 import org.joshy.gfx.util.localization.Localization;
 import org.joshy.gfx.util.u;
+import static org.joshy.sketch.Settings.*;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrUploadAction;
 import org.joshy.sketch.actions.io.*;
@@ -59,10 +60,6 @@ import java.util.*;
 import static org.joshy.gfx.util.localization.Localization.getString;
 
 public class Main implements Runnable {
-    private static final File homedir = new File(OSUtil.getBaseStorageDir(System.getProperty("org.joshy.sketch.settings.basedirname","Leonardo")));
-    public static final File RECENT_FILES = new File(homedir,"recentfiles.xml");
-    public static final File SETTINGS_FILE = new File(homedir,"settings.txt");
-    public static final File SCRIPTS_DIR = new File(homedir,"scripts");
 
     public SymbolManager symbolManager;
     public ColorSwatchManager colorManager;
@@ -83,15 +80,8 @@ public class Main implements Runnable {
     private Callback<ActionEvent> makeAWishAction;
     public static int CURRENT_BUILD_NUMBER = 2;
     public static Properties releaseProperties;
-    public static final String TRACKING_PERMISSIONS = "org.joshy.gfx.sketch.tracking.allow";
-    public static final String DEBUG_MENU = "org.joshy.gfx.sketch.debug.menuEnabled";
-    public static final String DEFAULT_LOCALE = "org.joshy.gfx.sketch.defaultLocale";
-    public static String UPDATE_URL = "";
-    public static String DOWNLOAD_URL = "";
     private List<Menu> recentFilesMenus = new ArrayList<Menu>();
     public static MasterImageCache FlickrSearchCache = new MasterImageCache(true,10,"LeonardoFlickrSearchCache");
-    public static String AMINO_BINARY_URL = null;
-    public static final String DEFAULT_FONT_NAME = "OpenSans";
 
     public static PowerupManager powerupManager = PowerupManager.get();
     private static AssetDB assetDatabase;
@@ -206,7 +196,6 @@ public class Main implements Runnable {
             setupTracking();
             UpdateChecker.setup(this);
             setupGlobals();
-            //setupNewDoc(defaultModeHelper,null);
             setupMac();
             showDocChooser();
             //Core.setDebugCSS(new File("test.css"));
@@ -825,7 +814,7 @@ public class Main implements Runnable {
         for(String name : unique) {
             recentFiles.add(map.get(name));
         }
-        saveRecentFiles(recentFiles, Main.RECENT_FILES);
+        saveRecentFiles(recentFiles, RECENT_FILES);
         regenRecentFilesMenus();
     }
 
