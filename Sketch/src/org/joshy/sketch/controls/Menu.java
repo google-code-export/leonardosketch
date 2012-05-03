@@ -94,7 +94,11 @@ public class Menu {
         }
         return jMenu;
     }
-    
+
+    public JMenu getNativeMenu() {
+        return this.jMenu;
+    }
+
 
     private static class ActionAdapter extends AbstractAction {
         private final SketchCanvas canvas;

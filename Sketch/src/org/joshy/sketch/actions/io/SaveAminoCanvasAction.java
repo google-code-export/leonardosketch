@@ -6,6 +6,7 @@ import org.joshy.gfx.stage.swing.SwingGFX;
 import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
+import org.joshy.sketch.Settings;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.ShapeExporter;
 import org.joshy.sketch.model.*;
@@ -90,7 +91,7 @@ public class SaveAminoCanvasAction extends BaseExportAction {
 
     private static void outputIndexHTML(IndentWriter out, SketchDocument doc) {
         out.println("<html><head><title>Amino Canvas Export</title>\n"
-                +"<script src='"+ Main.AMINO_BINARY_URL+"'></script>\n"
+                +"<script src='"+ Settings.AMINO_BINARY_URL+"'></script>\n"
                 +"<script src='generated.js'></script>\n"
                 +"<style type='text/css'>\n"
                 +"  body {\n"

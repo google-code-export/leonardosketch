@@ -38,7 +38,8 @@ public class Menubar {
     }
 
     public void remove(Menu menu) {
-        //To change body of created methods use File | Settings | File Templates.
+        this.menus.remove(menu);
+        this.jmenubar.remove(menu.getNativeMenu());
     }
 
     public void add(Menu menu) {
