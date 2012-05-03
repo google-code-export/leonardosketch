@@ -80,7 +80,6 @@ public class CanvasDocument<P extends Page> {
     }
 
     public void setWidth(double width) {
-        u.dumpStack();
         this.width = width;
         fireDocDirty();
         fireViewDirty();
