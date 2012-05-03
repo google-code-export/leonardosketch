@@ -11,6 +11,7 @@ import org.joshy.gfx.node.control.Togglebutton;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.sketch.canvas.PositionHandle;
 import org.joshy.sketch.model.ResizableGrid9Shape;
+import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.util.DrawUtils;
 
@@ -158,7 +159,16 @@ public class EditResizableShapeTool extends CanvasTool {
                     break;
             }
         }
+        
+        g.setPaint(FlatColor.GREEN);
+        g.translate(bounds.getX(),bounds.getY());
+        for(SNode node: shape.getNodes()) {
+            Bounds b = node.getTransformedBounds();
+            g.drawRect(b.getX(),b.getY(),b.getWidth(),b.getHeight());
+        }
         g.pop();
+        
+        
     }
 
     public static class VHandle {
