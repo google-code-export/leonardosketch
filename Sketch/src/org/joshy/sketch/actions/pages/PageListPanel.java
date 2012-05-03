@@ -13,6 +13,8 @@ import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.sketch.actions.DocumentActions;
+import org.joshy.sketch.controls.DoubleClickRecognizer;
+import org.joshy.sketch.controls.StandardDialog;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
@@ -28,6 +30,7 @@ public class PageListPanel extends HFlexBox {
     private boolean doDuplicate;
     private double dragY;
     private VectorDocContext context;
+    private DoubleClickRecognizer clickRecognizer;
 
     public PageListPanel(final VectorDocContext context) {
         this.context = context;
@@ -44,7 +47,8 @@ public class PageListPanel extends HFlexBox {
             }
         });
         listview.setRenderer(new ListView.ItemRenderer<SketchDocument.SketchPage>() {
-            public void draw(GFX gfx, ListView listView, SketchDocument.SketchPage item, int index, double x, double y, double width, double height) {
+            public void draw(GFX gfx, ListView listView, SketchDocument.SketchPage item,
+                             int index, double x, double y, double width, double height) {
                 gfx.setPaint(context.getDocument().getBackgroundFill());
                 gfx.fillRect(x, y, width, height);
                 Bounds oldClip = gfx.getClipRect();
@@ -101,10 +105,10 @@ public class PageListPanel extends HFlexBox {
         });
         toolbar.add(bt);
         this.add(toolbar, 0);
-
         this.add(scroll,1);
 
         this.setBoxAlign(Align.Stretch);
+        this.clickRecognizer = new DoubleClickRecognizer();
 
         EventBus.getSystem().addListener(listview, SelectionEvent.Changed, new Callback<SelectionEvent>() {
             public void call(SelectionEvent event) {
@@ -119,7 +123,16 @@ public class PageListPanel extends HFlexBox {
             public void call(MouseEvent event) {
                 if(event.getType() == MouseEvent.MousePressed) {
                     start = event.getX();
+                    if(clickRecognizer.isDoubleClick()) {
+                        SketchDocument doc = context.getDocument();
+                        String name = StandardDialog.showEditText("Set Page Name", doc.getCurrentPage().getName());
+                        if(name != null) {
+                            doc.getCurrentPage().setName(name);
+                            doc.setDirty(true);
+                        }
+                    }
                 }
+                clickRecognizer.apply(event);
                 if(event.getType() == MouseEvent.MouseDragged) {
                     doDuplicate = event.isAltPressed();
                     dragX = event.getX();
