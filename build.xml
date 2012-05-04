@@ -25,7 +25,7 @@
         <property  name="update.url" value="MUST_SET_UPDATE.URL"/>
         <property  name="download.url" value="MUST_SET_DOWNLOAD.URL"/>
         
-        <property name="javafx.dir" value="MUST_SET javafx.dir to the runtime"/>
+        <property name="javafx.dir" value="lib/javafx/native/mac/"/>
 
         <echo message="using lib.jogl.dir ${lib.jogl.dir}"/>
         <property  name="jnlp.codebase" value="file:///Users/joshmarinacci/projects/personal/LeonardoSketch/dist/jnlp/"/>
@@ -68,7 +68,7 @@
         <javac destdir="build/classes/AssetManager" debug="true">
             <src path="AssetManager/src"/>
             <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
-            <classpath> <fileset dir="lib/javafx/native/mac"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="${javafx.dir}"><include name="*.jar"/></fileset></classpath>
             <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
             <classpath> <fileset dir="build/jars"><include name="*.jar"/></fileset></classpath>
         </javac>
@@ -91,7 +91,7 @@
             <classpath> <fileset dir="lib"><include name="*.jar"/></fileset></classpath>
             <classpath> <fileset dir="${amino.core.dir}"><include name="*.jar"/></fileset></classpath>
             <classpath> <fileset dir="build/jars"><include name="*.jar"/></fileset></classpath>
-            <classpath> <fileset dir="lib/javafx/native/mac"><include name="*.jar"/></fileset></classpath>
+            <classpath> <fileset dir="${javafx.dir}"><include name="*.jar"/></fileset></classpath>
         </javac>
         <copy todir="build/classes/Sketch">
              <fileset dir="Sketch/src">
@@ -179,6 +179,7 @@
             <arg value="--jardir=lib/"/>
         </java>
     </target>
+    
     <target  name="build-jnlp" depends="build-sketch">
         <echo message="doing jnlp version"/>
         <java classpath="lib/AppBundler.jar;${amino.core.dir}/XMLLib.jar" classname="com.joshondesign.appbundler.Bundler" fork="true">
@@ -273,7 +274,6 @@
                 <include name="Sketch/**"/>
                 <include name="LICENSE.TXT"/>
             </zipfileset>
-<!--            <zipfileset dir="dist/mac" includes="${app.name}.app/Contents/MacOS/JavaApplicationStub" filemode="755"/>-->
         </zip>        
     </target>
     
@@ -349,27 +349,55 @@
         <mkdir dir="build/classes/parboiled"/>
         <javac destdir="build/classes/parboiled" debug="true">
             <src path="t/"/>
-
         </javac>
     </target>
     
-    <target name="windows-exe">
-        <taskdef name="jsmoothgen"
-             classname="net.charabia.jsmoothgen.ant.JSmoothGen"
-             classpath="bin/jsmooth/lib/jsmoothgen-ant.jar"/>        
-        <jsmoothgen project="bin/LeonardoSketch.jsmooth" 
-            skeletonroot="bin/jsmooth/skeletons"/>        
-            
-        <copy todir="dist" file="bin/LeonardoSketch.exe"/>
-        <zip destfile="dist/LeonardoSketch-windows.zip">
-            <zipfileset dir="dist" prefix="LeonardoSketch">
-                <include name="*.exe"/>
-                <include name="jnlp/**"/>
-            </zipfileset>
-        </zip>
-
-
-
-
+    
+    <target name="update-javafx-libs">
+    <!--
+        <property name="javafx-zip.dir" value="/Users/josh/Downloads/"/>
+        -->
+        <delete dir="lib/javafx"/>
+        <property name="libdir" value="lib/javafx"/>
+        <property name="javafx.version" value="2_2_0-beta-b06"/>
+        <property name="javafx.date" value="24_apr_2012"/>
+        
+        <mkdir dir="build/javafxlib"/>
+        <mkdir dir="build/javafxlib/linux"/>
+        <unzip dest="build/javafxlib/linux" src="${javafx-zip.dir}/javafx_sdk-${javafx.version}-linux-i586-${javafx.date}.zip">
+        </unzip>
+        <mkdir dir="${libdir}/native/linux"/>
+        <copy todir="${libdir}/native/linux">
+            <fileset dir="build/javafxlib/linux/javafx-sdk2.2.0-beta/rt/lib/">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="build/javafxlib/linux/javafx-sdk2.2.0-beta/rt/lib/i386">
+                <include name="**"/>
+            </fileset>
+        </copy>
+        
+        <mkdir dir="build/javafxlib/mac"/>
+        <unzip dest="build/javafxlib/mac" src="${javafx-zip.dir}/javafx_sdk-${javafx.version}-macosx-universal-${javafx.date}.zip">
+        </unzip>
+        <mkdir dir="${libdir}/native/mac"/>
+        <copy todir="${libdir}/native/mac">
+            <fileset dir="build/javafxlib/mac/javafx-sdk2.2.0-beta/rt/lib/">
+                <include name="*.jar"/>
+                <include name="**"/>
+            </fileset>
+        </copy>
+        
+        <mkdir dir="build/javafxlib/win32"/>
+        <unzip dest="build/javafxlib/win32" src="${javafx-zip.dir}/javafx_sdk-${javafx.version}-windows-i586-${javafx.date}.zip">
+        </unzip>
+        <mkdir dir="${libdir}/native/win"/>
+        <copy todir="${libdir}/native/win">
+            <fileset dir="build/javafxlib/win32/javafx-sdk2.2.0-beta/rt/lib/">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="build/javafxlib/win32/javafx-sdk2.2.0-beta/rt/bin/">
+                <include name="**"/>
+            </fileset>
+        </copy>
     </target>
 </project>
