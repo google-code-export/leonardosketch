@@ -202,6 +202,15 @@ public class Selection {
     public boolean contains(SNode node) {
         return selected.containsKey(node);
     }
+    
+    public boolean containsKind(Class cls) {
+        for(SNode node : selected.keySet()) {
+            if(cls.isAssignableFrom(node.getClass())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     public Map<SNode,List<Handle>> getHandles() {
