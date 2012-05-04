@@ -448,6 +448,14 @@ public class SelectMoveTool extends CanvasTool {
             }
             contextMenu.addActions(new MakeLink(context));
         }
+        
+        if(context.getSelection().size() == 2) {
+            if(context.getSelection().containsKind(SShape.class)) {
+                if(context.getSelection().containsKind(SImage.class)) {
+                    contextMenu.addActions(new ImageActions.SetMaskAction(context));
+                }
+            }
+        }
 
         contextMenu.setWidth(170);
         contextMenu.setHeight(200);
