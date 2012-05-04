@@ -359,33 +359,20 @@ public class ResizableGrid9Shape extends AbstractResizeableNode implements SelfD
     private class TextAdapter implements ControlPointAdapter<SText> {
 
         public List<Point2D> getControlPoints(SText node, double originalWidth, double originalHeight) {
-//            Font font = Font.name("Arial")
-//                    .weight(node.getWeight())
-//                    .style(node.getStyle())
-//                    .size((float)node.getFontSize())
-//                    .resolve();
-//            double w = font.calculateWidth(node.getText());
-//            double h = font.calculateHeight(node.getText());
             List<Point2D> points = new ArrayList<Point2D>();
-            points.add(new Point2D.Double(node.getTranslateX()+node.getX(),node.getTranslateY()+node.getY()));
-            points.add(new Point2D.Double(originalWidth,originalHeight));
+            points.add(new Point2D.Double(node.getTranslateX(),node.getTranslateY()));
+            points.add(new Point2D.Double(node.getX(),node.getY()));
+            points.add(new Point2D.Double(node.getWidth(),node.getHeight()));
             return points;
         }
 
         public void setControlPoints(SText node, List<Point2D> points) {
-//            Font font = Font.name("Arial")
-//                    .weight(node.getWeight())
-//                    .style(node.getStyle())
-//                    .size((float)node.getFontSize())
-//                    .resolve();
-//            double w = font.calculateWidth(node.getText());
-//            double h = font.calculateHeight(node.getText());
             node.setTranslateX(points.get(0).getX());
             node.setTranslateY(points.get(0).getY());
-            node.setX(0);
-            node.setY(0);
-            node.setWidth(points.get(1).getX());
-            node.setHeight(points.get(1).getY());
+            node.setX(points.get(1).getX());
+            node.setY(points.get(1).getY());
+            node.setWidth(points.get(2).getX());
+            node.setHeight(points.get(2).getY());
         }
     }
     
