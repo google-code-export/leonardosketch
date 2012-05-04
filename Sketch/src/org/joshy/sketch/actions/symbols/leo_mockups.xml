@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <sketchy version='-1'>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='60.0' height='60.0' top='20.0' bottom='120.0' left='20.0' right='120.0' originalWidth='140.0' originalHeight='140.0' vLocked='false' hLocked='false'>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='136.0' height='37.0' top='20.0' bottom='17.0' left='20.0' right='164.0' originalWidth='184.0' originalHeight='37.0' vLocked='true' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='183.0' height='37.0' corner='42.0'>        </resizeableNode>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='184.0' height='37.0' fontSize='24.0' weight='Regular' halign='Center' fontName='OpenSans' autoSize='false' bulleted='false' wrapText='false'>
+            <text>button</text>
+        </resizeableNode>
+    </resizeableNode>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='60.0' height='60.0' top='20.0' bottom='120.0' left='20.0' right='120.0' originalWidth='140.0' originalHeight='140.0' vLocked='false' hLocked='false'>
         <property name='SymbolName' value='Box'>        </property>
-        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='140.0' height='140.0' corner='0.0'>        </resizeableNode>
-        <shape type='poly' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-140.0' translateY='-120.0' closed='false'>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='140.0' height='140.0' corner='0.0'>        </resizeableNode>
+        <shape type='poly' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-140.0' translateY='-120.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' closed='false'>
             <point x='140.0' y='120.0'>            </point>
             <point x='280.0' y='260.0'>            </point>
         </shape>
-        <shape type='poly' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-140.0' translateY='-120.0' closed='false'>
+        <shape type='poly' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-140.0' translateY='-120.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' closed='false'>
             <point x='140.0' y='260.0'>            </point>
             <point x='280.0' y='120.0'>            </point>
         </shape>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='177.0' height='177.0' top='0.0' bottom='180.0' left='0.0' right='179.0' originalWidth='179.0' originalHeight='180.0' vLocked='false' hLocked='false'>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='177.0' height='177.0' top='0.0' bottom='180.0' left='0.0' right='179.0' originalWidth='179.0' originalHeight='180.0' vLocked='false' hLocked='false'>
         <property name='SymbolName' value='globe'>        </property>
-        <resizeableNode type='oval' fillPaint='#ffe9e9e9' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='179.0' height='180.0'>        </resizeableNode>
-        <shape type='poly' fillPaint='#ffc3c3c3' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-265.0' translateY='-303.0' closed='true'>
+        <resizeableNode type='oval' fillPaint='#ffe9e9e9' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='179.0' height='180.0'>        </resizeableNode>
+        <shape type='poly' fillPaint='#ffc3c3c3' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-265.0' translateY='-303.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' closed='true'>
             <point x='363.0' y='324.0'>            </point>
             <point x='340.0' y='336.0'>            </point>
             <point x='330.0' y='354.0'>            </point>
@@ -50,7 +56,7 @@
             <point x='334.0' y='306.0'>            </point>
             <point x='345.0' y='311.0'>            </point>
         </shape>
-        <shape type='poly' fillPaint='#ffc3c3c3' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-267.0' translateY='-303.0' closed='true'>
+        <shape type='poly' fillPaint='#ffc3c3c3' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-267.0' translateY='-303.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' closed='true'>
             <point x='419.0' y='380.0'>            </point>
             <point x='410.0' y='403.0'>            </point>
             <point x='416.0' y='419.0'>            </point>
@@ -62,7 +68,7 @@
             <point x='445.0' y='388.0'>            </point>
             <point x='441.0' y='374.0'>            </point>
         </shape>
-        <shape type='poly' fillPaint='#ffc3c3c3' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-267.0' translateY='-303.0' closed='true'>
+        <shape type='poly' fillPaint='#ffc3c3c3' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-267.0' translateY='-303.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' closed='true'>
             <point x='423.0' y='353.0'>            </point>
             <point x='419.0' y='373.0'>            </point>
             <point x='414.0' y='373.0'>            </point>
@@ -74,7 +80,7 @@
             <point x='424.0' y='333.0'>            </point>
             <point x='434.0' y='350.0'>            </point>
         </shape>
-        <shape type='poly' fillPaint='#ffc3c3c3' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-267.0' translateY='-303.0' closed='true'>
+        <shape type='poly' fillPaint='#ffc3c3c3' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-267.0' translateY='-303.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' closed='true'>
             <point x='406.0' y='324.0'>            </point>
             <point x='399.0' y='331.0'>            </point>
             <point x='389.0' y='322.0'>            </point>
@@ -82,121 +88,156 @@
             <point x='399.0' y='315.0'>            </point>
         </shape>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='27.0' height='90.0' top='20.0' bottom='84.0' left='20.0' right='7.0' originalWidth='27.0' originalHeight='104.0' vLocked='false' hLocked='true'>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='27.0' height='90.0' top='20.0' bottom='84.0' left='20.0' right='7.0' originalWidth='27.0' originalHeight='104.0' vLocked='false' hLocked='true'>
         <property name='SymbolName' value='v scrollbar'>        </property>
-        <resizeableNode type='rect' fillPaint='#ffe9e9e9' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='27.0' height='104.0' corner='0.0'>        </resizeableNode>
-        <shape type='ngon' fillPaint='#ff080808' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='14.0' radius='12.041594578792296' sides='3' angle='1.5707963267948966'>        </shape>
-        <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='90.0' radius='11.40175425099138' sides='3' angle='-1.5707963267948966'>        </shape>
+        <resizeableNode type='rect' fillPaint='#ffe9e9e9' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='27.0' height='104.0' corner='0.0'>        </resizeableNode>
+        <shape type='ngon' fillPaint='#ff080808' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='14.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' radius='12.041594578792296' innerRadius='40.0' sides='3' angle='1.5707963267948966' star='false'>        </shape>
+        <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='90.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' radius='11.40175425099138' innerRadius='40.0' sides='3' angle='-1.5707963267948966' star='false'>        </shape>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='-5.111111111111086' width='118.0' height='42.888888888888914' top='20.0' bottom='22.888888888888914' left='13.0' right='55.0' originalWidth='94.77777777777777' originalHeight='42.888888888888914' vLocked='true' hLocked='false'>
-        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='94.77777777777777' height='42.888888888888914' corner='0.0'>        </resizeableNode>
-        <shape type='poly' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-130.77777777777777' translateY='-274.66666666666663' closed='true'>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='-5.111111111111086' width='118.0' height='42.888888888888914' top='20.0' bottom='22.888888888888914' left='13.0' right='55.0' originalWidth='94.77777777777777' originalHeight='42.888888888888914' vLocked='true' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='94.77777777777777' height='42.888888888888914' corner='0.0'>        </resizeableNode>
+        <shape type='poly' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-130.77777777777777' translateY='-274.66666666666663' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' closed='true'>
             <point x='207.0' y='315.0'>            </point>
             <point x='219.0' y='298.0'>            </point>
             <point x='195.0' y='298.0'>            </point>
         </shape>
-        <shape type='poly' fillPaint='#ff080808' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-116.33333333333334' translateY='-327.1111111111111' closed='true'>
+        <shape type='poly' fillPaint='#ff080808' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-116.33333333333334' translateY='-327.1111111111111' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' closed='true'>
             <point x='195.11111111111111' y='330.22222222222223'>            </point>
             <point x='203.11111111111111' y='344.0'>            </point>
             <point x='181.33333333333334' y='344.44444444444446'>            </point>
         </shape>
-        <resizeableNode type='rect' fillPaint='#ffd2d2d2' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='3.2222222222222' translateY='5.111111111111143' x='0.0' y='0.0' width='53.777777777777786' height='32.0' corner='0.0'>        </resizeableNode>
-        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='94.77777777777777' height='42.888888888888914' text='999' fontSize='24.0' weight='Regular'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffd2d2d2' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='3.2222222222222' translateY='5.111111111111143' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='53.777777777777786' height='32.0' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='94.77777777777777' height='42.888888888888914' fontSize='24.0' weight='Regular' halign='Left' fontName='Open Sans' autoSize='false' bulleted='false' wrapText='false'>
+            <text>999</text>
+        </resizeableNode>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='158.0' height='41.0' top='20.0' bottom='21.0' left='20.0' right='150.0' originalWidth='170.0' originalHeight='41.0' vLocked='true' hLocked='false'>
-        <resizeableNode type='rect' fillPaint='#fff8f8f8' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='170.0' height='41.0' corner='41.208791208791204'>        </resizeableNode>
-        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='170.0' height='41.0' text='button' fontSize='24.0' weight='Regular'>        </resizeableNode>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='158.0' height='41.0' top='20.0' bottom='21.0' left='20.0' right='150.0' originalWidth='170.0' originalHeight='41.0' vLocked='true' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#fff8f8f8' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='170.0' height='41.0' corner='41.208791208791204'>        </resizeableNode>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='170.0' height='41.0' fontSize='24.0' weight='Regular' halign='Left' fontName='Open Sans' autoSize='false' bulleted='false' wrapText='false'>
+            <text>button</text>
+        </resizeableNode>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='189.0' height='42.0' top='20.0' bottom='22.0' left='37.0' right='174.0' originalWidth='228.0' originalHeight='42.0' vLocked='true' hLocked='false'>
-        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='0.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='228.0' height='42.0' corner='0.0'>        </resizeableNode>
-        <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='7.0' translateY='8.0' x='0.0' y='0.0' width='25.0' height='25.0' top='20.0' bottom='120.0' left='20.0' right='120.0' originalWidth='140.0' originalHeight='140.0' vLocked='false' hLocked='false'>
-            <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='140.0' height='140.0' corner='0.0'>            </resizeableNode>
-            <shape type='poly' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-140.0' translateY='-120.0' closed='false'>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='189.0' height='42.0' top='20.0' bottom='22.0' left='37.0' right='174.0' originalWidth='228.0' originalHeight='42.0' vLocked='true' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='0.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='228.0' height='42.0' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='7.0' translateY='8.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='25.0' height='25.0' top='20.0' bottom='120.0' left='20.0' right='120.0' originalWidth='140.0' originalHeight='140.0' vLocked='false' hLocked='false'>
+            <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='140.0' height='140.0' corner='0.0'>            </resizeableNode>
+            <shape type='poly' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-140.0' translateY='-120.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' closed='false'>
                 <point x='140.0' y='120.0'>                </point>
                 <point x='280.0' y='260.0'>                </point>
             </shape>
-            <shape type='poly' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-140.0' translateY='-120.0' closed='false'>
+            <shape type='poly' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='-140.0' translateY='-120.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' closed='false'>
                 <point x='140.0' y='260.0'>                </point>
                 <point x='280.0' y='120.0'>                </point>
             </shape>
         </resizeableNode>
-        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='228.0' height='42.0' text='checkbox' fontSize='24.0' weight='Regular'>        </resizeableNode>
-    </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='132.5' height='70.5' top='20.0' bottom='152.0' left='20.0' right='239.0' originalWidth='259.0' originalHeight='172.0' vLocked='false' hLocked='false'>
-        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.5' translateY='0.5' x='0.0' y='0.0' width='258.0' height='171.0' corner='0.0'>        </resizeableNode>
-        <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='231.5' translateY='0.5' x='0.0' y='0.0' width='27.0' height='171.0' top='20.0' bottom='84.0' left='20.0' right='7.0' originalWidth='27.0' originalHeight='104.0' vLocked='false' hLocked='true'>
-            <resizeableNode type='rect' fillPaint='#ffe9e9e9' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='27.0' height='104.0' corner='0.0'>            </resizeableNode>
-            <shape type='ngon' fillPaint='#ff080808' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='14.0' radius='12.041594578792296' sides='3' angle='1.5707963267948966'>            </shape>
-            <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='90.0' radius='11.40175425099138' sides='3' angle='-1.5707963267948966'>            </shape>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='228.0' height='42.0' fontSize='24.0' weight='Regular' halign='Left' fontName='Open Sans' autoSize='false' bulleted='false' wrapText='false'>
+            <text>checkbox</text>
         </resizeableNode>
-        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='259.0' height='172.0' text='text area' fontSize='24.0' weight='Regular'>        </resizeableNode>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='154.5' height='85.0' top='20.0' bottom='257.0' left='20.0' right='460.5' originalWidth='480.5' originalHeight='277.0' vLocked='false' hLocked='false'>
-        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.5' translateY='1.0' x='0.0' y='0.0' width='478.0' height='272.0' corner='0.0'>        </resizeableNode>
-        <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='453.5' translateY='0.0' x='0.0' y='0.0' width='27.0' height='277.0' top='20.0' bottom='84.0' left='20.0' right='7.0' originalWidth='27.0' originalHeight='104.0' vLocked='false' hLocked='true'>
-            <resizeableNode type='rect' fillPaint='#ffe9e9e9' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='27.0' height='104.0' corner='0.0'>            </resizeableNode>
-            <shape type='ngon' fillPaint='#ff080808' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='14.0' radius='12.041594578792296' sides='3' angle='1.5707963267948966'>            </shape>
-            <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='90.0' radius='11.40175425099138' sides='3' angle='-1.5707963267948966'>            </shape>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='132.5' height='70.5' top='20.0' bottom='152.0' left='20.0' right='239.0' originalWidth='259.0' originalHeight='172.0' vLocked='false' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.5' translateY='0.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='258.0' height='171.0' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='231.5' translateY='0.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='27.0' height='171.0' top='20.0' bottom='84.0' left='20.0' right='7.0' originalWidth='27.0' originalHeight='104.0' vLocked='false' hLocked='true'>
+            <resizeableNode type='rect' fillPaint='#ffe9e9e9' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='27.0' height='104.0' corner='0.0'>            </resizeableNode>
+            <shape type='ngon' fillPaint='#ff080808' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='14.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' radius='12.041594578792296' innerRadius='40.0' sides='3' angle='1.5707963267948966' star='false'>            </shape>
+            <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='90.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' radius='11.40175425099138' innerRadius='40.0' sides='3' angle='-1.5707963267948966' star='false'>            </shape>
         </resizeableNode>
-        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='480.5' height='277.0' text='list items' fontSize='24.0' weight='Regular'>        </resizeableNode>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='259.0' height='172.0' fontSize='24.0' weight='Regular' halign='Left' fontName='Open Sans' autoSize='false' bulleted='false' wrapText='false'>
+            <text>text area</text>
+        </resizeableNode>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='258.5' height='39.0' top='5.5' bottom='32.5' left='20.0' right='257.0' originalWidth='277.0' originalHeight='39.0' vLocked='true' hLocked='false'>
-        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.5' translateY='0.5' x='0.0' y='0.0' width='276.0' height='38.0' corner='12.637362637362633'>        </resizeableNode>
-        <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='256.5' translateY='17.5' radius='11.045361017187261' sides='3' angle='4.71238898038469'>        </shape>
-        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='277.0' height='39.0' text='dropdown menu' fontSize='24.0' weight='Regular'>        </resizeableNode>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='154.5' height='85.0' top='20.0' bottom='257.0' left='20.0' right='460.5' originalWidth='480.5' originalHeight='277.0' vLocked='false' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.5' translateY='1.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='478.0' height='272.0' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='453.5' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='27.0' height='277.0' top='20.0' bottom='84.0' left='20.0' right='7.0' originalWidth='27.0' originalHeight='104.0' vLocked='false' hLocked='true'>
+            <resizeableNode type='rect' fillPaint='#ffe9e9e9' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='27.0' height='104.0' corner='0.0'>            </resizeableNode>
+            <shape type='ngon' fillPaint='#ff080808' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='14.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' radius='12.041594578792296' innerRadius='40.0' sides='3' angle='1.5707963267948966' star='false'>            </shape>
+            <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='90.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' radius='11.40175425099138' innerRadius='40.0' sides='3' angle='-1.5707963267948966' star='false'>            </shape>
+        </resizeableNode>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='480.5' height='277.0' fontSize='24.0' weight='Regular' halign='Left' fontName='Open Sans' autoSize='false' bulleted='false' wrapText='false'>
+            <text>list items</text>
+        </resizeableNode>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='326.0' height='61.0' top='20.0' bottom='41.0' left='81.0' right='251.0' originalWidth='271.0' originalHeight='61.0' vLocked='true' hLocked='false'>
-        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.5' translateY='0.5' x='0.0' y='0.0' width='270.0' height='60.0' corner='0.0'>        </resizeableNode>
-        <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='57.0' translateY='30.5' radius='26.1725046566048' sides='3' angle='0.0'>        </shape>
-        <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='7.5' translateY='9.5' x='0.0' y='0.0' width='10.0' height='43.0' corner='0.0'>        </resizeableNode>
-        <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='22.0' translateY='9.5' x='0.0' y='0.0' width='10.0' height='43.0' corner='0.0'>        </resizeableNode>
-        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='271.0' height='61.0' text='playing song' fontSize='24.0' weight='Regular'>        </resizeableNode>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='258.5' height='39.0' top='5.5' bottom='32.5' left='20.0' right='257.0' originalWidth='277.0' originalHeight='39.0' vLocked='true' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.5' translateY='0.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='276.0' height='38.0' corner='12.637362637362633'>        </resizeableNode>
+        <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='256.5' translateY='17.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' radius='11.045361017187261' innerRadius='40.0' sides='3' angle='4.71238898038469' star='false'>        </shape>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='277.0' height='39.0' fontSize='24.0' weight='Regular' halign='Left' fontName='Open Sans' autoSize='false' bulleted='false' wrapText='false'>
+            <text>dropdown menu</text>
+        </resizeableNode>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='105.0' height='48.0' top='20.0' bottom='28.0' left='20.0' right='172.0' originalWidth='192.0' originalHeight='48.0' vLocked='true' hLocked='false'>
-        <resizeableNode type='rect' fillPaint='#fff0f0f0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='1.5' translateY='1.5' x='0.0' y='0.0' width='189.0' height='45.0' corner='0.0'>        </resizeableNode>
-        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='192.0' height='48.0' text='text box' fontSize='24.0' weight='Regular'>        </resizeableNode>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='326.0' height='61.0' top='20.0' bottom='41.0' left='81.0' right='251.0' originalWidth='271.0' originalHeight='61.0' vLocked='true' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.5' translateY='0.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='270.0' height='60.0' corner='0.0'>        </resizeableNode>
+        <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='57.0' translateY='30.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' radius='26.1725046566048' innerRadius='40.0' sides='3' angle='0.0' star='false'>        </shape>
+        <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='7.5' translateY='9.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='10.0' height='43.0' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='22.0' translateY='9.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='10.0' height='43.0' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='271.0' height='61.0' fontSize='24.0' weight='Regular' halign='Left' fontName='Open Sans' autoSize='false' bulleted='false' wrapText='false'>
+            <text>playing song</text>
+        </resizeableNode>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='196.5' height='159.5' top='19.0' bottom='250.0' left='70.5' right='357.0' originalWidth='377.0' originalHeight='300.0' vLocked='false' hLocked='false'>
-        <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='327.0' height='276.0' top='20.0' bottom='256.0' left='20.0' right='307.0' originalWidth='327.0' originalHeight='276.0' vLocked='false' hLocked='false'>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='105.0' height='48.0' top='20.0' bottom='28.0' left='20.0' right='172.0' originalWidth='192.0' originalHeight='48.0' vLocked='true' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#fff0f0f0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='1.5' translateY='1.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='189.0' height='45.0' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='192.0' height='48.0' fontSize='24.0' weight='Regular' halign='Left' fontName='Open Sans' autoSize='false' bulleted='false' wrapText='false'>
+            <text>text box</text>
+        </resizeableNode>
+    </resizeableNode>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='196.5' height='159.5' top='19.0' bottom='250.0' left='70.5' right='357.0' originalWidth='377.0' originalHeight='300.0' vLocked='false' hLocked='false'>
+        <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='327.0' height='276.0' top='20.0' bottom='256.0' left='20.0' right='307.0' originalWidth='327.0' originalHeight='276.0' vLocked='false' hLocked='false'>
             <group translateX='0.0' translateY='0.0'>
-                <resizeableNode type='rect' fillPaint='#fff0f0f0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.5' translateY='0.5' x='0.0' y='0.0' width='326.0' height='275.0' corner='0.0'>                </resizeableNode>
-                <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.5' translateY='240.5' x='0.0' y='0.0' width='6.0' height='28.0' corner='0.0'>                </resizeableNode>
-                <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='23.5' translateY='240.5' x='0.0' y='0.0' width='6.0' height='28.0' corner='0.0'>                </resizeableNode>
-                <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='46.75' translateY='254.5' radius='16.070158679988197' sides='3' angle='0.0'>                </shape>
-                <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='77.25' translateY='250.0' x='0.0' y='0.0' width='233.25' height='11.5' corner='12.0'>                </resizeableNode>
-                <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='136.25' translateY='234.5' x='0.0' y='0.0' width='12.5' height='36.0' corner='13.0'>                </resizeableNode>
-                <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='55.5' translateY='27.5' x='0.0' y='0.0' width='216.0' height='183.0'>                </resizeableNode>
-                <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='100.5' translateY='66.5' x='0.0' y='0.0' width='38.0' height='49.0'>                </resizeableNode>
-                <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='177.5' translateY='58.5' x='0.0' y='0.0' width='38.0' height='49.0'>                </resizeableNode>
-                <resizeableNode type='oval' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='110.5' translateY='83.5' x='0.0' y='0.0' width='15.0' height='25.0'>                </resizeableNode>
-                <resizeableNode type='oval' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='187.5' translateY='76.5' x='0.0' y='0.0' width='15.0' height='25.0'>                </resizeableNode>
-                <shape type='path' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='279.0' translateY='191.5' closed='true'>
-                    <pathpoint x='0.0' y='2.0' cx1='0.0' cy1='2.0' cx2='0.0' cy2='2.0'>                    </pathpoint>
-                    <pathpoint x='129.0' y='0.0' cx1='129.0' cy1='0.0' cx2='129.0' cy2='0.0'>                    </pathpoint>
-                    <pathpoint x='85.0' y='39.0' cx1='85.0' cy1='39.0' cx2='85.0' cy2='39.0'>                    </pathpoint>
+                <resizeableNode type='rect' fillPaint='#fff0f0f0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='326.0' height='275.0' corner='0.0'>                </resizeableNode>
+                <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='13.0' translateY='240.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='6.0' height='28.0' corner='0.0'>                </resizeableNode>
+                <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='23.0' translateY='240.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='6.0' height='28.0' corner='0.0'>                </resizeableNode>
+                <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='46.25' translateY='254.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' radius='16.070158679988197' innerRadius='40.0' sides='3' angle='0.0' star='false'>                </shape>
+                <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='76.75' translateY='249.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='233.25' height='11.5' corner='12.0'>                </resizeableNode>
+                <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='135.75' translateY='234.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='12.5' height='36.0' corner='13.0'>                </resizeableNode>
+                <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='55.0' translateY='27.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='216.0' height='183.0'>                </resizeableNode>
+                <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='100.0' translateY='66.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='38.0' height='49.0'>                </resizeableNode>
+                <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='177.0' translateY='58.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='38.0' height='49.0'>                </resizeableNode>
+                <resizeableNode type='oval' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='110.0' translateY='83.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='15.0' height='25.0'>                </resizeableNode>
+                <resizeableNode type='oval' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='187.0' translateY='76.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='15.0' height='25.0'>                </resizeableNode>
+                <shape type='path' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='278.5' translateY='191.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0'>
+                    <subpath closed='true'>
+                        <pathpoint x='0.0' y='2.0' cx1='0.0' cy1='2.0' cx2='0.0' cy2='2.0'>                        </pathpoint>
+                        <pathpoint x='129.0' y='0.0' cx1='129.0' cy1='0.0' cx2='129.0' cy2='0.0'>                        </pathpoint>
+                        <pathpoint x='85.0' y='39.0' cx1='85.0' cy1='39.0' cx2='85.0' cy2='39.0'>                        </pathpoint>
+                    </subpath>
                 </shape>
             </group>
         </resizeableNode>
-        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='37.5' translateY='4.5' x='0.0' y='0.0' width='338.0' height='294.0' corner='0.0'>        </resizeableNode>
-        <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='87.5' translateY='23.5' x='0.0' y='0.0' width='239.0' height='212.0'>        </resizeableNode>
-        <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='60.5' translateY='273.5' radius='13.038404810405298' sides='3' angle='0.0'>        </shape>
-        <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='2.0' translateX='96.5' translateY='271.5' x='0.0' y='0.0' width='253.0' height='9.0' corner='10.0'>        </resizeableNode>
-        <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='148.5' translateY='67.5' x='0.0' y='0.0' width='39.0' height='38.0'>        </resizeableNode>
-        <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='225.5' translateY='62.5' x='0.0' y='0.0' width='39.0' height='38.0'>        </resizeableNode>
-        <resizeableNode type='oval' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='157.5' translateY='79.5' x='0.0' y='0.0' width='16.0' height='24.0'>        </resizeableNode>
-        <resizeableNode type='oval' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='235.5' translateY='70.5' x='0.0' y='0.0' width='16.0' height='24.0'>        </resizeableNode>
-        <shape type='path' fillPaint='#ffdadada' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' closed='true'>
-            <pathpoint x='162.5' y='145.5' cx1='162.5' cy1='145.5' cx2='162.5' cy2='145.5'>            </pathpoint>
-            <pathpoint x='266.5' y='147.5' cx1='266.5' cy1='147.5' cx2='266.5' cy2='147.5'>            </pathpoint>
-            <pathpoint x='227.5' y='189.5' cx1='247.5' cy1='185.5' cx2='207.5' cy2='193.5'>            </pathpoint>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='37.5' translateY='4.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='338.0' height='294.0' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='87.5' translateY='23.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='239.0' height='212.0'>        </resizeableNode>
+        <shape type='ngon' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='60.5' translateY='273.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' radius='13.038404810405298' innerRadius='40.0' sides='3' angle='0.0' star='false'>        </shape>
+        <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='2.0' translateX='96.5' translateY='271.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='253.0' height='9.0' corner='10.0'>        </resizeableNode>
+        <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='148.5' translateY='67.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='39.0' height='38.0'>        </resizeableNode>
+        <resizeableNode type='oval' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='225.5' translateY='62.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='39.0' height='38.0'>        </resizeableNode>
+        <resizeableNode type='oval' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='157.5' translateY='79.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='16.0' height='24.0'>        </resizeableNode>
+        <resizeableNode type='oval' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='235.5' translateY='70.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='16.0' height='24.0'>        </resizeableNode>
+        <shape type='path' fillPaint='#ffdadada' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0'>
+            <subpath closed='true'>
+                <pathpoint x='162.5' y='145.5' cx1='162.5' cy1='145.5' cx2='162.5' cy2='145.5'>                </pathpoint>
+                <pathpoint x='266.5' y='147.5' cx1='266.5' cy1='147.5' cx2='266.5' cy2='147.5'>                </pathpoint>
+                <pathpoint x='227.5' y='189.5' cx1='247.5' cy1='185.5' cx2='207.5' cy2='193.5'>                </pathpoint>
+            </subpath>
         </shape>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='156.5' height='51.0' top='20.0' bottom='31.0' left='20.0' right='234.0' originalWidth='254.0' originalHeight='51.0' vLocked='true' hLocked='false'>
-        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='1.5' translateY='1.5' x='0.0' y='0.0' width='251.0' height='48.0' corner='52.0'>        </resizeableNode>
-        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='254.0' height='51.0' text='search box' fontSize='24.0' weight='Regular'>        </resizeableNode>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='156.5' height='51.0' top='20.0' bottom='31.0' left='20.0' right='234.0' originalWidth='254.0' originalHeight='51.0' vLocked='true' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='1.5' translateY='1.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='251.0' height='48.0' corner='52.0'>        </resizeableNode>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='254.0' height='51.0' fontSize='24.0' weight='Regular' halign='Left' fontName='Open Sans' autoSize='false' bulleted='false' wrapText='false'>
+            <text>search box</text>
+        </resizeableNode>
     </resizeableNode>
-    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' x='0.0' y='0.0' width='90.0' height='30.0' top='20.0' bottom='10.0' left='62.0' right='93.0' originalWidth='113.0' originalHeight='30.0' vLocked='true' hLocked='false'>
-        <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='0.0' translateX='0.0' translateY='9.5' x='0.0' y='0.0' width='113.0' height='11.0' corner='12.0'>        </resizeableNode>
-        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='40.0' translateY='1.5' x='0.0' y='0.0' width='12.0' height='27.0' corner='10.0'>        </resizeableNode>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='90.0' height='30.0' top='20.0' bottom='10.0' left='62.0' right='93.0' originalWidth='113.0' originalHeight='30.0' vLocked='true' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='0.0' translateX='0.0' translateY='9.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='113.0' height='11.0' corner='12.0'>        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='3.0' translateX='40.0' translateY='1.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='12.0' height='27.0' corner='10.0'>        </resizeableNode>
+    </resizeableNode>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='188.25' height='38.0' top='20.0' bottom='18.0' left='102.25' right='127.0' originalWidth='147.0' originalHeight='38.0' vLocked='true' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='2.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='35.0' height='36.0' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='42.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='105.0' height='33.0' fontSize='24.0' weight='Regular' halign='Left' fontName='OpenSans' autoSize='true' bulleted='false' wrapText='false'>
+            <text>checkbox</text>
+        </resizeableNode>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='6.0' translateY='7.5' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='22.0' height='25.0' corner='0.0'>        </resizeableNode>
+    </resizeableNode>
+    <resizeableNode type='grid9' fillPaint='#ffa0a0a0' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='176.5' height='133.0' top='20.0' bottom='104.5' left='20.0' right='171.0' originalWidth='191.0' originalHeight='124.5' vLocked='false' hLocked='false'>
+        <resizeableNode type='rect' fillPaint='#ffffffff' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='0.0' translateY='0.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='191.0' height='124.5' corner='0.0'>        </resizeableNode>
+        <resizeableNode type='text' fillPaint='#ff000000' fillOpacity='1.0' strokePaint='#ff000000' strokeWidth='1.0' translateX='6.5' translateY='5.0' anchorX='0.0' anchorY='0.0' scaleX='1.0' scaleY='1.0' rotate='0.0' x='0.0' y='0.0' width='179.0' height='114.0' fontSize='24.0' weight='Regular' halign='Left' fontName='OpenSans' autoSize='false' bulleted='false' wrapText='true'>
+            <text>a text area with wrapping text</text>
+        </resizeableNode>
     </resizeableNode>
 </sketchy>
