@@ -21,43 +21,9 @@ import java.util.List;
  */
 public class SymbolManager {
     private ListModel<SNode> model;
-    
-    //public Map<File,SymbolSet> sets = new HashMap<File,SymbolSet>();
     private SymbolSet currentSet;
-    //private File basedir;
     private List<SymbolSet> list = new ArrayList<SymbolSet>();
-    //private SymbolSetAsset virtuals = new SymbolSet();
     private AssetDB db;
-
-    /*
-    public SymbolManager(File file) {
-        basedir = file;
-        try {
-            loadSymbols(file);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        sets.put(new File("virtual"),virtuals);
-        list.add(virtuals);
-
-        model = new ListModel<SNode>() {
-            public SNode get(int i) {
-                if(i < currentSet.symbols.size()) {
-                    return currentSet.symbols.get(i);
-                } else {
-                    return null;
-                }
-            }
-            public int size() {
-                if(currentSet == null) return 0;
-                if(currentSet.symbols == null) return 0;
-                return currentSet.symbols.size();
-            }
-        };
-
-    }
-    */
 
     public SymbolManager(AssetDB assetDatabase) {
         this.db = assetDatabase;
@@ -106,7 +72,6 @@ public class SymbolManager {
 
     public Iterable<? extends SymbolSet> getSets() {
         return list;
-        //return sets.values();
     }
 
     public int getSetCount() {
@@ -242,24 +207,18 @@ public class SymbolManager {
         fireUpdate();
     }
 
-    /*
-    public void save() {
-        try {
-            saveSymbols(currentSet);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    */
-
     public ListModel<SNode> getModel() {
         return model;
     }
     
     public void remove(SNode shape) {
         currentSet.symbols.remove(shape);
+        try {
+            currentSet.saveSymbols();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         fireUpdate();
-        //save();
     }
 
 
