@@ -72,12 +72,7 @@ public class OpenAction extends SAction {
             if(fd.getFile() != null) {
                 File file = new File(fd.getDirectory(),fd.getFile());
                 u.p("opening a file" + file);
-                try {
-                    load(file);
-                    main.addRecentFile(file);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                load(file);
             }
         }
     }
@@ -104,6 +99,7 @@ public class OpenAction extends SAction {
                 } else {
                     main.setupNewDoc(new VectorModeHelper(main),doc);
                 }
+                main.addRecentFile(file);
             }
         } catch (Exception ex) {
             Log.error(ex);
