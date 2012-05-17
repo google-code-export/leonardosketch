@@ -456,6 +456,14 @@ public class SelectMoveTool extends CanvasTool {
                 }
             }
         }
+        if(context.getSelection().size() == 1) {
+            if(context.getSelection().containsKind(SImage.class)) {
+                SImage img = (SImage) context.getSelection().firstItem();
+                if(img.getMask() != null) {
+                    contextMenu.addActions(new ImageActions.UnsetMaskAction(context));
+                }
+            }
+        }
 
         contextMenu.setWidth(170);
         contextMenu.setHeight(200);
