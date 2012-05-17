@@ -164,6 +164,10 @@ public class SRect extends AbstractResizeableNode implements SelfDrawable {
             double d = x - rect.getX()-rect.getTranslateX()-10;
             d = d *2;
             if(d < 0) d = 0;
+            double min = Math.min(rect.getWidth(),rect.getHeight());
+            if(d > min) {
+                d = min;
+            }
             rect.setCorner(d);
         }
 
