@@ -274,4 +274,8 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
         maskOffX = getTranslateX();
         maskOffY = getTranslateY();
     }
+
+    public SShape getMask() {
+        return mask;
+    }
 }
