@@ -38,9 +38,6 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
     private String relativeURL = null;
     private FlatColor strokePaint = FlatColor.BLACK;
     private double strokeWidth = 0.0;
-    private SShape mask = null;
-    private double maskOffX;
-    private double maskOffY;
 
     public SImage(File file) throws IOException {
         super();
@@ -142,15 +139,6 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
             g.setPaint(FlatColor.BLACK);
             g.drawRect(0,0,getWidth(),getHeight());            
         } else {
-            if(this.mask != null) {
-                double diffx = getTranslateX() - maskOffX;
-                double diffy = getTranslateY() - maskOffY;
-                Area a = mask.toArea();
-                a.transform(AffineTransform.getTranslateInstance(
-                        -getTranslateX()+diffx,
-                        -getTranslateY()+diffy));
-                g.setMask(a);
-            }
             double sx = width/((double)image.getWidth());
             double sy = height/((double)image.getHeight());
             g.scale(sx,sy);
@@ -163,9 +151,6 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
                 g.setPaint(getStrokePaint());
                 g.drawRect(0,0,getWidth(),getHeight());
                 g.setStrokeWidth(1);
-            }
-            if(this.mask != null) {
-                g.setMask(null);
             }
         }
         g.translate(-getX(),-getY());
@@ -267,15 +252,5 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
         Shape sh = af.createTransformedShape(r);
         Rectangle2D bds = sh.getBounds2D();
         return Util.toBounds(bds);
-    }
-
-    public void setMask(SShape shape) {
-        this.mask = shape;
-        maskOffX = getTranslateX();
-        maskOffY = getTranslateY();
-    }
-
-    public SShape getMask() {
-        return mask;
     }
 }

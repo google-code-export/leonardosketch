@@ -172,12 +172,6 @@ public class Selection {
             hs.add(new TextResizeHandle((SText) rnode, ResizeHandle.Position.BottomRight));
             return;
         }
-        if(rnode instanceof SImage) {
-            SImage im = (SImage)rnode;
-            if(im.getMask() != null) {
-                return;
-            }
-        }
         hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopLeft));
         hs.add(new ResizeHandle(rnode, ResizeHandle.Position.TopRight));
         hs.add(new ResizeHandle(rnode, ResizeHandle.Position.BottomLeft));

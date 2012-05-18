@@ -1,9 +1,6 @@
 package org.joshy.sketch.actions;
 
-import org.joshy.gfx.util.u;
-import org.joshy.sketch.model.SImage;
-import org.joshy.sketch.model.SNode;
-import org.joshy.sketch.model.SShape;
+import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
 public class ImageActions {
@@ -30,10 +27,14 @@ public class ImageActions {
                 if(node instanceof SImage) image = (SImage) node;
                 if(node instanceof SShape) shape = (SShape) node;
             }
-            image.setMask(shape);
+            MaskedImage mask = new MaskedImage();
+            mask.setImage(image);
+            mask.setShape(shape);
             context.getDocument().getCurrentPage().remove(shape);
+            context.getDocument().getCurrentPage().remove(image);
+            context.getDocument().getCurrentPage().add(mask);
             context.getSelection().clear();
-            context.getSelection().setSelectedNode(image);
+            context.getSelection().setSelectedNode(mask);
         }
     }
 
@@ -52,13 +53,14 @@ public class ImageActions {
 
         @Override
         public void execute() throws Exception {
-            SImage image = null;
-            for(SNode node : context.getSelection().items()) {
-                if(node instanceof SImage) image = (SImage) node;
-            }
-            image.setMask(null);
+            MaskedImage img = (MaskedImage) context.getSelection().firstItem();
+            SketchDocument.SketchPage p = context.getDocument().getCurrentPage();
+            p.remove(img);
+            p.add(img.getShape());
+            p.add(img.getImage());
             context.getSelection().clear();
-            context.getSelection().setSelectedNode(image);
+            context.getSelection().setSelectedNode(img.getImage());
+            context.getSelection().setSelectedNode(img.getShape());
         }
 
     }
