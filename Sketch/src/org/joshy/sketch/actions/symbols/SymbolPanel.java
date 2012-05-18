@@ -100,8 +100,9 @@ public class SymbolPanel extends Panel {
                     if(created && dupe != null) {
                         Point2D pt = event.getPointInNodeCoords(context.getCanvas());
                         pt = context.getSketchCanvas().transformToCanvas(pt);
-                        dupe.setTranslateX(pt.getX());
-                        dupe.setTranslateY(pt.getY());
+                        Bounds b = dupe.getBounds();
+                        dupe.setTranslateX(pt.getX()-b.getWidth()/2);
+                        dupe.setTranslateY(pt.getY()-b.getHeight()/2);
                         context.redraw();
                     }
                     if(event.getX() < 0 && prevx >= 0 && !created) {
@@ -110,7 +111,12 @@ public class SymbolPanel extends Panel {
                         SNode node = listView.getModel().get(listView.getSelectedIndex());
                         SketchDocument sd = context.getDocument();
                         dupe = node.duplicate(null);
+                        Bounds b = dupe.getBounds();
                         sd.getCurrentPage().add(dupe);
+                        Point2D pt = event.getPointInNodeCoords(context.getCanvas());
+                        pt = context.getSketchCanvas().transformToCanvas(pt);
+                        dupe.setTranslateX(pt.getX()-b.getWidth()/2);
+                        dupe.setTranslateY(pt.getY()-b.getHeight()/2);
                         context.redraw();
                     }
                     prevx = event.getX();
