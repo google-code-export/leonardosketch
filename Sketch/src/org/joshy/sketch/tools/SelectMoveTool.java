@@ -457,14 +457,10 @@ public class SelectMoveTool extends CanvasTool {
             }
         }
         if(context.getSelection().size() == 1) {
-            if(context.getSelection().containsKind(SImage.class)) {
-                SImage img = (SImage) context.getSelection().firstItem();
-                if(img.getMask() != null) {
-                    contextMenu.addActions(new ImageActions.UnsetMaskAction(context));
-                }
+            if(context.getSelection().containsKind(MaskedImage.class)) {
+                contextMenu.addActions(new ImageActions.UnsetMaskAction(context));
             }
         }
-
         contextMenu.setWidth(170);
         contextMenu.setHeight(200);
         contextMenu.show(context.getCanvas(),event.getX(),event.getY());
@@ -474,7 +470,7 @@ public class SelectMoveTool extends CanvasTool {
         try {
             context.getDuplicateNodeAction().execute();
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         didDuplicate = true;
     }
