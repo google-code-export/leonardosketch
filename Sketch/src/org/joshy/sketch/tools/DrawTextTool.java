@@ -39,7 +39,7 @@ public class DrawTextTool extends CanvasTool {
 
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
         if(textNode == null) {
-            startTextEditing(event.getX(), event.getY());
+            createTextNode(event.getX(),event.getY());
         } else {
             endTextEditing();
             context.releaseControl();
@@ -48,14 +48,22 @@ public class DrawTextTool extends CanvasTool {
 
     @Override
     protected void mouseDragged(MouseEvent event, Point2D.Double cursor) {
+        if(textNode != null) {
+            Point2D.Double point =
+                    context.getSketchCanvas().transformToCanvas(event.getX(),event.getY());
+            textNode.setWidth(point.getX()-textNode.getX());
+            textNode.setHeight(point.getY()-textNode.getY());
+        }
     }
 
     @Override
     protected void mouseReleased(MouseEvent event, Point2D.Double cursor) {
+        startEditing(textNode);
     }
 
-    private void startTextEditing(double x, double y) {
+    private void createTextNode(double x, double y) {
         textNode = new SText();
+        textNode.setText("");
         textNode.setFillPaint(FlatColor.BLACK);
         textNode.setFontName(Settings.DEFAULT_FONT_NAME);
         textNode.setFontSize(24);
@@ -63,23 +71,13 @@ public class DrawTextTool extends CanvasTool {
         textNode.setX(point.x);
         textNode.setY(point.y);
 
-        Point2D pt2 = NodeUtils.convertToScene(context.getSketchCanvas(), x, y);
-
-        overlayTextBox = new Textarea();
-        //the -9 is to account for the textbox's insets
-        overlayTextBox.setTranslateX(pt2.getX()-9);
-        overlayTextBox.setTranslateY(pt2.getY()-9);
-        overlayTextBox.setFont(Font
-                .name(textNode.getFontName())
-                .size((float) (textNode.getFontSize()*context.getSketchCanvas().getScale()))
-                .style(textNode.getStyle())
-                .weight(textNode.getWeight())
-                .resolve());
-        overlayTextBox.setSizeToText(true);
-        context.getCanvas().getParent().getStage().getPopupLayer().add(overlayTextBox);
-        overlayTextBox.selectAll();
-        overlayTextBox.setVisible(true);
-        Core.getShared().getFocusManager().setFocusedNode(overlayTextBox);
+        if(!notInMainDocument) {
+            SketchDocument doc = context.getDocument();
+            doc.getCurrentPage().add(textNode);
+            context.getSelection().setSelectedNode(textNode);
+        }
+        context.getUndoManager().pushAction(new UndoableAddNodeAction(context,textNode,"text"));
+        this.notInMainDocument = false;
     }
 
     private void endTextEditing() {
