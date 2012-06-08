@@ -80,8 +80,8 @@ public class SymbolManager {
 
 
     public static class SymbolSet {
-        private List<SNode> symbols;
-        private SymbolSetAsset asset;
+        protected List<SNode> symbols;
+        protected SymbolSetAsset asset;
 
         public SymbolSet(SymbolSetAsset asset) {
             this.asset = asset;
@@ -132,59 +132,26 @@ public class SymbolManager {
 
     }
 
-    /*
-    private void loadSymbols(File basedir) throws Exception {
-        if(!basedir.exists()) {
-            boolean success = basedir.mkdirs();
-            if(!success) {
-                if(sets.isEmpty()) {
-                    SymbolSet set = new SymbolSet();
-                    set.file = new File(basedir,"default.xml");
-                    sets.put(set.file,set);
-                    list.add(set);
-                    currentSet = set;
-                }
-                throw new Exception("Error making the directory: " + basedir);
-            }
+    public static class VirtualSymbolSet extends SymbolSet {
+
+        private String name;
+
+        public VirtualSymbolSet(String name) {
+            super(null);
+            this.name = name;
+            this.symbols = new ArrayList<SNode>();
         }
 
-        try {
-            File COMMON_SYMBOLS = new File(basedir, "leo_common.xml");
-            if(!COMMON_SYMBOLS.exists()) {
-                Util.copyToFile(
-                        SymbolManager.class.getResourceAsStream("leo_common.xml")
-                        ,COMMON_SYMBOLS);
-            }
-            File MOCKUPS_SYMBOLS = new File(basedir, "leo_mockups.xml");
-            if(!MOCKUPS_SYMBOLS.exists()) {
-                Util.copyToFile(
-                        SymbolManager.class.getResourceAsStream("leo_mockups.xml")
-                        ,MOCKUPS_SYMBOLS);
-            }
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        @Override
+        public CharSequence getName() {
+            return this.name;
         }
-        for(File file : basedir.listFiles()) {
-            if(file.getName().endsWith(".xml") && file.exists()) {
-                List<SNode> shapes = OpenAction.loadShapes(file,null);
-                SymbolSet set = new SymbolSet();
-                set.file = file;
-                set.symbols = shapes;
-                currentSet = set;
-                sets.put(file,set);
-                list.add(set);
-            }
+
+        @Override
+        public void addSymbol(SNode dupe) {
+            this.symbols.add(dupe);
         }
-        if(sets.isEmpty()) {
-            SymbolSet set = new SymbolSet();
-            set.file = new File(basedir,"default.xml");
-            sets.put(set.file,set);
-            list.add(set);
-            currentSet = set;
-        }
-        fireUpdate();
     }
-    */
 
     private void loadDefaultSymbols() {
         u.p("========= loading default symbol sets =========");
@@ -202,9 +169,13 @@ public class SymbolManager {
         u.p("total number of symbol sets = " + db.getAllSymbols().size());
     }
     
+    public VirtualSymbolSet createVirtualSet(String name) {
+        VirtualSymbolSet v = new VirtualSymbolSet(name);
+        list.add(v);
+        return v;
+    }
     public void addVirtual(SNode node) {
         //virtuals.symbols.add(node);
-        fireUpdate();
     }
 
     public ListModel<SNode> getModel() {

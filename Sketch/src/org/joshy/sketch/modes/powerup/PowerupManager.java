@@ -29,6 +29,7 @@ public class PowerupManager {
     private PowerupManager() {
         powerups.add(new RokuPowerup());
         powerups.add(new FXMLPowerup());
+        powerups.add(new MicroGUIPowerup());
     }
 
     public Iterable<? extends Powerup> getPowerups() {
