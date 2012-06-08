@@ -40,7 +40,7 @@ public class GenericFXComponent extends FXAbstractComponent implements FXCompone
         this.leftAnchored = true;
         this.topAnchored = true;
     }
-    public void draw(GFX g) {
+     public void draw(GFX g) {
         this.dd.draw(g, this);
     }
 

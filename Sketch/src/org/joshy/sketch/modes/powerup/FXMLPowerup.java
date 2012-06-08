@@ -10,6 +10,7 @@ import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.ExportProcessor;
 import org.joshy.sketch.actions.SAction;
+import org.joshy.sketch.actions.symbols.SymbolManager;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.util.Util;
@@ -37,6 +38,7 @@ public class FXMLPowerup extends Powerup {
     public void enable(DocContext context, Main main) {
         context.getFileMenu().addItem("Run as JavaFX", new RunAsJavaFX(context, main));
 
+        SymbolManager.VirtualSymbolSet set = main.symbolManager.createVirtualSet("FXML");
 
         //checkbox
         GenericFXComponent.DrawDelegate checkbox_delegate = new GenericFXComponent.DrawDelegate() {
@@ -50,7 +52,7 @@ public class FXMLPowerup extends Powerup {
 
         Map<String,Object> checkbox_props = new HashMap<String, Object>();
         checkbox_props.put("text", "checkbox");
-        main.symbolManager.addVirtual(new GenericFXComponent(checkbox_delegate,checkbox_props,100, 30, "CheckBox"));
+        set.addSymbol(new GenericFXComponent(checkbox_delegate,checkbox_props,100, 30, "CheckBox"));
 
         //radio button
         GenericFXComponent.DrawDelegate radio_delegate = new GenericFXComponent.DrawDelegate() {
@@ -64,7 +66,7 @@ public class FXMLPowerup extends Powerup {
 
         Map<String,Object> radio_props = new HashMap<String, Object>();
         radio_props.put("text", "radiobutton");
-        main.symbolManager.addVirtual(new GenericFXComponent(radio_delegate,radio_props,100, 30, "RadioButton"));
+        set.addSymbol(new GenericFXComponent(radio_delegate,radio_props,100, 30, "RadioButton"));
 
         //textfield
         GenericFXComponent.DrawDelegate textfield_delegate = new GenericFXComponent.DrawDelegate() {
@@ -80,7 +82,7 @@ public class FXMLPowerup extends Powerup {
 
         Map<String,Object> textfield_props = new HashMap<String, Object>();
         textfield_props.put("text", "text field");
-        main.symbolManager.addVirtual(new GenericFXComponent(textfield_delegate,textfield_props, 100, 30, "TextField"));
+        set.addSymbol(new GenericFXComponent(textfield_delegate,textfield_props, 100, 30, "TextField"));
 
 
         //label
@@ -93,7 +95,7 @@ public class FXMLPowerup extends Powerup {
 
         Map<String,Object> label_props = new HashMap<String, Object>();
         label_props.put("text", "label");
-        main.symbolManager.addVirtual(new GenericFXComponent(label_delegate,label_props, 100, 30, "Label"));
+        set.addSymbol(new GenericFXComponent(label_delegate,label_props, 100, 30, "Label"));
 
 
 
@@ -196,7 +198,7 @@ public class FXMLPowerup extends Powerup {
 
         Map<String,Object> button_props = new HashMap<String, Object>();
         button_props.put("text", "button");
-        main.symbolManager.addVirtual(new GenericFXComponent(button_delegate,button_props, 100, 30, "Button"));
+        set.addSymbol(new GenericFXComponent(button_delegate,button_props, 100, 30, "Button"));
 
 
         //toggle button
@@ -317,6 +319,7 @@ class RunAsJavaFX extends SAction {
         this.main = main;
 
     }
+
     @Override
     public void execute() throws Exception {
         task = new BackgroundTask<DocContext, String>() {
