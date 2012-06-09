@@ -18,12 +18,15 @@ import java.awt.geom.Point2D;
  */
 public class ResizeHandle extends PositionHandle {
     private SResizeableNode rect;
+    private SResizeableNode.Constrain constrain;
+
 
     public ResizeHandle(SResizeableNode rect, Position position) {
         super(position);
         this.rect = rect;
+        this.constrain = rect.getConstrain();
     }
-
+    
     public SResizeableNode getResizeableNode() {
         return rect;
     }
@@ -74,48 +77,60 @@ public class ResizeHandle extends PositionHandle {
                 Point2D tl = screenToModel(x,y);
                 rect.setWidth(rect.getX() + rect.getWidth() - tl.getX());
                 rect.setX(tl.getX());
-                if(constrain) {
-                    double nh = rect.getY()+rect.getHeight()-tl.getY();
-                    double ratio = rect.getPreferredAspectRatio();
-                    rect.setHeight(rect.getWidth()*ratio);
-                    rect.setY(tl.getY()+nh-(rect.getWidth()*ratio));
-                } else {
-                    rect.setHeight(rect.getY()+rect.getHeight() - tl.getY());
-                    rect.setY(tl.getY());
+                if(this.constrain != SResizeableNode.Constrain.Vertical) {
+                    if(constrain) {
+                        double nh = rect.getY()+rect.getHeight()-tl.getY();
+                        double ratio = rect.getPreferredAspectRatio();
+                        rect.setHeight(rect.getWidth()*ratio);
+                        rect.setY(tl.getY()+nh-(rect.getWidth()*ratio));
+                    } else {
+                        rect.setHeight(rect.getY()+rect.getHeight() - tl.getY());
+                        rect.setY(tl.getY());
+                    }
                 }
                 break;
             case BottomLeft:
                 Point2D bl = screenToModel(x,y);
                 rect.setWidth(rect.getX() + rect.getWidth() - bl.getX());
                 rect.setX(bl.getX());
-                if(constrain) {
-                    double ratio = rect.getPreferredAspectRatio();
-                    rect.setHeight(rect.getWidth()*ratio);
-                } else {
-                    rect.setHeight(bl.getY() - rect.getY());
+                if(this.constrain != SResizeableNode.Constrain.Vertical) {
+                    if(constrain) {
+                        double ratio = rect.getPreferredAspectRatio();
+                        rect.setHeight(rect.getWidth()*ratio);
+                    } else {
+                        rect.setHeight(bl.getY() - rect.getY());
+                    }
                 }
                 break;
             case TopRight:
                 Point2D tr = screenToModel(x, y);
-                rect.setWidth(tr.getX()-rect.getX());
-                if(constrain) {
-                    double nh = rect.getY()+rect.getHeight()-tr.getY();
-                    double ratio = rect.getPreferredAspectRatio();
-                    rect.setHeight(rect.getWidth()*ratio);
-                    rect.setY(tr.getY()+nh-(rect.getWidth()*ratio));
-                } else {
-                    rect.setHeight(rect.getY()+rect.getHeight() - tr.getY());
-                    rect.setY(tr.getY());
+                if(this.constrain != SResizeableNode.Constrain.Horizontal) {
+                    rect.setWidth(tr.getX()-rect.getX());
+                }
+                if(this.constrain != SResizeableNode.Constrain.Vertical) {
+                    if(constrain) {
+                        double nh = rect.getY()+rect.getHeight()-tr.getY();
+                        double ratio = rect.getPreferredAspectRatio();
+                        rect.setHeight(rect.getWidth()*ratio);
+                        rect.setY(tr.getY()+nh-(rect.getWidth()*ratio));
+                    } else {
+                        rect.setHeight(rect.getY()+rect.getHeight() - tr.getY());
+                        rect.setY(tr.getY());
+                    }
                 }
                 break;
             case BottomRight:
                 Point2D br = screenToModel(x, y);
-                rect.setWidth(br.getX()-rect.getX());
-                if(constrain) {
-                    double ratio = rect.getPreferredAspectRatio();
-                    rect.setHeight(rect.getWidth()*ratio);
-                } else {
-                    rect.setHeight(br.getY() - rect.getY());
+                if(this.constrain != SResizeableNode.Constrain.Horizontal) {
+                    rect.setWidth(br.getX()-rect.getX());
+                }
+                if(this.constrain != SResizeableNode.Constrain.Vertical) {
+                    if(constrain) {
+                        double ratio = rect.getPreferredAspectRatio();
+                        rect.setHeight(rect.getWidth()*ratio);
+                    } else {
+                        rect.setHeight(br.getY() - rect.getY());
+                    }
                 }
                 break;
         }

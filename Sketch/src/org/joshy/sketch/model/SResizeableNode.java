@@ -8,6 +8,13 @@ package org.joshy.sketch.model;
  * To change this template use File | Settings | File Templates.
  */
 public interface SResizeableNode extends SelfDrawable {
+    public enum Constrain {
+        None,
+        Horizontal,
+        Vertical,
+        Both,
+    }
+
     double getX();
 
     double getWidth();
@@ -40,4 +47,6 @@ public interface SResizeableNode extends SelfDrawable {
     public double getPreferredAspectRatio();
 
     public boolean constrainByDefault();
+
+    public Constrain getConstrain();
 }

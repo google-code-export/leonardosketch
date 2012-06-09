@@ -127,5 +127,7 @@ public abstract class AbstractResizeableNode extends SShape implements SResizeab
     }
 
 
-
+    public Constrain getConstrain() {
+        return Constrain.None;
+    }
 }
