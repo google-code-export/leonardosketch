@@ -241,6 +241,10 @@ public class SImage extends SNode implements SelfDrawable, SResizeableNode {
         return true;
     }
 
+    public Constrain getConstrain() {
+        return Constrain.None;
+    }
+
     public Bounds getTransformedBounds() {
         java.awt.geom.Rectangle2D r = new Rectangle2D.Double(getX(),getY(),getWidth(),getHeight());
         AffineTransform af = new AffineTransform();

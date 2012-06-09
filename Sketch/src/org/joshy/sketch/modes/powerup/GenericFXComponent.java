@@ -24,6 +24,10 @@ public class GenericFXComponent extends FXAbstractComponent implements FXCompone
     private String xmlElementName;
     private int initialHeight;
 
+    public Constrain getConstrain() {
+        return Constrain.None;
+    }
+
     public static interface DrawDelegate {
         public void draw(GFX g, GenericFXComponent genericFXComponent);
     }
