@@ -10,8 +10,6 @@ import com.joshondesign.xml.Doc;
 import com.joshondesign.xml.Elem;
 import com.joshondesign.xml.XMLParser;
 import com.joshondesign.xml.XMLWriter;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
@@ -26,7 +24,6 @@ import org.joshy.gfx.util.OSUtil;
 import org.joshy.gfx.util.image.MasterImageCache;
 import org.joshy.gfx.util.localization.Localization;
 import org.joshy.gfx.util.u;
-import static org.joshy.sketch.Settings.*;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrUploadAction;
 import org.joshy.sketch.actions.io.*;
@@ -58,6 +55,7 @@ import java.net.URL;
 import java.util.*;
 
 import static org.joshy.gfx.util.localization.Localization.getString;
+import static org.joshy.sketch.Settings.*;
 
 public class Main implements Runnable {
 
@@ -646,22 +644,9 @@ public class Main implements Runnable {
                 u.p("managing assets");
 
                 try {
-                    
-                    JFrame frame = new JFrame("Asset Manager");
-                    final JFXPanel panel = new JFXPanel();
-                    frame.add(panel);
-                    frame.pack();
-                    frame.setSize(800,600);
-                    frame.setVisible(true);
-                    Platform.runLater(new Runnable() {
-                        public void run() {
-                            try {
-                                new AssetManager().start(panel);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    Stage stage = Stage.createStage();
+                    stage.setContent(AssetManager.setupMain());
+                    stage.centerOnScreen();
                 } catch (Throwable thr) {
                     thr.printStackTrace();
                 }

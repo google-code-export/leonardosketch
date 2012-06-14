@@ -1,12 +1,11 @@
 package org.joshy.sketch.model;
 
+import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.node.Bounds;
+
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Point2D;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.gfx.draw.GFX;
-import org.joshy.gfx.node.Bounds;
-import org.joshy.gfx.util.u;
 
 /**
  * Created by IntelliJ IDEA.
@@ -48,11 +47,11 @@ public class MaskedImage extends SNode implements SelfDrawable {
         double dy = image.getTranslateY();
         Area a = shape.toArea();
         a.transform(AffineTransform.getTranslateInstance(-dx, -dy));
-        g.setMask(a);
+        //g.setMask(a);
         g.translate(dx,dy);
         image.draw(g);
         g.translate(-dx,-dy);
-        g.setMask(null);
+        //g.setMask(null);
     }
 
     public SShape getShape() {

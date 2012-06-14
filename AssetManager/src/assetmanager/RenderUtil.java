@@ -1,18 +1,5 @@
 package assetmanager;
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.image.ImageView;
-import org.joshy.gfx.draw.FlatColor;
-import org.joshy.sketch.actions.swatches.Palette;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
 /**
  * Created with IntelliJ IDEA.
  * User: josh
@@ -21,6 +8,7 @@ import java.io.IOException;
  * To change this template use File | Settings | File Templates.
  */
 public class RenderUtil {
+    /*
     public static Node fontToImage(Asset asset) {
         BufferedImage img = new BufferedImage(100,17,BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = img.createGraphics();
@@ -70,6 +58,6 @@ public class RenderUtil {
         javafx.scene.image.Image fximg = javafx.scene.image.Image.impl_fromExternalImage(img);
         return fximg;
     }
-
+      */
 
 }
