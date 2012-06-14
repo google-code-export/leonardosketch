@@ -69,12 +69,12 @@ public class ImportAction extends SAction {
         SketchDocument sdoc = new SketchDocument();
         sdoc.removePage(sdoc.getCurrentPage());
         SketchDocument.SketchPage page = sdoc.addPage();
-        u.p("parsing");
+        //u.p("parsing");
         Doc doc = XMLParser.parse(stream);
-        u.p("parsed");
+        //u.p("parsed");
         Elem svg = doc.xpathElement("/svg");
         for(Elem n : svg.xpath("./*")) {
-            u.p("node = " + n + " " + n.name());
+            //u.p("node = " + n + " " + n.name());
             SNode node = loadNode(n);
             if(node != null) page.add(node);
         }
@@ -100,7 +100,7 @@ public class ImportAction extends SAction {
     }
 
     private static SNode loadNode(Elem root) throws Exception {
-        u.p("loading SVG element: " + root.name());
+        //u.p("loading SVG element: " + root.name());
         if("g".equals(root.name())) {
             SGroup g = new SGroup();
             for(Elem n : root.xpath("./*")) {
@@ -175,7 +175,7 @@ public class ImportAction extends SAction {
             char ch = (char) read.read();
             if(ch == -1) break;
             double x1,x2,y1,y2;
-            u.p("ch = " + ch);
+            //u.p("ch = " + ch);
             switch(ch) {
                 //absolute move
                 case 'M':
