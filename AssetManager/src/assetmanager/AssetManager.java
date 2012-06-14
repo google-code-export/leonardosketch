@@ -5,6 +5,9 @@
 package assetmanager;
 
 import org.joshy.gfx.Core;
+import org.joshy.gfx.SkinManager;
+import org.joshy.gfx.css.CSSMatcher;
+import org.joshy.gfx.css.CSSSkin;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
@@ -34,6 +37,8 @@ public class AssetManager {
     private static TableView<Asset, String> tableView;
     private static LibraryQuery all;
     private static AssetDB db;
+    private static CSSSkin tableSkin;
+    private static Font tableFont;
 
     public static void main(String[] args) throws Exception {
         Core.init();
@@ -101,30 +106,11 @@ public class AssetManager {
         sidebarModel.add(palettes);
         sidebarList.setModel(sidebarModel);
 
-        sidebarList.setRenderer(new ListView.ItemRenderer<assetmanager.Query>() {
-            public void draw(GFX gfx, ListView listView, Query query, int i, double x, double y, double w, double h) {
-                if(query == null) return;
-                if(!query.isSelectable()) {
-                    gfx.setPaint(FlatColor.GRAY);
-                    gfx.fillRect(x, y, w, h);
-                    gfx.setPaint(FlatColor.BLACK);
-                    Font.drawCenteredVertically(gfx, query.getName(), Font.DEFAULT, x, y, w, h, false);
-                    return;
-                }
-
-                gfx.setPaint(FlatColor.WHITE);
-                if(listView.getSelectedIndex() == i) {
-                    gfx.setPaint(FlatColor.BLUE);
-                }
-                gfx.fillRect(x, y, w, h);
-                gfx.setPaint(FlatColor.BLACK);
-                if(listView.getSelectedIndex() == i) {
-                    gfx.setPaint(FlatColor.WHITE);
-                }
-                Font.drawCenteredVertically(gfx, query.getName(), Font.DEFAULT, x, y, w, h, false);
+        sidebarList.setTextRenderer(new ListView.TextRenderer<Query>() {
+            public String toString(SelectableControl selectableControl, Query query, int i) {
+                return query.getName();
             }
         });
-
 
         EventBus.getSystem().addListener(sidebarList, SelectionEvent.Changed, new Callback<SelectionEvent>() {
             public void call(SelectionEvent selectionEvent) throws Exception {
@@ -144,17 +130,32 @@ public class AssetManager {
         });
         */
         tableView.setModel(new AssetTableModel(new ArrayList<Asset>()));
+        tableSkin = SkinManager.getShared().getCSSSkin();
+        tableFont = tableSkin.getStyleInfo(tableView,null).font;
+        tableView.setDefaultColumnWidth(200);
         tableView.setRenderer(new TableView.DataRenderer<assetmanager.Asset>() {
             public void draw(GFX gfx, TableView tableView, Asset asset, int row, int column, double x, double y, double w, double h) {
+
                 if(asset == null) return;
-                gfx.setPaint(FlatColor.WHITE);
-                gfx.fillRect(x,y,w,h);
-                gfx.setPaint(FlatColor.BLACK);
+
+                CSSMatcher matcher = new CSSMatcher(tableView);
+                Bounds bounds = new Bounds(x,y,w,h);
+                matcher.pseudoElement = "item";
+                if(tableView.getSelectedIndex() == row) {
+                    matcher.pseudoElement = "selected-item";
+                }
+
+                tableSkin.drawBackground(gfx, matcher, bounds);
+                tableSkin.drawBorder(gfx, matcher, bounds);
+
+                x = x + 3;
+                int col = tableSkin.getCSSSet().findColorValue(matcher, "color");
+                gfx.setPaint(new FlatColor(col));
                 if(column == 0) {
-                    Font.drawCenteredVertically(gfx, asset.getName(), Font.DEFAULT, x, y, w, h, false);
+                    Font.drawCenteredVertically(gfx, asset.getName(), tableFont, x, y, w, h, true);
                 }
                 if(column == 1) {
-                    Font.drawCenteredVertically(gfx, asset.getKind(), Font.DEFAULT, x, y, w, h, false);
+                    Font.drawCenteredVertically(gfx, asset.getKind(), tableFont, x, y, w, h, true);
                 }
                 if(column == 2) {
                     Image img = null;
@@ -176,8 +177,18 @@ public class AssetManager {
                 }
             }
         });
-        main.add(new ScrollPane(sidebarList).setPrefWidth(200));
-        main.add(new ScrollPane(tableView).setPrefWidth(200),1.0);
+
+        ScrollPane sidebarScroll = new ScrollPane(sidebarList);
+        sidebarScroll.setPrefWidth(200);
+        sidebarScroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.Never);
+        sidebarScroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);
+        main.add(sidebarScroll);
+        
+        ScrollPane tableScroll = new ScrollPane(tableView);
+        tableScroll.setPrefWidth(500);
+        tableScroll.setVerticalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);
+        tableScroll.setHorizontalVisiblePolicy(ScrollPane.VisiblePolicy.WhenNeeded);
+        main.add(tableScroll,1.0);
         vbox.add(main,1.0);
         return vbox;
     }
