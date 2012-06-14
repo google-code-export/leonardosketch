@@ -29,7 +29,9 @@
     <jar name="geronimo-jta_1.1_spec-1.1.1.jar"/>
     
     <!-- javafx -->
+    <!--
     <native name="javafx"/>
+    -->
     
     <filetype mimetype="application-x/leo"  extension="leo"  icon="resources/doc.icns"/>
     <filetype mimetype="application-x/leoz" extension="leoz" icon="resources/doc.icns"/>
