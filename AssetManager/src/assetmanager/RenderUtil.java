@@ -1,5 +1,14 @@
 package assetmanager;
 
+import org.joshy.gfx.draw.FlatColor;
+import org.joshy.gfx.draw.Image;
+import org.joshy.sketch.actions.swatches.Palette;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: josh
@@ -8,8 +17,8 @@ package assetmanager;
  * To change this template use File | Settings | File Templates.
  */
 public class RenderUtil {
-    /*
-    public static Node fontToImage(Asset asset) {
+
+    public static Image fontToImage(Asset asset) {
         BufferedImage img = new BufferedImage(100,17,BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = img.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
@@ -26,24 +35,20 @@ public class RenderUtil {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         g2.dispose();
-        javafx.scene.image.Image fximg = javafx.scene.image.Image.impl_fromExternalImage(img);
-        return new ImageView(fximg);
+        return Image.create(img);
     }
 
-
-    public static ImageView patternToImage(Asset asset) {
+    public static Image patternToImage(Asset asset) {
         File file = asset.getFile();
         try {
-            ImageView iv = new ImageView(new javafx.scene.image.Image(new FileInputStream(file)));
-            iv.setViewport(new Rectangle2D(0, 0, 100, 15));
-            return iv;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            return Image.getImageFromCache(file.toURI().toURL());
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            return null;
         }
-        return null;
     }
 
-    public static javafx.scene.image.Image toImage(Palette pal) {
+    public static Image toImage(Palette pal) {
         BufferedImage img = new BufferedImage(100,15,BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = img.createGraphics();
         g2.setPaint(java.awt.Color.RED);
@@ -55,9 +60,7 @@ public class RenderUtil {
             x++;
         }
         g2.dispose();
-        javafx.scene.image.Image fximg = javafx.scene.image.Image.impl_fromExternalImage(img);
-        return fximg;
+        return  Image.create(img);
     }
-      */
 
 }

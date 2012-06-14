@@ -8,18 +8,21 @@ import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
+import org.joshy.gfx.draw.Image;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.event.SelectionEvent;
 import org.joshy.gfx.event.SystemMenuEvent;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.FlexBox;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.ArrayListModel;
-import org.joshy.gfx.util.u;
+import org.joshy.sketch.actions.swatches.Palette;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +31,7 @@ import java.util.List;
  */
 public class AssetManager {
     private static ListView<Query> sidebarList;
-    private static ListView<Asset> tableView;
+    private static TableView<Asset, String> tableView;
     private static LibraryQuery all;
     private static AssetDB db;
 
@@ -127,19 +130,86 @@ public class AssetManager {
             public void call(SelectionEvent selectionEvent) throws Exception {
                 Query query = sidebarList.getModel().get(sidebarList.getSelectedIndex());
                 if(query == null || !query.isSelectable()) return;
-                List<Asset> results = query.execute(db);
-                ArrayListModel<Asset> assets = new ArrayListModel<Asset>();
-                assets.addAll(results);
-                tableView.setModel(assets);
+                tableView.setModel(new AssetTableModel(query.execute(db)));
 
             }
         });
 
-        tableView = new ListView<Asset>();
+        tableView = new TableView<Asset,String>();
+        /*
+        tableView.setSorter(new TableView.Sorter() {
+            public Comparator createComparator(TableView.TableModel tableModel, int col, TableView.SortOrder sortOrder) {
+                return Collator.getInstance();
+            }
+        });
+        */
+        tableView.setModel(new AssetTableModel(new ArrayList<Asset>()));
+        tableView.setRenderer(new TableView.DataRenderer<assetmanager.Asset>() {
+            public void draw(GFX gfx, TableView tableView, Asset asset, int row, int column, double x, double y, double w, double h) {
+                if(asset == null) return;
+                gfx.setPaint(FlatColor.WHITE);
+                gfx.fillRect(x,y,w,h);
+                gfx.setPaint(FlatColor.BLACK);
+                if(column == 0) {
+                    Font.drawCenteredVertically(gfx, asset.getName(), Font.DEFAULT, x, y, w, h, false);
+                }
+                if(column == 1) {
+                    Font.drawCenteredVertically(gfx, asset.getKind(), Font.DEFAULT, x, y, w, h, false);
+                }
+                if(column == 2) {
+                    Image img = null;
+                    if(asset.getKind().equals(AssetDB.PATTERN)) {
+                        img = RenderUtil.patternToImage(asset);
+                    }
+                    if(asset.getKind().equals(AssetDB.PALETTE)) {
+                        img = RenderUtil.toImage((Palette)asset);
+                    }
+                    if(asset.getKind().equals(AssetDB.FONT)) {
+                        img = RenderUtil.fontToImage(asset);
+                    }
+                    if(img != null) {
+                        Bounds oldClip = gfx.getClipRect();
+                        gfx.setClipRect(new Bounds(x,y,w,h));
+                        gfx.drawImage(img,x,y);
+                        gfx.setClipRect(oldClip);
+                    }
+                }
+            }
+        });
         main.add(new ScrollPane(sidebarList).setPrefWidth(200));
         main.add(new ScrollPane(tableView).setPrefWidth(200),1.0);
         vbox.add(main,1.0);
         return vbox;
     }
 
+    private static class AssetTableModel implements TableView.TableModel<Asset,String> {
+
+        private List<Asset> data;
+
+        public AssetTableModel(List<Asset> data) {
+            this.data = data;
+        }
+
+        public int getRowCount() {
+            return data.size();
+        }
+
+        public int getColumnCount() {
+            return 3;
+        }
+
+        public String getColumnHeader(int col) {
+            switch(col) {
+                case 0: return "Name";
+                case 1: return "Kind";
+                case 2: return "Preview";
+                default: return "col?";
+            }
+        }
+
+        public Asset get(int row, int col) {
+            if(row >= data.size()) return null;
+            return data.get(row);
+        }
+    }
 }
