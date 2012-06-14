@@ -26,6 +26,7 @@ public abstract class SNode {
     private double anchorY = 0;
     private String id = null;
     private String linkTarget;
+    private boolean locked;
 
     public abstract Bounds getBounds();
     public abstract Bounds getTransformedBounds();
@@ -37,6 +38,7 @@ public abstract class SNode {
     }
 
     public void setTranslateX(double translateX) {
+        if(isLocked()) return;
         this.translateX = translateX;
     }
 
@@ -45,6 +47,7 @@ public abstract class SNode {
     }
 
     public void setTranslateY(double translateY) {
+        if(isLocked()) return;
         this.translateY = translateY;
     }
 
@@ -141,5 +144,13 @@ public abstract class SNode {
 
     public String getLinkTarget() {
         return linkTarget;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }
+
+    public boolean isLocked() {
+        return locked;
     }
 }

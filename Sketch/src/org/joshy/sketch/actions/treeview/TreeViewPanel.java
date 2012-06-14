@@ -36,6 +36,7 @@ public class TreeViewPanel extends VFlexBox {
     private Checkbox bitmap_text;
     
     private List<Control> customPropsControls = new ArrayList<Control>();
+    private Checkbox lock_node;
 
     public TreeViewPanel(Main main, final VectorDocContext ctx) {
         this.main = main;
@@ -124,9 +125,23 @@ public class TreeViewPanel extends VFlexBox {
                  }
              }
          });
+        
+        
+        //lock
+        lock_node = new Checkbox("locked");
+        propsPanel.add(new HFlexBox()
+            .add(lock_node));
+        EventBus.getSystem().addListener(lock_node, ActionEvent.Action, new Callback<Event>() {
+            public void call(Event event) throws Exception {
+                Selection sel = ctx.getSelection();
+                if (sel.size() == 1) {
+                    SNode n = sel.firstItem();
+                    n.setLocked(lock_node.isSelected());
+                }
+            }
+        });
 
         //cache
-        //name
         all_cache = new Checkbox("cache");
         EventBus.getSystem().addListener(all_cache, ActionEvent.Action, new Callback<Event>() {
             public void call(Event event) throws Exception {
@@ -195,6 +210,7 @@ public class TreeViewPanel extends VFlexBox {
                     }
                     all_cache.setSelected(n.getBooleanProperty("com.joshondesign.amino.nodecache"));
                     all_cache_image.setSelected(n.getBooleanProperty("com.joshondesign.amino.nodecacheimage"));
+                    lock_node.setSelected(n.isLocked());
                 }
             } else {
                 all_name.setText("");
