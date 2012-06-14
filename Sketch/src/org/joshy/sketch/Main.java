@@ -646,6 +646,8 @@ public class Main implements Runnable {
                 try {
                     Stage stage = Stage.createStage();
                     stage.setContent(AssetManager.setupMain());
+                    stage.setWidth(1000);
+                    stage.setHeight(600);
                     stage.centerOnScreen();
                 } catch (Throwable thr) {
                     thr.printStackTrace();
