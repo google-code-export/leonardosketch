@@ -35,4 +35,6 @@
     
     <filetype mimetype="application-x/leo"  extension="leo"  icon="resources/doc.icns"/>
     <filetype mimetype="application-x/leoz" extension="leoz" icon="resources/doc.icns"/>
+
+    <property name="org.joshy.sketch.actions.enableImport" value="true"/>
 </app>
