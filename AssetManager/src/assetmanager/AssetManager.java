@@ -4,6 +4,12 @@
  */
 package assetmanager;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.SkinManager;
 import org.joshy.gfx.css.CSSMatcher;
@@ -20,6 +26,7 @@ import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.ArrayListModel;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.swatches.Palette;
 
 import java.util.ArrayList;
@@ -38,6 +45,8 @@ public class AssetManager {
     private static Font tableFont;
     private static Button tableViewButton;
     private static Textbox searchBox;
+    private static Button addButton;
+    private static Button deleteButton;
 
     public static void main(String[] args) throws Exception {
         Core.init();
@@ -68,13 +77,31 @@ public class AssetManager {
         vbox.setBoxAlign(FlexBox.Align.Stretch);
 
         HFlexBox toolbar = new HFlexBox();
-        toolbar.add(new Button("Add"));
-        toolbar.add(new Button("New List"));
-        toolbar.add(new Button("Delete"));
 
-        tableViewButton = new Button("Table View");
-        toolbar.add(tableViewButton);
-        toolbar.add(new Button("Thumb View"));
+        addButton = new Button("Add");
+        addButton.onClicked(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                FileDialog fd = new FileDialog((Frame)null);
+                fd.setMode(FileDialog.LOAD);
+                fd.setTitle("Add File or Director");
+                fd.setVisible(true);
+                if(fd.getFile() != null) {
+                    File file = new File(fd.getDirectory(),fd.getFile());
+                    addFile(file);
+                    tableView.redraw();
+                }
+            }
+        });
+        toolbar.add(addButton);
+        toolbar.add(new Button("New List").setEnabled(false));
+        
+        deleteButton = new Button("Delete");
+        deleteButton.onClicked(new DeleteAction());
+        toolbar.add(deleteButton);
+
+        //tableViewButton = new Button("Table View");
+        //toolbar.add(tableViewButton);
+        //toolbar.add(new Button("Thumb View"));
 
         searchBox = new Textbox("");
         searchBox.setHintText("Search");
@@ -203,6 +230,33 @@ public class AssetManager {
         return vbox;
     }
 
+
+    private static void addFile(File file) throws IOException {
+        if(file.exists()) {
+            if(file.isDirectory()) {
+                addFiles(file.listFiles());
+            } else {
+                processfile(file);
+            }
+        }
+    }
+
+    private static void addFiles(File[] files) throws IOException {
+        for(File file : files) {
+            addFile(file);
+        }
+    }
+
+    private static void processfile(File file) throws IOException {
+        //assume png is a texture
+        if(file.getName().toLowerCase().endsWith(".png")) {
+            db.copyAndAddPattern(file);
+        }
+        if(file.getName().toLowerCase().endsWith(".ttf")) {
+            db.copyAndAddFont(file);
+        }
+    }
+
     private static class AssetTableModel implements TableView.TableModel<Asset,String> {
 
         private List<Asset> data;
@@ -231,6 +285,25 @@ public class AssetManager {
         public Asset get(int row, int col) {
             if(row >= data.size()) return null;
             return data.get(row);
+        }
+    }
+
+    private static class DeleteAction implements Callback<ActionEvent> {
+        public void call(ActionEvent actionEvent) throws Exception {
+            Query currentQuery = sidebarList.getModel().get(sidebarList.getSelectedIndex());
+            if(currentQuery == all) {
+                int row = tableView.getSelectedRow();
+                Asset asset = tableView.getModel().get(row,0);
+                db.removeFromLibrary(asset);
+                tableView.redraw();
+                return;
+            }
+            if(!(currentQuery instanceof StaticQuery)) return;
+            StaticQuery staticQuery = (StaticQuery) currentQuery;
+            
+            int row = tableView.getSelectedRow();
+            Asset asset = tableView.getModel().get(row,0);
+            db.removeFromStaticList(staticQuery,asset);
         }
     }
 }
