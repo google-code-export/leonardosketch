@@ -27,6 +27,7 @@ public abstract class SNode {
     private String id = null;
     private String linkTarget;
     private boolean locked;
+    private boolean visible = true;
 
     public abstract Bounds getBounds();
     public abstract Bounds getTransformedBounds();
@@ -152,5 +153,13 @@ public abstract class SNode {
 
     public boolean isLocked() {
         return locked;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public boolean isVisible() {
+        return visible;
     }
 }
