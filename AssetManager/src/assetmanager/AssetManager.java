@@ -12,10 +12,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Image;
-import org.joshy.gfx.event.Callback;
-import org.joshy.gfx.event.EventBus;
-import org.joshy.gfx.event.SelectionEvent;
-import org.joshy.gfx.event.SystemMenuEvent;
+import org.joshy.gfx.event.*;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.FlexBox;
@@ -39,6 +36,8 @@ public class AssetManager {
     private static AssetDB db;
     private static CSSSkin tableSkin;
     private static Font tableFont;
+    private static Button tableViewButton;
+    private static Textbox searchBox;
 
     public static void main(String[] args) throws Exception {
         Core.init();
@@ -72,10 +71,21 @@ public class AssetManager {
         toolbar.add(new Button("Add"));
         toolbar.add(new Button("New List"));
         toolbar.add(new Button("Delete"));
-        toolbar.add(new Button("Table View"));
+
+        tableViewButton = new Button("Table View");
+        toolbar.add(tableViewButton);
         toolbar.add(new Button("Thumb View"));
 
-        toolbar.add(new Textbox("").setHintText("search").setWidth(100),1.0);
+        searchBox = new Textbox("");
+        searchBox.setHintText("Search");
+        searchBox.onAction(new Callback<ActionEvent>() {
+            public void call(ActionEvent actionEvent) throws Exception {
+                String query = searchBox.getText();
+                tableView.setModel(new AssetTableModel(db.searchByAnyText(query)));
+                tableView.redraw();
+            }
+        });
+        toolbar.add(searchBox.setWidth(100),1.0);
         vbox.add(toolbar);
 
 
@@ -117,7 +127,7 @@ public class AssetManager {
                 Query query = sidebarList.getModel().get(sidebarList.getSelectedIndex());
                 if(query == null || !query.isSelectable()) return;
                 tableView.setModel(new AssetTableModel(query.execute(db)));
-
+                tableView.redraw();
             }
         });
 
