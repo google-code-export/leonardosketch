@@ -83,6 +83,7 @@ public class Main implements Runnable {
 
     public static PowerupManager powerupManager = PowerupManager.get();
     private static AssetDB assetDatabase;
+    private Stage assetStage;
 
     public static void main(String ... args) throws Exception {
         System.setSecurityManager(null);
@@ -332,6 +333,11 @@ public class Main implements Runnable {
         final HFlexBox statusBar = new HFlexBox();
         statusBar.setBoxAlign(HFlexBox.Align.Baseline)
                 .add(new Button("Report a Problem, Request a Feature").onClicked(makeAWishAction))
+            .add(new Button("Asset Manager").onClicked(new Callback<ActionEvent>() {
+                public void call(ActionEvent actionEvent) throws Exception {
+                    showAssetManager();
+                }
+            }))
                 ;
         statusBar.setPrefWidth(450);
 
@@ -474,6 +480,22 @@ public class Main implements Runnable {
                 }
             }
         });
+    }
+
+    private void showAssetManager() {
+        try {
+            if(assetStage == null) {
+                Stage stage = Stage.createStage();
+                stage.setContent(AssetManager.setupMain());
+                stage.setWidth(1000);
+                stage.setHeight(600);
+                stage.centerOnScreen();
+                assetStage = stage;
+            }
+            assetStage.raiseToTop();
+        } catch (Throwable thr) {
+            thr.printStackTrace();
+        }
     }
 
     private void closeWindow(DocContext context) {
@@ -642,16 +664,7 @@ public class Main implements Runnable {
             @Override
             public void execute() throws Exception {
                 u.p("managing assets");
-
-                try {
-                    Stage stage = Stage.createStage();
-                    stage.setContent(AssetManager.setupMain());
-                    stage.setWidth(1000);
-                    stage.setHeight(600);
-                    stage.centerOnScreen();
-                } catch (Throwable thr) {
-                    thr.printStackTrace();
-                }
+                showAssetManager();
             }
         });
         
