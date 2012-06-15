@@ -37,6 +37,7 @@ public class TreeViewPanel extends VFlexBox {
     
     private List<Control> customPropsControls = new ArrayList<Control>();
     private Checkbox lock_node;
+    private Checkbox visible_node;
 
     public TreeViewPanel(Main main, final VectorDocContext ctx) {
         this.main = main;
@@ -141,6 +142,19 @@ public class TreeViewPanel extends VFlexBox {
             }
         });
 
+        //visible
+        visible_node = new Checkbox("visible");
+        propsPanel.add(new HFlexBox().add(visible_node));
+        EventBus.getSystem().addListener(visible_node, ActionEvent.Action, new Callback<Event>() {
+            public void call(Event event) throws Exception {
+                Selection sel = ctx.getSelection();
+                if (sel.size() == 1) {
+                    SNode n = sel.firstItem();
+                    n.setVisible(visible_node.isSelected());
+                }
+            }
+        });
+
         //cache
         all_cache = new Checkbox("cache");
         EventBus.getSystem().addListener(all_cache, ActionEvent.Action, new Callback<Event>() {
@@ -191,7 +205,6 @@ public class TreeViewPanel extends VFlexBox {
     private Callback<? extends Selection.SelectionChangeEvent> selectionCallback = new Callback<Selection.SelectionChangeEvent>() {
         public void call(Selection.SelectionChangeEvent selectionEvent) throws Exception {
             Selection sel = selectionEvent.getSelection();
-            //u.p("selection changed");
 
             boolean enabled = sel.size()==1;
 
@@ -211,6 +224,7 @@ public class TreeViewPanel extends VFlexBox {
                     all_cache.setSelected(n.getBooleanProperty("com.joshondesign.amino.nodecache"));
                     all_cache_image.setSelected(n.getBooleanProperty("com.joshondesign.amino.nodecacheimage"));
                     lock_node.setSelected(n.isLocked());
+                    visible_node.setSelected(n.isVisible());
                 }
             } else {
                 all_name.setText("");
