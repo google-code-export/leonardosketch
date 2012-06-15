@@ -23,13 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-/**
-* Created by IntelliJ IDEA.
-* User: joshmarinacci
-* Date: Sep 10, 2010
-* Time: 5:12:39 PM
-* To change this template use File | Settings | File Templates.
-*/
 public class Ruler extends Container {
     private boolean vertical;
     private double offset;
@@ -202,11 +195,11 @@ public class Ruler extends Container {
             while(true) {
                 if(y-o > -step) {
                     //major ticks
-                    g.drawLine(10,y-o,w,y-o);
+                    g.drawLine(w-10,y-o,w,y-o);
                     g.drawText(""+(int)(y/scale), fnt,2, y+12-o);
 
                     for(int i=1; i<=4; i++) {
-                        g.drawLine(20,y+i*10-o,w,y+i*10-o);
+                        g.drawLine(w-5,y+i*10-o,w,y+i*10-o);
                     }
                 }
 
@@ -223,10 +216,10 @@ public class Ruler extends Container {
             int h = (int) getHeight();
             while(true) {
                 if(x-o > -step) {
-                    g.drawLine(x-o,10,x-o,h);
+                    g.drawLine(x-o,h-10,x-o,h);
                     g.drawText(""+(int)(x/scale), fnt,x+3-o, 12);
                     for(int i=1; i<=4; i++) {
-                        g.drawLine(x+i*10-o,20,x+i*10-o,h);
+                        g.drawLine(x+i*10-o,h-5,x+i*10-o,h);
                     }
                 }
                 x+=step;

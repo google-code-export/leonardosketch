@@ -230,6 +230,7 @@ public class Main implements Runnable {
         final CanvasDocument fdoc = doc;
         context.stackPanel.add(
                 new Panel() {
+                    final int RULER_WIDTH = 20;
                     @Override
                     public void doLayout() {
                         hruler.setVisible(fdoc.isRulersVisible());
@@ -237,23 +238,23 @@ public class Main implements Runnable {
                         super.doLayout();
                         for(Control c : controlChildren()) {
                             if(c == hruler && fdoc.isRulersVisible()) {
-                                c.setWidth(getWidth()-30);
-                                c.setHeight(30);
-                                c.setTranslateX(30);
+                                c.setWidth(getWidth()-RULER_WIDTH);
+                                c.setHeight(RULER_WIDTH);
+                                c.setTranslateX(RULER_WIDTH);
                                 c.setTranslateY(0);
                             }
                             if(c == vruler && fdoc.isRulersVisible()) {
-                                c.setWidth(30);
-                                c.setHeight(getHeight()-30);
+                                c.setWidth(RULER_WIDTH);
+                                c.setHeight(getHeight()-RULER_WIDTH);
                                 c.setTranslateX(0);
-                                c.setTranslateY(30);
+                                c.setTranslateY(RULER_WIDTH);
                             }
                             if(c instanceof ScrollPane) {
                                 if(fdoc.isRulersVisible()) {
-                                    c.setWidth(getWidth()-30);
-                                    c.setHeight(getHeight()-30);
-                                    c.setTranslateX(30);
-                                    c.setTranslateY(30);
+                                    c.setWidth(getWidth()-RULER_WIDTH);
+                                    c.setHeight(getHeight()-RULER_WIDTH);
+                                    c.setTranslateX(RULER_WIDTH);
+                                    c.setTranslateY(RULER_WIDTH);
                                 } else {
                                     c.setWidth(getWidth()-0);
                                     c.setHeight(getHeight()-0);
