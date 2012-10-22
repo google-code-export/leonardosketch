@@ -1,13 +1,12 @@
 package org.joshy.sketch.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.event.EventBus;
 import org.joshy.sketch.util.Util;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
     private boolean gridActive = true;
@@ -39,8 +38,12 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         return gridHeight;
     }
 
-    public void setGridHeight(double gridHeight) {
-        this.gridHeight = gridHeight;
+    public void setGridHeight(double h) {
+        this.gridHeight = h;
+    }
+
+    public void setGridWidth(double w) {
+        this.gridWidth = w;
     }
 
     public void setGridActive(boolean gridActive) {
