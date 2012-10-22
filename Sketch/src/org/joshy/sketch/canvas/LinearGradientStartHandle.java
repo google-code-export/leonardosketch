@@ -1,5 +1,6 @@
 package org.joshy.sketch.canvas;
 
+import java.awt.geom.Point2D;
 import org.joshy.gfx.draw.LinearGradientFill;
 import org.joshy.gfx.draw.MultiGradientFill;
 import org.joshy.gfx.draw.Paint;
@@ -10,11 +11,10 @@ import org.joshy.gfx.node.control.Control;
 import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.util.GeomUtil;
 import org.joshy.sketch.model.AbstractResizeableNode;
+import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SShape;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.util.Util;
-
-import java.awt.geom.Point2D;
 
 /**
  * Created by IntelliJ IDEA.
@@ -268,7 +268,7 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
     }
 
     @Override
-    public void changed() {
+    public void changed(SNode node) {
         if(shape instanceof AbstractResizeableNode) {
             AbstractResizeableNode res = (AbstractResizeableNode) shape;
             Paint paint = shape.getFillPaint();
@@ -296,6 +296,6 @@ public class LinearGradientStartHandle extends BaseGradientHandle<LinearGradient
                 }
             }
         }
-        super.changed();
+        super.changed(node);
     }
 }

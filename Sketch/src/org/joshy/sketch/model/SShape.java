@@ -1,5 +1,10 @@
 package org.joshy.sketch.model;
 
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.ImageBuffer;
@@ -8,19 +13,12 @@ import org.joshy.gfx.draw.effects.BlurEffect;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.stage.swing.SwingGFX;
 
-import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Area;
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class SShape extends SNode {
     public Paint fillPaint = FlatColor.GRAY;
     public FlatColor strokePaint = FlatColor.BLACK;
     private double strokeWidth = 1;
     private double fillOpacity = 1.0;
     private DropShadow shadow = null;
-    private List<SShapeListener> listeners = new ArrayList<SShapeListener>();
     private ImageBuffer buf;
     private DropShadow oldShadow;
     private double oldWidth;
@@ -227,24 +225,8 @@ public abstract class SShape extends SNode {
         return this.shadow;
     }
 
-    public void addListener(SShapeListener gradientHandle) {
-        listeners.add(gradientHandle);
-    }
-
     protected void markContentChanged() {
         contentChanged = true;
-    }
-
-    protected void fireUpdate() {
-        if(listeners != null) {
-            for(SShapeListener c : listeners) {
-                c.changed();
-            }
-        }
-    }
-
-    public void removeListener(SShapeListener gradientHandle) {
-        listeners.remove(gradientHandle);
     }
 
     public SPath toPath() {
@@ -261,7 +243,4 @@ public abstract class SShape extends SNode {
         return af.createTransformedShape(sh);
     }
 
-    public static interface SShapeListener {
-        public void changed();
-    }
 }
