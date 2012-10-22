@@ -17,19 +17,31 @@ public class CanvasDocument<P extends Page> {
     private boolean rulersVisible = true;
     private boolean pagesVisible = false;
 
+    private static double DPI = 96.0;
     public static enum LengthUnits {
-        Pixels(1.0),
-        Inches(96.0),
-        Centimeters(96.0*0.393700787);
+
+        Pixels(1.0,"px"),
+        Inches(DPI,"in"),
+        Centimeters(DPI*0.393700787,"cm"),
+        Millimeters(DPI*0.393700787/10.0,"mm");
 
         private double pixelConversionFactor;
+        private String abbr;
 
-        LengthUnits(double factor) {
+        LengthUnits(double factor, String abbr) {
             this.pixelConversionFactor = factor;
+            this.abbr = abbr;
         }
 
-        public double toPixels(double width) {
-            return width* pixelConversionFactor;
+        public double toPixels(double value) {
+            return value* pixelConversionFactor;
+        }
+        public double fromPixels(double value) {
+            return value/pixelConversionFactor;
+        }
+
+        public String getAbbr() {
+            return abbr;
         }
     }
 

@@ -1,5 +1,6 @@
 package org.joshy.sketch.canvas;
 
+import java.util.List;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Transform;
@@ -9,8 +10,6 @@ import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.ScrollPane;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
-
-import java.util.List;
 
 public class SketchCanvas extends DocumentCanvas implements ScrollPane.ScrollingAware {
     public Selection selection;

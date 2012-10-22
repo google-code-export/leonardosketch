@@ -70,7 +70,9 @@ public class NewAction extends SAction {
                 double dheight = Double.parseDouble(height.getText());
                 SketchDocument doc = new SketchDocument();
                 doc.setDocBoundsActive(true);
-                doc.setUnits(CanvasDocument.LengthUnits.Pixels);
+                doc.setUnits(CanvasDocument.LengthUnits.Millimeters);
+                doc.setGridHeight(10);
+                doc.setGridWidth(10);
                 doc.setWidth(dwidth);
                 doc.setHeight(dheight);
                 try {

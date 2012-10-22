@@ -502,8 +502,11 @@ public class SelectMoveTool extends CanvasTool {
             double ny = cursor.getY();
             SketchDocument doc = context.getDocument();
             if(doc.isSnapGrid()) {
-                nx = ((int)(nx/doc.getGridWidth()))*doc.getGridWidth();
-                ny = ((int)(ny/doc.getGridHeight()))*doc.getGridHeight();
+                CanvasDocument.LengthUnits units = doc.getUnits();
+                double gw = units.toPixels(doc.getGridWidth());
+                double gh = units.toPixels(doc.getGridHeight());
+                nx = ((int)(nx/gw))*gw;
+                ny = ((int)(ny/gh))*gh;
             }
             if(selectedHandle instanceof MouseEventHandle) {
                 ((MouseEventHandle)selectedHandle).mouseDragged(nx, ny, event.isShiftPressed(), cursor);
@@ -582,8 +585,11 @@ public class SelectMoveTool extends CanvasTool {
             SketchDocument doc = context.getDocument();
             //calc snap points
             if(doc.isSnapGrid()) {
-                nx = ((int)(nx/doc.getGridWidth()))*doc.getGridWidth();
-                ny = ((int)(ny/doc.getGridHeight()))*doc.getGridHeight();
+                CanvasDocument.LengthUnits units = doc.getUnits();
+                double gw = units.toPixels(doc.getGridWidth());
+                double gh = units.toPixels(doc.getGridHeight());
+                nx = ((int)(nx/gw))*gw;
+                ny = ((int)(ny/gh))*gh;
             }
 
             //constrain movement to horiz and vert from the original drag point
@@ -968,30 +974,31 @@ public class SelectMoveTool extends CanvasTool {
         //draw the move position indicator
         if(!showIndicator) return;
         Bounds sb = context.getSketchCanvas().selection.calculateBounds();
+        CanvasDocument.LengthUnits units = context.getDocument().getUnits();
         String l1 = "";
         String l2 = "";
         if(selectedHandle != null) {
             String[] lines = selectedHandle.customStatusLines();
             if(lines == null || lines.length < 1) {
-                l1 = "w: "+moveInfoFormatter.format(sb.getWidth());
-                l2 = "h: "+moveInfoFormatter.format(sb.getHeight());
+                l1 = "w: "+moveInfoFormatter.format(units.fromPixels(sb.getWidth())) + " " + units.getAbbr();
+                l2 = "h: "+moveInfoFormatter.format(units.fromPixels(sb.getHeight())) + " " + units.getAbbr();
             } else {
                 if(lines.length >= 1) l1 = lines[0];
                 if(lines.length >= 2) l2 = lines[1];
             }
         } else {
-            l1 = "x: "+moveInfoFormatter.format(sb.getX());
-            l2 = "y: "+moveInfoFormatter.format(sb.getY());
+            l1 = "x: "+moveInfoFormatter.format(units.fromPixels(sb.getX()))+" "+units.getAbbr();
+            l2 = "y: "+moveInfoFormatter.format(units.fromPixels(sb.getY()))+" "+units.getAbbr();
         }
         sb = context.getSketchCanvas().transformToDrawing(sb);
 
         g.setPaint(FlatColor.hsb(0,0,0.6,ido));
-        g.fillRoundRect(sb.getX()+sb.getWidth()+20,sb.getY()+sb.getHeight()/2-20,50,40,10,10);
+        g.fillRoundRect(sb.getX()+sb.getWidth()+20,sb.getY()+sb.getHeight()/2-20,70,40,10,10);
         g.setPaint(new FlatColor(1.0,1.0,1.0,ido));
         g.drawText(l1,moveInfoFont,sb.getX()+sb.getWidth()+20+10,sb.getY()+sb.getHeight()/2-20+15);
         g.drawText(l2,moveInfoFont,sb.getX()+sb.getWidth()+20+10,sb.getY()+sb.getHeight()/2-20+15+15);
         g.setPaint(FlatColor.hsb(0,0,0.4,ido));
-        g.drawRoundRect(sb.getX()+sb.getWidth()+20,sb.getY()+sb.getHeight()/2-20,50,40,10,10);
+        g.drawRoundRect(sb.getX()+sb.getWidth()+20,sb.getY()+sb.getHeight()/2-20,70,40,10,10);
     }
 
 }
