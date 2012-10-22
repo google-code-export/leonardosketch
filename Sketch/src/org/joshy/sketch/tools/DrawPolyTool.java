@@ -55,7 +55,7 @@ public class DrawPolyTool extends CanvasTool {
             poly = new SPoly();
             poly.addPoint(snapPoint(cursor));
             hotspot = cursor;
-            SketchDocument doc = (SketchDocument) context.getDocument();
+            SketchDocument doc = context.getDocument();
             doc.getCurrentPage().add(poly);
             context.getUndoManager().pushAction(new UndoableAddNodeAction(context,poly,"polygon"));
             point = new Point2D.Double();

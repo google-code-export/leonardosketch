@@ -9,9 +9,7 @@ import org.joshy.gfx.node.layout.Container;
 import org.joshy.gfx.util.GeomUtil;
 import org.joshy.sketch.controls.AlphaPicker;
 import org.joshy.sketch.controls.FreerangeColorPicker;
-import org.joshy.sketch.model.AbstractResizeableNode;
-import org.joshy.sketch.model.Handle;
-import org.joshy.sketch.model.SShape;
+import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.tools.MouseEventHandle;
 import org.joshy.sketch.util.DrawUtils;
@@ -33,7 +31,7 @@ import java.util.Map;
  */
 public abstract class BaseGradientHandle<G extends MultiGradientFill>
         extends Handle
-        implements MouseEventHandle, SShape.SShapeListener {
+        implements MouseEventHandle, NodeListener {
     protected SShape shape;
     protected VectorDocContext context;
     protected Point2D.Double hoverPoint;
@@ -181,7 +179,7 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
         startPoint = null;
     }
 
-    public void changed() {
+    public void changed(SNode node) {
         refresh();
         updateControlPositions();
     }
@@ -196,7 +194,7 @@ public abstract class BaseGradientHandle<G extends MultiGradientFill>
             currentScale = canvas.getScale();
             currentPanX = canvas.getPanX();
             currentPanY = canvas.getPanY();
-            changed();
+            changed(null);
         }
 
         Point2D pt = new Point2D.Double(getX(),getY());

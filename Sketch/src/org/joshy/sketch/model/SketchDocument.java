@@ -6,6 +6,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.event.EventBus;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.util.Util;
 
 public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
@@ -125,7 +126,7 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         this.snapNodeBounds = snapNodeBounds;
     }
 
-    public static class SketchPage extends Page {
+    public static class SketchPage extends Page implements NodeListener {
         private List<Guideline> guidelines = new ArrayList<Guideline>();
         private List<SNode> model;
         private SketchDocument doc;
@@ -143,6 +144,7 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
         public void add(SNode node) {
             Util.assertNotNull(node);
             model.add(node);
+            node.addListener(this);
             doc.setDirty(true);
         }
 
@@ -179,6 +181,18 @@ public class SketchDocument extends CanvasDocument<SketchDocument.SketchPage> {
             getDocument().fireViewDirty();
             EventBus.getSystem().publish(new DocumentEvent(this.getDocument(),DocumentEvent.PageGuidelineAdded,g));
             return g;
+        }
+
+        public void changed(SNode node) {
+            //if node is an sresizable node
+            if(!(node instanceof SResizeableNode)) return;
+
+            //look for spolys that need to be updated
+            for(SNode n : getNodes()) {
+                if(n instanceof STrace) {
+                    ((STrace)n).updateSlavePositions();
+                }
+            }
         }
     }
 

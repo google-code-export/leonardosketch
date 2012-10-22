@@ -1,5 +1,7 @@
 package org.joshy.sketch.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.joshy.gfx.node.Bounds;
 
 import java.awt.geom.Point2D;
@@ -28,6 +30,7 @@ public abstract class SNode {
     private String linkTarget;
     private boolean locked;
     private boolean visible = true;
+    private List<NodeListener> listeners = new ArrayList<NodeListener>();
 
     public abstract Bounds getBounds();
     public abstract Bounds getTransformedBounds();
@@ -161,5 +164,21 @@ public abstract class SNode {
 
     public boolean isVisible() {
         return visible;
+    }
+
+    public void addListener(NodeListener gradientHandle) {
+        listeners.add(gradientHandle);
+    }
+
+    protected void fireUpdate() {
+        if(listeners != null) {
+            for(NodeListener c : listeners) {
+                c.changed(this);
+            }
+        }
+    }
+
+    public void removeListener(NodeListener gradientHandle) {
+        listeners.remove(gradientHandle);
     }
 }
