@@ -1,5 +1,6 @@
 package org.joshy.sketch.tools;
 
+import java.awt.geom.Point2D;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.Font;
@@ -8,7 +9,6 @@ import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.NodeUtils;
 import org.joshy.gfx.node.control.Textarea;
-import org.joshy.sketch.Main;
 import org.joshy.sketch.Settings;
 import org.joshy.sketch.actions.UndoableAddNodeAction;
 import org.joshy.sketch.model.ResizableGrid9Shape;
@@ -17,12 +17,11 @@ import org.joshy.sketch.model.SText;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 
-import java.awt.geom.Point2D;
-
 public class DrawTextTool extends CanvasTool {
     private SText textNode;
     private Textarea overlayTextBox;
     private boolean notInMainDocument;
+    private boolean editing;
 
     public DrawTextTool(VectorDocContext context) {
         super(context);
@@ -99,9 +98,14 @@ public class DrawTextTool extends CanvasTool {
         context.getUndoManager().pushAction(new UndoableAddNodeAction(context,textNode,"text"));
         textNode = null;
         this.notInMainDocument = false;
+        this.editing = false;
     }
 
     public void startEditing(SNode node) {
+        if(this.editing) {
+            return;
+        }
+        this.editing = true;
         SketchDocument doc = context.getDocument();
         double offsetX = 0;
         double offsetY = 0;
