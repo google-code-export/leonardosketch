@@ -1,5 +1,7 @@
 package org.joshy.sketch.actions.treeview;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.Event;
@@ -7,14 +9,10 @@ import org.joshy.gfx.event.EventBus;
 import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.VFlexBox;
-import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -38,6 +36,8 @@ public class TreeViewPanel extends VFlexBox {
     private List<Control> customPropsControls = new ArrayList<Control>();
     private Checkbox lock_node;
     private Checkbox visible_node;
+    private Textbox width_box;
+    private Textbox height_box;
 
     public TreeViewPanel(Main main, final VectorDocContext ctx) {
         this.main = main;
@@ -110,6 +110,8 @@ public class TreeViewPanel extends VFlexBox {
 
         //all nodes
 
+
+        
         //name
         all_name = new Textbox();
         all_name.setPrefWidth(100);
@@ -198,8 +200,36 @@ public class TreeViewPanel extends VFlexBox {
 
         this.add(propsPanel,0);
 
-
+        addProp("Width","width");
+        addProp("Height","height");
+        addProp("X:","x");
+        addProp("Y:","y");
         EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, selectionCallback);
+    }
+
+    private void addProp(String label, final String name) {
+        final Textbox box = new Textbox();
+        box.setPrefWidth(100);
+        propsPanel.add(new HFlexBox()
+                .add(new Label(label))
+                .add(box));
+
+        EventBus.getSystem().addListener(box, ActionEvent.Action, new Callback<Event>() {
+            public void call(Event event) throws Exception {
+                if(!main.propMan.isClassAvailable(SResizeableNode.class)) return;
+                double v = Double.parseDouble(box.getText());
+                main.propMan.getProperty(name).setValue(v);
+                ctx.redraw();
+            }
+        });
+
+
+        EventBus.getSystem().addListener(Selection.SelectionChangeEvent.Changed, new Callback<Selection.SelectionChangeEvent>() {
+            public void call(Selection.SelectionChangeEvent selectionChangeEvent) throws Exception {
+                if(!main.propMan.isClassAvailable(SResizeableNode.class)) return;
+                box.setText(""+main.propMan.getProperty(name).getDoubleValue());
+            }
+        });
     }
 
     private Callback<? extends Selection.SelectionChangeEvent> selectionCallback = new Callback<Selection.SelectionChangeEvent>() {
