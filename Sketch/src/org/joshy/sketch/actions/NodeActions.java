@@ -584,7 +584,7 @@ public class NodeActions {
         public void execute() {
             //duplicate the selection
             final List<SNode> dupes = new ArrayList<SNode>();
-            SketchDocument doc = (SketchDocument) context.getDocument();
+            SketchDocument doc = context.getDocument();
             for(SNode node : context.getSelection().sortedItems(doc)) {
                 SNode dupe = node.duplicate(null);
                 if(offset) {
@@ -657,6 +657,20 @@ public class NodeActions {
                 node.setRotate(0);
             }
             context.redraw();
+        }
+    }
+
+    public static class EditSnapPointsAction extends SAction {
+
+        private VectorDocContext context;
+
+        public EditSnapPointsAction(VectorDocContext context) {
+            this.context = context;
+        }
+
+        @Override
+        public void execute() throws Exception {
+            context.setSelectedTool(context.getEditSnapPointEditorTool());
         }
     }
 }
