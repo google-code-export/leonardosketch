@@ -21,6 +21,7 @@ public abstract class SNode {
     private double translateX = 0.0;
     private double translateY = 0.0;
     protected Map<String,String> props = new HashMap<String,String>();
+    protected List<Point2D> snapPoints = new ArrayList<Point2D>();
     private double scaleX = 1.0;
     private double scaleY = 1.0;
     private double rotate = 0.0;
@@ -180,5 +181,9 @@ public abstract class SNode {
 
     public void removeListener(NodeListener gradientHandle) {
         listeners.remove(gradientHandle);
+    }
+
+    public List<Point2D> getSnapPoints() {
+        return snapPoints;
     }
 }
