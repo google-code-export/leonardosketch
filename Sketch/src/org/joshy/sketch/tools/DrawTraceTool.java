@@ -17,12 +17,12 @@ public class DrawTraceTool extends CanvasTool {
     private boolean dragging;
     private boolean hovered;
     private STrace trace;
-    private Point2D.Double point;
+    private STrace.TracePoint point;
     private boolean active;
     private Point2D.Double hoverPoint;
     private STrace existingTrace;
     private boolean showTracePoints;
-    private Point2D dragPoint;
+    private STrace.TracePoint dragPoint;
 
     public DrawTraceTool(VectorDocContext context) {
         super(context);
@@ -61,9 +61,12 @@ public class DrawTraceTool extends CanvasTool {
             }
         }
         if(showTracePoints && existingTrace != null) {
-            for(Point2D pt : existingTrace.getPoints()) {
+            for(STrace.TracePoint pt : existingTrace.getPoints()) {
                 g.setPaint(FlatColor.PURPLE);
-                g.fillRect(existingTrace.getTranslateX()+pt.getX(),existingTrace.getTranslateY()+pt.getY(),10,10);
+                g.fillOval(
+                        existingTrace.getTranslateX() + pt.getX() - 5,
+                        existingTrace.getTranslateY() + pt.getY() - 5,
+                        10, 10);
             }
         }
     }
@@ -105,7 +108,7 @@ public class DrawTraceTool extends CanvasTool {
     @Override
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
         if(existingTrace != null) {
-            Point2D pt = findPoint(existingTrace, cursor);
+            STrace.TracePoint pt = findPoint(existingTrace, cursor);
             if(pt != null) {
                 dragPoint = pt;
             }
@@ -114,9 +117,9 @@ public class DrawTraceTool extends CanvasTool {
 
         if(active) {
             point.setLocation(cursor);
-            STrace.SlaveFunction func = findTraceSpot(point,trace);
+            STrace.SlaveFunction func = findTraceSpot(cursor,trace);
             if(func != null) {
-                endTrace(cursor,func);
+                endTrace(point,func);
                 active = false;
             } else {
                 appendPoint(cursor);
@@ -128,26 +131,23 @@ public class DrawTraceTool extends CanvasTool {
             STrace trace = new STrace();
             STrace.SlaveFunction func = findTraceSpot(cursor,trace);
             if(func != null) {
-                trace.setStrokeWidth(3);
-                trace.addPoint(cursor);
-                trace.addSlaveFunction(func);
+                STrace.TracePoint pt = trace.addPoint(cursor);
+                trace.addSlaveFunction(pt,func);
                 SketchDocument doc = context.getDocument();
                 doc.getCurrentPage().add(trace);
                 this.trace = trace;
-                point = new Point2D.Double();
-                point.setLocation(cursor);
-                trace.addPoint(point);
+                point = trace.addPoint(cursor);
                 context.redraw();
                 active = true;
             }
         }
     }
 
-    private Point2D findPoint(STrace existingTrace, Point2D.Double cursor) {
-        for(Point2D pt : existingTrace.getPoints()) {
+    private STrace.TracePoint findPoint(STrace existingTrace, Point2D.Double cursor) {
+        for(STrace.TracePoint pt : existingTrace.getPoints()) {
             double x = cursor.getX() - existingTrace.getTranslateX();
             double y = cursor.getY() - existingTrace.getTranslateY();
-            if(pt.distanceSq(x,y) < 10*10) {
+            if(Math.abs(pt.distance(x,y)) < 10) {
                 return pt;
             }
         }
@@ -166,19 +166,20 @@ public class DrawTraceTool extends CanvasTool {
                 double y = b.getY() + b.getHeight()*pt.getY();
                 if(within(x,y,cursor,10)){
                     return new STrace.SlaveFunction() {
-                        public void apply() {
-                            Bounds b = nd.getTransformedBounds();
+                        public void apply(STrace.TracePoint point, SNode trace) {
+                            Bounds b = node.getTransformedBounds();
                             double x = b.getX() + b.getWidth()*pt.getX();
                             double y = b.getY() + b.getHeight()*pt.getY();
-                            cursor.setLocation(x-trace.getTranslateX(),y-trace.getTranslateY());
+                            point.setLocation(x-trace.getTranslateX(),y-trace.getTranslateY());
                         }
                     };
                 }
             }
             
             if(! (node instanceof SResizeableNode)) continue;
-            final SResizeableNode rect = (SResizeableNode) node;
 
+            /*
+            final SResizeableNode rect = (SResizeableNode) node;
             //the corners
             if(within(rect.getTranslateX() + rect.getX(), rect.getTranslateY() + rect.getY(), cursor, 10)) {
                 return new STrace.SlaveFunction(){
@@ -241,6 +242,7 @@ public class DrawTraceTool extends CanvasTool {
                     }
                 };
             }
+            */
             /*
             if(within(rect.getTranslateX() + rect.getX()+rect.getWidth(), rect.getTranslateY() + rect.getY(), cursor, 10)) return rect;
             if(within(rect.getTranslateX() + rect.getX(), rect.getTranslateY() + rect.getY()+rect.getHeight(), cursor, 10)) return rect;
@@ -262,17 +264,14 @@ public class DrawTraceTool extends CanvasTool {
         return false;
     }
 
-    private void endTrace(Point2D.Double cursor, STrace.SlaveFunction func) {
-        trace.addSlaveFunction(func);
-        trace.setClosed(false);
+    private void endTrace(STrace.TracePoint cursor, STrace.SlaveFunction func) {
+        trace.addSlaveFunction(cursor, func);
         trace = null;
         context.releaseControl();
     }
 
     private void appendPoint(Point2D.Double cursor) {
-        point = new Point2D.Double();
-        point.setLocation(cursor);
-        trace.addPoint(point);
+        point = trace.addPoint(cursor);
         context.redraw();
     }
 
@@ -287,6 +286,20 @@ public class DrawTraceTool extends CanvasTool {
 
     @Override
     protected void mouseReleased(MouseEvent event, Point2D.Double cursor) {
+        if(dragPoint != null) {
+            //if first
+            if(existingTrace.getPoints().get(0) == dragPoint ||
+                    existingTrace.getPoints().get(existingTrace.getPoints().size()-1)==dragPoint
+                    ) {
+                STrace.SlaveFunction spot = findTraceSpot(cursor, existingTrace);
+                if(spot != null) {
+                    existingTrace.removeSlaveFunction(dragPoint);
+                    existingTrace.addSlaveFunction(dragPoint,spot);
+                } else {
+                    existingTrace.removeSlaveFunction(dragPoint);
+                }
+            }
+        }
         dragPoint = null;
     }
 
