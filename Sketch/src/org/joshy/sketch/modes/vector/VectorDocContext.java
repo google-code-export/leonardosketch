@@ -188,7 +188,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_insertknots.png")),drawPathTool);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_polygon.png")),drawNGonTool);
         tools.add(new ToolbarButton(Main.getIcon("draw_arrow.png")),drawArrowTool);
-        tools.add(new ToolbarButton(Main.getIcon("draw_arrow.png")),drawTraceTool);
+        tools.add(new ToolbarButton(Main.getIcon("cr22-action-add_sub_task.png")),drawTraceTool);
 
         editSnapPointsTool = new EditSnapPointsTool(this);
 
