@@ -1,5 +1,9 @@
 package org.joshy.sketch.tools;
 
+import java.awt.geom.Point2D;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.*;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.animation.AnimationDriver;
 import org.joshy.gfx.animation.KeyFrameAnimator;
@@ -12,6 +16,7 @@ import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
 import org.joshy.gfx.node.Bounds;
 import org.joshy.gfx.node.control.ListModel;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.symbols.CreateSymbol;
 import org.joshy.sketch.canvas.ResizeHandle;
@@ -21,11 +26,6 @@ import org.joshy.sketch.controls.FloatingPropertiesPanel;
 import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.util.DrawUtils;
-
-import java.awt.geom.Point2D;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.*;
 
 /*
 
@@ -364,7 +364,14 @@ public class SelectMoveTool extends CanvasTool {
         List<SNode> underCursor = new ArrayList<SNode>();
         for(SNode node : doc.getCurrentPage().getNodes()) {
             if(node.getTransformedBounds().contains(cursor)) {
-                underCursor.add(node);
+                    underCursor.add(node);
+            }
+            // TODO: expand this to cover all cases
+            if(node instanceof STrace) {
+                if(node.contains(cursor)) {
+                    underCursor.add(node);
+                    u.p("selected an STrace");
+                }
             }
         }
 

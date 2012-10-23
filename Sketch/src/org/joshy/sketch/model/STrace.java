@@ -78,6 +78,12 @@ public class STrace extends SNode implements SelfDrawable {
 
     @Override
     public boolean contains(Point2D point) {
+        for(TracePoint pt : getPoints()) {
+            if(Math.abs(point.distance(pt.getX()+this.getTranslateX(),
+                    pt.getY()+this.getTranslateY())) < 10) {
+                return true;
+            }
+        }
         return false;
     }
 
