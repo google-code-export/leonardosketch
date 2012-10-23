@@ -1,10 +1,9 @@
 package org.joshy.sketch.model;
 
-import org.joshy.gfx.draw.*;
-import org.joshy.gfx.draw.Paint;
-
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.Area;
+import java.awt.geom.Point2D;
+import org.joshy.gfx.draw.*;
 
 public class SOval extends AbstractResizeableNode implements SelfDrawable {
 
@@ -14,6 +13,7 @@ public class SOval extends AbstractResizeableNode implements SelfDrawable {
 
     public SOval(double x, double y, double w, double h) {
         super(x, y, w, h);
+        this.snapPoints.add(new Point2D.Double(0.5,0.5));
     }
 
     @Override

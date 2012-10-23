@@ -5,6 +5,7 @@ import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.GFX;
 import org.joshy.gfx.event.KeyEvent;
 import org.joshy.gfx.event.MouseEvent;
+import org.joshy.gfx.node.Bounds;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SResizeableNode;
 import org.joshy.sketch.model.STrace;
@@ -24,11 +25,35 @@ public class DrawTraceTool extends CanvasTool {
         super(context);
     }
 
+
+    @Override
+    public void enable() {
+        super.enable();
+        context.getCanvas().setShowSelection(false);
+        context.getPropPanel().setVisible(false);
+    }
+
+    @Override
+    public void disable() {
+        super.disable();
+        context.getCanvas().setShowSelection(true);
+        context.getPropPanel().setVisible(true);
+    }
+
     @Override
     public void drawOverlay(GFX g) {
         if(hovered) {
             g.setPaint(FlatColor.BLUE);
             g.drawOval(hoverPoint.getX(),hoverPoint.getY(),10,10);
+        }
+        for(SNode node : context.getDocument().getCurrentPage().getNodes()) {
+            for(Point2D pt : node.getSnapPoints()) {
+                Bounds b = node.getTransformedBounds();
+                double x = b.getX() + b.getWidth()*pt.getX();
+                double y = b.getY() + b.getHeight()*pt.getY();
+                g.setPaint(FlatColor.GREEN);
+                g.drawOval(x-5,y-5,10,10);
+            }
         }
     }
 
@@ -98,8 +123,27 @@ public class DrawTraceTool extends CanvasTool {
     }
 
     private STrace.SlaveFunction findTraceSpot(final Point2D.Double cursor, final STrace trace) {
-        for(SNode node : context.getDocument().getCurrentPage().getNodes()) {
+        for(final SNode node : context.getDocument().getCurrentPage().getNodes()) {
             if(node == trace) continue;
+
+            //first go through the real snap points
+            for(final Point2D pt : node.getSnapPoints()) {
+                Bounds b = node.getTransformedBounds();
+                final SNode nd = node;
+                double x = b.getX() + b.getWidth()*pt.getX();
+                double y = b.getY() + b.getHeight()*pt.getY();
+                if(within(x,y,cursor,10)){
+                    return new STrace.SlaveFunction() {
+                        public void apply() {
+                            Bounds b = nd.getTransformedBounds();
+                            double x = b.getX() + b.getWidth()*pt.getX();
+                            double y = b.getY() + b.getHeight()*pt.getY();
+                            cursor.setLocation(x-trace.getTranslateX(),y-trace.getTranslateY());
+                        }
+                    };
+                }
+            }
+            
             if(! (node instanceof SResizeableNode)) continue;
             final SResizeableNode rect = (SResizeableNode) node;
 
