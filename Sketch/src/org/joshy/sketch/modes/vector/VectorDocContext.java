@@ -48,6 +48,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     protected ToggleGroup group;
     protected BiList<Button, CanvasTool> tools = new BiList<Button, CanvasTool>();
     protected EditResizableShapeTool editResizableShapeTool;
+    protected EditSnapPointsTool editSnapPointsTool;
 
     public CanvasTool selectedTool;
     public SelectMoveTool moveRectTool;
@@ -112,6 +113,10 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
 
     public CanvasTool getEditResizableShapeTool() {
         return this.editResizableShapeTool;
+    }
+
+    public CanvasTool getEditSnapPointEditorTool() {
+        return this.editSnapPointsTool;
     }
 
     public void switchToTextEdit(SNode text) {
@@ -185,6 +190,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         tools.add(new ToolbarButton(Main.getIcon("draw_arrow.png")),drawArrowTool);
         tools.add(new ToolbarButton(Main.getIcon("draw_arrow.png")),drawTraceTool);
 
+        editSnapPointsTool = new EditSnapPointsTool(this);
 
         modeHelper.setupToolbar(tools, getMain(),this);
 
@@ -256,31 +262,32 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         //node menu
         VectorDocContext context = this;
         menubar.add(new Menu().setTitle(getString("menus.node"))
-                .addItem(getString("menus.raiseNodeTop"),      "shift CLOSE_BRACKET", new NodeActions.RaiseTopSelectedNodeAction(this))
-                .addItem(getString("menus.raiseNode"),        "CLOSE_BRACKET",       new NodeActions.RaiseSelectedNodeAction(this))
-                .addItem(getString("menus.lowerNode"),        "OPEN_BRACKET",        new NodeActions.LowerSelectedNodeAction(this))
-                .addItem(getString("menus.lowerNodeBottom"),   "shift OPEN_BRACKET",  new NodeActions.LowerBottomSelectedNodeAction(this))
+                .addItem(getString("menus.raiseNodeTop"), "shift CLOSE_BRACKET", new NodeActions.RaiseTopSelectedNodeAction(this))
+                .addItem(getString("menus.raiseNode"), "CLOSE_BRACKET", new NodeActions.RaiseSelectedNodeAction(this))
+                .addItem(getString("menus.lowerNode"), "OPEN_BRACKET", new NodeActions.LowerSelectedNodeAction(this))
+                .addItem(getString("menus.lowerNodeBottom"), "shift OPEN_BRACKET", new NodeActions.LowerBottomSelectedNodeAction(this))
                 .separator()
-                .addItem(getString("menus.alignNodeTop"),               new NodeActions.AlignTop(context))
-                .addItem(getString("menus.alignNodeBottom"),            new NodeActions.AlignBottom(context))
-                .addItem(getString("menus.alignNodeLeft"),              new NodeActions.AlignLeft(context))
-                .addItem(getString("menus.alignNodeRight"),             new NodeActions.AlignRight(context))
+                .addItem(getString("menus.alignNodeTop"), new NodeActions.AlignTop(context))
+                .addItem(getString("menus.alignNodeBottom"), new NodeActions.AlignBottom(context))
+                .addItem(getString("menus.alignNodeLeft"), new NodeActions.AlignLeft(context))
+                .addItem(getString("menus.alignNodeRight"), new NodeActions.AlignRight(context))
                 .addItem(getString("menus.alignNodeCenterHorizontal"), new NodeActions.AlignCenterH(context))
-                .addItem(getString("menus.alignNodeCenterVertical"),   new NodeActions.AlignCenterV(context))
+                .addItem(getString("menus.alignNodeCenterVertical"), new NodeActions.AlignCenterV(context))
                 .separator()
-                .addItem(getString("menus.matchNodeWidth"),              new NodeActions.SameWidth(context,true))
-                .addItem(getString("menus.matchNodeHeight"),             new NodeActions.SameWidth(context,false))
+                .addItem(getString("menus.matchNodeWidth"), new NodeActions.SameWidth(context, true))
+                .addItem(getString("menus.matchNodeHeight"), new NodeActions.SameWidth(context, false))
                 .separator()
-                .addItem(getString("menus.groupSelection"),   "G",       new NodeActions.GroupSelection(context))
+                .addItem(getString("menus.groupSelection"), "G", new NodeActions.GroupSelection(context))
                 .addItem(getString("menus.ungroupSelection"), "shift G", new NodeActions.UngroupSelection(context))
                 .separator()
                 .addItem(getString("menus.createSymbol"), new CreateSymbol(context))
                 .addItem(getString("menus.createResizableShape"), new CreateResizableShape(context))
                 .addItem(getString("menus.editResizableShape"), new CreateResizableShape.Edit(context))
-                .addItem(getString("menus.duplicateNode"), new NodeActions.DuplicateNodesAction(context,true))
+                .addItem(getString("menus.duplicateNode"), new NodeActions.DuplicateNodesAction(context, true))
+                .addItem("Edit Snap Points", new NodeActions.EditSnapPointsAction(context))
                 .separator()
                 .addItem(getString("menus.resetTransforms"), new NodeActions.ResetTransforms(context))
-                );
+        );
         menubar.add(new Menu().setTitle(getString("menus.path"))
                 .addItem(getString("menus.flipNodeHorizontal"), new PathActions.Flip(context,true))
                 .addItem(getString("menus.flipNodeVertical"),   new PathActions.Flip(context,false))

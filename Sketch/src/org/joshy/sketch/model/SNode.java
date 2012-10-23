@@ -186,4 +186,12 @@ public abstract class SNode {
     public List<Point2D> getSnapPoints() {
         return snapPoints;
     }
+
+    public void addSnapPoint(Point2D.Double pt) {
+        this.snapPoints.add(pt);
+    }
+
+    public void removeSnapPoint(Point2D currentPoint) {
+        this.snapPoints.remove(currentPoint);
+    }
 }
