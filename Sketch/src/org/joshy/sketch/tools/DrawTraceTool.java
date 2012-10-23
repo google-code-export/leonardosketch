@@ -20,6 +20,9 @@ public class DrawTraceTool extends CanvasTool {
     private Point2D.Double point;
     private boolean active;
     private Point2D.Double hoverPoint;
+    private STrace existingTrace;
+    private boolean showTracePoints;
+    private Point2D dragPoint;
 
     public DrawTraceTool(VectorDocContext context) {
         super(context);
@@ -38,6 +41,8 @@ public class DrawTraceTool extends CanvasTool {
         super.disable();
         context.getCanvas().setShowSelection(true);
         context.getPropPanel().setVisible(true);
+        existingTrace = null;
+        showTracePoints = false;
     }
 
     @Override
@@ -55,10 +60,19 @@ public class DrawTraceTool extends CanvasTool {
                 g.drawOval(x-5,y-5,10,10);
             }
         }
+        if(showTracePoints && existingTrace != null) {
+            for(Point2D pt : existingTrace.getPoints()) {
+                g.setPaint(FlatColor.PURPLE);
+                g.fillRect(existingTrace.getTranslateX()+pt.getX(),existingTrace.getTranslateY()+pt.getY(),10,10);
+            }
+        }
     }
 
     @Override
     protected void call(KeyEvent event) {
+        if(event.getKeyCode() == KeyEvent.KeyCode.KEY_ESCAPE) {
+            context.releaseControl();
+        }
     }
 
     @Override
@@ -90,6 +104,13 @@ public class DrawTraceTool extends CanvasTool {
 
     @Override
     protected void mousePressed(MouseEvent event, Point2D.Double cursor) {
+        if(existingTrace != null) {
+            Point2D pt = findPoint(existingTrace, cursor);
+            if(pt != null) {
+                dragPoint = pt;
+            }
+            return;
+        }
 
         if(active) {
             point.setLocation(cursor);
@@ -120,6 +141,17 @@ public class DrawTraceTool extends CanvasTool {
                 active = true;
             }
         }
+    }
+
+    private Point2D findPoint(STrace existingTrace, Point2D.Double cursor) {
+        for(Point2D pt : existingTrace.getPoints()) {
+            double x = cursor.getX() - existingTrace.getTranslateX();
+            double y = cursor.getY() - existingTrace.getTranslateY();
+            if(pt.distanceSq(x,y) < 10*10) {
+                return pt;
+            }
+        }
+        return null;
     }
 
     private STrace.SlaveFunction findTraceSpot(final Point2D.Double cursor, final STrace trace) {
@@ -246,9 +278,21 @@ public class DrawTraceTool extends CanvasTool {
 
     @Override
     protected void mouseDragged(MouseEvent event, Point2D.Double cursor) {
+        if(dragPoint != null) {
+            dragPoint.setLocation(
+                    cursor.getX()-existingTrace.getTranslateX(),
+                    cursor.getY()-existingTrace.getTranslateY());
+        }
     }
 
     @Override
     protected void mouseReleased(MouseEvent event, Point2D.Double cursor) {
+        dragPoint = null;
+    }
+
+    public void startEditing(STrace trace) {
+        existingTrace = trace;
+        showTracePoints = true;
+        context.redraw();
     }
 }

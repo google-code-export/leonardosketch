@@ -58,6 +58,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
     private List<SAction> viewActions = new ArrayList<SAction>();
     private TreeViewPanel treePanel;
     private DrawArrowTool drawArrowTool;
+    private DrawTraceTool drawTraceTool;
 
     public VectorDocContext(Main main, VectorModeHelper helper) {
         super(main,helper);
@@ -128,6 +129,12 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         drawNGonTool.startEditing(ngon);
     }
 
+
+    public void switchToTraceEdit(STrace trace) {
+        selectButtonForTool(drawTraceTool);
+        drawTraceTool.startEditing(trace);
+    }
+
     public void setSelectedTool(CanvasTool tool) {
         selectedTool.disable();
         selectedTool = tool;
@@ -168,6 +175,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         drawTextTool = new DrawTextTool(this);
         drawPathTool = new DrawPathTool(this);
         drawNGonTool = new DrawNgonTool(this);
+        drawTraceTool = new DrawTraceTool(this);
         drawArrowTool = new DrawArrowTool(this);
         editResizableShapeTool = new EditResizableShapeTool(this);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_select.png")),moveRectTool);
@@ -175,6 +183,7 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_insertknots.png")),drawPathTool);
         tools.add(new ToolbarButton(Main.getIcon("cr22-action-14_polygon.png")),drawNGonTool);
         tools.add(new ToolbarButton(Main.getIcon("draw_arrow.png")),drawArrowTool);
+        tools.add(new ToolbarButton(Main.getIcon("draw_arrow.png")),drawTraceTool);
 
 
         modeHelper.setupToolbar(tools, getMain(),this);
