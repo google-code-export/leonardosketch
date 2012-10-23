@@ -303,6 +303,10 @@ public class SelectMoveTool extends CanvasTool {
                 context.switchToNGonEdit((NGon) node);
                 return;
             }
+            if(node instanceof STrace) {
+                context.switchToTraceEdit((STrace)node);
+                return;
+            }
             if(node instanceof ResizableGrid9Shape) {
                 //main.selectButtonForTool(main.editResizableShapeTool);
                 ResizableGrid9Shape grid9 = (ResizableGrid9Shape) node;
