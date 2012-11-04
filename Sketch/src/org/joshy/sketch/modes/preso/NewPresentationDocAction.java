@@ -33,17 +33,20 @@ public class NewPresentationDocAction extends NewAction {
         doc.setWidth(800);
         doc.setHeight(500);
 
-        SwitchTheme.PresoThemeAction theme = new SwitchTheme.Standard(doc, null);
+        SwitchTheme.PresoThemeAction theme = new SwitchTheme.Reveal(doc, null);
         doc.getProperties().put("theme", theme);
         try {
             theme.execute();
         } catch (Exception e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
 
         //insert title page content on the first page
         SketchDocument.SketchPage page = doc.getCurrentPage();
         new PresoModeHelper.AddTitlePage(null).insertContents(page);
+        SketchDocument.SketchPage page2 = doc.addPage();
+        new PresoModeHelper.AddContentPage(null).insertContents(page2);
+        doc.setCurrentPage(0);
 
         try {
             newDocCreated(doc);

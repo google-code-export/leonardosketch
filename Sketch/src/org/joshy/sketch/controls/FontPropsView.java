@@ -13,6 +13,7 @@ import org.joshy.sketch.actions.SAction;
 import org.joshy.sketch.canvas.Selection;
 import org.joshy.sketch.model.SNode;
 import org.joshy.sketch.model.SText;
+import org.joshy.sketch.modes.preso.SwitchTheme;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.property.PropertyManager;
 
@@ -24,6 +25,7 @@ import org.joshy.sketch.property.PropertyManager;
  * To change this template use File | Settings | File Templates.
  */
 public class FontPropsView extends HFlexBox {
+
     private Togglebutton fontAlignLeft;
     private Togglebutton fontAlignHCenter;
     private Togglebutton fontAlignRight;
@@ -36,11 +38,42 @@ public class FontPropsView extends HFlexBox {
     private PopupMenuButton<String> fontPicker;
     private VectorDocContext context;
     private Selection selection;
+    private Main manager;
+    private PopupMenuButton<String> semanticFontPicker;
+
+
+    private Callback<SelectionEvent> semanticFontChanged = new Callback<SelectionEvent>() {
+        public void call(SelectionEvent event) throws Exception {
+            if(!manager.propMan.isClassAvailable(SText.class)) return;
+            int index = event.getView().getSelectedIndex();
+            String style = SwitchTheme.Reveal.semanticStyles[index];
+            SwitchTheme.Reveal sw = new SwitchTheme.Reveal(null, context);
+            for(SNode node: selection.items()) {
+                if(node instanceof SText) {
+                    SText text = (SText) node;
+                    text.setStringProperty("semanticstyle",style);
+                    sw.styleText(text);
+                }
+            }
+            context.redraw();
+        }
+    };
+
+    private Callback<SelectionEvent> fontPickerChanged =  new Callback<SelectionEvent>(){
+        public void call(SelectionEvent event) {
+            if(manager.propMan.isClassAvailable(SText.class)) {
+                int index = event.getView().getSelectedIndex();
+                String fontname = Main.getDatabase().getAllFonts().get(index).getName();
+                manager.propMan.getProperty("fontName").setValue(fontname);
+                context.redraw();
+            }
+        }
+    };
 
     public FontPropsView(final Main manager, final VectorDocContext context) throws IOException {
         this.setBoxAlign(Align.Baseline);
         this.context = context;
-
+        this.manager = manager;
 
         fontSizeLabel = new Label(getString("toolbar.fontSize")+":");
         add(fontSizeLabel);
@@ -62,17 +95,21 @@ public class FontPropsView extends HFlexBox {
                 return Main.getDatabase().getAllFonts().size();
             }
         });
-        EventBus.getSystem().addListener(fontPicker, SelectionEvent.Changed, new Callback<SelectionEvent>(){
-            public void call(SelectionEvent event) {
-                if(manager.propMan.isClassAvailable(SText.class)) {
-                    int index = event.getView().getSelectedIndex();
-                    String fontname = Main.getDatabase().getAllFonts().get(index).getName();
-                    manager.propMan.getProperty("fontName").setValue(fontname);
-                    context.redraw();
-                }
+        EventBus.getSystem().addListener(fontPicker, SelectionEvent.Changed, fontPickerChanged);
+        add(fontPicker);
+
+
+        semanticFontPicker = new PopupMenuButton<String>();
+        semanticFontPicker.setModel(new ListModel<String>() {
+            public String get(int i) {
+                return SwitchTheme.Reveal.semanticStyles[i];
+            }
+            public int size() {
+                return SwitchTheme.Reveal.semanticStyles.length;
             }
         });
-        add(fontPicker);
+        EventBus.getSystem().addListener(semanticFontPicker, SelectionEvent.Changed, semanticFontChanged);
+        add(semanticFontPicker);
 
         fontBoldButton = new Togglebutton("B");
         fontBoldButton.onClicked(fontBoldCallback);
@@ -133,7 +170,7 @@ public class FontPropsView extends HFlexBox {
         fontWrap = new Checkbox("wrap");
         fontWrap.onClicked(new Callback<ActionEvent>() {
             public void call(ActionEvent event) throws Exception {
-                if(manager.propMan.isClassAvailable(SText.class)) {
+                if (manager.propMan.isClassAvailable(SText.class)) {
                     manager.propMan.getProperty("wrapText").setValue(fontWrap.isSelected());
                     context.redraw();
                 }
@@ -209,6 +246,23 @@ public class FontPropsView extends HFlexBox {
             fontWrap.setSelected(wrapText.getBooleanValue());
         }
 
+        if(context.getDocument().isPresentation()) {
+            fontSizeLabel.setText("Style");
+            semanticFontPicker.setVisible(true);
+            fontPicker.setVisible(false);
+            fontSizeSlider.setVisible(false);
+            fontBoldButton.setVisible(false);
+            fontItalicButton.setVisible(false);
+            fontAlignRight.setVisible(false);
+            fontAlignLeft.setVisible(false);
+            fontAlignHCenter.setVisible(false);
+        } else {
+            semanticFontPicker.setVisible(false);
+            fontPicker.setVisible(true);
+            fontSizeSlider.setVisible(true);
+            fontBoldButton.setVisible(true);
+            fontItalicButton.setVisible(true);
+        }
     }
 
     public static class TIB extends ToolbarButton {

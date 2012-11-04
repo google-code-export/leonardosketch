@@ -8,6 +8,9 @@ import org.joshy.sketch.model.CanvasDocument;
 import org.joshy.sketch.model.SText;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.DocContext;
+import static org.joshy.sketch.modes.preso.SwitchTheme.Reveal.HEADER;
+import static org.joshy.sketch.modes.preso.SwitchTheme.Reveal.SUBHEADER;
+import static org.joshy.sketch.modes.preso.SwitchTheme.Reveal.TEXT_CLASS;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.modes.vector.VectorModeHelper;
 
@@ -65,28 +68,20 @@ public class PresoModeHelper extends VectorModeHelper {
             SText title = new SText();
             title.setText("Presentation Title");
             title.setFillPaint(FlatColor.BLACK);
-            title.setFontName("OpenSans");
-            title.setFontSize(70);
-
-            title.setAutoSize(false);
-            title.setWidth(600);
-            center(title, page);
-            title.setStringProperty("text-class","title");
-            title.setTranslateY(190);
+            title.setStringProperty(TEXT_CLASS, HEADER);
+//            title.setStringProperty("text-class","title");
+            title.setTranslateY(140);
             theme.styleText(title);
+            center(title, page);
             page.add(title);
 
             SText subtitle = new SText();
             subtitle.setText("by the author");
-            subtitle.setFillPaint(FlatColor.BLACK);
-            subtitle.setFontName("OpenSans");
-            subtitle.setFontSize(36);
-            subtitle.setAutoSize(false);
-            subtitle.setWidth(350);
-            center(subtitle, page);
-            subtitle.setStringProperty("text-class", "subtitle");
+            subtitle.setStringProperty(TEXT_CLASS, SUBHEADER);
+//            subtitle.setStringProperty("text-class", "subtitle");
             subtitle.setTranslateY(280);
             theme.styleText(subtitle);
+            center(subtitle, page);
             page.add(subtitle);
         }
 
@@ -122,7 +117,7 @@ public class PresoModeHelper extends VectorModeHelper {
         return doc;
     }
 
-    private static class AddContentPage extends SAction {
+    static class AddContentPage extends SAction {
         private VectorDocContext context;
 
         public AddContentPage(VectorDocContext context) {
@@ -141,23 +136,18 @@ public class PresoModeHelper extends VectorModeHelper {
             SwitchTheme.PresoThemeAction theme = (SwitchTheme.PresoThemeAction) page.getDocument().getProperties().get("theme");
             SText header = new SText();
             header.setText("A Page Header");
-            header.setFillPaint(FlatColor.BLACK);
+            header.setStringProperty(TEXT_CLASS, SUBHEADER);
             header.setTranslateX(50);
             header.setTranslateY(40);
-            header.setFontName("OpenSans");
-            header.setFontSize(48);
             header.setBulleted(false);
-            header.setStringProperty("text-class", "header");
             theme.styleText(header);
             page.add(header);
 
             SText content = new SText();
             content.setText("my first point\nmy second point\nmy third point\nmy fourth point");
-            content.setFillPaint(FlatColor.BLACK);
+            content.setStringProperty(TEXT_CLASS, SwitchTheme.Reveal.LIST);
             content.setTranslateX(70);
             content.setTranslateY(140);
-            content.setFontName("OpenSans");
-            content.setFontSize(30);
             content.setBulleted(true);
             theme.styleText(content);
             page.add(content);

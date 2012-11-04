@@ -2,11 +2,14 @@ package org.joshy.sketch.modes.preso;
 
 import assetmanager.Asset;
 import com.joshondesign.xml.XMLWriter;
+import java.io.File;
+import java.io.IOException;
 import org.joshy.gfx.draw.FlatColor;
 import org.joshy.gfx.draw.LinearGradientFill;
 import org.joshy.gfx.draw.Paint;
 import org.joshy.gfx.draw.PatternPaint;
 import org.joshy.gfx.node.Bounds;
+import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.DocumentActions;
 import org.joshy.sketch.actions.SAction;
@@ -15,9 +18,6 @@ import org.joshy.sketch.model.SText;
 import org.joshy.sketch.model.SketchDocument;
 import org.joshy.sketch.modes.vector.VectorDocContext;
 import org.joshy.sketch.util.Util;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -179,7 +179,6 @@ public class SwitchTheme {
             }
         }
     }
-
     public static class Standard extends PresoThemeAction {
         protected Standard(SketchDocument doc, VectorDocContext context) {
             super(doc, context);
@@ -209,6 +208,46 @@ public class SwitchTheme {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static class Reveal extends PresoThemeAction{
+        public final static String TEXT_CLASS = "text-class";
+        public final static String HEADER = "header";
+        public final static String SUBHEADER = "subheader";
+        public final static String LIST = "list";
+        public final static String[] semanticStyles =
+                {HEADER,SUBHEADER,"paragraph",LIST,"code"};
+        private final static String[] semanticNames  =
+                {"LeagueGothic","LeagueGothic","OpenSans","OpenSans","OpenSans"};
+        private final static double[] semanticSizes =
+                {120,70,30,30,30};
+        private final static boolean[] semanticBullets = {false,false,false,true,false};
+
+        public Reveal(SketchDocument doc, VectorDocContext context) {
+            super(doc, context);
+            this.backgroundFill = FlatColor.BLACK;
+        }
+
+        @Override
+        public void styleText(SText text) {
+            String style = text.getStringProperty(TEXT_CLASS);
+            u.p("semantic style = " + style);
+            int index = 0;
+            for(int i=0; i<semanticStyles.length; i++) {
+                if(semanticStyles[i].equals(style))
+                    index = i;
+            }
+            text.setFontName(semanticNames[index]);
+            text.setFontSize(semanticSizes[index]);
+            text.setBulleted(semanticBullets[index]);
+            text.setFillPaint(FlatColor.WHITE);
+
+        }
+
+        @Override
+        public void exportResources(XMLWriter out, File resources) {
+            //To change body of implemented methods use File | Settings | File Templates.
         }
     }
 }
