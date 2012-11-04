@@ -10,9 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import org.joshy.gfx.Core;
 import org.joshy.gfx.node.Node;
-import org.joshy.gfx.node.control.Button;
-import org.joshy.gfx.node.control.Checkbox;
-import org.joshy.gfx.node.control.Textbox;
+import org.joshy.gfx.node.control.*;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.stage.Stage;
 import org.joshy.gfx.util.u;
@@ -135,6 +133,9 @@ public class LayoutTest {
         if(name.equals("button")) return new Button();
         if(name.equals("textbox")) return new Textbox();
         if(name.equals("checkbox")) return new Checkbox();
+        if(name.equals("togglebutton")) return new Togglebutton("");
+        if(name.equals("radiobutton")) return new Radiobutton("");
+        if(name.equals("label")) return new Label("asdf");
         return null;
     }
 

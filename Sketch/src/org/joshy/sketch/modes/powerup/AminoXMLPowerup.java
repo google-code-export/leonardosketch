@@ -23,6 +23,7 @@ import org.joshy.gfx.node.control.Togglebutton;
 import org.joshy.gfx.node.layout.HFlexBox;
 import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.stage.Stage;
+import org.joshy.gfx.util.GraphicsUtil;
 import org.joshy.gfx.util.u;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.ExportProcessor;
@@ -62,31 +63,51 @@ public class AminoXMLPowerup extends Powerup {
         context.getSidebar().setSelected(((VectorDocContext)context).getSymbolPanel());
         context.sidebarContainer.setOpen(true);
 
+        //label
         Map<String,Object> label_props = new HashMap<String, Object>();
         label_props.put("text", "label");
-        set.addSymbol(new GenericAminoNode(label_delegate,label_props, 100, 30, "Label"));
-
+        set.addSymbol(new GenericAminoNode(label_delegate,label_props, 100, 30, "label"));
+        //button
         Map<String,Object> button_props = new HashMap<String, Object>();
         button_props.put("text", "button");
         set.addSymbol(new GenericAminoNode(
                 button_delegate,button_props, 100, 30, "button"));
+        //checkbox
+        Map<String,Object> checkbox_props = new HashMap<String, Object>();
+        checkbox_props.put("text", "checkbox");
+        set.addSymbol(new GenericAminoNode(
+                checkbox_delegate, checkbox_props, 100, 30, "checkbox"));
+        //radiobutton
+        Map<String,Object> radio_props = new HashMap<String, Object>();
+        radio_props.put("text", "radiobutton");
+        set.addSymbol(new GenericAminoNode(
+                radio_delegate, radio_props, 100, 30, "radiobutton"));
+        //togglebutton
+        Map<String,Object> togglebutton_props = new HashMap<String, Object>();
+        togglebutton_props.put("text", "togglebutton");
+        set.addSymbol(new GenericAminoNode(
+                togglebutton_delegate, togglebutton_props, 100, 30, "togglebutton"));
+        //textbox
+        Map<String,Object> textbox_props = new HashMap<String, Object>();
+        textbox_props.put("text", "text field");
+        set.addSymbol(new GenericAminoNode(
+                textbox_delegate, textbox_props, 100, 30, "textbox"));
 
+
+        //panel
         Map<String,Object> panel_props = new HashMap<String, Object>();
         GenericAminoNode panelSymbol = new GenericAminoNode(
                 panel_delegate, panel_props, 500, 400, "Panel");
         set.addSymbol(panelSymbol);
 
         SketchDocument.SketchPage page = ((VectorDocContext) context).getDocument().getCurrentPage();
-
         SNode rootPanel = panelSymbol.duplicate(null);
         page.add(rootPanel);
         rootPanel.setLocked(true);
         rootPanel.setTranslateX(100);
         rootPanel.setTranslateY(100);
+
     }
-
-
-
 
     private static interface DrawDelegate {
         public void draw(GFX g, GenericAminoNode node);
@@ -121,6 +142,95 @@ public class AminoXMLPowerup extends Powerup {
         }
     };
 
+    //checkbox
+    DrawDelegate checkbox_delegate = new DrawDelegate() {
+        public void draw(GFX g, GenericAminoNode c) {
+            g.setPaint(FlatColor.GRAY);
+            g.fillRoundRect(c.getX(), c.getY(), c.getHeight(), c.getHeight(), 3, 3);
+            g.setPaint(FlatColor.BLACK);
+            Font.drawCenteredVertically(g, "checkbox", Font.DEFAULT, c.getX() + c.getHeight() + 5, c.getY(), c.getWidth(), c.getHeight(), true);
+        }
+    };
+
+    //radio button
+    DrawDelegate radio_delegate = new DrawDelegate() {
+        public void draw(GFX g, GenericAminoNode c) {
+            g.setPaint(FlatColor.GRAY);
+            g.fillCircle(c.getX() + c.getHeight() / 2, c.getY() + c.getHeight() / 2, c.getHeight() / 3);
+            g.setPaint(FlatColor.BLACK);
+            Font.drawCenteredVertically(g, "radiobutton", Font.DEFAULT, c.getX() + c.getHeight() + 5, c.getY(), c.getWidth(), c.getHeight(), true);
+        }
+    };
+
+    //textfield
+    DrawDelegate textbox_delegate = new DrawDelegate() {
+        public void draw(GFX g, GenericAminoNode c) {
+            g.setPaint(FlatColor.WHITE);
+            g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+            g.setPaint(FlatColor.BLACK);
+            Font.drawCenteredVertically(g, "text field", Font.DEFAULT, c.getX() + c.getHeight() + 5, c.getY(), c.getWidth(), c.getHeight(), true);
+        }
+    };
+
+    //toggle button
+    DrawDelegate togglebutton_delegate = new DrawDelegate() {
+        public void draw(GFX g, GenericAminoNode c) {
+            g.setPaint(FlatColor.GRAY);
+            g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 10, 10);
+            g.setPaint(FlatColor.BLACK);
+            Font.drawCentered(g, "toggle button", Font.DEFAULT, c.getX(), c.getY(), c.getWidth(), c.getHeight(), true);
+        }
+    };
+
+    //slider
+    DrawDelegate slider_delegate = new DrawDelegate() {
+        public void draw(GFX g, GenericAminoNode c) {
+            g.setPaint(FlatColor.GRAY);
+            g.fillRoundRect(c.getX(), c.getY() + 3, c.getWidth(), c.getHeight()-6, 10, 10);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRoundRect(c.getX(), c.getY() + 3, c.getWidth(), c.getHeight()-6, 10, 10);
+            g.fillRoundRect(c.getX() + c.getWidth() / 2 - 10,c.getY(),20,c.getHeight(),4,4);
+        }
+    };
+
+    //progbar
+    GenericFXComponent.DrawDelegate progbar_delegate = new GenericFXComponent.DrawDelegate() {
+        public void draw(GFX g, GenericFXComponent c) {
+            g.setPaint(FlatColor.WHITE);
+            g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 10, 10);
+            g.setPaint(FlatColor.BLUE);
+            g.fillRoundRect(c.getX(), c.getY(), c.getWidth()/2, c.getHeight(), 10, 10);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 10, 10);
+        }
+    };
+
+    //progindicator
+    GenericFXComponent.DrawDelegate progind_delegate = new GenericFXComponent.DrawDelegate() {
+        public void draw(GFX g, GenericFXComponent c) {
+            g.setPaint(FlatColor.BLUE);
+            g.fillOval(c.getX(), c.getY(), c.getHeight(), c.getHeight());
+            g.setPaint(FlatColor.BLACK);
+            g.drawOval(c.getX(), c.getY(), c.getHeight(), c.getHeight());
+            g.setPaint(FlatColor.WHITE);
+            Font.drawCentered(g,"100%",Font.DEFAULT,c.getX(),c.getY(),c.getHeight(),c.getHeight(),true);
+        }
+    };
+
+    //choice box
+    DrawDelegate choicebox_delegate = new DrawDelegate() {
+        public void draw(GFX g, GenericAminoNode c) {
+            g.setPaint(FlatColor.WHITE);
+            g.fillRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+            g.setPaint(FlatColor.BLACK);
+            g.drawRoundRect(c.getX(), c.getY(), c.getWidth(), c.getHeight(), 3, 3);
+            g.setPaint(FlatColor.BLACK);
+            GraphicsUtil.fillDownArrow(g, c.getX() + c.getWidth() - 15 - 5, c.getY() + 5, 15);
+            Font.drawCenteredVertically(g, "choice box", Font.DEFAULT, c.getX() +  5, c.getY(), c.getWidth(), c.getHeight(), true);
+        }
+    };
 
     public static class GenericAminoNode extends SNode implements CustomProperties, SResizeableNode {
 
@@ -320,6 +430,7 @@ public class AminoXMLPowerup extends Powerup {
             testPanel = LayoutTest.loadGUI(new FileInputStream(outfile));
             if(testStage == null) {
                 testStage = Stage.createStage();
+                testStage.setAlwaysOnTop(true);
                 testStage.centerOnScreen();
             }
             testStage.setContent(testPanel);
@@ -363,6 +474,9 @@ public class AminoXMLPowerup extends Powerup {
             out.attr("y", df.format(node.getTranslateY() + node.getY()));
             out.attr("width",df.format(node.getWidth()));
             out.attr("height",df.format(node.getHeight()));
+            for(String key : node.aminoProps.keySet()) {
+                out.attr(key,objectToString(node.aminoProps.get(key)));
+            }
 
             if(node.getId() != null) out.attr("id",node.getId());
             if(node.rightAnchored) {
@@ -371,6 +485,14 @@ public class AminoXMLPowerup extends Powerup {
             if(node.bottomAnchored) {
                 out.attr("bottom",df.format(height-node.getTransformedBounds().getY2()));
             }
+        }
+
+        private String objectToString(Object o) {
+            if(o == null) return "";
+            if(o instanceof String) {
+                return (String) o;
+            }
+            return "";
         }
 
         public void exportPost(XMLWriter out, SNode shape) {
