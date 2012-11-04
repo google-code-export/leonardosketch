@@ -1,5 +1,10 @@
 package org.joshy.sketch.modes.vector;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFrame;
 import org.joshy.gfx.event.ActionEvent;
 import org.joshy.gfx.event.Callback;
 import org.joshy.gfx.event.EventBus;
@@ -10,6 +15,7 @@ import org.joshy.gfx.node.layout.Panel;
 import org.joshy.gfx.node.layout.TabPanel;
 import org.joshy.gfx.node.layout.VFlexBox;
 import org.joshy.gfx.stage.Stage;
+import static org.joshy.gfx.util.localization.Localization.getString;
 import org.joshy.sketch.Main;
 import org.joshy.sketch.actions.*;
 import org.joshy.sketch.actions.flickr.FlickrPanel;
@@ -25,14 +31,6 @@ import org.joshy.sketch.model.*;
 import org.joshy.sketch.modes.DocContext;
 import org.joshy.sketch.tools.*;
 import org.joshy.sketch.util.BiList;
-
-import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.joshy.gfx.util.localization.Localization.getString;
 
 /**
  * A doc context for all vector based doc types, including drawing and presentation
@@ -384,5 +382,9 @@ public class VectorDocContext extends DocContext<SketchCanvas, SketchDocument> {
 
     public List<SAction> getSidebarPanelViewActions() {
         return viewActions;
+    }
+
+    public SymbolPanel getSymbolPanel() {
+        return symbolPanel;
     }
 }

@@ -30,6 +30,7 @@ public class PowerupManager {
         powerups.add(new RokuPowerup());
         powerups.add(new FXMLPowerup());
         powerups.add(new MicroGUIPowerup());
+        powerups.add(new AminoXMLPowerup());
     }
 
     public Iterable<? extends Powerup> getPowerups() {
